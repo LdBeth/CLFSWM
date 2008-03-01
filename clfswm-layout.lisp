@@ -1,0 +1,284 @@
+;;; --------------------------------------------------------------------------
+;;; CLFSWM - FullScreen Window Manager
+;;;
+;;; #Date#: Wed Feb 27 22:19:57 2008
+;;;
+;;; --------------------------------------------------------------------------
+;;; Documentation: Layout functions
+;;; --------------------------------------------------------------------------
+;;;
+;;; (C) 2005 Philippe Brochard <hocwp@free.fr>
+;;;
+;;; This program is free software; you can redistribute it and/or modify
+;;; it under the terms of the GNU General Public License as published by
+;;; the Free Software Foundation; either version 3 of the License, or
+;;; (at your option) any later version.
+;;;
+;;; This program is distributed in the hope that it will be useful,
+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU General Public License
+;;; along with this program; if not, write to the Free Software
+;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+;;;
+;;; --------------------------------------------------------------------------
+
+(in-package :clfswm)
+
+
+;;; CONFIG - Layout menu
+;;;
+;;; To add a new layout:
+;;;   1- define your own layout: a method returning the real size of the
+;;;      child in screen size (integer) as 5 values (rx, ry, rw, rh, raise-p).
+;;;      This method can use the float size of the child (x, y ,w , h).
+;;;      It can be specialised for xlib:window or group
+;;;   2- Define a seter function for your layout
+;;;   3- Register your new layout with register-layout.
+
+
+
+
+;;; Generic functions
+(defun set-layout (layout)
+  "Set the layout of the current child"
+  (when (group-p *current-child*)
+    (setf (group-layout *current-child*) layout)
+    (leave-second-mode)))
+    ;;(show-all-childs)))
+
+(defun get-managed-child (father)
+  "Return only window in normal mode who can be tiled"
+  (when (group-p father)
+    (remove-if #'(lambda (x)
+		   (and (xlib:window-p x) (not (eql (window-type x) :normal))))
+	       (group-child father))))
+
+(defun register-layout (layout)
+  (setf *layout-list* (append *layout-list* (list layout))))
+
+
+
+;;; No layout
+(defgeneric no-layout (child father)
+  (:documentation "Maximize windows in there group - leave group to there size"))
+
+(defmethod no-layout ((child xlib:window) father)
+  (with-slots (rx ry rw rh) father
+    (values (1+ rx)  (1+ ry) (- rw 2) (- rh 2) nil)))
+
+(defmethod no-layout ((child group) father)
+  (with-slots ((cx x) (cy y) (cw w) (ch h)) child
+    (with-slots ((frx rx) (fry ry) (frw rw) (frh rh)) father
+      (values (round (+ (* cx frw) frx))
+	      (round (+ (* cy frh) fry))
+	      (round (* cw frw))
+	      (round (* ch frh))
+	      t))))
+
+(defun set-no-layout ()
+  "Maximize windows in there group - leave group to there size"
+  (set-layout #'no-layout))
+
+(register-layout 'set-no-layout)
+
+
+
+
+;;; Tile layout
+(defgeneric tile-layout (child father)
+  (:documentation "Tile child in its group"))
+
+(defmethod tile-layout (child father)
+  (let* ((managed-childs (get-managed-child father))
+	 (pos (position child managed-childs))
+	 (len (length managed-childs))
+	 (n (ceiling (sqrt len)))
+	 (dx (/ (group-rw father) n))
+	 (dy (/ (group-rh father) (ceiling (/ len n)))))
+    (values (round (+ (group-rx father) (truncate (* (mod pos n) dx)) 1))
+	    (round (+ (group-ry father) (truncate (* (truncate (/ pos n)) dy)) 1))
+	    (round (- dx 2))
+	    (round (- dy 2))
+	    nil)))
+
+(defun set-tile-layout ()
+  "Tile child in its group"
+  (set-layout #'tile-layout))
+
+(register-layout 'set-tile-layout)
+
+
+;;; Tile Left
+(defun layout-ask-size (msg slot &optional (min 80))
+  (when (group-p *current-child*)
+    (let ((new-size (/ (or (query-number msg) min) 100)))
+      (when (<= 0 new-size 1)
+	(setf (group-data-slot *current-child* slot) new-size)))))
+
+
+
+
+(defgeneric tile-left-layout (child father)
+  (:documentation "Tile Left: main child on left and others on right"))
+
+(defmethod tile-left-layout (child father)
+  (with-slots (rx ry rw rh) father
+    (let* ((managed-childs (get-managed-child father))
+	   (pos (position child managed-childs))
+	   (len (max (1- (length managed-childs)) 1))
+	   (dy (/ rh len))
+	   (size (or (group-data-slot father :tile-size) 0.8)))
+	(if (= pos 0)
+	    (values (1+ rx)
+		    (1+ ry)
+		    (- (round (* rw size)) 2)
+		    (- rh 2)
+		    nil)
+	    (values (1+ (round (+ rx (* rw size))))
+		    (1+ (round (+ ry (* dy (1- pos)))))
+		    (- (round (* rw (- 1 size))) 2)
+		    (- (round dy) 2)
+		    nil)))))
+
+
+(defun set-tile-left-layout ()
+  "Tile Left: main child on left and others on right"
+  (layout-ask-size "Tile size in percent (%)" :tile-size)
+  (set-layout #'tile-left-layout))
+
+(register-layout 'set-tile-left-layout)
+
+
+
+;;; Tile right
+(defgeneric tile-right-layout (child father)
+  (:documentation "Tile Right: main child on right and others on left"))
+
+(defmethod tile-right-layout (child father)
+  (with-slots (rx ry rw rh) father
+    (let* ((managed-childs (get-managed-child father))
+	   (pos (position child managed-childs))
+	   (len (max (1- (length managed-childs)) 1))
+	   (dy (/ rh len))
+	   (size (or (group-data-slot father :tile-size) 0.8)))
+      (if (= pos 0)
+	  (values (1+ (round (+ rx (* rw (- 1 size)))))
+		  (1+ ry)
+		  (- (round (* rw size)) 2)
+		  (- rh 2)
+		  nil)
+	  (values (1+ rx)
+		  (1+ (round (+ ry (* dy (1- pos)))))
+		  (- (round (* rw (- 1 size))) 2)
+		  (- (round dy) 2)
+		  nil)))))
+
+
+(defun set-tile-right-layout ()
+  "Tile Right: main child on right and others on left"
+  (layout-ask-size "Tile size in percent (%)" :tile-size)
+  (set-layout #'tile-right-layout))
+
+
+(register-layout 'set-tile-right-layout)
+
+
+
+
+;;; Tile Top
+(defgeneric tile-top-layout (child father)
+  (:documentation "Tile Top: main child on top and others on bottom"))
+
+(defmethod tile-top-layout (child father)
+  (with-slots (rx ry rw rh) father
+    (let* ((managed-childs (get-managed-child father))
+	   (pos (position child managed-childs))
+	   (len (max (1- (length managed-childs)) 1))
+	   (dx (/ rw len))
+	   (size (or (group-data-slot father :tile-size) 0.8)))
+	(if (= pos 0)
+	    (values (1+ rx)
+		    (1+ ry)
+		    (- rw 2)
+		    (- (round (* rh size)) 2)
+		    nil)
+	    (values (1+ (round (+ rx (* dx (1- pos)))))
+		    (1+ (round (+ ry (* rh size))))
+		    (- (round dx) 2)
+		    (- (round (* rh (- 1 size))) 2)
+		    nil)))))
+
+
+(defun set-tile-top-layout ()
+  "Tile Top: main child on top and others on bottom"
+  (layout-ask-size "Tile size in percent (%)" :tile-size)
+  (set-layout #'tile-top-layout))
+
+(register-layout 'set-tile-top-layout)
+
+
+
+;;; Tile Bottom
+(defgeneric tile-bottom-layout (child father)
+  (:documentation "Tile Bottom: main child on bottom and others on top"))
+
+(defmethod tile-bottom-layout (child father)
+  (with-slots (rx ry rw rh) father
+    (let* ((managed-childs (get-managed-child father))
+	   (pos (position child managed-childs))
+	   (len (max (1- (length managed-childs)) 1))
+	   (dx (/ rw len))
+	   (size (or (group-data-slot father :tile-size) 0.8)))
+      (if (= pos 0)
+	  (values (1+ rx)
+		  (1+ (round (+ ry (* rh (- 1 size)))))
+		  (- rw 2)
+		  (- (round (* rh size)) 2))
+	  (values (1+ (round (+ rx (* dx (1- pos)))))
+		  (1+ ry)
+		  (- (round dx) 2)
+		  (- (round (* rh (- 1 size))) 2))))))
+
+
+
+(defun set-tile-bottom-layout ()
+  "Tile Bottom: main child on bottom and others on top"
+  (layout-ask-size "Tile size in percent (%)" :tile-size)
+  (set-layout #'tile-bottom-layout))
+
+
+(register-layout 'set-tile-bottom-layout)
+
+
+
+
+
+;;; Space layout
+(defgeneric tile-space-layout (child father)
+  (:documentation "Tile Space: tile child in its group leaving spaces between them"))
+
+(defmethod tile-space-layout (child father)
+  (with-slots (rx ry rw rh) father
+    (let* ((managed-childs (get-managed-child father))
+	   (pos (position child managed-childs))
+	   (len (length managed-childs))
+	   (n (ceiling (sqrt len)))
+	   (dx (/ rw n))
+	   (dy (/ rh (ceiling (/ len n))))
+	   (size (or (group-data-slot father :tile-space-size) 0.1)))
+      (when (> size 0.5) (setf size 0.45))
+      (values (round (+ rx (truncate (* (mod pos n) dx)) (* dx size) 1))
+	      (round (+ ry (truncate (* (truncate (/ pos n)) dy)) (* dy size) 1))
+	      (round (- dx (* dx size 2) 2))
+	      (round (- dy (* dy size 2) 2))
+	      nil))))
+
+(defun set-space-tile-layout ()
+  "Tile Space: tile child in its group leaving spaces between them"
+  (layout-ask-size "Space size in percent (%)" :tile-space-size 10)
+  (set-layout #'tile-space-layout))
+
+(register-layout 'set-space-tile-layout)

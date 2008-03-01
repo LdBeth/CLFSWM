@@ -1,0 +1,83 @@
+        CLFSWM - A(nother) Common Lisp FullScreen Window Manager
+
+ CLFSWM is a 100% Common Lisp X11 window manager (based on [1]Tinywm
+ and [2]Stumpwm. Many thanks to them).
+ It can be driven only with the keyboard or with the mouse.
+
+ A display is divided in workspaces, groups and windows. Windows are
+ packed together in groups.
+ By default a group is fullscreen maximized (no decorations, no buttons,
+ no menus: nothing, just the application fullscreen!).
+ When not maximized, a group of windows can be moved, resized, tiled,
+ packed or filled to others groups edges.
+
+ For its binding, CLFSWM has two modes.
+ A main mode with minimal keys and no mouse grabbing to avoid conflict
+ with others applications.
+ And a second mode with more keys and mouse actions.
+ For details of its usage, have a look at the files keys.txt or 
+ keys.html
+
+
+* Installation
+
+Boot up a common lisp implementation. I develop it with sbcl, I've
+tested it with cmucl and I use it with clisp (you need the clx/xlib
+package).
+
+To use CLFSWM, load the load.lisp file. It loads the ASDF package,
+build the system and start the main loop.
+
+Another way is to do something like this:
+$ cd /in/the/directory/of/clfswm/
+$ clisp/cmucl/sbcl/...                  # start a lisp
+  > (load "asdf.lisp")                  ; asdf for clisp or cmucl
+or> (require :asdf)                     ; asdf for sbcl
+  > (require :clx)                      ; clx for cmucl
+  > (asdf:oos 'asdf:load-op :clfswm)    ; compile and load the system
+  > (in-package :clfswm)                ; go in the clfswm package
+  > (clfswm:main)                       ; start the main loop
+
+
+* Tweaking
+
+To change the default keybinding, have a look at the bindings*.lisp
+files and at the config.lisp file for global variables.
+
+All variables can be overwritten in a user configuration file
+(/etc/clfswmrc or $HOME/.clfswmrc). It's a standard lisp file loaded at
+startup. There is an example in the clfswm source (see dot-clfswmrc).
+
+If you want to add workspaces or groups at startup, tell this to
+clfswm in the init-display function in clfswm.lisp (there is already a
+default workspace and a default group created).
+
+In all cases, you can grep the source with 'CONFIG' and 'Alternative'
+keywords to find where you can simply customize clfswm.
+
+
+
+* Lisp implementation note
+
+If you are using clisp/new-clx, be sure to use the last version (at
+least 2.43). Older versions are a little bit bogus.
+If you are using clisp/mit-clx or an other clx than clisp/new-clx, you
+may find a speed up with the compress notify event. See the variable
+*have-to-compress-notify* in the configuration file.
+
+
+
+* License
+
+ CLFSWM is under the GNU General Public License - GPL license.
+ You can find more information in the files COPYING. or on the
+ [3]Free Software Foundation site.
+
+
+Philippe Brochard <hocwp at free dot fr>.
+
+Références
+
+   1. http://incise.org/index.cgi/TinyWM
+   2. http://www.nongnu.org/stumpwm/
+   3. http://www.gnu.org/

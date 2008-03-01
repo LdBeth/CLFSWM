@@ -1,0 +1,14 @@
+CLFSWM -  A(nother) Common Lisp FullScreen Window Manager
+---------------------------------------------------------
+
+Philippe Brochard   hocwp at free dot fr
+
+
+-----------------------------------
+
+Some of the CLFSWM code is based on 
+
+tinywm: http://incise.org/index.cgi/TinyWM
+
+And on the excellent Shawn Betts (sabetts at vcn bc ca) 
+Stumpwm: http://www.nongnu.org/stumpwm/

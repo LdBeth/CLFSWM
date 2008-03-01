@@ -1,0 +1,276 @@
+;;; --------------------------------------------------------------------------
+;;; CLFSWM - FullScreen Window Manager
+;;;
+;;; #Date#: Tue Feb 12 19:23:14 2008
+;;;
+;;; --------------------------------------------------------------------------
+;;; Documentation: Keys functions definition
+;;; --------------------------------------------------------------------------
+;;;
+;;; (C) 2005 Philippe Brochard <hocwp@free.fr>
+;;;
+;;; This program is free software; you can redistribute it and/or modify
+;;; it under the terms of the GNU General Public License as published by
+;;; the Free Software Foundation; either version 3 of the License, or
+;;; (at your option) any later version.
+;;;
+;;; This program is distributed in the hope that it will be useful,
+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU General Public License
+;;; along with this program; if not, write to the Free Software
+;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+;;;
+;;; --------------------------------------------------------------------------
+
+(in-package :clfswm)
+
+(defun define-hash-table-key-name (hash-table name)
+  (setf (gethash 'name hash-table) name))
+
+;;; CONFIG - Key mode names
+
+(define-hash-table-key-name *main-keys* "Main mode keys")
+(define-hash-table-key-name *second-keys* "Second mode keys")
+(define-hash-table-key-name *mouse-action* "Mouse buttons actions in second mode")
+(define-hash-table-key-name *pager-keys* "Pager mode keys")
+(define-hash-table-key-name *pager-mouse-action* "Mouse buttons actions in pager mode")
+(define-hash-table-key-name *info-keys* "Info mode keys")
+(define-hash-table-key-name *info-mouse-action* "Mouse buttons actions in info mode")
+
+
+(defmacro define-define-key (name hashtable)
+  (let ((name-key-fun (create-symbol "define-" name "-key-fun"))
+	(name-key (create-symbol "define-" name "-key"))
+	(undefine-name (create-symbol "undefine-" name "-key"))
+	(undefine-multi-name (create-symbol "undefine-" name "-multi-keys")))
+    `(progn
+       (defun ,name-key-fun (key function &optional keystring)
+	 "Define a new key, a key is '(char '(modifier list))"
+	 (setf (gethash key ,hashtable) (list function keystring)))
+      
+       (defmacro ,name-key ((key &rest modifiers) function &optional keystring)
+	 `(,',name-key-fun (list ,key ,(modifiers->state modifiers)) ,function ,keystring))
+      
+       (defmacro ,undefine-name ((key &rest modifiers))
+	 `(remhash (list ,key ,(modifiers->state modifiers)) ,',hashtable))
+
+       (defmacro ,undefine-multi-name (&rest keys)
+	 `(progn
+	    ,@(loop for k in keys
+		 collect `(,',undefine-name ,k)))))))
+
+
+(defmacro define-define-mouse (name hashtable)
+  (let ((name-mouse-fun (create-symbol "define-" name "-fun"))
+	(name-mouse (create-symbol "define-" name))
+	(undefine-name (create-symbol "undefine-" name)))
+    `(progn
+       (defun ,name-mouse-fun (button function-press &optional keystring function-release)
+	 "Define a new mouse button action, a button is '(button number '(modifier list))"
+	 (setf (gethash button ,hashtable) (list function-press keystring function-release)))
+      
+       (defmacro ,name-mouse ((button &rest modifiers) function-press &optional function-release keystring)
+	 `(,',name-mouse-fun (list ,button ,(modifiers->state modifiers)) ,function-press ,keystring ,function-release))
+
+       (defmacro ,undefine-name ((key &rest modifiers))
+	 `(remhash (list ,key ,(modifiers->state modifiers)) ,',hashtable)))))
+
+
+
+(define-define-key "main" *main-keys*)
+(define-define-key "second" *second-keys*)
+(define-define-key "pager" *pager-keys*)
+(define-define-key "info" *info-keys*)
+
+
+
+  
+;;(defun undefine-main-keys (&rest keys)
+;;  (dolist (k keys)
+;;    (undefine-main-key k)))
+
+(defun undefine-info-key-fun (key)
+  (remhash key *info-keys*))
+
+(define-define-mouse "mouse-action" *mouse-action*)
+(define-define-mouse "pager-mouse-action" *pager-mouse-action*)
+(define-define-mouse "info-mouse-action" *info-mouse-action*)
+
+
+
+
+
+(defmacro define-ungrab/grab (name function hashtable)
+  `(defun ,name ()
+     (maphash #'(lambda (k v)
+		  (declare (ignore v))
+		  (when (consp k)
+		    (handler-case 
+			(let* ((key (first k))
+			       (keycode (typecase key
+					  (character (char->keycode key))
+					  (number key)
+					  (string (let ((keysym (keysym-name->keysym key)))
+						    (and keysym (xlib:keysym->keycodes *display* keysym)))))))
+			  (if keycode
+			      (,function *root* keycode :modifiers (second k))
+			      (format t "~&Grabbing error: Can't find key '~A'~%" key)))
+		      (error (c)
+			;;(declare (ignore c))
+			(format t "~&Grabbing error: Can't grab key '~A' (~A)~%" k c)))
+		    (force-output)))
+	      ,hashtable)))
+
+(define-ungrab/grab grab-main-keys xlib:grab-key *main-keys*)
+(define-ungrab/grab ungrab-main-keys xlib:ungrab-key *main-keys*)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(defun funcall-key-from-code (hash-table-key code state &optional args)
+  (labels ((funcall-from (key)
+	     (multiple-value-bind (function foundp)
+		 (gethash (list key state) hash-table-key)
+	       (when (and foundp (first function))
+		 (if args
+		     (funcall (first function) args)
+		     (funcall (first function)))
+		 t)))
+	   (from-code ()
+	     (funcall-from code))
+	   (from-char ()
+	     (let ((char (keycode->char code state)))
+	       (funcall-from char)))
+	   (from-string ()
+	     (let ((string (keysym->keysym-name (xlib:keycode->keysym *display* code 0))))
+	       (funcall-from string))))
+    (cond ((from-code))
+	  ((from-char))
+	  ((from-string)))))
+
+
+
+(defun funcall-button-from-code (hash-table-key code state root-x root-y
+				 &optional (action #'first) args)
+  "Action: first=press third=release"
+  (let ((state (modifiers->state (set-difference (state->modifiers state)
+						 '(:button-1 :button-2 :button-3 :button-4 :button-5)))))
+    (multiple-value-bind (function foundp)
+	(gethash (list code state) hash-table-key)
+      (if (and foundp (funcall action function))
+	  (if args
+	      (funcall (funcall action function) root-x root-y args)
+	      (funcall (funcall action function) root-x root-y))
+	  t))))
+
+
+
+
+;;;,-----
+;;;| Auto documentation tools
+;;;`-----
+
+(defun produce-doc-html (hash-table-key-list &optional (stream t))
+  "Produce an html doc from a hash-table key"
+  (labels ((clean-string (str)
+	     (cond ((string-equal str "#\\:") ":")
+		   ((string-equal str "#\\#") "#")
+		   ((string-equal str "#\\\\") "\\")
+		   (t (substitute #\Space #\#
+				  (substitute #\Space #\\
+					      (substitute #\Space #\: str))))))
+	   (produce-keys (hk)
+	     `("table class=\"ex\" cellspacing=\"5\" border=\"0\" width=\"100%\""
+	       (tr ("th align=\"right\" width=\"10%\"" "Modifiers")
+		   ("th align=\"center\" width=\"10%\"" "Key/Button")
+		   ("th align=\"left\"" "Function"))
+	       ,@(let ((acc nil))
+		      (maphash #'(lambda (k v)
+				   (when (consp k)
+				     (push `(tr
+					     ("td align=\"right\" style=\"color:#FF0000\" nowrap"
+					      ,(clean-string (format nil "~{~@(~S ~)~}" (state->modifiers (second k)))))
+					     ("td align=\"center\" nowrap"
+					      ,(clean-string (format nil "~@(~S~)"
+								     (or (second v)
+									 (and (stringp (first k))
+									      (intern (string-upcase (first k))))
+									 (first k)))))
+					     ("td style=\"color:#0000FF\" nowrap" ,(documentation (or (first v) (third v)) 'function)))
+					   acc)))
+			       hk)
+		      (nreverse acc)))))
+    (produce-html
+     `(html
+       (head
+	(title "CLFSWM Keys"))
+       (body
+	(h1 "CLFSWM Keys")
+	(p (small "Note: Mod-1 is the Meta or Alt key"))
+	,@(let ((acc nil))
+	       (dolist (hk hash-table-key-list)
+		 (push `(h3 (u ,(gethash 'name hk))) acc)
+		 (push (produce-keys hk) acc))
+	       (nreverse acc))))
+     0 stream)))
+
+
+(defun produce-doc-html-in-file (filename)
+  (with-open-file (stream filename :direction :output
+			  :if-exists :supersede :if-does-not-exist :create)
+    (produce-doc-html (list *main-keys* *second-keys* *mouse-action* *pager-keys* *pager-mouse-action*
+			    *info-keys* *info-mouse-action*)
+		      stream)))
+
+
+
+(defun produce-doc (hash-table-key-list &optional (stream t))
+  "Produce a text doc from a hash-table key"
+  (format stream "    * CLFSWM Keys *~%")
+  (format stream "      -----------~%")
+  (format stream "~%Note: Mod-1 is the Meta or Alt key~%")
+  (dolist (hk hash-table-key-list)
+    (format stream "~2&~A:~%" (gethash 'name hk))
+    (dotimes (i (length (gethash 'name hk)))
+      (format stream "-"))
+    (format stream "~2%")
+    (maphash #'(lambda (k v)
+		 (when (consp k)
+		   (format stream "~&~20@<~{~@(~A~) ~}~> ~13@<~@(~A~)~>   ~A~%"
+			   (state->modifiers (second k))
+			   (remove #\# (remove #\\ (format nil "~S" (or (second v)
+									(and (stringp (first k))
+									     (intern (string-upcase (first k))))
+									(first k)))))
+			   (documentation (or (first v) (third v)) 'function))))
+	     hk)
+    (format stream "~2&")))
+
+			   
+
+(defun produce-doc-in-file (filename)
+  (with-open-file (stream filename :direction :output
+			  :if-exists :supersede :if-does-not-exist :create)
+    (produce-doc (list *main-keys* *second-keys* *mouse-action* *pager-keys* *pager-mouse-action*
+		       *info-keys* *info-mouse-action*)
+		 stream)))
+
+
+(defun produce-all-docs ()
+  "Produce all docs in keys.html and keys.txt"
+  (produce-doc-in-file "keys.txt")
+  (produce-doc-html-in-file "keys.html"))
+
