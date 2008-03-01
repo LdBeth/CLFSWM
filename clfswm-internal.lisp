@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Sat Mar  1 23:24:16 2008
+;;; #Date#: Sat Mar  1 23:56:57 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Main functions
@@ -138,8 +138,7 @@
     (find-free-number all-numbers)))
 
 
-
-(defun create-group (&key name (number (group-find-free-number)) (x 0.1) (y 0.1) (w 0.8) (h 0.8) layout)
+(defun create-group (&rest args &key (number (group-find-free-number)) &allow-other-keys)
   (let* ((window (xlib:create-window :parent *root*
 				     :x 0
 				     :y 0
@@ -155,8 +154,8 @@
 				   :background (get-color "Black")
 				   :font *default-font*
 				   :line-style :solid)))
-    (make-instance 'group :name name :number number
-		   :x x :y y :w w :h h :window window :gc gc :layout layout)))
+    (apply #'make-instance 'group :number number :window window :gc gc args)))
+
 
 
 (defun add-group (group father)
