@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Mon Feb 25 21:33:22 2008
+;;; #Date#: Sat Mar  1 13:52:50 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Package definition
@@ -55,6 +55,10 @@
 ;;	   (x 0) (y 0) (w 1) (h 1) rx ry rw rh
 ;;	   layout window gc child)
 
+;;; CONFIG - Default group datas
+(defparameter *default-group-data*
+  (list '(:tile-size 0.8) '(:tile-space-size 0.1)))
+
 (defclass group ()
   ((name :initarg :name :accessor group-name :initform nil)
    (number :initarg :number :accessor group-number :initform 0)
@@ -74,7 +78,7 @@
    (gc :initarg :gc :accessor group-gc :initform nil)
    (child :initarg :child :accessor group-child :initform nil)
    (data :initarg :data :accessor group-data
-	 :initform (list '(:tile-size 0.8) '(:tile-space-size 0.1))
+	 :initform *default-group-data*
 	 :documentation "An assoc list to store additional data")))
 
 

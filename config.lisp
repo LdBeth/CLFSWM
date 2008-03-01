@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Wed Feb 27 22:15:01 2008
+;;; #Date#: Sat Mar  1 13:52:41 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Configuration file
@@ -47,9 +47,6 @@ You can tweak this to what you want"
   (values -1 -1 (xlib:screen-width *screen*) (xlib:screen-height *screen*) nil))
 ;; (values -1 -1 1024 768))
 ;;  (values 100 100 800 600))
-
-
-
 
 
 
