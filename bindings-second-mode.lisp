@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Thu Feb 28 21:38:00 2008
+;;; #Date#: Sat Mar  1 22:45:26 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Bindings keys and mouse for second mode
@@ -173,8 +173,8 @@
 (define-second-key ("Down" :mod-1) 'select-next-level)
 (define-second-key ("Up" :mod-1) 'select-previous-level)
 
-(define-second-key ("Tab" :mod-1) 'select-next-child)
-(define-second-key ("Tab" :mod-1 :shift) 'select-previous-child)
+(define-second-key ("Tab" :mod-1) 'select-next-brother)
+(define-second-key ("Tab" :mod-1 :shift) 'select-previous-brother)
 
 (define-second-key ("Return" :mod-1) 'enter-group)
 (define-second-key ("Return" :mod-1 :shift) 'leave-group)

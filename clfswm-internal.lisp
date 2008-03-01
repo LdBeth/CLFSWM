@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Sat Mar  1 00:03:14 2008
+;;; #Date#: Sat Mar  1 22:44:26 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Main functions
@@ -369,12 +369,12 @@
 
 
 (defun set-focus-to-current-child ()
-  (no-focus) 
-  (when (group-p *current-child*)
-    (when (xlib:window-p (first (group-child *current-child*)))
-      (focus-window (first (group-child *current-child*)))))
-  (when (xlib:window-p *current-child*)
-    (focus-window *current-child*)))
+  (labels ((rec (child)
+	     (typecase child
+	       (xlib:window (focus-window child))
+	       (group (rec (first (group-child child)))))))
+    (no-focus)
+    (rec *current-child*)))
 
 
 
@@ -446,6 +446,7 @@
     (awhen (find-father-group *current-child*)
 	   (setf *current-child* it))
     (show-all-childs)))
+
 
 
 (defun select-next/previous-child (fun-rotate)
@@ -594,7 +595,8 @@ managed."
       (leave-group)
       (select-previous-level))
     ;;(unless (eql (window-type window) :maxsize) ;; PHIL: this is sufficient for the ROX panel
-    (pushnew window (group-child *current-child*)) ;)
+    (when (group-p *current-child*)
+      (pushnew window (group-child *current-child*))) ;)
     (unhide-window window)
     ;;(dbg (xlib:wm-name window) (xlib:get-wm-class window) (window-type window)) ;;; PHIL
     (case (window-type window)

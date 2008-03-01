@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Sun Feb 24 21:34:48 2008
+;;; #Date#: Sat Mar  1 22:43:17 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Bindings keys and mouse
@@ -48,8 +48,8 @@
 (define-main-key ("Down" :mod-1) 'select-next-level)
 (define-main-key ("Up" :mod-1) 'select-previous-level)
 
-(define-main-key ("Tab" :mod-1) 'select-next-child)
-(define-main-key ("Tab" :mod-1 :shift) 'select-previous-child)
+(define-main-key ("Tab" :mod-1) 'select-next-brother)
+(define-main-key ("Tab" :mod-1 :shift) 'select-previous-brother)
 
 (define-main-key ("Return" :mod-1) 'enter-group)
 (define-main-key ("Return" :mod-1 :shift) 'leave-group)
