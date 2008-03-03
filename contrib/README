@@ -1,0 +1,13 @@
+This directory is here if you want to contribute to CLFSWM and if your
+code is not merged in the clfswm core.
+
+How can you contribute:
+
+  - If your code is in one file, just tell use how to load it and how
+    to configure it from the clfswm configuration file.
+ 
+  - If your code takes more than one file, make a new directory and
+    create a new asd file in the contrib directory to load it from the
+    configuration file.
+
+(Some examples will come here. [Philippe])
