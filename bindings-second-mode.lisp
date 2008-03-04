@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Sat Mar  1 23:26:11 2008
+;;; #Date#: Tue Mar  4 22:41:24 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Bindings keys and mouse for second mode
@@ -105,7 +105,9 @@
   "Group menu"
   (info-mode-menu '((#\a group-adding-menu)
 		    (#\l group-layout-menu)
-		    (#\m group-movement-menu))))
+		    (#\m group-movement-menu)
+		    (#\r rename-current-child)
+		    (#\n renumber-current-group))))
 
 
 
@@ -203,9 +205,29 @@
 (define-second-key ("Delete") 'remove-current-child)
 
 
+;;; default shell programs
+(defmacro define-shell (key name docstring cmd)
+  "Define a second key to start a shell command"
+  `(define-second-key ,key
+       (defun ,name ()
+	 ,docstring
+	 (setf *second-mode-program* ,cmd)
+	 (leave-second-mode))))
+
+(define-shell (#\c) b-start-xterm "start an xterm" "exec xterm")
+(define-shell (#\e) b-start-emacs "start emacs" "exec emacs")
+(define-shell (#\e :control) b-start-emacsremote
+  "start an emacs for another user"
+  "exec emacsremote-Eterm")
+(define-shell (#\h) b-start-xclock "start an xclock" "exec xclock -d")
 
 
 
+
+
+
+
+;;; Mouse action
 (defun sm-handle-click-to-focus (root-x root-y)
   "Give the focus to the clicked child"
   (let ((win (find-child-under-mouse root-x root-y)))

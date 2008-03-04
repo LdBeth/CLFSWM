@@ -2,7 +2,7 @@
 ;;;; Author: Philippe Brochard <hocwp@free.fr>
 ;;;; ASDF System Definition
 ;;;
-;;; #date#: Fri Feb 22 21:39:37 2008
+;;; #date#: Tue Mar  4 22:30:25 2008
 
 (in-package #:asdf)
 
@@ -37,6 +37,8 @@
 			:depends-on ("package" "xlib-util" "config" "clfswm-keys" "clfswm" "clfswm-internal"))
 		 (:file "clfswm-util"
 			:depends-on ("clfswm" "keysyms" "clfswm-info" "clfswm-second-mode"))
+		 (:file "clfswm-query"
+			:depends-on ("package" "config"))
 		 (:file "clfswm-layout"
 			:depends-on ("package" "clfswm-util" "clfswm-info"))
 		 (:file "bindings"

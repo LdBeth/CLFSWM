@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Sat Mar  1 23:56:57 2008
+;;; #Date#: Tue Mar  4 22:36:13 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Main functions
@@ -76,6 +76,19 @@
 (defmethod child-name (child)
   (declare (ignore child))
   "???")
+
+
+
+(defgeneric rename-child (child name))
+
+(defmethod rename-child ((child group) name)
+  (setf (group-name child) name))
+
+(defmethod rename-child ((child xlib:window) name)
+  (setf (xlib:wm-name child) name))
+
+(defmethod rename-child (child name)
+  (declare (ignore child name)))
 
 
 
