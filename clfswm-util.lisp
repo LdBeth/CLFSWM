@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Sun Mar  2 00:06:29 2008
+;;; #Date#: Tue Mar  4 08:54:30 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Utility
@@ -445,6 +445,7 @@
 ;;; Focus by functions
 (defun focus-group-by (group)
   (when (group-p group)
+    (hide-all-childs *current-root*)
     (focus-all-childs group (or (find-father-group group *current-root*)
 				(find-father-group group)
 				*root-group*))))
@@ -481,6 +482,7 @@
 
 ;;; Delete by functions
 (defun delete-group-by (group)
+  (hide-all-childs *current-root*)
   (unless (equal group *root-group*)
     (when (equal group *current-root*)
       (setf *current-root* *root-group*))
@@ -503,6 +505,7 @@
 ;;; Move by function
 (defun move-current-child-by (child group-dest)
   (when (and child (group-p group-dest))
+    (hide-all-childs *current-root*)
     (remove-child-in-group child (find-father-group child))
     (pushnew child (group-child group-dest))
     (focus-all-childs child group-dest)))
@@ -525,6 +528,7 @@
 ;;; Copy by function
 (defun copy-current-child-by (child group-dest)
   (when (and child (group-p group-dest))
+    (hide-all-childs *current-root*)
     (pushnew child (group-child group-dest))
     (focus-all-childs child group-dest)))
 
