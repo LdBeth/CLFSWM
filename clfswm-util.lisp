@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Tue Mar  4 08:54:30 2008
+;;; #Date#: Tue Mar  4 11:14:45 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Utility
@@ -27,6 +27,12 @@
 
 (in-package :clfswm)
 
+(defun load-contrib (file)
+  "Load a file in the contrib directory"
+  (let ((truename (concatenate 'string cl-user:*base-dir* "contrib/" file)))
+    (format t "Loading contribution file: ~A~%" truename)
+    (when (probe-file truename)
+      (load truename))))
 
 
 (defun add-default-group ()

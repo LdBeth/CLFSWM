@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Tue Feb 26 23:00:22 2008
+;;; #Date#: Tue Mar  4 11:11:02 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: System loading functions
@@ -27,6 +27,7 @@
 
 
 (defparameter *base-dir* (directory-namestring *load-truename*))
+(export '*base-dir*)
 
 #+CMU
 (setf ext:*gc-verbose* nil)
