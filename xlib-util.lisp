@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Thu Feb 28 21:55:00 2008
+;;; #Date#: Wed Mar  5 22:22:59 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Utility functions
@@ -423,7 +423,7 @@ Window types are in +WINDOW-TYPES+.")
   ;; implementation (see translate.lisp and keysyms.lisp).  For now,
   ;; we do like this.  It suffices for modifiers and ASCII symbols.
   (if (fboundp 'xlib:character->keysyms)
-      (xlib:character->keysyms ch))
+      (xlib:character->keysyms ch)
       (list
        (case ch
 	 (:character-set-switch #xFF7E)
@@ -447,7 +447,7 @@ Window types are in +WINDOW-TYPES+.")
 	     ;; Latin-1 characters have their own value as keysym
 	     (if (< 31 (char-code ch) 256)
 		 (char-code ch)
-		 (error "Don't know how to get keysym from ~A" ch))))))))
+		 (error "Don't know how to get keysym from ~A" ch)))))))))
 
 
 

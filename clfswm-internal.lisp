@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Tue Mar  4 22:36:13 2008
+;;; #Date#: Wed Mar  5 23:09:42 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Main functions
@@ -37,6 +37,18 @@
     (t (apply hook args))))
 
 
+
+
+(defgeneric group-p (group))
+(defmethod group-p ((group group))
+  (declare (ignore group))
+  t)
+(defmethod group-p (group)
+  (declare (ignore group))
+  nil)
+
+
+
 ;;; Group data manipulation functions
 (defun group-data-slot (group slot)
   "Return the value associated to data slot"
@@ -55,13 +67,6 @@
 
 
 
-(defgeneric group-p (group))
-(defmethod group-p ((group group))
-  (declare (ignore group))
-  t)
-(defmethod group-p (group)
-  (declare (ignore group))
-  nil)
 
 
 
@@ -252,30 +257,30 @@
     (with-slots (name number gc window child) group
       (when (equal group *current-root*)
 	(xlib:clear-area window))
-      (xlib:with-gcontext (gc :foreground (get-color (if (and (equal group *current-root*)
+      (setf (xlib:gcontext-foreground gc) (get-color (if (and (equal group *current-root*)
 							      (equal group *current-child*))
 							 "Red" "Green")))
-	(xlib:draw-image-glyphs window gc 5 dy		 
-				(format nil "Group: ~A~A                                                  "
-					number
-					(if name  (format nil " - ~A" name) "")))
-	(let ((pos dy))
-	  (when (equal group *current-root*)
+      (xlib:draw-image-glyphs window gc 5 dy		 
+			      (format nil "Group: ~A~A                                                  "
+				      number
+				      (if name  (format nil " - ~A" name) "")))
+      (let ((pos dy))
+	(when (equal group *current-root*)
+	  (xlib:draw-image-glyphs window gc 5 (incf pos dy)
+				  (format nil "~A hidden windows             " (length (get-hidden-windows))))
+	  (when *child-selection*
 	    (xlib:draw-image-glyphs window gc 5 (incf pos dy)
-				    (format nil "~A hidden windows             " (length (get-hidden-windows))))
-	    (when *child-selection*
-	      (xlib:draw-image-glyphs window gc 5 (incf pos dy)
-				      (with-output-to-string (str)
-					(format str "Selection: ")
-					(dolist (child *child-selection*)
-					  (typecase child
-					    (xlib:window (format str "~A " (xlib:wm-name child)))
-					    (group (format str "group:~A[~A] " (group-number child)
-							   (aif (group-name child) it "")))))
-					(format str "                                                   ")))))
-	  (dolist (ch child)
-	    (when (xlib:window-p ch)
-	      (xlib:draw-glyphs window gc 5 (incf pos dy) (ensure-printable (xlib:wm-name ch))))))))))
+				    (with-output-to-string (str)
+				      (format str "Selection: ")
+				      (dolist (child *child-selection*)
+					(typecase child
+					  (xlib:window (format str "~A " (xlib:wm-name child)))
+					  (group (format str "group:~A[~A] " (group-number child)
+							 (aif (group-name child) it "")))))
+				      (format str "                                                   ")))))
+	(dolist (ch child)
+	  (when (xlib:window-p ch)
+	    (xlib:draw-glyphs window gc 5 (incf pos dy) (ensure-printable (xlib:wm-name ch)))))))))
 
 
 
