@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Thu Mar  6 17:03:02 2008
+;;; #Date#: Thu Mar  6 17:33:40 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Utility functions
@@ -39,10 +39,7 @@
 				:colormap-change
 				:focus-change
 				:enter-window
-				:exposure
-				:button-press
-				:button-release
-				:pointer-motion)
+				:exposure)
   "The events to listen for on managed windows.")
 
 
