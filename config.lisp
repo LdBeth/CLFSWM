@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Sat Mar  1 13:52:41 2008
+;;; #Date#: Thu Mar  6 16:11:38 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Configuration file
@@ -64,30 +64,6 @@ You can tweak this to what you want"
 (defparameter *sm-height* 25)
 
 
-;;; CONFIG - Pager mode colors and fonts
-(defparameter *pager-background* "black")
-(defparameter *pager-workspace-border* "blue")
-(defparameter *pager-workspace-background* "black")
-(defparameter *pager-group-border* "yellow")
-(defparameter *pager-group-border-selected* "red")
-(defparameter *pager-group-background* "grey10")
-
-(defparameter *pager-window-selected* "Green")
-(defparameter *pager-window-deselected* "Yellow")
-(defparameter *pager-window-hidden* "Green")
-(defparameter *pager-window-hidden-1* "Red")
-
-(defparameter *pager-window-separator* "blue")
-
-(defparameter *pager-workspace-cursor* "black")
-(defparameter *pager-line-cursor* "blue")
-(defparameter *pager-group-cursor* "white")
-(defparameter *pager-group-background-cursor* "grey35")
-
-
-(defparameter *pager-font-string* "9x15bold")
-
-(defparameter *pager-workspace-height* 200)
 
 
 

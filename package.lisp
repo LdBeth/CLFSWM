@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Thu Mar  6 15:25:41 2008
+;;; #Date#: Thu Mar  6 16:11:59 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Package definition
@@ -97,9 +97,7 @@
 
 (defparameter *main-keys* (make-hash-table :test 'equal))
 (defparameter *second-keys* (make-hash-table :test 'equal))
-(defparameter *mouse-action* (make-hash-table :test 'equal))
-(defparameter *pager-keys*  (make-hash-table :test 'equal))
-(defparameter *pager-mouse-action*  (make-hash-table :test 'equal))
+(defparameter *second-mouse* (make-hash-table :test 'equal))
 (defparameter *info-keys*  (make-hash-table :test 'equal))
 (defparameter *info-mouse-action*  (make-hash-table :test 'equal))
 
@@ -115,9 +113,6 @@ others in the same group")
 
 (defparameter *arrow-action* nil
   "Arrow action in the second mode")
-
-(defparameter *pager-arrow-action* nil
-  "Arrow action in the pager mode")
 
 
 
@@ -166,21 +161,6 @@ others in the same group")
 (defparameter *sm-enter-notify-hook* nil)
 (defparameter *sm-exposure-hook* nil)
 
-
-;;; Pager mode hooks (set in clfswm-pager.lisp)
-(defparameter *pager-button-press-hook* nil)
-(defparameter *pager-button-release-hook* nil)
-(defparameter *pager-motion-notify-hook* nil)
-(defparameter *pager-key-press-hook* nil)
-(defparameter *pager-configure-request-hook* nil)
-(defparameter *pager-map-request-hook* nil)
-(defparameter *pager-unmap-notify-hook* nil)
-(defparameter *pager-destroy-notify-hook* nil)
-(defparameter *pager-mapping-notify-hook* nil)
-(defparameter *pager-property-notify-hook* nil)
-(defparameter *pager-create-notify-hook* nil)
-(defparameter *pager-enter-notify-hook* nil)
-(defparameter *pager-exposure-hook* nil)
 
 
 ;;; Second mode global variables

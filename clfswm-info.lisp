@@ -339,7 +339,7 @@ key is a character, a keycode or a keysym"
 
 (defun show-global-key-binding ()
   "Show all key binding"
-  (show-key-binding *main-keys* *second-keys* *mouse-action*
+  (show-key-binding *main-keys* *second-keys* *second-mouse*
 		    *info-keys* *info-mouse-action*))
 
 (defun show-main-mode-key-binding ()
@@ -348,7 +348,7 @@ key is a character, a keycode or a keysym"
 
 (defun show-second-mode-key-binding ()
   "Show the second mode key binding"
-  (show-key-binding *second-keys* *mouse-action*))
+  (show-key-binding *second-keys* *second-mouse*))
 
 
 (let ((days '("Lundi" "Mardi" "Mercredi" "Jeudi" "Vendredi" "Samedi" "Dimanche"))

@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Tue Feb 12 19:23:14 2008
+;;; #Date#: Thu Mar  6 16:11:27 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Keys functions definition
@@ -34,9 +34,7 @@
 
 (define-hash-table-key-name *main-keys* "Main mode keys")
 (define-hash-table-key-name *second-keys* "Second mode keys")
-(define-hash-table-key-name *mouse-action* "Mouse buttons actions in second mode")
-(define-hash-table-key-name *pager-keys* "Pager mode keys")
-(define-hash-table-key-name *pager-mouse-action* "Mouse buttons actions in pager mode")
+(define-hash-table-key-name *second-mouse* "Mouse buttons actions in second mode")
 (define-hash-table-key-name *info-keys* "Info mode keys")
 (define-hash-table-key-name *info-mouse-action* "Mouse buttons actions in info mode")
 
@@ -82,7 +80,6 @@
 
 (define-define-key "main" *main-keys*)
 (define-define-key "second" *second-keys*)
-(define-define-key "pager" *pager-keys*)
 (define-define-key "info" *info-keys*)
 
 
@@ -95,8 +92,8 @@
 (defun undefine-info-key-fun (key)
   (remhash key *info-keys*))
 
-(define-define-mouse "mouse-action" *mouse-action*)
-(define-define-mouse "pager-mouse-action" *pager-mouse-action*)
+;;(define-define-mouse "main-mouse" *main-mouse*)
+(define-define-mouse "second-mouse" *second-mouse*)
 (define-define-mouse "info-mouse-action" *info-mouse-action*)
 
 
@@ -231,7 +228,7 @@
 (defun produce-doc-html-in-file (filename)
   (with-open-file (stream filename :direction :output
 			  :if-exists :supersede :if-does-not-exist :create)
-    (produce-doc-html (list *main-keys* *second-keys* *mouse-action* *pager-keys* *pager-mouse-action*
+    (produce-doc-html (list *main-keys* *second-keys* *second-mouse*
 			    *info-keys* *info-mouse-action*)
 		      stream)))
 
@@ -264,7 +261,7 @@
 (defun produce-doc-in-file (filename)
   (with-open-file (stream filename :direction :output
 			  :if-exists :supersede :if-does-not-exist :create)
-    (produce-doc (list *main-keys* *second-keys* *mouse-action* *pager-keys* *pager-mouse-action*
+    (produce-doc (list *main-keys* *second-keys* *second-mouse*
 		       *info-keys* *info-mouse-action*)
 		 stream)))
 

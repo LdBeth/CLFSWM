@@ -81,16 +81,16 @@
 (defun sm-handle-motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
   (declare (ignore event-slots))
   (unless (compress-motion-notify)
-    (funcall-button-from-code *mouse-action* 'motion 0 root-x root-y #'first)))
+    (funcall-button-from-code *second-mouse* 'motion 0 root-x root-y #'first)))
 
 (defun sm-handle-button-press (&rest event-slots &key root-x root-y code state &allow-other-keys)
   (declare (ignore event-slots))
-  (funcall-button-from-code *mouse-action* code state root-x root-y #'first)
+  (funcall-button-from-code *second-mouse* code state root-x root-y #'first)
   (draw-second-mode-window))
 
 (defun sm-handle-button-release (&rest event-slots &key root-x root-y code state &allow-other-keys)
   (declare (ignore event-slots))
-  (funcall-button-from-code *mouse-action* code state root-x root-y #'third)
+  (funcall-button-from-code *second-mouse* code state root-x root-y #'third)
   (draw-second-mode-window))
 
 (defun sm-handle-configure-request (&rest event-slots)

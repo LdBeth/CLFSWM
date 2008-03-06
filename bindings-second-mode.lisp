@@ -233,7 +233,7 @@
   (let ((win (find-child-under-mouse root-x root-y)))
     (handle-click-to-focus win)))
 
-(define-mouse-action (1) 'sm-handle-click-to-focus)
+(define-second-mouse (1) 'sm-handle-click-to-focus)
 
 
 
@@ -732,22 +732,22 @@
 ;;
 ;;
 ;;
-;;(define-mouse-action (1) 'move-selected-group 'release-move-selected-group)
-;;(define-mouse-action (1 :mod-1) 'resize-selected-group 'release-resize-selected-group)
-;;(define-mouse-action (1 :control) 'copy-selected-group 'release-copy-selected-group)
+;;(define-second-mouse (1) 'move-selected-group 'release-move-selected-group)
+;;(define-second-mouse (1 :mod-1) 'resize-selected-group 'release-resize-selected-group)
+;;(define-second-mouse (1 :control) 'copy-selected-group 'release-copy-selected-group)
 ;;
-;;(define-mouse-action (2) nil 'mouse-leave-second-mode-maximize)
-;;(define-mouse-action (2 :control) nil 'mouse-leave-second-mode)
+;;(define-second-mouse (2) nil 'mouse-leave-second-mode-maximize)
+;;(define-second-mouse (2 :control) nil 'mouse-leave-second-mode)
 ;;
-;;(define-mouse-action (3) 'move-selected-window 'release-move-selected-window)
-;;(define-mouse-action (3  :control) 'copy-selected-window 'release-copy-selected-window)
+;;(define-second-mouse (3) 'move-selected-window 'release-move-selected-window)
+;;(define-second-mouse (3  :control) 'copy-selected-window 'release-copy-selected-window)
 ;;
 ;;
-;;(define-mouse-action (4) 'mouse-circulate-window-up nil)
-;;(define-mouse-action (5) 'mouse-circulate-window-down nil)
+;;(define-second-mouse (4) 'mouse-circulate-window-up nil)
+;;(define-second-mouse (5) 'mouse-circulate-window-down nil)
 ;;
-;;(define-mouse-action (4 :mod-1) 'mouse-circulate-workspace-up nil)
-;;(define-mouse-action (5 :mod-1) 'mouse-circulate-workspace-down nil)
+;;(define-second-mouse (4 :mod-1) 'mouse-circulate-workspace-up nil)
+;;(define-second-mouse (5 :mod-1) 'mouse-circulate-workspace-down nil)
 ;;
-;;(define-mouse-action ('Motion) 'mouse-motion nil)
+;;(define-second-mouse ('Motion) 'mouse-motion nil)
 
