@@ -2,7 +2,7 @@
 ;;;; Author: Philippe Brochard <hocwp@free.fr>
 ;;;; ASDF System Definition
 ;;;
-;;; #date#: Wed Mar  5 23:08:25 2008
+;;; #date#: Thu Mar  6 16:21:25 2008
 
 (in-package #:asdf)
 
@@ -44,7 +44,7 @@
 		 (:file "bindings"
 			:depends-on ("clfswm" "clfswm-internal"))
 		 (:file "bindings-second-mode"
-			:depends-on ("clfswm" "clfswm-util" "clfswm-query"))))
+			:depends-on ("clfswm" "clfswm-util" "clfswm-query" "bindings"))))
 
 
 

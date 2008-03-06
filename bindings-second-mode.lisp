@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Tue Mar  4 22:41:24 2008
+;;; #Date#: Thu Mar  6 16:32:54 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Bindings keys and mouse for second mode
@@ -228,10 +228,11 @@
 
 
 ;;; Mouse action
-(defun sm-handle-click-to-focus (root-x root-y)
+(defun sm-handle-click-to-focus (window root-x root-y)
   "Give the focus to the clicked child"
+  (declare (ignore window))
   (let ((win (find-child-under-mouse root-x root-y)))
-    (handle-click-to-focus win)))
+    (handle-click-to-focus win root-x root-y)))
 
 (define-second-mouse (1) 'sm-handle-click-to-focus)
 

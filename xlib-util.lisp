@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Wed Mar  5 22:22:59 2008
+;;; #Date#: Thu Mar  6 17:03:02 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Utility functions
@@ -39,9 +39,10 @@
 				:colormap-change
 				:focus-change
 				:enter-window
-				:exposure)
-  ;;:button-press
-  ;;:button-release)
+				:exposure
+				:button-press
+				:button-release
+				:pointer-motion)
   "The events to listen for on managed windows.")
 
 
@@ -402,7 +403,7 @@ Window types are in +WINDOW-TYPES+.")
 
 (defun grab-all-buttons (window)
   (ungrab-all-buttons window)
-  (xlib:grab-button window :any '(:button-press)
+  (xlib:grab-button window :any '(:button-press :button-release :pointer-motion)
 		    :modifiers :any
 		    :owner-p nil
 		    :sync-pointer-p t

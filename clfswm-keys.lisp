@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Thu Mar  6 16:11:27 2008
+;;; #Date#: Thu Mar  6 16:47:42 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Keys functions definition
@@ -33,10 +33,11 @@
 ;;; CONFIG - Key mode names
 
 (define-hash-table-key-name *main-keys* "Main mode keys")
+(define-hash-table-key-name *main-mouse* "Mouse buttons actions in main mode")
 (define-hash-table-key-name *second-keys* "Second mode keys")
 (define-hash-table-key-name *second-mouse* "Mouse buttons actions in second mode")
 (define-hash-table-key-name *info-keys* "Info mode keys")
-(define-hash-table-key-name *info-mouse-action* "Mouse buttons actions in info mode")
+(define-hash-table-key-name *info-mouse* "Mouse buttons actions in info mode")
 
 
 (defmacro define-define-key (name hashtable)
@@ -84,17 +85,12 @@
 
 
 
-  
-;;(defun undefine-main-keys (&rest keys)
-;;  (dolist (k keys)
-;;    (undefine-main-key k)))
-
 (defun undefine-info-key-fun (key)
   (remhash key *info-keys*))
 
-;;(define-define-mouse "main-mouse" *main-mouse*)
+(define-define-mouse "main-mouse" *main-mouse*)
 (define-define-mouse "second-mouse" *second-mouse*)
-(define-define-mouse "info-mouse-action" *info-mouse-action*)
+(define-define-mouse "info-mouse" *info-mouse*)
 
 
 
@@ -160,18 +156,20 @@
 
 
 
-(defun funcall-button-from-code (hash-table-key code state root-x root-y
+(defun funcall-button-from-code (hash-table-key code state window root-x root-y
 				 &optional (action #'first) args)
-  "Action: first=press third=release"
+  "Action: first=press third=release - Return t if a function is found"
   (let ((state (modifiers->state (set-difference (state->modifiers state)
 						 '(:button-1 :button-2 :button-3 :button-4 :button-5)))))
     (multiple-value-bind (function foundp)
 	(gethash (list code state) hash-table-key)
       (if (and foundp (funcall action function))
-	  (if args
-	      (funcall (funcall action function) root-x root-y args)
-	      (funcall (funcall action function) root-x root-y))
-	  t))))
+	  (progn
+	    (if args
+		(funcall (funcall action function) window root-x root-y args)
+		(funcall (funcall action function) window root-x root-y))
+	    t)
+	  nil))))
 
 
 
@@ -228,8 +226,8 @@
 (defun produce-doc-html-in-file (filename)
   (with-open-file (stream filename :direction :output
 			  :if-exists :supersede :if-does-not-exist :create)
-    (produce-doc-html (list *main-keys* *second-keys* *second-mouse*
-			    *info-keys* *info-mouse-action*)
+    (produce-doc-html (list *main-keys* *main-mouse* *second-keys* *second-mouse*
+			    *info-keys* *info-mouse*)
 		      stream)))
 
 
@@ -261,8 +259,8 @@
 (defun produce-doc-in-file (filename)
   (with-open-file (stream filename :direction :output
 			  :if-exists :supersede :if-does-not-exist :create)
-    (produce-doc (list *main-keys* *second-keys* *second-mouse*
-		       *info-keys* *info-mouse-action*)
+    (produce-doc (list *main-keys* *main-mouse* *second-keys* *second-mouse*
+		       *info-keys* *info-mouse*)
 		 stream)))
 
 

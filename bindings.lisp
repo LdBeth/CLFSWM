@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Sat Mar  1 23:24:37 2008
+;;; #Date#: Thu Mar  6 17:10:55 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Bindings keys and mouse
@@ -71,6 +71,37 @@
 
 (define-main-key (#\t :mod-1) 'second-key-mode)
 (define-main-key ("less" :control) 'second-key-mode)
+
+
+
+
+
+
+;;; Mouse actions
+
+(defun handle-click-to-focus (window root-x root-y)
+  "Focus the current group or the current window father"
+  (declare (ignore root-x root-y))
+  (let ((to-replay t)
+	(child window)
+	(father (find-father-group window *current-root*)))
+    (unless father
+      (setf child (find-group-window window *current-root*)
+	    father (find-father-group child *current-root*)))
+    (when (and child father (focus-all-childs child father))
+      (show-all-childs)
+      (setf to-replay nil))
+    (if to-replay
+	(replay-button-event)
+	(stop-button-event))))
+
+
+(defun test-mouse-binding (window root-x root-y)
+  (dbg window root-x root-y))
+
+(define-main-mouse (1) 'handle-click-to-focus)
+;;(define-main-mouse (1) 'handle-click-to-focus 'test-mouse-binding)
+;;(define-main-mouse ('motion) 'test-mouse-binding)
 
 
 ;;(define-main-key ("a") (lambda ()

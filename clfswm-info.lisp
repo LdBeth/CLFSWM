@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Tue Feb 19 21:43:15 2008
+;;; #Date#: Thu Mar  6 16:45:37 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Info function (see the end of this file for user definition
@@ -35,9 +35,9 @@
   (declare (ignore info))
   (throw 'exit-info-loop nil))
 
-(defun mouse-leave-info-mode (root-x root-y info)
+(defun mouse-leave-info-mode (window root-x root-y info)
   "Leave the info mode"
-  (declare (ignore root-x root-y info))
+  (declare (ignore window root-x root-y info))
   (throw 'exit-info-loop nil))
 
 
@@ -152,35 +152,38 @@
 (defparameter *info-start-grab-y* nil)
 
 
-(defun info-begin-grab (root-x root-y info)
+(defun info-begin-grab (window root-x root-y info)
   "Begin grab text"
+  (declare (ignore window))
   (setf *info-start-grab-x* (+ root-x (info-x info))
 	*info-start-grab-y* (+ root-y (info-y info)))
   (draw-info-window info))
 
-(defun info-end-grab (root-x root-y info)
+(defun info-end-grab (window root-x root-y info)
   "End grab"
+  (declare (ignore window))
   (setf (info-x info) (- *info-start-grab-x* root-x)
 	(info-y info) (- *info-start-grab-y* root-y)
 	*info-start-grab-x* nil
 	*info-start-grab-y* nil)
   (draw-info-window info))
 
-(defun info-mouse-next-line (root-x root-y info)
+(defun info-mouse-next-line (window root-x root-y info)
   "Move one line down"
-  (declare (ignore root-x root-y))
+  (declare (ignore window root-x root-y))
   (incf (info-y info) (info-ilh info))
   (draw-info-window info))
 
-(defun info-mouse-previous-line (root-x root-y info)
+(defun info-mouse-previous-line (window root-x root-y info)
   "Move one line up"
-  (declare (ignore root-x root-y))
+  (declare (ignore window root-x root-y))
   (decf (info-y info) (info-ilh info))
   (draw-info-window info))
 
 
-(defun info-mouse-motion (root-x root-y info)
+(defun info-mouse-motion (window root-x root-y info)
   "Grab text"
+  (declare (ignore window))
   (when (and *info-start-grab-x* *info-start-grab-y*)
     (setf (info-x info) (- *info-start-grab-x* root-x)
 	  (info-y info) (- *info-start-grab-y* root-y))
@@ -190,11 +193,11 @@
 
 
 
-(define-info-mouse-action (1) 'info-begin-grab 'info-end-grab)
-(define-info-mouse-action (2) 'mouse-leave-info-mode)
-(define-info-mouse-action (4) 'info-mouse-previous-line)
-(define-info-mouse-action (5) 'info-mouse-next-line)
-(define-info-mouse-action ('Motion) 'info-mouse-motion nil)
+(define-info-mouse (1) 'info-begin-grab 'info-end-grab)
+(define-info-mouse (2) 'mouse-leave-info-mode)
+(define-info-mouse (4) 'info-mouse-previous-line)
+(define-info-mouse (5) 'info-mouse-next-line)
+(define-info-mouse ('Motion) 'info-mouse-motion nil)
 
 
 ;;;,-----
@@ -236,13 +239,13 @@
 		 (declare (ignore event-slots))
 		 (unless (xlib:event-case (*display* :discard-p nil :peek-p t :timeout 0)
 			   (:motion-notify () t))
-		   (funcall-button-from-code *info-mouse-action* 'motion 0 root-x root-y #'first info)))
-	       (handle-button-press (&rest event-slots &key root-x root-y code state &allow-other-keys)
+		   (funcall-button-from-code *info-mouse* 'motion 0 window root-x root-y #'first info)))
+	       (handle-button-press (&rest event-slots &key window root-x root-y code state &allow-other-keys)
 		 (declare (ignore event-slots))
-		 (funcall-button-from-code *info-mouse-action* code state root-x root-y #'first info))
-	       (handle-button-release (&rest event-slots &key root-x root-y code state &allow-other-keys)
+		 (funcall-button-from-code *info-mouse* code state window root-x root-y #'first info))
+	       (handle-button-release (&rest event-slots &key window root-x root-y code state &allow-other-keys)
 		 (declare (ignore event-slots))
-		 (funcall-button-from-code *info-mouse-action* code state root-x root-y #'third info))
+		 (funcall-button-from-code *info-mouse* code state window root-x root-y #'third info))
 	       (info-handle-unmap-notify (&rest event-slots)
 		 (apply #'handle-unmap-notify event-slots)
 		 (draw-info-window info))
@@ -339,12 +342,12 @@ key is a character, a keycode or a keysym"
 
 (defun show-global-key-binding ()
   "Show all key binding"
-  (show-key-binding *main-keys* *second-keys* *second-mouse*
-		    *info-keys* *info-mouse-action*))
+  (show-key-binding *main-keys* *main-mouse* *second-keys* *second-mouse*
+		    *info-keys* *info-mouse*))
 
 (defun show-main-mode-key-binding ()
   "Show the main mode binding"
-  (show-key-binding *main-keys*))
+  (show-key-binding *main-keys* *main-mouse*))
 
 (defun show-second-mode-key-binding ()
   "Show the second mode key binding"

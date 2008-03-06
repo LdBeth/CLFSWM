@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Thu Mar  6 15:34:27 2008
+;;; #Date#: Thu Mar  6 16:57:45 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Main functions
@@ -37,6 +37,23 @@
   (funcall-key-from-code *main-keys* code state))
 
 
+;; PHIL: TODO: focus-policy par group
+;;  :click, :sloppy, :nofocus
+(defun handle-button-press (&rest event-slots &key code state window root-x root-y &allow-other-keys)
+  (declare (ignore event-slots))
+  (unless (funcall-button-from-code *main-mouse* code state window root-x root-y #'first)
+    (replay-button-event)))
+
+
+(defun handle-button-release (&rest event-slots &key code state window root-x root-y &allow-other-keys)
+  (declare (ignore event-slots))
+  (unless (funcall-button-from-code *main-mouse* code state window root-x root-y #'third)
+    (replay-button-event)))
+
+(defun handle-motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
+  (declare (ignore event-slots))
+  (unless (compress-motion-notify)
+    (funcall-button-from-code *main-mouse* 'motion 0 root-x root-y #'first)))
 
 
 (defun handle-configure-request (&rest event-slots &key stack-mode #|parent|# window #|above-sibling|#
@@ -121,29 +138,6 @@
 
 
 
-;; PHIL: TODO: focus-policy par group
-;;  :click, :sloppy, :nofocus
-(defun handle-click-to-focus (window)
-  (let ((to-replay t)
-	(child window)
-	(father (find-father-group window *current-root*)))
-    (unless father
-      (setf child (find-group-window window *current-root*)
-	    father (find-father-group child *current-root*)))
-    (when (and child father (focus-all-childs child father))
-      (show-all-childs)
-      (setf to-replay nil))
-    (if to-replay (replay-button-event) (stop-button-event))))
-
-
-(defun handle-button-press (&rest event-slots &key code state window &allow-other-keys)
-  (declare (ignore event-slots))
-  (if (and (= code 1) (= state 0))
-      (handle-click-to-focus window)
-      (replay-button-event)))
-
-	
-
 
 
 
@@ -157,7 +151,9 @@
       *map-request-hook* #'handle-map-request
       *unmap-notify-hook* 'handle-unmap-notify
       *create-notify-hook* #'handle-create-notify
-      *button-press-hook* 'handle-button-press)
+      *button-press-hook* 'handle-button-press
+      *button-release-hook* 'handle-button-release
+      *motion-notify-hook* 'handle-motion-notify)
 
 
 
@@ -168,7 +164,8 @@
   (with-xlib-protect
       (case event-key
 	(:button-press (call-hook *button-press-hook* event-slots))
-	(:motion-notify (call-hook *button-motion-notify-hook* event-slots))
+	(:button-release (call-hook *button-release-hook* event-slots))
+	(:motion-notify (call-hook *motion-notify-hook* event-slots))
 	(:key-press (call-hook *key-press-hook* event-slots))
 	(:configure-request (call-hook *configure-request-hook* event-slots))
 	(:configure-notify (call-hook *configure-notify-hook* event-slots))
@@ -221,7 +218,9 @@
 							      :substructure-notify
 							      :property-change
 							      :exposure
-							      :button-press))
+							      :button-press
+							      :button-release
+							      :pointer-motion))
   ;;(intern-atoms *display*)
   (netwm-set-properties)
   (xlib:display-force-output *display*)

@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Wed Mar  5 23:09:42 2008
+;;; #Date#: Thu Mar  6 16:58:18 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Main functions
@@ -166,7 +166,7 @@
 				     :colormap (xlib:screen-default-colormap *screen*)
 				     :border-width 1
 				     :border (get-color "Red")
-				     :event-mask '(:exposure :button-press)))
+				     :event-mask '(:exposure :button-press :button-release :pointer-motion)))
 	 (gc (xlib:create-gcontext :drawable window
 				   :foreground (get-color "Green")
 				   :background (get-color "Black")

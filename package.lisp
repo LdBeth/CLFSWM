@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Thu Mar  6 16:11:59 2008
+;;; #Date#: Thu Mar  6 16:52:01 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Package definition
@@ -96,10 +96,11 @@
 
 
 (defparameter *main-keys* (make-hash-table :test 'equal))
+(defparameter *main-mouse* (make-hash-table :test 'equal))
 (defparameter *second-keys* (make-hash-table :test 'equal))
 (defparameter *second-mouse* (make-hash-table :test 'equal))
 (defparameter *info-keys*  (make-hash-table :test 'equal))
-(defparameter *info-mouse-action*  (make-hash-table :test 'equal))
+(defparameter *info-mouse*  (make-hash-table :test 'equal))
 
 
 (defparameter *open-next-window-in-new-workspace* nil
@@ -131,7 +132,8 @@ others in the same group")
 
 ;;; Main mode hooks (set in clfswm.lisp)
 (defparameter *button-press-hook* nil)
-(defparameter *button-motion-notify-hook* nil)
+(defparameter *button-release-hook* nil)
+(defparameter *motion-notify-hook* nil)
 (defparameter *key-press-hook* nil)
 (defparameter *configure-request-hook* nil)
 (defparameter *configure-notify-hook* nil)
