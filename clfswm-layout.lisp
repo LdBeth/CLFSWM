@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Wed Feb 27 22:19:57 2008
+;;; #Date#: Thu Mar  6 15:04:13 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Layout functions
@@ -47,7 +47,7 @@
   (when (group-p *current-child*)
     (setf (group-layout *current-child*) layout)
     (leave-second-mode)))
-    ;;(show-all-childs)))
+
 
 (defun get-managed-child (father)
   "Return only window in normal mode who can be tiled"
@@ -58,6 +58,12 @@
 
 (defun register-layout (layout)
   (setf *layout-list* (append *layout-list* (list layout))))
+
+(defun layout-ask-size (msg slot &optional (min 80))
+  (when (group-p *current-child*)
+    (let ((new-size (/ (or (query-number msg (* (group-data-slot *current-child* slot) 100)) min) 100)))
+      (when (<= 0 new-size 1)
+	(setf (group-data-slot *current-child* slot) new-size)))))
 
 
 
@@ -112,15 +118,6 @@
 
 
 ;;; Tile Left
-(defun layout-ask-size (msg slot &optional (min 80))
-  (when (group-p *current-child*)
-    (let ((new-size (/ (or (query-number msg) min) 100)))
-      (when (<= 0 new-size 1)
-	(setf (group-data-slot *current-child* slot) new-size)))))
-
-
-
-
 (defgeneric tile-left-layout (child father)
   (:documentation "Tile Left: main child on left and others on right"))
 

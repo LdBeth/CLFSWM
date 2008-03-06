@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Sat Mar  1 00:02:34 2008
+;;; #Date#: Thu Mar  6 15:34:27 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Main functions
@@ -261,10 +261,12 @@
 
 
 
-(defun main (&optional (display-str (or (getenv "DISPLAY") ":0")) protocol)
+(defun main (&key (display (or (getenv "DISPLAY") ":0")) protocol
+	     (base-dir (directory-namestring (or *load-truename* ""))))
+  (setf *contrib-dir* base-dir)
   (read-conf-file)
   (handler-case
-      (open-display display-str protocol)
+      (open-display display protocol)
     (xlib:access-error (c)
       (format t "~&~A~&Maybe another window manager is running.~%" c)
       (force-output)

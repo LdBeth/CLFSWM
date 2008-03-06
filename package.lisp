@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Sat Mar  1 13:52:50 2008
+;;; #Date#: Thu Mar  6 15:25:41 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Package definition
@@ -40,6 +40,8 @@
 (defparameter *root* nil)
 (defparameter *no-focus-window* nil)
 (defparameter *root-gc* nil)
+
+(defparameter *contrib-dir* "")
 
 (defparameter *default-font* nil)
 ;;(defparameter *default-font-string* "9x15")

@@ -44,9 +44,10 @@ or> (require :asdf)                     ; asdf for sbcl
 To change the default keybinding, have a look at the bindings*.lisp
 files and at the config.lisp file for global variables.
 
-All variables can be overwritten in a user configuration file
-(/etc/clfswmrc or $HOME/.clfswmrc). It's a standard lisp file loaded at
-startup. There is an example in the clfswm source (see dot-clfswmrc).
+All variables can be overwritten in a user configuration file:
+$HOME/.clfswmrc or /etc/clfswmrc or $XDG_CONFIG_HOME/clfswm/clfswmrc.
+It's a standard lisp file loaded at startup. There is an example in
+the clfswm source (see dot-clfswmrc).
 
 If you want to add workspaces or groups at startup, tell this to
 clfswm in the init-display function in clfswm.lisp (there is already a
@@ -74,7 +75,7 @@ may find a speed up with the compress notify event. See the variable
  [3]Free Software Foundation site.
 
 
-Philippe Brochard <hocwp at free dot fr>.
+Philippe Brochard <pbrochard [at] common-lisp [dot] net>.
 
 Références
 

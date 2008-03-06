@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Tue Mar  4 22:29:03 2008
+;;; #Date#: Thu Mar  6 15:38:05 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: System loading functions
@@ -57,4 +57,4 @@
 
 (in-package :clfswm)
 
-(clfswm:main ":0")
+(clfswm:main)
