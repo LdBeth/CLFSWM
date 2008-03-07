@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Thu Mar  6 16:32:54 2008
+;;; #Date#: Fri Mar  7 23:14:21 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Bindings keys and mouse for second mode
@@ -228,13 +228,54 @@
 
 
 ;;; Mouse action
-(defun sm-handle-click-to-focus (window root-x root-y)
+
+
+(defun sm-mouse-click-to-focus (window root-x root-y)
   "Give the focus to the clicked child"
   (declare (ignore window))
-  (let ((win (find-child-under-mouse root-x root-y)))
-    (handle-click-to-focus win root-x root-y)))
+  (let ((win (find-window-under-mouse root-x root-y)))
+    (mouse-click-to-focus win root-x root-y)))
 
-(define-second-mouse (1) 'sm-handle-click-to-focus)
+
+
+
+(defun sm-mouse-select-next-level (window root-x root-y)
+  "Select the next level in group"
+  (declare (ignore window root-x root-y))
+  (select-next-level))
+
+
+
+
+(defun sm-mouse-select-previous-level (window root-x root-y)
+  "Select the previous level in group"
+  (declare (ignore window root-x root-y))
+  (select-previous-level))
+
+
+
+(defun sm-mouse-enter-group (window root-x root-y)
+  "Enter in the selected group - ie make it the root group"
+  (declare (ignore window root-x root-y))
+  (enter-group))
+
+
+
+(defun sm-mouse-leave-group (window root-x root-y)
+  "Leave the selected group - ie make its father the root group"
+  (declare (ignore window root-x root-y))
+  (leave-group))
+
+
+
+
+(define-second-mouse (1) 'sm-mouse-click-to-focus)
+
+(define-second-mouse (4) 'sm-mouse-select-next-level)
+(define-second-mouse (5) 'sm-mouse-select-previous-level)
+
+(define-second-mouse (4 :mod-1) 'sm-mouse-enter-group)
+(define-second-mouse (5 :mod-1) 'sm-mouse-leave-group)
 
 
 

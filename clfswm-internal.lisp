@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Thu Mar  6 16:58:18 2008
+;;; #Date#: Fri Mar  7 22:25:37 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Main functions
@@ -31,10 +31,11 @@
 ;;; Minimal hook
 (defun call-hook (hook &optional args)
   "Call a hook (a function, a symbol or a list of function)"
-  (typecase hook
-    (list (dolist (h hook)
-	    (apply 'call-hook (list h args))))
-    (t (apply hook args))))
+  (when hook
+    (typecase hook
+      (cons (dolist (h hook)
+	      (call-hook h args)))
+      (t (apply hook args)))))
 
 
 
@@ -590,17 +591,30 @@
 
 
 
+(defun place-window-from-hints (window)
+  "Place a window from its hints"
+  (let* ((hints (xlib:wm-normal-hints window))
+	 (min-width (or (and hints (xlib:wm-size-hints-min-width hints)) 0))
+	 (min-height (or (and hints (xlib:wm-size-hints-min-height hints)) 0))
+	 (max-width (or (and hints (xlib:wm-size-hints-max-width hints)) (xlib:drawable-width *root*)))
+	 (max-height (or (and hints (xlib:wm-size-hints-max-height hints)) (xlib:drawable-height *root*)))
+	 (rwidth (or (and hints (or (xlib:wm-size-hints-width hints) (xlib:wm-size-hints-base-width hints)))
+		     (xlib:drawable-width window)))
+	 (rheight (or (and hints (or (xlib:wm-size-hints-height hints) (xlib:wm-size-hints-base-height hints)))
+		      (xlib:drawable-height window))))
+    (setf (xlib:drawable-width window) (min (max min-width rwidth) max-width)
+	  (xlib:drawable-height window) (min (max min-height rheight) max-height))
+    (setf (xlib:drawable-x window) (truncate (+ (group-rx *current-child*) (/ (- (group-rw *current-child*) (xlib:drawable-width window)) 2)))
+	  (xlib:drawable-y window) (truncate (+ (group-ry *current-child*) (/ (- (group-rh *current-child*) (xlib:drawable-height window)) 2))))))
+
+
 
 (defun process-new-window (window)
   "When a new window is created (or when we are scanning initial
 windows), this function dresses the window up and gets it ready to be
 managed."
-  ;; Listen for events
-  ;;(create-workspace-on-request)
-  ;;(create-group-on-request)
-  ;; PHIL: TODO: add a hook here
   (with-xlib-protect
-      (setf (xlib:window-event-mask window) *window-events*)
+    (setf (xlib:window-event-mask window) *window-events*)
     (set-window-state window +normal-state+)
     (setf (xlib:drawable-border-width window) (case (window-type window)
 						(:normal 1)
@@ -618,19 +632,7 @@ managed."
     ;;(dbg (xlib:wm-name window) (xlib:get-wm-class window) (window-type window)) ;;; PHIL
     (case (window-type window)
       (:normal (adapt-child-to-father window *current-child*))
-      (t (let* ((hints (xlib:wm-normal-hints window))
-		(min-width (or (and hints (xlib:wm-size-hints-min-width hints)) 0))
-		(min-height (or (and hints (xlib:wm-size-hints-min-height hints)) 0))
-		(max-width (or (and hints (xlib:wm-size-hints-max-width hints)) (xlib:drawable-width *root*)))
-		(max-height (or (and hints (xlib:wm-size-hints-max-height hints)) (xlib:drawable-height *root*)))
-		(rwidth (or (and hints (or (xlib:wm-size-hints-width hints) (xlib:wm-size-hints-base-width hints)))
-			    (xlib:drawable-width window)))
-		(rheight (or (and hints (or (xlib:wm-size-hints-height hints) (xlib:wm-size-hints-base-height hints)))
-			     (xlib:drawable-height window))))
-	   (setf (xlib:drawable-width window) (min (max min-width rwidth) max-width)
-		 (xlib:drawable-height window) (min (max min-height rheight) max-height))
-	   (setf (xlib:drawable-x window) (truncate (+ (group-rx *current-child*) (/ (- (group-rw *current-child*) (xlib:drawable-width window)) 2)))
-		 (xlib:drawable-y window) (truncate (+ (group-ry *current-child*) (/ (- (group-rh *current-child*) (xlib:drawable-height window)) 2)))))))
+      (t (place-window-from-hints window)))
     (netwm-add-in-client-list window)))
 
 

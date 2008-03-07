@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Thu Mar  6 17:10:55 2008
+;;; #Date#: Fri Mar  7 22:58:01 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Bindings keys and mouse
@@ -79,7 +79,7 @@
 
 ;;; Mouse actions
 
-(defun handle-click-to-focus (window root-x root-y)
+(defun mouse-click-to-focus (window root-x root-y)
   "Focus the current group or the current window father"
   (declare (ignore root-x root-y))
   (let ((to-replay t)
@@ -99,7 +99,56 @@
 (defun test-mouse-binding (window root-x root-y)
   (dbg window root-x root-y))
 
-(define-main-mouse (1) 'handle-click-to-focus)
+
+
+(defun mouse-select-next-level (window root-x root-y)
+  "Select the next level in group"
+  (declare (ignore root-x root-y))
+  (let ((group (find-group-window window)))
+    (when (or group (xlib:window-equal window *root*))
+      (select-next-level))
+    (replay-button-event)))
+
+
+
+(defun mouse-select-previous-level (window root-x root-y)
+  "Select the previous level in group"
+  (declare (ignore root-x root-y))
+  (let ((group (find-group-window window)))
+    (when (or group (xlib:window-equal window *root*))
+      (select-previous-level))
+    (replay-button-event)))
+
+
+
+(defun mouse-enter-group (window root-x root-y)
+  "Enter in the selected group - ie make it the root group"
+  (declare (ignore root-x root-y))
+  (let ((group (find-group-window window)))
+    (when (or group (xlib:window-equal window *root*))
+      (enter-group))
+    (replay-button-event)))
+
+
+
+(defun mouse-leave-group (window root-x root-y)
+  "Leave the selected group - ie make its father the root group"
+  (declare (ignore root-x root-y))
+  (let ((group (find-group-window window)))
+    (when (or group (xlib:window-equal window *root*))
+      (leave-group))
+    (replay-button-event)))
+
+
+(define-main-mouse (1) 'mouse-click-to-focus)
+
+
+(define-main-mouse (4) 'mouse-select-next-level)
+(define-main-mouse (5) 'mouse-select-previous-level)
+
+(define-main-mouse (4 :mod-1) 'mouse-enter-group)
+(define-main-mouse (5 :mod-1) 'mouse-leave-group)
+
 ;;(define-main-mouse (1) 'handle-click-to-focus 'test-mouse-binding)
 ;;(define-main-mouse ('motion) 'test-mouse-binding)
 

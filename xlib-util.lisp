@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Thu Mar  6 17:33:40 2008
+;;; #Date#: Fri Mar  7 21:18:17 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Utility functions
@@ -121,9 +121,10 @@ Window types are in +WINDOW-TYPES+.")
 (defun unhide-window (window)
   (when window
     (with-xlib-protect
-      (xlib:map-window window)
-      (setf (window-state window) +normal-state+
-	    (xlib:window-event-mask window) *window-events*))))
+      (when (window-hidden-p window)
+	(xlib:map-window window)
+	(setf (window-state window) +normal-state+
+	      (xlib:window-event-mask window) *window-events*)))))
 
 
 

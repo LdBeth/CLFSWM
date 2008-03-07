@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Thu Mar  6 16:57:45 2008
+;;; #Date#: Fri Mar  7 21:16:29 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Main functions
@@ -37,7 +37,7 @@
   (funcall-key-from-code *main-keys* code state))
 
 
-;; PHIL: TODO: focus-policy par group
+;; PHIL: TODO: focus-policy by group
 ;;  :click, :sloppy, :nofocus
 (defun handle-button-press (&rest event-slots &key code state window root-x root-y &allow-other-keys)
   (declare (ignore event-slots))

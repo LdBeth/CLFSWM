@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Thu Mar  6 15:26:18 2008
+;;; #Date#: Fri Mar  7 23:07:03 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Utility
@@ -110,27 +110,41 @@
 (defun unhide-all-windows-in-current-child ()
   "Unhide all hidden windows into the current child"
   (with-xlib-protect
-      (dolist (window (get-hidden-windows))
-	(unhide-window window)
-	(process-new-window window)
-	(xlib:map-window window)))
+    (dolist (window (get-hidden-windows))
+      (unhide-window window)
+      (process-new-window window)
+      (xlib:map-window window)))
   (show-all-childs))
 
 
 
 
-(defun find-child-under-mouse (x y)
+(defun find-window-under-mouse (x y)
   "Return the child window under the mouse"
   (with-xlib-protect
-      (let ((win nil))
-	(with-all-windows-groups (*current-root* child)
-	  (when (and (<= (xlib:drawable-x child) x (+ (xlib:drawable-x child) (xlib:drawable-width child)))
-		     (<= (xlib:drawable-y child) y (+ (xlib:drawable-y child) (xlib:drawable-height child))))
-	    (setf win child))
-	  (when (and (<= (group-rx child) x (+ (group-rx child) (group-rw child)))
-		     (<= (group-ry child) y (+ (group-ry child) (group-rh child))))
-	    (setf win (group-window child))))
-	win)))
+    (let ((win nil))
+      (with-all-windows-groups (*current-root* child)
+	(when (and (<= (xlib:drawable-x child) x (+ (xlib:drawable-x child) (xlib:drawable-width child)))
+		   (<= (xlib:drawable-y child) y (+ (xlib:drawable-y child) (xlib:drawable-height child))))
+	  (setf win child))
+	(when (and (<= (group-rx child) x (+ (group-rx child) (group-rw child)))
+		   (<= (group-ry child) y (+ (group-ry child) (group-rh child))))
+	  (setf win (group-window child))))
+      win)))
+
+
+(defun find-child-under-mouse (x y)
+  "Return the child under the mouse"
+  (with-xlib-protect
+    (let ((ret nil))
+      (with-all-windows-groups (*current-root* child)
+	(when (and (<= (xlib:drawable-x child) x (+ (xlib:drawable-x child) (xlib:drawable-width child)))
+		   (<= (xlib:drawable-y child) y (+ (xlib:drawable-y child) (xlib:drawable-height child))))
+	  (setf ret child))
+	(when (and (<= (group-rx child) x (+ (group-rx child) (group-rw child)))
+		   (<= (group-ry child) y (+ (group-ry child) (group-rh child))))
+	  (setf ret child)))
+      ret)))
 
 
 
