@@ -1,12 +1,12 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Sun Mar  9 15:26:50 2008
+;;; #Date#: Sun Mar  9 15:31:35 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: New window Hooks
 ;;;
-;;;  This hooks can be set for each group to manage new window when they are
+;;;  Those hooks can be set for each group to manage new window when they are
 ;;;  mapped.
 ;;; --------------------------------------------------------------------------
 ;;;
@@ -30,4 +30,4 @@
 
 (in-package :clfswm)
 
-;;; TODO: fill this file
+;;; TODO: fill this file (test of git :)
