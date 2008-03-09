@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Thu Mar  6 16:52:01 2008
+;;; #Date#: Sat Mar  8 21:26:50 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Package definition
@@ -76,6 +76,8 @@
    (rw :initarg :rw :accessor group-rw :initform 800)
    (rh :initarg :rh :accessor group-rh :initform 600)
    (layout :initarg :layout :accessor group-layout :initform nil)
+   (nw-hook :initarg :nw-hook :accessor group-nw-hook :initform nil
+	      :documentation "Hook done by the group when a new window is mapped")
    (window :initarg :window :accessor group-window :initform nil)
    (gc :initarg :gc :accessor group-gc :initform nil)
    (child :initarg :child :accessor group-child :initform nil)

@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Fri Mar  7 21:16:29 2008
+;;; #Date#: Sun Mar  9 13:35:36 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Main functions
@@ -96,10 +96,8 @@
 (defun handle-map-request (&rest event-slots &key window send-event-p &allow-other-keys)
   (declare (ignore event-slots))
   (unless send-event-p
-    ;;    (unhide-window window)
     (process-new-window window)
     (xlib:map-window window)
-    ;;    (focus-window window)
     (show-all-childs)))
 
 
@@ -247,7 +245,7 @@
 	 (etc-conf (probe-file #p"/etc/clfswmrc"))
 	 (config-user-conf (probe-file (make-pathname :directory (append (xdg-config-home) '("clfswm"))
 						      :name "clfswmrc")))
-	 (conf (or user-conf etc-conf config-user-conf)))
+	 (conf (or config-user-conf user-conf etc-conf)))
     (if conf
 	(handler-case (load conf)
 	  (error (c)

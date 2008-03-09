@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Fri Mar  7 22:25:37 2008
+;;; #Date#: Sun Mar  9 01:24:59 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Main functions
@@ -30,12 +30,17 @@
 
 ;;; Minimal hook
 (defun call-hook (hook &optional args)
-  "Call a hook (a function, a symbol or a list of function)"
-  (when hook
-    (typecase hook
-      (cons (dolist (h hook)
-	      (call-hook h args)))
-      (t (apply hook args)))))
+  "Call a hook (a function, a symbol or a list of functions)
+Return the result of the last hook"
+  (let ((result nil))
+    (labels ((rec (hook)
+	       (when hook
+		 (typecase hook
+		   (cons (dolist (h hook)
+			   (rec h)))
+		   (t (setf result (apply hook args)))))))
+      (rec hook)
+      result)))
 
 
 
@@ -609,6 +614,46 @@
 
 
 
+(defun default-group-nw-hook (window)
+  (when (xlib:window-p *current-child*)
+    (leave-group)
+    (select-previous-level))
+  ;;(unless (eql (window-type window) :maxsize) ;; PHIL: this is sufficient for the ROX panel
+  (when (group-p *current-child*)
+    (pushnew window (group-child *current-child*))) ;)
+  ;;(dbg (xlib:wm-name window) (xlib:get-wm-class window) (window-type window)) ;;; PHIL
+  (case (window-type window)
+    (:normal (adapt-child-to-father window *current-child*))
+    (t (place-window-from-hints window))))
+
+
+(defun open-in-new-group-nw-hook (group window)
+  (declare (ignore group))
+  (pushnew window (group-child *current-root*))
+  ;;(dbg (xlib:wm-name window) (xlib:get-wm-class window) (window-type window)) ;;; PHIL
+  (case (window-type window)
+    (:normal (adapt-child-to-father window *current-root*))
+    (t (place-window-from-hints window)))
+  (list t nil))
+  
+
+
+(defun do-all-groups-nw-hook (window)
+  "Call nw-hook of each group. A hook must return one value or a list of two values.
+If the value or the first value is true then the default nw-hook is not executed.
+If the second value is true then no more group can do an action with the window (ie leave the loop)."
+  (let ((result nil))
+    (with-all-groups (*root-group* group)
+      (let ((ret (call-hook (group-nw-hook group) (list group window))))
+	(typecase ret
+	  (cons (when (first ret)
+		  (setf result t))
+		(when (second ret)
+		  (return-from do-all-groups-nw-hook result)))
+	  (t (when ret
+	       (setf result t))))))
+    result))
+
 (defun process-new-window (window)
   "When a new window is created (or when we are scanning initial
 windows), this function dresses the window up and gets it ready to be
@@ -622,17 +667,11 @@ managed."
 						(:transient 1)
 						(t 0)))
     (grab-all-buttons window)
-    (when (xlib:window-p *current-child*)
-      (leave-group)
-      (select-previous-level))
-    ;;(unless (eql (window-type window) :maxsize) ;; PHIL: this is sufficient for the ROX panel
-    (when (group-p *current-child*)
-      (pushnew window (group-child *current-child*))) ;)
+;;    (when (group-p *current-child*) ;; PHIL: Remove this!!!
+;;      (setf (group-nw-hook *current-child*) #'open-in-new-group-nw-hook))
+    (unless (do-all-groups-nw-hook window)
+      (default-group-nw-hook window))
     (unhide-window window)
-    ;;(dbg (xlib:wm-name window) (xlib:get-wm-class window) (window-type window)) ;;; PHIL
-    (case (window-type window)
-      (:normal (adapt-child-to-father window *current-child*))
-      (t (place-window-from-hints window)))
     (netwm-add-in-client-list window)))
 
 

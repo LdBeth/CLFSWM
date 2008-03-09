@@ -4,6 +4,13 @@ CLFSWM -  A(nother) Common Lisp FullScreen Window Manager
 Philippe Brochard   hocwp at free dot fr
 
 
+Contributors
+------------
+
+Xavier Maillard     xma at gnu dot org
+Cyrille THOUVENIN
+
+
 -----------------------------------
 
 Some of the CLFSWM code is based on 

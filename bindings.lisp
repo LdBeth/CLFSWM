@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Fri Mar  7 22:58:01 2008
+;;; #Date#: Sat Mar  8 21:13:30 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Bindings keys and mouse
@@ -140,7 +140,7 @@
     (replay-button-event)))
 
 
-(define-main-mouse (1) 'mouse-click-to-focus)
+(define-main-mouse (1) nil 'mouse-click-to-focus)
 
 
 (define-main-mouse (4) 'mouse-select-next-level)

@@ -1,0 +1,54 @@
+#!/bin/bash -e
+#
+# #Date#:
+#
+# --------------------------------------------------------------------------
+# Documentation:
+#
+# Original code and idea: http://stumpwm.antidesktop.net/cgi-bin/wiki/SetUp
+#
+# This script is targeted to CLisp users. It will help in starting
+# CLFSWM quicker by dumping an image of CLFSWM.
+#
+# Installation:
+# Put this script wherever you want and just call it from your .xinitrc file
+#
+# The first time you will launch it, it will build the final
+# executable and then call it. To force a rebuild of your executable
+# (say you have updated something in the CLFSWM source tree), just
+# delete the image and restart your X session.
+# --------------------------------------------------------------------------
+
+# (C) 2008 Xavier Maillard <xma@gnu.org>
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+#
+# --------------------------------------------------------------------------
+
+# Tweak this
+IMAGE="$HOME/var/cache/clfswm-$(cksum $(type -p clisp) | cut -d ' ' -f 1).core"
+ASDF=$HOME/usr/src/SVNed/clfswm
+CLFSWMASDPATH=$HOME/usr/share/common-lisp/systems
+
+if  test ! -e "$x" ||
+    (   for i in "$(dirname $(readlink $CLFSWMASDPATH/clfswm.asd))"/*.lisp
+        do  test "$x" -ot "$i" && exit 1
+        done )
+then
+	clisp -m 8MB -E ISO-8859-1 -q -K full -i $ASDF/asdf.lisp -x "(asdf:oos 'asdf:load-op :clfswm)\
+       		(EXT:SAVEINITMEM \"$IMAGE\" :INIT-FUNCTION 'clfswm:main :EXECUTABLE t :norc t)"
+fi
+
+$IMAGE

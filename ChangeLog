@@ -1,3 +1,20 @@
+2008-03-09  Philippe Brochard  <hocwp@free.fr>
+
+	* clfswm-internal.lisp (process-new-window): Beginning of new
+	window hook: each group have a hook to tell what he wants to do
+	with the new created window.
+
+2008-03-08  Xavier Maillard  <xma@gnu.org>
+
+	* contrib/clfswm: New script. Dump a CLISP image of CLFSWM then
+ 	call the resulting executable.
+	
+2008-03-08  Xavier Maillard  <xma@gnu.org>
+	
+	* clfswm.lisp (read-conf-file): Check for the user config file in
+	XDG_CONFIG_HOME *first*. Freedesktop.org standards should be
+	prefered whenever possible.
+
 2008-02-27  Philippe Brochard  <hocwp@free.fr>
 
 	* clfswm-layout.lisp (*-layout): Add an optional raise-p
