@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Mon Mar 10 23:48:11 2008
+;;; #Date#: Tue Mar 11 00:00:32 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: New window Hooks
@@ -31,5 +31,3 @@
 (in-package :clfswm)
 
 ;;; TODO: fill this file.
-
-;;; Test of git+svn
