@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Mon Mar 10 23:35:51 2008
+;;; #Date#: Mon Mar 10 23:48:11 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: New window Hooks
@@ -33,6 +33,3 @@
 ;;; TODO: fill this file.
 
 ;;; Test of git+svn
-
-
-;;; An other test of git+svn
