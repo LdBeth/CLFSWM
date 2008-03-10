@@ -1,3 +1,11 @@
+2008-03-10  Xavier Maillard  <xma@gnu.org>
+
+	* contrib/clfswm: Complete rewrite of the script. Detect error and
+	act accordingly. Add command line arguments to configure the
+	script execution. User can now choose different common lisp
+	implementation (clisp and sbcl only), choose where to store the
+	dumped image, where to find clfswm source.
+
 2008-03-09  Philippe Brochard  <hocwp@free.fr>
 
 	* clfswm-internal.lisp (process-new-window): Beginning of new
@@ -8,9 +16,7 @@
 
 	* contrib/clfswm: New script. Dump a CLISP image of CLFSWM then
  	call the resulting executable.
-	
-2008-03-08  Xavier Maillard  <xma@gnu.org>
-	
+
 	* clfswm.lisp (read-conf-file): Check for the user config file in
 	XDG_CONFIG_HOME *first*. Freedesktop.org standards should be
 	prefered whenever possible.
