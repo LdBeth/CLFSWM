@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Fri Mar  7 23:07:03 2008
+;;; #Date#: Tue Mar 11 12:35:53 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Utility
@@ -208,7 +208,7 @@
 	 (window (xlib:create-window :parent *root*
 				     :x 0 :y 0
 				     :width (- (xlib:screen-width *screen*) 2)
-				     :height (* 3 (+ (xlib:max-char-ascent font) (xlib:max-char-descent font)))
+				     :height (* 5 (+ (xlib:max-char-ascent font) (xlib:max-char-descent font)))
 				     :background (get-color *identify-background*)
 				     :border-width 1
 				     :border (get-color *identify-border*)
@@ -219,7 +219,12 @@
 				   :background (get-color *identify-background*)
 				   :font font
 				   :line-style :solid)))
-    (labels ((print-key (code keysym key modifiers)
+    (labels ((print-doc (msg hash-table-key pos code state)
+	       (let ((function (find-key-from-code hash-table-key code state)))
+		 (when function
+		   (xlib:draw-image-glyphs window gc 10 (+ (* pos (+ (xlib:max-char-ascent font) (xlib:max-char-descent font))) 5)
+					   (format nil "~A ~A" msg (documentation function 'function))))))
+	     (print-key (code state keysym key modifiers)
 	       (xlib:clear-area window)
 	       (setf (xlib:gcontext-foreground gc) (get-color *identify-foreground*))
 	       (xlib:draw-image-glyphs window gc 5 (+ (xlib:max-char-ascent font) 5)
@@ -227,7 +232,9 @@
 	       (when code
 		 (xlib:draw-image-glyphs window gc 10 (+ (* 2 (+ (xlib:max-char-ascent font) (xlib:max-char-descent font))) 5)
 					 (format nil "Code=~A  KeySym=~A  Key=~S  Modifiers=~A"
-						 code keysym key modifiers))))
+						 code keysym key modifiers))
+		 (print-doc "Main mode  : " *main-keys* 3 code state)
+		 (print-doc "Second mode: " *second-keys* 4 code state)))
 	     (handle-identify-key (&rest event-slots &key root code state &allow-other-keys)
 	       (declare (ignore event-slots root))
 	       (let* ((modifiers (xlib:make-state-keys state))
@@ -235,18 +242,18 @@
 		      (keysym (keysym->keysym-name (xlib:keycode->keysym *display* code 0))))
 		 (setf done (and (equal key #\q) (null modifiers)))
 		 (dbg code keysym key modifiers)
-		 (print-key code keysym key modifiers)
+		 (print-key code state keysym key modifiers)
 		 (force-output)))
 	     (handle-identify (&rest event-slots &key display event-key &allow-other-keys)
 	       (declare (ignore display))
 	       (case event-key
 		 (:key-press (apply #'handle-identify-key event-slots) t)
-		 (:exposure (print-key nil nil nil nil)))
+		 (:exposure (print-key nil nil nil nil nil)))
 	       t))
       (xgrab-pointer *root* 92 93)
       (xlib:map-window window)
       (format t "~&Press 'q' to stop the identify loop~%")
-      (print-key nil nil nil nil)
+      (print-key nil nil nil nil nil)
       (force-output)
       (unwind-protect
 	   (loop until done do

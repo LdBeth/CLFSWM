@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Thu Mar  6 16:47:42 2008
+;;; #Date#: Tue Mar 11 12:23:23 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Keys functions definition
@@ -129,27 +129,33 @@
 
 
 
-
+(defun find-key-from-code (hash-table-key code state)
+  "Return the function associated to code/state"
+  (labels ((function-from (key)
+	     (multiple-value-bind (function foundp)
+		 (gethash (list key state) hash-table-key)
+	       (when (and foundp (first function))
+		 (first function))))
+	   (from-code ()
+	     (function-from code))
+	   (from-char ()
+	     (let ((char (keycode->char code state)))
+	       (function-from char)))
+	   (from-string ()
+	     (let ((string (keysym->keysym-name (xlib:keycode->keysym *display* code 0))))
+	       (function-from string))))
+    (or (from-code) (from-char) (from-string))))
 
 
 
 (defun funcall-key-from-code (hash-table-key code state &optional args)
-  (labels ((funcall-from (key)
-	     (multiple-value-bind (function foundp)
-		 (gethash (list key state) hash-table-key)
-	       (when (and foundp (first function))
-		 (if args
-		     (funcall (first function) args)
-		     (funcall (first function)))
-		 t)))
-	   (from-code ()
-	     (funcall-from code))
-	   (from-char ()
-	     (let ((char (keycode->char code state)))
-	       (funcall-from char)))
-	   (from-string ()
-	     (let ((string (keysym->keysym-name (xlib:keycode->keysym *display* code 0))))
-	       (funcall-from string))))
+  (let ((function (find-key-from-code hash-table-key code state)))
+    (when function
+      (apply function args)
+      t)))
+
+       
+  (labels 
     (cond ((from-code))
 	  ((from-char))
 	  ((from-string)))))
