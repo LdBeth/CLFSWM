@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Tue Mar 11 12:23:23 2008
+;;; #Date#: Wed Mar 12 18:12:54 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Keys functions definition
@@ -148,17 +148,11 @@
 
 
 
-(defun funcall-key-from-code (hash-table-key code state &optional args)
+(defun funcall-key-from-code (hash-table-key code state &rest args)
   (let ((function (find-key-from-code hash-table-key code state)))
     (when function
       (apply function args)
       t)))
-
-       
-  (labels 
-    (cond ((from-code))
-	  ((from-char))
-	  ((from-string)))))
 
 
 
