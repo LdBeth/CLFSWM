@@ -1,7 +1,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Thu Mar  6 15:38:05 2008
+;;; #Date#: Wed Mar 12 22:34:33 2008
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: System loading functions
@@ -47,7 +47,7 @@
 #-ASDF
 (load (make-pathname :host (pathname-host *base-dir*)
 		     :device (pathname-device *base-dir*)
-		     :directory (pathname-directory *base-dir*)
+		     :directory (append (pathname-directory *base-dir*) (list "contrib"))
 		     :name "asdf" :type "lisp"))
 
 (push *base-dir* asdf:*central-registry*)
