@@ -663,7 +663,7 @@ managed."
 						(:normal 1)
 						(:maxsize 1)
 						(:transient 1)
-						(t 0)))
+						(t 1)))
     (grab-all-buttons window)
 ;;    (when (group-p *current-child*) ;; PHIL: Remove this!!!
 ;;      (setf (group-nw-hook *current-child*) #'open-in-new-group-nw-hook))

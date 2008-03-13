@@ -438,6 +438,30 @@
 
 
 
+(defun force-window-in-group ()
+  "Force the current window to move in the group (Useful only for transient windows)"
+  (when (xlib:window-p *current-child*)
+    (let ((father (find-father-group *current-child*)))
+      (with-xlib-protect
+	(setf (xlib:drawable-x *current-child*) (group-rx father)
+	      (xlib:drawable-y *current-child*) (group-ry father)))))
+  (leave-second-mode))
+
+(defun force-window-center-in-group ()
+  "Force the current window to move in the center of the group (Useful only for transient windows)"
+  (when (xlib:window-p *current-child*)
+    (let ((father (find-father-group *current-child*)))
+      (with-xlib-protect
+	(setf (xlib:drawable-x *current-child*) (truncate (+ (group-rx father)
+							     (/ (- (group-rw father)
+								   (xlib:drawable-width *current-child*)) 2)))
+	      (xlib:drawable-y *current-child*) (truncate (+ (group-ry father)
+							     (/ (- (group-rh father)
+								   (xlib:drawable-height *current-child*)) 2)))))))
+  (leave-second-mode))
+
+
+
 ;;;;;,-----
 ;;;;;| Various definitions
 ;;;;;`-----

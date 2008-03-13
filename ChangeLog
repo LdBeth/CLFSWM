@@ -1,3 +1,8 @@
+2008-03-13  Philippe Brochard  <hocwp@free.fr>
+
+	* clfswm-util.lisp (force-window-in-group/force-window-center-in-group):
+	new functions.
+
 2008-03-11  Philippe Brochard  <hocwp@free.fr>
 
 	* clfswm-util.lisp (identify-key): Display the documentation

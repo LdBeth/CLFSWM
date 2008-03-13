@@ -142,8 +142,8 @@
 	   (from-string ()
 	     (let* ((modifiers (xlib:make-state-keys state))
 		    (string (keysym->keysym-name (xlib:keycode->keysym *display* code (cond  ((member :shift modifiers) 1)
-											   ((member :mod-5 modifiers) 2)
-											   (t 0))))))
+											     ((member :mod-5 modifiers) 2)
+											     (t 0))))))
 	       (function-from string))))
     (or (from-code) (from-char) (from-string))))
 

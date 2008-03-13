@@ -107,6 +107,11 @@
 		    (#\r rename-current-child)
 		    (#\n renumber-current-group))))
 
+(defun window-menu ()
+  "Window menu"
+  (info-mode-menu '((#\i force-window-in-group)
+		    (#\c force-window-center-in-group))))
+
 
 
 (defun selection-menu ()
@@ -128,7 +133,7 @@
 (defun main-menu ()
   "Open the main menu"
   (info-mode-menu '((#\g group-menu)
-		    ;;(#\w window-menu)
+		    (#\w window-menu)
 		    (#\s selection-menu)
 		    (#\n action-by-name-menu)
 		    (#\u action-by-number-menu)
