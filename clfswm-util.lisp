@@ -1,8 +1,6 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Tue Mar 11 12:35:53 2008
-;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Utility
 ;;; --------------------------------------------------------------------------
@@ -231,7 +229,7 @@
 				       (format nil "Press a key to identify. Press 'q' to stop the identify loop."))
 	       (when code
 		 (xlib:draw-image-glyphs window gc 10 (+ (* 2 (+ (xlib:max-char-ascent font) (xlib:max-char-descent font))) 5)
-					 (format nil "Code=~A  KeySym=~A  Key=~S  Modifiers=~A"
+					 (format nil "Code=~A  KeySym=~S  Key=~S  Modifiers=~A"
 						 code keysym key modifiers))
 		 (print-doc "Main mode  : " *main-keys* 3 code state)
 		 (print-doc "Second mode: " *second-keys* 4 code state)))
@@ -239,7 +237,9 @@
 	       (declare (ignore event-slots root))
 	       (let* ((modifiers (xlib:make-state-keys state))
 		      (key (keycode->char code state))
-		      (keysym (keysym->keysym-name (xlib:keycode->keysym *display* code 0))))
+		      (keysym (keysym->keysym-name (xlib:keycode->keysym *display* code (cond  ((member :shift modifiers) 1)
+											       ((member :mod-5 modifiers) 2)
+											       (t 0))))))
 		 (setf done (and (equal key #\q) (null modifiers)))
 		 (dbg code keysym key modifiers)
 		 (print-key code state keysym key modifiers)

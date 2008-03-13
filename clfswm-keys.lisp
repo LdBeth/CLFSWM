@@ -1,8 +1,6 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Wed Mar 12 18:12:54 2008
-;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: Keys functions definition
 ;;; --------------------------------------------------------------------------
@@ -142,7 +140,10 @@
 	     (let ((char (keycode->char code state)))
 	       (function-from char)))
 	   (from-string ()
-	     (let ((string (keysym->keysym-name (xlib:keycode->keysym *display* code 0))))
+	     (let* ((modifiers (xlib:make-state-keys state))
+		    (string (keysym->keysym-name (xlib:keycode->keysym *display* code (cond  ((member :shift modifiers) 1)
+											   ((member :mod-5 modifiers) 2)
+											   (t 0))))))
 	       (function-from string))))
     (or (from-code) (from-char) (from-string))))
 

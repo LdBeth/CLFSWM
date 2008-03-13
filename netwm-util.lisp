@@ -1,8 +1,6 @@
 ;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
-;;; #Date#: Wed Feb 20 23:26:21 2008
-;;;
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: NetWM functions
 ;;;   http://freedesktop.org/wiki/Specifications_2fwm_2dspec
