@@ -10,7 +10,8 @@ Should handle these soon.
 Rewrote all useful code present in 0801 version.
 - pack/fill/resize [Philippe]
 - mouse operations [Philippe]
-- Bind alt+1/2/3/4... to a particular child:
+- Hide a window when its size is less than hint minimal size. [Philippe]
+- Bind alt+1/2/3/4... to a particular child: [Philippe]
    If bind exist -> focus this child
    If not -> bind the key to the current-child
   Bind alt+control+1/2/3/4... to remove binding on a child.
