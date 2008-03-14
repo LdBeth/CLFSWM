@@ -10,8 +10,11 @@ Should handle these soon.
 Rewrote all useful code present in 0801 version.
 - pack/fill/resize [Philippe]
 - mouse operations [Philippe]
-- Bind alt+1/2/3/4... to a particular child (ask on first keypress -
-   can be rebinded on another child if needed).
+- Bind alt+1/2/3/4... to a particular child:
+   If bind exist -> focus this child
+   If not -> bind the key to the current-child
+  Bind alt+control+1/2/3/4... to remove binding on a child.
+
 
 - Hooks when a new window is mapped [Philippe]
 - Show group window for info (Wait for keypress or an amount of time) [Philippe]
