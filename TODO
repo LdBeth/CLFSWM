@@ -1,0 +1,33 @@
+This file contains suggestions for further work.
+Feel free to edit the wiki at http://trac.common-lisp.net/clfswm/wiki
+if you want something in clfswm.
+
+
+URGENT PROBLEMS
+===============
+Should handle these soon.
+
+Rewrote all useful code present in 0801 version.
+- pack/fill/resize [Philippe]
+- mouse operations [Philippe]
+- Bind alt+1/2/3/4... to a particular child (ask on first keypress -
+   can be rebinded on another child if needed).
+
+- Hooks when a new window is mapped [Philippe]
+- Show group window for info (Wait for keypress or an amount of time) [Philippe]
+
+
+MAYBE
+=====
+
+- From stumpwm: [Philippe]
+ "In other news stumpwm should catch unhandled errors, restart, and
+ print an error message. And there is now a soft-restart command. With
+ this in place I suspect you will need to restart stumpwm very rarely
+ and it won't spontaneously bring down X."
+
+
+NEVER
+=====
+
+Nothing here for now.
