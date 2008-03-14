@@ -47,7 +47,7 @@
 (define-main-key ("Up" :mod-1) 'select-previous-level)
 
 (define-main-key ("Tab" :mod-1) 'select-next-child)
-(define-main-key ("Tab" :mod-1 :shift) 'select-previous-child)
+(define-main-key ("ISO_Left_Tab" :mod-1 :shift) 'select-previous-child)
 
 (define-main-key ("Return" :mod-1) 'enter-group)
 (define-main-key ("Return" :mod-1 :shift) 'leave-group)
@@ -138,7 +138,7 @@
     (replay-button-event)))
 
 
-(define-main-mouse (1) nil 'mouse-click-to-focus)
+(define-main-mouse (1) 'mouse-click-to-focus 'test-mouse-binding)
 
 
 (define-main-mouse (4) 'mouse-select-next-level)

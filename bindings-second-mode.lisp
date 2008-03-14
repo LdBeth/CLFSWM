@@ -179,7 +179,7 @@
 (define-second-key ("Up" :mod-1) 'select-previous-level)
 
 (define-second-key ("Tab" :mod-1) 'select-next-child)
-(define-second-key ("Tab" :mod-1 :shift) 'select-previous-child)
+(define-second-key ("ISO_Left_Tab" :mod-1 :shift) 'select-previous-child)
 
 (define-second-key ("Return" :mod-1) 'enter-group)
 (define-second-key ("Return" :mod-1 :shift) 'leave-group)
