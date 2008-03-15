@@ -208,6 +208,7 @@
 (define-second-key ("Delete") 'remove-current-child)
 
 
+
 ;;; default shell programs
 (defmacro define-shell (key name docstring cmd)
   "Define a second key to start a shell command"
@@ -223,6 +224,11 @@
   "start an emacs for another user"
   "exec emacsremote-Eterm")
 (define-shell (#\h) b-start-xclock "start an xclock" "exec xclock -d")
+
+
+(define-second-key ("Menu") 'show-all-groups-info-key)
+(define-second-key ("Menu" :shift) 'show-all-groups-info)
+(define-second-key ("Menu" :control) 'toggle-show-root-group)
 
 
 

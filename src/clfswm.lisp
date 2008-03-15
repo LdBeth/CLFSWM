@@ -141,15 +141,15 @@
 (setf *key-press-hook* #'handle-key-press
       *configure-request-hook* #'handle-configure-request
       *configure-notify-hook* #'handle-configure-notify
-      *destroy-notify-hook* 'handle-destroy-notify
+      *destroy-notify-hook* #'handle-destroy-notify
       *enter-notify-hook* #'handle-enter-notify
-      *exposure-hook* 'handle-exposure
+      *exposure-hook* #'handle-exposure
       *map-request-hook* #'handle-map-request
-      *unmap-notify-hook* 'handle-unmap-notify
+      *unmap-notify-hook* #'handle-unmap-notify
       *create-notify-hook* #'handle-create-notify
-      *button-press-hook* 'handle-button-press
-      *button-release-hook* 'handle-button-release
-      *motion-notify-hook* 'handle-motion-notify)
+      *button-press-hook* #'handle-button-press
+      *button-release-hook* #'handle-button-release
+      *motion-notify-hook* #'handle-motion-notify)
 
 
 

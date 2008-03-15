@@ -18,7 +18,8 @@ Rewrote all useful code present in 0801 version.
 
 
 - Hooks when a new window is mapped [Philippe]
-- Show group window for info (Wait for keypress or an amount of time) [Philippe]
+
+- Add boundaries in the info window [Philippe]
 
 
 MAYBE

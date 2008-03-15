@@ -437,7 +437,7 @@
 
 
 
-
+;;; Force window functions
 (defun force-window-in-group ()
   "Force the current window to move in the group (Useful only for transient windows)"
   (when (xlib:window-p *current-child*)
@@ -459,6 +459,29 @@
 							     (/ (- (group-rh father)
 								   (xlib:drawable-height *current-child*)) 2)))))))
   (leave-second-mode))
+
+
+
+;;; Show group info
+(defun show-all-groups-info ()
+  "Show all groups info windows"
+  (with-all-groups (*current-root* group)
+    (raise-window (group-window group))
+    (display-group-info group)))
+
+(defun hide-all-groups-info ()
+  "Hide all groups info windows"
+  (with-all-windows (*current-root* window)
+    (raise-window window))
+  (show-all-childs))
+
+(defun show-all-groups-info-key ()
+  "Show all groups info windows until a key is release"
+  (with-all-groups (*current-root* group)
+    (raise-window (group-window group))
+    (display-group-info group))
+  (wait-no-key-or-button-press)
+  (hide-all-groups-info))
 
 
 

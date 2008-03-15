@@ -55,7 +55,10 @@
 (define-main-key ("Home" :mod-1) 'switch-to-root-group)
 (define-main-key ("Home" :mod-1 :shift) 'switch-and-select-root-group)
 
-(define-main-key ("Menu") 'toggle-show-root-group)
+
+(define-main-key ("Menu") 'show-all-groups-info-key)
+(define-main-key ("Menu" :shift) 'show-all-groups-info)
+(define-main-key ("Menu" :control) 'toggle-show-root-group)
 
 (define-main-key (#\b :mod-1) 'banish-pointer)
 
@@ -95,7 +98,8 @@
 
 
 (defun test-mouse-binding (window root-x root-y)
-  (dbg window root-x root-y))
+  (dbg window root-x root-y)
+  (replay-button-event))
 
 
 
@@ -138,8 +142,7 @@
     (replay-button-event)))
 
 
-(define-main-mouse (1) 'mouse-click-to-focus 'test-mouse-binding)
-
+(define-main-mouse (1) 'mouse-click-to-focus)
 
 (define-main-mouse (4) 'mouse-select-next-level)
 (define-main-mouse (5) 'mouse-select-previous-level)

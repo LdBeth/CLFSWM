@@ -1,3 +1,8 @@
+2008-03-15  Philippe Brochard  <hocwp@free.fr>
+
+	* src/clfswm-util.lisp (show/hide-all-groups-info/key): Show/hide all groups info 
+	window.
+
 2008-03-14  Philippe Brochard  <hocwp@free.fr>
 
 	* bindings-second-mode.lisp ("ISO_Left_Tab"): Use ISO_Left_Tab

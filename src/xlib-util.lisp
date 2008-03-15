@@ -37,7 +37,10 @@
 				:colormap-change
 				:focus-change
 				:enter-window
-				:exposure)
+				:exposure
+				:button-press
+				:button-release
+				:pointer-motion)
   "The events to listen for on managed windows.")
 
 
@@ -387,11 +390,6 @@ Window types are in +WINDOW-TYPES+.")
 
 
 
-(defun stop-button-event ()
-  (xlib:allow-events *display* :sync-pointer))
-
-(defun replay-button-event ()
-  (xlib:allow-events *display* :replay-pointer))
     
 
 (defun ungrab-all-buttons (window)
@@ -404,6 +402,12 @@ Window types are in +WINDOW-TYPES+.")
 		    :owner-p nil
 		    :sync-pointer-p t
 		    :sync-keyboard-p nil))
+
+(defun stop-button-event ()
+  (xlib:allow-events *display* :sync-pointer))
+
+(defun replay-button-event ()
+  (xlib:allow-events *display* :replay-pointer))
 
 
 
