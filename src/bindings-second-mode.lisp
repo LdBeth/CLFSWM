@@ -49,6 +49,12 @@
 		     for i from 0
 		     collect (list (code-char (+ (char-code #\a) i)) l))))
 
+(defun group-nw-hook-menu ()
+  "Group new window hook menu"
+  (info-mode-menu (loop for l in *nw-hook-list*
+		     for i from 0
+		     collect (list (code-char (+ (char-code #\a) i)) l))))
+
 
   
 
@@ -99,13 +105,21 @@
 		    (#\c copy-current-child-by-number))))
 
 
+(defun group-info-menu ()
+  "Group information menu"
+  (info-mode-menu '((#\s show-all-groups-info)
+		    (#\h hide-all-groups-info))))
+
+
 (defun group-menu ()
   "Group menu"
   (info-mode-menu '((#\a group-adding-menu)
 		    (#\l group-layout-menu)
+		    (#\n group-nw-hook-menu)
 		    (#\m group-movement-menu)
 		    (#\r rename-current-child)
-		    (#\n renumber-current-group))))
+		    (#\u renumber-current-group)
+		    (#\i group-info-menu))))
 
 (defun window-menu ()
   "Window menu"
@@ -190,6 +204,8 @@
 (define-second-key ("Menu") 'toggle-show-root-group)
 
 (define-second-key (#\b :mod-1) 'banish-pointer)
+
+(define-second-key (#\o) 'set-open-in-new-group-in-root-group-nw-hook)
 
 
 ;;;; Escape

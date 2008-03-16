@@ -465,21 +465,22 @@
 ;;; Show group info
 (defun show-all-groups-info ()
   "Show all groups info windows"
-  (with-all-groups (*current-root* group)
-    (raise-window (group-window group))
-    (display-group-info group)))
+  (let ((*show-root-group-p* t))
+    (show-all-childs)
+    (with-all-groups (*current-root* group)
+      (raise-window (group-window group))
+      (display-group-info group))))
 
 (defun hide-all-groups-info ()
   "Hide all groups info windows"
   (with-all-windows (*current-root* window)
     (raise-window window))
+  (hide-child *current-root*)
   (show-all-childs))
 
 (defun show-all-groups-info-key ()
   "Show all groups info windows until a key is release"
-  (with-all-groups (*current-root* group)
-    (raise-window (group-window group))
-    (display-group-info group))
+  (show-all-groups-info)
   (wait-no-key-or-button-press)
   (hide-all-groups-info))
 

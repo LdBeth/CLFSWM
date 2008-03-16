@@ -49,6 +49,7 @@
 (defparameter *child-selection* nil)
 
 (defparameter *layout-list* nil)
+(defparameter *nw-hook-list* nil)
 
 
 ;;(defstruct group (number (incf *current-group-number*)) name

@@ -1,3 +1,9 @@
+2008-03-16  Philippe Brochard  <hocwp@free.fr>
+
+	* src/clfswm-nw-hooks.lisp: Register system for new window hooks.
+	Bind control+o to open the next window in a new group in the root group 
+	 (as open in next window in a new workspace in 0801 version).
+
 2008-03-15  Philippe Brochard  <hocwp@free.fr>
 
 	* src/clfswm-util.lisp (show/hide-all-groups-info/key): Show/hide all groups info 
