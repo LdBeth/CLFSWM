@@ -26,7 +26,7 @@
 (in-package :cl-user)
 
 (defpackage clfswm
-  (:use :common-lisp :my-html :tools)
+  (:use :common-lisp :my-html :tools :version)
   ;;(:shadow :defun)
   (:export :main))
 

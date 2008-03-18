@@ -16,7 +16,7 @@
 			 (:file "my-html"
 			  :depends-on ("tools"))
 			 (:file "package"
-			  :depends-on ("my-html" "tools"))
+			  :depends-on ("my-html" "tools" "version"))
 			 (:file "config"
 			  :depends-on ("package"))
 			 (:file "keysyms"
@@ -32,10 +32,12 @@
 			 (:file "clfswm"
 			  :depends-on ("xlib-util" "netwm-util" "clfswm-keys" "config"
 						   "clfswm-internal" "tools"))
+			 (:file "version"
+			  :depends-on ("tools"))
 			 (:file "clfswm-second-mode"
 			  :depends-on ("package" "clfswm-internal"))
 			 (:file "clfswm-info"
-			  :depends-on ("package" "xlib-util" "config" "clfswm-keys" "clfswm" "clfswm-internal"))
+			  :depends-on ("package" "version" "xlib-util" "config" "clfswm-keys" "clfswm" "clfswm-internal"))
 			 (:file "clfswm-util"
 			  :depends-on ("clfswm" "keysyms" "clfswm-info" "clfswm-second-mode" "clfswm-query"))
 			 (:file "clfswm-query"

@@ -352,17 +352,6 @@ key is a character, a keycode or a keysym"
   (show-key-binding *second-keys* *second-mouse*))
 
 
-(let ((days '("Lundi" "Mardi" "Mercredi" "Jeudi" "Vendredi" "Samedi" "Dimanche"))
-      (months '("Janvier" "Fevrier" "Mars" "Avril" "Mai" "Juin" "Juillet"
-		"Aout" "Septembre" "Octobre" "Novembre" "Decembre")))
-  (defun date-string ()
-    (multiple-value-bind (second minute hour date month year day)
-	(get-decoded-time)
-      (format nil "   ~2,'0D:~2,'0D:~2,'0D    ~A ~2,'0D ~A ~A   "
-	      hour minute second
-	      (nth day days) date (nth (1- month) months) year))))
-
-      
 (defun show-date ()
   "Show the current time and date"
   (info-mode (list (date-string))))
@@ -417,6 +406,9 @@ key is a character, a keycode or a keysym"
 		    (#\l show-cd-playlist))))
 
 
+(defun show-version ()
+  "Show the current CLFSWM version"
+  (info-mode (list *version*)))
 
 (defun help-on-clfswm ()
   "Open the help and info window"
@@ -426,6 +418,7 @@ key is a character, a keycode or a keysym"
 		    (#\c show-cpu-proc)
 		    (#\m show-mem-proc)
 		    (#\x xmms-info-menu)
+		    (#\v show-version)
 		    (#\d info-on-cd-menu))))
 
 
@@ -437,6 +430,7 @@ key is a character, a keycode or a keysym"
 		    (#\c show-cpu-proc)
 		    (#\m show-mem-proc)
 		    (#\x xmms-info-menu)
+		    (#\v show-version)
 		    (#\d info-on-cd-menu))))
 
 
