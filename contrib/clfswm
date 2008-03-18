@@ -103,9 +103,6 @@ do
     shift
 done
 
-test -x $(type -p $lisp) || die "$lisp can't be found."
-test -e $clfswm_asd_path/clfswm.asd || die "can't find clfswm.asd in $clfswm_asd_path"
-test -e $asdf_path/asdf.lisp || die "can't find asdf.lisp in $asdf_path"
 
 dump_image="$dump_path/clfswm-$(cksum $(type -p $lisp) | cut -d ' ' -f 1).core"
 
@@ -120,7 +117,11 @@ if test ! -e "$dump_image" ||
         do  test "$dump_image" -ot "$i" && exit 1
         done )
 then
-	eval build_$lisp
+    test -x $(type -p $lisp) || die "$lisp can't be found."
+    test -e $clfswm_asd_path/clfswm.asd || die "can't find clfswm.asd in $clfswm_asd_path"
+    test -e $asdf_path/asdf.lisp || die "can't find asdf.lisp in $asdf_path"
+
+    eval build_$lisp
 fi
 
 # Run the resulting image
