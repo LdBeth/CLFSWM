@@ -69,7 +69,7 @@
   (declare (ignore group))
   (leave-if-not-group *current-child*)
   (when (group-p *current-child*)
-    (pushnew window (group-child *current-child*))) ;)
+    (pushnew window (group-child *current-child*)))
   (default-window-placement *current-child* window))
 
 (defun set-default-group-nw-hook ()

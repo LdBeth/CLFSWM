@@ -596,19 +596,20 @@ Return the result of the last hook"
 
 (defun place-window-from-hints (window)
   "Place a window from its hints"
-  (let* ((hints (xlib:wm-normal-hints window))
-	 (min-width (or (and hints (xlib:wm-size-hints-min-width hints)) 0))
-	 (min-height (or (and hints (xlib:wm-size-hints-min-height hints)) 0))
-	 (max-width (or (and hints (xlib:wm-size-hints-max-width hints)) (xlib:drawable-width *root*)))
-	 (max-height (or (and hints (xlib:wm-size-hints-max-height hints)) (xlib:drawable-height *root*)))
-	 (rwidth (or (and hints (or (xlib:wm-size-hints-width hints) (xlib:wm-size-hints-base-width hints)))
-		     (xlib:drawable-width window)))
-	 (rheight (or (and hints (or (xlib:wm-size-hints-height hints) (xlib:wm-size-hints-base-height hints)))
-		      (xlib:drawable-height window))))
-    (setf (xlib:drawable-width window) (min (max min-width rwidth) max-width)
-	  (xlib:drawable-height window) (min (max min-height rheight) max-height))
-    (setf (xlib:drawable-x window) (truncate (+ (group-rx *current-child*) (/ (- (group-rw *current-child*) (xlib:drawable-width window)) 2)))
-	  (xlib:drawable-y window) (truncate (+ (group-ry *current-child*) (/ (- (group-rh *current-child*) (xlib:drawable-height window)) 2))))))
+  (with-xlib-protect
+    (let* ((hints (xlib:wm-normal-hints window))
+	   (min-width (or (and hints (xlib:wm-size-hints-min-width hints)) 0))
+	   (min-height (or (and hints (xlib:wm-size-hints-min-height hints)) 0))
+	   (max-width (or (and hints (xlib:wm-size-hints-max-width hints)) (xlib:drawable-width *root*)))
+	   (max-height (or (and hints (xlib:wm-size-hints-max-height hints)) (xlib:drawable-height *root*)))
+	   (rwidth (or (and hints (or (xlib:wm-size-hints-width hints) (xlib:wm-size-hints-base-width hints)))
+		       (xlib:drawable-width window)))
+	   (rheight (or (and hints (or (xlib:wm-size-hints-height hints) (xlib:wm-size-hints-base-height hints)))
+			(xlib:drawable-height window))))
+      (setf (xlib:drawable-width window) (min (max min-width rwidth) max-width)
+	    (xlib:drawable-height window) (min (max min-height rheight) max-height))
+      (setf (xlib:drawable-x window) (truncate (+ (group-rx *current-child*) (/ (- (group-rw *current-child*) (xlib:drawable-width window)) 2)))
+	    (xlib:drawable-y window) (truncate (+ (group-ry *current-child*) (/ (- (group-rh *current-child*) (xlib:drawable-height window)) 2)))))))
 
 
 
@@ -656,7 +657,6 @@ managed."
 ;;      (setf (group-nw-hook *current-child*) #'open-in-new-group-nw-hook))
     (unless (do-all-groups-nw-hook window)
       (default-group-nw-hook nil window))
-    (unhide-window window)
     (netwm-add-in-client-list window)))
 
 
@@ -680,7 +680,9 @@ managed."
 	    (when (or (eql map-state :viewable)
 		      (eql wm-state +iconic-state+))
 	      (format t "Processing ~S: type=~A ~S~%" (xlib:wm-name win) (window-type win)win)
+	      (unhide-window win)
 	      (process-new-window win)
+	      (xlib:map-window win)
 	      (raise-window win)
 	      (pushnew (xlib:window-id win) id-list))))))
     (netwm-set-client-list id-list)))

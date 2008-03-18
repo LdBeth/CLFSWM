@@ -37,10 +37,7 @@
 				:colormap-change
 				:focus-change
 				:enter-window
-				:exposure
-				:button-press
-				:button-release
-				:pointer-motion)
+				:exposure)
   "The events to listen for on managed windows.")
 
 

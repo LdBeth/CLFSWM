@@ -94,10 +94,10 @@
 (defun handle-map-request (&rest event-slots &key window send-event-p &allow-other-keys)
   (declare (ignore event-slots))
   (unless send-event-p
+    (unhide-window window)
     (process-new-window window)
     (xlib:map-window window)
     (show-all-childs)))
-
 
 (defun handle-unmap-notify (&rest event-slots &key send-event-p event-window window &allow-other-keys)
   (declare (ignore event-slots))
@@ -126,7 +126,7 @@
 (defun handle-exposure   (&rest event-slots &key window &allow-other-keys)
   (declare (ignore event-slots))
   (awhen (find-group-window window *current-root*)
-	 (display-group-info it)))
+    (display-group-info it)))
 
 
 (defun handle-create-notify (&rest event-slots)

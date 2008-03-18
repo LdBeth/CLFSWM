@@ -18,6 +18,8 @@ Rewrote all useful code present in 0801 version.
 
 
 - Hooks when a new window is mapped [Philippe]
+   + Hook to open next window in named/numbered group
+
 
 - Add boundaries in the info window [Philippe]
 
