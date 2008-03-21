@@ -284,7 +284,6 @@
 	  (xlib:free-gcontext gc)
 	  (xlib:destroy-window window)
 	  (xlib:close-font font)
-	  (show-all-childs)
 	  (wait-no-key-or-button-press))))))
 
 
