@@ -54,6 +54,7 @@
 
 
 (defun draw-second-mode-window ()
+  (raise-window *sm-window*)
   (xlib:clear-area *sm-window*)
   (let* ((text (format nil "Second mode"))
 	 (len (length text)))

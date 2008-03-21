@@ -1,3 +1,7 @@
+2008-03-21  Philippe Brochard  <hocwp@free.fr>
+
+	* src/clfswm-pack.lisp: Pack, Fill, Resize functions.
+
 2008-03-16  Philippe Brochard  <hocwp@free.fr>
 
 	* src/clfswm-nw-hooks.lisp: Register system for new window hooks.

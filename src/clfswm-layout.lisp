@@ -131,12 +131,12 @@
 		    (1+ ry)
 		    (- (round (* rw size)) 2)
 		    (- rh 2)
-		    nil)
+		    t)
 	    (values (1+ (round (+ rx (* rw size))))
 		    (1+ (round (+ ry (* dy (1- pos)))))
 		    (- (round (* rw (- 1 size))) 2)
 		    (- (round dy) 2)
-		    nil)))))
+		    t)))))
 
 
 (defun set-tile-left-layout ()
@@ -164,12 +164,12 @@
 		  (1+ ry)
 		  (- (round (* rw size)) 2)
 		  (- rh 2)
-		  nil)
+		  t)
 	  (values (1+ rx)
 		  (1+ (round (+ ry (* dy (1- pos)))))
 		  (- (round (* rw (- 1 size))) 2)
 		  (- (round dy) 2)
-		  nil)))))
+		  t)))))
 
 
 (defun set-tile-right-layout ()
@@ -199,12 +199,12 @@
 		    (1+ ry)
 		    (- rw 2)
 		    (- (round (* rh size)) 2)
-		    nil)
+		    t)
 	    (values (1+ (round (+ rx (* dx (1- pos)))))
 		    (1+ (round (+ ry (* rh size))))
 		    (- (round dx) 2)
 		    (- (round (* rh (- 1 size))) 2)
-		    nil)))))
+		    t)))))
 
 
 (defun set-tile-top-layout ()
@@ -231,11 +231,13 @@
 	  (values (1+ rx)
 		  (1+ (round (+ ry (* rh (- 1 size)))))
 		  (- rw 2)
-		  (- (round (* rh size)) 2))
+		  (- (round (* rh size)) 2)
+		  t)
 	  (values (1+ (round (+ rx (* dx (1- pos)))))
 		  (1+ ry)
 		  (- (round dx) 2)
-		  (- (round (* rh (- 1 size))) 2))))))
+		  (- (round (* rh (- 1 size))) 2)
+		  t)))))
 
 
 
@@ -269,7 +271,7 @@
 	      (round (+ ry (truncate (* (truncate (/ pos n)) dy)) (* dy size) 1))
 	      (round (- dx (* dx size 2) 2))
 	      (round (- dy (* dy size 2) 2))
-	      nil))))
+	      t))))
 
 (defun set-space-tile-layout ()
   "Tile Space: tile child in its group leaving spaces between them"

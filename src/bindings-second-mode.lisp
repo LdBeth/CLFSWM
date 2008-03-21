@@ -58,29 +58,137 @@
 
   
 
-
 (defun group-pack-menu ()
   "Group pack menu"
-  (info-mode-menu '(("Up" group-pack-up)
-		    ("Down" group-pack-down))))
+  (info-mode-menu '(("Up" current-group-pack-up)
+		    ("Down" current-group-pack-down)
+		    ("Left" current-group-pack-left)
+		    ("Right" current-group-pack-right))))
+
+
+(defun group-fill-menu ()
+  "Group fill menu"
+  (info-mode-menu '(("Up" current-group-fill-up)
+		    ("Down" current-group-fill-down)
+		    ("Left" current-group-fill-left)
+		    ("Right" current-group-fill-right)
+		    (#\a current-group-fill-all-dir)
+		    (#\v current-group-fill-vertical)
+		    (#\h current-group-fill-horizontal))))
+
+(defun group-resize-menu ()
+  "Group resize menu"
+  (info-mode-menu '(("Up" current-group-resize-up)
+		    ("Down" current-group-resize-down)
+		    ("Left" current-group-resize-left)
+		    ("Right" current-group-resize-right)
+		    (#\d current-group-resize-all-dir)
+		    (#\a current-group-resize-all-dir-minimal))))
 
 
 (defun group-movement-menu ()
   "Group movement menu"
   (info-mode-menu '((#\p group-pack-menu)
 		    (#\f group-fill-menu)
-		    (#\r group-resize-menu))))
+		    (#\r group-resize-menu)
+		    (#\c center-current-group))))
 
 
-(defun group-pack-up ()
-  "Pack group up"
-  (print 'pack-up)
-  (group-movement-menu))
+(defmacro with-movement (&body body)
+  `(when (group-p *current-child*)
+     ,@body
+     (show-all-childs)
+     (draw-second-mode-window)
+     (group-movement-menu)))
 
-(defun group-pack-down ()
-  "Pack group down"
-  (print 'pack-down)
-  (group-movement-menu))
+
+;;; Pack
+(defun current-group-pack-up ()
+  "Pack the current group up"
+  (with-movement (pack-group-up *current-child* (find-father-group *current-child* *current-root*))))
+
+(defun current-group-pack-down ()
+  "Pack the current group down"
+  (with-movement (pack-group-down *current-child* (find-father-group *current-child* *current-root*))))
+
+(defun current-group-pack-left ()
+  "Pack the current group left"
+  (with-movement (pack-group-left *current-child* (find-father-group *current-child* *current-root*))))
+
+(defun current-group-pack-right ()
+  "Pack the current group right"
+  (with-movement (pack-group-right *current-child* (find-father-group *current-child* *current-root*))))
+
+;;; Center
+(defun center-current-group ()
+  "Center the current group"
+  (with-movement (center-group *current-child*)))
+
+;;; Fill
+(defun current-group-fill-up ()
+  "Fill the current group up"
+  (with-movement (fill-group-up *current-child* (find-father-group *current-child* *current-root*))))
+
+(defun current-group-fill-down ()
+  "Fill the current group down"
+  (with-movement (fill-group-down *current-child* (find-father-group *current-child* *current-root*))))
+
+(defun current-group-fill-left ()
+  "Fill the current group left"
+  (with-movement (fill-group-left *current-child* (find-father-group *current-child* *current-root*))))
+
+(defun current-group-fill-right ()
+  "Fill the current group right"
+  (with-movement (fill-group-right *current-child* (find-father-group *current-child* *current-root*))))
+
+(defun current-group-fill-all-dir ()
+  "Fill the current group in all directions"
+  (with-movement
+    (let ((father (find-father-group *current-child* *current-root*)))
+      (fill-group-up *current-child* father)
+      (fill-group-down *current-child* father)
+      (fill-group-left *current-child* father)
+      (fill-group-right *current-child* father))))
+
+(defun current-group-fill-vertical ()
+  "Fill the current group vertically"
+  (with-movement
+    (let ((father (find-father-group *current-child* *current-root*)))
+      (fill-group-up *current-child* father)
+      (fill-group-down *current-child* father))))
+
+(defun current-group-fill-horizontal ()
+  "Fill the current group horizontally"
+  (with-movement
+    (let ((father (find-father-group *current-child* *current-root*)))
+      (fill-group-left *current-child* father)
+      (fill-group-right *current-child* father))))
+    
+
+;;; Resize
+(defun current-group-resize-up ()
+  "Resize the current group up to its half height"
+  (with-movement (resize-half-height-up *current-child*)))
+
+(defun current-group-resize-down ()
+  "Resize the current group down to its half height"
+  (with-movement (resize-half-height-down *current-child*)))
+
+(defun current-group-resize-left ()
+  "Resize the current group left to its half width"
+  (with-movement (resize-half-width-left *current-child*)))
+
+(defun current-group-resize-right ()
+  "Resize the current group right to its half width"
+  (with-movement (resize-half-width-right *current-child*)))
+
+(defun current-group-resize-all-dir ()
+  "Resize down the current group"
+  (with-movement (resize-group-down *current-child*)))
+
+(defun current-group-resize-all-dir-minimal ()
+  "Resize down the current group to its minimal size"
+  (with-movement (resize-minimal-group *current-child*)))
 
 
 
