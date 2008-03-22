@@ -45,7 +45,7 @@
 			 (:file "clfswm-layout"
 			  :depends-on ("package" "clfswm-util" "clfswm-info"))
 			 (:file "clfswm-pack"
-			  :depends-on ("clfswm" "clfswm-util"))
+			  :depends-on ("clfswm" "clfswm-util" "clfswm-second-mode"))
 			 (:file "clfswm-nw-hooks"
 			  :depends-on ("package" "clfswm-util" "clfswm-info"))
 			 (:file "bindings"

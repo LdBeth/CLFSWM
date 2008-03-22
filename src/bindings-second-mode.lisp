@@ -227,7 +227,8 @@
 		    (#\m group-movement-menu)
 		    (#\r rename-current-child)
 		    (#\u renumber-current-group)
-		    (#\i group-info-menu))))
+		    (#\i group-info-menu)
+		    (#\x explode-current-group))))
 
 (defun window-menu ()
   "Window menu"

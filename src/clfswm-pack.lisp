@@ -193,31 +193,18 @@
 ;;;;;,-----
 ;;;;;| Explode/Implode functions
 ;;;;;`-----
-;;(defun explode-group (workspace group)
-;;  "Create a new group for each window in group"
-;;  (dolist (w (rest (group-window-list group)))
-;;    (add-group-in-workspace (copy-group *default-group*) workspace)
-;;    (add-window-in-group w (first (workspace-group-list workspace)))
-;;    (remove-window-in-group w group)))
-;;
-;;(defun implode-group (workspace)
-;;  "Move all windows in workspace to one group and remove other groups"
-;;  (dolist (g (rest (workspace-group-list workspace)))
-;;    (dolist (w (group-window-list g))
-;;      (add-window-in-group w (first (workspace-group-list workspace)))
-;;      (remove-window-in-group w g))
-;;    (remove-group-in-workspace g workspace)))
-;;
-;;
-;;
-;;(defun explode-current-group ()
-;;  "Create a new group for each window in the current group"
-;;  (explode-group (current-workspace) (current-group))
-;;  (show-all-windows-in-workspace (current-workspace)))
-;;
-;;
-;;(defun implode-current-group ()
-;;  "Move all windows in the current workspace to one group and remove other groups"
-;;  (implode-group (current-workspace))
-;;  (show-all-windows-in-workspace (current-workspace)))
+(defun explode-group (group)
+  "Create a new group for each window in group"
+  (when (group-p group)
+    (let ((windows (loop :for child :in (group-child group)
+		      :when (xlib:window-p child)
+		      :collect child)))
+      (dolist (win windows)
+	(add-group (create-group :child (list win)) group)
+	(remove-child-in-group win group)))))
 
+
+(defun explode-current-group ()
+  "Create a new group for each window in group"
+  (explode-group *current-child*)
+  (leave-second-mode))
