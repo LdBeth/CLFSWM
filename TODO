@@ -8,7 +8,6 @@ URGENT PROBLEMS
 Should handle these soon.
 
 Rewrote all useful code present in 0801 version.
-- pack/fill/resize [Philippe]
 - mouse operations [Philippe]
 - Hide a window when its size is less than hint minimal size. [Philippe]
 - Bind alt+1/2/3/4... to a particular child: [Philippe]
@@ -16,10 +15,17 @@ Rewrote all useful code present in 0801 version.
    If not -> bind the key to the current-child
   Bind alt+control+1/2/3/4... to remove binding on a child.
 
+- Hook to open next window in named/numbered group [Philippe]
 
-- Hooks when a new window is mapped [Philippe]
-   + Hook to open next window in named/numbered group
+- Undo/redo (any idea to implement this is welcome)
 
+- Ensure-unique-number/name (new function) [Philippe]
+
+- Float->Screen Screen->Float: convert geometry from 0 to 1 to pixel and from pixel to 0 to 1. [Philippe]
+
+- Raise/lower group [Philippe]
+
+- Hide/Unhide group [Philippe]
 
 - Add boundaries in the info window [Philippe]
 
@@ -32,6 +38,21 @@ MAYBE
  print an error message. And there is now a soft-restart command. With
  this in place I suspect you will need to restart stumpwm very rarely
  and it won't spontaneously bring down X."
+
+- Zoom
+
+Concept:
+  * zoom out: Behave as if the application window is bigger for the application but completely drawn in a small amount of space (miniature). The zoom factor is inferior to 100%
+  * zoom in: Behave as a magnifying glass. The zoom factor is superior to 100%. The part of the application window shown (viewport) can be moved.
+
+Operation:
+  * set-zoom-factor (frame, factor)
+  * move-viewport (frame &optional (increment 1))
+    * left
+    * right
+    * up
+    * down
+
 
 
 NEVER
