@@ -43,8 +43,8 @@
 ;;			      (format nil ">W:~A" *open-next-window-in-new-workspace*))
 ;;			     (*open-next-window-in-new-workspace* ">W")
 ;;			     (t ""))
-;;		       (cond ((equal *open-next-window-in-new-group* :once) ">G")
-;;			     (*open-next-window-in-new-group* ">G+")
+;;		       (cond ((equal *open-next-window-in-new-frame* :once) ">G")
+;;			     (*open-next-window-in-new-frame* ">G+")
 ;;			     (t ""))))
 ;;	 (len (length text)))
 ;;    (xlib:draw-image-glyphs *sm-window* *sm-gc*
@@ -74,7 +74,7 @@
 
 (defun sm-handle-enter-notify (&rest event-slots &key root-x root-y &allow-other-keys)
   (declare (ignore event-slots root-x root-y))
-  ;;  (focus-group-under-mouse root-x root-y)
+  ;;  (focus-frame-under-mouse root-x root-y)
   (draw-second-mode-window))
 
 (defun sm-handle-motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
@@ -203,7 +203,7 @@
     (xungrab-keyboard)
     (xungrab-pointer)
     (grab-main-keys)
-    (show-all-childs))
+    (show-all-children))
   (wait-no-key-or-button-press)
   (when *second-mode-program*
     (do-shell *second-mode-program*)

@@ -317,6 +317,13 @@ key is a character, a keycode or a keysym"
 
 
 
+(defun keys-from-list (list)
+  "Produce a key menu based on list item"
+  (loop for l in list
+     for i from 0
+     collect (list (code-char (+ (char-code #\a) i)) l)))
+
+
 ;;;,-----
 ;;;| CONFIG - Info mode functions
 ;;;`-----

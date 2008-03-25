@@ -43,31 +43,31 @@ Return the result of the last hook"
 
 
 
-(defgeneric group-p (group))
-(defmethod group-p ((group group))
-  (declare (ignore group))
+(defgeneric frame-p (frame))
+(defmethod frame-p ((frame frame))
+  (declare (ignore frame))
   t)
-(defmethod group-p (group)
-  (declare (ignore group))
+(defmethod frame-p (frame)
+  (declare (ignore frame))
   nil)
 
 
 
-;;; Group data manipulation functions
-(defun group-data-slot (group slot)
+;;; Frame data manipulation functions
+(defun frame-data-slot (frame slot)
   "Return the value associated to data slot"
-  (when (group-p group)
-    (second (assoc slot (group-data group)))))
+  (when (frame-p frame)
+    (second (assoc slot (frame-data frame)))))
 
-(defun set-group-data-slot (group slot value)
+(defun set-frame-data-slot (frame slot value)
   "Set the value associated to data slot"
-  (when (group-p group)
-    (with-slots (data) group
+  (when (frame-p frame)
+    (with-slots (data) frame
       (setf data (remove (assoc slot data) data))
       (push (list slot value) data))
     value))
 
-(defsetf group-data-slot set-group-data-slot)
+(defsetf frame-data-slot set-frame-data-slot)
 
 
 
@@ -79,8 +79,8 @@ Return the result of the last hook"
 (defmethod child-name ((child xlib:window))
   (xlib:wm-name child))
 
-(defmethod child-name ((child group))
-  (group-name child))
+(defmethod child-name ((child frame))
+  (frame-name child))
 
 (defmethod child-name (child)
   (declare (ignore child))
@@ -90,8 +90,8 @@ Return the result of the last hook"
 
 (defgeneric rename-child (child name))
 
-(defmethod rename-child ((child group) name)
-  (setf (group-name child) name))
+(defmethod rename-child ((child frame) name)
+  (setf (frame-name child) name))
 
 (defmethod rename-child ((child xlib:window) name)
   (setf (xlib:wm-name child) name))
@@ -101,66 +101,66 @@ Return the result of the last hook"
 
 
 
-;; (with-all-childs (*root-group* child) (typecase child (xlib:window (print child)) (group (print (group-number child)))))
-(defmacro with-all-childs ((root child) &body body)
+;; (with-all-children (*root-frame* child) (typecase child (xlib:window (print child)) (frame (print (frame-number child)))))
+(defmacro with-all-children ((root child) &body body)
   (let ((rec (gensym))
 	(sub-child (gensym)))
     `(labels ((,rec (,child)
 		,@body
-		(when (group-p ,child)
-		  (dolist (,sub-child (group-child ,child))
+		(when (frame-p ,child)
+		  (dolist (,sub-child (frame-child ,child))
 		    (,rec ,sub-child)))))
        (,rec ,root))))
 
 
-;; (with-all-group (*root-group* group) (print (group-number group)))
-(defmacro with-all-groups ((root group) &body body)
+;; (with-all-frames (*root-frame* frame) (print (frame-number frame)))
+(defmacro with-all-frames ((root frame) &body body)
   (let ((rec (gensym))
 	(child (gensym)))
-    `(labels ((,rec (,group)
-		(when (group-p ,group)
+    `(labels ((,rec (,frame)
+		(when (frame-p ,frame)
 		  ,@body
-		  (dolist (,child (group-child ,group))
+		  (dolist (,child (frame-child ,frame))
 		    (,rec ,child)))))
        (,rec ,root))))
 
 
-;; (with-all-windows (*root-group* window) (print window))
+;; (with-all-windows (*root-frame* window) (print window))
 (defmacro with-all-windows ((root window) &body body)
   (let ((rec (gensym))
 	(child (gensym)))
     `(labels ((,rec (,window)
 		(when (xlib:window-p ,window)
 		  ,@body)
-		(when (group-p ,window)
-		  (dolist (,child (group-child ,window))
+		(when (frame-p ,window)
+		  (dolist (,child (frame-child ,window))
 		    (,rec ,child)))))
        (,rec ,root))))
 
 
 
-;; (with-all-groups-windows (*root-group* child) (print child) (print (group-number child)))
-(defmacro with-all-windows-groups ((root child) body-window body-group)
+;; (with-all-frames-windows (*root-frame* child) (print child) (print (frame-number child)))
+(defmacro with-all-windows-frames ((root child) body-window body-frame)
   (let ((rec (gensym))
 	(sub-child (gensym)))
     `(labels ((,rec (,child)
 		(typecase ,child
 		  (xlib:window ,body-window)
-		  (group ,body-group
-			 (dolist (,sub-child (group-child ,child))
+		  (frame ,body-frame
+			 (dolist (,sub-child (frame-child ,child))
 			   (,rec ,sub-child))))))
        (,rec ,root))))
 
 
 
-(defun group-find-free-number ()
+(defun frame-find-free-number ()
   (let ((all-numbers nil))
-    (with-all-groups (*root-group* group)
-      (push (group-number group) all-numbers))
+    (with-all-frames (*root-frame* frame)
+      (push (frame-number frame) all-numbers))
     (find-free-number all-numbers)))
 
 
-(defun create-group (&rest args &key (number (group-find-free-number)) &allow-other-keys)
+(defun create-frame (&rest args &key (number (frame-find-free-number)) &allow-other-keys)
   (let* ((window (xlib:create-window :parent *root*
 				     :x 0
 				     :y 0
@@ -176,12 +176,12 @@ Return the result of the last hook"
 				   :background (get-color "Black")
 				   :font *default-font*
 				   :line-style :solid)))
-    (apply #'make-instance 'group :number number :window window :gc gc args)))
+    (apply #'make-instance 'frame :number number :window window :gc gc args)))
 
 
 
-(defun add-group (group father)
-  (push group (group-child father)))
+(defun add-frame (frame father)
+  (push frame (frame-child father)))
 
 
 
@@ -190,56 +190,56 @@ Return the result of the last hook"
 
 (defun get-current-child ()
   "Return the current focused child"
-  (unless (equal *current-child* *root-group*)
+  (unless (equal *current-child* *root-frame*)
     (typecase *current-child*
       (xlib:window *current-child*)
-      (group (if (xlib:window-p (first (group-child *current-child*)))
-		 (first (group-child *current-child*))
+      (frame (if (xlib:window-p (first (frame-child *current-child*)))
+		 (first (frame-child *current-child*))
 		 *current-child*)))))
 
 
 (defun find-child (to-find root)
-  "Find to-find in root or in its childs"
-  (with-all-childs (root child)
+  "Find to-find in root or in its children"
+  (with-all-children (root child)
     (when (equal child to-find)
       (return-from find-child t))))
 
 
 
-(defun find-father-group (to-find &optional (root *root-group*))
-  "Return the father group of to-find"
-  (with-all-groups (root group)
-    (when (member to-find (group-child group))
-      (return-from find-father-group group))))
+(defun find-father-frame (to-find &optional (root *root-frame*))
+  "Return the father frame of to-find"
+  (with-all-frames (root frame)
+    (when (member to-find (frame-child frame))
+      (return-from find-father-frame frame))))
 
   
 
-(defun find-group-window (window &optional (root *root-group*))
-  "Return the group with the window window"
-  (with-all-groups (root group)
-    (when (xlib:window-equal window (group-window group))
-      (return-from find-group-window group))))
+(defun find-frame-window (window &optional (root *root-frame*))
+  "Return the frame with the window window"
+  (with-all-frames (root frame)
+    (when (xlib:window-equal window (frame-window frame))
+      (return-from find-frame-window frame))))
 
 
-(defun find-group-by-name (name)
-  "Find a group from its name"
+(defun find-frame-by-name (name)
+  "Find a frame from its name"
   (when name
-    (with-all-groups (*root-group* group)
-      (when (string-equal name (group-name group))
-	(return-from find-group-by-name group)))))
+    (with-all-frames (*root-frame* frame)
+      (when (string-equal name (frame-name frame))
+	(return-from find-frame-by-name frame)))))
 
-(defun find-group-by-number (number)
-  "Find a group from its number"
+(defun find-frame-by-number (number)
+  "Find a frame from its number"
   (when (numberp number)
-    (with-all-groups (*root-group* group)
-      (when (= number (group-number group))
-	(return-from find-group-by-number group)))))
+    (with-all-frames (*root-frame* frame)
+      (when (= number (frame-number frame))
+	(return-from find-frame-by-number frame)))))
 
 
 
 
-(defun get-all-windows (&optional (root *root-group*))
-  "Return all windows in root and in its childs"
+(defun get-all-windows (&optional (root *root-frame*))
+  "Return all windows in root and in its children"
   (let ((acc nil))
     (with-all-windows (root window)
       (push window acc))
@@ -256,20 +256,20 @@ Return the result of the last hook"
 
 
 
-(defun display-group-info (group)
+(defun display-frame-info (frame)
   (let ((dy (+ (xlib:max-char-ascent *default-font*) (xlib:max-char-descent *default-font*))))
-    (with-slots (name number gc window child) group
-      (when (equal group *current-root*)
+    (with-slots (name number gc window child) frame
+      (when (equal frame *current-root*)
 	(xlib:clear-area window))
-      (setf (xlib:gcontext-foreground gc) (get-color (if (and (equal group *current-root*)
-							      (equal group *current-child*))
+      (setf (xlib:gcontext-foreground gc) (get-color (if (and (equal frame *current-root*)
+							      (equal frame *current-child*))
 							 "Red" "Green")))
       (xlib:draw-image-glyphs window gc 5 dy		 
-			      (format nil "Group: ~A~A                                                  "
+			      (format nil "Frame: ~A~A                                                  "
 				      number
 				      (if name  (format nil " - ~A" name) "")))
       (let ((pos dy))
-	(when (equal group *current-root*)
+	(when (equal frame *current-root*)
 	  (xlib:draw-image-glyphs window gc 5 (incf pos dy)
 				  (format nil "~A hidden windows             " (length (get-hidden-windows))))
 	  (when *child-selection*
@@ -279,8 +279,8 @@ Return the result of the last hook"
 				      (dolist (child *child-selection*)
 					(typecase child
 					  (xlib:window (format str "~A " (xlib:wm-name child)))
-					  (group (format str "group:~A[~A] " (group-number child)
-							 (aif (group-name child) it "")))))
+					  (frame (format str "frame:~A[~A] " (frame-number child)
+							 (aif (frame-name child) it "")))))
 				      (format str "                                                   ")))))
 	(dolist (ch child)
 	  (when (xlib:window-p ch)
@@ -296,8 +296,8 @@ Return the result of the last hook"
 
 
 (defun get-father-layout (child father)
-  (if (group-p father)
-      (aif (group-layout father)
+  (if (frame-p father)
+      (aif (frame-layout father)
 	   (funcall it child father)
 	   (no-layout child father))
       (get-fullscreen-size)))
@@ -315,11 +315,11 @@ Return the result of the last hook"
 	      (xlib:drawable-height window) nh)
 	raise-p)))
 
-(defmethod adapt-child-to-father ((group group) father)
+(defmethod adapt-child-to-father ((frame frame) father)
   (with-xlib-protect
       (multiple-value-bind (nx ny nw nh raise-p)
-	  (get-father-layout group father)
-	(with-slots (rx ry rw rh window) group
+	  (get-father-layout frame father)
+	(with-slots (rx ry rw rh window) frame
 	  (setf rx nx  ry ny  rw nw  rh nh)
 	  (setf (xlib:drawable-x window) rx
 		(xlib:drawable-y window) ry
@@ -332,21 +332,21 @@ Return the result of the last hook"
 (defgeneric show-child (child father))
 (defgeneric hide-child (child))
 
-(defmethod show-child ((group group) father)
+(defmethod show-child ((frame frame) father)
   (with-xlib-protect
-      (with-slots (window) group
-	(let ((raise-p (adapt-child-to-father group father)))
-	  (when (or *show-root-group-p* (not (equal group *current-root*)))
+      (with-slots (window) frame
+	(let ((raise-p (adapt-child-to-father frame father)))
+	  (when (or *show-root-frame-p* (not (equal frame *current-root*)))
 	    (setf (xlib:window-background window) (get-color "Black"))
 	    (xlib:map-window window)
 	    (when raise-p
 	      (raise-window window))
-	    (display-group-info group))))))
+	    (display-frame-info frame))))))
 
 
-(defmethod hide-child ((group group))
+(defmethod hide-child ((frame frame))
   (with-xlib-protect
-      (with-slots (window) group
+      (with-slots (window) frame
 	(xlib:unmap-window window))))
 
 
@@ -369,10 +369,10 @@ Return the result of the last hook"
 
 (defgeneric select-child (child selected))
 
-(defmethod select-child ((group group) selected)
+(defmethod select-child ((frame frame) selected)
   (with-xlib-protect
-      (when (and (group-p group) (group-window group))
-	(setf (xlib:window-border (group-window group))
+      (when (and (frame-p frame) (frame-window frame))
+	(setf (xlib:window-border (frame-window frame))
 	      (get-color (cond ((equal selected :maybe) *color-maybe-selected*)
 			       ((equal selected nil) *color-unselected*)
 			       (selected *color-selected*)))))))
@@ -384,7 +384,7 @@ Return the result of the last hook"
 			     ((equal selected nil) *color-unselected*)
 			     (selected *color-selected*))))))
 
-(defun select-current-group (selected)
+(defun select-current-frame (selected)
   (select-child *current-child* selected))
 
 
@@ -393,7 +393,7 @@ Return the result of the last hook"
   (labels ((rec (child)
 	     (typecase child
 	       (xlib:window (focus-window child))
-	       (group (rec (first (group-child child)))))))
+	       (frame (rec (first (frame-child child)))))))
     (no-focus)
     (rec *current-child*)))
 
@@ -401,15 +401,15 @@ Return the result of the last hook"
 
 
 
-(defun show-all-childs ()
-  "Show all childs from *current-root*"
+(defun show-all-children ()
+  "Show all children from *current-root*"
   (labels ((rec (root father first-p)
 	     (show-child root father)
 	     (select-child root (if (equal root *current-child*) t
 				    (if first-p :maybe nil)))
-	     (when (group-p root)
-	       (let ((first-child (first (group-child root))))
-		 (dolist (child (reverse (group-child root)))
+	     (when (frame-p root)
+	       (let ((first-child (first (frame-child root))))
+		 (dolist (child (reverse (frame-child root)))
 		   (rec child root (and first-p (equal child first-child))))))))
     (rec *current-root* nil t)
     (set-focus-to-current-child)))
@@ -417,65 +417,65 @@ Return the result of the last hook"
 
 
 
-(defun hide-all-childs (root)
+(defun hide-all-children (root)
   (hide-child root)
-  (when (group-p root)
-    (dolist (child (group-child root))
-      (hide-all-childs child))))
+  (when (frame-p root)
+    (dolist (child (frame-child root))
+      (hide-all-children child))))
 
 
 
 
 (defun select-next/previous-brother (fun-rotate)
-  "Select the next/previous brother group"
-  (let ((group-is-root? (and (equal *current-root* *current-child*)
-			     (not (equal *current-root* *root-group*)))))
-    (if group-is-root?
-	(hide-all-childs *current-root*)
-	(select-current-group nil))
-    (let ((father (find-father-group *current-child*)))
-      (when (group-p father)
+  "Select the next/previous brother frame"
+  (let ((frame-is-root? (and (equal *current-root* *current-child*)
+			     (not (equal *current-root* *root-frame*)))))
+    (if frame-is-root?
+	(hide-all-children *current-root*)
+	(select-current-frame nil))
+    (let ((father (find-father-frame *current-child*)))
+      (when (frame-p father)
 	(with-slots (child) father
 	  (setf child (funcall fun-rotate child))
 	  (setf *current-child* (first child)))))
-    (when group-is-root?
+    (when frame-is-root?
       (setf *current-root* *current-child*))
-    (show-all-childs)))
+    (show-all-children)))
 
 
 (defun select-next-brother ()
-  "Select the next brother group"
+  "Select the next brother frame"
   (select-next/previous-brother #'anti-rotate-list))
 
 (defun select-previous-brother ()
-  "Select the previous brother group"
+  "Select the previous brother frame"
   (select-next/previous-brother #'rotate-list))
 
 
 (defun select-next-level ()
-  "Select the next level in group"
-  (select-current-group nil)
-  (when (group-p *current-child*)
-    (awhen (first (group-child *current-child*))
+  "Select the next level in frame"
+  (select-current-frame nil)
+  (when (frame-p *current-child*)
+    (awhen (first (frame-child *current-child*))
 	   (setf *current-child* it)))
-  (show-all-childs))
+  (show-all-children))
 
 (defun select-previous-level ()
-  "Select the previous level in group"
+  "Select the previous level in frame"
   (unless (equal *current-child* *current-root*)
-    (select-current-group nil)
-    (awhen (find-father-group *current-child*)
+    (select-current-frame nil)
+    (awhen (find-father-frame *current-child*)
 	   (setf *current-child* it))
-    (show-all-childs)))
+    (show-all-children)))
 
 
 
 (defun select-next/previous-child (fun-rotate)
   "Select the next/previous child"
-  (when (group-p *current-child*)
+  (when (frame-p *current-child*)
     (with-slots (child) *current-child*
       (setf child (funcall fun-rotate child)))
-    (show-all-childs)))
+    (show-all-children)))
 
 
 (defun select-next-child ()
@@ -488,49 +488,49 @@ Return the result of the last hook"
 
 
 
-(defun enter-group ()
-  "Enter in the selected group - ie make it the root group"
-  (hide-all-childs *current-root*)
+(defun enter-frame ()
+  "Enter in the selected frame - ie make it the root frame"
+  (hide-all-children *current-root*)
   (setf *current-root* *current-child*)
-  (show-all-childs))
+  (show-all-children))
 
-(defun leave-group ()
-  "Leave the selected group - ie make its father the root group"
-  (hide-all-childs *current-root*)
-  (awhen (find-father-group *current-root*)
-	 (when (group-p it)
+(defun leave-frame ()
+  "Leave the selected frame - ie make its father the root frame"
+  (hide-all-children *current-root*)
+  (awhen (find-father-frame *current-root*)
+	 (when (frame-p it)
 	   (setf *current-root* it)))
-  (show-all-childs))
+  (show-all-children))
 
 
-(defun switch-to-root-group ()
-  "Switch to the root group"
-  (hide-all-childs *current-root*)
-  (setf *current-root* *root-group*)
-  (show-all-childs))
+(defun switch-to-root-frame ()
+  "Switch to the root frame"
+  (hide-all-children *current-root*)
+  (setf *current-root* *root-frame*)
+  (show-all-children))
 
-(defun switch-and-select-root-group ()
-  "Switch and select the root group"
-  (hide-all-childs *current-root*)
-  (setf *current-root* *root-group*)
+(defun switch-and-select-root-frame ()
+  "Switch and select the root frame"
+  (hide-all-children *current-root*)
+  (setf *current-root* *root-frame*)
   (setf *current-child* *current-root*)
-  (show-all-childs))
+  (show-all-children))
 
 
-(defun toggle-show-root-group ()
-  "Show/Hide the root group"
-  (hide-all-childs *current-root*)
-  (setf *show-root-group-p* (not *show-root-group-p*))
-  (show-all-childs))
+(defun toggle-show-root-frame ()
+  "Show/Hide the root frame"
+  (hide-all-children *current-root*)
+  (setf *show-root-frame-p* (not *show-root-frame-p*))
+  (show-all-children))
 
 
 (defun focus-child (child father)
   "Focus child - Return true if something has change"
-  (when (and (group-p father)
-	     (member child (group-child father)))
-    (when (not (equal child (first (group-child father))))
-      (loop until (equal child (first (group-child father)))
-	 do (setf (group-child father) (rotate-list (group-child father))))
+  (when (and (frame-p father)
+	     (member child (frame-child father)))
+    (when (not (equal child (first (frame-child father))))
+      (loop until (equal child (first (frame-child father)))
+	 do (setf (frame-child father) (rotate-list (frame-child father))))
       t)))
 
 (defun focus-child-rec (child father)
@@ -540,16 +540,16 @@ Return the result of the last hook"
 	       (when (focus-child child father)
 		 (setf change t))
 	       (when father
-		 (rec father (find-father-group father)))))
+		 (rec father (find-father-frame father)))))
       (rec child father))
     change))
 
 (defun set-current-child (child father)
   "Set *current-child* to child - Return t if something has change"
-  (cond ((and (group-p child) (not (equal *current-child* child)))
+  (cond ((and (frame-p child) (not (equal *current-child* child)))
 	 (setf *current-child* child)
 	 t)
-	((and (group-p father) (not (equal *current-child* father)))
+	((and (frame-p father) (not (equal *current-child* father)))
 	 (setf *current-child* father)
 	 t)))
 
@@ -559,8 +559,8 @@ Return the result of the last hook"
     (setf *current-root* father)))
 
 
-(defun focus-all-childs (child father)
-  "Focus child and its fathers - Set current group to father"
+(defun focus-all-children (child father)
+  "Focus child and its fathers - Set current frame to father"
   (let ((new-focus (focus-child-rec child father))
 	(new-current-child (set-current-child child father))
 	(new-root (set-current-root father)))
@@ -568,27 +568,27 @@ Return the result of the last hook"
 
 
 
-(defun remove-child-in-group (child group)
-  "Remove the child in group"
-  (when (group-p group)
-    (setf (group-child group) (remove child (group-child group) :test #'equal))))
+(defun remove-child-in-frame (child frame)
+  "Remove the child in frame"
+  (when (frame-p frame)
+    (setf (frame-child frame) (remove child (frame-child frame) :test #'equal))))
 
-(defun remove-child-in-groups (child root)
-  "Remove child in the group root and in all its childs"
-  (with-all-groups (root group)
-    (remove-child-in-group child group))
+(defun remove-child-in-frames (child root)
+  "Remove child in the frame root and in all its children"
+  (with-all-frames (root frame)
+    (remove-child-in-frame child frame))
   (when (xlib:window-p child)
     (netwm-remove-in-client-list child)))
 
 
 
-(defun remove-child-in-all-groups (child)
-  "Remove child in all groups from *root-group*"
+(defun remove-child-in-all-frames (child)
+  "Remove child in all frames from *root-frame*"
   (when (equal child *current-root*)
-    (setf *current-root* (find-father-group child)))
+    (setf *current-root* (find-father-frame child)))
   (when (equal child *current-child*)
     (setf *current-child* *current-root*))
-  (remove-child-in-groups child *root-group*))
+  (remove-child-in-frames child *root-frame*))
 
 
 
@@ -608,33 +608,33 @@ Return the result of the last hook"
 			(xlib:drawable-height window))))
       (setf (xlib:drawable-width window) (min (max min-width rwidth) max-width)
 	    (xlib:drawable-height window) (min (max min-height rheight) max-height))
-      (setf (xlib:drawable-x window) (truncate (+ (group-rx *current-child*) (/ (- (group-rw *current-child*) (xlib:drawable-width window)) 2)))
-	    (xlib:drawable-y window) (truncate (+ (group-ry *current-child*) (/ (- (group-rh *current-child*) (xlib:drawable-height window)) 2)))))))
+      (setf (xlib:drawable-x window) (truncate (+ (frame-rx *current-child*) (/ (- (frame-rw *current-child*) (xlib:drawable-width window)) 2)))
+	    (xlib:drawable-y window) (truncate (+ (frame-ry *current-child*) (/ (- (frame-rh *current-child*) (xlib:drawable-height window)) 2)))))))
 
 
 
-;;(defun do-all-groups-nw-hook (window)
-;;  "Call nw-hook of each group. A hook must return one value or a list of two values.
+;;(defun do-all-frames-nw-hook (window)
+;;  "Call nw-hook of each frame. A hook must return one value or a list of two values.
 ;;If the value or the first value is true then the default nw-hook is not executed.
-;;If the second value is true then no more group can do an action with the window (ie leave the loop)."
+;;If the second value is true then no more frame can do an action with the window (ie leave the loop)."
 ;;  (let ((result nil))
-;;    (with-all-groups (*root-group* group)
-;;      (let ((ret (call-hook (group-nw-hook group) (list group window))))
+;;    (with-all-frames (*root-frame* frame)
+;;      (let ((ret (call-hook (frame-nw-hook frame) (list frame window))))
 ;;	(typecase ret
 ;;	  (cons (when (first ret)
 ;;		  (setf result t))
 ;;		(when (second ret)
-;;		  (return-from do-all-groups-nw-hook result)))
+;;		  (return-from do-all-frames-nw-hook result)))
 ;;	  (t (when ret
 ;;	       (setf result t))))))
 ;;    result))
 
-(defun do-all-groups-nw-hook (window)
-  "Call nw-hook of each group."
+(defun do-all-frames-nw-hook (window)
+  "Call nw-hook of each frame."
   (let ((found nil))
-    (with-all-groups (*root-group* group)
-      (awhen (group-nw-hook group)
-	(call-hook it (list group window))
+    (with-all-frames (*root-frame* frame)
+      (awhen (frame-nw-hook frame)
+	(call-hook it (list frame window))
 	(setf found t)))
     found))
 
@@ -653,10 +653,10 @@ managed."
 						(:transient 1)
 						(t 1)))
     (grab-all-buttons window)
-;;    (when (group-p *current-child*) ;; PHIL: Remove this!!!
-;;      (setf (group-nw-hook *current-child*) #'open-in-new-group-nw-hook))
-    (unless (do-all-groups-nw-hook window)
-      (default-group-nw-hook nil window))
+;;    (when (frame-p *current-child*) ;; PHIL: Remove this!!!
+;;      (setf (frame-nw-hook *current-child*) #'open-in-new-frame-nw-hook))
+    (unless (do-all-frames-nw-hook window)
+      (default-frame-nw-hook nil window))
     (netwm-add-in-client-list window)))
 
 

@@ -38,157 +38,154 @@
 ;;;;;;;;;;;;;;;
 ;; Menu entry
 ;;;;;;;;;;;;;;;
-(defun group-adding-menu ()
-  "Adding group menu"
-  (info-mode-menu '((#\a add-default-group)
-		    (#\p add-placed-group))))
+(defun frame-adding-menu ()
+  "Adding frame menu"
+  (info-mode-menu '((#\a add-default-frame)
+		    (#\p add-placed-frame))))
 
-(defun group-layout-menu ()
-  "Group layout menu"
-  (info-mode-menu (loop for l in *layout-list*
-		     for i from 0
-		     collect (list (code-char (+ (char-code #\a) i)) l))))
+(defun frame-layout-menu ()
+  "Frame layout menu"
+  (info-mode-menu (keys-from-list *layout-list*)))
 
-(defun group-nw-hook-menu ()
-  "Group new window hook menu"
-  (info-mode-menu (loop for l in *nw-hook-list*
-		     for i from 0
-		     collect (list (code-char (+ (char-code #\a) i)) l))))
+(defun frame-nw-hook-menu ()
+  "Frame new window hook menu"
+  (info-mode-menu (keys-from-list *nw-hook-list*)))
 
 
   
 
-(defun group-pack-menu ()
-  "Group pack menu"
-  (info-mode-menu '(("Up" current-group-pack-up)
-		    ("Down" current-group-pack-down)
-		    ("Left" current-group-pack-left)
-		    ("Right" current-group-pack-right))))
+(defun frame-pack-menu ()
+  "Frame pack menu"
+  (info-mode-menu '(("Up" current-frame-pack-up)
+		    ("Down" current-frame-pack-down)
+		    ("Left" current-frame-pack-left)
+		    ("Right" current-frame-pack-right))))
 
 
-(defun group-fill-menu ()
-  "Group fill menu"
-  (info-mode-menu '(("Up" current-group-fill-up)
-		    ("Down" current-group-fill-down)
-		    ("Left" current-group-fill-left)
-		    ("Right" current-group-fill-right)
-		    (#\a current-group-fill-all-dir)
-		    (#\v current-group-fill-vertical)
-		    (#\h current-group-fill-horizontal))))
+(defun frame-fill-menu ()
+  "Frame fill menu"
+  (info-mode-menu '(("Up" current-frame-fill-up)
+		    ("Down" current-frame-fill-down)
+		    ("Left" current-frame-fill-left)
+		    ("Right" current-frame-fill-right)
+		    (#\a current-frame-fill-all-dir)
+		    (#\v current-frame-fill-vertical)
+		    (#\h current-frame-fill-horizontal))))
 
-(defun group-resize-menu ()
-  "Group resize menu"
-  (info-mode-menu '(("Up" current-group-resize-up)
-		    ("Down" current-group-resize-down)
-		    ("Left" current-group-resize-left)
-		    ("Right" current-group-resize-right)
-		    (#\d current-group-resize-all-dir)
-		    (#\a current-group-resize-all-dir-minimal))))
+(defun frame-resize-menu ()
+  "Frame resize menu"
+  (info-mode-menu '(("Up" current-frame-resize-up)
+		    ("Down" current-frame-resize-down)
+		    ("Left" current-frame-resize-left)
+		    ("Right" current-frame-resize-right)
+		    (#\d current-frame-resize-all-dir)
+		    (#\a current-frame-resize-all-dir-minimal))))
 
 
-(defun group-movement-menu ()
-  "Group movement menu"
-  (info-mode-menu '((#\p group-pack-menu)
-		    (#\f group-fill-menu)
-		    (#\r group-resize-menu)
-		    (#\c center-current-group))))
+(defun frame-movement-menu ()
+  "Frame movement menu"
+  (info-mode-menu '((#\p frame-pack-menu)
+		    (#\f frame-fill-menu)
+		    (#\r frame-resize-menu)
+		    (#\c center-current-frame)))
+  (leave-second-mode))
 
 
 (defmacro with-movement (&body body)
-  `(when (group-p *current-child*)
+  `(when (frame-p *current-child*)
      ,@body
-     (show-all-childs)
+     (show-all-children)
      (draw-second-mode-window)
-     (group-movement-menu)))
+     (frame-movement-menu)))
 
 
 ;;; Pack
-(defun current-group-pack-up ()
-  "Pack the current group up"
-  (with-movement (pack-group-up *current-child* (find-father-group *current-child* *current-root*))))
+(defun current-frame-pack-up ()
+  "Pack the current frame up"
+  (with-movement (pack-frame-up *current-child* (find-father-frame *current-child* *current-root*))))
 
-(defun current-group-pack-down ()
-  "Pack the current group down"
-  (with-movement (pack-group-down *current-child* (find-father-group *current-child* *current-root*))))
+(defun current-frame-pack-down ()
+  "Pack the current frame down"
+  (with-movement (pack-frame-down *current-child* (find-father-frame *current-child* *current-root*))))
 
-(defun current-group-pack-left ()
-  "Pack the current group left"
-  (with-movement (pack-group-left *current-child* (find-father-group *current-child* *current-root*))))
+(defun current-frame-pack-left ()
+  "Pack the current frame left"
+  (with-movement (pack-frame-left *current-child* (find-father-frame *current-child* *current-root*))))
 
-(defun current-group-pack-right ()
-  "Pack the current group right"
-  (with-movement (pack-group-right *current-child* (find-father-group *current-child* *current-root*))))
+(defun current-frame-pack-right ()
+  "Pack the current frame right"
+  (with-movement (pack-frame-right *current-child* (find-father-frame *current-child* *current-root*))))
 
 ;;; Center
-(defun center-current-group ()
-  "Center the current group"
-  (with-movement (center-group *current-child*)))
+(defun center-current-frame ()
+  "Center the current frame"
+  (with-movement (center-frame *current-child*)))
 
 ;;; Fill
-(defun current-group-fill-up ()
-  "Fill the current group up"
-  (with-movement (fill-group-up *current-child* (find-father-group *current-child* *current-root*))))
+(defun current-frame-fill-up ()
+  "Fill the current frame up"
+  (with-movement (fill-frame-up *current-child* (find-father-frame *current-child* *current-root*))))
 
-(defun current-group-fill-down ()
-  "Fill the current group down"
-  (with-movement (fill-group-down *current-child* (find-father-group *current-child* *current-root*))))
+(defun current-frame-fill-down ()
+  "Fill the current frame down"
+  (with-movement (fill-frame-down *current-child* (find-father-frame *current-child* *current-root*))))
 
-(defun current-group-fill-left ()
-  "Fill the current group left"
-  (with-movement (fill-group-left *current-child* (find-father-group *current-child* *current-root*))))
+(defun current-frame-fill-left ()
+  "Fill the current frame left"
+  (with-movement (fill-frame-left *current-child* (find-father-frame *current-child* *current-root*))))
 
-(defun current-group-fill-right ()
-  "Fill the current group right"
-  (with-movement (fill-group-right *current-child* (find-father-group *current-child* *current-root*))))
+(defun current-frame-fill-right ()
+  "Fill the current frame right"
+  (with-movement (fill-frame-right *current-child* (find-father-frame *current-child* *current-root*))))
 
-(defun current-group-fill-all-dir ()
-  "Fill the current group in all directions"
+(defun current-frame-fill-all-dir ()
+  "Fill the current frame in all directions"
   (with-movement
-    (let ((father (find-father-group *current-child* *current-root*)))
-      (fill-group-up *current-child* father)
-      (fill-group-down *current-child* father)
-      (fill-group-left *current-child* father)
-      (fill-group-right *current-child* father))))
+    (let ((father (find-father-frame *current-child* *current-root*)))
+      (fill-frame-up *current-child* father)
+      (fill-frame-down *current-child* father)
+      (fill-frame-left *current-child* father)
+      (fill-frame-right *current-child* father))))
 
-(defun current-group-fill-vertical ()
-  "Fill the current group vertically"
+(defun current-frame-fill-vertical ()
+  "Fill the current frame vertically"
   (with-movement
-    (let ((father (find-father-group *current-child* *current-root*)))
-      (fill-group-up *current-child* father)
-      (fill-group-down *current-child* father))))
+    (let ((father (find-father-frame *current-child* *current-root*)))
+      (fill-frame-up *current-child* father)
+      (fill-frame-down *current-child* father))))
 
-(defun current-group-fill-horizontal ()
-  "Fill the current group horizontally"
+(defun current-frame-fill-horizontal ()
+  "Fill the current frame horizontally"
   (with-movement
-    (let ((father (find-father-group *current-child* *current-root*)))
-      (fill-group-left *current-child* father)
-      (fill-group-right *current-child* father))))
+    (let ((father (find-father-frame *current-child* *current-root*)))
+      (fill-frame-left *current-child* father)
+      (fill-frame-right *current-child* father))))
     
 
 ;;; Resize
-(defun current-group-resize-up ()
-  "Resize the current group up to its half height"
+(defun current-frame-resize-up ()
+  "Resize the current frame up to its half height"
   (with-movement (resize-half-height-up *current-child*)))
 
-(defun current-group-resize-down ()
-  "Resize the current group down to its half height"
+(defun current-frame-resize-down ()
+  "Resize the current frame down to its half height"
   (with-movement (resize-half-height-down *current-child*)))
 
-(defun current-group-resize-left ()
-  "Resize the current group left to its half width"
+(defun current-frame-resize-left ()
+  "Resize the current frame left to its half width"
   (with-movement (resize-half-width-left *current-child*)))
 
-(defun current-group-resize-right ()
-  "Resize the current group right to its half width"
+(defun current-frame-resize-right ()
+  "Resize the current frame right to its half width"
   (with-movement (resize-half-width-right *current-child*)))
 
-(defun current-group-resize-all-dir ()
-  "Resize down the current group"
-  (with-movement (resize-group-down *current-child*)))
+(defun current-frame-resize-all-dir ()
+  "Resize down the current frame"
+  (with-movement (resize-frame-down *current-child*)))
 
-(defun current-group-resize-all-dir-minimal ()
-  "Resize down the current group to its minimal size"
-  (with-movement (resize-minimal-group *current-child*)))
+(defun current-frame-resize-all-dir-minimal ()
+  "Resize down the current frame to its minimal size"
+  (with-movement (resize-minimal-frame *current-child*)))
 
 
 
@@ -198,42 +195,42 @@
 
 (defun action-by-name-menu ()
   "Actions by name menu"
-  (info-mode-menu '((#\f focus-group-by-name)
-		    (#\o open-group-by-name)
-		    (#\d delete-group-by-name)
+  (info-mode-menu '((#\f focus-frame-by-name)
+		    (#\o open-frame-by-name)
+		    (#\d delete-frame-by-name)
 		    (#\m move-current-child-by-name)
 		    (#\c copy-current-child-by-name))))
 
 (defun action-by-number-menu ()
   "Actions by number menu"
-  (info-mode-menu '((#\f focus-group-by-number)
-		    (#\o open-group-by-number)
-		    (#\d delete-group-by-number)
+  (info-mode-menu '((#\f focus-frame-by-number)
+		    (#\o open-frame-by-number)
+		    (#\d delete-frame-by-number)
 		    (#\m move-current-child-by-number)
 		    (#\c copy-current-child-by-number))))
 
 
-(defun group-info-menu ()
-  "Group information menu"
-  (info-mode-menu '((#\s show-all-groups-info)
-		    (#\h hide-all-groups-info))))
+(defun frame-info-menu ()
+  "Frame information menu"
+  (info-mode-menu '((#\s show-all-frames-info)
+		    (#\h hide-all-frames-info))))
 
 
-(defun group-menu ()
-  "Group menu"
-  (info-mode-menu '((#\a group-adding-menu)
-		    (#\l group-layout-menu)
-		    (#\n group-nw-hook-menu)
-		    (#\m group-movement-menu)
+(defun frame-menu ()
+  "Frame menu"
+  (info-mode-menu '((#\a frame-adding-menu)
+		    (#\l frame-layout-menu)
+		    (#\n frame-nw-hook-menu)
+		    (#\m frame-movement-menu)
 		    (#\r rename-current-child)
-		    (#\u renumber-current-group)
-		    (#\i group-info-menu)
-		    (#\x explode-current-group))))
+		    (#\u renumber-current-frame)
+		    (#\i frame-info-menu)
+		    (#\x explode-current-frame))))
 
 (defun window-menu ()
   "Window menu"
-  (info-mode-menu '((#\i force-window-in-group)
-		    (#\c force-window-center-in-group))))
+  (info-mode-menu '((#\i force-window-in-frame)
+		    (#\c force-window-center-in-frame))))
 
 
 
@@ -255,7 +252,7 @@
   
 (defun main-menu ()
   "Open the main menu"
-  (info-mode-menu '((#\g group-menu)
+  (info-mode-menu '((#\f frame-menu)
 		    (#\w window-menu)
 		    (#\s selection-menu)
 		    (#\n action-by-name-menu)
@@ -270,7 +267,7 @@
 (define-second-key ("F1" :mod-1) 'help-on-second-mode)
 
 (define-second-key ("m") 'main-menu)
-(define-second-key ("g") 'group-menu)
+(define-second-key ("f") 'frame-menu)
 (define-second-key ("n") 'action-by-name-menu)
 (define-second-key ("u") 'action-by-number-menu)
 
@@ -304,17 +301,17 @@
 (define-second-key ("Tab" :mod-1) 'select-next-child)
 (define-second-key ("ISO_Left_Tab" :mod-1 :shift) 'select-previous-child)
 
-(define-second-key ("Return" :mod-1) 'enter-group)
-(define-second-key ("Return" :mod-1 :shift) 'leave-group)
+(define-second-key ("Return" :mod-1) 'enter-frame)
+(define-second-key ("Return" :mod-1 :shift) 'leave-frame)
 
-(define-second-key ("Home" :mod-1) 'switch-to-root-group)
-(define-second-key ("Home" :mod-1 :shift) 'switch-and-select-root-group)
+(define-second-key ("Home" :mod-1) 'switch-to-root-frame)
+(define-second-key ("Home" :mod-1 :shift) 'switch-and-select-root-frame)
 
-(define-second-key ("Menu") 'toggle-show-root-group)
+(define-second-key ("Menu") 'toggle-show-root-frame)
 
 (define-second-key (#\b :mod-1) 'banish-pointer)
 
-(define-second-key (#\o) 'set-open-in-new-group-in-root-group-nw-hook)
+(define-second-key (#\o) 'set-open-in-new-frame-in-root-frame-nw-hook)
 
 
 ;;;; Escape
@@ -351,9 +348,9 @@
 (define-shell (#\h) b-start-xclock "start an xclock" "exec xclock -d")
 
 
-(define-second-key ("Menu") 'show-all-groups-info-key)
-(define-second-key ("Menu" :shift) 'show-all-groups-info)
-(define-second-key ("Menu" :control) 'toggle-show-root-group)
+(define-second-key ("Menu") 'show-all-frames-info-key)
+(define-second-key ("Menu" :shift) 'show-all-frames-info)
+(define-second-key ("Menu" :control) 'toggle-show-root-frame)
 
 
 
@@ -374,7 +371,7 @@
 
 
 (defun sm-mouse-select-next-level (window root-x root-y)
-  "Select the next level in group"
+  "Select the next level in frame"
   (declare (ignore window root-x root-y))
   (select-next-level))
 
@@ -382,23 +379,23 @@
 
 
 (defun sm-mouse-select-previous-level (window root-x root-y)
-  "Select the previous level in group"
+  "Select the previous level in frame"
   (declare (ignore window root-x root-y))
   (select-previous-level))
 
 
 
-(defun sm-mouse-enter-group (window root-x root-y)
-  "Enter in the selected group - ie make it the root group"
+(defun sm-mouse-enter-frame (window root-x root-y)
+  "Enter in the selected frame - ie make it the root frame"
   (declare (ignore window root-x root-y))
-  (enter-group))
+  (enter-frame))
 
 
 
-(defun sm-mouse-leave-group (window root-x root-y)
-  "Leave the selected group - ie make its father the root group"
+(defun sm-mouse-leave-frame (window root-x root-y)
+  "Leave the selected frame - ie make its father the root frame"
   (declare (ignore window root-x root-y))
-  (leave-group))
+  (leave-frame))
 
 
 
@@ -408,8 +405,8 @@
 (define-second-mouse (4) 'sm-mouse-select-next-level)
 (define-second-mouse (5) 'sm-mouse-select-previous-level)
 
-(define-second-mouse (4 :mod-1) 'sm-mouse-enter-group)
-(define-second-mouse (5 :mod-1) 'sm-mouse-leave-group)
+(define-second-mouse (4 :mod-1) 'sm-mouse-enter-frame)
+(define-second-mouse (5 :mod-1) 'sm-mouse-leave-frame)
 
 
 
@@ -420,31 +417,31 @@
 ;;(define-second-key ("Escape" :control :shift) 'delete-current-window)
 ;;(define-second-key ("Escape" :mod-1 :control :shift) 'destroy-current-window)
 ;;(define-second-key ("Escape" :control) 'remove-current-window)
-;;(define-second-key ("Escape" :shift) 'unhide-all-windows-in-current-group)
+;;(define-second-key ("Escape" :shift) 'unhide-all-windows-in-current-frame)
 ;;
 ;;
 ;;;; Up
-;;(define-second-key ("Up" :mod-1) 'circulate-group-up)
-;;(define-second-key ("Up" :mod-1 :shift) 'circulate-group-up-move-window)
-;;(define-second-key ("Up" :mod-1 :shift :control) 'circulate-group-up-copy-window)
+;;(define-second-key ("Up" :mod-1) 'circulate-frame-up)
+;;(define-second-key ("Up" :mod-1 :shift) 'circulate-frame-up-move-window)
+;;(define-second-key ("Up" :mod-1 :shift :control) 'circulate-frame-up-copy-window)
 ;;
 ;;
 ;;;; Down
-;;(define-second-key ("Down" :mod-1) 'circulate-group-down)
-;;(define-second-key ("Down" :mod-1 :shift) 'circulate-group-down-move-window)
-;;(define-second-key ("Down" :mod-1 :shift :control) 'circulate-group-down-copy-window)
+;;(define-second-key ("Down" :mod-1) 'circulate-frame-down)
+;;(define-second-key ("Down" :mod-1 :shift) 'circulate-frame-down-move-window)
+;;(define-second-key ("Down" :mod-1 :shift :control) 'circulate-frame-down-copy-window)
 ;;
 ;;
 ;;;; Right
 ;;(define-second-key ("Right" :mod-1) 'circulate-workspace-up)
-;;(define-second-key ("Right" :mod-1 :shift) 'circulate-workspace-up-move-group)
-;;(define-second-key ("Right" :mod-1 :shift :control) 'circulate-workspace-up-copy-group)
+;;(define-second-key ("Right" :mod-1 :shift) 'circulate-workspace-up-move-frame)
+;;(define-second-key ("Right" :mod-1 :shift :control) 'circulate-workspace-up-copy-frame)
 ;;
 ;;
 ;;;; Left
 ;;(define-second-key ("Left" :mod-1) 'circulate-workspace-down)
-;;(define-second-key ("Left" :mod-1 :shift) 'circulate-workspace-down-move-group)
-;;(define-second-key ("Left" :mod-1 :shift :control) 'circulate-workspace-down-copy-group)
+;;(define-second-key ("Left" :mod-1 :shift) 'circulate-workspace-down-move-frame)
+;;(define-second-key ("Left" :mod-1 :shift :control) 'circulate-workspace-down-copy-frame)
 ;;
 ;;
 ;;(defmacro define-second-focus-workspace-by-number (key number)
@@ -477,7 +474,7 @@
 ;;
 ;;(define-second-key (#\b) 'banish-pointer)
 ;;
-;;(define-second-key (#\b :mod-1) 'toggle-maximize-current-group)
+;;(define-second-key (#\b :mod-1) 'toggle-maximize-current-frame)
 ;;
 ;;(define-second-key (#\x) 'pager-mode)
 ;;
@@ -486,8 +483,8 @@
 ;;(define-second-key (#\k) 'remove-current-window)
 ;;
 ;;
-;;(define-second-key (#\g) 'create-new-default-group)
-;;(define-second-key (#\g :mod-1) 'remove-current-group)
+;;(define-second-key (#\g) 'create-new-default-frame)
+;;(define-second-key (#\g :mod-1) 'remove-current-frame)
 ;;
 ;;(define-second-key (#\w) 'create-new-default-workspace)
 ;;(define-second-key (#\w :mod-1) 'remove-current-workspace)
@@ -509,15 +506,15 @@
 ;;
 ;;
 ;;(define-second-key (#\o :mod-1)
-;;    (defun b-open-next-window-in-new-group-once ()
-;;      "Open the next window in a new group and all others in the same group"
-;;      (setf *open-next-window-in-new-group* :once)
+;;    (defun b-open-next-window-in-new-frame-once ()
+;;      "Open the next window in a new frame and all others in the same frame"
+;;      (setf *open-next-window-in-new-frame* :once)
 ;;      (leave-second-mode)))
 ;;
 ;;(define-second-key (#\o :mod-1 :control)
-;;    (defun b-open-next-window-in-new-group ()
-;;      "Open each next window in a new group"
-;;      (setf *open-next-window-in-new-group* t)
+;;    (defun b-open-next-window-in-new-frame ()
+;;      "Open each next window in a new frame"
+;;      (setf *open-next-window-in-new-frame* t)
 ;;      (leave-second-mode)))
 ;;
 ;;
@@ -538,8 +535,8 @@
 ;;(define-shell (#\h) b-start-xclock "start an xclock" "exec xclock -d")
 ;;
 ;;
-;;(define-second-key (#\a) 'force-window-center-in-group)
-;;(define-second-key (#\a :mod-1) 'force-window-in-group)
+;;(define-second-key (#\a) 'force-window-center-in-frame)
+;;(define-second-key (#\a :mod-1) 'force-window-in-frame)
 ;;
 ;;
 ;;(define-second-key (#\d :mod-1)
@@ -554,145 +551,145 @@
 ;;
 ;;(define-second-key (#\y) 'tile-current-workspace-to)
 ;;(define-second-key (#\y :mod-1) 'reconfigure-tile-workspace)
-;;(define-second-key (#\y :control) 'explode-current-group)
-;;(define-second-key (#\y :control :shift) 'implode-current-group)
+;;(define-second-key (#\y :control) 'explode-current-frame)
+;;(define-second-key (#\y :control :shift) 'implode-current-frame)
 ;;    
 ;;;;;,-----
-;;;;;| Moving/Resizing groups
+;;;;;| Moving/Resizing frames
 ;;;;;`-----
 ;;(define-second-key (#\p)
-;;    (defun b-pack-group-on-next-arrow ()
-;;      "Pack group on next arrow action"
+;;    (defun b-pack-frame-on-next-arrow ()
+;;      "Pack frame on next arrow action"
 ;;      (setf *arrow-action* :pack)))
 ;;
 ;;
-;;(defun fill-group-in-all-directions ()
-;;  "Fill group in all directions"
-;;  (fill-current-group-up)
-;;  (fill-current-group-left)
-;;  (fill-current-group-right)
-;;  (fill-current-group-down))
+;;(defun fill-frame-in-all-directions ()
+;;  "Fill frame in all directions"
+;;  (fill-current-frame-up)
+;;  (fill-current-frame-left)
+;;  (fill-current-frame-right)
+;;  (fill-current-frame-down))
 ;;
 ;;
 ;;(define-second-key (#\f)
-;;    (defun b-fill-group ()
-;;      "Fill group on next arrow action (fill in all directions on second f keypress)"
+;;    (defun b-fill-frame ()
+;;      "Fill frame on next arrow action (fill in all directions on second f keypress)"
 ;;      (case *arrow-action*
-;;	(:fill (fill-group-in-all-directions)
+;;	(:fill (fill-frame-in-all-directions)
 ;;	       (setf *arrow-action* nil))
 ;;	(t (setf *arrow-action* :fill)))))
 ;;
-;;(define-second-key (#\f :mod-1) 'fill-group-in-all-directions)
+;;(define-second-key (#\f :mod-1) 'fill-frame-in-all-directions)
 ;;
 ;;(define-second-key (#\f :shift)
-;;    (defun b-fill-group-vert ()
-;;      "Fill group vertically"
-;;      (fill-current-group-up)
-;;      (fill-current-group-down)))
+;;    (defun b-fill-frame-vert ()
+;;      "Fill frame vertically"
+;;      (fill-current-frame-up)
+;;      (fill-current-frame-down)))
 ;;
 ;;(define-second-key (#\f :control)
-;;    (defun b-fill-group-horiz ()
-;;      "Fill group horizontally"
-;;      (fill-current-group-left)
-;;      (fill-current-group-right)))
+;;    (defun b-fill-frame-horiz ()
+;;      "Fill frame horizontally"
+;;      (fill-current-frame-left)
+;;      (fill-current-frame-right)))
 ;;
 ;;
 ;;(define-second-key (#\r)
 ;;    (defun b-resize-half ()
-;;      "Resize group to its half width or heigth on next arraw action"
+;;      "Resize frame to its half width or heigth on next arraw action"
 ;;      (setf *arrow-action* :resize-half)))
 ;;
 ;;
-;;(define-second-key (#\l) 'resize-minimal-current-group)
-;;(define-second-key (#\l :mod-1) 'resize-down-current-group)
+;;(define-second-key (#\l) 'resize-minimal-current-frame)
+;;(define-second-key (#\l :mod-1) 'resize-down-current-frame)
 ;;
 ;;
-;;(define-second-key (#\m) 'center-current-group)
+;;(define-second-key (#\m) 'center-current-frame)
 ;;   
 ;;
 ;;(define-second-key ("Up")
 ;;    (defun b-move-or-pack-up ()
-;;      "Move, pack, fill or resize group up"
+;;      "Move, pack, fill or resize frame up"
 ;;      (case *arrow-action*
-;;	(:pack (pack-current-group-up))
-;;	(:fill (fill-current-group-up))
-;;	(:resize-half (resize-half-height-up-current-group))
-;;	(t (move-group (current-group) 0 -10)))
+;;	(:pack (pack-current-frame-up))
+;;	(:fill (fill-current-frame-up))
+;;	(:resize-half (resize-half-height-up-current-frame))
+;;	(t (move-frame (current-frame) 0 -10)))
 ;;      (setf *arrow-action* nil)))
 ;;
 ;;(define-second-key ("Down")
 ;;    (defun b-move-or-pack-down ()
-;;      "Move, pack, fill or resize group down"
+;;      "Move, pack, fill or resize frame down"
 ;;      (case *arrow-action*
-;;	(:pack (pack-current-group-down))
-;;	(:fill (fill-current-group-down))
-;;	(:resize-half (resize-half-height-down-current-group))
-;;	(t (move-group (current-group) 0 +10)))
+;;	(:pack (pack-current-frame-down))
+;;	(:fill (fill-current-frame-down))
+;;	(:resize-half (resize-half-height-down-current-frame))
+;;	(t (move-frame (current-frame) 0 +10)))
 ;;      (setf *arrow-action* nil)))
 ;;
 ;;(define-second-key ("Right")
 ;;    (defun b-move-or-pack-right ()
-;;      "Move, pack, fill or resize group right"
+;;      "Move, pack, fill or resize frame right"
 ;;      (case *arrow-action*
-;;	(:pack (pack-current-group-right))
-;;	(:fill (fill-current-group-right))
-;;	(:resize-half (resize-half-width-right-current-group))
-;;	(t (move-group (current-group) +10 0)))
+;;	(:pack (pack-current-frame-right))
+;;	(:fill (fill-current-frame-right))
+;;	(:resize-half (resize-half-width-right-current-frame))
+;;	(t (move-frame (current-frame) +10 0)))
 ;;      (setf *arrow-action* nil)))
 ;;
 ;;(define-second-key ("Left")
 ;;    (defun b-move-or-pack-left ()
-;;      "Move, pack, fill or resize group left"
+;;      "Move, pack, fill or resize frame left"
 ;;      (case *arrow-action*
-;;	(:pack (pack-current-group-left))
-;;	(:fill (fill-current-group-left))
-;;	(:resize-half (resize-half-width-left-current-group))
-;;	(t (move-group (current-group) -10 0)))
+;;	(:pack (pack-current-frame-left))
+;;	(:fill (fill-current-frame-left))
+;;	(:resize-half (resize-half-width-left-current-frame))
+;;	(t (move-frame (current-frame) -10 0)))
 ;;      (setf *arrow-action* nil)))
 ;;
 ;;
 ;;(define-second-key ("Up" :shift)
 ;;    (defun b-resize-up ()
-;;      "Resize group up"
-;;      (resize-group (current-group) 0 -10)))
+;;      "Resize frame up"
+;;      (resize-frame (current-frame) 0 -10)))
 ;;
 ;;(define-second-key ("Down" :shift)
 ;;    (defun b-resize-down ()
-;;      "Resize group down"
-;;      (resize-group (current-group) 0 +10)))
+;;      "Resize frame down"
+;;      (resize-frame (current-frame) 0 +10)))
 ;;
 ;;(define-second-key ("Right" :shift)
 ;;    (defun b-resize-right ()
-;;      "Resize group right"
-;;      (resize-group (current-group) +10 0)))
+;;      "Resize frame right"
+;;      (resize-frame (current-frame) +10 0)))
 ;;
 ;;(define-second-key ("Left" :shift)
 ;;    (defun b-resize-left ()
-;;      "Resize group left"
-;;      (resize-group (current-group) -10 0)))
+;;      "Resize frame left"
+;;      (resize-frame (current-frame) -10 0)))
 ;;
 ;;
 ;;;;;,-----
 ;;;;;| Mouse second mode functions
 ;;;;;`-----
-;;(defun select-group-under-mouse (root-x root-y)
-;;  (let ((group (find-group-under-mouse root-x root-y)))
-;;    (when group
+;;(defun select-frame-under-mouse (root-x root-y)
+;;  (let ((frame (find-frame-under-mouse root-x root-y)))
+;;    (when frame
 ;;      (no-focus)
-;;      (focus-group group (current-workspace))
+;;      (focus-frame frame (current-workspace))
 ;;      (focus-window (current-window))
-;;      (show-all-group (current-workspace) nil))))
+;;      (show-all-frame (current-workspace) nil))))
 ;;
 ;;(defun mouse-leave-second-mode-maximize (root-x root-y)
-;;  "Leave second mode and maximize current group"
-;;  (select-group-under-mouse root-x root-y)
-;;  (maximize-group (current-group))
+;;  "Leave second mode and maximize current frame"
+;;  (select-frame-under-mouse root-x root-y)
+;;  (maximize-frame (current-frame))
 ;;  (show-all-windows-in-workspace (current-workspace))
 ;;  (throw 'exit-second-loop nil))
 ;;
 ;;(defun mouse-leave-second-mode (root-x root-y)
 ;;  "Leave second mode"
-;;  (select-group-under-mouse root-x root-y)
+;;  (select-frame-under-mouse root-x root-y)
 ;;  (show-all-windows-in-workspace (current-workspace))
 ;;  (throw 'exit-second-loop nil))
 ;;
@@ -729,160 +726,160 @@
 ;;(defun init-motion-vars ()
 ;;  (setf *motion-action* nil
 ;;	*motion-object* nil
-;;	*motion-start-group* nil
+;;	*motion-start-frame* nil
 ;;	*motion-dx* nil
 ;;	*motion-dy* nil))
 ;;
 ;;
 ;;(let ((accept-motion t)
-;;      (selected-group nil))
+;;      (selected-frame nil))
 ;;  (defun mouse-motion (root-x root-y)
-;;    "Move or resize group. Move window from a group to another.
+;;    "Move or resize frame. Move window from a frame to another.
 ;;Go to top left or rigth corner to change workspaces."
-;;    (let ((group (find-group-under-mouse root-x root-y)))
-;;      (unless (equal selected-group group)
-;;	(select-group-under-mouse root-x root-y)
-;;	(setf selected-group group)))
+;;    (let ((frame (find-frame-under-mouse root-x root-y)))
+;;      (unless (equal selected-frame frame)
+;;	(select-frame-under-mouse root-x root-y)
+;;	(setf selected-frame frame)))
 ;;    (if (<= root-y 5)
 ;;	(cond ((and accept-motion (<= root-x 5))
 ;;	       (case *motion-action*
-;;		 (:move-group
-;;		  (remove-group-in-workspace *motion-object* (current-workspace))))
+;;		 (:move-frame
+;;		  (remove-frame-in-workspace *motion-object* (current-workspace))))
 ;;	       (circulate-workspace-down)
-;;	       (minimize-group (current-group))
+;;	       (minimize-frame (current-frame))
 ;;	       (case *motion-action*
-;;		 (:move-group
-;;		  (add-group-in-workspace *motion-object* (current-workspace))))
+;;		 (:move-frame
+;;		  (add-frame-in-workspace *motion-object* (current-workspace))))
 ;;	       (warp-pointer *root* (1- (xlib:screen-width *screen*)) 100)
 ;;	       (setf accept-motion nil))
 ;;	      ((and accept-motion (>= root-x (- (xlib:screen-width *screen*) 5)))
 ;;	       (case *motion-action*
-;;		 (:move-group
-;;		  (remove-group-in-workspace *motion-object* (current-workspace))))
+;;		 (:move-frame
+;;		  (remove-frame-in-workspace *motion-object* (current-workspace))))
 ;;	       (circulate-workspace-up)
-;;	       (minimize-group (current-group))
+;;	       (minimize-frame (current-frame))
 ;;	       (case *motion-action*
-;;		 (:move-group
-;;		  (add-group-in-workspace *motion-object* (current-workspace))))
+;;		 (:move-frame
+;;		  (add-frame-in-workspace *motion-object* (current-workspace))))
 ;;	       (warp-pointer *root* 0 100)
 ;;	       (setf accept-motion nil))
 ;;	      (t (setf accept-motion t)))
 ;;	(setf accept-motion t))
 ;;    (case *motion-action*
-;;      (:move-group
-;;       (hide-group *root* *motion-object*)
-;;       (setf (group-x *motion-object*) (+ root-x *motion-dx*)
-;;	     (group-y *motion-object*) (+ root-y *motion-dy*))
-;;       (show-group *root* *root-gc* *motion-object*)
-;;       (adapt-all-window-in-group *motion-object*)
-;;       (show-all-group (current-workspace) nil))
-;;      (:resize-group
-;;       (hide-group *root* *motion-object*)
-;;       (setf (group-width *motion-object*) (max (+ (group-width *motion-object*) (- root-x *motion-dx*)) 100)
-;;	     (group-height *motion-object*) (max (+ (group-height *motion-object*) (- root-y *motion-dy*)) 100)
+;;      (:move-frame
+;;       (hide-frame *root* *motion-object*)
+;;       (setf (frame-x *motion-object*) (+ root-x *motion-dx*)
+;;	     (frame-y *motion-object*) (+ root-y *motion-dy*))
+;;       (show-frame *root* *root-gc* *motion-object*)
+;;       (adapt-all-window-in-frame *motion-object*)
+;;       (show-all-frame (current-workspace) nil))
+;;      (:resize-frame
+;;       (hide-frame *root* *motion-object*)
+;;       (setf (frame-width *motion-object*) (max (+ (frame-width *motion-object*) (- root-x *motion-dx*)) 100)
+;;	     (frame-height *motion-object*) (max (+ (frame-height *motion-object*) (- root-y *motion-dy*)) 100)
 ;;	     *motion-dx* root-x *motion-dy* root-y)
-;;       (show-group *root* *root-gc* *motion-object*)
-;;       (adapt-all-window-in-group *motion-object*)
-;;       (show-all-group (current-workspace) nil)))))
+;;       (show-frame *root* *root-gc* *motion-object*)
+;;       (adapt-all-window-in-frame *motion-object*)
+;;       (show-all-frame (current-workspace) nil)))))
 ;;
 ;;
 ;;
-;;(defun move-selected-group (root-x root-y)
-;;  "Move selected group or create a new group on the root window"
-;;  (select-group-under-mouse root-x root-y)
-;;  (setf *motion-object* (find-group-under-mouse root-x root-y))
+;;(defun move-selected-frame (root-x root-y)
+;;  "Move selected frame or create a new frame on the root window"
+;;  (select-frame-under-mouse root-x root-y)
+;;  (setf *motion-object* (find-frame-under-mouse root-x root-y))
 ;;  (if *motion-object*
-;;      (setf *motion-action* :move-group
-;;	    *motion-dx* (- (group-x *motion-object*) root-x)
-;;	    *motion-dy* (- (group-y *motion-object*) root-y))
+;;      (setf *motion-action* :move-frame
+;;	    *motion-dx* (- (frame-x *motion-object*) root-x)
+;;	    *motion-dy* (- (frame-y *motion-object*) root-y))
 ;;      (progn
-;;	(setf *motion-object* (make-group :x root-x :y root-y :width 100 :height 100 :fullscreenp nil))
+;;	(setf *motion-object* (make-frame :x root-x :y root-y :width 100 :height 100 :fullscreenp nil))
 ;;	(warp-pointer *root* (+ root-x 100) (+ root-y 100))
-;;	(add-group-in-workspace *motion-object* (current-workspace))
-;;	(show-all-group (current-workspace))
-;;	(setf *motion-action* :resize-group
+;;	(add-frame-in-workspace *motion-object* (current-workspace))
+;;	(show-all-frame (current-workspace))
+;;	(setf *motion-action* :resize-frame
 ;;	      *motion-dx* (+ root-x 100)
 ;;	      *motion-dy* (+ root-y 100)))))
 ;;
 ;;
 ;;
-;;(defun copy-selected-group (root-x root-y)
-;;  "Copy selected group"
+;;(defun copy-selected-frame (root-x root-y)
+;;  "Copy selected frame"
 ;;  (xgrab-pointer *root* 50 51)
-;;  (select-group-under-mouse root-x root-y)
-;;  (setf *motion-object* (find-group-under-mouse root-x root-y))
+;;  (select-frame-under-mouse root-x root-y)
+;;  (setf *motion-object* (find-frame-under-mouse root-x root-y))
 ;;  (when *motion-object*
-;;    (setf *motion-action* :copy-group
-;;	  *motion-object* (copy-group *motion-object*)
-;;	  *motion-dx* (- (group-x *motion-object*) root-x)
-;;	  *motion-dy* (- (group-y *motion-object*) root-y))))
-;;;;    (add-group-in-workspace *motion-object* (current-workspace))))
+;;    (setf *motion-action* :copy-frame
+;;	  *motion-object* (copy-frame *motion-object*)
+;;	  *motion-dx* (- (frame-x *motion-object*) root-x)
+;;	  *motion-dy* (- (frame-y *motion-object*) root-y))))
+;;;;    (add-frame-in-workspace *motion-object* (current-workspace))))
 ;;
 ;;
 ;;
-;;(defun release-move-selected-group (root-x root-y)
+;;(defun release-move-selected-frame (root-x root-y)
 ;;  "Release button"
 ;;  (when *motion-object*
 ;;    (case *motion-action*
-;;      (:move-group
-;;       (move-group-to *motion-object* (+ root-x *motion-dx*) (+ root-y *motion-dy*)))
-;;      (:resize-group
-;;       (resize-group *motion-object* 0 0))))
+;;      (:move-frame
+;;       (move-frame-to *motion-object* (+ root-x *motion-dx*) (+ root-y *motion-dy*)))
+;;      (:resize-frame
+;;       (resize-frame *motion-object* 0 0))))
 ;;  (init-motion-vars)
-;;  (select-group-under-mouse root-x root-y))
+;;  (select-frame-under-mouse root-x root-y))
 ;;
 ;;
-;;(defun release-copy-selected-group (root-x root-y)
+;;(defun release-copy-selected-frame (root-x root-y)
 ;;  "Release button"
 ;;  (xgrab-pointer *root* 66 67)
 ;;  (when *motion-object*
-;;    (unless (group-windows-already-in-workspace *motion-object* (current-workspace))
-;;      (add-group-in-workspace *motion-object* (current-workspace))
-;;      (move-group-to *motion-object* (+ root-x *motion-dx*) (+ root-y *motion-dy*))))
+;;    (unless (frame-windows-already-in-workspace *motion-object* (current-workspace))
+;;      (add-frame-in-workspace *motion-object* (current-workspace))
+;;      (move-frame-to *motion-object* (+ root-x *motion-dx*) (+ root-y *motion-dy*))))
 ;;  (init-motion-vars)
-;;  (select-group-under-mouse root-x root-y)
+;;  (select-frame-under-mouse root-x root-y)
 ;;  (show-all-windows-in-workspace (current-workspace)))
 ;;
 ;;
 ;;
-;;(defun resize-selected-group (root-x root-y)
-;;  "Resize selected group"
-;;  (select-group-under-mouse root-x root-y)
-;;  (setf *motion-object* (find-group-under-mouse root-x root-y))
+;;(defun resize-selected-frame (root-x root-y)
+;;  "Resize selected frame"
+;;  (select-frame-under-mouse root-x root-y)
+;;  (setf *motion-object* (find-frame-under-mouse root-x root-y))
 ;;  (when *motion-object*
-;;    (setf *motion-action* :resize-group
+;;    (setf *motion-action* :resize-frame
 ;;	  *motion-dx* root-x
 ;;	  *motion-dy* root-y)))
 ;;
 ;;
-;;(defun release-resize-selected-group (root-x root-y)
+;;(defun release-resize-selected-frame (root-x root-y)
 ;;  "Release button"
 ;;  (when *motion-object*
-;;    (resize-group *motion-object* 0 0))
+;;    (resize-frame *motion-object* 0 0))
 ;;  (init-motion-vars)
-;;  (select-group-under-mouse root-x root-y))
+;;  (select-frame-under-mouse root-x root-y))
 ;;
 ;;
 ;;
 ;;(defun move-selected-window (root-x root-y)
 ;;  "Move selected window"
 ;;  (xgrab-pointer *root* 50 51)
-;;  (select-group-under-mouse root-x root-y)
+;;  (select-frame-under-mouse root-x root-y)
 ;;  (setf *motion-object* (current-window)
 ;;	*motion-action* :move-window)
 ;;  (when *motion-object*
-;;    (setf *motion-start-group* (current-group))))
+;;    (setf *motion-start-frame* (current-frame))))
 ;;
 ;;
 ;;(defun release-move-selected-window (root-x root-y)
 ;;  "Release button"
 ;;  (xgrab-pointer *root* 66 67)
-;;  (select-group-under-mouse root-x root-y)
+;;  (select-frame-under-mouse root-x root-y)
 ;;  (when *motion-object*
-;;    (remove-window-in-group *motion-object* *motion-start-group*)
-;;    (add-window-in-group *motion-object* (current-group)))
+;;    (remove-window-in-frame *motion-object* *motion-start-frame*)
+;;    (add-window-in-frame *motion-object* (current-frame)))
 ;;  (init-motion-vars)
-;;  (select-group-under-mouse root-x root-y)
+;;  (select-frame-under-mouse root-x root-y)
 ;;  (show-all-windows-in-workspace (current-workspace)))
 ;;
 ;;
@@ -895,12 +892,12 @@
 ;;(defun release-copy-selected-window (root-x root-y)
 ;;  "Release button"
 ;;  (xgrab-pointer *root* 66 67)
-;;  (select-group-under-mouse root-x root-y)
+;;  (select-frame-under-mouse root-x root-y)
 ;;  (when *motion-object*
 ;;    (unless (window-already-in-workspace *motion-object* (current-workspace))
-;;      (add-window-in-group *motion-object* (current-group))))
+;;      (add-window-in-frame *motion-object* (current-frame))))
 ;;  (init-motion-vars)
-;;  (select-group-under-mouse root-x root-y)
+;;  (select-frame-under-mouse root-x root-y)
 ;;  (show-all-windows-in-workspace (current-workspace)))
 ;;
 ;;
@@ -908,9 +905,9 @@
 ;;
 ;;
 ;;
-;;(define-second-mouse (1) 'move-selected-group 'release-move-selected-group)
-;;(define-second-mouse (1 :mod-1) 'resize-selected-group 'release-resize-selected-group)
-;;(define-second-mouse (1 :control) 'copy-selected-group 'release-copy-selected-group)
+;;(define-second-mouse (1) 'move-selected-frame 'release-move-selected-frame)
+;;(define-second-mouse (1 :mod-1) 'resize-selected-frame 'release-resize-selected-frame)
+;;(define-second-mouse (1 :control) 'copy-selected-frame 'release-copy-selected-frame)
 ;;
 ;;(define-second-mouse (2) nil 'mouse-leave-second-mode-maximize)
 ;;(define-second-mouse (2 :control) nil 'mouse-leave-second-mode)

@@ -35,7 +35,7 @@
   (funcall-key-from-code *main-keys* code state))
 
 
-;; PHIL: TODO: focus-policy by group
+;; PHIL: TODO: focus-policy by frame
 ;;  :click, :sloppy, :nofocus
 (defun handle-button-press (&rest event-slots &key code state window root-x root-y &allow-other-keys)
   (declare (ignore event-slots))
@@ -74,7 +74,7 @@
 	    (setf (xlib:drawable-border-width window) border-width))
 	  (if (find-child window *current-root*)
 	      (case (window-type window)
-		(:normal (adapt-child-to-father window (find-father-group window *current-root*))
+		(:normal (adapt-child-to-father window (find-father-frame window *current-root*))
 			 (send-configuration-notify window))
 		(t (adjust-from-request)))
 	      (adjust-from-request))
@@ -97,24 +97,24 @@
     (unhide-window window)
     (process-new-window window)
     (xlib:map-window window)
-    (show-all-childs)))
+    (show-all-children)))
 
 (defun handle-unmap-notify (&rest event-slots &key send-event-p event-window window &allow-other-keys)
   (declare (ignore event-slots))
   (unless (and (not send-event-p)
 	       (not (xlib:window-equal window event-window)))
-    (when (find-child window *root-group*)
-      (remove-child-in-all-groups window)
-      (show-all-childs))))
+    (when (find-child window *root-frame*)
+      (remove-child-in-all-frames window)
+      (show-all-children))))
 
 
 (defun handle-destroy-notify (&rest event-slots &key send-event-p event-window window &allow-other-keys)
   (declare (ignore event-slots))
   (unless (or send-event-p
 	      (xlib:window-equal window event-window))
-    (when (find-child window *root-group*)
-      (remove-child-in-all-groups window)
-      (show-all-childs))))
+    (when (find-child window *root-frame*)
+      (remove-child-in-all-frames window)
+      (show-all-children))))
 
 
 
@@ -125,8 +125,8 @@
 
 (defun handle-exposure   (&rest event-slots &key window &allow-other-keys)
   (declare (ignore event-slots))
-  (awhen (find-group-window window *current-root*)
-    (display-group-info it)))
+  (awhen (find-frame-window window *current-root*)
+    (display-frame-info it)))
 
 
 (defun handle-create-notify (&rest event-slots)
@@ -221,12 +221,12 @@
   (netwm-set-properties)
   (xlib:display-force-output *display*)
   (setf *child-selection* nil)
-  (setf *root-group* (create-group :name "Root" :number 0 :layout #'tile-space-layout)
-	*current-root* *root-group*
+  (setf *root-frame* (create-frame :name "Root" :number 0 :layout #'tile-space-layout)
+	*current-root* *root-frame*
 	*current-child* *current-root*)
   (call-hook *init-hook*)
   (process-existing-windows *screen*)
-  (show-all-childs)
+  (show-all-children)
   (grab-main-keys)
   (xlib:display-finish-output *display*))
 

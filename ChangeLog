@@ -1,3 +1,11 @@
+2008-03-25  Philippe Brochard  <hocwp@free.fr>
+
+	* src/clfswm-info.lisp (keys-from-list): new function.
+
+	* src/*: rename 'childs' in 'children'.
+
+	* src/*: rename 'group' in 'frame'.
+
 2008-03-22  Philippe Brochard  <hocwp@free.fr>
 
 	* src/clfswm-pack.lisp (explode-group/explode-current-group): new functions.

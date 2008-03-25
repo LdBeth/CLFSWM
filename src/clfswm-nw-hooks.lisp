@@ -4,7 +4,7 @@
 ;;; --------------------------------------------------------------------------
 ;;; Documentation: New window Hooks
 ;;;
-;;;  Those hooks can be set for each group to manage new window when they are
+;;;  Those hooks can be set for each frame to manage new window when they are
 ;;;  mapped.
 ;;; --------------------------------------------------------------------------
 ;;;
@@ -40,53 +40,53 @@
 
 (defun set-nw-hook (hook)
   "Set the hook of the current child"
-  (let ((group (if (xlib:window-p *current-child*)
-		   (find-father-group *current-child*)
+  (let ((frame (if (xlib:window-p *current-child*)
+		   (find-father-frame *current-child*)
 		   *current-child*)))
-    (setf (group-nw-hook group) hook)
+    (setf (frame-nw-hook frame) hook)
     (leave-second-mode)))
 
 (defun register-nw-hook (hook)
   (setf *nw-hook-list* (append *nw-hook-list* (list hook))))
 
 
-(defun default-window-placement (group window)
+(defun default-window-placement (frame window)
   (case (window-type window)
-    (:normal (adapt-child-to-father window group))
+    (:normal (adapt-child-to-father window frame))
     (t (place-window-from-hints window))))
 
-(defun leave-if-not-group (child)
-  "Leave the child if it's not a group"
+(defun leave-if-not-frame (child)
+  "Leave the child if it's not a frame"
   (when (xlib:window-p child)
-    (leave-group)
+    (leave-frame)
     (select-previous-level)))
 
 
 
-;;; Default group new window hook
-(defun default-group-nw-hook (group window)
-  "Open the next window in the current group"
-  (declare (ignore group))
-  (leave-if-not-group *current-child*)
-  (when (group-p *current-child*)
-    (pushnew window (group-child *current-child*)))
+;;; Default frame new window hook
+(defun default-frame-nw-hook (frame window)
+  "Open the next window in the current frame"
+  (declare (ignore frame))
+  (leave-if-not-frame *current-child*)
+  (when (frame-p *current-child*)
+    (pushnew window (frame-child *current-child*)))
   (default-window-placement *current-child* window))
 
-(defun set-default-group-nw-hook ()
-  "Open the next window in the current group"
-  (set-nw-hook #'default-group-nw-hook))
+(defun set-default-frame-nw-hook ()
+  "Open the next window in the current frame"
+  (set-nw-hook #'default-frame-nw-hook))
 
-(register-nw-hook 'set-default-group-nw-hook)
+(register-nw-hook 'set-default-frame-nw-hook)
 
 
 ;;; Open new window in current root hook
-(defun open-in-current-root-nw-hook (group window)
+(defun open-in-current-root-nw-hook (frame window)
   "Open the next window in the current root"
-  (leave-if-not-group *current-root*)
-  (pushnew window (group-child *current-root*))
-  (setf *current-child* (first (group-child *current-root*)))
+  (leave-if-not-frame *current-root*)
+  (pushnew window (frame-child *current-root*))
+  (setf *current-child* (first (frame-child *current-root*)))
   (default-window-placement *current-root* window)
-  (setf (group-nw-hook group) nil))
+  (setf (frame-nw-hook frame) nil))
 
 (defun set-open-in-current-root-nw-hook ()
   "Open the next window in the current root"
@@ -95,37 +95,37 @@
 (register-nw-hook 'set-open-in-current-root-nw-hook)
 
 
-;;; Open new window in a new group in the current root hook
-(defun open-in-new-group-in-current-root-nw-hook (group window)
-  "Open the next window in a new group in the current root"
-  (leave-if-not-group *current-root*)
-  (let ((new-group (create-group)))
-    (pushnew new-group (group-child *current-root*))
-    (pushnew window (group-child new-group))
-    (setf *current-child* new-group)
-    (default-window-placement new-group window))
-  (setf (group-nw-hook group) nil))
+;;; Open new window in a new frame in the current root hook
+(defun open-in-new-frame-in-current-root-nw-hook (frame window)
+  "Open the next window in a new frame in the current root"
+  (leave-if-not-frame *current-root*)
+  (let ((new-frame (create-frame)))
+    (pushnew new-frame (frame-child *current-root*))
+    (pushnew window (frame-child new-frame))
+    (setf *current-child* new-frame)
+    (default-window-placement new-frame window))
+  (setf (frame-nw-hook frame) nil))
 
-(defun set-open-in-new-group-in-current-root-nw-hook ()
-  "Open the next window in a new group in the current root"
-  (set-nw-hook #'open-in-new-group-in-current-root-nw-hook))
+(defun set-open-in-new-frame-in-current-root-nw-hook ()
+  "Open the next window in a new frame in the current root"
+  (set-nw-hook #'open-in-new-frame-in-current-root-nw-hook))
 
-(register-nw-hook 'set-open-in-new-group-in-current-root-nw-hook)
+(register-nw-hook 'set-open-in-new-frame-in-current-root-nw-hook)
 
 
-;;; Open new window in a new group in the root group hook
-(defun open-in-new-group-in-root-group-nw-hook (group window)
-  "Open the next window in a new group in the root group"
-  (let ((new-group (create-group)))
-    (pushnew new-group (group-child *root-group*))
-    (pushnew window (group-child new-group))
-    (switch-to-root-group)
-    (setf *current-child* new-group)
-    (default-window-placement new-group window))
-  (setf (group-nw-hook group) nil))
+;;; Open new window in a new frame in the root frame hook
+(defun open-in-new-frame-in-root-frame-nw-hook (frame window)
+  "Open the next window in a new frame in the root frame"
+  (let ((new-frame (create-frame)))
+    (pushnew new-frame (frame-child *root-frame*))
+    (pushnew window (frame-child new-frame))
+    (switch-to-root-frame)
+    (setf *current-child* new-frame)
+    (default-window-placement new-frame window))
+  (setf (frame-nw-hook frame) nil))
 
-(defun set-open-in-new-group-in-root-group-nw-hook ()
-  "Open the next window in a new group in the root group"
-  (set-nw-hook #'open-in-new-group-in-root-group-nw-hook))
+(defun set-open-in-new-frame-in-root-frame-nw-hook ()
+  "Open the next window in a new frame in the root frame"
+  (set-nw-hook #'open-in-new-frame-in-root-frame-nw-hook))
 
-(register-nw-hook 'set-open-in-new-group-in-root-group-nw-hook)
+(register-nw-hook 'set-open-in-new-frame-in-root-frame-nw-hook)

@@ -15,7 +15,7 @@ Rewrote all useful code present in 0801 version.
    If not -> bind the key to the current-child
   Bind alt+control+1/2/3/4... to remove binding on a child.
 
-- Hook to open next window in named/numbered group [Philippe]
+- Hook to open next window in named/numbered frame [Philippe]
 
 - Undo/redo (any idea to implement this is welcome)
 
@@ -23,11 +23,15 @@ Rewrote all useful code present in 0801 version.
 
 - Float->Screen Screen->Float: convert geometry from 0 to 1 to pixel and from pixel to 0 to 1. [Philippe]
 
-- Raise/lower group [Philippe]
+- Raise/lower frame [Philippe]
 
-- Hide/Unhide group [Philippe]
+- Hide/Unhide frame [Philippe]
 
 - Add boundaries in the info window [Philippe]
+
+- get-frame-by-name (path)  [Philippe]
+  get-frame-by-name (path): return the frame that its own frame has this name if it exists such a frame
+  get-window-by-name (path): return the window that its own frame that its own frame has this name if it exists such a window.
 
 
 MAYBE
@@ -53,6 +57,9 @@ Operation:
     * up
     * down
 
+- Remote access to the clfswm REPL [Philippe]
+
+- cd/pwd a la shell to navigate throu frames. [Philippe] 
 
 
 NEVER

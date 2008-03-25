@@ -52,48 +52,48 @@
 (defparameter *nw-hook-list* nil)
 
 
-;;(defstruct group (number (incf *current-group-number*)) name
+;;(defstruct frame (number (incf *current-frame-number*)) name
 ;;	   (x 0) (y 0) (w 1) (h 1) rx ry rw rh
 ;;	   layout window gc child)
 
-;;; CONFIG - Default group datas
-(defparameter *default-group-data*
+;;; CONFIG - Default frame datas
+(defparameter *default-frame-data*
   (list '(:tile-size 0.8) '(:tile-space-size 0.1)))
 
-(defclass group ()
-  ((name :initarg :name :accessor group-name :initform nil)
-   (number :initarg :number :accessor group-number :initform 0)
+(defclass frame ()
+  ((name :initarg :name :accessor frame-name :initform nil)
+   (number :initarg :number :accessor frame-number :initform 0)
    ;;; Float size between 0 and 1 - Manipulate only this variable and not real size
-   (x :initarg :x :accessor group-x :initform 0.1)
-   (y :initarg :y :accessor group-y :initform 0.1)
-   (w :initarg :w :accessor group-w :initform 0.8)
-   (h :initarg :h :accessor group-h :initform 0.8)
+   (x :initarg :x :accessor frame-x :initform 0.1)
+   (y :initarg :y :accessor frame-y :initform 0.1)
+   (w :initarg :w :accessor frame-w :initform 0.8)
+   (h :initarg :h :accessor frame-h :initform 0.8)
    ;;; Real size (integer) in screen size - Don't set directly this variables
    ;;; they may be recalculated by the layout manager.
-   (rx :initarg :rx :accessor group-rx :initform 0)
-   (ry :initarg :ry :accessor group-ry :initform 0)
-   (rw :initarg :rw :accessor group-rw :initform 800)
-   (rh :initarg :rh :accessor group-rh :initform 600)
-   (layout :initarg :layout :accessor group-layout :initform nil)
-   (nw-hook :initarg :nw-hook :accessor group-nw-hook :initform nil
-	      :documentation "Hook done by the group when a new window is mapped")
-   (window :initarg :window :accessor group-window :initform nil)
-   (gc :initarg :gc :accessor group-gc :initform nil)
-   (child :initarg :child :accessor group-child :initform nil)
-   (data :initarg :data :accessor group-data
-	 :initform *default-group-data*
+   (rx :initarg :rx :accessor frame-rx :initform 0)
+   (ry :initarg :ry :accessor frame-ry :initform 0)
+   (rw :initarg :rw :accessor frame-rw :initform 800)
+   (rh :initarg :rh :accessor frame-rh :initform 600)
+   (layout :initarg :layout :accessor frame-layout :initform nil)
+   (nw-hook :initarg :nw-hook :accessor frame-nw-hook :initform nil
+	      :documentation "Hook done by the frame when a new window is mapped")
+   (window :initarg :window :accessor frame-window :initform nil)
+   (gc :initarg :gc :accessor frame-gc :initform nil)
+   (child :initarg :child :accessor frame-child :initform nil)
+   (data :initarg :data :accessor frame-data
+	 :initform *default-frame-data*
 	 :documentation "An assoc list to store additional data")))
 
 
 
-(defparameter *root-group* nil
-  "Root of the root - ie the root group")
+(defparameter *root-frame* nil
+  "Root of the root - ie the root frame")
 (defparameter *current-root* nil
   "The current fullscreen maximized child")
 (defparameter *current-child* nil
   "The current child with the focus")
 
-(defparameter *show-root-group-p* nil)
+(defparameter *show-root-frame-p* nil)
 
 
 (defparameter *main-keys* (make-hash-table :test 'equal))
@@ -108,10 +108,10 @@
   "Set to t to open the next window in a new workspace
 or to a number to open in a numbered workspace")
 
-(defparameter *open-next-window-in-new-group* nil
-  "Set to t to open the each next window in a new group
-or set to :once open the next window in a new group and all
-others in the same group")
+(defparameter *open-next-window-in-new-frame* nil
+  "Set to t to open the each next window in a new frame
+or set to :once open the next window in a new frame and all
+others in the same frame")
 
 (defparameter *arrow-action* nil
   "Arrow action in the second mode")
@@ -128,7 +128,7 @@ others in the same group")
 ;;;
 ;;; See clfswm.lisp for hooks examples.
 
-;;; Init hook. This hook is run just after the first root group is created
+;;; Init hook. This hook is run just after the first root frame is created
 (defparameter *init-hook* nil)
 
 ;;; Main mode hooks (set in clfswm.lisp)
@@ -169,7 +169,7 @@ others in the same group")
 ;;; Second mode global variables
 (defparameter *motion-action* nil)
 (defparameter *motion-object* nil)
-(defparameter *motion-start-group* nil)
+(defparameter *motion-start-frame* nil)
 (defparameter *motion-dx* nil)
 (defparameter *motion-dy* nil)
 

@@ -28,56 +28,56 @@
 ;;;,-----
 ;;;| Edges functions
 ;;;`-----
-(defun group-x2 (group)
-  (+ (group-x group) (group-w group)))
+(defun frame-x2 (frame)
+  (+ (frame-x frame) (frame-w frame)))
 
-(defun group-y2 (group)
-  (+ (group-y group) (group-h group)))
+(defun frame-y2 (frame)
+  (+ (frame-y frame) (frame-h frame)))
 
 
-(defun find-edge-up (current-group father)
+(defun find-edge-up (current-frame father)
   (let ((y-found 0))
-    (dolist (group (group-child father))
-      (when (and (group-p group)
-		 (not (equal group current-group))
-		 (<= (group-y2 group) (group-y current-group))
-		 (>= (group-x2 group) (group-x current-group))
-		 (<= (group-x group) (group-x2 current-group)))
-	(setf y-found (max y-found (group-y2 group)))))
+    (dolist (frame (frame-child father))
+      (when (and (frame-p frame)
+		 (not (equal frame current-frame))
+		 (<= (frame-y2 frame) (frame-y current-frame))
+		 (>= (frame-x2 frame) (frame-x current-frame))
+		 (<= (frame-x frame) (frame-x2 current-frame)))
+	(setf y-found (max y-found (frame-y2 frame)))))
     y-found))
 	     
-(defun find-edge-down (current-group father)
+(defun find-edge-down (current-frame father)
   (let ((y-found 1))
-    (dolist (group (group-child father))
-      (when (and (group-p group)
-		 (not (equal group current-group))
-		 (>= (group-y group) (group-y2 current-group))
-		 (>= (group-x2 group) (group-x current-group))
-		 (<= (group-x group) (group-x2 current-group)))
-	(setf y-found (min y-found (group-y group)))))
+    (dolist (frame (frame-child father))
+      (when (and (frame-p frame)
+		 (not (equal frame current-frame))
+		 (>= (frame-y frame) (frame-y2 current-frame))
+		 (>= (frame-x2 frame) (frame-x current-frame))
+		 (<= (frame-x frame) (frame-x2 current-frame)))
+	(setf y-found (min y-found (frame-y frame)))))
     y-found))
 	     
-(defun find-edge-right (current-group father)
+(defun find-edge-right (current-frame father)
   (let ((x-found 1))
-    (dolist (group (group-child father))
-      (when (and (group-p group)
-		 (not (equal group current-group))
-		 (>= (group-x group) (group-x2 current-group))
-		 (>= (group-y2 group) (group-y current-group))
-		 (<= (group-y group) (group-y2 current-group)))
-	(setf x-found (min x-found (group-x group)))))
+    (dolist (frame (frame-child father))
+      (when (and (frame-p frame)
+		 (not (equal frame current-frame))
+		 (>= (frame-x frame) (frame-x2 current-frame))
+		 (>= (frame-y2 frame) (frame-y current-frame))
+		 (<= (frame-y frame) (frame-y2 current-frame)))
+	(setf x-found (min x-found (frame-x frame)))))
     x-found))
 	     
 
-(defun find-edge-left (current-group father)
+(defun find-edge-left (current-frame father)
   (let ((x-found 0))
-    (dolist (group (group-child father))
-      (when (and (group-p group)
-		 (not (equal group current-group))
-		 (<= (group-x2 group) (group-x current-group))
-		 (>= (group-y2 group) (group-y current-group))
-		 (<= (group-y group) (group-y2 current-group)))
-	(setf x-found (max x-found (group-x2 group)))))
+    (dolist (frame (frame-child father))
+      (when (and (frame-p frame)
+		 (not (equal frame current-frame))
+		 (<= (frame-x2 frame) (frame-x current-frame))
+		 (>= (frame-y2 frame) (frame-y current-frame))
+		 (<= (frame-y frame) (frame-y2 current-frame)))
+	(setf x-found (max x-found (frame-x2 frame)))))
     x-found))
 
 
@@ -85,107 +85,107 @@
 ;;;,-----
 ;;;| Pack functions
 ;;;`-----
-(defun pack-group-up (group father)
-  "Pack group to up"
-  (let ((y-found (find-edge-up group father)))
-    (setf (group-y group) y-found)))
+(defun pack-frame-up (frame father)
+  "Pack frame to up"
+  (let ((y-found (find-edge-up frame father)))
+    (setf (frame-y frame) y-found)))
 
 
-(defun pack-group-down (group father)
-  "Pack group to down"
-  (let ((y-found (find-edge-down group father)))
-    (setf (group-y group) (- y-found (group-h group)))))
+(defun pack-frame-down (frame father)
+  "Pack frame to down"
+  (let ((y-found (find-edge-down frame father)))
+    (setf (frame-y frame) (- y-found (frame-h frame)))))
 
-(defun pack-group-right (group father)
-  "Pack group to right"
-  (let ((x-found (find-edge-right group father)))
-    (setf (group-x group) (- x-found (group-w group)))))
-
-
-(defun pack-group-left (group father)
-  "Pack group to left"
-  (let ((x-found (find-edge-left group father)))
-    (setf (group-x group) x-found)))
+(defun pack-frame-right (frame father)
+  "Pack frame to right"
+  (let ((x-found (find-edge-right frame father)))
+    (setf (frame-x frame) (- x-found (frame-w frame)))))
 
 
+(defun pack-frame-left (frame father)
+  "Pack frame to left"
+  (let ((x-found (find-edge-left frame father)))
+    (setf (frame-x frame) x-found)))
 
-(defun center-group (group)
-  "Center group"
-  (setf (group-x group) (/ (- 1 (group-w group)) 2)
-	(group-y group) (/ (- 1 (group-h group)) 2)))
+
+
+(defun center-frame (frame)
+  "Center frame"
+  (setf (frame-x frame) (/ (- 1 (frame-w frame)) 2)
+	(frame-y frame) (/ (- 1 (frame-h frame)) 2)))
 
 ;;;,-----
 ;;;| Fill functions
 ;;;`-----
-(defun fill-group-up (group father)
-  "Fill a group up"
-  (let* ((y-found (find-edge-up group father))
-	 (dy (- (group-y group) y-found)))
-    (setf (group-y group) y-found
-	  (group-h group) (+ (group-h group) dy))))
+(defun fill-frame-up (frame father)
+  "Fill a frame up"
+  (let* ((y-found (find-edge-up frame father))
+	 (dy (- (frame-y frame) y-found)))
+    (setf (frame-y frame) y-found
+	  (frame-h frame) (+ (frame-h frame) dy))))
 
-(defun fill-group-down (group father)
-  "Fill a group down"
-  (let* ((y-found (find-edge-down group father))
-	 (dy (- y-found (group-y2 group))))
-    (setf (group-h group) (+ (group-h group) dy))))
+(defun fill-frame-down (frame father)
+  "Fill a frame down"
+  (let* ((y-found (find-edge-down frame father))
+	 (dy (- y-found (frame-y2 frame))))
+    (setf (frame-h frame) (+ (frame-h frame) dy))))
 
 
-(defun fill-group-left (group father)
-  "Fill a group left"
-  (let* ((x-found (find-edge-left group father))
-	 (dx (- (group-x group) x-found)))
-    (setf (group-x group) x-found
-	  (group-w group) (+ (group-w group) dx))))
+(defun fill-frame-left (frame father)
+  "Fill a frame left"
+  (let* ((x-found (find-edge-left frame father))
+	 (dx (- (frame-x frame) x-found)))
+    (setf (frame-x frame) x-found
+	  (frame-w frame) (+ (frame-w frame) dx))))
 
-(defun fill-group-right (group father)
-  "Fill a group rigth"
-  (let* ((x-found (find-edge-right group father))
-	 (dx (- x-found (group-x2 group))))
-    (setf (group-w group) (+ (group-w group) dx))))
+(defun fill-frame-right (frame father)
+  "Fill a frame rigth"
+  (let* ((x-found (find-edge-right frame father))
+	 (dx (- x-found (frame-x2 frame))))
+    (setf (frame-w frame) (+ (frame-w frame) dx))))
 
 
 ;;;,-----
 ;;;| Lower functions
 ;;;`-----
-(defun resize-group-down (group)
-  "Resize down a group"
-  (when (> (group-w group) 0.1)
-    (setf (group-x group) (+ (group-x group) 0.01)
-	  (group-w group) (max (- (group-w group) 0.02) 0.01)))
-  (when (> (group-h group) 0.1)
-    (setf (group-y group) (+ (group-y group) 0.01)
-	  (group-h group) (max (- (group-h group) 0.02) 0.01))))
+(defun resize-frame-down (frame)
+  "Resize down a frame"
+  (when (> (frame-w frame) 0.1)
+    (setf (frame-x frame) (+ (frame-x frame) 0.01)
+	  (frame-w frame) (max (- (frame-w frame) 0.02) 0.01)))
+  (when (> (frame-h frame) 0.1)
+    (setf (frame-y frame) (+ (frame-y frame) 0.01)
+	  (frame-h frame) (max (- (frame-h frame) 0.02) 0.01))))
 
 
-(defun resize-minimal-group (group)
-  "Resize down a group to its minimal size"
+(defun resize-minimal-frame (frame)
+  "Resize down a frame to its minimal size"
   (dotimes (i 100)
-    (resize-group-down group)))
+    (resize-frame-down frame)))
 
 
 
 
 
-(defun resize-half-width-left (group)
-  (setf (group-w group)(/ (group-w group) 2)))
+(defun resize-half-width-left (frame)
+  (setf (frame-w frame)(/ (frame-w frame) 2)))
 
 
-(defun resize-half-width-right (group)
-  (let* ((new-size (/ (group-w group) 2))
-	 (dx (- (group-w group) new-size)))
-    (setf (group-w group) new-size)
-    (incf (group-x group) (max dx 0))))
+(defun resize-half-width-right (frame)
+  (let* ((new-size (/ (frame-w frame) 2))
+	 (dx (- (frame-w frame) new-size)))
+    (setf (frame-w frame) new-size)
+    (incf (frame-x frame) (max dx 0))))
   
 
-(defun resize-half-height-up (group)
-  (setf (group-h group) (/ (group-h group) 2)))
+(defun resize-half-height-up (frame)
+  (setf (frame-h frame) (/ (frame-h frame) 2)))
 
-(defun resize-half-height-down (group)
-  (let* ((new-size (/ (group-h group) 2))
-	 (dy (- (group-h group) new-size)))
-    (setf (group-h group) new-size)
-    (incf (group-y group) (max dy 0))))
+(defun resize-half-height-down (frame)
+  (let* ((new-size (/ (frame-h frame) 2))
+	 (dy (- (frame-h frame) new-size)))
+    (setf (frame-h frame) new-size)
+    (incf (frame-y frame) (max dy 0))))
   
 
 
@@ -193,18 +193,18 @@
 ;;;;;,-----
 ;;;;;| Explode/Implode functions
 ;;;;;`-----
-(defun explode-group (group)
-  "Create a new group for each window in group"
-  (when (group-p group)
-    (let ((windows (loop :for child :in (group-child group)
+(defun explode-frame (frame)
+  "Create a new frame for each window in frame"
+  (when (frame-p frame)
+    (let ((windows (loop :for child :in (frame-child frame)
 		      :when (xlib:window-p child)
 		      :collect child)))
       (dolist (win windows)
-	(add-group (create-group :child (list win)) group)
-	(remove-child-in-group win group)))))
+	(add-frame (create-frame :child (list win)) frame)
+	(remove-child-in-frame win frame)))))
 
 
-(defun explode-current-group ()
-  "Create a new group for each window in group"
-  (explode-group *current-child*)
+(defun explode-current-frame ()
+  "Create a new frame for each window in frame"
+  (explode-frame *current-child*)
   (leave-second-mode))
