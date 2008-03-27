@@ -327,37 +327,44 @@ Return the result of the last hook"
 		(xlib:drawable-height window) rh)
 	  raise-p))))
    
-  
 
-(defgeneric show-child (child father))
-(defgeneric hide-child (child))
 
-(defmethod show-child ((frame frame) father)
+
+
+(defun raise-if-needed (window raise-p first-p)
+  (when (or (eql raise-p t)
+	    (and (eql raise-p :first-only) first-p))
+    (raise-window window)))
+
+(defgeneric show-child (child father first-p))
+
+(defmethod show-child ((frame frame) father first-p)
   (with-xlib-protect
       (with-slots (window) frame
 	(let ((raise-p (adapt-child-to-father frame father)))
 	  (when (or *show-root-frame-p* (not (equal frame *current-root*)))
 	    (setf (xlib:window-background window) (get-color "Black"))
 	    (xlib:map-window window)
-	    (when raise-p
-	      (raise-window window))
+	    (raise-if-needed window raise-p first-p)
 	    (display-frame-info frame))))))
 
 
-(defmethod hide-child ((frame frame))
-  (with-xlib-protect
-      (with-slots (window) frame
-	(xlib:unmap-window window))))
-
-
-(defmethod show-child ((window xlib:window) father)
+(defmethod show-child ((window xlib:window) father first-p)
   (with-xlib-protect
       (let ((raise-p nil))
 	(when (eql (window-type window) :normal)
 	  (setf raise-p (adapt-child-to-father window father)))
 	(xlib:map-window window)
-	(when raise-p
-	  (raise-window window)))))
+	(raise-if-needed window raise-p first-p))))
+
+
+
+(defgeneric hide-child (child))
+
+(defmethod hide-child ((frame frame))
+  (with-xlib-protect
+      (with-slots (window) frame
+	(xlib:unmap-window window))))
 
 (defmethod hide-child ((window xlib:window))
   (hide-window window))
@@ -403,25 +410,29 @@ Return the result of the last hook"
 
 (defun show-all-children ()
   "Show all children from *current-root*"
-  (labels ((rec (root father first-p)
-	     (show-child root father)
+  (labels ((rec (root father first-p first-father)
+	     (show-child root father first-p)
 	     (select-child root (if (equal root *current-child*) t
-				    (if first-p :maybe nil)))
+				    (if (and first-p first-father) :maybe nil)))
 	     (when (frame-p root)
 	       (let ((first-child (first (frame-child root))))
 		 (dolist (child (reverse (frame-child root)))
-		   (rec child root (and first-p (equal child first-child))))))))
-    (rec *current-root* nil t)
+		   (rec child root (equal child first-child) first-p))))))
+    (rec *current-root* nil t t)
     (set-focus-to-current-child)))
 
 
 
-
 (defun hide-all-children (root)
-  (hide-child root)
+  "Hide all root children"
   (when (frame-p root)
     (dolist (child (frame-child root))
-      (hide-all-children child))))
+      (hide-all child))))
+
+(defun hide-all (root)
+  "Hide root and all its children"
+  (hide-child root)
+  (hide-all-children root))
 
 
 
@@ -431,7 +442,7 @@ Return the result of the last hook"
   (let ((frame-is-root? (and (equal *current-root* *current-child*)
 			     (not (equal *current-root* *root-frame*)))))
     (if frame-is-root?
-	(hide-all-children *current-root*)
+	(hide-all *current-root*)
 	(select-current-frame nil))
     (let ((father (find-father-frame *current-child*)))
       (when (frame-p father)
@@ -490,13 +501,13 @@ Return the result of the last hook"
 
 (defun enter-frame ()
   "Enter in the selected frame - ie make it the root frame"
-  (hide-all-children *current-root*)
+  (hide-all *current-root*)
   (setf *current-root* *current-child*)
   (show-all-children))
 
 (defun leave-frame ()
   "Leave the selected frame - ie make its father the root frame"
-  (hide-all-children *current-root*)
+  (hide-all *current-root*)
   (awhen (find-father-frame *current-root*)
 	 (when (frame-p it)
 	   (setf *current-root* it)))
@@ -505,13 +516,13 @@ Return the result of the last hook"
 
 (defun switch-to-root-frame ()
   "Switch to the root frame"
-  (hide-all-children *current-root*)
+  (hide-all *current-root*)
   (setf *current-root* *root-frame*)
   (show-all-children))
 
 (defun switch-and-select-root-frame ()
   "Switch and select the root frame"
-  (hide-all-children *current-root*)
+  (hide-all *current-root*)
   (setf *current-root* *root-frame*)
   (setf *current-child* *current-root*)
   (show-all-children))
@@ -519,7 +530,7 @@ Return the result of the last hook"
 
 (defun toggle-show-root-frame ()
   "Show/Hide the root frame"
-  (hide-all-children *current-root*)
+  (hide-all *current-root*)
   (setf *show-root-frame-p* (not *show-root-frame-p*))
   (show-all-children))
 

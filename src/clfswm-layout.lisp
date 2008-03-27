@@ -33,6 +33,7 @@
 ;;;      child in screen size (integer) as 5 values (rx, ry, rw, rh, raise-p).
 ;;;      This method can use the float size of the child (x, y ,w , h).
 ;;;      It can be specialised for xlib:window or frame
+;;;      Raise-p is nil or :first-only or t
 ;;;   2- Define a seter function for your layout
 ;;;   3- Register your new layout with register-layout.
 
@@ -71,7 +72,11 @@
 
 (defmethod no-layout ((child xlib:window) father)
   (with-slots (rx ry rw rh) father
-    (values (1+ rx)  (1+ ry) (- rw 2) (- rh 2) nil)))
+    (values (1+ rx)
+	    (1+ ry)
+	    (- rw 2)
+	    (- rh 2)
+	    :first-only)))
 
 (defmethod no-layout ((child frame) father)
   (with-slots ((cx x) (cy y) (cw w) (ch h)) child
@@ -80,7 +85,7 @@
 	      (round (+ (* cy frh) fry))
 	      (round (* cw frw))
 	      (round (* ch frh))
-	      t))))
+	      :first-only))))
 
 (defun set-no-layout ()
   "Maximize windows in there frame - leave frame to there size (no layout)"

@@ -163,14 +163,14 @@
 (defun cut-current-child ()
   "Cut the current child to the selection"
   (copy-current-child)
-  (hide-all-children *current-child*)
+  (hide-all *current-child*)
   (remove-child-in-frame *current-child* (find-father-frame *current-child* *current-root*))
   (setf *current-child* *current-root*)
   (show-all-children))
 
 (defun remove-current-child ()
   "Remove the current child from its father frame"
-  (hide-all-children *current-child*)
+  (hide-all *current-child*)
   (remove-child-in-frame *current-child* (find-father-frame *current-child* *current-root*))
   (setf *current-child* *current-root*)
   (leave-second-mode))
@@ -332,7 +332,7 @@
 ;;; Focus by functions
 (defun focus-frame-by (frame)
   (when (frame-p frame)
-    (hide-all-children *current-root*)
+    (hide-all *current-root*)
     (focus-all-children frame (or (find-father-frame frame *current-root*)
 				(find-father-frame frame)
 				*root-frame*))))
@@ -369,7 +369,7 @@
 
 ;;; Delete by functions
 (defun delete-frame-by (frame)
-  (hide-all-children *current-root*)
+  (hide-all *current-root*)
   (unless (equal frame *root-frame*)
     (when (equal frame *current-root*)
       (setf *current-root* *root-frame*))
@@ -392,7 +392,7 @@
 ;;; Move by function
 (defun move-current-child-by (child frame-dest)
   (when (and child (frame-p frame-dest))
-    (hide-all-children *current-root*)
+    (hide-all *current-root*)
     (remove-child-in-frame child (find-father-frame child))
     (pushnew child (frame-child frame-dest))
     (focus-all-children child frame-dest)))
@@ -415,7 +415,7 @@
 ;;; Copy by function
 (defun copy-current-child-by (child frame-dest)
   (when (and child (frame-p frame-dest))
-    (hide-all-children *current-root*)
+    (hide-all *current-root*)
     (pushnew child (frame-child frame-dest))
     (focus-all-children child frame-dest)))
 

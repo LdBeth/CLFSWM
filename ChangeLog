@@ -1,3 +1,14 @@
+2008-03-27  Philippe Brochard  <hocwp@free.fr>
+
+	* src/clfswm-layout.lisp (no-layout): Use :first-only to raise only the
+	first child.
+
+	* src/clfswm-internal.lisp (hide-all): Split hide-all-children in hide-all 
+	and hide-all-children.
+	(raise-if-needed): New function.
+	(show-child): Use a first-p parameter to raise windows only when they are
+	first child.
+
 2008-03-26  Philippe Brochard  <hocwp@free.fr>
 
 	* src/clfswm-internal.lisp (select-next/previous-level): Don't use show-all-children 

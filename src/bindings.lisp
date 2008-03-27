@@ -83,8 +83,7 @@
 ;;handle-configure-request
 
 (defun move-frame (frame orig-x orig-y)
-  (dolist (child (frame-child frame))
-    (hide-all-children child))
+  (hide-all-children frame)
   (with-slots (window) frame
     (let ((done nil)
 	  (dx (- (xlib:drawable-x window) orig-x))
@@ -115,7 +114,8 @@
     (unless father
       (setf child (find-frame-window window *current-root*)
 	    father (find-father-frame child *current-root*))
-      (move-frame child root-x root-y))
+      (when child
+	(move-frame child root-x root-y)))
     (when (and child father (focus-all-children child father))
       (show-all-children)
       (setf to-replay nil))
