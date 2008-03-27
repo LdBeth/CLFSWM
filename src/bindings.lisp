@@ -80,15 +80,42 @@
 
 ;;; Mouse actions
 
+;;handle-configure-request
+
+(defun move-frame (frame orig-x orig-y)
+  (dolist (child (frame-child frame))
+    (hide-all-children child))
+  (with-slots (window) frame
+    (let ((done nil)
+	  (dx (- (xlib:drawable-x window) orig-x))
+	  (dy (- (xlib:drawable-y window) orig-y)))
+      (labels ((motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
+		 (declare (ignore event-slots))
+		 (setf (xlib:drawable-x (frame-window frame)) (+ root-x dx)
+		       (xlib:drawable-y (frame-window frame)) (+ root-y dy))
+		 (display-frame-info frame))
+	       (handle-event (&rest event-slots &key event-key &allow-other-keys)
+		 (case event-key
+		   (:motion-notify (apply #'motion-notify event-slots))
+		   (:button-release (setf done t)))))
+	(when frame
+	  (loop until done
+	     do (with-xlib-protect
+		  (xlib:display-finish-output *display*)
+		  (xlib:process-event *display* :handler #'handle-event)))))))
+  (show-all-children))
+
+	   
+
 (defun mouse-click-to-focus (window root-x root-y)
   "Focus the current frame or the current window father"
-  (declare (ignore root-x root-y))
   (let ((to-replay t)
 	(child window)
 	(father (find-father-frame window *current-root*)))
     (unless father
       (setf child (find-frame-window window *current-root*)
-	    father (find-father-frame child *current-root*)))
+	    father (find-father-frame child *current-root*))
+      (move-frame child root-x root-y))
     (when (and child father (focus-all-children child father))
       (show-all-children)
       (setf to-replay nil))

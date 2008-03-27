@@ -180,7 +180,7 @@
 (defun main-loop ()
   (loop
      (with-xlib-protect
-	 (xlib:display-finish-output *display*)
+       (xlib:display-finish-output *display*)
        (xlib:process-event *display* :handler #'handle-event))))
 ;;(dbg "Main loop finish" c)))))
 

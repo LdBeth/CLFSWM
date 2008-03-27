@@ -33,6 +33,8 @@ Rewrote all useful code present in 0801 version.
   get-frame-by-name (path): return the frame that its own frame has this name if it exists such a frame
   get-window-by-name (path): return the window that its own frame that its own frame has this name if it exists such a window.
 
+- A better algorithm to display all children (ie: raise just needed children and with less filckering)
+
 
 MAYBE
 =====

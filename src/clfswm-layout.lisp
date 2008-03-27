@@ -71,7 +71,7 @@
 
 (defmethod no-layout ((child xlib:window) father)
   (with-slots (rx ry rw rh) father
-    (values (1+ rx)  (1+ ry) (- rw 2) (- rh 2) t)))
+    (values (1+ rx)  (1+ ry) (- rw 2) (- rh 2) nil)))
 
 (defmethod no-layout ((child frame) father)
   (with-slots ((cx x) (cy y) (cw w) (ch h)) child
@@ -106,7 +106,7 @@
 	    (round (+ (frame-ry father) (truncate (* (truncate (/ pos n)) dy)) 1))
 	    (round (- dx 2))
 	    (round (- dy 2))
-	    nil)))
+	    t)))
 
 (defun set-tile-layout ()
   "Tile child in its frame"

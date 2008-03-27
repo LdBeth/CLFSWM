@@ -1,3 +1,8 @@
+2008-03-26  Philippe Brochard  <hocwp@free.fr>
+
+	* src/clfswm-internal.lisp (select-next/previous-level): Don't use show-all-children 
+	-> less flickering.
+
 2008-03-25  Philippe Brochard  <hocwp@free.fr>
 
 	* src/clfswm-info.lisp (keys-from-list): new function.

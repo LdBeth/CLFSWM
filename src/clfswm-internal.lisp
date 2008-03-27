@@ -454,19 +454,19 @@ Return the result of the last hook"
 
 (defun select-next-level ()
   "Select the next level in frame"
-  (select-current-frame nil)
+  (select-current-frame :maybe)
   (when (frame-p *current-child*)
     (awhen (first (frame-child *current-child*))
 	   (setf *current-child* it)))
-  (show-all-children))
+  (select-current-frame t))
 
 (defun select-previous-level ()
   "Select the previous level in frame"
   (unless (equal *current-child* *current-root*)
-    (select-current-frame nil)
+    (select-current-frame :maybe)
     (awhen (find-father-frame *current-child*)
 	   (setf *current-child* it))
-    (show-all-children)))
+    (select-current-frame t)))
 
 
 
