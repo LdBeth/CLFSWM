@@ -361,11 +361,20 @@
 ;;; Mouse action
 
 
-(defun sm-mouse-click-to-focus (window root-x root-y)
-  "Give the focus to the clicked child"
+(defun sm-mouse-click-to-focus-and-move (window root-x root-y)
+  "Move and focus the current child"
   (declare (ignore window))
   (let ((win (find-window-under-mouse root-x root-y)))
-    (mouse-click-to-focus win root-x root-y)))
+    (unless (equal win (frame-window *current-root*))
+      (mouse-click-to-focus-and-move win root-x root-y))))
+
+
+(defun sm-mouse-click-to-focus-and-resize (window root-x root-y)
+  "Resize and focus the current child"
+  (declare (ignore window))
+  (let ((win (find-window-under-mouse root-x root-y)))
+    (unless (equal win (frame-window *current-root*))
+      (mouse-click-to-focus-and-resize win root-x root-y))))
 
 
 
@@ -400,7 +409,8 @@
 
 
 
-(define-second-mouse (1) 'sm-mouse-click-to-focus)
+(define-second-mouse (1) 'sm-mouse-click-to-focus-and-move)
+(define-second-mouse (3) 'sm-mouse-click-to-focus-and-resize)
 
 (define-second-mouse (4) 'sm-mouse-select-next-level)
 (define-second-mouse (5) 'sm-mouse-select-previous-level)

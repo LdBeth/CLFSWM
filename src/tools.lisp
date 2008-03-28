@@ -31,6 +31,7 @@
   (:export :it
 	   :awhen
 	   :aif
+	   :call-hook
 	   :dbg
 	   :dbgnl
 	   :setf/=
@@ -90,6 +91,24 @@
 
 (defmacro aif (test then &optional else)
   `(let ((it ,test)) (if it ,then ,else)))
+
+
+;;;,-----
+;;;| Minimal hook
+;;;`-----
+(defun call-hook (hook &optional args)
+  "Call a hook (a function, a symbol or a list of functions)
+Return the result of the last hook"
+  (let ((result nil))
+    (labels ((rec (hook)
+	       (when hook
+		 (typecase hook
+		   (cons (dolist (h hook)
+			   (rec h)))
+		   (t (setf result (apply hook args)))))))
+      (rec hook)
+      result)))
+
 
 
 ;;;,-----

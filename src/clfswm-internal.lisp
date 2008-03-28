@@ -26,19 +26,43 @@
 (in-package :clfswm)
 
 
-;;; Minimal hook
-(defun call-hook (hook &optional args)
-  "Call a hook (a function, a symbol or a list of functions)
-Return the result of the last hook"
-  (let ((result nil))
-    (labels ((rec (hook)
-	       (when hook
-		 (typecase hook
-		   (cons (dolist (h hook)
-			   (rec h)))
-		   (t (setf result (apply hook args)))))))
-      (rec hook)
-      result)))
+;;; Conversion functions
+;;; Float -> Pixel conversion
+(defun x-fl->px (x father)
+  "Convert float X coordinate to pixel"
+  (round (+ (* x (frame-rw father)) (frame-rx father))))
+
+(defun y-fl->px (y father)
+  "Convert float Y coordinate to pixel"
+  (round (+ (* y (frame-rh father)) (frame-ry father))))
+
+(defun w-fl->px (w father)
+  "Convert float Width coordinate to pixel"
+  (round (* w (frame-rw father))))
+
+(defun h-fl->px (h father)
+  "Convert float Height coordinate to pixel"
+  (round (* h (frame-rh father))))
+
+;;; Pixel -> Float conversion
+(defun x-px->fl (x father)
+  "Convert pixel X coordinate to float"
+  (/ (- x (frame-rx father)) (frame-rw father)))
+
+(defun y-px->fl (y father)
+  "Convert pixel Y coordinate to float"
+  (/ (- y (frame-ry father)) (frame-rh father)))
+
+(defun w-px->fl (w father)
+  "Convert pixel Width coordinate to float"
+  (/ w (frame-rw father)))
+
+(defun h-px->fl (h father)
+  "Convert pixel Height coordinate to float"
+  (/ h (frame-rh father)))
+
+
+
 
 
 
@@ -555,14 +579,21 @@ Return the result of the last hook"
       (rec child father))
     change))
 
-(defun set-current-child (child father)
-  "Set *current-child* to child - Return t if something has change"
-  (cond ((and (frame-p child) (not (equal *current-child* child)))
-	 (setf *current-child* child)
-	 t)
-	((and (frame-p father) (not (equal *current-child* father)))
-	 (setf *current-child* father)
-	 t)))
+
+(defgeneric set-current-child (child father))
+
+(defmethod set-current-child ((child xlib:window) father)
+  (unless (equal *current-child* father)
+    (setf *current-child* father)
+    t))
+
+(defmethod set-current-child ((child frame) father)
+  (declare (ignore father))
+  (unless (equal *current-child* child)
+    (setf *current-child* child)
+    t))
+
+
 
 (defun set-current-root (father)
   "Set current root if father is not in current root"
@@ -624,22 +655,6 @@ Return the result of the last hook"
 
 
 
-;;(defun do-all-frames-nw-hook (window)
-;;  "Call nw-hook of each frame. A hook must return one value or a list of two values.
-;;If the value or the first value is true then the default nw-hook is not executed.
-;;If the second value is true then no more frame can do an action with the window (ie leave the loop)."
-;;  (let ((result nil))
-;;    (with-all-frames (*root-frame* frame)
-;;      (let ((ret (call-hook (frame-nw-hook frame) (list frame window))))
-;;	(typecase ret
-;;	  (cons (when (first ret)
-;;		  (setf result t))
-;;		(when (second ret)
-;;		  (return-from do-all-frames-nw-hook result)))
-;;	  (t (when ret
-;;	       (setf result t))))))
-;;    result))
-
 (defun do-all-frames-nw-hook (window)
   "Call nw-hook of each frame."
   (let ((found nil))
@@ -673,10 +688,10 @@ managed."
 
 
 
-;;(defun hide-existing-windows (screen)
-;;  "Hide all existing windows in screen"
-;;  (dolist (win (xlib:query-tree (xlib:screen-root screen)))
-;;    (hide-window win)))
+(defun hide-existing-windows (screen)
+  "Hide all existing windows in screen"
+  (dolist (win (xlib:query-tree (xlib:screen-root screen)))
+    (hide-window win)))
 
 (defun process-existing-windows (screen)
   "Windows present when clfswm starts up must be absorbed by clfswm."

@@ -8,7 +8,9 @@ URGENT PROBLEMS
 Should handle these soon.
 
 Rewrote all useful code present in 0801 version.
-- mouse operations [Philippe]
+
+- mouse operations: A beginnig is done. Now in second mode: focus child+ resize/move window's father [Philippe]
+
 - Hide a window when its size is less than hint minimal size. [Philippe]
 - Bind alt+1/2/3/4... to a particular child: [Philippe]
    If bind exist -> focus this child
@@ -21,8 +23,6 @@ Rewrote all useful code present in 0801 version.
 
 - Ensure-unique-number/name (new function) [Philippe]
 
-- Float->Screen Screen->Float: convert geometry from 0 to 1 to pixel and from pixel to 0 to 1. [Philippe]
-
 - Raise/lower frame [Philippe]
 
 - Hide/Unhide frame [Philippe]
@@ -32,8 +32,6 @@ Rewrote all useful code present in 0801 version.
 - get-frame-by-name (path)  [Philippe]
   get-frame-by-name (path): return the frame that its own frame has this name if it exists such a frame
   get-window-by-name (path): return the window that its own frame that its own frame has this name if it exists such a window.
-
-- A better algorithm to display all children (ie: raise just needed children and with less filckering)
 
 
 MAYBE

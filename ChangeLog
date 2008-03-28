@@ -1,3 +1,13 @@
+2008-03-28  Philippe Brochard  <hocwp@free.fr>
+
+	* src/clfswm-util.lisp (mouse-click-to-focus-and-move)
+	(mouse-click-to-focus-and-resize): New functions.
+
+	* src/clfswm-internal.lisp (*-fl->px): Convert float coordinates to pixel.
+	(*-px->fl): Convert pixel coordinates to float.
+
+	* src/tools.lisp (call-hook): Move call-hook to tools.lisp.
+
 2008-03-27  Philippe Brochard  <hocwp@free.fr>
 
 	* src/clfswm-layout.lisp (no-layout): Use :first-only to raise only the

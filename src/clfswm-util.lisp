@@ -120,7 +120,7 @@
 (defun find-window-under-mouse (x y)
   "Return the child window under the mouse"
   (with-xlib-protect
-    (let ((win nil))
+    (let ((win *root*))
       (with-all-windows-frames (*current-root* child)
 	(when (and (<= (xlib:drawable-x child) x (+ (xlib:drawable-x child) (xlib:drawable-width child)))
 		   (<= (xlib:drawable-y child) y (+ (xlib:drawable-y child) (xlib:drawable-height child))))
@@ -486,6 +486,143 @@
 
 
 
+
+
+;;; Mouse utilities
+(defun move-frame (frame father orig-x orig-y)
+  (hide-all-children frame)
+  (with-slots (window) frame
+    (raise-window window)
+    (let ((done nil)
+	  (dx (- (xlib:drawable-x window) orig-x))
+	  (dy (- (xlib:drawable-y window) orig-y)))
+      (labels ((motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
+		 (declare (ignore event-slots))
+		 (setf (xlib:drawable-x window) (+ root-x dx)
+		       (xlib:drawable-y window) (+ root-y dy))
+		 (display-frame-info frame))
+	       (handle-event (&rest event-slots &key event-key &allow-other-keys)
+		 (case event-key
+		   (:motion-notify (apply #'motion-notify event-slots))
+		   (:button-release (setf done t)))
+		 t))
+	(when frame
+	  (loop until done
+	     do (with-xlib-protect
+		  (xlib:display-finish-output *display*)
+		  (xlib:process-event *display* :handler #'handle-event))))
+	(setf (frame-x frame) (x-px->fl (xlib:drawable-x window) father)
+	      (frame-y frame) (y-px->fl (xlib:drawable-y window) father))
+	(show-all-children)))))
+
+
+(defun resize-frame (frame father orig-x orig-y)
+  (hide-all-children frame)
+  (with-slots (window) frame
+    (raise-window window)
+    (let ((done nil)
+	  (dx (- (xlib:drawable-x window) orig-x))
+	  (dy (- (xlib:drawable-y window) orig-y))
+	  (lx orig-x)
+	  (ly orig-y))
+      (labels ((motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
+		 (declare (ignore event-slots))
+		 (setf (xlib:drawable-width window) (max (+ (xlib:drawable-width window) (- root-x lx)) 10)
+		       (xlib:drawable-height window) (max (+ (xlib:drawable-height window) (- root-y ly)) 10)
+		       dx (- dx (- root-x lx))
+		       dy (- dy (- root-y ly))
+		       lx root-x ly root-y)
+		 (display-frame-info frame))
+	       (handle-event (&rest event-slots &key event-key &allow-other-keys)
+		 (case event-key
+		   (:motion-notify (apply #'motion-notify event-slots))
+		   (:button-release (setf done t)))
+		 t))
+	(when frame
+	  (loop until done
+	     do (with-xlib-protect
+		  (xlib:display-finish-output *display*)
+		  (xlib:process-event *display* :handler #'handle-event))))
+	(setf (frame-w frame) (w-px->fl (xlib:drawable-width window) father)
+	      (frame-h frame) (h-px->fl (xlib:drawable-height window) father))
+	(show-all-children)))))
+
+	   
+
+(defun mouse-click-to-focus-generic (window root-x root-y mouse-fn)
+  "Focus the current frame or focus the current window father
+mouse-fun is #'move-frame or #'resize-frame"
+  (let ((to-replay t)
+	(child window)
+	(father (find-father-frame window *current-root*)))
+    (unless father
+      (setf child (find-frame-window window *current-root*)
+	    father (find-father-frame child *current-root*))
+      (when child
+	(funcall mouse-fn child father root-x root-y)))
+    (when (and child father (focus-all-children child father))
+      (show-all-children)
+      (setf to-replay nil))
+    (if to-replay
+	(replay-button-event)
+	(stop-button-event))))
+
+(defun mouse-click-to-focus-and-move (window root-x root-y)
+  "Move and focus the current frame or focus the current window father"
+  (mouse-click-to-focus-generic window root-x root-y #'move-frame))
+
+(defun mouse-click-to-focus-and-resize (window root-x root-y)
+  "Resize and focus the current frame or focus the current window father"
+  (mouse-click-to-focus-generic window root-x root-y #'resize-frame))
+
+
+
+(defun test-mouse-binding (window root-x root-y)
+  (dbg window root-x root-y)
+  (replay-button-event))
+
+
+
+(defun mouse-select-next-level (window root-x root-y)
+  "Select the next level in frame"
+  (declare (ignore root-x root-y))
+  (let ((frame (find-frame-window window)))
+    (when (or frame (xlib:window-equal window *root*))
+      (select-next-level))
+    (replay-button-event)))
+
+
+
+(defun mouse-select-previous-level (window root-x root-y)
+  "Select the previous level in frame"
+  (declare (ignore root-x root-y))
+  (let ((frame (find-frame-window window)))
+    (when (or frame (xlib:window-equal window *root*))
+      (select-previous-level))
+    (replay-button-event)))
+
+
+
+(defun mouse-enter-frame (window root-x root-y)
+  "Enter in the selected frame - ie make it the root frame"
+  (declare (ignore root-x root-y))
+  (let ((frame (find-frame-window window)))
+    (when (or frame (xlib:window-equal window *root*))
+      (enter-frame))
+    (replay-button-event)))
+
+
+
+(defun mouse-leave-frame (window root-x root-y)
+  "Leave the selected frame - ie make its father the root frame"
+  (declare (ignore root-x root-y))
+  (let ((frame (find-frame-window window)))
+    (when (or frame (xlib:window-equal window *root*))
+      (leave-frame))
+    (replay-button-event)))
+
+
+
 ;;;;;,-----
 ;;;;;| Various definitions
 ;;;;;`-----
@@ -496,369 +633,10 @@
 ;;	*arrow-action* nil
 ;;	*pager-arrow-action* nil))
 ;;
-;;(defun rotate-window-up ()
-;;  "Rotate up windows in the current frame"
-;;  (setf (frame-window-list (current-frame))
-;;	(rotate-list (frame-window-list (current-frame))))
-;;  (adapt-window-to-frame (current-window) (current-frame))
-;;  (focus-window (current-window))
-;;  (show-all-frame (current-workspace)))
-;;
-;;(defun rotate-window-down ()
-;;  "Rotate down windows in the current frame"
-;;  (setf (frame-window-list (current-frame))
-;;	(anti-rotate-list (frame-window-list (current-frame))))
-;;  (adapt-window-to-frame (current-window) (current-frame))
-;;  (focus-window (current-window))
-;;  (show-all-frame (current-workspace)))
-;;
-;;
-;;(defun maximize-frame (frame)
-;;  "Maximize the frame"
-;;  (when frame
-;;    (unless (frame-fullscreenp frame)
-;;      (setf (frame-fullscreenp frame) t)
-;;      (show-all-windows-in-workspace (current-workspace)))))
-;;
-;;(defun minimize-frame (frame)
-;;  "Minimize the frame"
-;;  (when frame
-;;    (when (frame-fullscreenp frame)
-;;      (setf (frame-fullscreenp frame) nil)
-;;      (show-all-windows-in-workspace (current-workspace)))))
-;;
-;;(defun toggle-maximize-frame (frame)
-;;  "Maximize/minimize a frame"
-;;  (if (frame-fullscreenp frame)
-;;      (minimize-frame frame)
-;;      (maximize-frame frame)))
-;;
-;;
-;;(defun toggle-maximize-current-frame ()
-;;  "Maximize/minimize the current frame"
-;;  (toggle-maximize-frame (current-frame)))
-;;
-;;
-;;(defun renumber-workspaces ()
-;;  "Reset workspaces numbers (1 for current workspace, 2 for the second...) "
-;;  (hide-all-windows-in-workspace (current-workspace))
-;;  (setf *current-workspace-number* 0)
-;;  (loop for workspace in *workspace-list* do
-;;       (setf (workspace-number workspace) (incf *current-workspace-number*)))
-;;  (show-all-windows-in-workspace (current-workspace)))
-;;
-;;
-;;(defun sort-workspaces ()
-;;  "Sort workspaces by numbers"
-;;  (hide-all-windows-in-workspace (current-workspace))
-;;  (setf *workspace-list* (sort *workspace-list*
-;;			       #'(lambda (x y)
-;;				   (< (workspace-number x) (workspace-number y)))))
-;;  (show-all-windows-in-workspace (current-workspace)))
-;;
-;;
-;;
-;;
-;;(defun circulate-frame-up ()
-;;  "Circulate up in frame"
-;;  (banish-pointer)
-;;  (minimize-frame (current-frame))
-;;  (no-focus)
-;;  (setf (workspace-frame-list (current-workspace))
-;;	(rotate-list (workspace-frame-list (current-workspace))))
-;;  (adapt-window-to-frame (current-window) (current-frame))
-;;  (focus-window (current-window))
-;;  (show-all-frame (current-workspace)))
-;;
-;;
-;;(defun circulate-frame-up-move-window ()
-;;  "Circulate up in frame moving the current window in the next frame"
-;;  (banish-pointer)
-;;  (minimize-frame (current-frame))
-;;  (no-focus)
-;;  (let ((window (current-window)))
-;;    (remove-window-in-frame window (current-frame))
-;;    (focus-window (current-window))
-;;    (setf (workspace-frame-list (current-workspace))
-;;	  (rotate-list (workspace-frame-list (current-workspace))))
-;;    (add-window-in-frame window (current-frame)))
-;;  (adapt-window-to-frame (current-window) (current-frame))
-;;  (focus-window (current-window))
-;;  (show-all-frame (current-workspace)))
-;;
-;;(defun circulate-frame-up-copy-window ()
-;;  "Circulate up in frame copying the current window in the next frame"
-;;  (banish-pointer)
-;;  (minimize-frame (current-frame))
-;;  (no-focus)
-;;  (let ((window (current-window)))
-;;    (setf (workspace-frame-list (current-workspace))
-;;	  (rotate-list (workspace-frame-list (current-workspace))))
-;;    (unless (window-already-in-workspace window (current-workspace))
-;;      (add-window-in-frame window (current-frame))))
-;;  (adapt-window-to-frame (current-window) (current-frame))
-;;  (focus-window (current-window))
-;;  (show-all-frame (current-workspace)))
-;;
-;;
-;;
-;;(defun circulate-frame-down ()
-;;  "Circulate down in frame"
-;;  (banish-pointer)
-;;  (minimize-frame (current-frame))
-;;  (no-focus)
-;;  (setf (workspace-frame-list (current-workspace))
-;;	(anti-rotate-list (workspace-frame-list (current-workspace))))
-;;  (adapt-window-to-frame (current-window) (current-frame))
-;;  (focus-window (current-window))
-;;  (show-all-frame (current-workspace)))
-;;
-;;(defun circulate-frame-down-move-window ()
-;;  "Circulate down in frame moving the current window in the next frame"
-;;  (banish-pointer)
-;;  (minimize-frame (current-frame))
-;;  (no-focus)
-;;  (let ((window (current-window)))
-;;    (remove-window-in-frame window (current-frame))
-;;    (focus-window (current-window))
-;;    (setf (workspace-frame-list (current-workspace))
-;;	  (anti-rotate-list (workspace-frame-list (current-workspace))))
-;;    (add-window-in-frame window (current-frame)))
-;;  (adapt-window-to-frame (current-window) (current-frame))
-;;  (focus-window (current-window))
-;;  (show-all-frame (current-workspace)))
-;;
-;;(defun circulate-frame-down-copy-window ()
-;;  "Circulate down in frame copying the current window in the next frame"
-;;  (banish-pointer)
-;;  (minimize-frame (current-frame))
-;;  (no-focus)
-;;  (let ((window (current-window)))
-;;    (setf (workspace-frame-list (current-workspace))
-;;	  (anti-rotate-list (workspace-frame-list (current-workspace))))
-;;    (unless (window-already-in-workspace window (current-workspace))
-;;      (add-window-in-frame window (current-frame))))
-;;  (adapt-window-to-frame (current-window) (current-frame))
-;;  (focus-window (current-window))
-;;  (show-all-frame (current-workspace)))
-;;
-;;
-;;
-;;
-;;
-;;(defun circulate-workspace-by-number (number)
-;;  "Focus a workspace given its number"
-;;  (no-focus)
-;;  (hide-all-windows-in-workspace (current-workspace))
-;;  (dotimes (i (length *workspace-list*))
-;;    (when (= (workspace-number (current-workspace)) number)
-;;      (return))
-;;    (setf *workspace-list* (rotate-list *workspace-list*)))
-;;  (show-all-windows-in-workspace (current-workspace)))
-;;  
-;;
-;;(defun circulate-workspace-up ()
-;;  "Circulate up in workspace"
-;;  (no-focus)
-;;  (hide-all-windows-in-workspace (current-workspace))
-;;  (setf *workspace-list* (rotate-list *workspace-list*))
-;;  (show-all-windows-in-workspace (current-workspace)))
-;;
-;;(defun circulate-workspace-up-move-frame ()
-;;  "Circulate up in workspace moving current frame in the next workspace"
-;;  (no-focus)
-;;  (hide-all-windows-in-workspace (current-workspace))
-;;  (let ((frame (current-frame)))
-;;    (remove-frame-in-workspace frame (current-workspace))
-;;    (setf *workspace-list* (rotate-list *workspace-list*))
-;;    (add-frame-in-workspace (copy-frame frame) (current-workspace)))
-;;  (show-all-windows-in-workspace (current-workspace)))
-;;
-;;(defun circulate-workspace-up-copy-frame ()
-;;  "Circulate up in workspace copying current frame in the next workspace"
-;;  (no-focus)
-;;  (hide-all-windows-in-workspace (current-workspace))
-;;  (let ((frame (current-frame)))
-;;    (setf *workspace-list* (rotate-list *workspace-list*))
-;;    (unless (frame-windows-already-in-workspace frame (current-workspace))
-;;      (add-frame-in-workspace (copy-frame frame) (current-workspace))))
-;;  (show-all-windows-in-workspace (current-workspace)))
-;;
-;;
-;;
-;;(defun circulate-workspace-down ()
-;;  "Circulate down in workspace"
-;;  (no-focus)
-;;  (hide-all-windows-in-workspace (current-workspace))
-;;  (setf *workspace-list* (anti-rotate-list *workspace-list*))
-;;  (show-all-windows-in-workspace (current-workspace)))
-;;
-;;(defun circulate-workspace-down-move-frame ()
-;;  "Circulate down in workspace moving current frame in the next workspace"
-;;  (no-focus)
-;;  (hide-all-windows-in-workspace (current-workspace))
-;;  (let ((frame (current-frame)))
-;;    (remove-frame-in-workspace frame (current-workspace))
-;;    (setf *workspace-list* (anti-rotate-list *workspace-list*))
-;;    (add-frame-in-workspace (copy-frame frame) (current-workspace)))
-;;  (show-all-windows-in-workspace (current-workspace)))
-;;
-;;(defun circulate-workspace-down-copy-frame ()
-;;  "Circulate down in workspace copying current frame in the next workspace"
-;;  (no-focus)
-;;  (hide-all-windows-in-workspace (current-workspace))
-;;  (let ((frame (current-frame)))
-;;    (setf *workspace-list* (anti-rotate-list *workspace-list*))
-;;    (unless (frame-windows-already-in-workspace frame (current-workspace))
-;;      (add-frame-in-workspace (copy-frame frame) (current-workspace))))
-;;  (show-all-windows-in-workspace (current-workspace)))
-;;
-;;
-;;
-;;(defun delete-current-window ()
-;;  "Delete the current window in all frames and workspaces"
-;;  (let ((window (current-window)))
-;;    (when window
-;;      (no-focus)
-;;      (remove-window-in-all-workspace window)
-;;      (send-client-message window :WM_PROTOCOLS
-;;			   (intern-atom *display* "WM_DELETE_WINDOW"))))
-;;  (focus-window (current-window))
-;;  (show-all-frame (current-workspace)))
-;;
-;;
-;;(defun destroy-current-window ()
-;;  "Destroy the current window in all frames and workspaces"
-;;  (let ((window (current-window)))
-;;    (when window
-;;      (no-focus)
-;;      (remove-window-in-all-workspace window)
-;;      (kill-client *display* (xlib:window-id window))))
-;;  (focus-window (current-window))
-;;  (show-all-frame (current-workspace)))
-;;
-;;(defun remove-current-window ()
-;;  "Remove the current window in the current frame"
-;;  (let ((window (current-window)))
-;;    (when window
-;;      (no-focus)
-;;      (hide-window window)
-;;      (remove-window-in-frame (current-window) (current-frame))))
-;;  (focus-window (current-window))
-;;  (show-all-frame (current-workspace)))
-;;
-;;(defun remove-current-frame ()
-;;  "Remove the current frame in the current workspace"
-;;  (minimize-frame (current-frame))
-;;  (let ((frame (current-frame)))
-;;    (when frame
-;;      (no-focus)
-;;      (dolist (window (frame-window-list frame))
-;;	(when window
-;;	  (hide-window window)))
-;;      (remove-frame-in-workspace frame (current-workspace))))
-;;  (focus-window (current-window))
-;;  (show-all-frame (current-workspace)))
-;;
-;;(defun remove-current-workspace ()
-;;  "Remove the current workspace"
-;;  (let ((workspace (current-workspace)))
-;;    (when workspace
-;;      (hide-all-windows-in-workspace workspace)
-;;      (remove-workspace workspace)
-;;      (show-all-windows-in-workspace (current-workspace)))))
-;;
-;;
-;;(defun unhide-all-windows-in-current-frame ()
-;;  "Unhide all hidden windows into the current frame"
-;;  (let ((all-windows (get-all-windows))
-;;	(hidden-windows (remove-if-not #'window-hidden-p
-;;				       (copy-list (xlib:query-tree *root*))))
-;;	(current-frame (current-frame)))
-;;    (dolist (window (set-difference hidden-windows all-windows))
-;;      (unhide-window window)
-;;      (process-new-window window)
-;;      (xlib:map-window window)
-;;      (adapt-window-to-frame window current-frame)))
-;;  (focus-window (current-window))
-;;  (show-all-frame (current-workspace)))
-;;
-;;
-;;
-;;
-;;(defun create-new-default-frame ()
-;;  "Create a new default frame"
-;;  (minimize-frame (current-frame))
-;;  (add-frame-in-workspace (copy-frame *default-frame*)
-;;			  (current-workspace))
-;;  (show-all-windows-in-workspace (current-workspace)))
-;;
-;;
-;;(defun create-new-default-workspace ()
-;;  "Create a new default workspace"
-;;  (hide-all-windows-in-workspace (current-workspace))
-;;  (add-workspace (create-default-workspace))
-;;  (show-all-windows-in-workspace (current-workspace)))
-;;
-;;
-;;
-;;
-;;;;;,-----
-;;;;;| Frame moving
-;;;;;`-----
-;;(defun move-frame (frame dx dy)
-;;  "Move frame"
-;;  (setf (frame-x frame) (+ (frame-x frame) dx)
-;;	(frame-y frame) (+ (frame-y frame) dy))
-;;  (dolist (window (frame-window-list frame))
-;;    (adapt-window-to-frame window frame))
-;;  (show-all-frame (current-workspace)))
-;;
-;;(defun move-frame-to (frame x y)
-;;  "Move frame to"
-;;  (setf (frame-x frame) x
-;;	(frame-y frame) y)
-;;  (dolist (window (frame-window-list frame))
-;;    (adapt-window-to-frame window frame))
-;;  (focus-window (current-window))
-;;  (show-all-frame (current-workspace)))
-;;
-;;
-;;(defun resize-frame (frame dx dy)
-;;  "Resize frame"
-;;  (setf (frame-width frame) (max (+ (frame-width frame) dx) 100)
-;;	(frame-height frame) (max (+ (frame-height frame) dy) 100))
-;;  (dolist (window (frame-window-list frame))
-;;    (adapt-window-to-frame window frame))
-;;  (show-all-frame (current-workspace)))
-;;
-;;(defun force-window-in-frame ()
-;;  "Force the current window to move in the frame (Useful only for transient windows)"
-;;  (let ((frame (current-frame))
-;;	(window (current-window)))
-;;    (when window
-;;      (setf (xlib:drawable-x window) (frame-x frame)
-;;	    (xlib:drawable-y window) (frame-y frame))
-;;      (show-all-windows-in-workspace (current-workspace)))))
-;;
-;;(defun force-window-center-in-frame ()
-;;  "Force the current window to move in the center of the frame (Useful only for transient windows)"
-;;  (let ((frame (current-frame))
-;;	(window (current-window)))
-;;    (when window
-;;      (setf (xlib:drawable-x window) (truncate (+ (frame-x frame)
-;;						  (/ (- (frame-width frame) (xlib:drawable-width window)) 2)))
-;;	    (xlib:drawable-y window) (truncate (+ (frame-y frame)
-;;						  (/ (- (frame-height frame) (xlib:drawable-height window)) 2))))
-;;      (show-all-windows-in-workspace (current-workspace)))))
-;;
-;;
-;;
-;;  
-;;
-;;(defun show-help (&optional (browser "dillo") (tempfile "/tmp/clfswm.html"))
-;;  "Show current keys and buttons bindings"
-;;  (ignore-errors
-;;    (produce-doc-html-in-file tempfile))
-;;  (sleep 1)
-;;  (do-shell (format nil "~A ~A" browser tempfile)))
+
+(defun show-help (&optional (browser "dillo") (tempfile "/tmp/clfswm.html"))
+  "Show current keys and buttons bindings"
+  (ignore-errors
+    (produce-doc-html-in-file tempfile))
+  (sleep 1)
+  (do-shell (format nil "~A ~A" browser tempfile)))

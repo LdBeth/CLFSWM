@@ -79,13 +79,13 @@
 	    :first-only)))
 
 (defmethod no-layout ((child frame) father)
-  (with-slots ((cx x) (cy y) (cw w) (ch h)) child
-    (with-slots ((frx rx) (fry ry) (frw rw) (frh rh)) father
-      (values (round (+ (* cx frw) frx))
-	      (round (+ (* cy frh) fry))
-	      (round (* cw frw))
-	      (round (* ch frh))
-	      :first-only))))
+  (values (x-fl->px (frame-x child) father)
+	  (y-fl->px (frame-y child) father)
+	  (w-fl->px (frame-w child) father)
+	  (h-fl->px (frame-h child) father)
+	  :first-only))
+
+
 
 (defun set-no-layout ()
   "Maximize windows in there frame - leave frame to there size (no layout)"
