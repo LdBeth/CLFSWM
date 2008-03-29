@@ -148,6 +148,7 @@
 
 
 
+
 ;;; Selection functions
 (defun clear-selection ()
   "Clear the current selection"

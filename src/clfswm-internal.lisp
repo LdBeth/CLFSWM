@@ -212,14 +212,14 @@
 
 
 
-(defun get-current-child ()
-  "Return the current focused child"
-  (unless (equal *current-child* *root-frame*)
-    (typecase *current-child*
-      (xlib:window *current-child*)
-      (frame (if (xlib:window-p (first (frame-child *current-child*)))
-		 (first (frame-child *current-child*))
-		 *current-child*)))))
+;;(defun get-current-child ()
+;;  "Return the current focused child"
+;;  (unless (equal *current-child* *root-frame*)
+;;    (typecase *current-child*
+;;      (xlib:window *current-child*)
+;;      (frame (if (xlib:window-p (first (frame-child *current-child*)))
+;;		 (first (frame-child *current-child*))
+;;		 *current-child*)))))
 
 
 (defun find-child (to-find root)
@@ -580,19 +580,19 @@
     change))
 
 
-(defgeneric set-current-child (child father))
-
-(defmethod set-current-child ((child xlib:window) father)
-  (unless (equal *current-child* father)
-    (setf *current-child* father)
-    t))
-
-(defmethod set-current-child ((child frame) father)
-  (declare (ignore father))
+(defun set-current-child-generic (child)
   (unless (equal *current-child* child)
     (setf *current-child* child)
     t))
 
+(defgeneric set-current-child (child father window-father))
+
+(defmethod set-current-child ((child xlib:window) father window-father)
+  (set-current-child-generic (if window-father father child)))
+
+(defmethod set-current-child ((child frame) father window-father)
+  (declare (ignore father window-father))
+  (set-current-child-generic child))
 
 
 (defun set-current-root (father)
@@ -601,10 +601,11 @@
     (setf *current-root* father)))
 
 
-(defun focus-all-children (child father)
-  "Focus child and its fathers - Set current frame to father"
+(defun focus-all-children (child father &optional (window-father t))
+  "Focus child and its fathers -
+For window: set current child to window or its father according to window-father"
   (let ((new-focus (focus-child-rec child father))
-	(new-current-child (set-current-child child father))
+	(new-current-child (set-current-child child father window-father))
 	(new-root (set-current-root father)))
     (or new-focus new-current-child new-root)))
 

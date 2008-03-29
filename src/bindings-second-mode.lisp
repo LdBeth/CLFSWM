@@ -359,23 +359,24 @@
 
 
 ;;; Mouse action
-
+(defun sm-mouse-click-to-focus-generic (window root-x root-y fn-action)
+  (declare (ignore window))
+  (let* ((child (find-child-under-mouse root-x root-y))
+	 (father (find-father-frame child)))
+    (unless (equal child *current-root*)
+      (typecase child
+	(xlib:window (funcall fn-action father (find-father-frame father) root-x root-y))
+	(frame (funcall fn-action child father root-x root-y)))
+      (focus-all-children child father nil)
+      (show-all-children))))
 
 (defun sm-mouse-click-to-focus-and-move (window root-x root-y)
   "Move and focus the current child"
-  (declare (ignore window))
-  (let ((win (find-window-under-mouse root-x root-y)))
-    (unless (equal win (frame-window *current-root*))
-      (mouse-click-to-focus-and-move win root-x root-y))))
-
+  (sm-mouse-click-to-focus-generic window root-x root-y #'move-frame))
 
 (defun sm-mouse-click-to-focus-and-resize (window root-x root-y)
   "Resize and focus the current child"
-  (declare (ignore window))
-  (let ((win (find-window-under-mouse root-x root-y)))
-    (unless (equal win (frame-window *current-root*))
-      (mouse-click-to-focus-and-resize win root-x root-y))))
-
+  (sm-mouse-click-to-focus-generic window root-x root-y #'resize-frame))
 
 
 

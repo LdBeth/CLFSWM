@@ -1,3 +1,8 @@
+2008-03-29  Philippe Brochard  <hocwp@free.fr>
+
+	* src/bindings-second-mode.lisp (sm-mouse-click-to-focus-generic): Focus, move and resize
+	the current child (even if it's a window).
+
 2008-03-28  Philippe Brochard  <hocwp@free.fr>
 
 	* src/clfswm-util.lisp (mouse-click-to-focus-and-move)
