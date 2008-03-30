@@ -224,6 +224,8 @@
   (setf *root-frame* (create-frame :name "Root" :number 0 :layout #'tile-space-layout)
 	*current-root* *root-frame*
 	*current-child* *current-root*)
+  (add-frame (create-frame :name "Default" :layout nil :x 0.1 :y 0.1 :w 0.8 :h 0.8) *root-frame*)
+  (setf *current-child* (first (frame-child *current-root*)))
   (call-hook *init-hook*)
   (process-existing-windows *screen*)
   (show-all-children)

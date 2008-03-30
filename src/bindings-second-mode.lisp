@@ -295,8 +295,8 @@
 (define-second-key ("Right" :mod-1) 'select-next-brother)
 (define-second-key ("Left" :mod-1) 'select-previous-brother)
 
-(define-second-key ("Down" :mod-1) 'select-next-level)
-(define-second-key ("Up" :mod-1) 'select-previous-level)
+(define-second-key ("Down" :mod-1) 'select-previous-level)
+(define-second-key ("Up" :mod-1) 'select-next-level)
 
 (define-second-key ("Tab" :mod-1) 'select-next-child)
 (define-second-key ("ISO_Left_Tab" :mod-1 :shift) 'select-previous-child)

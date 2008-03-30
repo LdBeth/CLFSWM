@@ -1,5 +1,11 @@
 2008-03-30  Philippe Brochard  <hocwp@free.fr>
 
+	* src/bindings.lisp (Up/Down): Swap select previous/next level.
+
+	* src/bindings-second-mode.lisp (Up/Down): Swap select previous/next level.
+
+	* src/clfswm.lisp (init-display): Create a default frame in the root frame.
+
 	* src/clfswm-internal.lisp (place-frame): Place frame from real (pixel) coordinates.
 	(with-all-*): Reverse the child list to manage the first child last (like in 
 	show-all-children).

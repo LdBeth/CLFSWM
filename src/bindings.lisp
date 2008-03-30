@@ -43,8 +43,8 @@
 (define-main-key ("Right" :mod-1) 'select-next-brother)
 (define-main-key ("Left" :mod-1) 'select-previous-brother)
 
-(define-main-key ("Down" :mod-1) 'select-next-level)
-(define-main-key ("Up" :mod-1) 'select-previous-level)
+(define-main-key ("Down" :mod-1) 'select-previous-level)
+(define-main-key ("Up" :mod-1) 'select-next-level)
 
 (define-main-key ("Tab" :mod-1) 'select-next-child)
 (define-main-key ("ISO_Left_Tab" :mod-1 :shift) 'select-previous-child)
