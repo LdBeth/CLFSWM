@@ -1,6 +1,8 @@
 2008-03-30  Philippe Brochard  <hocwp@free.fr>
 
 	* src/clfswm-internal.lisp (place-frame): Place frame from real (pixel) coordinates.
+	(with-all-*): Reverse the child list to manage the first child last (like in 
+	show-all-children).
 
 	* src/config.lisp (*create-frame-on-root*): New variable: Create a new frame on the
 	root window only if true.
@@ -122,8 +124,10 @@
 
 2008-02-24  Philippe Brochard  <hocwp@free.fr>
 
-	* *: Major update - No more reference  to workspaces. The main
-	structure is a tree of groups or application windows.
+	* ************************************************************ *
+	*: Major update - No more reference  to workspaces. The main   *
+	structure is a tree of groups or application windows.          *
+	* ************************************************************ *
 
 2008-02-07  Philippe Brochard  <hocwp@free.fr>
 

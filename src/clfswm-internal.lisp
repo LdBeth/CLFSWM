@@ -132,7 +132,7 @@
     `(labels ((,rec (,child)
 		,@body
 		(when (frame-p ,child)
-		  (dolist (,sub-child (frame-child ,child))
+		  (dolist (,sub-child (reverse (frame-child ,child)))
 		    (,rec ,sub-child)))))
        (,rec ,root))))
 
@@ -144,7 +144,7 @@
     `(labels ((,rec (,frame)
 		(when (frame-p ,frame)
 		  ,@body
-		  (dolist (,child (frame-child ,frame))
+		  (dolist (,child (reverse (frame-child ,frame)))
 		    (,rec ,child)))))
        (,rec ,root))))
 
@@ -157,7 +157,7 @@
 		(when (xlib:window-p ,window)
 		  ,@body)
 		(when (frame-p ,window)
-		  (dolist (,child (frame-child ,window))
+		  (dolist (,child (reverse (frame-child ,window)))
 		    (,rec ,child)))))
        (,rec ,root))))
 
@@ -171,7 +171,7 @@
 		(typecase ,child
 		  (xlib:window ,body-window)
 		  (frame ,body-frame
-			 (dolist (,sub-child (frame-child ,child))
+			 (dolist (,sub-child (reverse (frame-child ,child)))
 			   (,rec ,sub-child))))))
        (,rec ,root))))
 
