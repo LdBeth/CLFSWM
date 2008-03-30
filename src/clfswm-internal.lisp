@@ -208,6 +208,18 @@
   (push frame (frame-child father)))
 
 
+(defun place-frame (frame father prx pry prw prh)
+  "Place a frame from real (pixel) coordinates"
+  (with-slots (window x y w h) frame
+    (setf (xlib:drawable-x window) prx
+	  (xlib:drawable-y window) pry
+	  (xlib:drawable-width window) prw
+	  (xlib:drawable-height window) prh
+	  x (x-px->fl prx father)
+	  y (y-px->fl pry father)
+	  w (w-px->fl prw father)
+	  h (h-px->fl prh father))))
+
 
 
 

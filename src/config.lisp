@@ -47,6 +47,11 @@ You can tweak this to what you want"
 ;;  (values 100 100 800 600))
 
 
+;;; CONFIG
+(defparameter *create-frame-on-root* nil
+  "Set this variable to true if you want to allow to create a new frame
+on root window in the main mode")
+
 
 ;;; CONFIG: Main mode colors
 (defparameter *color-selected* "Red")

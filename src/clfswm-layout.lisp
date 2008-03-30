@@ -83,7 +83,7 @@
 	  (y-fl->px (frame-y child) father)
 	  (w-fl->px (frame-w child) father)
 	  (h-fl->px (frame-h child) father)
-	  :first-only))
+	  t))
 
 
 

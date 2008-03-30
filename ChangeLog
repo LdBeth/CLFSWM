@@ -1,3 +1,16 @@
+2008-03-30  Philippe Brochard  <hocwp@free.fr>
+
+	* src/clfswm-internal.lisp (place-frame): Place frame from real (pixel) coordinates.
+
+	* src/config.lisp (*create-frame-on-root*): New variable: Create a new frame on the
+	root window only if true.
+
+	* src/clfswm-util.lisp (mouse-click-to-focus-generic): Create a new frame on the
+	root window only if *create-frame-on-root* is true.
+
+	* src/bindings-second-mode.lisp (sm-mouse-click-to-focus-generic): Create a new frame
+	on the root window.
+
 2008-03-29  Philippe Brochard  <hocwp@free.fr>
 
 	* src/bindings-second-mode.lisp (sm-mouse-click-to-focus-generic): Focus, move and resize

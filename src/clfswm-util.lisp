@@ -555,15 +555,26 @@
 mouse-fun is #'move-frame or #'resize-frame"
   (let ((to-replay t)
 	(child window)
-	(father (find-father-frame window *current-root*)))
-    (unless father
-      (setf child (find-frame-window window *current-root*)
-	    father (find-father-frame child *current-root*))
-      (when child
-	(funcall mouse-fn child father root-x root-y)))
-    (when (and child father (focus-all-children child father))
-      (show-all-children)
-      (setf to-replay nil))
+	(father (find-father-frame window *current-root*))
+	(root-p (or (equal window *root*)
+		    (equal window (frame-window *current-root*)))))
+    (when (or (not root-p) *create-frame-on-root*)
+      (unless father
+	(if root-p
+	    (progn
+	      (setf child (create-frame)
+		    father *current-root*
+		    mouse-fn #'resize-frame)
+	      (place-frame child father root-x root-y 10 10)
+	      (xlib:map-window (frame-window child))
+	      (pushnew child (frame-child *current-root*)))
+	    (setf child (find-frame-window window *current-root*)
+		  father (find-father-frame child *current-root*)))
+	(when child
+	  (funcall mouse-fn child father root-x root-y)))
+      (when (and child father (focus-all-children child father))
+	(show-all-children)
+	(setf to-replay nil)))
     (if to-replay
 	(replay-button-event)
 	(stop-button-event))))
