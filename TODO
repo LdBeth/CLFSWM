@@ -40,8 +40,6 @@ Rewrote all useful code present in 0801 version.
   and redisplay only the wanted child).
   Split computation of geometry outside of show-all-children. [Philippe]
 
-- Bind Control+Alt+Mouse 1/2 to move and resize father frame in main mode [Philippe]
-  
 
 
 MAYBE

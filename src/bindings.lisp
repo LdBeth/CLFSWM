@@ -79,8 +79,24 @@
 
 
 ;;; Mouse actions
+(defun mouse-click-to-focus-and-move-window (window root-x root-y)
+  "Move and focus the current child - Create a new frame on the root window"
+  (declare (ignore window))
+  (mouse-focus-move/resize-generic root-x root-y #'move-frame t))
+
+(defun mouse-click-to-focus-and-resize-window (window root-x root-y)
+  "Resize and focus the current child - Create a new frame on the root window"
+  (declare (ignore window))
+  (mouse-focus-move/resize-generic root-x root-y #'resize-frame t))
+
+
+
+
 (define-main-mouse (1) 'mouse-click-to-focus-and-move)
 (define-main-mouse (3) 'mouse-click-to-focus-and-resize)
+
+(define-main-mouse (1 :mod-1) 'mouse-click-to-focus-and-move-window)
+(define-main-mouse (3 :mod-1) 'mouse-click-to-focus-and-resize-window)
 
 (define-main-mouse (4) 'mouse-select-next-level)
 (define-main-mouse (5) 'mouse-select-previous-level)

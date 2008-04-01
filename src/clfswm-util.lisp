@@ -589,6 +589,30 @@ mouse-fun is #'move-frame or #'resize-frame"
 
 
 
+
+(defun mouse-focus-move/resize-generic (root-x root-y mouse-fn window-father)
+  "Focus the current frame or focus the current window father
+mouse-fun is #'move-frame or #'resize-frame.
+Focus child and its fathers -
+For window: set current child to window or its father according to window-father"
+  (let* ((child (find-child-under-mouse root-x root-y))
+	 (father (find-father-frame child)))
+    (when (equal child *current-root*)
+      (setf child (create-frame)
+	    father *current-root*
+	    mouse-fn #'resize-frame)
+      (place-frame child father root-x root-y 10 10)
+	    (xlib:map-window (frame-window child))
+	    (pushnew child (frame-child *current-root*)))
+    (typecase child
+      (xlib:window (funcall mouse-fn father (find-father-frame father) root-x root-y))
+      (frame (funcall mouse-fn child father root-x root-y)))
+    (focus-all-children child father window-father)
+    (show-all-children)))
+
+
+
+
 (defun test-mouse-binding (window root-x root-y)
   (dbg window root-x root-y)
   (replay-button-event))
