@@ -1,4 +1,14 @@
-2008-03-30  Philippe Brochard  <hocwp@free.fr>
+2008-04-01  Philippe Brochard  <hocwp@free.fr>
+
+	* src/clfswm-util.lisp (mouse-click-to-focus-generic): Stop button
+	event only if there is a geometry change.
+
+2008-04-01  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (show-all-children): Return t if there
+	is a geometry change.
+
+2008-03-30  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/bindings.lisp (Up/Down): Swap select previous/next level.
 
@@ -19,12 +29,12 @@
 	* src/bindings-second-mode.lisp (sm-mouse-click-to-focus-generic): Create a new frame
 	on the root window.
 
-2008-03-29  Philippe Brochard  <hocwp@free.fr>
+2008-03-29  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/bindings-second-mode.lisp (sm-mouse-click-to-focus-generic): Focus, move and resize
 	the current child (even if it's a window).
 
-2008-03-28  Philippe Brochard  <hocwp@free.fr>
+2008-03-28  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (mouse-click-to-focus-and-move)
 	(mouse-click-to-focus-and-resize): New functions.
@@ -34,7 +44,7 @@
 
 	* src/tools.lisp (call-hook): Move call-hook to tools.lisp.
 
-2008-03-27  Philippe Brochard  <hocwp@free.fr>
+2008-03-27  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-layout.lisp (no-layout): Use :first-only to raise only the
 	first child.
@@ -45,12 +55,12 @@
 	(show-child): Use a first-p parameter to raise windows only when they are
 	first child.
 
-2008-03-26  Philippe Brochard  <hocwp@free.fr>
+2008-03-26  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp (select-next/previous-level): Don't use show-all-children 
 	-> less flickering.
 
-2008-03-25  Philippe Brochard  <hocwp@free.fr>
+2008-03-25  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-info.lisp (keys-from-list): new function.
 
@@ -58,36 +68,36 @@
 
 	* src/*: rename 'group' in 'frame'.
 
-2008-03-22  Philippe Brochard  <hocwp@free.fr>
+2008-03-22  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-pack.lisp (explode-group/explode-current-group): new functions.
 
-2008-03-21  Philippe Brochard  <hocwp@free.fr>
+2008-03-21  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-pack.lisp: Pack, Fill, Resize functions.
 
-2008-03-16  Philippe Brochard  <hocwp@free.fr>
+2008-03-16  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-nw-hooks.lisp: Register system for new window hooks.
 	Bind control+o to open the next window in a new group in the root group 
 	 (as open in next window in a new workspace in 0801 version).
 
-2008-03-15  Philippe Brochard  <hocwp@free.fr>
+2008-03-15  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (show/hide-all-groups-info/key): Show/hide all groups info 
 	window.
 
-2008-03-14  Philippe Brochard  <hocwp@free.fr>
+2008-03-14  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* bindings-second-mode.lisp ("ISO_Left_Tab"): Use ISO_Left_Tab
 	instead of Tab for select-previous-child.
 
-2008-03-13  Philippe Brochard  <hocwp@free.fr>
+2008-03-13  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-util.lisp (force-window-in-group/force-window-center-in-group):
 	new functions.
 
-2008-03-11  Philippe Brochard  <hocwp@free.fr>
+2008-03-11  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-util.lisp (identify-key): Display the documentation
 	associated to keys when identifying a key.
@@ -100,7 +110,7 @@
 	implementation (clisp and sbcl only), choose where to store the
 	dumped image, where to find clfswm source.
 
-2008-03-09  Philippe Brochard  <hocwp@free.fr>
+2008-03-09  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-internal.lisp (process-new-window): Beginning of new
 	window hook: each group have a hook to tell what he wants to do
@@ -115,12 +125,12 @@
 	XDG_CONFIG_HOME *first*. Freedesktop.org standards should be
 	prefered whenever possible.
 
-2008-02-27  Philippe Brochard  <hocwp@free.fr>
+2008-02-27  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-layout.lisp (*-layout): Add an optional raise-p
 	parameter in each layout.
 
-2008-02-26  Philippe Brochard  <hocwp@free.fr>
+2008-02-26  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-util.lisp (copy/cut-current-child): Does not affect the
 	root group.
@@ -128,14 +138,14 @@
 	(focus-group-by-name/number): new functions
 	(delete-group-by-name/number): new functions
 
-2008-02-24  Philippe Brochard  <hocwp@free.fr>
+2008-02-24  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* ************************************************************ *
 	*: Major update - No more reference  to workspaces. The main   *
 	structure is a tree of groups or application windows.          *
 	* ************************************************************ *
 
-2008-02-07  Philippe Brochard  <hocwp@free.fr>
+2008-02-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm.lisp (read-conf-file): Read configuration in
 	$HOME/.clfswmrc or in /etc/clfswmrc or in
@@ -143,18 +153,18 @@
 	(xdg-config-home): Return the content of $XDG-CONFIG-HOME (default
 	to $HOME/.config/).
 
-2008-01-18  Philippe Brochard  <hocwp@free.fr>
+2008-01-18  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-internal.lisp (show-all-group): Use *root* and *root-gc*
 	by default.
 
-2008-01-03  Philippe Brochard  <hocwp@free.fr>
+2008-01-03  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-internal.lisp (find-window-group): New function.
 
 	* clfswm*: Change to make clfswm run with clisp/new-clx.
 
-2008-01-01  Philippe Brochard  <hocwp@free.fr>
+2008-01-01  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-util.lisp (query-show-paren): Add show parent matching in
 	query string.
@@ -171,7 +181,7 @@
 	* clfswm-internal.lisp (process-new-window): Adjust new window
 	with the specified hints (max/min/base width/height).
 
-2007-12-31  Philippe Brochard  <hocwp@free.fr>
+2007-12-31  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm.lisp (handle-configure-request): Send an Configuration
 	Notify event. This solve a bug with xterm and rxvt who takes some
@@ -180,7 +190,7 @@
 	* bindings-second-mode.lisp (define-shell): Run programs after
 	living the second mode.
 
-2007-12-30  Philippe Brochard  <hocwp@free.fr>
+2007-12-30  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-internal.lisp (process-new-window): Do not crop transient
 	window to group size.
@@ -194,7 +204,7 @@
 	(handle-exposure): Remove show-all-group on exposure event
 	-> Speed up.
 
-2007-12-29  Philippe Brochard  <hocwp@free.fr>
+2007-12-29  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-util.lisp (circulate-group-up-copy-window)
 	(circulate-group-down-copy-window)
@@ -223,13 +233,13 @@
 	* clfswm-internal.lisp (adapt-window-to-group): use set/= to set
 	x, y... only when necessary.
 
-2007-12-28  Philippe Brochard  <hocwp@free.fr>
+2007-12-28  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm.lisp (handle-configure-notify, *configure-notify-hook*):
 	new function and hook: force windows to stay in its group (solve a
 	bug with the Gimp).
 
-2007-12-25  Philippe Brochard  <hocwp@free.fr>
+2007-12-25  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* bindings-second-mode.lisp (mouse-motion): use hide-group to have
 	less flickering when moving/resizing groups.
@@ -237,7 +247,7 @@
 	* clfswm-internal.lisp (hide-group): new function.
 	(show-all-group): clear-all: new parameter.
 
-2007-12-22  Philippe Brochard  <hocwp@free.fr>
+2007-12-22  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-keys.lisp (define-define-key): undefine-*-multi-name: new
 	macro.
@@ -249,21 +259,21 @@
 	* config.lisp: new file - group all globals variables in this
 	file.
 	
-2007-08-26  Philippe Brochard  <hocwp@free.fr>
+2007-08-26  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* xlib-util.lisp (hide-window): Remove structure-notivy events
 	when hidding a window.
 
-2007-05-16  Philippe Brochard  <hocwp@free.fr>
+2007-05-16  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* package.lisp (*sm-property-notify-hook*): Readded
 	property-notify-hook in second mode.
 
-2007-05-15  Philippe Brochard  <hocwp@free.fr>
+2007-05-15  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-keys.lisp (produce-doc-html): Better clean up for strings.
 
-2007-05-13  Philippe Brochard  <hocwp@free.fr>
+2007-05-13  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-pack.lisp (tile-current-workspace-to/right/left/top/bottom):  
 	Tile the current workspace with the current window on one side and
@@ -273,13 +283,13 @@
 	* clfswm-pager.lisp (pager-tile-current-workspace-to): idem for
 	the pager.
 	
-2007-05-12  Philippe Brochard  <hocwp@free.fr>
+2007-05-12  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-pager.lisp (pager-draw-window-in-group): Add
 	ensure-printable to print windows name even with non-ascii
 	characters.
 
-2007-05-11  Philippe Brochard  <hocwp@free.fr>
+2007-05-11  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-pager.lisp (pager-explode-current-group): Create a new
 	group for each window in group.
@@ -296,12 +306,12 @@
 	package.lisp.
 	(query-string): idem.
 
-2007-04-29  Philippe Brochard  <hocwp@free.fr>
+2007-04-29  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* netwm-util.lisp: Start of NetWM compliance.
 	Add a Netwm client list gestion.
 
-2007-04-28  Philippe Brochard  <hocwp@free.fr>
+2007-04-28  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-internal.lisp (create-group-on-request): open a new group
 	only when the current group is not empty.
@@ -324,7 +334,7 @@
 	* clfswm.lisp (handle-event): Add a hook system. This hooks can be
 	changed in the user configuration file (~/.clfswmrc)
 
-2007-04-25  Philippe Brochard  <hocwp@free.fr>
+2007-04-25  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-util.lisp (stop-all-pending-actions): new function: reset
 	arrow action, open next window in new workspace/group.
@@ -334,23 +344,23 @@
 	new group (only once) or open all new windows in a new group (like
 	others windows managers).
 
-2007-04-22  Philippe Brochard  <hocwp@free.fr>
+2007-04-22  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm.lisp (read-conf-file): New function to read a lisp
 	configuration file at startup. 
 	(focus-group-under-mouse): Check if group isn't the current group
 	( prevent a bug with unclutter ).
 
-2007-03-02  Philippe Brochard  <hocwp@free.fr>
+2007-03-02  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* bindings.lisp (run-program-from-query-string): A program can be
 	launch from a input query window.
 
-2007-03-01  Philippe Brochard  <hocwp@free.fr>
+2007-03-01  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-info.lisp: Fix a bug with banish pointer in info mode.
 
-2007-02-28  Philippe Brochard  <hocwp@free.fr>
+2007-02-28  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm.lisp (process-new-window): One can now open the next
 	window in a workspace called by its number.
@@ -359,7 +369,7 @@
 	capabilities.
 	(eval-from-string): And an REPL in the window manager... :)
 
-2007-02-26  Philippe Brochard  <hocwp@free.fr>
+2007-02-26  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm.lisp (process-new-window): One can now open the next
 	window in a new workspace or a new group.
@@ -373,12 +383,12 @@
 	* clfswm-pager.lisp (pager-mode): Hide all windows before leaving
 	the pager mode and then redisplay only the current workspace.
 
-2007-02-25  Philippe Brochard  <hocwp@free.fr>
+2007-02-25  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm.lisp (add-workspace): Workspaces are now numbered. So
 	they can be focused with a keypress, sorted or renumbered.
 
-2007-02-24  Philippe Brochard  <hocwp@free.fr>
+2007-02-24  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-pager.lisp (pager-mode): Remove multiple silly
 	pager-draw-display. This prevent a lot of flickering in the
@@ -387,7 +397,7 @@
 	* clfswm.lisp: Remove all display-force-output and replace them
 	with only one display-finish-output in the event loop.
 
-2006-11-06  Philippe Brochard  <hocwp@free.fr>
+2006-11-06  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-pager.lisp (pager-center-group): New function - center a
 	group at the middle of the screen.
@@ -399,7 +409,7 @@
 	(show-group): Group are showned even if fullscreened.
 	(init-display): Add an exposure event on the root window.
 
-2006-11-05  Philippe Brochard  <hocwp@free.fr>
+2006-11-05  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* package.lisp (*default-group*): Default group is the same size
 	of a fullscreened group.
@@ -413,7 +423,7 @@
 	* clfswm.lisp (second-key-mode): Use a single window to show the
 	second mode. See for alternatives at the end of this file.
 
-2006-11-03  Philippe Brochard  <hocwp@free.fr>
+2006-11-03  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-keys.lisp (define-define-key/mouse): Factorisation in a
 	macro of key and mouse definitions.
@@ -422,18 +432,18 @@
 
 	* clfswm.lisp (second-key-mode): Add a colored border in second mode.
 
-2006-11-02  Philippe Brochard  <hocwp@free.fr>
+2006-11-02  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-info.lisp (info-mode): Add an info mode.
 
-2006-11-01  Philippe Brochard  <hocwp@free.fr>
+2006-11-01  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm.lisp (process-new-window): Change border size for
 	transient windows.
 	(show-all-windows-in-workspace): Unhide all windows even when the
 	current group is in fullscreen mode.
 
-2006-10-26  Philippe Brochard  <hocwp@free.fr>
+2006-10-26  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-util.lisp (identify-key): Add an exposure handle-event to
 	redisplay the identify window after a terminal switch.
@@ -441,7 +451,7 @@
 	* clfswm-pager.lisp (pager-mode): Add an exposure handle-event to
 	redisplay the pager after a terminal switch.
 
-2006-10-24  Philippe Brochard  <hocwp@free.fr>
+2006-10-24  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-util.lisp (identify-key): Add a window to display
 	the keys to identify on screen.
@@ -454,11 +464,11 @@
 	(show-all-windows-in-workspace): unhide window before adapting it
 	to group.
 
-2006-10-23  Philippe Brochard  <hocwp@free.fr>
+2006-10-23  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm.lisp (handle-event): Revert to an older version.
 
-2006-10-18  Philippe Brochard  <hocwp@free.fr>
+2006-10-18  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-util.lisp (force-window-in-group)
 	(force-window-center-in-group): New functions for transient windows.
@@ -466,7 +476,7 @@
 	* clfswm-pager.lisp (pager-remove-current-workspace/group):
 	bugfix: hide all windows before removing group or workspace.
 
-2006-10-17  Philippe Brochard  <hocwp@free.fr>
+2006-10-17  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* bindings-pager.lisp (mouse-pager-move-selected-group) 
 	(mouse-pager-copy-selected-group) 
@@ -479,7 +489,7 @@
 	(pager-copy-group-on-next/previous-workspace)
 	(pager-copy-window-on-next/previous-line): New functions
 
-2006-10-15  Philippe Brochard  <hocwp@free.fr>
+2006-10-15  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-pager.lisp (pager-move-window-on-next/previous-line,
 	(pager-move-group-on-next/previous-workspace): new functions.
@@ -487,22 +497,22 @@
 	* clfswm-pack.lisp (resize-half-x-x-current-group): resize group
 	to its half size (new functions).
 
-2006-10-11  Philippe Brochard  <hocwp@free.fr>
+2006-10-11  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-pager.lisp: workspaces, groups and windows can now be
 	selectionned with the keyboard or the mouse.
 
-2006-10-09  Philippe Brochard  <hocwp@free.fr>
+2006-10-09  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-pager.lisp (pager-select-workspace-right/left):
 	workspaces can now be selectionned with the keyboard.
 
-2006-10-08  Philippe Brochard  <hocwp@free.fr>
+2006-10-08  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-keys.lisp (undefine-main-key, undefine-second-key, undefine-mouse-action):  
 	new function to remove a previous defined key or mouse combination.
 	
-2006-10-07  Philippe Brochard  <hocwp@free.fr>
+2006-10-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm.lisp (main): Check for access error in init-display.
 
@@ -514,12 +524,12 @@
 	(define-shell): new macro to define shell command for the second
 	mode.
 
-2006-10-06  Philippe Brochard  <hocwp@free.fr>
+2006-10-06  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-keys.lisp (define-ungrab/grab): use a cond instead of a 
 	boggus typecase.
 
-2006-10-05  Philippe Brochard  <hocwp@free.fr>
+2006-10-05  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* bindings.lisp (accept-motion): Move group bugfix in upper mouse
 	workspace circulation.
@@ -528,19 +538,19 @@
 
 	* clfswm-keys.lisp: Keysyms support.
 
-2006-10-02  Philippe Brochard  <hocwp@free.fr>
+2006-10-02  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm.lisp (show-group): Use one gc for all groups and not one
 	per group.
 
-2006-10-01  Philippe Brochard  <hocwp@free.fr>
+2006-10-01  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* bindings.lisp (define-second-key (#\l :mod-1)): fix a typo.
 
 	* clfswm.lisp (adapt-window-to-group): Adapt only windows with
 	width and height outside group.
 
-2006-09-28  Philippe Brochard  <hocwp@free.fr>
+2006-09-28  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm.lisp: First public release.
 

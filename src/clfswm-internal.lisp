@@ -345,11 +345,15 @@
   (with-xlib-protect
       (multiple-value-bind (nx ny nw nh raise-p)
 	  (get-father-layout window father)
-	(setf (xlib:drawable-x window) nx
-	      (xlib:drawable-y window) ny
-	      (xlib:drawable-width window) nw
-	      (xlib:drawable-height window) nh)
-	raise-p)))
+	(let ((change (or (/= (xlib:drawable-x window) nx)
+			  (/= (xlib:drawable-y window) ny)
+			  (/= (xlib:drawable-width window) nw)
+			  (/= (xlib:drawable-height window) nh))))
+	  (setf (xlib:drawable-x window) nx
+		(xlib:drawable-y window) ny
+		(xlib:drawable-width window) nw
+		(xlib:drawable-height window) nh)
+	  (values raise-p change)))))
 
 (defmethod adapt-child-to-father ((frame frame) father)
   (with-xlib-protect
@@ -357,11 +361,15 @@
 	  (get-father-layout frame father)
 	(with-slots (rx ry rw rh window) frame
 	  (setf rx nx  ry ny  rw nw  rh nh)
-	  (setf (xlib:drawable-x window) rx
-		(xlib:drawable-y window) ry
-		(xlib:drawable-width window) rw
-		(xlib:drawable-height window) rh)
-	  raise-p))))
+	  (let ((change (or (/= (xlib:drawable-x window) rx)
+			    (/= (xlib:drawable-y window) ry)
+			    (/= (xlib:drawable-width window) rw)
+			    (/= (xlib:drawable-height window) rh))))
+	    (setf (xlib:drawable-x window) rx
+		  (xlib:drawable-y window) ry
+		  (xlib:drawable-width window) rw
+		  (xlib:drawable-height window) rh)
+	    (values raise-p change))))))
    
 
 
@@ -377,21 +385,28 @@
 (defmethod show-child ((frame frame) father first-p)
   (with-xlib-protect
       (with-slots (window) frame
-	(let ((raise-p (adapt-child-to-father frame father)))
+	(multiple-value-bind (raise-p geometry-change)
+	    (adapt-child-to-father frame father)
 	  (when (or *show-root-frame-p* (not (equal frame *current-root*)))
 	    (setf (xlib:window-background window) (get-color "Black"))
 	    (xlib:map-window window)
 	    (raise-if-needed window raise-p first-p)
-	    (display-frame-info frame))))))
+	    (display-frame-info frame))
+	  geometry-change))))
 
 
 (defmethod show-child ((window xlib:window) father first-p)
   (with-xlib-protect
-      (let ((raise-p nil))
+      (let ((raise-p nil)
+	    (geometry-change  nil))
 	(when (eql (window-type window) :normal)
-	  (setf raise-p (adapt-child-to-father window father)))
+	  (multiple-value-bind (to-raise change)
+	      (adapt-child-to-father window father)
+	    (setf raise-p to-raise
+		  geometry-change change)))
 	(xlib:map-window window)
-	(raise-if-needed window raise-p first-p))))
+	(raise-if-needed window raise-p first-p)
+	geometry-change)))
 
 
 
@@ -446,16 +461,19 @@
 
 (defun show-all-children ()
   "Show all children from *current-root*"
-  (labels ((rec (root father first-p first-father)
-	     (show-child root father first-p)
-	     (select-child root (if (equal root *current-child*) t
-				    (if (and first-p first-father) :maybe nil)))
-	     (when (frame-p root)
-	       (let ((first-child (first (frame-child root))))
-		 (dolist (child (reverse (frame-child root)))
-		   (rec child root (equal child first-child) first-p))))))
-    (rec *current-root* nil t t)
-    (set-focus-to-current-child)))
+  (let ((geometry-change nil))
+    (labels ((rec (root father first-p first-father)
+	       (when (show-child root father first-p)
+		 (setf geometry-change t))
+	       (select-child root (if (equal root *current-child*) t
+				      (if (and first-p first-father) :maybe nil)))
+	       (when (frame-p root)
+		 (let ((first-child (first (frame-child root))))
+		   (dolist (child (reverse (frame-child root)))
+		     (rec child root (equal child first-child) first-p))))))
+      (rec *current-root* nil t t)
+      (set-focus-to-current-child)
+      geometry-change)))
 
 
 
@@ -692,8 +710,6 @@ managed."
 						(:transient 1)
 						(t 1)))
     (grab-all-buttons window)
-;;    (when (frame-p *current-child*) ;; PHIL: Remove this!!!
-;;      (setf (frame-nw-hook *current-child*) #'open-in-new-frame-nw-hook))
     (unless (do-all-frames-nw-hook window)
       (default-frame-nw-hook nil window))
     (netwm-add-in-client-list window)))

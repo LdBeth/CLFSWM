@@ -573,8 +573,8 @@ mouse-fun is #'move-frame or #'resize-frame"
 	(when child
 	  (funcall mouse-fn child father root-x root-y)))
       (when (and child father (focus-all-children child father))
-	(show-all-children)
-	(setf to-replay nil)))
+	(when (show-all-children)
+	  (setf to-replay nil))))
     (if to-replay
 	(replay-button-event)
 	(stop-button-event))))

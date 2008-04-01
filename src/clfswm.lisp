@@ -35,8 +35,6 @@
   (funcall-key-from-code *main-keys* code state))
 
 
-;; PHIL: TODO: focus-policy by frame
-;;  :click, :sloppy, :nofocus
 (defun handle-button-press (&rest event-slots &key code state window root-x root-y &allow-other-keys)
   (declare (ignore event-slots))
   (unless (funcall-button-from-code *main-mouse* code state window root-x root-y #'first)

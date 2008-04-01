@@ -8,11 +8,9 @@ URGENT PROBLEMS
 Should handle these soon.
 
 Rewrote all useful code present in 0801 version.
-- Hide a window when its size is less than hint minimal size. [Philippe]
-- Bind alt+1/2/3/4... to a particular child: [Philippe]
-   If bind exist -> focus this child
-   If not -> bind the key to the current-child
-  Bind alt+control+1/2/3/4... to remove binding on a child.
+- Hide a window when its size is less than minimal hint size. [Philippe]
+- Bind alt+1/2/3/4... to a particular child (current root and current child) [Philippe]
+  Open a menu: Space -> jump to child  Enter -> bind current child to key
 
 - Hook to open next window in named/numbered frame [Philippe]
 
@@ -30,7 +28,20 @@ Rewrote all useful code present in 0801 version.
   get-frame-by-name (path): return the frame that its own frame has this name if it exists such a frame
   get-window-by-name (path): return the window that its own frame that its own frame has this name if it exists such a window.
 
-- Adapt frame to window hints
+- Adapt frame to window hints [Philippe]
+
+- Show config -> list and display documentation for all tweakable global variables. [Philippe]
+
+- Set Layout once [Philippe]
+
+- A Gimp layout example [Philippe]
+
+- Add a show-all-children without recomputation of geometry (ie: use real coordinates
+  and redisplay only the wanted child).
+  Split computation of geometry outside of show-all-children. [Philippe]
+
+- Bind Control+Alt+Mouse 1/2 to move and resize father frame in main mode [Philippe]
+  
 
 
 MAYBE
@@ -60,8 +71,3 @@ Operation:
 
 - cd/pwd a la shell to navigate throu frames. [Philippe] 
 
-
-NEVER
-=====
-
-Nothing here for now.

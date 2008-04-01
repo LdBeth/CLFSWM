@@ -314,7 +314,7 @@ Window types are in +WINDOW-TYPES+.")
     (with-xlib-protect
       (raise-window window)
       (xlib:set-input-focus *display* window :parent))))
-    ;;(xlib:set-input-focus *display* :pointer-root :pointer-root)) ;;PHIL
+
 
 
 
