@@ -78,6 +78,35 @@
 
 
 
+;;; Bind or jump functions
+(define-main-key ("1" :mod-1) 'bind-or-jump-1)
+(define-main-key ("2" :mod-1) 'bind-or-jump-2)
+(define-main-key ("3" :mod-1) 'bind-or-jump-3)
+(define-main-key ("4" :mod-1) 'bind-or-jump-4)
+(define-main-key ("5" :mod-1) 'bind-or-jump-5)
+(define-main-key ("6" :mod-1) 'bind-or-jump-6)
+(define-main-key ("7" :mod-1) 'bind-or-jump-7)
+(define-main-key ("8" :mod-1) 'bind-or-jump-8)
+(define-main-key ("9" :mod-1) 'bind-or-jump-9)
+(define-main-key ("0" :mod-1) 'bind-or-jump-10)
+
+
+;; For an azery keyboard:
+;;(define-main-key ("ampersand" :mod-1) 'bind-or-jump-1)
+;;(define-main-key ("eacute" :mod-1) 'bind-or-jump-2)
+;;(define-main-key ("quotedbl" :mod-1) 'bind-or-jump-3)
+;;(define-main-key ("quoteright" :mod-1) 'bind-or-jump-4)
+;;(define-main-key ("parenleft" :mod-1) 'bind-or-jump-5)
+;;(define-main-key ("minus" :mod-1) 'bind-or-jump-6)
+;;(define-main-key ("egrave" :mod-1) 'bind-or-jump-7)
+;;(define-main-key ("underscore" :mod-1) 'bind-or-jump-8)
+;;(define-main-key ("ccedilla" :mod-1) 'bind-or-jump-9)
+;;(define-main-key ("agrave" :mod-1) 'bind-or-jump-10)
+
+
+
+
+
 ;;; Mouse actions
 (defun mouse-click-to-focus-and-move-window (window root-x root-y)
   "Move and focus the current child - Create a new frame on the root window"

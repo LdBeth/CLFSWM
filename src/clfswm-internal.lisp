@@ -111,6 +111,22 @@
   "???")
 
 
+(defgeneric child-fullname (child))
+
+(defmethod child-fullname ((child xlib:window))
+  (format nil "~A (~A)" (xlib:wm-name child) (xlib:get-wm-class child)))
+
+(defmethod child-fullname ((child frame))
+  (aif (frame-name child)
+       (format nil "~A (Frame ~A)" it (frame-number child))
+       (format nil "Frame ~A" (frame-number child))))
+
+(defmethod child-fullname (child)
+  (declare (ignore child))
+  "???")
+
+
+
 
 (defgeneric rename-child (child name))
 

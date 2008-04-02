@@ -40,6 +40,7 @@
 	   :expand-newline
 	   :ensure-list
 	   :ensure-printable
+	   :ensure-n-elems
 	   :find-assoc-word
 	   :print-space
 	   :escape-string
@@ -198,6 +199,15 @@ Return the result of the last hook"
 (defun ensure-printable (string &optional (new #\?))
   "Ensure a string is printable in ascii"
   (substitute-if-not new #'standard-char-p string))
+
+
+(defun ensure-n-elems (list n)
+  "Ensure that list has exactly n elements"
+  (let ((length (length list)))
+    (cond ((= length n) list)
+	  ((< length n) (ensure-n-elems (append list '(nil)) n))
+	  ((> length n) (ensure-n-elems (butlast list) n)))))
+      
 
 
 

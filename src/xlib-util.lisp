@@ -70,7 +70,8 @@ Window types are in +WINDOW-TYPES+.")
        (progn
 	 ,@body)
      ((or xlib:match-error xlib:window-error xlib:drawable-error) (c)
-       (dbg c ',body))))
+       (declare (ignore c)))))
+       ;;(dbg c ',body))))
 
 
 

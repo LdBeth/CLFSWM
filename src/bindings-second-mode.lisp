@@ -404,6 +404,9 @@
 (define-second-mouse (1) 'sm-mouse-click-to-focus-and-move)
 (define-second-mouse (3) 'sm-mouse-click-to-focus-and-resize)
 
+(define-second-mouse (1 :mod-1) 'mouse-click-to-focus-and-move-window)
+(define-second-mouse (3 :mod-1) 'mouse-click-to-focus-and-resize-window)
+
 (define-second-mouse (4) 'sm-mouse-select-next-level)
 (define-second-mouse (5) 'sm-mouse-select-previous-level)
 

@@ -505,7 +505,17 @@
 	       (handle-event (&rest event-slots &key event-key &allow-other-keys)
 		 (case event-key
 		   (:motion-notify (apply #'motion-notify event-slots))
-		   (:button-release (setf done t)))
+		   (:button-release (setf done t))
+		   (:configure-request (call-hook *configure-request-hook* event-slots))
+		   (:configure-notify (call-hook *configure-notify-hook* event-slots))
+		   (:map-request (call-hook *map-request-hook* event-slots))
+		   (:unmap-notify (call-hook *unmap-notify-hook* event-slots))
+		   (:destroy-notify (call-hook *destroy-notify-hook* event-slots))
+		   (:mapping-notify (call-hook *mapping-notify-hook* event-slots))
+		   (:property-notify (call-hook *property-notify-hook* event-slots))
+		   (:create-notify (call-hook *create-notify-hook* event-slots))
+		   (:enter-notify (call-hook *enter-notify-hook* event-slots))
+		   (:exposure (call-hook *exposure-hook* event-slots)))
 		 t))
 	(when frame
 	  (loop until done
@@ -537,7 +547,17 @@
 	       (handle-event (&rest event-slots &key event-key &allow-other-keys)
 		 (case event-key
 		   (:motion-notify (apply #'motion-notify event-slots))
-		   (:button-release (setf done t)))
+		   (:button-release (setf done t))
+		   (:configure-request (call-hook *configure-request-hook* event-slots))
+		   (:configure-notify (call-hook *configure-notify-hook* event-slots))
+		   (:map-request (call-hook *map-request-hook* event-slots))
+		   (:unmap-notify (call-hook *unmap-notify-hook* event-slots))
+		   (:destroy-notify (call-hook *destroy-notify-hook* event-slots))
+		   (:mapping-notify (call-hook *mapping-notify-hook* event-slots))
+		   (:property-notify (call-hook *property-notify-hook* event-slots))
+		   (:create-notify (call-hook *create-notify-hook* event-slots))
+		   (:enter-notify (call-hook *enter-notify-hook* event-slots))
+		   (:exposure (call-hook *exposure-hook* event-slots)))
 		 t))
 	(when frame
 	  (loop until done
@@ -676,3 +696,49 @@ For window: set current child to window or its father according to window-father
     (produce-doc-html-in-file tempfile))
   (sleep 1)
   (do-shell (format nil "~A ~A" browser tempfile)))
+
+
+
+;;;  Bind or jump functions
+(let ((key-slots (make-array 10 :initial-element nil))
+      (current-slot 0))
+  (defun bind-on-slot ()
+    "Bind current child to slot"
+    (setf (aref key-slots current-slot) *current-child*))
+
+  (defun remove-binding-on-slot ()
+    "Remove binding on slot"
+    (setf (aref key-slots current-slot) nil))
+
+  (defun jump-to-slot ()
+    "Jump to slot"
+    (hide-all *current-root*)
+    (setf *current-root* (aref key-slots current-slot)
+	  *current-child* *current-root*)
+    (focus-all-children *current-child* *current-child*)
+    (show-all-children))
+  
+  (defun bind-or-jump (n)
+    (let ((default-bind `("Return" bind-on-slot
+				   ,(format nil "Bind slot ~A on child: ~A" n (child-fullname *current-child*)))))
+      (setf current-slot (- n 1))
+      (info-mode-menu (aif (aref key-slots current-slot)
+			   `(,default-bind
+				("BackSpace" remove-binding-on-slot
+					     ,(format nil "Remove slot ~A binding on child: ~A" n (child-fullname *current-child*)))
+				("   -  " nil " -")
+				("Tab" jump-to-slot
+					 ,(format nil "Jump to child: ~A" (aif (aref key-slots current-slot)
+									       (child-fullname it)
+									       "Not set - Please, bind it with Return"))))
+			   (list default-bind))))))
+
+(defmacro def-bind-or-jump ()
+  `(progn
+     ,@(loop for i from 1 to 10
+	  collect `(defun ,(intern (format nil "BIND-OR-JUMP-~A" i)) ()
+		     ,(format nil "Bind or jump to the child on slot ~A" i)
+		     (bind-or-jump ,i)))))
+
+
+(def-bind-or-jump)

@@ -294,12 +294,14 @@
 (defun info-mode-menu (item-list &key (x 0) (y 0) (width nil) (height nil))
   "Open an info help menu.
 Item-list is: '((key function) (key function))
+or with explicit docstring: '((key function \"documentation 1\") (key function \"bla bla\") (key function)) 
 key is a character, a keycode or a keysym"
   (let ((info-list nil)
 	(action nil))
     (dolist (item item-list)
-      (destructuring-bind (key function) item
-	(push (format nil "~A: ~A" key (documentation function 'function))
+      (destructuring-bind (key function explicit-doc) (ensure-n-elems item 3)
+	(push (format nil "~@(~A~): ~A" key (or explicit-doc
+						(documentation function 'function)))
 	      info-list)
 	(define-info-key-fun (list key 0)
 	    (lambda (&optional args)
