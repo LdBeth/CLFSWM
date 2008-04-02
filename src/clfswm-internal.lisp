@@ -339,12 +339,14 @@
       (get-fullscreen-size)))
 
 
+
 (defgeneric adapt-child-to-father (child father))
 
 (defmethod adapt-child-to-father ((window xlib:window) father)
   (with-xlib-protect
       (multiple-value-bind (nx ny nw nh raise-p)
 	  (get-father-layout window father)
+	(setf nw (max nw 1)  nh (max nh 1))
 	(let ((change (or (/= (xlib:drawable-x window) nx)
 			  (/= (xlib:drawable-y window) ny)
 			  (/= (xlib:drawable-width window) nw)
@@ -360,7 +362,9 @@
       (multiple-value-bind (nx ny nw nh raise-p)
 	  (get-father-layout frame father)
 	(with-slots (rx ry rw rh window) frame
-	  (setf rx nx  ry ny  rw nw  rh nh)
+	  (setf rx nx  ry ny
+		rw (max nw 1)
+		rh (max nh 1))
 	  (let ((change (or (/= (xlib:drawable-x window) rx)
 			    (/= (xlib:drawable-y window) ry)
 			    (/= (xlib:drawable-width window) rw)

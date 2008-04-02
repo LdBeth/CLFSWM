@@ -8,7 +8,6 @@ URGENT PROBLEMS
 Should handle these soon.
 
 Rewrote all useful code present in 0801 version.
-- Hide a window when its size is less than minimal hint size. [Philippe]
 - Bind alt+1/2/3/4... to a particular child (current root and current child) [Philippe]
   Open a menu: Space -> jump to child  Enter -> bind current child to key
 
