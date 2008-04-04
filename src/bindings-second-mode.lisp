@@ -353,6 +353,36 @@
 (define-second-key ("Menu" :control) 'toggle-show-root-frame)
 
 
+;;; Bind or jump functions
+(define-second-key ("1" :mod-1) 'bind-or-jump 1)
+(define-second-key ("2" :mod-1) 'bind-or-jump 2)
+(define-second-key ("3" :mod-1) 'bind-or-jump 3)
+(define-second-key ("4" :mod-1) 'bind-or-jump 4)
+(define-second-key ("5" :mod-1) 'bind-or-jump 5)
+(define-second-key ("6" :mod-1) 'bind-or-jump 6)
+(define-second-key ("7" :mod-1) 'bind-or-jump 7)
+(define-second-key ("8" :mod-1) 'bind-or-jump 8)
+(define-second-key ("9" :mod-1) 'bind-or-jump 9)
+(define-second-key ("0" :mod-1) 'bind-or-jump 10)
+
+
+;; For an azery keyboard:
+;;(undefine-second-multi-keys (#\1 :mod-1) (#\2 :mod-1) (#\3 :mod-1)
+;;			    (#\4 :mod-1) (#\5 :mod-1) (#\6 :mod-1)
+;;			    (#\7 :mod-1) (#\8 :mod-1) (#\9 :mod-1) (#\0 :mod-1))
+;;(define-second-key ("ampersand" :mod-1) 'bind-or-jump 1)
+;;(define-second-key ("eacute" :mod-1) 'bind-or-jump 2)
+;;(define-second-key ("quotedbl" :mod-1) 'bind-or-jump 3)
+;;(define-second-key ("quoteright" :mod-1) 'bind-or-jump 4)
+;;(define-second-key ("parenleft" :mod-1) 'bind-or-jump 5)
+;;(define-second-key ("minus" :mod-1) 'bind-or-jump 6)
+;;(define-second-key ("egrave" :mod-1) 'bind-or-jump 7)
+;;(define-second-key ("underscore" :mod-1) 'bind-or-jump 8)
+;;(define-second-key ("ccedilla" :mod-1) 'bind-or-jump 9)
+;;(define-second-key ("agrave" :mod-1) 'bind-or-jump 10)
+
+
+
 
 
 

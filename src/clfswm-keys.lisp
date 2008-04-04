@@ -25,6 +25,11 @@
 
 (in-package :clfswm)
 
+
+(defparameter *fun-press* #'first)
+(defparameter *fun-release* #'second)
+
+
 (defun define-hash-table-key-name (hash-table name)
   (setf (gethash 'name hash-table) name))
 
@@ -44,12 +49,12 @@
 	(undefine-name (create-symbol "undefine-" name "-key"))
 	(undefine-multi-name (create-symbol "undefine-" name "-multi-keys")))
     `(progn
-       (defun ,name-key-fun (key function &optional keystring)
+       (defun ,name-key-fun (key function &rest args)
 	 "Define a new key, a key is '(char '(modifier list))"
-	 (setf (gethash key ,hashtable) (list function keystring)))
+	 (setf (gethash key ,hashtable) (list function args)))
       
-       (defmacro ,name-key ((key &rest modifiers) function &optional keystring)
-	 `(,',name-key-fun (list ,key ,(modifiers->state modifiers)) ,function ,keystring))
+       (defmacro ,name-key ((key &rest modifiers) function &rest args)
+	 `(,',name-key-fun (list ,key ,(modifiers->state modifiers)) ,function ,@args))
       
        (defmacro ,undefine-name ((key &rest modifiers))
 	 `(remhash (list ,key ,(modifiers->state modifiers)) ,',hashtable))
@@ -65,12 +70,12 @@
 	(name-mouse (create-symbol "define-" name))
 	(undefine-name (create-symbol "undefine-" name)))
     `(progn
-       (defun ,name-mouse-fun (button function-press &optional keystring function-release)
+       (defun ,name-mouse-fun (button function-press &optional function-release &rest args)
 	 "Define a new mouse button action, a button is '(button number '(modifier list))"
-	 (setf (gethash button ,hashtable) (list function-press keystring function-release)))
+	 (setf (gethash button ,hashtable) (list function-press function-release args)))
       
-       (defmacro ,name-mouse ((button &rest modifiers) function-press &optional function-release keystring)
-	 `(,',name-mouse-fun (list ,button ,(modifiers->state modifiers)) ,function-press ,keystring ,function-release))
+       (defmacro ,name-mouse ((button &rest modifiers) function-press &optional function-release &rest args)
+	 `(,',name-mouse-fun (list ,button ,(modifiers->state modifiers)) ,function-press ,function-release ,@args))
 
        (defmacro ,undefine-name ((key &rest modifiers))
 	 `(remhash (list ,key ,(modifiers->state modifiers)) ,',hashtable)))))
@@ -133,7 +138,7 @@
 	     (multiple-value-bind (function foundp)
 		 (gethash (list key state) hash-table-key)
 	       (when (and foundp (first function))
-		 (first function))))
+		 function)))
 	   (from-code ()
 	     (function-from code))
 	   (from-char ()
@@ -152,23 +157,19 @@
 (defun funcall-key-from-code (hash-table-key code state &rest args)
   (let ((function (find-key-from-code hash-table-key code state)))
     (when function
-      (apply function args)
+      (apply (first function) (append args (second function)))
       t)))
 
 
-
 (defun funcall-button-from-code (hash-table-key code state window root-x root-y
-				 &optional (action #'first) args)
-  "Action: first=press third=release - Return t if a function is found"
+				 &optional (action *fun-press*) args)
   (let ((state (modifiers->state (set-difference (state->modifiers state)
 						 '(:button-1 :button-2 :button-3 :button-4 :button-5)))))
     (multiple-value-bind (function foundp)
 	(gethash (list code state) hash-table-key)
       (if (and foundp (funcall action function))
 	  (progn
-	    (if args
-		(funcall (funcall action function) window root-x root-y args)
-		(funcall (funcall action function) window root-x root-y))
+	    (apply (funcall action function) `(,window ,root-x ,root-y ,@(append args (third function))))
 	    t)
 	  nil))))
 
@@ -201,8 +202,7 @@
 					      ,(clean-string (format nil "~{~@(~S ~)~}" (state->modifiers (second k)))))
 					     ("td align=\"center\" nowrap"
 					      ,(clean-string (format nil "~@(~S~)"
-								     (or (second v)
-									 (and (stringp (first k))
+								     (or (and (stringp (first k))
 									      (intern (string-upcase (first k))))
 									 (first k)))))
 					     ("td style=\"color:#0000FF\" nowrap" ,(documentation (or (first v) (third v)) 'function)))
@@ -247,8 +247,7 @@
 		 (when (consp k)
 		   (format stream "~&~20@<~{~@(~A~) ~}~> ~13@<~@(~A~)~>   ~A~%"
 			   (state->modifiers (second k))
-			   (remove #\# (remove #\\ (format nil "~S" (or (second v)
-									(and (stringp (first k))
+			   (remove #\# (remove #\\ (format nil "~S" (or (and (stringp (first k))
 									     (intern (string-upcase (first k))))
 									(first k)))))
 			   (documentation (or (first v) (third v)) 'function))))

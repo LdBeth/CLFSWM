@@ -1,3 +1,16 @@
+2008-04-04  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/bindings-second-mode.lisp: Add keys definitions to
+	bind-or-jump in the second mode.
+
+	* src/clfswm-util.lisp (bind-or-jump): remove the auto-defining
+	macro for bind-or-jump-(1|2|3...).
+
+	* src/clfswm-keys.lisp (define-define-key/mouse): Allow additional
+	arguments to function. This allow to do things like:
+ 	(define-main-key (key) 'my-function 10 20 'foo) -> 10 20 and 'foo
+	are passed to my-function on key press.
+
 2008-04-03  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (bind-or-jump): New (great) function.

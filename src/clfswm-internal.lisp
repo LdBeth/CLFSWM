@@ -238,18 +238,6 @@
 
 
 
-
-
-;;(defun get-current-child ()
-;;  "Return the current focused child"
-;;  (unless (equal *current-child* *root-frame*)
-;;    (typecase *current-child*
-;;      (xlib:window *current-child*)
-;;      (frame (if (xlib:window-p (first (frame-child *current-child*)))
-;;		 (first (frame-child *current-child*))
-;;		 *current-child*)))))
-
-
 (defun find-child (to-find root)
   "Find to-find in root or in its children"
   (with-all-children (root child)

@@ -31,7 +31,6 @@
 ;;;| CONFIG - Bindings main mode
 ;;;`-----
 
-
 (define-main-key ("F1" :mod-1) 'help-on-clfswm)
 
 (defun quit-clfswm ()
@@ -79,29 +78,32 @@
 
 
 ;;; Bind or jump functions
-(define-main-key ("1" :mod-1) 'bind-or-jump-1)
-(define-main-key ("2" :mod-1) 'bind-or-jump-2)
-(define-main-key ("3" :mod-1) 'bind-or-jump-3)
-(define-main-key ("4" :mod-1) 'bind-or-jump-4)
-(define-main-key ("5" :mod-1) 'bind-or-jump-5)
-(define-main-key ("6" :mod-1) 'bind-or-jump-6)
-(define-main-key ("7" :mod-1) 'bind-or-jump-7)
-(define-main-key ("8" :mod-1) 'bind-or-jump-8)
-(define-main-key ("9" :mod-1) 'bind-or-jump-9)
-(define-main-key ("0" :mod-1) 'bind-or-jump-10)
+(define-main-key ("1" :mod-1) 'bind-or-jump 1)
+(define-main-key ("2" :mod-1) 'bind-or-jump 2)
+(define-main-key ("3" :mod-1) 'bind-or-jump 3)
+(define-main-key ("4" :mod-1) 'bind-or-jump 4)
+(define-main-key ("5" :mod-1) 'bind-or-jump 5)
+(define-main-key ("6" :mod-1) 'bind-or-jump 6)
+(define-main-key ("7" :mod-1) 'bind-or-jump 7)
+(define-main-key ("8" :mod-1) 'bind-or-jump 8)
+(define-main-key ("9" :mod-1) 'bind-or-jump 9)
+(define-main-key ("0" :mod-1) 'bind-or-jump 10)
 
 
 ;; For an azery keyboard:
-;;(define-main-key ("ampersand" :mod-1) 'bind-or-jump-1)
-;;(define-main-key ("eacute" :mod-1) 'bind-or-jump-2)
-;;(define-main-key ("quotedbl" :mod-1) 'bind-or-jump-3)
-;;(define-main-key ("quoteright" :mod-1) 'bind-or-jump-4)
-;;(define-main-key ("parenleft" :mod-1) 'bind-or-jump-5)
-;;(define-main-key ("minus" :mod-1) 'bind-or-jump-6)
-;;(define-main-key ("egrave" :mod-1) 'bind-or-jump-7)
-;;(define-main-key ("underscore" :mod-1) 'bind-or-jump-8)
-;;(define-main-key ("ccedilla" :mod-1) 'bind-or-jump-9)
-;;(define-main-key ("agrave" :mod-1) 'bind-or-jump-10)
+;;(undefine-main-multi-keys (#\1 :mod-1) (#\2 :mod-1) (#\3 :mod-1)
+;;			  (#\4 :mod-1) (#\5 :mod-1) (#\6 :mod-1)
+;;			  (#\7 :mod-1) (#\8 :mod-1) (#\9 :mod-1) (#\0 :mod-1))
+;;(define-main-key ("ampersand" :mod-1) 'bind-or-jump 1)
+;;(define-main-key ("eacute" :mod-1) 'bind-or-jump 2)
+;;(define-main-key ("quotedbl" :mod-1) 'bind-or-jump 3)
+;;(define-main-key ("quoteright" :mod-1) 'bind-or-jump 4)
+;;(define-main-key ("parenleft" :mod-1) 'bind-or-jump 5)
+;;(define-main-key ("minus" :mod-1) 'bind-or-jump 6)
+;;(define-main-key ("egrave" :mod-1) 'bind-or-jump 7)
+;;(define-main-key ("underscore" :mod-1) 'bind-or-jump 8)
+;;(define-main-key ("ccedilla" :mod-1) 'bind-or-jump 9)
+;;(define-main-key ("agrave" :mod-1) 'bind-or-jump 10)
 
 
 
@@ -117,8 +119,6 @@
   "Resize and focus the current child - Create a new frame on the root window"
   (declare (ignore window))
   (mouse-focus-move/resize-generic root-x root-y #'resize-frame t))
-
-
 
 
 (define-main-mouse (1) 'mouse-click-to-focus-and-move)

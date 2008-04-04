@@ -37,19 +37,19 @@
 
 (defun handle-button-press (&rest event-slots &key code state window root-x root-y &allow-other-keys)
   (declare (ignore event-slots))
-  (unless (funcall-button-from-code *main-mouse* code state window root-x root-y #'first)
+  (unless (funcall-button-from-code *main-mouse* code state window root-x root-y *fun-press*)
     (replay-button-event)))
 
 
 (defun handle-button-release (&rest event-slots &key code state window root-x root-y &allow-other-keys)
   (declare (ignore event-slots))
-  (unless (funcall-button-from-code *main-mouse* code state window root-x root-y #'third)
+  (unless (funcall-button-from-code *main-mouse* code state window root-x root-y *fun-release*)
     (replay-button-event)))
 
 (defun handle-motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
   (declare (ignore event-slots))
   (unless (compress-motion-notify)
-    (funcall-button-from-code *main-mouse* 'motion 0 root-x root-y #'first)))
+    (funcall-button-from-code *main-mouse* 'motion 0 root-x root-y *fun-press*)))
 
 
 (defun handle-configure-request (&rest event-slots &key stack-mode #|parent|# window #|above-sibling|#

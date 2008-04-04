@@ -701,7 +701,7 @@ For window: set current child to window or its father according to window-father
 
 ;;;  Bind or jump functions
 (let ((key-slots (make-array 10 :initial-element nil))
-      (current-slot 0))
+      (current-slot 1))
   (defun bind-on-slot ()
     "Bind current child to slot"
     (setf (aref key-slots current-slot) *current-child*))
@@ -719,6 +719,7 @@ For window: set current child to window or its father according to window-father
     (show-all-children))
   
   (defun bind-or-jump (n)
+    "Bind or jump to a slot"
     (let ((default-bind `("Return" bind-on-slot
 				   ,(format nil "Bind slot ~A on child: ~A" n (child-fullname *current-child*)))))
       (setf current-slot (- n 1))
@@ -732,13 +733,3 @@ For window: set current child to window or its father according to window-father
 									       (child-fullname it)
 									       "Not set - Please, bind it with Return"))))
 			   (list default-bind))))))
-
-(defmacro def-bind-or-jump ()
-  `(progn
-     ,@(loop for i from 1 to 10
-	  collect `(defun ,(intern (format nil "BIND-OR-JUMP-~A" i)) ()
-		     ,(format nil "Bind or jump to the child on slot ~A" i)
-		     (bind-or-jump ,i)))))
-
-
-(def-bind-or-jump)
