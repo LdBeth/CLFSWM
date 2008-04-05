@@ -1,3 +1,9 @@
+2008-04-05  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-nw-hooks.lisp (leave-focus-frame-nw-hook): New
+	nw-hook: Open the next window in the current frame and leave the
+	focus to the current child.
+
 2008-04-04  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/bindings-second-mode.lisp: Add keys definitions to

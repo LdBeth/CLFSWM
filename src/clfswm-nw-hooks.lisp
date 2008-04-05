@@ -129,3 +129,23 @@
   (set-nw-hook #'open-in-new-frame-in-root-frame-nw-hook))
 
 (register-nw-hook 'set-open-in-new-frame-in-root-frame-nw-hook)
+
+
+
+;;; Open a new window but leave the focus on the current child
+(defun leave-focus-frame-nw-hook (frame window)
+  "Open the next window in the current frame and leave the focus to the current child"
+  (declare (ignore frame))
+  (leave-if-not-frame *current-child*)
+  (when (frame-p *current-child*)
+    (pushnew window (frame-child *current-child*))
+    (when (second (frame-child *current-child*))
+      (rotatef (first (frame-child *current-child*))
+	       (second (frame-child *current-child*)))))
+  (default-window-placement *current-child* window))
+
+(defun set-leave-focus-frame-nw-hook ()
+  "Open the next window in the current frame and leave the focus to the current child"
+  (set-nw-hook #'leave-focus-frame-nw-hook))
+
+(register-nw-hook 'set-leave-focus-frame-nw-hook)
