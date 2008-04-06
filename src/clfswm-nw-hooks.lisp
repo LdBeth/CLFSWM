@@ -134,7 +134,7 @@
 
 ;;; Open a new window but leave the focus on the current child
 (defun leave-focus-frame-nw-hook (frame window)
-  "Open the next window in the current frame and leave the focus to the current child"
+  "Open the next window in the current frame and leave the focus on the current child"
   (declare (ignore frame))
   (leave-if-not-frame *current-child*)
   (when (frame-p *current-child*)
@@ -145,7 +145,7 @@
   (default-window-placement *current-child* window))
 
 (defun set-leave-focus-frame-nw-hook ()
-  "Open the next window in the current frame and leave the focus to the current child"
+  "Open the next window in the current frame and leave the focus on the current child"
   (set-nw-hook #'leave-focus-frame-nw-hook))
 
 (register-nw-hook 'set-leave-focus-frame-nw-hook)
