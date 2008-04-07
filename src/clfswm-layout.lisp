@@ -47,6 +47,11 @@
     (setf (frame-layout *current-child*) layout)
     (leave-second-mode)))
 
+(defun set-layout-dont-leave (layout)
+  "Set the layout of the current child"
+  (when (frame-p *current-child*)
+    (setf (frame-layout *current-child*) layout)))
+
 
 (defun get-managed-child (father)
   "Return only window in normal mode who can be tiled"
@@ -55,8 +60,26 @@
 		   (and (xlib:window-p x) (not (eql (window-type x) :normal))))
 	       (frame-child father))))
 
-(defun register-layout (layout)
-  (setf *layout-list* (append *layout-list* (list layout))))
+
+
+
+(defmacro register-layout (layout)
+  `(progn
+     (setf *layout-list* (append *layout-list* (list ',layout)))
+     (defun ,(intern (format nil "~A-ONCE" layout)) ()
+       (set-layout-dont-leave #',(intern (subseq (format nil "~A" layout) 4)))
+       (show-all-children)
+       (fixe-real-size-current-child)
+       (set-layout-dont-leave #'no-layout))))
+
+
+(defun set-layout-once-documentation ()
+  (loop :for l :in *layout-list*
+     :do (setf (documentation (create-symbol (format nil "~A" l) "-ONCE") 'function)
+	       (documentation l 'function))))
+
+
+
 
 (defun layout-ask-size (msg slot &optional (min 80))
   (when (frame-p *current-child*)
@@ -91,7 +114,7 @@
   "Maximize windows in there frame - leave frame to there size (no layout)"
   (set-layout #'no-layout))
 
-(register-layout 'set-no-layout)
+(register-layout set-no-layout)
 
 
 
@@ -117,7 +140,7 @@
   "Tile child in its frame"
   (set-layout #'tile-layout))
 
-(register-layout 'set-tile-layout)
+(register-layout set-tile-layout)
 
 
 ;;; Tile Left
@@ -149,7 +172,7 @@
   (layout-ask-size "Tile size in percent (%)" :tile-size)
   (set-layout #'tile-left-layout))
 
-(register-layout 'set-tile-left-layout)
+(register-layout set-tile-left-layout)
 
 
 
@@ -183,7 +206,7 @@
   (set-layout #'tile-right-layout))
 
 
-(register-layout 'set-tile-right-layout)
+(register-layout set-tile-right-layout)
 
 
 
@@ -217,7 +240,7 @@
   (layout-ask-size "Tile size in percent (%)" :tile-size)
   (set-layout #'tile-top-layout))
 
-(register-layout 'set-tile-top-layout)
+(register-layout set-tile-top-layout)
 
 
 
@@ -252,7 +275,7 @@
   (set-layout #'tile-bottom-layout))
 
 
-(register-layout 'set-tile-bottom-layout)
+(register-layout set-tile-bottom-layout)
 
 
 
@@ -278,9 +301,9 @@
 	      (round (- dy (* dy size 2) 2))
 	      t))))
 
-(defun set-space-tile-layout ()
+(defun set-tile-space-layout ()
   "Tile Space: tile child in its frame leaving spaces between them"
   (layout-ask-size "Space size in percent (%)" :tile-space-size 10)
   (set-layout #'tile-space-layout))
 
-(register-layout 'set-space-tile-layout)
+(register-layout set-tile-space-layout)

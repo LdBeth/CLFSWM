@@ -236,6 +236,23 @@
 	  w (w-px->fl prw father)
 	  h (h-px->fl prh father))))
 
+(defun fixe-real-size (frame father)
+  "Fixe real (pixel) coordinates in float coordinates"
+  (when (frame-p frame)
+    (with-slots (x y w h rx ry rw rh) frame
+      (setf x (x-px->fl rx father)
+	    y (y-px->fl ry father)
+	    w (w-px->fl rw father)
+	    h (h-px->fl rh father)))))
+
+(defun fixe-real-size-current-child ()
+  "Fixe real (pixel) coordinates in float coordinates for children in the current child"
+  (when (frame-p *current-child*)
+    (dolist (child (frame-child *current-child*))
+      (fixe-real-size child *current-child*))))
+
+
+
 
 
 (defun find-child (to-find root)

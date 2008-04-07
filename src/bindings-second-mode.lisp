@@ -47,6 +47,11 @@
   "Frame layout menu"
   (info-mode-menu (keys-from-list *layout-list*)))
 
+(defun frame-layout-once-menu ()
+  "Frame layout menu (Set only once)"
+  (info-mode-menu (keys-from-list (loop :for l :in *layout-list*
+				     :collect (create-symbol (format nil "~A" l) "-ONCE")))))
+
 (defun frame-nw-hook-menu ()
   "Frame new window hook menu"
   (info-mode-menu (keys-from-list *nw-hook-list*)))
@@ -220,6 +225,7 @@
   "Frame menu"
   (info-mode-menu '((#\a frame-adding-menu)
 		    (#\l frame-layout-menu)
+		    (#\o frame-layout-once-menu)
 		    (#\n frame-nw-hook-menu)
 		    (#\m frame-movement-menu)
 		    (#\r rename-current-child)

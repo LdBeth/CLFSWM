@@ -1,3 +1,17 @@
+2008-04-07  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/bindings-second-mode.lisp (frame-layout-once-menu): Set the
+	layout only one time and revert to no-layout to freely handle
+	frames.
+
+	* src/clfswm-nw-hooks.lisp
+	(open-in-new-frame-in-root-frame-nw-hook): Tile layout with spaces
+	with new created window.
+
+	* src/clfswm-layout.lisp (register-layout): Now register
+	automatically a once layout to set the layout only one time and
+	revert to no-layout to freely handle frames.
+
 2008-04-05  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-nw-hooks.lisp (leave-focus-frame-nw-hook): New

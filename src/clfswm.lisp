@@ -217,6 +217,7 @@
 							      :pointer-motion))
   ;;(intern-atoms *display*)
   (netwm-set-properties)
+  (set-layout-once-documentation)
   (xlib:display-force-output *display*)
   (setf *child-selection* nil)
   (setf *root-frame* (create-frame :name "Root" :number 0) ;; :layout #'tile-space-layout)

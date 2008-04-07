@@ -120,6 +120,8 @@
     (pushnew new-frame (frame-child *root-frame*))
     (pushnew window (frame-child new-frame))
     (switch-to-root-frame)
+    (setf *current-child* *current-root*)
+    (set-tile-space-layout-once)
     (setf *current-child* new-frame)
     (default-window-placement new-frame window))
   (setf (frame-nw-hook frame) nil))
