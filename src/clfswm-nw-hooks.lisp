@@ -119,7 +119,7 @@
   (let ((new-frame (create-frame)))
     (pushnew new-frame (frame-child *root-frame*))
     (pushnew window (frame-child new-frame))
-    (switch-to-root-frame)
+    (switch-to-root-frame :show-later t)
     (setf *current-child* *current-root*)
     (set-tile-space-layout-once)
     (setf *current-child* new-frame)

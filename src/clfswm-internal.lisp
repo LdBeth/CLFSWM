@@ -593,18 +593,20 @@
   (show-all-children))
 
 
-(defun switch-to-root-frame ()
+(defun switch-to-root-frame (&key (show-later nil))
   "Switch to the root frame"
   (hide-all *current-root*)
   (setf *current-root* *root-frame*)
-  (show-all-children))
+  (unless show-later
+    (show-all-children)))
 
-(defun switch-and-select-root-frame ()
+(defun switch-and-select-root-frame (&key (show-later nil))
   "Switch and select the root frame"
   (hide-all *current-root*)
   (setf *current-root* *root-frame*)
   (setf *current-child* *current-root*)
-  (show-all-children))
+  (unless show-later
+    (show-all-children)))
 
 
 (defun toggle-show-root-frame ()

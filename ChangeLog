@@ -1,3 +1,8 @@
+2008-04-09  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (switch-to-root-frame): show later -
+	new key parameter to have less flickering.
+
 2008-04-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/bindings-second-mode.lisp (frame-layout-once-menu): Set the
