@@ -194,7 +194,9 @@
 (defun init-display ()
   (setf *screen* (first (xlib:display-roots *display*))
 	*root* (xlib:screen-root *screen*)
-	*no-focus-window* (xlib:create-window :parent *root* :x 0 :y 0 :width 1 :height 1)
+	*no-focus-window* (xlib:create-window :parent *root* :x 0 :y 0 :width 1 :height 1
+					      :event-mask '(:key-press :key-release
+							    :button-press :button-release :pointer-motion))
 	*root-gc* (xlib:create-gcontext :drawable *root*
 					:foreground (get-color *color-unselected*)
 					:background (get-color "Black")
