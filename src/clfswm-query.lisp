@@ -112,7 +112,7 @@
 		 (setf result-string (subseq result-string 0 pos)))
 	       (handle-query-key (&rest event-slots &key root code state &allow-other-keys)
 		 (declare (ignore event-slots root))
-		 (let* ((modifiers (xlib:make-state-keys state))
+		 (let* ((modifiers (state->modifiers state))
 			(keysym (xlib:keycode->keysym *display* code (cond  ((member :shift modifiers) 1)
 									    ((member :mod-5 modifiers) 2)
 									    (t 0))))

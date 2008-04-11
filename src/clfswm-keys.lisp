@@ -99,29 +99,31 @@
 
 
 
-(defmacro define-ungrab/grab (name function hashtable)
-  `(defun ,name ()
-     (maphash #'(lambda (k v)
-		  (declare (ignore v))
-		  (when (consp k)
-		    (handler-case 
-			(let* ((key (first k))
-			       (keycode (typecase key
-					  (character (char->keycode key))
-					  (number key)
-					  (string (let ((keysym (keysym-name->keysym key)))
-						    (and keysym (xlib:keysym->keycodes *display* keysym)))))))
-			  (if keycode
-			      (,function *root* keycode :modifiers (second k))
-			      (format t "~&Grabbing error: Can't find key '~A'~%" key)))
-		      (error (c)
-			;;(declare (ignore c))
-			(format t "~&Grabbing error: Can't grab key '~A' (~A)~%" k c)))
-		    (force-output)))
-	      ,hashtable)))
-
-(define-ungrab/grab grab-main-keys xlib:grab-key *main-keys*)
-(define-ungrab/grab ungrab-main-keys xlib:ungrab-key *main-keys*)
+;;(defmacro define-ungrab/grab (name function hashtable)
+;;  `(defun ,name ()
+;;     (maphash #'(lambda (k v)
+;;		  (declare (ignore v))
+;;		  (when (consp k)
+;;		    (handler-case 
+;;			(let* ((key (first k))
+;;			       (modifiers (second k))
+;;			       (keycode (typecase key
+;;					  (character (char->keycode key))
+;;					  (number key)
+;;					  (string (let ((keysym (keysym-name->keysym key)))
+;;						    (when keysym
+;;						      (xlib:keysym->keycodes *display* keysym)))))))
+;;			  (if keycode
+;;			      (,function *root* keycode :modifiers modifiers)
+;;			      (format t "~&Grabbing error: Can't find key '~A'~%" key)))
+;;		      (error (c)
+;;			;;(declare (ignore c))
+;;			(format t "~&Grabbing error: Can't grab key '~A' (~A)~%" k c)))
+;;		    (force-output)))
+;;	      ,hashtable)))
+;;
+;;(define-ungrab/grab grab-main-keys xlib:grab-key *main-keys*)
+;;(define-ungrab/grab ungrab-main-keys xlib:ungrab-key *main-keys*)
 
 
 
@@ -134,9 +136,9 @@
 
 (defun find-key-from-code (hash-table-key code state)
   "Return the function associated to code/state"
-  (labels ((function-from (key)
+  (labels ((function-from (key &optional (new-state state))
 	     (multiple-value-bind (function foundp)
-		 (gethash (list key state) hash-table-key)
+		 (gethash (list key new-state) hash-table-key)
 	       (when (and foundp (first function))
 		 function)))
 	   (from-code ()
@@ -145,12 +147,18 @@
 	     (let ((char (keycode->char code state)))
 	       (function-from char)))
 	   (from-string ()
-	     (let* ((modifiers (xlib:make-state-keys state))
+	     (let* ((modifiers (state->modifiers state))
 		    (string (keysym->keysym-name (xlib:keycode->keysym *display* code (cond  ((member :shift modifiers) 1)
 											     ((member :mod-5 modifiers) 2)
 											     (t 0))))))
-	       (function-from string))))
-    (or (from-code) (from-char) (from-string))))
+	       (function-from string)))
+	   (from-string-no-shift ()
+	     (let* ((modifiers (state->modifiers state))
+		    (string (keysym->keysym-name (xlib:keycode->keysym *display* code (cond  ((member :shift modifiers) 1)
+											     ((member :mod-5 modifiers) 2)
+											     (t 0))))))
+	       (function-from string (modifiers->state (remove :shift modifiers))))))
+    (or (from-code) (from-char) (from-string) (from-string-no-shift))))
 
 
 

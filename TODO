@@ -11,8 +11,6 @@ Should handle these soon.
   and redisplay only the wanted child).  *** REALLY URGENT ***
   Split computation of geometry outside of show-all-children. [Philippe]
 
-- Rethink the keysym part with shift+1/!.
-
 - Hook to open next window in named/numbered frame [Philippe]
 
 - Undo/redo (any idea to implement this is welcome)

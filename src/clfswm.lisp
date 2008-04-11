@@ -32,7 +32,9 @@
 ;;; Main mode hooks
 (defun handle-key-press (&rest event-slots &key root code state &allow-other-keys)
   (declare (ignore event-slots root))
-  (funcall-key-from-code *main-keys* code state))
+  (if (funcall-key-from-code *main-keys* code state)
+      (stop-keyboard-event)   ;; Maybe TODO: report this in funcall-key-from-code to allow key stop/replay on funcall
+      (replay-keyboard-event)))
 
 
 (defun handle-button-press (&rest event-slots &key code state window root-x root-y &allow-other-keys)
@@ -200,18 +202,14 @@
 	*default-font* (xlib:open-font *display* *default-font-string*))
   (xgrab-init-pointer)
   (xgrab-init-keyboard)
-  ;;(xgrab-pointer *root* 66 67 '(:enter-window :button-press :button-release) t)  ;; PHIL
-  ;;(grab-pointer *root* '(:button-press :button-release)
-  ;;  		:owner-p t :sync-keyboard-p nil :sync-pointer-p nil)
-  ;;(grab-button *root* 1 nil ;;'(:button-press :button-release)
-  ;;	       :owner-p nil  :sync-keyboard-p nil :sync-pointer-p nil)
-  ;;(xlib:grab-pointer *root* nil :owner-p nil)
   (xlib:map-window *no-focus-window*)
   (dbg *display*)
   (setf (xlib:window-event-mask *root*) (xlib:make-event-mask :substructure-redirect
 							      :substructure-notify
 							      :property-change
 							      :exposure
+							      :key-press
+							      :key-release
 							      :button-press
 							      :button-release
 							      :pointer-motion))
@@ -228,7 +226,7 @@
   (call-hook *init-hook*)
   (process-existing-windows *screen*)
   (show-all-children)
-  (grab-main-keys)
+  ;;(grab-main-keys)
   (xlib:display-finish-output *display*))
 
 
@@ -270,7 +268,6 @@
   (handler-case
       (init-display)
     (xlib:access-error (c)
-      (ungrab-main-keys)
       (xlib:destroy-window *no-focus-window*)
       (xlib:close-display *display*)
       (format t "~&~A~&Maybe another window manager is running.~%" c)
@@ -279,28 +276,8 @@
   (unwind-protect
        (catch 'exit-main-loop
 	 (main-loop))
-    (ungrab-main-keys)
     (xlib:destroy-window *no-focus-window*)
     (xlib:close-display *display*)))
       
 
 
-
-;;(defun perform-click (type code state time)
-;;  "Send a button-{press, release} event for button-number. The type of the
-;;   sent event will be determined according to the type of the ev event
-;;   argument: if type key-press then send button-press, if key-release then
-;;   button-release is sent. The destination window will be retreived in the
-;;   ev event argument."
-;;  (flet ((my-query (win) (multiple-value-list (xlib:query-pointer win))))
-;;    (loop with window = *root*
-;;       for (x y ssp child nil root-x root-y root) = (my-query window)
-;;       while child do (setf window child)
-;;       finally
-;;       (progn
-;;	 (dbg window)
-;;	 (xlib:send-event window type nil
-;;			  :x x :y y :root-x root-x :root-y root-y
-;;			  :state state :code code
-;;			  :window window :event-window window :root root :child child
-;;			  :same-screen-p ssp :time time)))))

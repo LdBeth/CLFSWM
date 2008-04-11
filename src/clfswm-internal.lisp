@@ -737,6 +737,7 @@ managed."
 						(:transient 1)
 						(t 1)))
     (grab-all-buttons window)
+    (grab-all-keys window)
     (unless (do-all-frames-nw-hook window)
       (default-frame-nw-hook nil window))
     (netwm-add-in-client-list window)))

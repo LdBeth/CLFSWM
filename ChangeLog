@@ -1,3 +1,12 @@
+2008-04-11  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm.lisp (main): Keyboard handle strategie change: Grab
+	all keys by default and replay just what is needed. No change for
+	the second mode.
+
+	* src/clfswm-keys.lisp: remove grab/ungrab main keys.
+	(find-key-from-code): Test for shift and not shift presence.
+
 2008-04-09  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp (switch-to-root-frame): show later -

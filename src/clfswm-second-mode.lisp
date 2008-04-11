@@ -144,7 +144,7 @@
 
 (defun sm-handle-event (&rest event-slots &key display event-key &allow-other-keys)
   (declare (ignore display))
-  ;;(dbg event-key)
+  ;; (dbg event-key)
   (with-xlib-protect
     (case event-key
       (:button-press (call-hook *sm-button-press-hook* event-slots))
@@ -177,7 +177,7 @@
 					:border-width 1
 					:border (get-color *sm-border-color*)
 					:colormap (xlib:screen-default-colormap *screen*)
-					:event-mask '(:exposure))
+					:event-mask '(:exposure :key-press :key-release :button-press :button-release))
 	*sm-font* (xlib:open-font *display* *sm-font-string*)
 	*sm-gc* (xlib:create-gcontext :drawable *sm-window*
 				      :foreground (get-color *sm-foreground-color*)
@@ -187,7 +187,6 @@
   (xlib:map-window *sm-window*)
   (draw-second-mode-window)
   (no-focus)
-  (ungrab-main-keys)
   (xgrab-keyboard *root*)
   (xgrab-pointer *root* 66 67)
   (unwind-protect
@@ -202,7 +201,6 @@
     (xlib:destroy-window *sm-window*)
     (xungrab-keyboard)
     (xungrab-pointer)
-    (grab-main-keys)
     (show-all-children))
   (wait-no-key-or-button-press)
   (when *second-mode-program*

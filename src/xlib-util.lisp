@@ -37,7 +37,11 @@
 				:colormap-change
 				:focus-change
 				:enter-window
-				:exposure)
+				:exposure
+				:key-press
+				:key-release
+				:button-press
+				:button-release)
   "The events to listen for on managed windows.")
 
 
@@ -380,6 +384,7 @@ Window types are in +WINDOW-TYPES+.")
   (defun xgrab-keyboard (root)
     (setf keyboard-grabbed t)
     (xlib:grab-keyboard root :owner-p nil :sync-keyboard-p nil :sync-pointer-p nil))
+
   
   (defun xungrab-keyboard ()
     (setf keyboard-grabbed nil)
@@ -401,11 +406,35 @@ Window types are in +WINDOW-TYPES+.")
 		    :sync-pointer-p t
 		    :sync-keyboard-p nil))
 
+
+(defun ungrab-all-keys (window)
+  (xlib:ungrab-key window :any :modifiers :any))
+
+(defun grab-all-keys (window)
+  (ungrab-all-keys window)
+  (xlib:grab-key window :any
+		 :modifiers :any
+		 :owner-p nil
+		 :sync-pointer-p nil
+		 :sync-keyboard-p t))
+
+
+
+
+(defun stop-keyboard-event ()
+  (xlib:allow-events *display* :sync-keyboard))
+
+(defun replay-keyboard-event ()
+  (xlib:allow-events *display* :replay-keyboard))
+
+
 (defun stop-button-event ()
   (xlib:allow-events *display* :sync-pointer))
 
 (defun replay-button-event ()
   (xlib:allow-events *display* :replay-pointer))
+
+
 
 
 

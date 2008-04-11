@@ -236,7 +236,7 @@
 		 (print-doc "Second mode: " *second-keys* 4 code state)))
 	     (handle-identify-key (&rest event-slots &key root code state &allow-other-keys)
 	       (declare (ignore event-slots root))
-	       (let* ((modifiers (xlib:make-state-keys state))
+	       (let* ((modifiers (state->modifiers state))
 		      (key (keycode->char code state))
 		      (keysym (keysym->keysym-name (xlib:keycode->keysym *display* code (cond  ((member :shift modifiers) 1)
 											       ((member :mod-5 modifiers) 2)

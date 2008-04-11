@@ -253,8 +253,8 @@
 (defun utility-menu ()
   "Utility menu"
   (info-mode-menu '((#\i identify-key)
-		    (#\: eval-from-query-string)
-		    (#\! run-program-from-query-string))))
+		    ("colon" eval-from-query-string)
+		    ("exclam" run-program-from-query-string))))
   
 (defun main-menu ()
   "Open the main menu"
@@ -280,10 +280,10 @@
 
 ;;(define-second-key (#\g :control) 'stop-all-pending-actions)
 
-(define-second-key (#\i) 'identify-key)
-(define-second-key (#\:) 'eval-from-query-string)
+(define-second-key ("i") 'identify-key)
+(define-second-key ("colon") 'eval-from-query-string)
 
-(define-second-key (#\!) 'run-program-from-query-string)
+(define-second-key ("exclam") 'run-program-from-query-string)
 
 
 (define-second-key (#\t) 'leave-second-mode)
