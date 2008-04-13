@@ -99,31 +99,31 @@
 
 
 
-;;(defmacro define-ungrab/grab (name function hashtable)
-;;  `(defun ,name ()
-;;     (maphash #'(lambda (k v)
-;;		  (declare (ignore v))
-;;		  (when (consp k)
-;;		    (handler-case 
-;;			(let* ((key (first k))
-;;			       (modifiers (second k))
-;;			       (keycode (typecase key
-;;					  (character (char->keycode key))
-;;					  (number key)
-;;					  (string (let ((keysym (keysym-name->keysym key)))
-;;						    (when keysym
-;;						      (xlib:keysym->keycodes *display* keysym)))))))
-;;			  (if keycode
-;;			      (,function *root* keycode :modifiers modifiers)
-;;			      (format t "~&Grabbing error: Can't find key '~A'~%" key)))
-;;		      (error (c)
-;;			;;(declare (ignore c))
-;;			(format t "~&Grabbing error: Can't grab key '~A' (~A)~%" k c)))
-;;		    (force-output)))
-;;	      ,hashtable)))
-;;
-;;(define-ungrab/grab grab-main-keys xlib:grab-key *main-keys*)
-;;(define-ungrab/grab ungrab-main-keys xlib:ungrab-key *main-keys*)
+(defmacro define-ungrab/grab (name function hashtable)
+  `(defun ,name ()
+     (maphash #'(lambda (k v)
+		  (declare (ignore v))
+		  (when (consp k)
+		    (handler-case 
+			(let* ((key (first k))
+			       (modifiers (second k))
+			       (keycode (typecase key
+					  (character (char->keycode key))
+					  (number key)
+					  (string (let ((keysym (keysym-name->keysym key)))
+						    (when keysym
+						      (xlib:keysym->keycodes *display* keysym)))))))
+			  (if keycode
+			      (,function *root* keycode :modifiers modifiers)
+			      (format t "~&Grabbing error: Can't find key '~A'~%" key)))
+		      (error (c)
+			;;(declare (ignore c))
+			(format t "~&Grabbing error: Can't grab key '~A' (~A)~%" k c)))
+		    (force-output)))
+	      ,hashtable)))
+
+(define-ungrab/grab grab-main-keys xlib:grab-key *main-keys*)
+(define-ungrab/grab ungrab-main-keys xlib:ungrab-key *main-keys*)
 
 
 
@@ -147,6 +147,9 @@
 	     (let ((char (keycode->char code state)))
 	       (function-from char)))
 	   (from-string ()
+	     (let ((string (keysym->keysym-name (xlib:keycode->keysym *display* code 0))))
+	       (function-from string)))
+	   (from-string-shift ()
 	     (let* ((modifiers (state->modifiers state))
 		    (string (keysym->keysym-name (xlib:keycode->keysym *display* code (cond  ((member :shift modifiers) 1)
 											     ((member :mod-5 modifiers) 2)
@@ -158,7 +161,7 @@
 											     ((member :mod-5 modifiers) 2)
 											     (t 0))))))
 	       (function-from string (modifiers->state (remove :shift modifiers))))))
-    (or (from-code) (from-char) (from-string) (from-string-no-shift))))
+    (or (from-code) (from-char) (from-string) (from-string-shift) (from-string-no-shift))))
 
 
 

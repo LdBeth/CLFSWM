@@ -32,9 +32,7 @@
 ;;; Main mode hooks
 (defun handle-key-press (&rest event-slots &key root code state &allow-other-keys)
   (declare (ignore event-slots root))
-  (if (funcall-key-from-code *main-keys* code state)
-      (stop-keyboard-event)   ;; Maybe TODO: report this in funcall-key-from-code to allow key stop/replay on funcall
-      (replay-keyboard-event)))
+  (funcall-key-from-code *main-keys* code state))
 
 
 (defun handle-button-press (&rest event-slots &key code state window root-x root-y &allow-other-keys)
@@ -194,9 +192,7 @@
 (defun init-display ()
   (setf *screen* (first (xlib:display-roots *display*))
 	*root* (xlib:screen-root *screen*)
-	*no-focus-window* (xlib:create-window :parent *root* :x 0 :y 0 :width 1 :height 1
-					      :event-mask '(:key-press :key-release
-							    :button-press :button-release :pointer-motion))
+	*no-focus-window* (xlib:create-window :parent *root* :x 0 :y 0 :width 1 :height 1)
 	*root-gc* (xlib:create-gcontext :drawable *root*
 					:foreground (get-color *color-unselected*)
 					:background (get-color "Black")
@@ -210,8 +206,6 @@
 							      :substructure-notify
 							      :property-change
 							      :exposure
-							      :key-press
-							      :key-release
 							      :button-press
 							      :button-release
 							      :pointer-motion))
@@ -228,7 +222,7 @@
   (call-hook *init-hook*)
   (process-existing-windows *screen*)
   (show-all-children)
-  ;;(grab-main-keys)
+  (grab-main-keys)
   (xlib:display-finish-output *display*))
 
 
@@ -270,6 +264,7 @@
   (handler-case
       (init-display)
     (xlib:access-error (c)
+      (ungrab-main-keys)
       (xlib:destroy-window *no-focus-window*)
       (xlib:close-display *display*)
       (format t "~&~A~&Maybe another window manager is running.~%" c)
@@ -278,6 +273,7 @@
   (unwind-protect
        (catch 'exit-main-loop
 	 (main-loop))
+    (ungrab-main-keys)
     (xlib:destroy-window *no-focus-window*)
     (xlib:close-display *display*)))
       

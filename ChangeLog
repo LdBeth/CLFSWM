@@ -1,3 +1,8 @@
+2008-04-13  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-keys.lisp (find-key-from-code): Better handle of
+	keysyms. Revert to hold grabning method for the main mode.
+
 2008-04-12  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm.lisp (init-display): Add key handling on no focus

@@ -210,8 +210,7 @@
 				     :colormap (xlib:screen-default-colormap *screen*)
 				     :border-width 1
 				     :border (get-color "Red")
-				     :event-mask '(:exposure :key-press :key-release
-						   :button-press :button-release :pointer-motion)))
+				     :event-mask '(:exposure :button-press :button-release :pointer-motion)))
 	 (gc (xlib:create-gcontext :drawable window
 				   :foreground (get-color "Green")
 				   :background (get-color "Black")
@@ -738,7 +737,6 @@ managed."
 						(:transient 1)
 						(t 1)))
     (grab-all-buttons window)
-    (grab-all-keys window)
     (unless (do-all-frames-nw-hook window)
       (default-frame-nw-hook nil window))
     (netwm-add-in-client-list window)))
