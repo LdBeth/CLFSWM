@@ -99,6 +99,11 @@
 
 
 
+
+(defun add-in-state (state modifier)
+  "Add a modifier in a state"
+  (modifiers->state (append (state->modifiers state) (list modifier))))
+
 (defmacro define-ungrab/grab (name function hashtable)
   `(defun ,name ()
      (maphash #'(lambda (k v)
@@ -110,9 +115,11 @@
 			       (keycode (typecase key
 					  (character (char->keycode key))
 					  (number key)
-					  (string (let ((keysym (keysym-name->keysym key)))
-						    (when keysym
-						      (xlib:keysym->keycodes *display* keysym)))))))
+					  (string (let* ((keysym (keysym-name->keysym key))
+							 (ret-keycode (xlib:keysym->keycodes *display* keysym)))
+						    (when (/= keysym (xlib:keycode->keysym *display* ret-keycode 0))
+						      (setf modifiers (add-in-state modifiers :shift)))
+						    ret-keycode)))))
 			  (if keycode
 			      (,function *root* keycode :modifiers modifiers)
 			      (format t "~&Grabbing error: Can't find key '~A'~%" key)))
