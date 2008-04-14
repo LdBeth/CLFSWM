@@ -1,12 +1,15 @@
 2008-04-14  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm.lisp (init-display): Move the default frame creation
+	on the default init hook.
+
 	* src/clfswm-keys.lisp (define-ungrab/grab): Handle all keysyms in
 	the main mode (for example: "1" on an azerty keyboard).
 
 2008-04-13  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-keys.lisp (find-key-from-code): Better handle of
-	keysyms. Revert to hold grabbing method for the main mode.
+	keysyms. Revert to old grabbing method for the main mode.
 
 2008-04-12  Philippe Brochard  <pbrochard@common-lisp.net>
 
