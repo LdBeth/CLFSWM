@@ -221,7 +221,8 @@
 
 
 (defun add-frame (frame father)
-  (push frame (frame-child father)))
+  (push frame (frame-child father))
+  frame)
 
 
 (defun place-frame (frame father prx pry prw prh)
@@ -365,18 +366,20 @@
 
 (defmethod adapt-child-to-father ((window xlib:window) father)
   (with-xlib-protect
-      (multiple-value-bind (nx ny nw nh raise-p)
-	  (get-father-layout window father)
-	(setf nw (max nw 1)  nh (max nh 1))
-	(let ((change (or (/= (xlib:drawable-x window) nx)
-			  (/= (xlib:drawable-y window) ny)
-			  (/= (xlib:drawable-width window) nw)
-			  (/= (xlib:drawable-height window) nh))))
-	  (setf (xlib:drawable-x window) nx
-		(xlib:drawable-y window) ny
-		(xlib:drawable-width window) nw
-		(xlib:drawable-height window) nh)
-	  (values raise-p change)))))
+    (if (eql (window-type window) :normal)
+	(multiple-value-bind (nx ny nw nh raise-p)
+	    (get-father-layout window father)
+	  (setf nw (max nw 1)  nh (max nh 1))
+	  (let ((change (or (/= (xlib:drawable-x window) nx)
+			    (/= (xlib:drawable-y window) ny)
+			    (/= (xlib:drawable-width window) nw)
+			    (/= (xlib:drawable-height window) nh))))
+	    (setf (xlib:drawable-x window) nx
+		  (xlib:drawable-y window) ny
+		  (xlib:drawable-width window) nw
+		  (xlib:drawable-height window) nh)
+	    (values raise-p change)))
+	(values nil nil))))
 
 (defmethod adapt-child-to-father ((frame frame) father)
   (with-xlib-protect
@@ -405,34 +408,22 @@
 	    (and (eql raise-p :first-only) first-p))
     (raise-window window)))
 
-(defgeneric show-child (child father first-p))
+(defgeneric show-child (child raise-p first-p))
 
-(defmethod show-child ((frame frame) father first-p)
+(defmethod show-child ((frame frame) raise-p first-p)
   (with-xlib-protect
       (with-slots (window) frame
-	(multiple-value-bind (raise-p geometry-change)
-	    (adapt-child-to-father frame father)
 	  (when (or *show-root-frame-p* (not (equal frame *current-root*)))
 	    (setf (xlib:window-background window) (get-color "Black"))
 	    (xlib:map-window window)
 	    (raise-if-needed window raise-p first-p)
-	    (display-frame-info frame))
-	  geometry-change))))
+	    (display-frame-info frame)))))
 
 
-(defmethod show-child ((window xlib:window) father first-p)
+(defmethod show-child ((window xlib:window) raise-p first-p)
   (with-xlib-protect
-      (let ((raise-p nil)
-	    (geometry-change  nil))
-	(when (eql (window-type window) :normal)
-	  (multiple-value-bind (to-raise change)
-	      (adapt-child-to-father window father)
-	    (setf raise-p to-raise
-		  geometry-change change)))
 	(xlib:map-window window)
-	(raise-if-needed window raise-p first-p)
-	geometry-change)))
-
+	(raise-if-needed window raise-p first-p)))
 
 
 (defgeneric hide-child (child))
@@ -484,19 +475,24 @@
 
 
 
-(defun show-all-children ()
-  "Show all children from *current-root*"
+(defun show-all-children (&optional (display-child *current-root*))
+  "Show all children from *current-root*. Start the effective display
+only for display-child and its children"
   (let ((geometry-change nil))
-    (labels ((rec (root father first-p first-father)
-	       (when (show-child root father first-p)
-		 (setf geometry-change t))
+    (labels ((rec (root father first-p first-father display-p)
+	       (multiple-value-bind (raise-p change)
+		   (adapt-child-to-father root father)
+		 (when change (setf geometry-change change))
+		 (when display-p
+		   (show-child root raise-p first-p)))
 	       (select-child root (if (equal root *current-child*) t
 				      (if (and first-p first-father) :maybe nil)))
 	       (when (frame-p root)
 		 (let ((first-child (first (frame-child root))))
 		   (dolist (child (reverse (frame-child root)))
-		     (rec child root (equal child first-child) first-p))))))
-      (rec *current-root* nil t t)
+		     (rec child root (equal child first-child) first-p
+			  (or display-p (equal root display-child))))))))
+      (rec *current-root* nil t t (equal display-child *current-root*))
       (set-focus-to-current-child)
       geometry-change)))
 
@@ -565,7 +561,7 @@
   (when (frame-p *current-child*)
     (with-slots (child) *current-child*
       (setf child (funcall fun-rotate child)))
-    (show-all-children)))
+    (show-all-children *current-child*)))
 
 
 (defun select-next-child ()

@@ -523,8 +523,7 @@
 		  (xlib:display-finish-output *display*)
 		  (xlib:process-event *display* :handler #'handle-event))))
 	(setf (frame-x frame) (x-px->fl (xlib:drawable-x window) father)
-	      (frame-y frame) (y-px->fl (xlib:drawable-y window) father))
-	(show-all-children)))))
+	      (frame-y frame) (y-px->fl (xlib:drawable-y window) father))))))
 
 
 (defun resize-frame (frame father orig-x orig-y)
@@ -565,8 +564,7 @@
 		  (xlib:display-finish-output *display*)
 		  (xlib:process-event *display* :handler #'handle-event))))
 	(setf (frame-w frame) (w-px->fl (xlib:drawable-width window) father)
-	      (frame-h frame) (h-px->fl (xlib:drawable-height window) father))
-	(show-all-children)))))
+	      (frame-h frame) (h-px->fl (xlib:drawable-height window) father))))))
 
 	   
 
@@ -593,7 +591,7 @@ mouse-fun is #'move-frame or #'resize-frame"
 	(when child
 	  (funcall mouse-fn child father root-x root-y)))
       (when (and child father (focus-all-children child father))
-	(when (show-all-children)
+	(when (show-all-children *current-child*)
 	  (setf to-replay nil))))
     (if to-replay
 	(replay-button-event)

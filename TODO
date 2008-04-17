@@ -7,9 +7,9 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Add a show-all-children without recomputation of geometry (ie: use real coordinates
-  and redisplay only the wanted child).  *** REALLY URGENT ***
-  Split computation of geometry outside of show-all-children. [Philippe]
+- Rethink the menu system to be able to change/add/remove entry. [Philippe]
+
+- Add a frame parameter to choose what window type to handle. [Philippe]
 
 - Hook to open next window in named/numbered frame [Philippe]
 

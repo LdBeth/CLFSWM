@@ -1,3 +1,20 @@
+2008-04-17  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (add-frame): Add frame return the
+	created frame.
+	(show-all-children): Move the size computation outside the
+	show-child part.
+
+	* src/bindings-second-mode.lisp (with-movement): Redisplay only
+	the current child.
+
+	* src/clfswm-util.lisp (mouse-click-to-focus-generic): Redisplay
+	only the current child.
+
+	* src/clfswm-internal.lisp (show-all-children): New display-child
+	parameter to display only the desired child and its children.
+	(select-next/previous-child): Only display the current child.
+
 2008-04-14  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm.lisp (init-display): Move the default frame creation
