@@ -1,3 +1,8 @@
+2008-04-18  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (show-all-children): Display-child is
+	the first child by default. Solve a bug with father-p.
+
 2008-04-17  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp (add-frame): Add frame return the

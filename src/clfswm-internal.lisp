@@ -196,7 +196,7 @@
 (defun frame-find-free-number ()
   (let ((all-numbers nil))
     (with-all-frames (*root-frame* frame)
-      (push (frame-number frame) all-numbers))
+      (pushnew (frame-number frame) all-numbers))
     (find-free-number all-numbers)))
 
 
@@ -461,6 +461,10 @@
 (defun select-current-frame (selected)
   (select-child *current-child* selected))
 
+(defun unselect-all-frames ()
+  (with-all-children (*current-root* child)
+    (select-child child nil)))
+
 
 
 (defun set-focus-to-current-child ()
@@ -475,7 +479,7 @@
 
 
 
-(defun show-all-children (&optional (display-child *current-root*))
+(defun show-all-children (&optional (display-child *current-child*))
   "Show all children from *current-root*. Start the effective display
 only for display-child and its children"
   (let ((geometry-change nil))
@@ -490,7 +494,7 @@ only for display-child and its children"
 	       (when (frame-p root)
 		 (let ((first-child (first (frame-child root))))
 		   (dolist (child (reverse (frame-child root)))
-		     (rec child root (equal child first-child) first-p
+		     (rec child root (equal child first-child) (and first-p first-father)
 			  (or display-p (equal root display-child))))))))
       (rec *current-root* nil t t (equal display-child *current-root*))
       (set-focus-to-current-child)
@@ -512,104 +516,6 @@ only for display-child and its children"
 
 
 
-(defun select-next/previous-brother (fun-rotate)
-  "Select the next/previous brother frame"
-  (let ((frame-is-root? (and (equal *current-root* *current-child*)
-			     (not (equal *current-root* *root-frame*)))))
-    (if frame-is-root?
-	(hide-all *current-root*)
-	(select-current-frame nil))
-    (let ((father (find-father-frame *current-child*)))
-      (when (frame-p father)
-	(with-slots (child) father
-	  (setf child (funcall fun-rotate child))
-	  (setf *current-child* (first child)))))
-    (when frame-is-root?
-      (setf *current-root* *current-child*))
-    (show-all-children)))
-
-
-(defun select-next-brother ()
-  "Select the next brother frame"
-  (select-next/previous-brother #'anti-rotate-list))
-
-(defun select-previous-brother ()
-  "Select the previous brother frame"
-  (select-next/previous-brother #'rotate-list))
-
-
-(defun select-next-level ()
-  "Select the next level in frame"
-  (select-current-frame :maybe)
-  (when (frame-p *current-child*)
-    (awhen (first (frame-child *current-child*))
-	   (setf *current-child* it)))
-  (select-current-frame t))
-
-(defun select-previous-level ()
-  "Select the previous level in frame"
-  (unless (equal *current-child* *current-root*)
-    (select-current-frame :maybe)
-    (awhen (find-father-frame *current-child*)
-	   (setf *current-child* it))
-    (select-current-frame t)))
-
-
-
-(defun select-next/previous-child (fun-rotate)
-  "Select the next/previous child"
-  (when (frame-p *current-child*)
-    (with-slots (child) *current-child*
-      (setf child (funcall fun-rotate child)))
-    (show-all-children *current-child*)))
-
-
-(defun select-next-child ()
-  "Select the next child"
-  (select-next/previous-child #'anti-rotate-list))
-
-(defun select-previous-child ()
-  "Select the previous child"
-  (select-next/previous-child #'rotate-list))
-
-
-
-(defun enter-frame ()
-  "Enter in the selected frame - ie make it the root frame"
-  (hide-all *current-root*)
-  (setf *current-root* *current-child*)
-  (show-all-children))
-
-(defun leave-frame ()
-  "Leave the selected frame - ie make its father the root frame"
-  (hide-all *current-root*)
-  (awhen (find-father-frame *current-root*)
-	 (when (frame-p it)
-	   (setf *current-root* it)))
-  (show-all-children))
-
-
-(defun switch-to-root-frame (&key (show-later nil))
-  "Switch to the root frame"
-  (hide-all *current-root*)
-  (setf *current-root* *root-frame*)
-  (unless show-later
-    (show-all-children)))
-
-(defun switch-and-select-root-frame (&key (show-later nil))
-  "Switch and select the root frame"
-  (hide-all *current-root*)
-  (setf *current-root* *root-frame*)
-  (setf *current-child* *current-root*)
-  (unless show-later
-    (show-all-children)))
-
-
-(defun toggle-show-root-frame ()
-  "Show/Hide the root frame"
-  (hide-all *current-root*)
-  (setf *show-root-frame-p* (not *show-root-frame-p*))
-  (show-all-children))
 
 
 (defun focus-child (child father)
@@ -662,6 +568,110 @@ For window: set current child to window or its father according to window-father
 	(new-root (set-current-root father)))
     (or new-focus new-current-child new-root)))
 
+
+
+
+
+
+(defun select-next/previous-brother (fun-rotate)
+  "Select the next/previous brother frame"
+  (let ((frame-is-root? (and (equal *current-root* *current-child*)
+			     (not (equal *current-root* *root-frame*)))))
+    (if frame-is-root?
+	(hide-all *current-root*)
+	(select-current-frame nil))
+    (let ((father (find-father-frame *current-child*)))
+      (when (frame-p father)
+	(with-slots (child) father
+	  (setf child (funcall fun-rotate child))
+	  (setf *current-child* (first child)))))
+    (when frame-is-root?
+      (setf *current-root* *current-child*))
+    (show-all-children *current-root*))) ;; PLOP
+
+
+(defun select-next-brother ()
+  "Select the next brother frame"
+  (select-next/previous-brother #'anti-rotate-list))
+
+(defun select-previous-brother ()
+  "Select the previous brother frame"
+  (select-next/previous-brother #'rotate-list))
+
+
+(defun select-next-level ()
+  "Select the next level in frame"
+  (select-current-frame :maybe)
+  (when (frame-p *current-child*)
+    (awhen (first (frame-child *current-child*))
+	   (setf *current-child* it)))
+  (select-current-frame t))
+
+(defun select-previous-level ()
+  "Select the previous level in frame"
+  (unless (equal *current-child* *current-root*)
+    (select-current-frame :maybe)
+    (awhen (find-father-frame *current-child*)
+	   (setf *current-child* it))
+    (select-current-frame t)))
+
+
+
+(defun select-next/previous-child (fun-rotate)
+  "Select the next/previous child"
+  (when (frame-p *current-child*)
+    (unselect-all-frames)
+    (with-slots (child) *current-child*
+      (setf child (funcall fun-rotate child)))
+    (show-all-children))) ;; PLOP
+
+
+(defun select-next-child ()
+  "Select the next child"
+  (select-next/previous-child #'anti-rotate-list))
+
+(defun select-previous-child ()
+  "Select the previous child"
+  (select-next/previous-child #'rotate-list))
+
+
+
+(defun enter-frame ()
+  "Enter in the selected frame - ie make it the root frame"
+  (hide-all *current-root*)
+  (setf *current-root* *current-child*)
+  (show-all-children *current-root*)) ;; PLOP
+
+(defun leave-frame ()
+  "Leave the selected frame - ie make its father the root frame"
+  (hide-all *current-root*)
+  (awhen (find-father-frame *current-root*)
+	 (when (frame-p it)
+	   (setf *current-root* it)))
+  (show-all-children *current-root*)) ;; PLOP
+
+
+(defun switch-to-root-frame (&key (show-later nil))
+  "Switch to the root frame"
+  (hide-all *current-root*)
+  (setf *current-root* *root-frame*)
+  (unless show-later
+    (show-all-children *current-root*))) ;; PLOP
+
+(defun switch-and-select-root-frame (&key (show-later nil))
+  "Switch and select the root frame"
+  (hide-all *current-root*)
+  (setf *current-root* *root-frame*)
+  (setf *current-child* *current-root*)
+  (unless show-later
+    (show-all-children *current-root*))) ;; PLOP
+
+
+(defun toggle-show-root-frame ()
+  "Show/Hide the root frame"
+  (hide-all *current-root*)
+  (setf *show-root-frame-p* (not *show-root-frame-p*))
+  (show-all-children *current-root*)) ;; PLOP
 
 
 (defun remove-child-in-frame (child frame)

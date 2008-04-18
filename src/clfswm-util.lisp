@@ -591,7 +591,7 @@ mouse-fun is #'move-frame or #'resize-frame"
 	(when child
 	  (funcall mouse-fn child father root-x root-y)))
       (when (and child father (focus-all-children child father))
-	(when (show-all-children *current-child*)
+	(when (show-all-children) ;; PLOP
 	  (setf to-replay nil))))
     (if to-replay
 	(replay-button-event)
@@ -714,7 +714,7 @@ For window: set current child to window or its father according to window-father
     (setf *current-root* (aref key-slots current-slot)
 	  *current-child* *current-root*)
     (focus-all-children *current-child* *current-child*)
-    (show-all-children))
+    (show-all-children *current-root*)) ;; PLOP
   
   (defun bind-or-jump (n)
     "Bind or jump to a slot"

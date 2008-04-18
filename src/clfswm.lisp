@@ -219,7 +219,7 @@
 	*current-child* *current-root*)
   (call-hook *init-hook*)
   (process-existing-windows *screen*)
-  (show-all-children)
+  (show-all-children *current-root*)
   (grab-main-keys)
   (xlib:display-finish-output *display*))
 

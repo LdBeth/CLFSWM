@@ -99,7 +99,7 @@
 (defmacro with-movement (&body body)
   `(when (frame-p *current-child*)
      ,@body
-     (show-all-children *current-child*)
+     (show-all-children) ;; PLOP
      (draw-second-mode-window)
      (frame-movement-menu)))
 

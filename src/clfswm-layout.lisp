@@ -68,7 +68,7 @@
      (setf *layout-list* (append *layout-list* (list ',layout)))
      (defun ,(intern (format nil "~A-ONCE" layout)) ()
        (set-layout-dont-leave #',(intern (subseq (format nil "~A" layout) 4)))
-       (show-all-children)
+       (show-all-children *current-root*)
        (fixe-real-size-current-child)
        (set-layout-dont-leave #'no-layout))))
 
