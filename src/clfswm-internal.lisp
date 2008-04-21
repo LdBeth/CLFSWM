@@ -587,7 +587,7 @@ For window: set current child to window or its father according to window-father
 	  (setf *current-child* (first child)))))
     (when frame-is-root?
       (setf *current-root* *current-child*))
-    (show-all-children *current-root*))) ;; PLOP
+    (show-all-children *current-root*)))
 
 
 (defun select-next-brother ()
@@ -623,7 +623,7 @@ For window: set current child to window or its father according to window-father
     (unselect-all-frames)
     (with-slots (child) *current-child*
       (setf child (funcall fun-rotate child)))
-    (show-all-children))) ;; PLOP
+    (show-all-children)))
 
 
 (defun select-next-child ()
@@ -640,7 +640,7 @@ For window: set current child to window or its father according to window-father
   "Enter in the selected frame - ie make it the root frame"
   (hide-all *current-root*)
   (setf *current-root* *current-child*)
-  (show-all-children *current-root*)) ;; PLOP
+  (show-all-children *current-root*))
 
 (defun leave-frame ()
   "Leave the selected frame - ie make its father the root frame"
@@ -648,7 +648,7 @@ For window: set current child to window or its father according to window-father
   (awhen (find-father-frame *current-root*)
 	 (when (frame-p it)
 	   (setf *current-root* it)))
-  (show-all-children *current-root*)) ;; PLOP
+  (show-all-children *current-root*))
 
 
 (defun switch-to-root-frame (&key (show-later nil))
@@ -656,7 +656,7 @@ For window: set current child to window or its father according to window-father
   (hide-all *current-root*)
   (setf *current-root* *root-frame*)
   (unless show-later
-    (show-all-children *current-root*))) ;; PLOP
+    (show-all-children *current-root*)))
 
 (defun switch-and-select-root-frame (&key (show-later nil))
   "Switch and select the root frame"
@@ -664,14 +664,14 @@ For window: set current child to window or its father according to window-father
   (setf *current-root* *root-frame*)
   (setf *current-child* *current-root*)
   (unless show-later
-    (show-all-children *current-root*))) ;; PLOP
+    (show-all-children *current-root*)))
 
 
 (defun toggle-show-root-frame ()
   "Show/Hide the root frame"
   (hide-all *current-root*)
   (setf *show-root-frame-p* (not *show-root-frame-p*))
-  (show-all-children *current-root*)) ;; PLOP
+  (show-all-children *current-root*))
 
 
 (defun remove-child-in-frame (child frame)

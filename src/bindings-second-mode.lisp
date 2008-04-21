@@ -34,74 +34,39 @@
 ;;;`-----
 
 
+(define-second-key ("F1" :mod-1) 'help-on-second-mode)
 
-;;;;;;;;;;;;;;;
-;; Menu entry
-;;;;;;;;;;;;;;;
-(defun frame-adding-menu ()
-  "Adding frame menu"
-  (info-mode-menu '((#\a add-default-frame)
-		    (#\p add-placed-frame))))
+;;;;;;;;;;;;;;;;;
+;;;; Menu entry
+;;;;;;;;;;;;;;;;;
 
-(defun frame-layout-menu ()
-  "Frame layout menu"
-  (info-mode-menu (keys-from-list *layout-list*)))
+;;; Here is a small example of menu manipulation:
 
-(defun frame-layout-once-menu ()
-  "Frame layout menu (Set only once)"
-  (info-mode-menu (keys-from-list (loop :for l :in *layout-list*
-				     :collect (create-symbol (format nil "~A" l) "-ONCE")))))
-
-(defun frame-nw-hook-menu ()
-  "Frame new window hook menu"
-  (info-mode-menu (keys-from-list *nw-hook-list*)))
+;;(add-menu-key 'main "a" 'help-on-second-mode)
+;;(add-menu-key 'main "c" 'help-on-clfswm)
+;;
+;;(add-sub-menu 'main "p" 'plop "A sub menu")
+;;
+;;(add-menu-key 'plop "a" 'help-on-clfswm)
+;;(add-menu-key 'plop "b" 'help-on-second-mode)
+;;(add-menu-key 'plop "d" 'help-on-second-mode)
 
 
-  
+;;(del-menu-key 'main "p")
+;;(del-menu-value 'plop 'help-on-main-mode)
+;;(del-sub-menu 'main 'plop)
 
-(defun frame-pack-menu ()
-  "Frame pack menu"
-  (info-mode-menu '(("Up" current-frame-pack-up)
-		    ("Down" current-frame-pack-down)
-		    ("Left" current-frame-pack-left)
-		    ("Right" current-frame-pack-right))))
+;;(define-second-key ("a") 'open-menu)
 
 
-(defun frame-fill-menu ()
-  "Frame fill menu"
-  (info-mode-menu '(("Up" current-frame-fill-up)
-		    ("Down" current-frame-fill-down)
-		    ("Left" current-frame-fill-left)
-		    ("Right" current-frame-fill-right)
-		    (#\a current-frame-fill-all-dir)
-		    (#\v current-frame-fill-vertical)
-		    (#\h current-frame-fill-horizontal))))
-
-(defun frame-resize-menu ()
-  "Frame resize menu"
-  (info-mode-menu '(("Up" current-frame-resize-up)
-		    ("Down" current-frame-resize-down)
-		    ("Left" current-frame-resize-left)
-		    ("Right" current-frame-resize-right)
-		    (#\d current-frame-resize-all-dir)
-		    (#\a current-frame-resize-all-dir-minimal))))
-
-
-(defun frame-movement-menu ()
-  "Frame movement menu"
-  (info-mode-menu '((#\p frame-pack-menu)
-		    (#\f frame-fill-menu)
-		    (#\r frame-resize-menu)
-		    (#\c center-current-frame)))
-  (leave-second-mode))
 
 
 (defmacro with-movement (&body body)
   `(when (frame-p *current-child*)
      ,@body
-     (show-all-children) ;; PLOP
+     (show-all-children)
      (draw-second-mode-window)
-     (frame-movement-menu)))
+     (open-menu (find-menu 'frame-movement-menu))))
 
 
 ;;; Pack
@@ -195,87 +160,127 @@
 
 
 
+(defun frame-layout-menu ()
+  "< Frame layout menu >"
+  (info-mode-menu (keys-from-list *layout-list*)))
+
+(defun frame-layout-once-menu ()
+  "< Frame layout menu (Set only once) >"
+  (info-mode-menu (keys-from-list (loop :for l :in *layout-list*
+				     :collect (create-symbol (format nil "~A" l) "-ONCE")))))
+
+(defun frame-nw-hook-menu ()
+  "< Frame new window hook menu >"
+  (info-mode-menu (keys-from-list *nw-hook-list*)))
 
 
 
-(defun action-by-name-menu ()
-  "Actions by name menu"
-  (info-mode-menu '((#\f focus-frame-by-name)
-		    (#\o open-frame-by-name)
-		    (#\d delete-frame-by-name)
-		    (#\m move-current-child-by-name)
-		    (#\c copy-current-child-by-name))))
-
-(defun action-by-number-menu ()
-  "Actions by number menu"
-  (info-mode-menu '((#\f focus-frame-by-number)
-		    (#\o open-frame-by-number)
-		    (#\d delete-frame-by-number)
-		    (#\m move-current-child-by-number)
-		    (#\c copy-current-child-by-number))))
-
-
-(defun frame-info-menu ()
-  "Frame information menu"
-  (info-mode-menu '((#\s show-all-frames-info)
-		    (#\h hide-all-frames-info))))
-
-
-(defun frame-menu ()
-  "Frame menu"
-  (info-mode-menu '((#\a frame-adding-menu)
-		    (#\l frame-layout-menu)
-		    (#\o frame-layout-once-menu)
-		    (#\n frame-nw-hook-menu)
-		    (#\m frame-movement-menu)
-		    (#\r rename-current-child)
-		    (#\u renumber-current-frame)
-		    (#\i frame-info-menu)
-		    (#\x explode-current-frame))))
-
-(defun window-menu ()
-  "Window menu"
-  (info-mode-menu '((#\i force-window-in-frame)
-		    (#\c force-window-center-in-frame))))
+(add-sub-menu 'main "f" 'frame-menu "Frame menu")
+(add-sub-menu 'main "w" 'window-menu "Window menu")
+(add-sub-menu 'main "s" 'selection-menu "Selection menu")
+(add-sub-menu 'main "n" 'action-by-name-menu "Action by name menu")
+(add-sub-menu 'main "u" 'action-by-number-menu "Action by number menu")
+(add-sub-menu 'main "y" 'utility-menu "Utility menu")
 
 
 
-(defun selection-menu ()
-  "Selection menu"
-  (info-mode-menu '((#\x cut-current-child)
-		    (#\c copy-current-child)
-		    (#\v paste-selection)
-		    (#\p paste-selection-no-clear)
-		    ("Delete" remove-current-child)
-		    (#\z clear-selection))))
+(add-sub-menu 'frame-menu "a" 'frame-adding-menu "Adding frame menu")
+(add-menu-key 'frame-menu "l" 'frame-layout-menu)
+(add-menu-key 'frame-menu "o" 'frame-layout-once-menu)
+(add-menu-key 'frame-menu "n" 'frame-nw-hook-menu)
+(add-sub-menu 'frame-menu "m" 'frame-movement-menu "Frame movement menu")
+(add-sub-menu 'frame-menu "i" 'frame-info-menu "Frame info menu")
+(add-menu-key 'frame-menu "r" 'rename-current-child)
+(add-menu-key 'frame-menu "u" 'renumber-current-frame)
+(add-menu-key 'frame-menu "x" 'explode-current-frame)
 
 
-(defun utility-menu ()
-  "Utility menu"
-  (info-mode-menu '((#\i identify-key)
-		    ("colon" eval-from-query-string)
-		    ("exclam" run-program-from-query-string))))
-  
-(defun main-menu ()
-  "Open the main menu"
-  (info-mode-menu '((#\f frame-menu)
-		    (#\w window-menu)
-		    (#\s selection-menu)
-		    (#\n action-by-name-menu)
-		    (#\u action-by-number-menu)
-		    (#\y utility-menu))))
+(add-menu-key 'frame-adding-menu "a" 'add-default-frame)
+(add-menu-key 'frame-adding-menu "p" 'add-placed-frame)
+
+
+(add-sub-menu 'frame-movement-menu "p" 'frame-pack-menu "Frame pack menu")
+(add-sub-menu 'frame-movement-menu "f" 'frame-fill-menu "Frame fill menu")
+(add-sub-menu 'frame-movement-menu "r" 'frame-resize-menu "Frame resize menu")
+(add-menu-key 'frame-movement-menu "c" 'center-current-frame)
+
+
+(add-menu-key 'frame-pack-menu "Up" 'current-frame-pack-up)
+(add-menu-key 'frame-pack-menu "Down" 'current-frame-pack-down)
+(add-menu-key 'frame-pack-menu "Left" 'current-frame-pack-left)
+(add-menu-key 'frame-pack-menu "Right" 'current-frame-pack-right)
+
+
+(add-menu-key 'frame-fill-menu "Up" 'current-frame-fill-up)
+(add-menu-key 'frame-fill-menu "Down" 'current-frame-fill-down)
+(add-menu-key 'frame-fill-menu "Left" 'current-frame-fill-left)
+(add-menu-key 'frame-fill-menu "Right" 'current-frame-fill-right)
+(add-menu-key 'frame-fill-menu #\a 'current-frame-fill-all-dir)
+(add-menu-key 'frame-fill-menu #\v 'current-frame-fill-vertical)
+(add-menu-key 'frame-fill-menu #\h 'current-frame-fill-horizontal)
+
+(add-menu-key 'frame-resize-menu "Up" 'current-frame-resize-up)
+(add-menu-key 'frame-resize-menu "Down" 'current-frame-resize-down)
+(add-menu-key 'frame-resize-menu "Left" 'current-frame-resize-left)
+(add-menu-key 'frame-resize-menu "Right" 'current-frame-resize-right)
+(add-menu-key 'frame-resize-menu #\d 'current-frame-resize-all-dir)
+(add-menu-key 'frame-resize-menu #\a 'current-frame-resize-all-dir-minimal)
+
+
+(add-menu-key 'frame-info-menu "s" 'show-all-frames-info)
+(add-menu-key 'frame-info-menu "h" 'hide-all-frames-info)
+
+
+(add-menu-key 'window-menu "i" 'force-window-in-frame)
+(add-menu-key 'window-menu "c" 'force-window-center-in-frame)
+
+
+(add-menu-key 'selection-menu "x" 'cut-current-child)
+(add-menu-key 'selection-menu "c" 'copy-current-child)
+(add-menu-key 'selection-menu "v" 'paste-selection)
+(add-menu-key 'selection-menu "p" 'paste-selection-no-clear)
+(add-menu-key 'selection-menu "Delete" 'remove-current-child)
+(add-menu-key 'selection-menu "z" 'clear-selection)
+
+
+
+(add-menu-key 'action-by-name-menu "f" 'focus-frame-by-name)
+(add-menu-key 'action-by-name-menu "o" 'open-frame-by-name)
+(add-menu-key 'action-by-name-menu "d" 'delete-frame-by-name)
+(add-menu-key 'action-by-name-menu "m" 'move-current-child-by-name)
+(add-menu-key 'action-by-name-menu "c" 'copy-current-child-by-name)
+
+(add-menu-key 'action-by-number-menu "f" 'focus-frame-by-number)
+(add-menu-key 'action-by-number-menu "o" 'open-frame-by-number)
+(add-menu-key 'action-by-number-menu "d" 'delete-frame-by-number)
+(add-menu-key 'action-by-number-menu "m" 'move-current-child-by-number)
+(add-menu-key 'action-by-number-menu "c" 'copy-current-child-by-number)
+
+
+(add-menu-key 'utility-menu "i" 'identify-key)
+(add-menu-key 'utility-menu "colon" 'eval-from-query-string)
+(add-menu-key 'utility-menu "exclam" 'run-program-from-query-string)
 
 
 
 
+(defun open-frame-menu ()
+  "Open the frame menu"
+  (open-menu (find-menu 'frame-menu)))
+
+(defun open-action-by-name-menu ()
+  "Open the action by name menu"
+  (open-menu (find-menu 'action-by-name-menu)))
+
+(defun open-action-by-number-menu ()
+  "Open the action by number menu"
+  (open-menu (find-menu 'action-by-number-menu)))
 
 
-(define-second-key ("F1" :mod-1) 'help-on-second-mode)
-
-(define-second-key ("m") 'main-menu)
-(define-second-key ("f") 'frame-menu)
-(define-second-key ("n") 'action-by-name-menu)
-(define-second-key ("u") 'action-by-number-menu)
+(define-second-key ("m") 'open-menu)
+(define-second-key ("f") 'open-frame-menu)
+(define-second-key ("n") 'open-action-by-name-menu)
+(define-second-key ("u") 'open-action-by-number-menu)
 
 
 ;;(define-second-key (#\g :control) 'stop-all-pending-actions)
@@ -386,11 +391,6 @@
 ;;(define-second-key ("underscore" :mod-1) 'bind-or-jump 8)
 ;;(define-second-key ("ccedilla" :mod-1) 'bind-or-jump 9)
 ;;(define-second-key ("agrave" :mod-1) 'bind-or-jump 10)
-
-
-
-
-
 
 
 

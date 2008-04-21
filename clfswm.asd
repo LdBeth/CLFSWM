@@ -48,10 +48,12 @@
 			  :depends-on ("clfswm" "clfswm-util" "clfswm-second-mode"))
 			 (:file "clfswm-nw-hooks"
 			  :depends-on ("package" "clfswm-util" "clfswm-info"))
+			 (:file "clfswm-menu"
+			  :depends-on ("package" "clfswm-info"))
 			 (:file "bindings"
 			  :depends-on ("clfswm" "clfswm-internal" "clfswm-util"))
 			 (:file "bindings-second-mode"
-			  :depends-on ("clfswm" "clfswm-util" "clfswm-query" "bindings" "clfswm-pack"))))))
+			  :depends-on ("clfswm" "clfswm-util" "clfswm-query" "bindings" "clfswm-pack" "clfswm-menu"))))))
 
 
 

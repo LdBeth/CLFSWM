@@ -431,7 +431,7 @@ key is a character, a keycode or a keysym"
 
 
 (defun help-on-second-mode ()
-  "Open the help and info window"
+  "Open the help and info window for the second mode"
   (info-mode-menu '((#\h show-global-key-binding)
 		    (#\b show-second-mode-key-binding)
 		    (#\t show-date)

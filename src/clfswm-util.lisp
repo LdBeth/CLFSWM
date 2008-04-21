@@ -336,7 +336,8 @@
     (hide-all *current-root*)
     (focus-all-children frame (or (find-father-frame frame *current-root*)
 				(find-father-frame frame)
-				*root-frame*))))
+				*root-frame*))
+    (show-all-children *current-root*)))
 
 
 (defun focus-frame-by-name ()
@@ -353,7 +354,8 @@
 ;;; Open by functions
 (defun open-frame-by (frame)
   (when (frame-p frame)
-    (push (create-frame :name (query-string "Frame name")) (frame-child frame))))
+    (push (create-frame :name (query-string "Frame name")) (frame-child frame))
+    (show-all-children *current-root*)))
 
 
 
@@ -364,7 +366,7 @@
 
 (defun open-frame-by-number ()
   "Open a new frame in a numbered frame"
-  (open-frame-by (find-frame-by-name (ask-frame-name "Open a new frame in the grou numbered:")))
+  (open-frame-by (find-frame-by-number (query-number "Open a new frame in the group numbered:")))
   (leave-second-mode))
 
 
@@ -376,7 +378,8 @@
       (setf *current-root* *root-frame*))
     (when (equal frame *current-child*)
       (setf *current-child* *current-root*))
-    (remove-child-in-frame frame (find-father-frame frame))))
+    (remove-child-in-frame frame (find-father-frame frame)))
+  (show-all-children *current-root*))
 
 
 (defun delete-frame-by-name ()
@@ -396,7 +399,8 @@
     (hide-all *current-root*)
     (remove-child-in-frame child (find-father-frame child))
     (pushnew child (frame-child frame-dest))
-    (focus-all-children child frame-dest)))
+    (focus-all-children child frame-dest)
+    (show-all-children *current-root*)))
 
 (defun move-current-child-by-name ()
   "Move current child in a named frame"
@@ -418,7 +422,8 @@
   (when (and child (frame-p frame-dest))
     (hide-all *current-root*)
     (pushnew child (frame-child frame-dest))
-    (focus-all-children child frame-dest)))
+    (focus-all-children child frame-dest)
+    (show-all-children *current-root*)))
 
 (defun copy-current-child-by-name ()
   "Copy current child in a named frame"
@@ -591,7 +596,7 @@ mouse-fun is #'move-frame or #'resize-frame"
 	(when child
 	  (funcall mouse-fn child father root-x root-y)))
       (when (and child father (focus-all-children child father))
-	(when (show-all-children) ;; PLOP
+	(when (show-all-children)
 	  (setf to-replay nil))))
     (if to-replay
 	(replay-button-event)
@@ -714,7 +719,7 @@ For window: set current child to window or its father according to window-father
     (setf *current-root* (aref key-slots current-slot)
 	  *current-child* *current-root*)
     (focus-all-children *current-child* *current-child*)
-    (show-all-children *current-root*)) ;; PLOP
+    (show-all-children *current-root*))
   
   (defun bind-or-jump (n)
     "Bind or jump to a slot"

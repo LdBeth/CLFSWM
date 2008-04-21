@@ -7,8 +7,6 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Rethink the menu system to be able to change/add/remove entry. [Philippe]
-
 - Add a frame parameter to choose what window type to handle. [Philippe]
 
 - Hook to open next window in named/numbered frame [Philippe]
@@ -19,22 +17,13 @@ Should handle these soon.
 
 - Raise/lower frame - this can be done with children order [Philippe]
 
-- Hide/Unhide frame [Philippe]
-
-- Add boundaries in the info window [Philippe]
-
-- get-frame-by-name (path)  [Philippe]
-  get-frame-by-name (path): return the frame that its own frame has this name if it exists such a frame
-  get-window-by-name (path): return the window that its own frame that its own frame has this name if it exists such a window.
-
 - Adapt frame to window hints [Philippe]
 
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
 
-- Set Layout once [Philippe]
-
 - A Gimp layout example [Philippe]
 
+- Add boundaries in the info window [Philippe]
 
 
 MAYBE
@@ -64,3 +53,4 @@ Operation:
 
 - cd/pwd a la shell to navigate throu frames. [Philippe] 
 
+- Hide/Unhide frame [Philippe]
