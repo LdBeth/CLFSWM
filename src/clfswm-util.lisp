@@ -220,9 +220,9 @@
 				   :line-style :solid)))
     (labels ((print-doc (msg hash-table-key pos code state)
 	       (let ((function (find-key-from-code hash-table-key code state)))
-		 (when function
+		 (when (and function (fboundp (first function)))
 		   (xlib:draw-image-glyphs window gc 10 (+ (* pos (+ (xlib:max-char-ascent font) (xlib:max-char-descent font))) 5)
-					   (format nil "~A ~A" msg (documentation function 'function))))))
+					   (format nil "~A ~A" msg (documentation (first function) 'function))))))
 	     (print-key (code state keysym key modifiers)
 	       (xlib:clear-area window)
 	       (setf (xlib:gcontext-foreground gc) (get-color *identify-foreground*))
