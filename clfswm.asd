@@ -35,7 +35,7 @@
 			 (:file "version"
 			  :depends-on ("tools"))
 			 (:file "clfswm-second-mode"
-			  :depends-on ("package" "clfswm-internal"))
+			  :depends-on ("package" "clfswm" "clfswm-internal"))
 			 (:file "clfswm-info"
 			  :depends-on ("package" "version" "xlib-util" "config" "clfswm-keys" "clfswm" "clfswm-internal"))
 			 (:file "clfswm-menu"

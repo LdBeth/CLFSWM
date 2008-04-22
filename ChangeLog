@@ -1,5 +1,8 @@
 2008-04-22  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* clfswm.asd (clfswm): Add a dependency from
+	clfswm-second-mode.lisp to clfswm.lisp.
+
 	* src/clfswm-util.lisp (identify-key): Show the documentation for
 	the function bound on a key.
 	(with-movement): Move with-movement,
