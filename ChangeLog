@@ -2,6 +2,9 @@
 
 	* src/clfswm-util.lisp (identify-key): Show the documentation for
 	the function bound on a key.
+	(with-movement): Move with-movement,
+	current-frame-fill/pack/resize-*  from bindings-second-mode.lisp
+	to clfswm-util.lisp.
 
 	* src/clfswm-menu.lisp: New menu system that let user change keys
 	or functions associated to keys.

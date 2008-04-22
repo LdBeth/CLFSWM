@@ -215,7 +215,3 @@
   "Leave second mode"
   (banish-pointer)
   (throw 'exit-second-loop nil))
-
-
-
-

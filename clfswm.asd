@@ -38,8 +38,10 @@
 			  :depends-on ("package" "clfswm-internal"))
 			 (:file "clfswm-info"
 			  :depends-on ("package" "version" "xlib-util" "config" "clfswm-keys" "clfswm" "clfswm-internal"))
+			 (:file "clfswm-menu"
+			  :depends-on ("package" "clfswm-info"))
 			 (:file "clfswm-util"
-			  :depends-on ("clfswm" "keysyms" "clfswm-info" "clfswm-second-mode" "clfswm-query"))
+			  :depends-on ("clfswm" "keysyms" "clfswm-info" "clfswm-second-mode" "clfswm-query" "clfswm-menu"))
 			 (:file "clfswm-query"
 			  :depends-on ("package" "config"))
 			 (:file "clfswm-layout"
@@ -48,8 +50,6 @@
 			  :depends-on ("clfswm" "clfswm-util" "clfswm-second-mode"))
 			 (:file "clfswm-nw-hooks"
 			  :depends-on ("package" "clfswm-util" "clfswm-info"))
-			 (:file "clfswm-menu"
-			  :depends-on ("package" "clfswm-info"))
 			 (:file "bindings"
 			  :depends-on ("clfswm" "clfswm-internal" "clfswm-util"))
 			 (:file "bindings-second-mode"
