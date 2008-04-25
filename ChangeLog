@@ -1,3 +1,5 @@
+Another test
+
 2008-04-25  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (current-frame-manage-window-type): Let the
