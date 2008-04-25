@@ -28,38 +28,38 @@
 
 ;;; Conversion functions
 ;;; Float -> Pixel conversion
-(defun x-fl->px (x father)
+(defun x-fl->px (x parent)
   "Convert float X coordinate to pixel"
-  (round (+ (* x (frame-rw father)) (frame-rx father))))
+  (round (+ (* x (frame-rw parent)) (frame-rx parent))))
 
-(defun y-fl->px (y father)
+(defun y-fl->px (y parent)
   "Convert float Y coordinate to pixel"
-  (round (+ (* y (frame-rh father)) (frame-ry father))))
+  (round (+ (* y (frame-rh parent)) (frame-ry parent))))
 
-(defun w-fl->px (w father)
+(defun w-fl->px (w parent)
   "Convert float Width coordinate to pixel"
-  (round (* w (frame-rw father))))
+  (round (* w (frame-rw parent))))
 
-(defun h-fl->px (h father)
+(defun h-fl->px (h parent)
   "Convert float Height coordinate to pixel"
-  (round (* h (frame-rh father))))
+  (round (* h (frame-rh parent))))
 
 ;;; Pixel -> Float conversion
-(defun x-px->fl (x father)
+(defun x-px->fl (x parent)
   "Convert pixel X coordinate to float"
-  (/ (- x (frame-rx father)) (frame-rw father)))
+  (/ (- x (frame-rx parent)) (frame-rw parent)))
 
-(defun y-px->fl (y father)
+(defun y-px->fl (y parent)
   "Convert pixel Y coordinate to float"
-  (/ (- y (frame-ry father)) (frame-rh father)))
+  (/ (- y (frame-ry parent)) (frame-rh parent)))
 
-(defun w-px->fl (w father)
+(defun w-px->fl (w parent)
   "Convert pixel Width coordinate to float"
-  (/ w (frame-rw father)))
+  (/ w (frame-rw parent)))
 
-(defun h-px->fl (h father)
+(defun h-px->fl (h parent)
   "Convert pixel Height coordinate to float"
-  (/ h (frame-rh father)))
+  (/ h (frame-rh parent)))
 
 
 
@@ -220,31 +220,31 @@
 
 
 
-(defun add-frame (frame father)
-  (push frame (frame-child father))
+(defun add-frame (frame parent)
+  (push frame (frame-child parent))
   frame)
 
 
-(defun place-frame (frame father prx pry prw prh)
+(defun place-frame (frame parent prx pry prw prh)
   "Place a frame from real (pixel) coordinates"
   (with-slots (window x y w h) frame
     (setf (xlib:drawable-x window) prx
 	  (xlib:drawable-y window) pry
 	  (xlib:drawable-width window) prw
 	  (xlib:drawable-height window) prh
-	  x (x-px->fl prx father)
-	  y (y-px->fl pry father)
-	  w (w-px->fl prw father)
-	  h (h-px->fl prh father))))
+	  x (x-px->fl prx parent)
+	  y (y-px->fl pry parent)
+	  w (w-px->fl prw parent)
+	  h (h-px->fl prh parent))))
 
-(defun fixe-real-size (frame father)
+(defun fixe-real-size (frame parent)
   "Fixe real (pixel) coordinates in float coordinates"
   (when (frame-p frame)
     (with-slots (x y w h rx ry rw rh) frame
-      (setf x (x-px->fl rx father)
-	    y (y-px->fl ry father)
-	    w (w-px->fl rw father)
-	    h (h-px->fl rh father)))))
+      (setf x (x-px->fl rx parent)
+	    y (y-px->fl ry parent)
+	    w (w-px->fl rw parent)
+	    h (h-px->fl rh parent)))))
 
 (defun fixe-real-size-current-child ()
   "Fixe real (pixel) coordinates in float coordinates for children in the current child"
@@ -264,11 +264,11 @@
 
 
 
-(defun find-father-frame (to-find &optional (root *root-frame*))
-  "Return the father frame of to-find"
+(defun find-parent-frame (to-find &optional (root *root-frame*))
+  "Return the parent frame of to-find"
   (with-all-frames (root frame)
     (when (member to-find (frame-child frame))
-      (return-from find-father-frame frame))))
+      (return-from find-parent-frame frame))))
 
   
 
@@ -353,22 +353,22 @@
 
 
 
-(defun get-father-layout (child father)
-  (if (frame-p father)
-      (aif (frame-layout father)
-	   (funcall it child father)
-	   (no-layout child father))
+(defun get-parent-layout (child parent)
+  (if (frame-p parent)
+      (aif (frame-layout parent)
+	   (funcall it child parent)
+	   (no-layout child parent))
       (get-fullscreen-size)))
 
 
 
-(defgeneric adapt-child-to-father (child father))
+(defgeneric adapt-child-to-parent (child parent))
 
-(defmethod adapt-child-to-father ((window xlib:window) father)
+(defmethod adapt-child-to-parent ((window xlib:window) parent)
   (with-xlib-protect
     (if (eql (window-type window) :normal)
 	(multiple-value-bind (nx ny nw nh raise-p)
-	    (get-father-layout window father)
+	    (get-parent-layout window parent)
 	  (setf nw (max nw 1)  nh (max nh 1))
 	  (let ((change (or (/= (xlib:drawable-x window) nx)
 			    (/= (xlib:drawable-y window) ny)
@@ -381,23 +381,23 @@
 	    (values raise-p change)))
 	(values nil nil))))
 
-(defmethod adapt-child-to-father ((frame frame) father)
+(defmethod adapt-child-to-parent ((frame frame) parent)
   (with-xlib-protect
-      (multiple-value-bind (nx ny nw nh raise-p)
-	  (get-father-layout frame father)
-	(with-slots (rx ry rw rh window) frame
-	  (setf rx nx  ry ny
-		rw (max nw 1)
-		rh (max nh 1))
-	  (let ((change (or (/= (xlib:drawable-x window) rx)
-			    (/= (xlib:drawable-y window) ry)
-			    (/= (xlib:drawable-width window) rw)
-			    (/= (xlib:drawable-height window) rh))))
-	    (setf (xlib:drawable-x window) rx
-		  (xlib:drawable-y window) ry
-		  (xlib:drawable-width window) rw
-		  (xlib:drawable-height window) rh)
-	    (values raise-p change))))))
+    (multiple-value-bind (nx ny nw nh raise-p)
+	(get-parent-layout frame parent)
+      (with-slots (rx ry rw rh window) frame
+	(setf rx nx  ry ny
+	      rw (max nw 1)
+	      rh (max nh 1))
+	(let ((change (or (/= (xlib:drawable-x window) rx)
+			  (/= (xlib:drawable-y window) ry)
+			  (/= (xlib:drawable-width window) rw)
+			  (/= (xlib:drawable-height window) rh))))
+	  (setf (xlib:drawable-x window) rx
+		(xlib:drawable-y window) ry
+		(xlib:drawable-width window) rw
+		(xlib:drawable-height window) rh)
+	  (values raise-p change))))))
    
 
 
@@ -412,26 +412,26 @@
 
 (defmethod show-child ((frame frame) raise-p first-p)
   (with-xlib-protect
-      (with-slots (window) frame
-	  (when (or *show-root-frame-p* (not (equal frame *current-root*)))
-	    (setf (xlib:window-background window) (get-color "Black"))
-	    (xlib:map-window window)
-	    (raise-if-needed window raise-p first-p)
-	    (display-frame-info frame)))))
+    (with-slots (window) frame
+      (when (or *show-root-frame-p* (not (equal frame *current-root*)))
+	(setf (xlib:window-background window) (get-color "Black"))
+	(xlib:map-window window)
+	(raise-if-needed window raise-p first-p)
+	(display-frame-info frame)))))
 
 
 (defmethod show-child ((window xlib:window) raise-p first-p)
   (with-xlib-protect
-	(xlib:map-window window)
-	(raise-if-needed window raise-p first-p)))
+    (xlib:map-window window)
+    (raise-if-needed window raise-p first-p)))
 
 
 (defgeneric hide-child (child))
 
 (defmethod hide-child ((frame frame))
   (with-xlib-protect
-      (with-slots (window) frame
-	(xlib:unmap-window window))))
+    (with-slots (window) frame
+      (xlib:unmap-window window))))
 
 (defmethod hide-child ((window xlib:window))
   (hide-window window))
@@ -445,18 +445,18 @@
 
 (defmethod select-child ((frame frame) selected)
   (with-xlib-protect
-      (when (and (frame-p frame) (frame-window frame))
-	(setf (xlib:window-border (frame-window frame))
-	      (get-color (cond ((equal selected :maybe) *color-maybe-selected*)
-			       ((equal selected nil) *color-unselected*)
-			       (selected *color-selected*)))))))
+    (when (and (frame-p frame) (frame-window frame))
+      (setf (xlib:window-border (frame-window frame))
+	    (get-color (cond ((equal selected :maybe) *color-maybe-selected*)
+			     ((equal selected nil) *color-unselected*)
+			     (selected *color-selected*)))))))
 
 (defmethod select-child ((window xlib:window) selected)
   (with-xlib-protect
-      (setf (xlib:window-border window)
-	    (get-color (cond ((equal selected :maybe) *color-maybe-selected*)
-			     ((equal selected nil) *color-unselected*)
-			     (selected *color-selected*))))))
+    (setf (xlib:window-border window)
+	  (get-color (cond ((equal selected :maybe) *color-maybe-selected*)
+			   ((equal selected nil) *color-unselected*)
+			   (selected *color-selected*))))))
 
 (defun select-current-frame (selected)
   (select-child *current-child* selected))
@@ -483,18 +483,18 @@
   "Show all children from *current-root*. Start the effective display
 only for display-child and its children"
   (let ((geometry-change nil))
-    (labels ((rec (root father first-p first-father display-p)
+    (labels ((rec (root parent first-p first-parent display-p)
 	       (multiple-value-bind (raise-p change)
-		   (adapt-child-to-father root father)
+		   (adapt-child-to-parent root parent)
 		 (when change (setf geometry-change change))
 		 (when display-p
 		   (show-child root raise-p first-p)))
 	       (select-child root (if (equal root *current-child*) t
-				      (if (and first-p first-father) :maybe nil)))
+				      (if (and first-p first-parent) :maybe nil)))
 	       (when (frame-p root)
 		 (let ((first-child (first (frame-child root))))
 		   (dolist (child (reverse (frame-child root)))
-		     (rec child root (equal child first-child) (and first-p first-father)
+		     (rec child root (equal child first-child) (and first-p first-parent)
 			  (or display-p (equal root display-child))))))))
       (rec *current-root* nil t t (equal display-child *current-root*))
       (set-focus-to-current-child)
@@ -518,24 +518,24 @@ only for display-child and its children"
 
 
 
-(defun focus-child (child father)
+(defun focus-child (child parent)
   "Focus child - Return true if something has change"
-  (when (and (frame-p father)
-	     (member child (frame-child father)))
-    (when (not (equal child (first (frame-child father))))
-      (loop until (equal child (first (frame-child father)))
-	 do (setf (frame-child father) (rotate-list (frame-child father))))
+  (when (and (frame-p parent)
+	     (member child (frame-child parent)))
+    (when (not (equal child (first (frame-child parent))))
+      (loop until (equal child (first (frame-child parent)))
+	 do (setf (frame-child parent) (rotate-list (frame-child parent))))
       t)))
 
-(defun focus-child-rec (child father)
-  "Focus child and its fathers - Return true if something has change"
+(defun focus-child-rec (child parent)
+  "Focus child and its parents - Return true if something has change"
   (let ((change nil))
-    (labels ((rec (child father)
-	       (when (focus-child child father)
+    (labels ((rec (child parent)
+	       (when (focus-child child parent)
 		 (setf change t))
-	       (when father
-		 (rec father (find-father-frame father)))))
-      (rec child father))
+	       (when parent
+		 (rec parent (find-parent-frame parent)))))
+      (rec child parent))
     change))
 
 
@@ -544,28 +544,28 @@ only for display-child and its children"
     (setf *current-child* child)
     t))
 
-(defgeneric set-current-child (child father window-father))
+(defgeneric set-current-child (child parent window-parent))
 
-(defmethod set-current-child ((child xlib:window) father window-father)
-  (set-current-child-generic (if window-father father child)))
+(defmethod set-current-child ((child xlib:window) parent window-parent)
+  (set-current-child-generic (if window-parent parent child)))
 
-(defmethod set-current-child ((child frame) father window-father)
-  (declare (ignore father window-father))
+(defmethod set-current-child ((child frame) parent window-parent)
+  (declare (ignore parent window-parent))
   (set-current-child-generic child))
 
 
-(defun set-current-root (father)
-  "Set current root if father is not in current root"
-  (unless (find-child father *current-root*)
-    (setf *current-root* father)))
+(defun set-current-root (parent)
+  "Set current root if parent is not in current root"
+  (unless (find-child parent *current-root*)
+    (setf *current-root* parent)))
 
 
-(defun focus-all-children (child father &optional (window-father t))
-  "Focus child and its fathers -
-For window: set current child to window or its father according to window-father"
-  (let ((new-focus (focus-child-rec child father))
-	(new-current-child (set-current-child child father window-father))
-	(new-root (set-current-root father)))
+(defun focus-all-children (child parent &optional (window-parent t))
+  "Focus child and its parents -
+For window: set current child to window or its parent according to window-parent"
+  (let ((new-focus (focus-child-rec child parent))
+	(new-current-child (set-current-child child parent window-parent))
+	(new-root (set-current-root parent)))
     (or new-focus new-current-child new-root)))
 
 
@@ -580,9 +580,9 @@ For window: set current child to window or its father according to window-father
     (if frame-is-root?
 	(hide-all *current-root*)
 	(select-current-frame nil))
-    (let ((father (find-father-frame *current-child*)))
-      (when (frame-p father)
-	(with-slots (child) father
+    (let ((parent (find-parent-frame *current-child*)))
+      (when (frame-p parent)
+	(with-slots (child) parent
 	  (setf child (funcall fun-rotate child))
 	  (setf *current-child* (first child)))))
     (when frame-is-root?
@@ -604,15 +604,15 @@ For window: set current child to window or its father according to window-father
   (select-current-frame :maybe)
   (when (frame-p *current-child*)
     (awhen (first (frame-child *current-child*))
-	   (setf *current-child* it)))
+      (setf *current-child* it)))
   (select-current-frame t))
 
 (defun select-previous-level ()
   "Select the previous level in frame"
   (unless (equal *current-child* *current-root*)
     (select-current-frame :maybe)
-    (awhen (find-father-frame *current-child*)
-	   (setf *current-child* it))
+    (awhen (find-parent-frame *current-child*)
+      (setf *current-child* it))
     (select-current-frame t)))
 
 
@@ -643,11 +643,11 @@ For window: set current child to window or its father according to window-father
   (show-all-children *current-root*))
 
 (defun leave-frame ()
-  "Leave the selected frame - ie make its father the root frame"
+  "Leave the selected frame - ie make its parent the root frame"
   (hide-all *current-root*)
-  (awhen (find-father-frame *current-root*)
-	 (when (frame-p it)
-	   (setf *current-root* it)))
+  (awhen (find-parent-frame *current-root*)
+    (when (frame-p it)
+      (setf *current-root* it)))
   (show-all-children *current-root*))
 
 
@@ -691,7 +691,7 @@ For window: set current child to window or its father according to window-father
 (defun remove-child-in-all-frames (child)
   "Remove child in all frames from *root-frame*"
   (when (equal child *current-root*)
-    (setf *current-root* (find-father-frame child)))
+    (setf *current-root* (find-parent-frame child)))
   (when (equal child *current-child*)
     (setf *current-child* *current-root*))
   (remove-child-in-frames child *root-frame*))

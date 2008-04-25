@@ -53,12 +53,12 @@
     (setf (frame-layout *current-child*) layout)))
 
 
-(defun get-managed-child (father)
+(defun get-managed-child (parent)
   "Return only window in normal mode who can be tiled"
-  (when (frame-p father)
+  (when (frame-p parent)
     (remove-if #'(lambda (x)
 		   (and (xlib:window-p x) (not (eql (window-type x) :normal))))
-	       (frame-child father))))
+	       (frame-child parent))))
 
 
 
@@ -90,22 +90,22 @@
 
 
 ;;; No layout
-(defgeneric no-layout (child father)
+(defgeneric no-layout (child parent)
   (:documentation "Maximize windows in there frame - leave frame to there size (no layout)"))
 
-(defmethod no-layout ((child xlib:window) father)
-  (with-slots (rx ry rw rh) father
+(defmethod no-layout ((child xlib:window) parent)
+  (with-slots (rx ry rw rh) parent
     (values (1+ rx)
 	    (1+ ry)
 	    (- rw 2)
 	    (- rh 2)
 	    :first-only)))
 
-(defmethod no-layout ((child frame) father)
-  (values (x-fl->px (frame-x child) father)
-	  (y-fl->px (frame-y child) father)
-	  (w-fl->px (frame-w child) father)
-	  (h-fl->px (frame-h child) father)
+(defmethod no-layout ((child frame) parent)
+  (values (x-fl->px (frame-x child) parent)
+	  (y-fl->px (frame-y child) parent)
+	  (w-fl->px (frame-w child) parent)
+	  (h-fl->px (frame-h child) parent)
 	  t))
 
 
@@ -120,18 +120,18 @@
 
 
 ;;; Tile layout
-(defgeneric tile-layout (child father)
+(defgeneric tile-layout (child parent)
   (:documentation "Tile child in its frame"))
 
-(defmethod tile-layout (child father)
-  (let* ((managed-children (get-managed-child father))
+(defmethod tile-layout (child parent)
+  (let* ((managed-children (get-managed-child parent))
 	 (pos (position child managed-children))
 	 (len (length managed-children))
 	 (n (ceiling (sqrt len)))
-	 (dx (/ (frame-rw father) n))
-	 (dy (/ (frame-rh father) (ceiling (/ len n)))))
-    (values (round (+ (frame-rx father) (truncate (* (mod pos n) dx)) 1))
-	    (round (+ (frame-ry father) (truncate (* (truncate (/ pos n)) dy)) 1))
+	 (dx (/ (frame-rw parent) n))
+	 (dy (/ (frame-rh parent) (ceiling (/ len n)))))
+    (values (round (+ (frame-rx parent) (truncate (* (mod pos n) dx)) 1))
+	    (round (+ (frame-ry parent) (truncate (* (truncate (/ pos n)) dy)) 1))
 	    (round (- dx 2))
 	    (round (- dy 2))
 	    t)))
@@ -144,27 +144,27 @@
 
 
 ;;; Tile Left
-(defgeneric tile-left-layout (child father)
+(defgeneric tile-left-layout (child parent)
   (:documentation "Tile Left: main child on left and others on right"))
 
-(defmethod tile-left-layout (child father)
-  (with-slots (rx ry rw rh) father
-    (let* ((managed-children (get-managed-child father))
+(defmethod tile-left-layout (child parent)
+  (with-slots (rx ry rw rh) parent
+    (let* ((managed-children (get-managed-child parent))
 	   (pos (position child managed-children))
 	   (len (max (1- (length managed-children)) 1))
 	   (dy (/ rh len))
-	   (size (or (frame-data-slot father :tile-size) 0.8)))
-	(if (= pos 0)
-	    (values (1+ rx)
-		    (1+ ry)
-		    (- (round (* rw size)) 2)
-		    (- rh 2)
-		    t)
-	    (values (1+ (round (+ rx (* rw size))))
-		    (1+ (round (+ ry (* dy (1- pos)))))
-		    (- (round (* rw (- 1 size))) 2)
-		    (- (round dy) 2)
-		    t)))))
+	   (size (or (frame-data-slot parent :tile-size) 0.8)))
+      (if (= pos 0)
+	  (values (1+ rx)
+		  (1+ ry)
+		  (- (round (* rw size)) 2)
+		  (- rh 2)
+		  t)
+	  (values (1+ (round (+ rx (* rw size))))
+		  (1+ (round (+ ry (* dy (1- pos)))))
+		  (- (round (* rw (- 1 size))) 2)
+		  (- (round dy) 2)
+		  t)))))
 
 
 (defun set-tile-left-layout ()
@@ -177,16 +177,16 @@
 
 
 ;;; Tile right
-(defgeneric tile-right-layout (child father)
+(defgeneric tile-right-layout (child parent)
   (:documentation "Tile Right: main child on right and others on left"))
 
-(defmethod tile-right-layout (child father)
-  (with-slots (rx ry rw rh) father
-    (let* ((managed-children (get-managed-child father))
+(defmethod tile-right-layout (child parent)
+  (with-slots (rx ry rw rh) parent
+    (let* ((managed-children (get-managed-child parent))
 	   (pos (position child managed-children))
 	   (len (max (1- (length managed-children)) 1))
 	   (dy (/ rh len))
-	   (size (or (frame-data-slot father :tile-size) 0.8)))
+	   (size (or (frame-data-slot parent :tile-size) 0.8)))
       (if (= pos 0)
 	  (values (1+ (round (+ rx (* rw (- 1 size)))))
 		  (1+ ry)
@@ -212,27 +212,27 @@
 
 
 ;;; Tile Top
-(defgeneric tile-top-layout (child father)
+(defgeneric tile-top-layout (child parent)
   (:documentation "Tile Top: main child on top and others on bottom"))
 
-(defmethod tile-top-layout (child father)
-  (with-slots (rx ry rw rh) father
-    (let* ((managed-children (get-managed-child father))
+(defmethod tile-top-layout (child parent)
+  (with-slots (rx ry rw rh) parent
+    (let* ((managed-children (get-managed-child parent))
 	   (pos (position child managed-children))
 	   (len (max (1- (length managed-children)) 1))
 	   (dx (/ rw len))
-	   (size (or (frame-data-slot father :tile-size) 0.8)))
-	(if (= pos 0)
-	    (values (1+ rx)
-		    (1+ ry)
-		    (- rw 2)
-		    (- (round (* rh size)) 2)
-		    t)
-	    (values (1+ (round (+ rx (* dx (1- pos)))))
-		    (1+ (round (+ ry (* rh size))))
-		    (- (round dx) 2)
-		    (- (round (* rh (- 1 size))) 2)
-		    t)))))
+	   (size (or (frame-data-slot parent :tile-size) 0.8)))
+      (if (= pos 0)
+	  (values (1+ rx)
+		  (1+ ry)
+		  (- rw 2)
+		  (- (round (* rh size)) 2)
+		  t)
+	  (values (1+ (round (+ rx (* dx (1- pos)))))
+		  (1+ (round (+ ry (* rh size))))
+		  (- (round dx) 2)
+		  (- (round (* rh (- 1 size))) 2)
+		  t)))))
 
 
 (defun set-tile-top-layout ()
@@ -245,16 +245,16 @@
 
 
 ;;; Tile Bottom
-(defgeneric tile-bottom-layout (child father)
+(defgeneric tile-bottom-layout (child parent)
   (:documentation "Tile Bottom: main child on bottom and others on top"))
 
-(defmethod tile-bottom-layout (child father)
-  (with-slots (rx ry rw rh) father
-    (let* ((managed-children (get-managed-child father))
+(defmethod tile-bottom-layout (child parent)
+  (with-slots (rx ry rw rh) parent
+    (let* ((managed-children (get-managed-child parent))
 	   (pos (position child managed-children))
 	   (len (max (1- (length managed-children)) 1))
 	   (dx (/ rw len))
-	   (size (or (frame-data-slot father :tile-size) 0.8)))
+	   (size (or (frame-data-slot parent :tile-size) 0.8)))
       (if (= pos 0)
 	  (values (1+ rx)
 		  (1+ (round (+ ry (* rh (- 1 size)))))
@@ -282,18 +282,18 @@
 
 
 ;;; Space layout
-(defgeneric tile-space-layout (child father)
+(defgeneric tile-space-layout (child parent)
   (:documentation "Tile Space: tile child in its frame leaving spaces between them"))
 
-(defmethod tile-space-layout (child father)
-  (with-slots (rx ry rw rh) father
-    (let* ((managed-children (get-managed-child father))
+(defmethod tile-space-layout (child parent)
+  (with-slots (rx ry rw rh) parent
+    (let* ((managed-children (get-managed-child parent))
 	   (pos (position child managed-children))
 	   (len (length managed-children))
 	   (n (ceiling (sqrt len)))
 	   (dx (/ rw n))
 	   (dy (/ rh (ceiling (/ len n))))
-	   (size (or (frame-data-slot father :tile-space-size) 0.1)))
+	   (size (or (frame-data-slot parent :tile-space-size) 0.1)))
       (when (> size 0.5) (setf size 0.45))
       (values (round (+ rx (truncate (* (mod pos n) dx)) (* dx size) 1))
 	      (round (+ ry (truncate (* (truncate (/ pos n)) dy)) (* dy size) 1))

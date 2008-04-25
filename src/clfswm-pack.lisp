@@ -35,9 +35,9 @@
   (+ (frame-y frame) (frame-h frame)))
 
 
-(defun find-edge-up (current-frame father)
+(defun find-edge-up (current-frame parent)
   (let ((y-found 0))
-    (dolist (frame (frame-child father))
+    (dolist (frame (frame-child parent))
       (when (and (frame-p frame)
 		 (not (equal frame current-frame))
 		 (<= (frame-y2 frame) (frame-y current-frame))
@@ -46,9 +46,9 @@
 	(setf y-found (max y-found (frame-y2 frame)))))
     y-found))
 	     
-(defun find-edge-down (current-frame father)
+(defun find-edge-down (current-frame parent)
   (let ((y-found 1))
-    (dolist (frame (frame-child father))
+    (dolist (frame (frame-child parent))
       (when (and (frame-p frame)
 		 (not (equal frame current-frame))
 		 (>= (frame-y frame) (frame-y2 current-frame))
@@ -57,9 +57,9 @@
 	(setf y-found (min y-found (frame-y frame)))))
     y-found))
 	     
-(defun find-edge-right (current-frame father)
+(defun find-edge-right (current-frame parent)
   (let ((x-found 1))
-    (dolist (frame (frame-child father))
+    (dolist (frame (frame-child parent))
       (when (and (frame-p frame)
 		 (not (equal frame current-frame))
 		 (>= (frame-x frame) (frame-x2 current-frame))
@@ -69,9 +69,9 @@
     x-found))
 	     
 
-(defun find-edge-left (current-frame father)
+(defun find-edge-left (current-frame parent)
   (let ((x-found 0))
-    (dolist (frame (frame-child father))
+    (dolist (frame (frame-child parent))
       (when (and (frame-p frame)
 		 (not (equal frame current-frame))
 		 (<= (frame-x2 frame) (frame-x current-frame))
@@ -85,26 +85,26 @@
 ;;;,-----
 ;;;| Pack functions
 ;;;`-----
-(defun pack-frame-up (frame father)
+(defun pack-frame-up (frame parent)
   "Pack frame to up"
-  (let ((y-found (find-edge-up frame father)))
+  (let ((y-found (find-edge-up frame parent)))
     (setf (frame-y frame) y-found)))
 
 
-(defun pack-frame-down (frame father)
+(defun pack-frame-down (frame parent)
   "Pack frame to down"
-  (let ((y-found (find-edge-down frame father)))
+  (let ((y-found (find-edge-down frame parent)))
     (setf (frame-y frame) (- y-found (frame-h frame)))))
 
-(defun pack-frame-right (frame father)
+(defun pack-frame-right (frame parent)
   "Pack frame to right"
-  (let ((x-found (find-edge-right frame father)))
+  (let ((x-found (find-edge-right frame parent)))
     (setf (frame-x frame) (- x-found (frame-w frame)))))
 
 
-(defun pack-frame-left (frame father)
+(defun pack-frame-left (frame parent)
   "Pack frame to left"
-  (let ((x-found (find-edge-left frame father)))
+  (let ((x-found (find-edge-left frame parent)))
     (setf (frame-x frame) x-found)))
 
 
@@ -117,30 +117,30 @@
 ;;;,-----
 ;;;| Fill functions
 ;;;`-----
-(defun fill-frame-up (frame father)
+(defun fill-frame-up (frame parent)
   "Fill a frame up"
-  (let* ((y-found (find-edge-up frame father))
+  (let* ((y-found (find-edge-up frame parent))
 	 (dy (- (frame-y frame) y-found)))
     (setf (frame-y frame) y-found
 	  (frame-h frame) (+ (frame-h frame) dy))))
 
-(defun fill-frame-down (frame father)
+(defun fill-frame-down (frame parent)
   "Fill a frame down"
-  (let* ((y-found (find-edge-down frame father))
+  (let* ((y-found (find-edge-down frame parent))
 	 (dy (- y-found (frame-y2 frame))))
     (setf (frame-h frame) (+ (frame-h frame) dy))))
 
 
-(defun fill-frame-left (frame father)
+(defun fill-frame-left (frame parent)
   "Fill a frame left"
-  (let* ((x-found (find-edge-left frame father))
+  (let* ((x-found (find-edge-left frame parent))
 	 (dx (- (frame-x frame) x-found)))
     (setf (frame-x frame) x-found
 	  (frame-w frame) (+ (frame-w frame) dx))))
 
-(defun fill-frame-right (frame father)
+(defun fill-frame-right (frame parent)
   "Fill a frame rigth"
-  (let* ((x-found (find-edge-right frame father))
+  (let* ((x-found (find-edge-right frame parent))
 	 (dx (- x-found (frame-x2 frame))))
     (setf (frame-w frame) (+ (frame-w frame) dx))))
 

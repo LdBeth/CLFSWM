@@ -102,7 +102,7 @@
     (when (and window (not (xlib:window-equal window *no-focus-window*)))
       (setf *current-child* *current-root*)
       (hide-child window)
-      (remove-child-in-frame window (find-father-frame window))
+      (remove-child-in-frame window (find-parent-frame window))
       (show-all-children))))
 
 
@@ -166,14 +166,14 @@
   "Cut the current child to the selection"
   (copy-current-child)
   (hide-all *current-child*)
-  (remove-child-in-frame *current-child* (find-father-frame *current-child* *current-root*))
+  (remove-child-in-frame *current-child* (find-parent-frame *current-child* *current-root*))
   (setf *current-child* *current-root*)
   (show-all-children))
 
 (defun remove-current-child ()
-  "Remove the current child from its father frame"
+  "Remove the current child from its parent frame"
   (hide-all *current-child*)
-  (remove-child-in-frame *current-child* (find-father-frame *current-child* *current-root*))
+  (remove-child-in-frame *current-child* (find-parent-frame *current-child* *current-root*))
   (setf *current-child* *current-root*)
   (leave-second-mode))
       
@@ -181,7 +181,7 @@
 (defun paste-selection-no-clear ()
   "Paste the selection in the current frame - Do not clear the selection after paste"
   (let ((frame-dest (typecase *current-child*
-		      (xlib:window (find-father-frame *current-child* *current-root*))
+		      (xlib:window (find-parent-frame *current-child* *current-root*))
 		      (frame *current-child*))))
     (when frame-dest
       (dolist (child *child-selection*)
@@ -335,9 +335,9 @@
 (defun focus-frame-by (frame)
   (when (frame-p frame)
     (hide-all *current-root*)
-    (focus-all-children frame (or (find-father-frame frame *current-root*)
-				(find-father-frame frame)
-				*root-frame*))
+    (focus-all-children frame (or (find-parent-frame frame *current-root*)
+				  (find-parent-frame frame)
+				  *root-frame*))
     (show-all-children *current-root*)))
 
 
@@ -379,7 +379,7 @@
       (setf *current-root* *root-frame*))
     (when (equal frame *current-child*)
       (setf *current-child* *current-root*))
-    (remove-child-in-frame frame (find-father-frame frame)))
+    (remove-child-in-frame frame (find-parent-frame frame)))
   (show-all-children *current-root*))
 
 
@@ -398,7 +398,7 @@
 (defun move-current-child-by (child frame-dest)
   (when (and child (frame-p frame-dest))
     (hide-all *current-root*)
-    (remove-child-in-frame child (find-father-frame child))
+    (remove-child-in-frame child (find-parent-frame child))
     (pushnew child (frame-child frame-dest))
     (focus-all-children child frame-dest)
     (show-all-children *current-root*)))
@@ -448,22 +448,22 @@
 (defun force-window-in-frame ()
   "Force the current window to move in the frame (Useful only for transient windows)"
   (when (xlib:window-p *current-child*)
-    (let ((father (find-father-frame *current-child*)))
+    (let ((parent (find-parent-frame *current-child*)))
       (with-xlib-protect
-	(setf (xlib:drawable-x *current-child*) (frame-rx father)
-	      (xlib:drawable-y *current-child*) (frame-ry father)))))
+	(setf (xlib:drawable-x *current-child*) (frame-rx parent)
+	      (xlib:drawable-y *current-child*) (frame-ry parent)))))
   (leave-second-mode))
 
 (defun force-window-center-in-frame ()
   "Force the current window to move in the center of the frame (Useful only for transient windows)"
   (when (xlib:window-p *current-child*)
-    (let ((father (find-father-frame *current-child*)))
+    (let ((parent (find-parent-frame *current-child*)))
       (with-xlib-protect
-	(setf (xlib:drawable-x *current-child*) (truncate (+ (frame-rx father)
-							     (/ (- (frame-rw father)
+	(setf (xlib:drawable-x *current-child*) (truncate (+ (frame-rx parent)
+							     (/ (- (frame-rw parent)
 								   (xlib:drawable-width *current-child*)) 2)))
-	      (xlib:drawable-y *current-child*) (truncate (+ (frame-ry father)
-							     (/ (- (frame-rh father)
+	      (xlib:drawable-y *current-child*) (truncate (+ (frame-ry parent)
+							     (/ (- (frame-rh parent)
 								   (xlib:drawable-height *current-child*)) 2)))))))
   (leave-second-mode))
 
@@ -496,7 +496,7 @@
 
 
 ;;; Mouse utilities
-(defun move-frame (frame father orig-x orig-y)
+(defun move-frame (frame parent orig-x orig-y)
   (hide-all-children frame)
   (with-slots (window) frame
     (raise-window window)
@@ -528,11 +528,11 @@
 	     do (with-xlib-protect
 		  (xlib:display-finish-output *display*)
 		  (xlib:process-event *display* :handler #'handle-event))))
-	(setf (frame-x frame) (x-px->fl (xlib:drawable-x window) father)
-	      (frame-y frame) (y-px->fl (xlib:drawable-y window) father))))))
+	(setf (frame-x frame) (x-px->fl (xlib:drawable-x window) parent)
+	      (frame-y frame) (y-px->fl (xlib:drawable-y window) parent))))))
 
 
-(defun resize-frame (frame father orig-x orig-y)
+(defun resize-frame (frame parent orig-x orig-y)
   (hide-all-children frame)
   (with-slots (window) frame
     (raise-window window)
@@ -569,34 +569,34 @@
 	     do (with-xlib-protect
 		  (xlib:display-finish-output *display*)
 		  (xlib:process-event *display* :handler #'handle-event))))
-	(setf (frame-w frame) (w-px->fl (xlib:drawable-width window) father)
-	      (frame-h frame) (h-px->fl (xlib:drawable-height window) father))))))
+	(setf (frame-w frame) (w-px->fl (xlib:drawable-width window) parent)
+	      (frame-h frame) (h-px->fl (xlib:drawable-height window) parent))))))
 
 	   
 
 (defun mouse-click-to-focus-generic (window root-x root-y mouse-fn)
-  "Focus the current frame or focus the current window father
+  "Focus the current frame or focus the current window parent
 mouse-fun is #'move-frame or #'resize-frame"
   (let ((to-replay t)
 	(child window)
-	(father (find-father-frame window *current-root*))
+	(parent (find-parent-frame window *current-root*))
 	(root-p (or (equal window *root*)
 		    (equal window (frame-window *current-root*)))))
     (when (or (not root-p) *create-frame-on-root*)
-      (unless father
+      (unless parent
 	(if root-p
 	    (progn
 	      (setf child (create-frame)
-		    father *current-root*
+		    parent *current-root*
 		    mouse-fn #'resize-frame)
-	      (place-frame child father root-x root-y 10 10)
+	      (place-frame child parent root-x root-y 10 10)
 	      (xlib:map-window (frame-window child))
 	      (pushnew child (frame-child *current-root*)))
 	    (setf child (find-frame-window window *current-root*)
-		  father (find-father-frame child *current-root*)))
+		  parent (find-parent-frame child *current-root*)))
 	(when child
-	  (funcall mouse-fn child father root-x root-y)))
-      (when (and child father (focus-all-children child father))
+	  (funcall mouse-fn child parent root-x root-y)))
+      (when (and child parent (focus-all-children child parent))
 	(when (show-all-children)
 	  (setf to-replay nil))))
     (if to-replay
@@ -604,34 +604,34 @@ mouse-fun is #'move-frame or #'resize-frame"
 	(stop-button-event))))
 
 (defun mouse-click-to-focus-and-move (window root-x root-y)
-  "Move and focus the current frame or focus the current window father"
+  "Move and focus the current frame or focus the current window parent"
   (mouse-click-to-focus-generic window root-x root-y #'move-frame))
 
 (defun mouse-click-to-focus-and-resize (window root-x root-y)
-  "Resize and focus the current frame or focus the current window father"
+  "Resize and focus the current frame or focus the current window parent"
   (mouse-click-to-focus-generic window root-x root-y #'resize-frame))
 
 
 
 
-(defun mouse-focus-move/resize-generic (root-x root-y mouse-fn window-father)
-  "Focus the current frame or focus the current window father
+(defun mouse-focus-move/resize-generic (root-x root-y mouse-fn window-parent)
+  "Focus the current frame or focus the current window parent
 mouse-fun is #'move-frame or #'resize-frame.
-Focus child and its fathers -
-For window: set current child to window or its father according to window-father"
+Focus child and its parents -
+For window: set current child to window or its parent according to window-parent"
   (let* ((child (find-child-under-mouse root-x root-y))
-	 (father (find-father-frame child)))
+	 (parent (find-parent-frame child)))
     (when (equal child *current-root*)
       (setf child (create-frame)
-	    father *current-root*
+	    parent *current-root*
 	    mouse-fn #'resize-frame)
-      (place-frame child father root-x root-y 10 10)
-	    (xlib:map-window (frame-window child))
-	    (pushnew child (frame-child *current-root*)))
+      (place-frame child parent root-x root-y 10 10)
+      (xlib:map-window (frame-window child))
+      (pushnew child (frame-child *current-root*)))
     (typecase child
-      (xlib:window (funcall mouse-fn father (find-father-frame father) root-x root-y))
-      (frame (funcall mouse-fn child father root-x root-y)))
-    (focus-all-children child father window-father)
+      (xlib:window (funcall mouse-fn parent (find-parent-frame parent) root-x root-y))
+      (frame (funcall mouse-fn child parent root-x root-y)))
+    (focus-all-children child parent window-parent)
     (show-all-children)))
 
 
@@ -674,7 +674,7 @@ For window: set current child to window or its father according to window-father
 
 
 (defun mouse-leave-frame (window root-x root-y)
-  "Leave the selected frame - ie make its father the root frame"
+  "Leave the selected frame - ie make its parent the root frame"
   (declare (ignore root-x root-y))
   (let ((frame (find-frame-window window)))
     (when (or frame (xlib:window-equal window *root*))
@@ -732,10 +732,10 @@ For window: set current child to window or its father according to window-father
 				("BackSpace" remove-binding-on-slot
 					     ,(format nil "Remove slot ~A binding on child: ~A" n (child-fullname *current-child*)))
 				("   -  " nil " -")
-				("Tab" jump-to-slot
-					 ,(format nil "Jump to child: ~A" (aif (aref key-slots current-slot)
-									       (child-fullname it)
-									       "Not set - Please, bind it with Return"))))
+			      ("Tab" jump-to-slot
+				     ,(format nil "Jump to child: ~A" (aif (aref key-slots current-slot)
+									   (child-fullname it)
+									   "Not set - Please, bind it with Return"))))
 			   (list default-bind))))))
 
 
@@ -754,19 +754,19 @@ For window: set current child to window or its father according to window-father
 ;;; Pack
 (defun current-frame-pack-up ()
   "Pack the current frame up"
-  (with-movement (pack-frame-up *current-child* (find-father-frame *current-child* *current-root*))))
+  (with-movement (pack-frame-up *current-child* (find-parent-frame *current-child* *current-root*))))
 
 (defun current-frame-pack-down ()
   "Pack the current frame down"
-  (with-movement (pack-frame-down *current-child* (find-father-frame *current-child* *current-root*))))
+  (with-movement (pack-frame-down *current-child* (find-parent-frame *current-child* *current-root*))))
 
 (defun current-frame-pack-left ()
   "Pack the current frame left"
-  (with-movement (pack-frame-left *current-child* (find-father-frame *current-child* *current-root*))))
+  (with-movement (pack-frame-left *current-child* (find-parent-frame *current-child* *current-root*))))
 
 (defun current-frame-pack-right ()
   "Pack the current frame right"
-  (with-movement (pack-frame-right *current-child* (find-father-frame *current-child* *current-root*))))
+  (with-movement (pack-frame-right *current-child* (find-parent-frame *current-child* *current-root*))))
 
 ;;; Center
 (defun center-current-frame ()
@@ -776,42 +776,42 @@ For window: set current child to window or its father according to window-father
 ;;; Fill
 (defun current-frame-fill-up ()
   "Fill the current frame up"
-  (with-movement (fill-frame-up *current-child* (find-father-frame *current-child* *current-root*))))
+  (with-movement (fill-frame-up *current-child* (find-parent-frame *current-child* *current-root*))))
 
 (defun current-frame-fill-down ()
   "Fill the current frame down"
-  (with-movement (fill-frame-down *current-child* (find-father-frame *current-child* *current-root*))))
+  (with-movement (fill-frame-down *current-child* (find-parent-frame *current-child* *current-root*))))
 
 (defun current-frame-fill-left ()
   "Fill the current frame left"
-  (with-movement (fill-frame-left *current-child* (find-father-frame *current-child* *current-root*))))
+  (with-movement (fill-frame-left *current-child* (find-parent-frame *current-child* *current-root*))))
 
 (defun current-frame-fill-right ()
   "Fill the current frame right"
-  (with-movement (fill-frame-right *current-child* (find-father-frame *current-child* *current-root*))))
+  (with-movement (fill-frame-right *current-child* (find-parent-frame *current-child* *current-root*))))
 
 (defun current-frame-fill-all-dir ()
   "Fill the current frame in all directions"
   (with-movement
-    (let ((father (find-father-frame *current-child* *current-root*)))
-      (fill-frame-up *current-child* father)
-      (fill-frame-down *current-child* father)
-      (fill-frame-left *current-child* father)
-      (fill-frame-right *current-child* father))))
+    (let ((parent (find-parent-frame *current-child* *current-root*)))
+      (fill-frame-up *current-child* parent)
+      (fill-frame-down *current-child* parent)
+      (fill-frame-left *current-child* parent)
+      (fill-frame-right *current-child* parent))))
 
 (defun current-frame-fill-vertical ()
   "Fill the current frame vertically"
   (with-movement
-    (let ((father (find-father-frame *current-child* *current-root*)))
-      (fill-frame-up *current-child* father)
-      (fill-frame-down *current-child* father))))
+    (let ((parent (find-parent-frame *current-child* *current-root*)))
+      (fill-frame-up *current-child* parent)
+      (fill-frame-down *current-child* parent))))
 
 (defun current-frame-fill-horizontal ()
   "Fill the current frame horizontally"
   (with-movement
-    (let ((father (find-father-frame *current-child* *current-root*)))
-      (fill-frame-left *current-child* father)
-      (fill-frame-right *current-child* father))))
+    (let ((parent (find-parent-frame *current-child* *current-root*)))
+      (fill-frame-left *current-child* parent)
+      (fill-frame-right *current-child* parent))))
     
 
 ;;; Resize
@@ -854,7 +854,7 @@ For window: set current child to window or its father according to window-father
 	    (setf (frame-rw *current-child*) min-width))
 	  (when (and height-p min-height)
 	    (setf (frame-rh *current-child*) min-height))
-	  (fixe-real-size *current-child* (find-father-frame *current-child*))
+	  (fixe-real-size *current-child* (find-parent-frame *current-child*))
 	  (leave-second-mode))))))
 
 (defun adapt-current-frame-to-window-hints ()

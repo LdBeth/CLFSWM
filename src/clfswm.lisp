@@ -67,18 +67,18 @@
 	     (when (has-h value-mask) (setf (xlib:drawable-height window) height))
 	     (when (has-w value-mask) (setf (xlib:drawable-width window) width))))
     (with-xlib-protect
-	(xlib:with-state (window)
-	  (when (has-bw value-mask)
-	    (setf (xlib:drawable-border-width window) border-width))
-	  (if (find-child window *current-root*)
-	      (case (window-type window)
-		(:normal (adapt-child-to-father window (find-father-frame window *current-root*))
-			 (send-configuration-notify window))
-		(t (adjust-from-request)))
-	      (adjust-from-request))
-	  (when (has-stackmode value-mask)
-	    (case stack-mode
-	      (:above (raise-window window))))))))
+      (xlib:with-state (window)
+	(when (has-bw value-mask)
+	  (setf (xlib:drawable-border-width window) border-width))
+	(if (find-child window *current-root*)
+	    (case (window-type window)
+	      (:normal (adapt-child-to-parent window (find-parent-frame window *current-root*))
+		       (send-configuration-notify window))
+	      (t (adjust-from-request)))
+	    (adjust-from-request))
+	(when (has-stackmode value-mask)
+	  (case stack-mode
+	    (:above (raise-window window))))))))
 
 
 
@@ -156,21 +156,21 @@
   (declare (ignore display))
   ;;(dbg  event-key)
   (with-xlib-protect
-      (case event-key
-	(:button-press (call-hook *button-press-hook* event-slots))
-	(:button-release (call-hook *button-release-hook* event-slots))
-	(:motion-notify (call-hook *motion-notify-hook* event-slots))
-	(:key-press (call-hook *key-press-hook* event-slots))
-	(:configure-request (call-hook *configure-request-hook* event-slots))
-	(:configure-notify (call-hook *configure-notify-hook* event-slots))
-	(:map-request (call-hook *map-request-hook* event-slots))
-	(:unmap-notify (call-hook *unmap-notify-hook* event-slots))
-	(:destroy-notify (call-hook *destroy-notify-hook* event-slots))
-	(:mapping-notify (call-hook *mapping-notify-hook* event-slots))
-	(:property-notify (call-hook *property-notify-hook* event-slots))
-	(:create-notify (call-hook *create-notify-hook* event-slots))
-	(:enter-notify (call-hook *enter-notify-hook* event-slots))
-	(:exposure (call-hook *exposure-hook* event-slots))))
+    (case event-key
+      (:button-press (call-hook *button-press-hook* event-slots))
+      (:button-release (call-hook *button-release-hook* event-slots))
+      (:motion-notify (call-hook *motion-notify-hook* event-slots))
+      (:key-press (call-hook *key-press-hook* event-slots))
+      (:configure-request (call-hook *configure-request-hook* event-slots))
+      (:configure-notify (call-hook *configure-notify-hook* event-slots))
+      (:map-request (call-hook *map-request-hook* event-slots))
+      (:unmap-notify (call-hook *unmap-notify-hook* event-slots))
+      (:destroy-notify (call-hook *destroy-notify-hook* event-slots))
+      (:mapping-notify (call-hook *mapping-notify-hook* event-slots))
+      (:property-notify (call-hook *property-notify-hook* event-slots))
+      (:create-notify (call-hook *create-notify-hook* event-slots))
+      (:enter-notify (call-hook *enter-notify-hook* event-slots))
+      (:exposure (call-hook *exposure-hook* event-slots))))
   t)
 
 

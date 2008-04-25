@@ -1,5 +1,7 @@
 2008-04-25  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/*.lisp: Rename all 'father' occurrences to 'parent'.
+
 	* src/clfswm-nw-hooks.lisp
 	(open-in-new-frame-in-parent-frame-nw-hook): New new window hook.
 

@@ -333,7 +333,7 @@
 
 
 (defun sm-mouse-leave-frame (window root-x root-y)
-  "Leave the selected frame - ie make its father the root frame"
+  "Leave the selected frame - ie make its parent the root frame"
   (declare (ignore window root-x root-y))
   (leave-frame))
 

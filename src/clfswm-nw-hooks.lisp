@@ -41,7 +41,7 @@
 (defun set-nw-hook (hook)
   "Set the hook of the current child"
   (let ((frame (if (xlib:window-p *current-child*)
-		   (find-father-frame *current-child*)
+		   (find-parent-frame *current-child*)
 		   *current-child*)))
     (setf (frame-nw-hook frame) hook)
     (leave-second-mode)))
@@ -52,7 +52,7 @@
 
 (defun default-window-placement (frame window)
   (case (window-type window)
-    (:normal (adapt-child-to-father window frame))
+    (:normal (adapt-child-to-parent window frame))
     (t (place-window-from-hints window))))
 
 (defun leave-if-not-frame (child)
@@ -137,7 +137,7 @@
 (defun open-in-new-frame-in-parent-frame-nw-hook (frame window)
   "Open the next window in a new frame in the parent frame"
   (let ((new-frame (create-frame))
-	(parent (find-father-frame frame)))
+	(parent (find-parent-frame frame)))
     (when parent
       (pushnew new-frame (frame-child parent))
       (pushnew window (frame-child new-frame))
