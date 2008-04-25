@@ -744,7 +744,7 @@ managed."
 						(t 1)))
     (grab-all-buttons window)
     (unless (do-all-frames-nw-hook window)
-      (default-frame-nw-hook nil window))
+      (call-hook *default-nw-hook* (list *root-frame* window)))
     (netwm-add-in-client-list window)))
 
 

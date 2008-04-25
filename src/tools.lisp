@@ -198,7 +198,7 @@ Return the result of the last hook"
 
 (defun ensure-printable (string &optional (new #\?))
   "Ensure a string is printable in ascii"
-  (substitute-if-not new #'standard-char-p string))
+  (or (substitute-if-not new #'standard-char-p (or string "")) ""))
 
 
 (defun ensure-n-elems (list n)

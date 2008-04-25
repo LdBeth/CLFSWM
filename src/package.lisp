@@ -117,27 +117,6 @@ others in the same frame")
   "Arrow action in the second mode")
 
 
-
-;;; Hook definitions
-;;;
-;;; A hook is a function, a symbol or a list of functions with a rest
-;;; arguments.
-;;;
-;;; This hooks are set in clfswm.lisp, you can overwrite them or extend
-;;; them with a hook list.
-;;;
-;;; See clfswm.lisp for hooks examples.
-
-;;; Init hook. This hook is run just after the first root frame is created
-(defun default-init-hook ()
-  (let ((frame (add-frame (create-frame :name "Default"
-                                        :layout nil :x 0.05 :y 0.05
-                                        :w 0.9 :h 0.9) *root-frame*)))
-    (setf *current-child* frame)))
-
-(defparameter *init-hook* #'default-init-hook)
-
-
 ;;; Main mode hooks (set in clfswm.lisp)
 (defparameter *button-press-hook* nil)
 (defparameter *button-release-hook* nil)

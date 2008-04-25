@@ -9,21 +9,22 @@ Should handle these soon.
 
 - Add a frame parameter to choose what window type to handle. [Philippe]
 
-- Hook to open next window in named/numbered frame [Philippe]
+- Move the autodoc in its own file (clfswm-autodoc.lisp) and make the autodoc
+  for the menu system.
 
-- Undo/redo (any idea to implement this is welcome)
+- Hook to open next window in named/numbered frame [Philippe]
 
 - Ensure-unique-number/name (new function) [Philippe]
 
 - Raise/lower frame - this can be done with children order [Philippe]
-
-- Adapt frame to window hints [Philippe]
 
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
 
 - A Gimp layout example [Philippe]
 
 - Add boundaries in the info window [Philippe]
+
+- Allow to move/resize transient windows [Philippe]
 
 
 MAYBE
@@ -54,3 +55,5 @@ Operation:
 - cd/pwd a la shell to navigate throu frames. [Philippe] 
 
 - Hide/Unhide frame [Philippe]
+
+- Undo/redo (any idea to implement this is welcome)

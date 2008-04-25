@@ -40,6 +40,7 @@
   (let ((name (query-string (format nil "New child name: (last: ~A)" (child-name *current-child*))
 			    (child-name *current-child*))))
     (rename-child *current-child* name)
+    (display-frame-info *current-child*)
     (leave-second-mode)))
 
 
@@ -739,9 +740,9 @@ For window: set current child to window or its father according to window-father
 
 
 
-
-;;; Useful function for the second mode
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Useful function for the second mode ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defmacro with-movement (&body body)
   `(when (frame-p *current-child*)
      ,@body
@@ -837,3 +838,33 @@ For window: set current child to window or its father according to window-father
 (defun current-frame-resize-all-dir-minimal ()
   "Resize down the current frame to its minimal size"
   (with-movement (resize-minimal-frame *current-child*)))
+
+
+
+;;; Adapt frame functions
+(defun adapt-current-frame-to-window-hints-generic (width-p height-p)
+  "Adapt the current frame to the current window minimal size hints"
+  (when (frame-p *current-child*)
+    (let ((window (first (frame-child *current-child*))))
+      (when (xlib:window-p window)
+	(let* ((hints (xlib:wm-normal-hints window))
+	       (min-width (and hints (xlib:wm-size-hints-min-width hints)))
+	       (min-height (and hints (xlib:wm-size-hints-min-height hints))))
+	  (when (and width-p min-width)
+	    (setf (frame-rw *current-child*) min-width))
+	  (when (and height-p min-height)
+	    (setf (frame-rh *current-child*) min-height))
+	  (fixe-real-size *current-child* (find-father-frame *current-child*))
+	  (leave-second-mode))))))
+
+(defun adapt-current-frame-to-window-hints ()
+  "Adapt the current frame to the current window minimal size hints"
+  (adapt-current-frame-to-window-hints-generic t t))
+
+(defun adapt-current-frame-to-window-width-hint ()
+  "Adapt the current frame to the current window minimal width hint"
+  (adapt-current-frame-to-window-hints-generic t nil))
+
+(defun adapt-current-frame-to-window-height-hint ()
+  "Adapt the current frame to the current window minimal height hint"
+  (adapt-current-frame-to-window-hints-generic nil t))

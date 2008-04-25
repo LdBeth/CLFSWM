@@ -133,6 +133,9 @@
 
 (add-menu-key 'window-menu "i" 'force-window-in-frame)
 (add-menu-key 'window-menu "c" 'force-window-center-in-frame)
+(add-menu-key 'window-menu "a" 'adapt-current-frame-to-window-hints)
+(add-menu-key 'window-menu "w" 'adapt-current-frame-to-window-width-hint)
+(add-menu-key 'window-menu "h" 'adapt-current-frame-to-window-height-hint)
 
 
 (add-menu-key 'selection-menu "x" 'cut-current-child)

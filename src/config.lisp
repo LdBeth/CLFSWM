@@ -47,10 +47,35 @@ You can tweak this to what you want"
 ;;  (values 100 100 800 600))
 
 
+;;; Hook definitions
+;;;
+;;; A hook is a function, a symbol or a list of functions with a rest
+;;; arguments.
+;;;
+;;; This hooks are set in clfswm.lisp, you can overwrite them or extend
+;;; them with a hook list.
+;;;
+;;; See clfswm.lisp for hooks examples.
+
+(defun default-init-hook ()
+  (let ((frame (add-frame (create-frame :name "Default"
+                                        :layout nil :x 0.05 :y 0.05
+                                        :w 0.9 :h 0.9) *root-frame*)))
+    (setf *current-child* frame)))
+
+(defparameter *init-hook* 'default-init-hook
+  "Init hook. This hook is run just after the first root frame is created")
+
+(defparameter *default-nw-hook* 'default-frame-nw-hook
+  "Default action to do on newly created windows")
+
+
+
+
 ;;; CONFIG
 (defparameter *create-frame-on-root* nil
   "Set this variable to true if you want to allow to create a new frame
-on root window in the main mode")
+on the root window in the main mode with the mouse")
 
 
 ;;; CONFIG: Main mode colors

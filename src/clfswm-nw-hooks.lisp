@@ -133,6 +133,28 @@
 (register-nw-hook 'set-open-in-new-frame-in-root-frame-nw-hook)
 
 
+;;; Open new window in a new frame in the parent frame hook
+(defun open-in-new-frame-in-parent-frame-nw-hook (frame window)
+  "Open the next window in a new frame in the parent frame"
+  (let ((new-frame (create-frame))
+	(parent (find-father-frame frame)))
+    (when parent
+      (pushnew new-frame (frame-child parent))
+      (pushnew window (frame-child new-frame))
+      (hide-all *current-root*)
+      (setf *current-root* parent)
+      (setf *current-child* new-frame)
+      (default-window-placement new-frame window)
+      (show-all-children *current-root*)))
+  (setf (frame-nw-hook frame) nil))
+
+(defun set-open-in-new-frame-in-parent-frame-nw-hook ()
+  "Open the next window in a new frame in the parent frame"
+  (set-nw-hook #'open-in-new-frame-in-parent-frame-nw-hook))
+
+(register-nw-hook 'set-open-in-new-frame-in-parent-frame-nw-hook)
+
+
 
 ;;; Open a new window but leave the focus on the current child
 (defun leave-focus-frame-nw-hook (frame window)

@@ -1,3 +1,19 @@
+2008-04-25  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-nw-hooks.lisp
+	(open-in-new-frame-in-parent-frame-nw-hook): New new window hook.
+
+	* src/clfswm-util.lisp (adapt-current-frame-to-window-hints): New
+	function.
+
+	* src/tools.lisp (ensure-printable): Return always a string even
+	with a null string.
+
+2008-04-24  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/config.lisp (*default-nw-hook*): New variable to change the
+	default new window hook.
+
 2008-04-22  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm.asd (clfswm): Add a dependency from
