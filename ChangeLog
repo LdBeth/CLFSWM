@@ -1,5 +1,18 @@
 2008-04-25  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-util.lisp (current-frame-manage-window-type): Let the
+	user choose what window type the current frame must handle.
+	(display-current-window-info): New function.
+	(current-frame-manage-all-window-type)
+	(current-frame-manage-only-normal-window-type)
+	(current-frame-manage-no-window-type): New functions.
+
+	* src/clfswm-internal.lisp (managed-window-p): New function.
+
+	* src/package.lisp (frame): Managed type: new frame
+	parameter. This allow to choose what window type a frame must
+	handle.
+
 	* src/*.lisp: Rename all 'father' occurrences to 'parent'.
 
 	* src/clfswm-nw-hooks.lisp

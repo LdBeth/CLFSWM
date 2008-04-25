@@ -51,9 +51,9 @@
 
 
 (defun default-window-placement (frame window)
-  (case (window-type window)
-    (:normal (adapt-child-to-parent window frame))
-    (t (place-window-from-hints window))))
+  (if (managed-window-p window frame)
+      (adapt-child-to-parent window frame)
+      (place-window-from-hints window)))
 
 (defun leave-if-not-frame (child)
   "Leave the child if it's not a frame"

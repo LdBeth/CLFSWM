@@ -868,3 +868,51 @@ For window: set current child to window or its parent according to window-parent
 (defun adapt-current-frame-to-window-height-hint ()
   "Adapt the current frame to the current window minimal height hint"
   (adapt-current-frame-to-window-hints-generic nil t))
+
+
+
+
+;;; Managed window type functions
+(defun current-frame-manage-window-type ()
+  "Change window types to be managed by a frame"
+  (when (frame-p *current-child*)
+    (let* ((type-str (query-string "Managed window type: (all, normal, transient, maxsize, desktop, dock, toolbar, menu, utility, splash, dialog)"
+				   (format nil "~{~:(~A~)~}" (frame-managed-type *current-child*))))
+	   (type-list (loop :for type :in (split-string type-str)
+			 :collect (intern (string-upcase type) :keyword))))
+      (setf (frame-managed-type *current-child*) type-list)))
+  (leave-second-mode))
+
+
+(defun current-frame-manage-window-type-generic (type-list)
+  (when (frame-p *current-child*)
+    (setf (frame-managed-type *current-child*) type-list))
+  (leave-second-mode))
+
+(defun current-frame-manage-all-window-type ()
+  "Manage all window type"
+  (current-frame-manage-window-type-generic '(:all)))
+
+(defun current-frame-manage-only-normal-window-type ()
+  "Manage only normal window type"
+  (current-frame-manage-window-type-generic '(:normal)))
+
+(defun current-frame-manage-no-window-type ()
+  "Do not manage any window type"
+  (current-frame-manage-window-type-generic nil))
+
+
+
+
+(defun display-current-window-info ()
+  "Display information on the current window"
+  (let ((window (typecase *current-child*
+		  (xlib:window  *current-child*)
+		  (frame (first (frame-child *current-child*))))))
+    (when window
+      (info-mode (list (format nil "Window:       ~A" window)
+		       (format nil "Window name:  ~A" (xlib:wm-name window))
+		       (format nil "Window class: ~A" (xlib:get-wm-class window))
+		       (format nil "Window type:  ~:(~A~)" (window-type window))))))
+  (leave-second-mode))
+

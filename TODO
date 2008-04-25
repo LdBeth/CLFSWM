@@ -7,7 +7,7 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Add a frame parameter to choose what window type to handle. [Philippe]
+- Allow to move/resize unmanaged windows [Philippe]
 
 - Move the autodoc in its own file (clfswm-autodoc.lisp) and make the autodoc
   for the menu system.
@@ -23,8 +23,6 @@ Should handle these soon.
 - A Gimp layout example [Philippe]
 
 - Add boundaries in the info window [Philippe]
-
-- Allow to move/resize transient windows [Philippe]
 
 
 MAYBE

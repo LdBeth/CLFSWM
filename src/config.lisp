@@ -47,6 +47,7 @@ You can tweak this to what you want"
 ;;  (values 100 100 800 600))
 
 
+
 ;;; Hook definitions
 ;;;
 ;;; A hook is a function, a symbol or a list of functions with a rest

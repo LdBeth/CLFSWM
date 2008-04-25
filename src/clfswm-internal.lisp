@@ -94,6 +94,11 @@
 (defsetf frame-data-slot set-frame-data-slot)
 
 
+(defun managed-window-p (window frame)
+  "Return t only if window is managed by frame"
+  (or (member :all (frame-managed-type frame))
+      (member (window-type window) (frame-managed-type frame))))
+
 
 
 
@@ -366,7 +371,7 @@
 
 (defmethod adapt-child-to-parent ((window xlib:window) parent)
   (with-xlib-protect
-    (if (eql (window-type window) :normal)
+    (if (managed-window-p window parent)
 	(multiple-value-bind (nx ny nw nh raise-p)
 	    (get-parent-layout window parent)
 	  (setf nw (max nw 1)  nh (max nh 1))
@@ -767,7 +772,7 @@ managed."
 		      (eql win *no-focus-window*))
 	    (when (or (eql map-state :viewable)
 		      (eql wm-state +iconic-state+))
-	      (format t "Processing ~S: type=~A ~S~%" (xlib:wm-name win) (window-type win)win)
+	      (format t "Processing ~S: type=~A ~S~%" (xlib:wm-name win) (window-type win) win)
 	      (unhide-window win)
 	      (process-new-window win)
 	      (xlib:map-window win)

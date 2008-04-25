@@ -60,6 +60,15 @@
 (defparameter *default-frame-data*
   (list '(:tile-size 0.8) '(:tile-space-size 0.1)))
 
+
+;;; CONFIG - Default managed window type for a frame
+;;; type can be  :all, :normal, :transient, :maxsize, :desktop, :dock, :toolbar, :menu, :utility, :splash, :dialog
+(defparameter *default-managed-type* '(:normal))
+;;(defparameter *default-managed-type* '(:normal :maxsize :transient))
+;;(defparameter *default-managed-type* '(:normal :transient :maxsize :desktop :dock :toolbar :menu :utility :splash :dialog))
+;;(defparameter *default-managed-type* '())
+;;(defparameter *default-managed-type* '(:all))
+
 (defclass frame ()
   ((name :initarg :name :accessor frame-name :initform nil)
    (number :initarg :number :accessor frame-number :initform 0)
@@ -74,9 +83,13 @@
    (ry :initarg :ry :accessor frame-ry :initform 0)
    (rw :initarg :rw :accessor frame-rw :initform 800)
    (rh :initarg :rh :accessor frame-rh :initform 600)
-   (layout :initarg :layout :accessor frame-layout :initform nil)
+   (layout :initarg :layout :accessor frame-layout :initform nil
+	   :documentation "Layout to display windows on a frame")
    (nw-hook :initarg :nw-hook :accessor frame-nw-hook :initform nil
-	      :documentation "Hook done by the frame when a new window is mapped")
+	    :documentation "Hook done by the frame when a new window is mapped")
+   (managed-type :initarg :managed-type :accessor frame-managed-type
+		 :initform *default-managed-type*
+		 :documentation "Managed window type")
    (window :initarg :window :accessor frame-window :initform nil)
    (gc :initarg :gc :accessor frame-gc :initform nil)
    (child :initarg :child :accessor frame-child :initform nil)

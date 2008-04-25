@@ -54,10 +54,10 @@
 
 
 (defun get-managed-child (parent)
-  "Return only window in normal mode who can be tiled"
+  "Return only the windows that are managed for tiling"
   (when (frame-p parent)
     (remove-if #'(lambda (x)
-		   (and (xlib:window-p x) (not (eql (window-type x) :normal))))
+		   (and (xlib:window-p x) (not (managed-window-p x parent))))
 	       (frame-child parent))))
 
 

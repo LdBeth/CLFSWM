@@ -71,10 +71,12 @@
 	(when (has-bw value-mask)
 	  (setf (xlib:drawable-border-width window) border-width))
 	(if (find-child window *current-root*)
-	    (case (window-type window)
-	      (:normal (adapt-child-to-parent window (find-parent-frame window *current-root*))
-		       (send-configuration-notify window))
-	      (t (adjust-from-request)))
+	    (let ((parent (find-parent-frame window *current-root*)))
+	      (if (and parent (managed-window-p window parent))
+		  (progn
+		    (adapt-child-to-parent window parent)
+		    (send-configuration-notify window))
+		  (adjust-from-request)))
 	    (adjust-from-request))
 	(when (has-stackmode value-mask)
 	  (case stack-mode

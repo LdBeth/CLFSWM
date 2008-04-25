@@ -89,6 +89,7 @@
 (add-menu-key 'frame-menu "o" 'frame-layout-once-menu)
 (add-menu-key 'frame-menu "n" 'frame-nw-hook-menu)
 (add-sub-menu 'frame-menu "m" 'frame-movement-menu "Frame movement menu")
+(add-sub-menu 'frame-menu "w" 'managed-window-menu "Managed window type menu")
 (add-sub-menu 'frame-menu "i" 'frame-info-menu "Frame info menu")
 (add-menu-key 'frame-menu "r" 'rename-current-child)
 (add-menu-key 'frame-menu "u" 'renumber-current-frame)
@@ -127,15 +128,23 @@
 (add-menu-key 'frame-resize-menu #\a 'current-frame-resize-all-dir-minimal)
 
 
+(add-menu-key 'managed-window-menu "m" 'current-frame-manage-window-type)
+(add-menu-key 'managed-window-menu "a" 'current-frame-manage-all-window-type)
+(add-menu-key 'managed-window-menu "n" 'current-frame-manage-only-normal-window-type)
+(add-menu-key 'managed-window-menu "u" 'current-frame-manage-no-window-type)
+
+
 (add-menu-key 'frame-info-menu "s" 'show-all-frames-info)
 (add-menu-key 'frame-info-menu "h" 'hide-all-frames-info)
 
 
-(add-menu-key 'window-menu "i" 'force-window-in-frame)
+(add-menu-key 'window-menu "i" 'display-current-window-info)
+(add-menu-key 'window-menu "f" 'force-window-in-frame)
 (add-menu-key 'window-menu "c" 'force-window-center-in-frame)
 (add-menu-key 'window-menu "a" 'adapt-current-frame-to-window-hints)
 (add-menu-key 'window-menu "w" 'adapt-current-frame-to-window-width-hint)
 (add-menu-key 'window-menu "h" 'adapt-current-frame-to-window-height-hint)
+
 
 
 (add-menu-key 'selection-menu "x" 'cut-current-child)
@@ -171,6 +180,10 @@
   "Open the frame menu"
   (open-menu (find-menu 'frame-menu)))
 
+(defun open-window-menu ()
+  "Open the window menu"
+  (open-menu (find-menu 'window-menu)))
+
 (defun open-action-by-name-menu ()
   "Open the action by name menu"
   (open-menu (find-menu 'action-by-name-menu)))
@@ -182,6 +195,7 @@
 
 (define-second-key ("m") 'open-menu)
 (define-second-key ("f") 'open-frame-menu)
+(define-second-key ("w") 'open-window-menu)
 (define-second-key ("n") 'open-action-by-name-menu)
 (define-second-key ("u") 'open-action-by-number-menu)
 
