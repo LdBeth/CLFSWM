@@ -1,0 +1,137 @@
+#!/bin/bash -e
+#
+# (C) 2008 Xavier Maillard <xma@gnu.org>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+#
+#
+# --------------------------------------------------------------------------
+# Documentation:
+#
+# Original code and idea: http://stumpwm.antidesktop.net/cgi-bin/wiki/SetUp
+#
+# Installation:
+# Put this script wherever you want and just call it from your .xinitrc file
+#
+# The first time you will launch it, it will build the final
+# executable and then call it. To force a rebuild of your executable
+# (say you have updated something in the CLFSWM source tree), just
+# delete the image and restart your X session.
+# --------------------------------------------------------------------------
+
+usage() {
+
+    echo "$0 [options]
+--
+n,no-start           don't start CLFSWM after image dump
+f,force              force image dump
+rebuild              same as -f,--force
+l,with-lisp=         use <lisp> as the common lisp implementation
+d,dump-path=         path to the dump directory
+with-clfswm          path to clfswm.asd file
+with-asdf            path to the asdf.lisp file"
+
+    exit 0
+}
+
+die() {
+	echo >&2 "$@"
+	exit 1
+}
+
+build_clisp ()
+{
+    clisp -m 8MB -E ISO-8859-1 -q -K full -i $asdf_path/asdf.lisp -x "(asdf:oos 'asdf:load-op :clfswm)\
+       		(EXT:SAVEINITMEM \"$dump_image\" :INIT-FUNCTION 'clfswm:main :EXECUTABLE t :norc t)"
+}
+
+build_sbcl()
+{
+   sbcl --disable-debugger --eval "(mapc 'require '(asdf clfswm))" \
+       --eval "(save-lisp-and-die \"$dump_image\" :toplevel 'clfswm:main)"
+}
+
+no_start=no
+lisp=clisp
+dump_path=$HOME/var/cache
+asdf_path=$HOME/usr/src/SVNed/clfswm
+clfswm_asd_path=$HOME/usr/share/common-lisp/systems
+
+while test $# != 0
+do
+    case "$1" in
+	-n|--no-start)
+	    no_start=yes ;;
+	-f|--force|--rebuild)
+	    force=yes ;;
+	-d|--dump-path)
+	    shift
+	    dump_path="$1" ;;
+	--with-clfswm)
+	    shift
+	    clfswm_asd_path="$1" ;;
+	--with-asdf)
+	    shift
+	    asdf_path="$1" ;;
+	-l|--with-lisp)
+	    shift
+	    case "$1" in
+		'')
+		    usage;;
+		clisp|sbcl)
+		    lisp="$1" ;;
+	    esac
+	    ;;
+	--)
+	    shift
+	    break ;;
+	*)
+	    usage ;;
+    esac
+    shift
+done
+
+
+dump_image="$dump_path/clfswm-$(cksum $(type -p $lisp) | cut -d ' ' -f 1).core"
+
+if test yes = "$force" && test -e "$dump_image"
+then
+    echo "Removing old image."
+    rm -f "$dump_image"
+fi
+
+if test ! -e "$dump_image" ||
+    (   for i in "$(dirname $(readlink $clfswm_asd_path/clfswm.asd))"/*.lisp
+        do  test "$dump_image" -ot "$i" && exit 1
+        done )
+then
+    test -x $(type -p $lisp) || die "$lisp can't be found."
+    test -e $clfswm_asd_path/clfswm.asd || die "can't find clfswm.asd in $clfswm_asd_path"
+    test -e $asdf_path/asdf.lisp || die "can't find asdf.lisp in $asdf_path"
+
+    eval build_$lisp
+fi
+
+# Run the resulting image
+if test no = "$no_start"
+then
+    case $lisp in
+	clisp ) $dump_image ;;
+	sbcl ) exec sbcl --core "$dump_image" ;;
+	*) echo "..." ;;
+    esac
+else
+    echo "As requested, we have just dumped the image."
+fi
