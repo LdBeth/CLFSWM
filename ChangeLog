@@ -1,5 +1,8 @@
 2008-04-27  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/xlib-util.lisp (resize-window): Take care of window size
+	hints.
+
 	* src/clfswm-util.lisp (mouse-focus-move/resize-generic): Allow to
 	move/resize unmanaged windows.
 
