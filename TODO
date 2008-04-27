@@ -7,12 +7,9 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Allow to move/resize unmanaged windows (Alt+button 1/3) [Philippe]
-
 - forced-managed-window/forced-unmanaged-window: new frame parameter [Philippe]
 
 - Move window over frame (Alt+Control+B1) [Philippe]
-
 
 LESS URGENT TODO
 ================
@@ -32,6 +29,7 @@ LESS URGENT TODO
 
 - Add boundaries in the info window [Philippe]
 
+- Show unmanaged windows only for *current-child* [Philippe]
 
 MAYBE
 =====

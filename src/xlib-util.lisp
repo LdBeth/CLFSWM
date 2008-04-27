@@ -353,13 +353,15 @@ Window types are in +WINDOW-TYPES+.")
       (setf pointer-grabbed t)
       (let* ((white (xlib:make-color :red 1.0 :green 1.0 :blue 1.0))
 	     (black (xlib:make-color :red 0.0 :green 0.0 :blue 0.0)))
-	(setf cursor-font (xlib:open-font *display* "cursor")
-	      cursor (xlib:create-glyph-cursor :source-font cursor-font
-					       :source-char cursor-char
-					       :mask-font cursor-font
-					       :mask-char cursor-mask-char
-					       :foreground black
-					       :background white))
+	(if cursor-char
+	    (setf cursor-font (xlib:open-font *display* "cursor")
+		  cursor (xlib:create-glyph-cursor :source-font cursor-font
+						   :source-char cursor-char
+						   :mask-font cursor-font
+						   :mask-char cursor-mask-char
+						   :foreground black
+						   :background white))
+	    (setf cursor nil))
 	(xlib:grab-pointer root pointer-mask
 			   :owner-p owner-p  :sync-keyboard-p nil :sync-pointer-p nil :cursor cursor)))
 
@@ -438,6 +440,92 @@ Window types are in +WINDOW-TYPES+.")
 
 (defun replay-button-event ()
   (xlib:allow-events *display* :replay-pointer))
+
+
+
+
+
+
+
+;;; Mouse action on window 
+(defun move-window (window orig-x orig-y &optional additional-fn additional-arg)
+  (raise-window window)
+  (let ((done nil)
+	(dx (- (xlib:drawable-x window) orig-x))
+	(dy (- (xlib:drawable-y window) orig-y))
+	(pointer-grabbed-p (xgrab-pointer-p)))
+    (labels ((motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
+	       (declare (ignore event-slots))
+	       (setf (xlib:drawable-x window) (+ root-x dx)
+		     (xlib:drawable-y window) (+ root-y dy))
+	       (when additional-fn
+		 (apply additional-fn additional-arg)))
+	     (my-handle-event (&rest event-slots &key event-key &allow-other-keys)
+	       (case event-key
+		 (:motion-notify (apply #'motion-notify event-slots))
+		 (:button-release (setf done t))
+		 (:configure-request (call-hook *configure-request-hook* event-slots))
+		 (:configure-notify (call-hook *configure-notify-hook* event-slots))
+		 (:map-request (call-hook *map-request-hook* event-slots))
+		 (:unmap-notify (call-hook *unmap-notify-hook* event-slots))
+		 (:destroy-notify (call-hook *destroy-notify-hook* event-slots))
+		 (:mapping-notify (call-hook *mapping-notify-hook* event-slots))
+		 (:property-notify (call-hook *property-notify-hook* event-slots))
+		 (:create-notify (call-hook *create-notify-hook* event-slots))
+		 (:enter-notify (call-hook *enter-notify-hook* event-slots))
+		 (:exposure (call-hook *exposure-hook* event-slots)))
+	       t))
+      (unless pointer-grabbed-p
+	(xgrab-pointer *root* nil nil))
+      (loop until done
+	 do (with-xlib-protect
+	      (xlib:display-finish-output *display*)
+	      (xlib:process-event *display* :handler #'my-handle-event)))
+      (unless pointer-grabbed-p
+	(xungrab-pointer)))))
+
+
+(defun resize-window (window orig-x orig-y &optional additional-fn additional-arg)
+  (raise-window window)
+  (let ((done nil)
+	(dx (- (xlib:drawable-x window) orig-x))
+	(dy (- (xlib:drawable-y window) orig-y))
+	(lx orig-x)
+	(ly orig-y)
+	(pointer-grabbed-p (xgrab-pointer-p)))
+    (labels ((motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
+	       (declare (ignore event-slots))
+	       (setf (xlib:drawable-width window) (max (+ (xlib:drawable-width window) (- root-x lx)) 10)
+		     (xlib:drawable-height window) (max (+ (xlib:drawable-height window) (- root-y ly)) 10)
+		     dx (- dx (- root-x lx))
+		     dy (- dy (- root-y ly))
+		     lx root-x ly root-y)
+	       (when additional-fn
+		 (apply additional-fn additional-arg)))
+	     (handle-event (&rest event-slots &key event-key &allow-other-keys)
+	       (case event-key
+		 (:motion-notify (apply #'motion-notify event-slots))
+		 (:button-release (setf done t))
+		 (:configure-request (call-hook *configure-request-hook* event-slots))
+		 (:configure-notify (call-hook *configure-notify-hook* event-slots))
+		 (:map-request (call-hook *map-request-hook* event-slots))
+		 (:unmap-notify (call-hook *unmap-notify-hook* event-slots))
+		 (:destroy-notify (call-hook *destroy-notify-hook* event-slots))
+		 (:mapping-notify (call-hook *mapping-notify-hook* event-slots))
+		 (:property-notify (call-hook *property-notify-hook* event-slots))
+		 (:create-notify (call-hook *create-notify-hook* event-slots))
+		 (:enter-notify (call-hook *enter-notify-hook* event-slots))
+		 (:exposure (call-hook *exposure-hook* event-slots)))
+	       t))
+      (unless pointer-grabbed-p
+	(xgrab-pointer *root* nil nil))
+      (loop until done
+	 do (with-xlib-protect
+	      (xlib:display-finish-output *display*)
+	      (xlib:process-event *display* :handler #'handle-event)))
+      (unless pointer-grabbed-p
+	(xungrab-pointer)))))
+
 
 
 

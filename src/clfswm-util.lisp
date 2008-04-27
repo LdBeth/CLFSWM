@@ -497,80 +497,21 @@
 
 ;;; Mouse utilities
 (defun move-frame (frame parent orig-x orig-y)
-  (hide-all-children frame)
-  (with-slots (window) frame
-    (raise-window window)
-    (let ((done nil)
-	  (dx (- (xlib:drawable-x window) orig-x))
-	  (dy (- (xlib:drawable-y window) orig-y)))
-      (labels ((motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
-		 (declare (ignore event-slots))
-		 (setf (xlib:drawable-x window) (+ root-x dx)
-		       (xlib:drawable-y window) (+ root-y dy))
-		 (display-frame-info frame))
-	       (handle-event (&rest event-slots &key event-key &allow-other-keys)
-		 (case event-key
-		   (:motion-notify (apply #'motion-notify event-slots))
-		   (:button-release (setf done t))
-		   (:configure-request (call-hook *configure-request-hook* event-slots))
-		   (:configure-notify (call-hook *configure-notify-hook* event-slots))
-		   (:map-request (call-hook *map-request-hook* event-slots))
-		   (:unmap-notify (call-hook *unmap-notify-hook* event-slots))
-		   (:destroy-notify (call-hook *destroy-notify-hook* event-slots))
-		   (:mapping-notify (call-hook *mapping-notify-hook* event-slots))
-		   (:property-notify (call-hook *property-notify-hook* event-slots))
-		   (:create-notify (call-hook *create-notify-hook* event-slots))
-		   (:enter-notify (call-hook *enter-notify-hook* event-slots))
-		   (:exposure (call-hook *exposure-hook* event-slots)))
-		 t))
-	(when frame
-	  (loop until done
-	     do (with-xlib-protect
-		  (xlib:display-finish-output *display*)
-		  (xlib:process-event *display* :handler #'handle-event))))
-	(setf (frame-x frame) (x-px->fl (xlib:drawable-x window) parent)
-	      (frame-y frame) (y-px->fl (xlib:drawable-y window) parent))))))
+  (when frame
+    (hide-all-children frame)
+    (with-slots (window) frame
+      (move-window window orig-x orig-y #'display-frame-info (list frame))
+      (setf (frame-x frame) (x-px->fl (xlib:drawable-x window) parent)
+	    (frame-y frame) (y-px->fl (xlib:drawable-y window) parent)))))
 
 
 (defun resize-frame (frame parent orig-x orig-y)
-  (hide-all-children frame)
-  (with-slots (window) frame
-    (raise-window window)
-    (let ((done nil)
-	  (dx (- (xlib:drawable-x window) orig-x))
-	  (dy (- (xlib:drawable-y window) orig-y))
-	  (lx orig-x)
-	  (ly orig-y))
-      (labels ((motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
-		 (declare (ignore event-slots))
-		 (setf (xlib:drawable-width window) (max (+ (xlib:drawable-width window) (- root-x lx)) 10)
-		       (xlib:drawable-height window) (max (+ (xlib:drawable-height window) (- root-y ly)) 10)
-		       dx (- dx (- root-x lx))
-		       dy (- dy (- root-y ly))
-		       lx root-x ly root-y)
-		 (display-frame-info frame))
-	       (handle-event (&rest event-slots &key event-key &allow-other-keys)
-		 (case event-key
-		   (:motion-notify (apply #'motion-notify event-slots))
-		   (:button-release (setf done t))
-		   (:configure-request (call-hook *configure-request-hook* event-slots))
-		   (:configure-notify (call-hook *configure-notify-hook* event-slots))
-		   (:map-request (call-hook *map-request-hook* event-slots))
-		   (:unmap-notify (call-hook *unmap-notify-hook* event-slots))
-		   (:destroy-notify (call-hook *destroy-notify-hook* event-slots))
-		   (:mapping-notify (call-hook *mapping-notify-hook* event-slots))
-		   (:property-notify (call-hook *property-notify-hook* event-slots))
-		   (:create-notify (call-hook *create-notify-hook* event-slots))
-		   (:enter-notify (call-hook *enter-notify-hook* event-slots))
-		   (:exposure (call-hook *exposure-hook* event-slots)))
-		 t))
-	(when frame
-	  (loop until done
-	     do (with-xlib-protect
-		  (xlib:display-finish-output *display*)
-		  (xlib:process-event *display* :handler #'handle-event))))
-	(setf (frame-w frame) (w-px->fl (xlib:drawable-width window) parent)
-	      (frame-h frame) (h-px->fl (xlib:drawable-height window) parent))))))
+  (when frame
+    (hide-all-children frame)
+    (with-slots (window) frame
+      (resize-window window orig-x orig-y #'display-frame-info (list frame))
+      (setf (frame-w frame) (w-px->fl (xlib:drawable-width window) parent)
+	    (frame-h frame) (h-px->fl (xlib:drawable-height window) parent)))))
 
 	   
 
@@ -629,7 +570,12 @@ For window: set current child to window or its parent according to window-parent
       (xlib:map-window (frame-window child))
       (pushnew child (frame-child *current-root*)))
     (typecase child
-      (xlib:window (funcall mouse-fn parent (find-parent-frame parent) root-x root-y))
+      (xlib:window
+       (if (managed-window-p child parent)
+	   (funcall mouse-fn parent (find-parent-frame parent) root-x root-y)
+	   (funcall(cond ((eql mouse-fn #'move-frame) #'move-window)
+			 ((eql mouse-fn #'resize-frame) #'resize-window))
+		   child root-x root-y)))
       (frame (funcall mouse-fn child parent root-x root-y)))
     (focus-all-children child parent window-parent)
     (show-all-children)))

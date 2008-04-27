@@ -1,3 +1,10 @@
+2008-04-27  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (mouse-focus-move/resize-generic): Allow to
+	move/resize unmanaged windows.
+
+	* src/xlib-util.lisp (move-window, resize-window): New functions.
+
 2008-04-25  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (current-frame-manage-window-type): Let the
