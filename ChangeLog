@@ -1,3 +1,21 @@
+2008-04-28  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (manage-current-window)
+	(unmanage-current-window): New functions: Allow to force to manage
+	or unmanage a window by its parent frame.
+
+	* src/bindings-second-mode.lisp (#\o): binded to
+	set-open-in-new-frame-in-parent-frame-nw-hook and
+	(#\o :control) to set-open-in-new-frame-in-root-frame-nw-hook
+
+	* src/clfswm-util.lisp (with-current-window): New macro.
+
+	* src/xlib-util.lisp (move-window, resize-window): Remove uneeded
+	exposure and enter-window handle event.
+
+	* src/clfswm-util.lisp (move-frame, resize-frame): Show all
+	children for the current child after the move/resize.
+
 2008-04-27  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/xlib-util.lisp (resize-window): Take care of window size

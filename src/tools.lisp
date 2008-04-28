@@ -41,6 +41,7 @@
 	   :ensure-list
 	   :ensure-printable
 	   :ensure-n-elems
+	   :string-equal-p
 	   :find-assoc-word
 	   :print-space
 	   :escape-string
@@ -207,7 +208,9 @@ Return the result of the last hook"
     (cond ((= length n) list)
 	  ((< length n) (ensure-n-elems (append list '(nil)) n))
 	  ((> length n) (ensure-n-elems (butlast list) n)))))
-      
+
+(defun string-equal-p (x y)
+  (when (stringp y) (string-equal x y)))
 
 
 

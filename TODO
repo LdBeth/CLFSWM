@@ -61,3 +61,5 @@ Operation:
 - Hide/Unhide frame [Philippe]
 
 - Undo/redo (any idea to implement this is welcome)
+
+- Double buffering for all text windows.

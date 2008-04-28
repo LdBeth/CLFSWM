@@ -141,6 +141,8 @@
 (add-menu-key 'window-menu "i" 'display-current-window-info)
 (add-menu-key 'window-menu "f" 'force-window-in-frame)
 (add-menu-key 'window-menu "c" 'force-window-center-in-frame)
+(add-menu-key 'window-menu "m" 'manage-current-window)
+(add-menu-key 'window-menu "u" 'unmanage-current-window)
 (add-menu-key 'window-menu "a" 'adapt-current-frame-to-window-hints)
 (add-menu-key 'window-menu "w" 'adapt-current-frame-to-window-width-hint)
 (add-menu-key 'window-menu "h" 'adapt-current-frame-to-window-height-hint)
@@ -239,7 +241,8 @@
 
 (define-second-key (#\b :mod-1) 'banish-pointer)
 
-(define-second-key (#\o) 'set-open-in-new-frame-in-root-frame-nw-hook)
+(define-second-key (#\o) 'set-open-in-new-frame-in-parent-frame-nw-hook)
+(define-second-key (#\o :control) 'set-open-in-new-frame-in-root-frame-nw-hook)
 
 
 ;;;; Escape

@@ -90,6 +90,14 @@
    (managed-type :initarg :managed-type :accessor frame-managed-type
 		 :initform *default-managed-type*
 		 :documentation "Managed window type")
+   (forced-managed-window :initarg :forced-managed-window
+			  :accessor frame-forced-managed-window
+			  :initform nil
+			  :documentation "A list of forced managed windows (wm-name or window)")
+   (forced-unmanaged-window :initarg :forced-unmanaged-window
+			  :accessor frame-forced-unmanaged-window
+			  :initform nil
+			  :documentation "A list of forced unmanaged windows (wm-name or window)")
    (window :initarg :window :accessor frame-window :initform nil)
    (gc :initarg :gc :accessor frame-gc :initform nil)
    (child :initarg :child :accessor frame-child :initform nil)

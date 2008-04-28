@@ -96,8 +96,14 @@
 
 (defun managed-window-p (window frame)
   "Return t only if window is managed by frame"
-  (or (member :all (frame-managed-type frame))
-      (member (window-type window) (frame-managed-type frame))))
+  (with-slots ((managed forced-managed-window)
+	       (unmanaged forced-unmanaged-window)) frame
+    (and (not (member window unmanaged))
+	 (not (member (xlib:wm-name window) unmanaged :test #'string-equal-p))
+	 (or (member :all (frame-managed-type frame))
+	     (member (window-type window) (frame-managed-type frame))
+	     (member window managed)
+	     (member (xlib:wm-name window) managed :test #'string-equal-p)))))
 
 
 
@@ -319,22 +325,22 @@
 
 
 
+;;; TODO: Double buffering for frame window
 (defun display-frame-info (frame)
   (let ((dy (+ (xlib:max-char-ascent *default-font*) (xlib:max-char-descent *default-font*))))
     (with-slots (name number gc window child) frame
-      (when (equal frame *current-root*)
-	(xlib:clear-area window))
+      (xlib:clear-area window)
       (setf (xlib:gcontext-foreground gc) (get-color (if (and (equal frame *current-root*)
 							      (equal frame *current-child*))
 							 "Red" "Green")))
       (xlib:draw-image-glyphs window gc 5 dy		 
-			      (format nil "Frame: ~A~A                                                  "
+			      (format nil "Frame: ~A~A"
 				      number
 				      (if name  (format nil " - ~A" name) "")))
       (let ((pos dy))
 	(when (equal frame *current-root*)
 	  (xlib:draw-image-glyphs window gc 5 (incf pos dy)
-				  (format nil "~A hidden windows             " (length (get-hidden-windows))))
+				  (format nil "~A hidden windows" (length (get-hidden-windows))))
 	  (when *child-selection*
 	    (xlib:draw-image-glyphs window gc 5 (incf pos dy)
 				    (with-output-to-string (str)
@@ -343,8 +349,7 @@
 					(typecase child
 					  (xlib:window (format str "~A " (xlib:wm-name child)))
 					  (frame (format str "frame:~A[~A] " (frame-number child)
-							 (aif (frame-name child) it "")))))
-				      (format str "                                                   ")))))
+							 (aif (frame-name child) it "")))))))))
 	(dolist (ch child)
 	  (when (xlib:window-p ch)
 	    (xlib:draw-glyphs window gc 5 (incf pos dy) (ensure-printable (xlib:wm-name ch)))))))))

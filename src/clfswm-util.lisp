@@ -443,32 +443,6 @@
 
 
 
-
-;;; Force window functions
-(defun force-window-in-frame ()
-  "Force the current window to move in the frame (Useful only for transient windows)"
-  (when (xlib:window-p *current-child*)
-    (let ((parent (find-parent-frame *current-child*)))
-      (with-xlib-protect
-	(setf (xlib:drawable-x *current-child*) (frame-rx parent)
-	      (xlib:drawable-y *current-child*) (frame-ry parent)))))
-  (leave-second-mode))
-
-(defun force-window-center-in-frame ()
-  "Force the current window to move in the center of the frame (Useful only for transient windows)"
-  (when (xlib:window-p *current-child*)
-    (let ((parent (find-parent-frame *current-child*)))
-      (with-xlib-protect
-	(setf (xlib:drawable-x *current-child*) (truncate (+ (frame-rx parent)
-							     (/ (- (frame-rw parent)
-								   (xlib:drawable-width *current-child*)) 2)))
-	      (xlib:drawable-y *current-child*) (truncate (+ (frame-ry parent)
-							     (/ (- (frame-rh parent)
-								   (xlib:drawable-height *current-child*)) 2)))))))
-  (leave-second-mode))
-
-
-
 ;;; Show frame info
 (defun show-all-frames-info ()
   "Show all frames info windows"
@@ -502,7 +476,8 @@
     (with-slots (window) frame
       (move-window window orig-x orig-y #'display-frame-info (list frame))
       (setf (frame-x frame) (x-px->fl (xlib:drawable-x window) parent)
-	    (frame-y frame) (y-px->fl (xlib:drawable-y window) parent)))))
+	    (frame-y frame) (y-px->fl (xlib:drawable-y window) parent)))
+    (show-all-children frame)))
 
 
 (defun resize-frame (frame parent orig-x orig-y)
@@ -511,7 +486,8 @@
     (with-slots (window) frame
       (resize-window window orig-x orig-y #'display-frame-info (list frame))
       (setf (frame-w frame) (w-px->fl (xlib:drawable-width window) parent)
-	    (frame-h frame) (h-px->fl (xlib:drawable-height window) parent)))))
+	    (frame-h frame) (h-px->fl (xlib:drawable-height window) parent)))
+    (show-all-children frame)))
 
 	   
 
@@ -850,15 +826,80 @@ For window: set current child to window or its parent according to window-parent
 
 
 
+
+
+
+;;; Current window utilities
+(defun get-current-window ()
+  (typecase *current-child*
+    (xlib:window  *current-child*)
+    (frame (first (frame-child *current-child*)))))
+
+(defmacro with-current-window (&body body)
+  "Bind 'window' to the current window"
+  `(let ((window (get-current-window)))
+      (when window
+	,@body)))
+
+
+
+
+
+;;; Force window functions
+(defun force-window-in-frame ()
+  "Force the current window to move in the frame (Useful only for transient windows)"
+  (with-current-window
+    (let ((parent (find-parent-frame window)))
+      (with-xlib-protect
+	(setf (xlib:drawable-x window) (frame-rx parent)
+	      (xlib:drawable-y window) (frame-ry parent)))))
+  (leave-second-mode))
+
+
+(defun force-window-center-in-frame ()
+  "Force the current window to move in the center of the frame (Useful only for transient windows)"
+  (with-current-window
+    (let ((parent (find-parent-frame window)))
+      (with-xlib-protect
+	(setf (xlib:drawable-x window) (truncate (+ (frame-rx parent)
+						    (/ (- (frame-rw parent)
+							  (xlib:drawable-width window)) 2)))
+	      (xlib:drawable-y window) (truncate (+ (frame-ry parent)
+						    (/ (- (frame-rh parent)
+							  (xlib:drawable-height window)) 2)))))))
+  (leave-second-mode))
+
+
+
 (defun display-current-window-info ()
   "Display information on the current window"
-  (let ((window (typecase *current-child*
-		  (xlib:window  *current-child*)
-		  (frame (first (frame-child *current-child*))))))
-    (when window
-      (info-mode (list (format nil "Window:       ~A" window)
-		       (format nil "Window name:  ~A" (xlib:wm-name window))
-		       (format nil "Window class: ~A" (xlib:get-wm-class window))
-		       (format nil "Window type:  ~:(~A~)" (window-type window))))))
+  (with-current-window
+    (info-mode (list (format nil "Window:       ~A" window)
+		     (format nil "Window name:  ~A" (xlib:wm-name window))
+		     (format nil "Window class: ~A" (xlib:get-wm-class window))
+		     (format nil "Window type:  ~:(~A~)" (window-type window)))))
+  (leave-second-mode))
+
+
+(defun manage-current-window ()
+  "Force to manage the current window by its parent frame"
+  (with-current-window
+    (let ((parent (find-parent-frame window)))
+      (with-slots ((managed forced-managed-window)
+		   (unmanaged forced-unmanaged-window)) parent
+	(setf unmanaged (remove window unmanaged)
+	      unmanaged (remove (xlib:wm-name window) unmanaged :test #'string-equal-p))
+	(pushnew window managed))))
+  (leave-second-mode))
+
+(defun unmanage-current-window ()
+  "Force to not manage the current window by its parent frame"
+  (with-current-window
+    (let ((parent (find-parent-frame window)))
+      (with-slots ((managed forced-managed-window)
+		   (unmanaged forced-unmanaged-window)) parent
+	(setf managed (remove window managed)
+	      managed (remove (xlib:wm-name window) managed :test #'string-equal-p))
+	(pushnew window unmanaged))))
   (leave-second-mode))
 
