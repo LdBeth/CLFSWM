@@ -1,3 +1,8 @@
+2008-04-29  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (show-all-children): Display unmanaged
+	windows only when its window parent is the current child.
+
 2008-04-28  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (manage-current-window)

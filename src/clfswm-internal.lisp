@@ -418,22 +418,29 @@
 	    (and (eql raise-p :first-only) first-p))
     (raise-window window)))
 
-(defgeneric show-child (child raise-p first-p))
+(defgeneric show-child (child parent display-p raise-p first-p))
 
-(defmethod show-child ((frame frame) raise-p first-p)
+(defmethod show-child ((frame frame) parent display-p raise-p first-p)
+  (declare (ignore parent))
+  (when display-p
+    (with-xlib-protect
+      (with-slots (window) frame
+	(when (or *show-root-frame-p* (not (equal frame *current-root*)))
+	  (setf (xlib:window-background window) (get-color "Black"))
+	  (xlib:map-window window)
+	  (raise-if-needed window raise-p first-p)
+	  (display-frame-info frame))))))
+
+
+(defmethod show-child ((window xlib:window) parent display-p raise-p first-p)
   (with-xlib-protect
-    (with-slots (window) frame
-      (when (or *show-root-frame-p* (not (equal frame *current-root*)))
-	(setf (xlib:window-background window) (get-color "Black"))
-	(xlib:map-window window)
-	(raise-if-needed window raise-p first-p)
-	(display-frame-info frame)))))
+    (if (or (managed-window-p window parent)
+	    (equal parent *current-child*))
+	(when display-p
+	  (xlib:map-window window)
+	  (raise-if-needed window raise-p first-p))
+	(hide-window window))))
 
-
-(defmethod show-child ((window xlib:window) raise-p first-p)
-  (with-xlib-protect
-    (xlib:map-window window)
-    (raise-if-needed window raise-p first-p)))
 
 
 (defgeneric hide-child (child))
@@ -497,8 +504,7 @@ only for display-child and its children"
 	       (multiple-value-bind (raise-p change)
 		   (adapt-child-to-parent root parent)
 		 (when change (setf geometry-change change))
-		 (when display-p
-		   (show-child root raise-p first-p)))
+		 (show-child root parent display-p raise-p first-p))
 	       (select-child root (if (equal root *current-child*) t
 				      (if (and first-p first-parent) :maybe nil)))
 	       (when (frame-p root)
@@ -615,7 +621,7 @@ For window: set current child to window or its parent according to window-parent
   (when (frame-p *current-child*)
     (awhen (first (frame-child *current-child*))
       (setf *current-child* it)))
-  (select-current-frame t))
+  (show-all-children))
 
 (defun select-previous-level ()
   "Select the previous level in frame"
@@ -623,7 +629,7 @@ For window: set current child to window or its parent according to window-parent
     (select-current-frame :maybe)
     (awhen (find-parent-frame *current-child*)
       (setf *current-child* it))
-    (select-current-frame t)))
+    (show-all-children)))
 
 
 

@@ -475,6 +475,8 @@ Window types are in +WINDOW-TYPES+.")
 	       t))
       (unless pointer-grabbed-p
 	(xgrab-pointer *root* nil nil))
+      (when additional-fn
+	(apply additional-fn additional-arg))
       (loop until done
 	 do (with-xlib-protect
 	      (xlib:display-finish-output *display*)
@@ -520,6 +522,8 @@ Window types are in +WINDOW-TYPES+.")
 	       t))
       (unless pointer-grabbed-p
 	(xgrab-pointer *root* nil nil))
+      (when additional-fn
+	(apply additional-fn additional-arg))
       (loop until done
 	 do (with-xlib-protect
 	      (xlib:display-finish-output *display*)

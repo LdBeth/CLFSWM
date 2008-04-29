@@ -7,15 +7,14 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- forced-managed-window/forced-unmanaged-window: new frame parameter [Philippe]
-
 - Move window over frame (Alt+Control+B1) [Philippe]
-
-LESS URGENT TODO
-================
 
 - Move the autodoc in its own file (clfswm-autodoc.lisp) and make the autodoc
   for the menu system.
+
+
+LESS URGENT TODO
+================
 
 - Hook to open next window in named/numbered frame [Philippe]
 
@@ -29,7 +28,6 @@ LESS URGENT TODO
 
 - Add boundaries in the info window [Philippe]
 
-- Show unmanaged windows only for *current-child* [Philippe]
 
 MAYBE
 =====
