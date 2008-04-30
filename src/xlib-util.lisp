@@ -460,7 +460,7 @@ Window types are in +WINDOW-TYPES+.")
 		     (xlib:drawable-y window) (+ root-y dy))
 	       (when additional-fn
 	       	 (apply additional-fn additional-arg)))
-	     (my-handle-event (&rest event-slots &key event-key &allow-other-keys)
+	     (handle-event (&rest event-slots &key event-key &allow-other-keys)
 	       (case event-key
 		 (:motion-notify (apply #'motion-notify event-slots))
 		 (:button-release (setf done t))
@@ -480,7 +480,7 @@ Window types are in +WINDOW-TYPES+.")
       (loop until done
 	 do (with-xlib-protect
 	      (xlib:display-finish-output *display*)
-	      (xlib:process-event *display* :handler #'my-handle-event)))
+	      (xlib:process-event *display* :handler #'handle-event)))
       (unless pointer-grabbed-p
 	(xungrab-pointer)))))
 
@@ -530,6 +530,37 @@ Window types are in +WINDOW-TYPES+.")
 	      (xlib:process-event *display* :handler #'handle-event)))
       (unless pointer-grabbed-p
 	(xungrab-pointer)))))
+
+
+
+
+
+(defun wait-mouse-button-release (&optional cursor-char cursor-mask-char)
+  (let ((done nil)
+	(pointer-grabbed-p (xgrab-pointer-p)))
+    (labels ((handle-event (&rest event-slots &key event-key &allow-other-keys)
+	       (case event-key
+		 ;;(:motion-notify (apply #'motion-notify event-slots))
+		 (:button-release (setf done t))
+		 (:configure-request (call-hook *configure-request-hook* event-slots))
+		 (:configure-notify (call-hook *configure-notify-hook* event-slots))
+		 (:map-request (call-hook *map-request-hook* event-slots))
+		 (:unmap-notify (call-hook *unmap-notify-hook* event-slots))
+		 (:destroy-notify (call-hook *destroy-notify-hook* event-slots))
+		 (:mapping-notify (call-hook *mapping-notify-hook* event-slots))
+		 (:property-notify (call-hook *property-notify-hook* event-slots))
+		 (:create-notify (call-hook *create-notify-hook* event-slots)))
+	       t))
+      (unless pointer-grabbed-p
+	(xgrab-pointer *root* cursor-char cursor-mask-char))
+      (loop until done
+	 do (with-xlib-protect
+	      (xlib:display-finish-output *display*)
+	      (xlib:process-event *display* :handler #'handle-event)))
+      (unless pointer-grabbed-p
+	(xungrab-pointer)))))
+
+
 
 
 
@@ -615,3 +646,11 @@ Window types are in +WINDOW-TYPES+.")
     (xlib:event-case (*display* :discard-p nil :peek-p t :timeout 0)
       (:motion-notify () t))))
 
+
+(defun display-all-cursors (&optional (display-time 1))
+  "Display all X11 cursors for display-time seconds"
+  (loop for i from 0 to 152 by 2
+     do (xgrab-pointer *root* i (1+ i))
+       (dbg i)
+       (sleep display-time)
+       (xungrab-pointer)))

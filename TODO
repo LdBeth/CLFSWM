@@ -7,8 +7,6 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Move window over frame (Alt+Control+B1) [Philippe]
-
 - Move the autodoc in its own file (clfswm-autodoc.lisp) and make the autodoc
   for the menu system.
 

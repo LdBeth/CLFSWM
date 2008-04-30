@@ -396,7 +396,7 @@
 
 
 ;;; Move by function
-(defun move-current-child-by (child frame-dest)
+(defun move-child-to (child frame-dest)
   (when (and child (frame-p frame-dest))
     (hide-all *current-root*)
     (remove-child-in-frame child (find-parent-frame child))
@@ -406,21 +406,21 @@
 
 (defun move-current-child-by-name ()
   "Move current child in a named frame"
-  (move-current-child-by *current-child*
-			 (find-frame-by-name
-			  (ask-frame-name (format nil "Move '~A' to frame" (child-name *current-child*)))))
+  (move-child-to *current-child*
+		 (find-frame-by-name
+		  (ask-frame-name (format nil "Move '~A' to frame" (child-name *current-child*)))))
   (leave-second-mode))
 
 (defun move-current-child-by-number ()
   "Move current child in a numbered frame"
-  (move-current-child-by *current-child*
-			 (find-frame-by-number
-			  (query-number (format nil "Move '~A' to frame numbered:" (child-name *current-child*)))))
+  (move-child-to *current-child*
+		 (find-frame-by-number
+		  (query-number (format nil "Move '~A' to frame numbered:" (child-name *current-child*)))))
   (leave-second-mode))
 
 
 ;;; Copy by function
-(defun copy-current-child-by (child frame-dest)
+(defun copy-child-to (child frame-dest)
   (when (and child (frame-p frame-dest))
     (hide-all *current-root*)
     (pushnew child (frame-child frame-dest))
@@ -429,16 +429,16 @@
 
 (defun copy-current-child-by-name ()
   "Copy current child in a named frame"
-  (copy-current-child-by *current-child*
-			 (find-frame-by-name
-			  (ask-frame-name (format nil "Copy '~A' to frame" (child-name *current-child*)))))
+  (copy-child-to *current-child*
+		 (find-frame-by-name
+		  (ask-frame-name (format nil "Copy '~A' to frame" (child-name *current-child*)))))
   (leave-second-mode))
 
 (defun copy-current-child-by-number ()
   "Copy current child in a numbered frame"
-  (copy-current-child-by *current-child*
-			 (find-frame-by-number
-			  (query-number (format nil "Copy '~A' to frame numbered:" (child-name *current-child*)))))
+  (copy-child-to *current-child*
+		 (find-frame-by-number
+		  (query-number (format nil "Copy '~A' to frame numbered:" (child-name *current-child*)))))
   (leave-second-mode))
 
 
@@ -903,4 +903,25 @@ For window: set current child to window or its parent according to window-parent
 	      managed (remove (xlib:wm-name window) managed :test #'string-equal-p))
 	(pushnew window unmanaged))))
   (leave-second-mode))
+
+
+
+;;; Moving window with the mouse function
+(defun mouse-move-window-over-frame (window root-x root-y)
+  "Move the window under the mouse cursor to another frame"
+  (declare (ignore window))
+  (let ((child (find-child-under-mouse root-x root-y)))
+    (unless (equal child *current-root*)
+      (hide-child child)
+      (remove-child-in-frame child (find-parent-frame child))
+      (wait-mouse-button-release 50 51)
+      (multiple-value-bind (x y)
+	  (xlib:query-pointer *root*)
+	(let ((dest (find-child-under-mouse x y)))
+	  (when (xlib:window-p dest)
+	    (setf dest (find-parent-frame dest)))
+	  (unless (equal child dest)
+	    (move-child-to child dest))))))
+  (stop-button-event))
+
 
