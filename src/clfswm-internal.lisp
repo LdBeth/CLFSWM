@@ -305,6 +305,17 @@
 	(return-from find-frame-by-number frame)))))
 
 
+(defun find-child-in-parent (child base)
+  "Return t if child is in base or in its parents"
+  (labels ((rec (base)
+	     (when (equal child base)
+	       (return-from find-child-in-parent t))
+	     (let ((parent (find-parent-frame base)))
+	       (when parent
+		 (rec parent)))))
+    (rec base)))
+
+
 
 
 (defun get-all-windows (&optional (root *root-frame*))

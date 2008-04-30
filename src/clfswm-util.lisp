@@ -185,7 +185,8 @@
 		      (frame *current-child*))))
     (when frame-dest
       (dolist (child *child-selection*)
-	(pushnew child (frame-child frame-dest)))
+	(unless (find-child-in-parent child frame-dest)
+	  (pushnew child (frame-child frame-dest))))
       (show-all-children))))
 
 (defun paste-selection ()

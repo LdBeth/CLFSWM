@@ -241,9 +241,8 @@
 
 (define-second-key (#\b :mod-1) 'banish-pointer)
 
-(define-second-key (#\o) 'set-open-in-new-frame-in-parent-frame-nw-hook)
-(define-second-key (#\o :control) 'set-open-in-new-frame-in-root-frame-nw-hook)
-
+(define-second-key (#\o) 'set-open-in-new-frame-in-root-frame-nw-hook)
+(define-second-key (#\o :control) 'set-open-in-new-frame-in-parent-frame-nw-hook)
 
 ;;;; Escape
 (define-second-key ("Escape" :control :shift) 'delete-focus-window)

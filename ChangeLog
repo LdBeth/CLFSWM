@@ -1,3 +1,11 @@
+2008-04-30  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (paste-selection-no-clear): Prevent to
+	paste a child on one of its own children. (this prevent a
+	recursive bug).
+
+	* src/clfswm-internal.lisp (find-child-in-parent): New function.
+
 2008-04-29  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp (show-all-children): Display unmanaged
