@@ -7,6 +7,9 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
+- Produce the autodoc menu for Frame layout menu, Frame layout menu (Set only once)
+  and Frame new window hook menu
+
 - Ensure-unique-number/name (new function) [Philippe]
 
 - Add boundaries in the info window [Philippe]
