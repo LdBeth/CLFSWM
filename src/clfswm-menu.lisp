@@ -26,13 +26,6 @@
 (in-package :clfswm)
 
 
-(defstruct menu name item doc)
-(defstruct menu-item key value)
-
-
-(defvar *menu* (make-menu :name 'main))
-
-
 (defmacro with-all-menu ((menu item) &body body)
   (let ((rec (gensym))
 	(subm (gensym)))

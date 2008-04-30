@@ -27,6 +27,8 @@
 			  :depends-on ("package" "xlib-util"))
 			 (:file "clfswm-keys"
 			  :depends-on ("package" "config" "xlib-util" "keysyms"))
+			 (:file "clfswm-autodoc"
+			  :depends-on ("package" "clfswm-keys" "my-html" "tools"))
 			 (:file "clfswm-internal"
 			  :depends-on ("xlib-util" "clfswm-keys" "netwm-util" "tools"))
 			 (:file "clfswm"

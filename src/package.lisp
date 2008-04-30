@@ -125,17 +125,12 @@
 (defparameter *info-mouse*  (make-hash-table :test 'equal))
 
 
-(defparameter *open-next-window-in-new-workspace* nil
-  "Set to t to open the next window in a new workspace
-or to a number to open in a numbered workspace")
 
-(defparameter *open-next-window-in-new-frame* nil
-  "Set to t to open the each next window in a new frame
-or set to :once open the next window in a new frame and all
-others in the same frame")
+(defstruct menu name item doc)
+(defstruct menu-item key value)
 
-(defparameter *arrow-action* nil
-  "Arrow action in the second mode")
+
+(defvar *menu* (make-menu :name 'main :doc "Main menu"))
 
 
 ;;; Main mode hooks (set in clfswm.lisp)
@@ -171,14 +166,6 @@ others in the same frame")
 (defparameter *sm-enter-notify-hook* nil)
 (defparameter *sm-exposure-hook* nil)
 
-
-
-;;; Second mode global variables
-(defparameter *motion-action* nil)
-(defparameter *motion-object* nil)
-(defparameter *motion-start-frame* nil)
-(defparameter *motion-dx* nil)
-(defparameter *motion-dy* nil)
 
 
 ;; For debug - redefine defun

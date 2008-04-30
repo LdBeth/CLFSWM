@@ -1,5 +1,9 @@
 2008-04-30  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-autodoc.lisp (produce-menu-doc,
+	(produce-menu-doc-html): New functions.
+	(produce-doc-*): Moved to clfswm-autodoc.lisp.
+
 	* src/clfswm-util.lisp (paste-selection-no-clear): Prevent to
 	paste a child on one of its own children. (this prevent a
 	recursive bug).

@@ -1,0 +1,102 @@
+Here is the map of the CLFSWM menu:
+(By default it is bound on second-mode + m)
+
+Main
+f: < Frame menu >
+w: < Window menu >
+s: < Selection menu >
+n: < Action by name menu >
+u: < Action by number menu >
+y: < Utility menu >
+
+Frame-Menu
+a: < Adding frame menu >
+l: < Frame layout menu >
+o: < Frame layout menu (Set only once) >
+n: < Frame new window hook menu >
+m: < Frame movement menu >
+w: < Managed window type menu >
+i: < Frame info menu >
+r: Rename the current child
+u: Renumber the current frame
+x: Create a new frame for each window in frame
+
+Frame-Adding-Menu
+a: Add a default frame
+p: Add a placed frame
+
+Frame-Movement-Menu
+p: < Frame pack menu >
+f: < Frame fill menu >
+r: < Frame resize menu >
+c: Center the current frame
+
+Frame-Pack-Menu
+Up: Pack the current frame up
+Down: Pack the current frame down
+Left: Pack the current frame left
+Right: Pack the current frame right
+
+Frame-Fill-Menu
+Up: Fill the current frame up
+Down: Fill the current frame down
+Left: Fill the current frame left
+Right: Fill the current frame right
+a: Fill the current frame in all directions
+v: Fill the current frame vertically
+h: Fill the current frame horizontally
+
+Frame-Resize-Menu
+Up: Resize the current frame up to its half height
+Down: Resize the current frame down to its half height
+Left: Resize the current frame left to its half width
+Right: Resize the current frame right to its half width
+d: Resize down the current frame
+a: Resize down the current frame to its minimal size
+
+Managed-Window-Menu
+m: Change window types to be managed by a frame
+a: Manage all window type
+n: Manage only normal window type
+u: Do not manage any window type
+
+Frame-Info-Menu
+s: Show all frames info windows
+h: Hide all frames info windows
+
+Window-Menu
+i: Display information on the current window
+f: Force the current window to move in the frame (Useful only for transient windows)
+c: Force the current window to move in the center of the frame (Useful only for transient windows)
+m: Force to manage the current window by its parent frame
+u: Force to not manage the current window by its parent frame
+a: Adapt the current frame to the current window minimal size hints
+w: Adapt the current frame to the current window minimal width hint
+h: Adapt the current frame to the current window minimal height hint
+
+Selection-Menu
+x: Cut the current child to the selection
+c: Copy the current child to the selection
+v: Paste the selection in the current frame
+p: Paste the selection in the current frame - Do not clear the selection after paste
+Delete: Remove the current child from its parent frame
+z: Clear the current selection
+
+Action-By-Name-Menu
+f: Focus a frame by name
+o: Open a new frame in a named frame
+d: Delete a frame by name
+m: Move current child in a named frame
+c: Copy current child in a named frame
+
+Action-By-Number-Menu
+f: Focus a frame by number
+o: Open a new frame in a numbered frame
+d: Delete a frame by number
+m: Move current child in a numbered frame
+c: Copy current child in a numbered frame
+
+Utility-Menu
+i: Identify a key
+colon: Eval a lisp form from the query input
+exclam: Run a program from the query input
