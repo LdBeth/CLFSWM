@@ -1,5 +1,7 @@
 2008-05-01  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-info.lisp (info-mode): Add boundaries in the info mode window.
+
 	* src/menu-def.lisp: New file: move all menu definition in
 	menu-def.lisp.
 

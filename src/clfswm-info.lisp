@@ -25,7 +25,7 @@
 
 (in-package :clfswm)
 
-(defstruct info window gc font list ilw ilh x y)
+(defstruct info window gc font list ilw ilh x y max-x max-y)
 
 
 (defun leave-info-mode (info)
@@ -94,25 +94,25 @@
 (define-info-key ("Down")
     (defun info-next-line (info)
       "Move one line down"
-      (incf (info-y info) (info-ilh info))
+      (setf (info-y info) (min (+ (info-y info) (info-ilh info)) (info-max-y info)))
       (draw-info-window info)))
 
 (define-info-key ("Up")
     (defun info-previous-line (info)
       "Move one line up"
-      (decf (info-y info) (info-ilh info))
+      (setf (info-y info) (max (- (info-y info) (info-ilh info)) 0))
       (draw-info-window info)))
 
 (define-info-key ("Left")
     (defun info-previous-char (info)
       "Move one char left"
-      (decf (info-x info) (info-ilw info))
+      (setf (info-x info) (max (- (info-x info) (info-ilw info)) 0))
       (draw-info-window info)))
 
 (define-info-key ("Right")
     (defun info-next-char (info)
       "Move one char right"
-      (incf (info-x info) (info-ilw info))
+      (setf (info-x info) (min (+ (info-x info) (info-ilw info)) (info-max-x info)))
       (draw-info-window info)))
 
 
@@ -153,15 +153,15 @@
 (defun info-begin-grab (window root-x root-y info)
   "Begin grab text"
   (declare (ignore window))
-  (setf *info-start-grab-x* (+ root-x (info-x info))
-	*info-start-grab-y* (+ root-y (info-y info)))
+  (setf *info-start-grab-x* (min (max (+ root-x (info-x info)) 0) (info-max-x info))
+	*info-start-grab-y* (min (max (+ root-y (info-y info)) 0) (info-max-y info)))
   (draw-info-window info))
 
 (defun info-end-grab (window root-x root-y info)
   "End grab"
   (declare (ignore window))
-  (setf (info-x info) (- *info-start-grab-x* root-x)
-	(info-y info) (- *info-start-grab-y* root-y)
+  (setf (info-x info) (min (max (- *info-start-grab-x* root-x) 0) (info-max-x info))
+	(info-y info) (min (max (- *info-start-grab-y* root-y) 0) (info-max-y info))
 	*info-start-grab-x* nil
 	*info-start-grab-y* nil)
   (draw-info-window info))
@@ -183,8 +183,8 @@
   "Grab text"
   (declare (ignore window))
   (when (and *info-start-grab-x* *info-start-grab-y*)
-    (setf (info-x info) (- *info-start-grab-x* root-x)
-	  (info-y info) (- *info-start-grab-y* root-y))
+    (setf (info-x info) (min (max (- *info-start-grab-x* root-x) 0) (info-max-x info))
+	  (info-y info) (min (max (- *info-start-grab-y* root-y) 0) (info-max-y info)))
     (draw-info-window-partial info)))
 
 
@@ -229,7 +229,9 @@
 				     :font font
 				     :line-style :solid))
 	   (info (make-info :window window :gc gc :x 0 :y 0 :list info-list
-							    :font font :ilw ilw :ilh ilh)))
+							    :font font :ilw ilw :ilh ilh
+							    :max-x (* (loop for l in info-list maximize (length l)) ilw)
+							    :max-y (* (length info-list) ilh))))
       (labels ((handle-key (&rest event-slots &key root code state &allow-other-keys)
 		 (declare (ignore event-slots root))
 		 (funcall-key-from-code *info-keys* code state info))

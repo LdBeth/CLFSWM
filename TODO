@@ -7,12 +7,9 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Produce the autodoc menu for Frame layout menu, Frame layout menu (Set only once)
-  and Frame new window hook menu
-
 - Ensure-unique-number/name (new function) [Philippe]
 
-- Add boundaries in the info window [Philippe]
+- Double buffering for all text windows. [Philippe]
 
 
 MAYBE
@@ -45,8 +42,6 @@ Operation:
 - Hide/Unhide frame [Philippe]
 
 - Undo/redo (any idea to implement this is welcome)
-
-- Double buffering for all text windows.
 
 - Raise/lower frame - this can be done with children order [Philippe]
 

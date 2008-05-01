@@ -363,7 +363,7 @@
 							 (aif (frame-name child) it "")))))))))
 	(dolist (ch child)
 	  (when (xlib:window-p ch)
-	    (xlib:draw-glyphs window gc 5 (incf pos dy) (ensure-printable (xlib:wm-name ch)))))))))
+	    (xlib:draw-image-glyphs window gc 5 (incf pos dy) (ensure-printable (xlib:wm-name ch)))))))))
 
 
 
