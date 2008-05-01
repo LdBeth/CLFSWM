@@ -1,3 +1,11 @@
+2008-05-01  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/menu-def.lisp: New file: move all menu definition in
+	menu-def.lisp.
+
+	* src/clfswm-layout.lisp (register-layout): Use a function instead
+	of a macro.
+
 2008-04-30  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-autodoc.lisp (produce-menu-doc,

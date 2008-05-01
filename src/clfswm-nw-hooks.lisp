@@ -37,6 +37,8 @@
 ;;;   3- Register your new hook with register-nw-hook.
 
 
+(defparameter *nw-hook-current-key* (char-code #\a))
+
 
 (defun set-nw-hook (hook)
   "Set the hook of the current child"
@@ -47,7 +49,9 @@
     (leave-second-mode)))
 
 (defun register-nw-hook (hook)
-  (setf *nw-hook-list* (append *nw-hook-list* (list hook))))
+  (setf *nw-hook-list* (append *nw-hook-list* (list hook)))
+  (add-menu-key 'frame-nw-hook-menu (code-char *nw-hook-current-key*) hook)
+  (incf *nw-hook-current-key*))
 
 
 (defun default-window-placement (frame window)

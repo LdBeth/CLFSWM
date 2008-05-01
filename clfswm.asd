@@ -39,23 +39,25 @@
 			 (:file "clfswm-second-mode"
 			  :depends-on ("package" "clfswm" "clfswm-internal"))
 			 (:file "clfswm-info"
-			  :depends-on ("package" "version" "xlib-util" "config" "clfswm-keys" "clfswm" "clfswm-internal"))
+			  :depends-on ("package" "version" "xlib-util" "config" "clfswm-keys" "clfswm" "clfswm-internal" "clfswm-autodoc"))
 			 (:file "clfswm-menu"
 			  :depends-on ("package" "clfswm-info"))
+			 (:file "menu-def"
+			  :depends-on ("clfswm-menu"))
 			 (:file "clfswm-util"
-			  :depends-on ("clfswm" "keysyms" "clfswm-info" "clfswm-second-mode" "clfswm-query" "clfswm-menu"))
+			  :depends-on ("clfswm" "keysyms" "clfswm-info" "clfswm-second-mode" "clfswm-query" "clfswm-menu" "clfswm-autodoc"))
 			 (:file "clfswm-query"
 			  :depends-on ("package" "config"))
 			 (:file "clfswm-layout"
-			  :depends-on ("package" "clfswm-internal" "clfswm-util" "clfswm-info"))
+			  :depends-on ("package" "clfswm-internal" "clfswm-util" "clfswm-info" "menu-def"))
 			 (:file "clfswm-pack"
 			  :depends-on ("clfswm" "clfswm-util" "clfswm-second-mode"))
 			 (:file "clfswm-nw-hooks"
-			  :depends-on ("package" "clfswm-util" "clfswm-info"))
+			  :depends-on ("package" "clfswm-util" "clfswm-info" "clfswm-layout" "menu-def"))
 			 (:file "bindings"
 			  :depends-on ("clfswm" "clfswm-internal" "clfswm-util"))
 			 (:file "bindings-second-mode"
-			  :depends-on ("clfswm" "clfswm-util" "clfswm-query" "bindings" "clfswm-pack" "clfswm-menu"))))))
+			  :depends-on ("clfswm" "clfswm-util" "clfswm-query" "bindings" "clfswm-pack" "clfswm-menu" "menu-def"))))))
 
 
 

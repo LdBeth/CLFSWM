@@ -39,6 +39,8 @@
 
 
 
+(defparameter *layout-current-key* (char-code #\a))
+
 
 ;;; Generic functions
 (defun set-layout (layout)
@@ -63,20 +65,19 @@
 
 
 
-(defmacro register-layout (layout)
-  `(progn
-     (setf *layout-list* (append *layout-list* (list ',layout)))
-     (defun ,(intern (format nil "~A-ONCE" layout)) ()
-       (set-layout-dont-leave #',(intern (subseq (format nil "~A" layout) 4)))
-       (show-all-children *current-root*)
-       (fixe-real-size-current-child)
-       (set-layout-dont-leave #'no-layout))))
+(defun register-layout (layout)
+  (let ((once-name (create-symbol (format nil "~A" layout) "-ONCE")))
+    (setf (symbol-function once-name)
+	  (lambda ()
+	    (set-layout-dont-leave (intern (subseq (format nil "~A" layout) 4)))
+	    (show-all-children *current-root*)
+	    (fixe-real-size-current-child)
+	    (set-layout-dont-leave #'no-layout)))
+    (setf (documentation once-name 'function) (documentation layout 'function))
+    (add-menu-key 'frame-layout-menu (code-char *layout-current-key*) layout)
+    (add-menu-key 'frame-layout-once-menu (code-char *layout-current-key*) once-name)
+    (incf *layout-current-key*)))
 
-
-(defun set-layout-once-documentation ()
-  (loop :for l :in *layout-list*
-     :do (setf (documentation (create-symbol (format nil "~A" l) "-ONCE") 'function)
-	       (documentation l 'function))))
 
 
 
@@ -114,7 +115,7 @@
   "Maximize windows in there frame - leave frame to there size (no layout)"
   (set-layout #'no-layout))
 
-(register-layout set-no-layout)
+(register-layout 'set-no-layout)
 
 
 
@@ -140,7 +141,7 @@
   "Tile child in its frame"
   (set-layout #'tile-layout))
 
-(register-layout set-tile-layout)
+(register-layout 'set-tile-layout)
 
 
 ;;; Tile Left
@@ -172,7 +173,7 @@
   (layout-ask-size "Tile size in percent (%)" :tile-size)
   (set-layout #'tile-left-layout))
 
-(register-layout set-tile-left-layout)
+(register-layout 'set-tile-left-layout)
 
 
 
@@ -206,7 +207,7 @@
   (set-layout #'tile-right-layout))
 
 
-(register-layout set-tile-right-layout)
+(register-layout 'set-tile-right-layout)
 
 
 
@@ -240,7 +241,7 @@
   (layout-ask-size "Tile size in percent (%)" :tile-size)
   (set-layout #'tile-top-layout))
 
-(register-layout set-tile-top-layout)
+(register-layout 'set-tile-top-layout)
 
 
 
@@ -275,7 +276,7 @@
   (set-layout #'tile-bottom-layout))
 
 
-(register-layout set-tile-bottom-layout)
+(register-layout 'set-tile-bottom-layout)
 
 
 
@@ -306,4 +307,4 @@
   (layout-ask-size "Space size in percent (%)" :tile-space-size 10)
   (set-layout #'tile-space-layout))
 
-(register-layout set-tile-space-layout)
+(register-layout 'set-tile-space-layout)

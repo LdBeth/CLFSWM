@@ -152,5 +152,5 @@ Mouse buttons actions in info mode:
                      2               Leave the info mode
                      4               Move one line up
                      5               Move one line down
-                     Clfswm::motion   Grab text
+                     Motion          Grab text
 
