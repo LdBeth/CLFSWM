@@ -169,13 +169,13 @@
 (defun info-mouse-next-line (window root-x root-y info)
   "Move one line down"
   (declare (ignore window root-x root-y))
-  (incf (info-y info) (info-ilh info))
+  (setf (info-y info) (min (+ (info-y info) (info-ilh info)) (info-max-y info)))
   (draw-info-window info))
 
 (defun info-mouse-previous-line (window root-x root-y info)
   "Move one line up"
   (declare (ignore window root-x root-y))
-  (decf (info-y info) (info-ilh info))
+  (setf (info-y info) (max (- (info-y info) (info-ilh info)) 0))
   (draw-info-window info))
 
 
