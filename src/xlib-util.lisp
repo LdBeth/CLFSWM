@@ -332,15 +332,23 @@ Window types are in +WINDOW-TYPES+.")
 (let ((cursor-font nil)
       (cursor nil)
       (pointer-grabbed nil))
-  (labels ((free-grab-pointer ()
-	     (when cursor
-	       (xlib:free-cursor cursor)
-	       (setf cursor nil))
-	     (when cursor-font
-	       (xlib:close-font cursor-font)
-	       (setf cursor-font nil))))
-    (defun xgrab-init-pointer ()
-      (setf pointer-grabbed nil))
+;;  (labels ((free-grab-pointer ()
+;;	     (when cursor
+;;	       (xlib:free-cursor cursor)
+;;	       (setf cursor nil))
+;;	     (when cursor-font
+;;	       (xlib:close-font cursor-font)
+  ;;	       (setf cursor-font nil))))
+  (defun free-grab-pointer ()
+    (when cursor
+      (xlib:free-cursor cursor)
+      (setf cursor nil))
+    (when cursor-font
+      (xlib:close-font cursor-font)
+      (setf cursor-font nil)))
+
+  (defun xgrab-init-pointer ()
+    (setf pointer-grabbed nil))
 
     (defun xgrab-pointer-p ()
       pointer-grabbed)
@@ -369,7 +377,7 @@ Window types are in +WINDOW-TYPES+.")
       "Remove the grab on the cursor and restore the cursor shape."
       (setf pointer-grabbed nil)
       (xlib:ungrab-pointer *display*)
-      (free-grab-pointer))))
+      (free-grab-pointer)))
 
 
 (let ((keyboard-grabbed nil))

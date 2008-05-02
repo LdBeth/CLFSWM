@@ -1,5 +1,8 @@
 2008-05-02  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/tools.lisp (getenv): Implemented for ECL.
+	(urun-prog): Implemented for ECL.
+
 	* src/clfswm-util.lisp (identify-key): Use a double buffer to
 	display text.
 

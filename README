@@ -4,25 +4,45 @@
  and [2]Stumpwm. Many thanks to them).
  It can be driven only with the keyboard or with the mouse.
 
- A display is divided in workspaces, groups and windows. Windows are
- packed together in groups.
- By default a group is fullscreen maximized (no decorations, no buttons,
- no menus: nothing, just the application fullscreen!).
- When not maximized, a group of windows can be moved, resized, tiled,
- packed or filled to others groups edges.
+ A display contain a root frame and its children. A children can be a
+ window or another frame. The root frame or its children can be the
+ current root. The current root is fullscreen maximized (no
+ decorations, no buttons, no menus: nothing, just the application
+ fullscreen!).
+ Using CLFSWM is like walking throw a tree of frames and windows.
+ Enter in a child to make it the current root and make it fullscreen
+ maximized. Leave it to make its parent the current root.
 
- For its binding, CLFSWM has two modes.
- A main mode with minimal keys and no mouse grabbing to avoid conflict
+ Here is the default key binding to navigate throw this tree:
+
+  * Alt-Tab: circulate throw children of the current child.
+  * Alt-Left/Right: circulate throw brother children (ie: this is like
+      workspaces for a more conventional window manager)
+  * Alt-Up: select the first child of the current frame.
+  * Alt-Down: select the parent of the current child.
+  * Alt-Enter: Make the current selected child the current root (ie
+      maximize it) 
+  Alt+Shift-Enter: Make the parent of the current root the current
+      root (ie unmaximize the current root).
+
+ There is no more need for a pager: you are in the pager!
+
+ For its binding, CLFSWM has two modes:
+ A main mode with minimal keys and mouse grabbing to avoid conflicts
  with others applications.
  And a second mode with more keys and mouse actions.
  For details of its usage, have a look at the files keys.txt or 
  keys.html
 
+ A frame can be placed anywhere in its parent frame. And can have
+ differents layouts to automatically manage its children (tile, tile
+ to left, to bottom, no layout...).
+
 
 * Installation
 
-Boot up a common lisp implementation. I develop it with sbcl, I've
-tested it with cmucl and I use it with clisp (you need the clx/xlib
+Boot up a common lisp implementation. I develop it with sbcl, I test
+it with cmucl regularly and I use it with clisp (you need the clx/xlib
 package).
 
 To use CLFSWM, load the load.lisp file. It loads the ASDF package,
@@ -45,17 +65,13 @@ To change the default keybinding, have a look at the bindings*.lisp
 files and at the config.lisp file for global variables.
 
 All variables can be overwritten in a user configuration file:
-$HOME/.clfswmrc or /etc/clfswmrc or $XDG_CONFIG_HOME/clfswm/clfswmrc.
+$XDG_CONFIG_HOME/clfswm/clfswmrc or $HOME/.clfswmrc or /etc/clfswmrc.
 It's a standard lisp file loaded at startup. There is an example in
 the clfswm source (see dot-clfswmrc).
 
-If you want to add workspaces or groups at startup, tell this to
-clfswm in the init-display function in clfswm.lisp (there is already a
-default workspace and a default group created).
-
-In all cases, you can grep the source with 'CONFIG' and 'Alternative'
-keywords to find where you can simply customize clfswm.
-
+There is a lot of hooks in CLFSWM to tweak its behaviour. For example,
+if you want to add some frames at startup you can write your own
+init-hook (see dot-clfswmrc).
 
 
 * Lisp implementation note
