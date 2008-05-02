@@ -59,6 +59,8 @@ Second mode keys:
 
 Mod-1                F1              Open the help and info window for the second mode
                      M               Open the main menu
+                     <               Open the main menu
+Control              <               Open the main menu
                      F               Open the frame menu
                      W               Open the window menu
                      N               Open the action by name menu
@@ -69,7 +71,6 @@ Mod-1                F1              Open the help and info window for the secon
                      T               Leave second mode
                      Return          Leave second mode
                      Escape          Leave second mode
-Control              <               Leave second mode
 Mod-1 Control Shift  Home            Quit clfswm
 Mod-1                Right           Select the next brother frame
 Mod-1                Left            Select the previous brother frame

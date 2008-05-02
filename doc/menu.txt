@@ -92,8 +92,8 @@ h: Hide all frames info windows
 
 Window-Menu
 i: Display information on the current window
-f: Force the current window to move in the frame (Useful only for transient windows)
-c: Force the current window to move in the center of the frame (Useful only for transient windows)
+f: Force the current window to move in the frame (Useful only for unmanaged windows)
+c: Force the current window to move in the center of the frame (Useful only for unmanaged windows)
 m: Force to manage the current window by its parent frame
 u: Force to not manage the current window by its parent frame
 a: Adapt the current frame to the current window minimal size hints
