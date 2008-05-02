@@ -223,19 +223,20 @@
     (labels ((print-doc (msg hash-table-key pos code state)
 	       (let ((function (find-key-from-code hash-table-key code state)))
 		 (when (and function (fboundp (first function)))
-		   (xlib:draw-image-glyphs window gc 10 (+ (* pos (+ (xlib:max-char-ascent font) (xlib:max-char-descent font))) 5)
-					   (format nil "~A ~A" msg (documentation (first function) 'function))))))
+		   (xlib:draw-glyphs *pixmap-buffer* gc 10 (+ (* pos (+ (xlib:max-char-ascent font) (xlib:max-char-descent font))) 5)
+				     (format nil "~A ~A" msg (documentation (first function) 'function))))))
 	     (print-key (code state keysym key modifiers)
-	       (xlib:clear-area window)
+	       (clear-pixmap-buffer window gc)
 	       (setf (xlib:gcontext-foreground gc) (get-color *identify-foreground*))
-	       (xlib:draw-image-glyphs window gc 5 (+ (xlib:max-char-ascent font) 5)
-				       (format nil "Press a key to identify. Press 'q' to stop the identify loop."))
+	       (xlib:draw-glyphs *pixmap-buffer* gc 5 (+ (xlib:max-char-ascent font) 5)
+				 (format nil "Press a key to identify. Press 'q' to stop the identify loop."))
 	       (when code
-		 (xlib:draw-image-glyphs window gc 10 (+ (* 2 (+ (xlib:max-char-ascent font) (xlib:max-char-descent font))) 5)
-					 (format nil "Code=~A  KeySym=~S  Key=~S  Modifiers=~A"
-						 code keysym key modifiers))
+		 (xlib:draw-glyphs *pixmap-buffer* gc 10 (+ (* 2 (+ (xlib:max-char-ascent font) (xlib:max-char-descent font))) 5)
+				   (format nil "Code=~A  KeySym=~S  Key=~S  Modifiers=~A"
+					   code keysym key modifiers))
 		 (print-doc "Main mode  : " *main-keys* 3 code state)
-		 (print-doc "Second mode: " *second-keys* 4 code state)))
+		 (print-doc "Second mode: " *second-keys* 4 code state))
+	       (copy-pixmap-buffer window gc))
 	     (handle-identify-key (&rest event-slots &key root code state &allow-other-keys)
 	       (declare (ignore event-slots root))
 	       (let* ((modifiers (state->modifiers state))
@@ -839,7 +840,7 @@ For window: set current child to window or its parent according to window-parent
 (defmacro with-current-window (&body body)
   "Bind 'window' to the current window"
   `(let ((window (get-current-window)))
-      (when window
+      (when (xlib:window-p window)
 	,@body)))
 
 
@@ -848,7 +849,7 @@ For window: set current child to window or its parent according to window-parent
 
 ;;; Force window functions
 (defun force-window-in-frame ()
-  "Force the current window to move in the frame (Useful only for transient windows)"
+  "Force the current window to move in the frame (Useful only for unmanaged windows)"
   (with-current-window
     (let ((parent (find-parent-frame window)))
       (with-xlib-protect
@@ -858,7 +859,7 @@ For window: set current child to window or its parent according to window-parent
 
 
 (defun force-window-center-in-frame ()
-  "Force the current window to move in the center of the frame (Useful only for transient windows)"
+  "Force the current window to move in the center of the frame (Useful only for unmanaged windows)"
   (with-current-window
     (let ((parent (find-parent-frame window)))
       (with-xlib-protect

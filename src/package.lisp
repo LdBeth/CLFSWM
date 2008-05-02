@@ -39,6 +39,8 @@
 (defparameter *no-focus-window* nil)
 (defparameter *root-gc* nil)
 
+(defparameter *pixmap-buffer* nil)
+
 (defparameter *contrib-dir* "")
 
 (defparameter *default-font* nil)

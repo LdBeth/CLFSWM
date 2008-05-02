@@ -55,13 +55,14 @@
 
 (defun draw-second-mode-window ()
   (raise-window *sm-window*)
-  (xlib:clear-area *sm-window*)
+  (clear-pixmap-buffer *sm-window* *sm-gc*)
   (let* ((text (format nil "Second mode"))
 	 (len (length text)))
-    (xlib:draw-image-glyphs *sm-window* *sm-gc*
-			    (truncate (/ (- *sm-width* (* (xlib:max-char-width *sm-font*) len)) 2))
-			    (truncate (/ (+ *sm-height* (- (xlib:font-ascent *sm-font*) (xlib:font-descent *sm-font*))) 2))
-			    text)))
+    (xlib:draw-glyphs *pixmap-buffer* *sm-gc*
+		      (truncate (/ (- *sm-width* (* (xlib:max-char-width *sm-font*) len)) 2))
+		      (truncate (/ (+ *sm-height* (- (xlib:font-ascent *sm-font*) (xlib:font-descent *sm-font*))) 2))
+		      text))
+  (copy-pixmap-buffer *sm-window* *sm-gc*))
 
 
 

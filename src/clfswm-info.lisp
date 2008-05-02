@@ -40,40 +40,17 @@
 
 
 
+
+
 (defun draw-info-window (info)
-  (xlib:clear-area (info-window info))
-  (setf (xlib:gcontext-foreground (info-gc info)) (get-color *info-foreground*))
+  (clear-pixmap-buffer (info-window info) (info-gc info))
   (loop for line in (info-list info)
      for y from 0 do
-     (xlib:draw-image-glyphs (info-window info) (info-gc info)
-			     (- (info-ilw info) (info-x info))
-			     (- (+ (* (info-ilh info) y) (info-ilh info)) (info-y info))
-			     (format nil "~A" line))))
-
-
-(defun draw-info-window-partial (info)
-  (let ((last-y (info-y info)))
-    (setf (xlib:gcontext-foreground (info-gc info)) (get-color *info-background*))
-    (xlib:draw-rectangle (info-window info) (info-gc info) 0 0
-			 (xlib:drawable-width (info-window info))
-			 (max (+ (- (info-y info)) (xlib:max-char-ascent (info-font info))) 0) t)
-    (loop for line in (info-list info)
-       for y from 0 do
-       (setf last-y (- (+ (* (info-ilh info) y) (info-ilh info)) (info-y info)))
-       (setf (xlib:gcontext-foreground (info-gc info)) (get-color *info-background*))
-       (xlib:draw-rectangle (info-window info) (info-gc info)
-			    0 (+ last-y (- (info-ilh info)) (xlib:max-char-descent (info-font info)))
-			    (xlib:drawable-width (info-window info)) (info-ilh info) t)
-       (setf (xlib:gcontext-foreground (info-gc info)) (get-color *info-foreground*))
-       (xlib:draw-image-glyphs (info-window info) (info-gc info)
-			       (- (info-ilw info) (info-x info))
-			       last-y
-			       (format nil "~A" line)))
-    (setf (xlib:gcontext-foreground (info-gc info)) (get-color *info-background*))
-    (xlib:draw-rectangle (info-window info) (info-gc info) 0 last-y
-			 (xlib:drawable-width (info-window info))
-			 (xlib:drawable-height (info-window info))
-			 t)))
+     (xlib:draw-glyphs *pixmap-buffer* (info-gc info)
+		       (- (info-ilw info) (info-x info))
+		       (- (+ (* (info-ilh info) y) (info-ilh info)) (info-y info))
+		       (format nil "~A" line)))
+  (copy-pixmap-buffer (info-window info) (info-gc info)))
 
 
 ;;;,-----
@@ -185,8 +162,7 @@
   (when (and *info-start-grab-x* *info-start-grab-y*)
     (setf (info-x info) (min (max (- *info-start-grab-x* root-x) 0) (info-max-x info))
 	  (info-y info) (min (max (- *info-start-grab-y* root-y) 0) (info-max-y info)))
-    (draw-info-window-partial info)))
-
+    (draw-info-window info)))
 
 
 

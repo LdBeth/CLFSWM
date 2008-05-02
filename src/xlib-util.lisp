@@ -540,7 +540,6 @@ Window types are in +WINDOW-TYPES+.")
 	(pointer-grabbed-p (xgrab-pointer-p)))
     (labels ((handle-event (&rest event-slots &key event-key &allow-other-keys)
 	       (case event-key
-		 ;;(:motion-notify (apply #'motion-notify event-slots))
 		 (:button-release (setf done t))
 		 (:configure-request (call-hook *configure-request-hook* event-slots))
 		 (:configure-notify (call-hook *configure-notify-hook* event-slots))
@@ -654,3 +653,20 @@ Window types are in +WINDOW-TYPES+.")
        (dbg i)
        (sleep display-time)
        (xungrab-pointer)))
+
+
+
+
+;;; Double buffering tools
+(defun clear-pixmap-buffer (window gc)
+  (rotatef (xlib:gcontext-foreground gc) (xlib:gcontext-background gc))
+  (xlib:draw-rectangle *pixmap-buffer* gc
+		       0 0 (xlib:drawable-width window) (xlib:drawable-height window)
+		       t)
+  (rotatef (xlib:gcontext-foreground gc) (xlib:gcontext-background gc)))
+
+(defun copy-pixmap-buffer (window gc)
+  (xlib:copy-area *pixmap-buffer* gc
+		  0 0 (xlib:drawable-width window) (xlib:drawable-height window)
+		  window 0 0))
+  

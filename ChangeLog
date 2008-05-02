@@ -1,3 +1,17 @@
+2008-05-02  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (identify-key): Use a double buffer to
+	display text.
+
+	* src/clfswm-query.lisp (query-string): Use a double buffer to
+	display text.
+
+	* src/clfswm-info.lisp (draw-info-window): Use a double buffer to
+	display text.
+
+	* src/xlib-util.lisp (clear-pixmap-buffer, copy-pixmap-buffer):
+	New functions.
+
 2008-05-01  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-info.lisp (info-mode): Add boundaries in the info mode window.

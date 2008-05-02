@@ -54,6 +54,9 @@
 
 
 (define-second-key ("m") 'open-menu)
+(define-second-key (#\<) 'open-menu)
+(define-second-key (#\< :control) 'open-menu)
+
 (define-second-key ("f") 'open-frame-menu)
 (define-second-key ("w") 'open-window-menu)
 (define-second-key ("n") 'open-action-by-name-menu)
@@ -71,10 +74,6 @@
 (define-second-key (#\t) 'leave-second-mode)
 (define-second-key ("Return") 'leave-second-mode)
 (define-second-key ("Escape") 'leave-second-mode)
-
-
-(define-second-key (#\< :control) 'leave-second-mode)
-
 
 
 

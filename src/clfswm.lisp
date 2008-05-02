@@ -199,7 +199,11 @@
 					:foreground (get-color *color-unselected*)
 					:background (get-color "Black")
 					:line-style :solid)
-	*default-font* (xlib:open-font *display* *default-font-string*))
+	*default-font* (xlib:open-font *display* *default-font-string*)
+	*pixmap-buffer* (xlib:create-pixmap :width (xlib:screen-width *screen*)
+					    :height (xlib:screen-height *screen*)
+					    :depth (xlib:screen-root-depth *screen*)
+					    :drawable *root*))
   (xgrab-init-pointer)
   (xgrab-init-keyboard)
   (xlib:map-window *no-focus-window*)
@@ -274,6 +278,7 @@
 	 (main-loop))
     (ungrab-main-keys)
     (xlib:destroy-window *no-focus-window*)
+    (xlib:free-pixmap *pixmap-buffer*)
     (xlib:close-display *display*)))
       
 
