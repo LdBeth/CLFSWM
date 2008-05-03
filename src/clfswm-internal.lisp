@@ -421,7 +421,10 @@
 		(xlib:drawable-width window) rw
 		(xlib:drawable-height window) rh)
 	  (values raise-p change))))))
-   
+
+(defmethod adapt-child-to-parent (child parent)
+  (declare (ignore child parent))
+  ())
 
 
 
@@ -454,6 +457,9 @@
 	  (raise-if-needed window raise-p first-p))
 	(hide-window window))))
 
+(defmethod show-child (child parent display-p raise-p first-p)
+  (declare (ignore child parent display-p raise-p first-p))
+  ())
 
 
 (defgeneric hide-child (child))
@@ -466,7 +472,9 @@
 (defmethod hide-child ((window xlib:window))
   (hide-window window))
 
-
+(defmethod hide-child (child)
+  (declare (ignore child))
+  ())
 
 
 
@@ -487,6 +495,10 @@
 	  (get-color (cond ((equal selected :maybe) *color-maybe-selected*)
 			   ((equal selected nil) *color-unselected*)
 			   (selected *color-selected*))))))
+
+(defmethod select-child (child selected)
+  (declare (ignore child selected))
+  ())
 
 (defun select-current-frame (selected)
   (select-child *current-child* selected))
@@ -581,6 +593,10 @@ only for display-child and its children"
 (defmethod set-current-child ((child frame) parent window-parent)
   (declare (ignore parent window-parent))
   (set-current-child-generic child))
+
+(defmethod set-current-child (child parent window-parent)
+  (declare (ignore child parent window-parent))
+  ())
 
 
 (defun set-current-root (parent)

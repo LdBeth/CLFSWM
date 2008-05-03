@@ -1,5 +1,9 @@
 2008-05-03  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-internal.lisp (set-current-child)
+	(adapt-child-to-parent, show-child, hide-child): Handle the case
+	where child is not a frame or a window.
+
 	* src/clfswm-util.lisp
 	(mouse-click-to-focus-generic,mouse-focus-move/resize-generic):
 	Check if child is a frame.
