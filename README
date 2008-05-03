@@ -1,4 +1,4 @@
-        CLFSWM - A(nother) Common Lisp FullScreen Window Manager
+        CLFSWM[0] - A(nother) Common Lisp FullScreen Window Manager
 
  CLFSWM is a 100% Common Lisp X11 window manager (based on [1]Tinywm
  and [2]Stumpwm. Many thanks to them).
@@ -9,6 +9,11 @@
  current root. The current root is fullscreen maximized (no
  decorations, no buttons, no menus: nothing, just the application
  fullscreen!).
+
+ CLFSWM is highly dynamic. By default there is only one frame. Other
+ frames are created/deleted on the fly. A window can be in more than
+ one frame, so it can have multiple views of the same windows.
+
  Using CLFSWM is like walking throw a tree of frames and windows.
  Enter in a child to make it the current root and make it fullscreen
  maximized. Leave it to make its parent the current root.
@@ -22,7 +27,7 @@
   * Alt-Down: select the parent of the current child.
   * Alt-Enter: Make the current selected child the current root (ie
       maximize it) 
-  Alt+Shift-Enter: Make the parent of the current root the current
+  * Alt+Shift-Enter: Make the parent of the current root the current
       root (ie unmaximize the current root).
 
  There is no more need for a pager: you are in the pager!
@@ -31,11 +36,13 @@
  A main mode with minimal keys and mouse grabbing to avoid conflicts
  with others applications.
  And a second mode with more keys and mouse actions.
- For details of its usage, have a look at the files keys.txt or 
- keys.html
+ For details of its usage, have a look at the files doc/keys.txt or 
+ doc/keys.html
+ A lot of functions to manage CLFSWM can be found in the second mode
+ menu. See the file menu-def.lisp for an overview.
 
  A frame can be placed anywhere in its parent frame. And can have
- differents layouts to automatically manage its children (tile, tile
+ different layouts to automatically manage its children (tile, tile
  to left, to bottom, no layout...).
 
 
@@ -66,11 +73,11 @@ files and at the config.lisp file for global variables.
 
 All variables can be overwritten in a user configuration file:
 $XDG_CONFIG_HOME/clfswm/clfswmrc or $HOME/.clfswmrc or /etc/clfswmrc.
-It's a standard lisp file loaded at startup. There is an example in
+It's a standard lisp file loaded at start up. There is an example in
 the clfswm source (see dot-clfswmrc).
 
 There is a lot of hooks in CLFSWM to tweak its behaviour. For example,
-if you want to add some frames at startup you can write your own
+if you want to add some frames at start up you can write your own
 init-hook (see dot-clfswmrc).
 
 
@@ -95,6 +102,8 @@ Philippe Brochard <pbrochard [at] common-lisp [dot] net>.
 
 Références
 
+      http://common-lisp.net/project/clfswm/
+      http://trac.common-lisp.net/clfswm/
    1. http://incise.org/index.cgi/TinyWM
    2. http://www.nongnu.org/stumpwm/
    3. http://www.gnu.org/

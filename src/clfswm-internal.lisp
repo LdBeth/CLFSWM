@@ -365,7 +365,9 @@
       (copy-pixmap-buffer window gc))))
 
 
-
+(defun display-all-frame-info (&optional (root *current-root*))
+  (with-all-frames (root frame)
+    (display-frame-info frame)))
 
 
 

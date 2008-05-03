@@ -262,6 +262,7 @@
 	  (xlib:free-gcontext gc)
 	  (xlib:destroy-window window)
 	  (xlib:close-font font)
+	  (display-all-frame-info)
 	  (wait-no-key-or-button-press))))))
 
 

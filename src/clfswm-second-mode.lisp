@@ -204,7 +204,8 @@
     (xungrab-keyboard)
     (xungrab-pointer)
     (grab-main-keys)
-    (show-all-children))
+    (show-all-children)
+    (display-all-frame-info))
   (wait-no-key-or-button-press)
   (when *second-mode-program*
     (do-shell *second-mode-program*)

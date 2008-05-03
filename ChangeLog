@@ -1,3 +1,13 @@
+2008-05-03  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-info.lisp (info-mode): display all frame info before
+	leaving.
+
+	* src/clfswm-second-mode.lisp (second-key-mode): display all frame
+	info before leaving.
+
+	* src/clfswm-internal.lisp (display-all-frame-info): New function.
+
 2008-05-02  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/tools.lisp (getenv): Implemented for ECL.
