@@ -96,14 +96,16 @@
 
 (defun managed-window-p (window frame)
   "Return t only if window is managed by frame"
-  (with-slots ((managed forced-managed-window)
-	       (unmanaged forced-unmanaged-window)) frame
-    (and (not (member window unmanaged))
-	 (not (member (xlib:wm-name window) unmanaged :test #'string-equal-p))
-	 (or (member :all (frame-managed-type frame))
-	     (member (window-type window) (frame-managed-type frame))
-	     (member window managed)
-	     (member (xlib:wm-name window) managed :test #'string-equal-p)))))
+  (if (frame-p frame)
+      (with-slots ((managed forced-managed-window)
+		   (unmanaged forced-unmanaged-window)) frame
+	(and (not (member window unmanaged))
+	     (not (member (xlib:wm-name window) unmanaged :test #'string-equal-p))
+	     (or (member :all (frame-managed-type frame))
+		 (member (window-type window) (frame-managed-type frame))
+		 (member window managed)
+		 (member (xlib:wm-name window) managed :test #'string-equal-p))))
+      t))
 
 
 
@@ -238,15 +240,16 @@
 
 (defun place-frame (frame parent prx pry prw prh)
   "Place a frame from real (pixel) coordinates"
-  (with-slots (window x y w h) frame
-    (setf (xlib:drawable-x window) prx
-	  (xlib:drawable-y window) pry
-	  (xlib:drawable-width window) prw
-	  (xlib:drawable-height window) prh
-	  x (x-px->fl prx parent)
-	  y (y-px->fl pry parent)
-	  w (w-px->fl prw parent)
-	  h (h-px->fl prh parent))))
+  (when (and (frame-p frame) (frame-p parent))
+    (with-slots (window x y w h) frame
+      (setf (xlib:drawable-x window) prx
+	    (xlib:drawable-y window) pry
+	    (xlib:drawable-width window) prw
+	    (xlib:drawable-height window) prh
+	    x (x-px->fl prx parent)
+	    y (y-px->fl pry parent)
+	    w (w-px->fl prw parent)
+	    h (h-px->fl prh parent)))))
 
 (defun fixe-real-size (frame parent)
   "Fixe real (pixel) coordinates in float coordinates"

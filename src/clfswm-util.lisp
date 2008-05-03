@@ -496,11 +496,12 @@
 (defun mouse-click-to-focus-generic (window root-x root-y mouse-fn)
   "Focus the current frame or focus the current window parent
 mouse-fun is #'move-frame or #'resize-frame"
-  (let ((to-replay t)
-	(child window)
-	(parent (find-parent-frame window *current-root*))
-	(root-p (or (equal window *root*)
-		    (equal window (frame-window *current-root*)))))
+  (let* ((to-replay t)
+	 (child window)
+	 (parent (find-parent-frame child *current-root*))
+	 (root-p (or (equal window *root*)
+		     (and (frame-p child)
+			  (equal child (frame-window *current-root*))))))
     (when (or (not root-p) *create-frame-on-root*)
       (unless parent
 	(if root-p
@@ -540,7 +541,8 @@ Focus child and its parents -
 For window: set current child to window or its parent according to window-parent"
   (let* ((child (find-child-under-mouse root-x root-y))
 	 (parent (find-parent-frame child)))
-    (when (equal child *current-root*)
+    (when (and (equal child *current-root*)
+	       (frame-p *current-root*))
       (setf child (create-frame)
 	    parent *current-root*
 	    mouse-fn #'resize-frame)

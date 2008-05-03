@@ -1,5 +1,13 @@
 2008-05-03  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-util.lisp
+	(mouse-click-to-focus-generic,mouse-focus-move/resize-generic):
+	Check if child is a frame.
+
+	* src/clfswm-internal.lisp (managed-window-p): Handle the case
+	where frame is null.
+	(place-frame): Check if frame and parent are frames.
+
 	* src/clfswm-info.lisp (info-mode): display all frame info before
 	leaving.
 
