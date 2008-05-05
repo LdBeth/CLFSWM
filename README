@@ -4,7 +4,7 @@
  and [2]Stumpwm. Many thanks to them).
  It can be driven only with the keyboard or with the mouse.
 
- A display contains a root frame and its children. A children can be a
+ A display contains a root frame and its children. A child can be a
  window or another frame. The root frame or its children can be the
  current root. The current root is fullscreen maximized (no
  decorations, no buttons, no menus: nothing, just the application
