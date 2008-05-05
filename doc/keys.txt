@@ -65,6 +65,9 @@ Control              <               Open the main menu
                      W               Open the window menu
                      N               Open the action by name menu
                      U               Open the action by number menu
+                     P               Open the frame pack menu
+                     L               Open the frame fill menu
+                     R               Open the frame resize menu
                      I               Identify a key
                      Colon           Eval a lisp form from the query input
                      Exclam          Run a program from the query input
@@ -153,5 +156,5 @@ Mouse buttons actions in info mode:
                      2               Leave the info mode
                      4               Move one line up
                      5               Move one line down
-                     Motion          Grab text
+                     Clfswm::motion   Grab text
 

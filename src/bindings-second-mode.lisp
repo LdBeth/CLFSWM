@@ -52,6 +52,18 @@
   "Open the action by number menu"
   (open-menu (find-menu 'action-by-number-menu)))
 
+(defun open-frame-pack-menu ()
+  "Open the frame pack menu"
+  (open-menu (find-menu 'frame-pack-menu)))
+
+(defun open-frame-fill-menu ()
+  "Open the frame fill menu"
+  (open-menu (find-menu 'frame-fill-menu)))
+
+(defun open-frame-resize-menu ()
+  "Open the frame resize menu"
+  (open-menu (find-menu 'frame-resize-menu)))
+
 
 (define-second-key ("m") 'open-menu)
 (define-second-key (#\<) 'open-menu)
@@ -61,6 +73,11 @@
 (define-second-key ("w") 'open-window-menu)
 (define-second-key ("n") 'open-action-by-name-menu)
 (define-second-key ("u") 'open-action-by-number-menu)
+
+(define-second-key ("p") 'open-frame-pack-menu)
+(define-second-key ("l") 'open-frame-fill-menu)
+(define-second-key ("r") 'open-frame-resize-menu)
+
 
 
 ;;(define-second-key (#\g :control) 'stop-all-pending-actions)

@@ -2,8 +2,8 @@
 ;;;
 ;;; CLFSWM configuration file example
 ;;;
-;;; Send me your configuration file at hocwp _at_ free -dot- fr if
-;;; you want to share it with others.
+;;; Send me your configuration file at pbrochard _at_ common-lisp -dot- net
+;;; if you want to share it with others.
 
 (in-package :clfswm)
 
@@ -22,6 +22,12 @@
 
 ;;(defparameter *fullscreen* '(0 4 800 570))
 (defparameter *fullscreen* '(0 0 1024 750))
+
+
+;;; Contributed code example
+;;; See in the clfswm/contrib directory to find some contributed code
+;;; and se load-contrib to load them. For example:
+(load-contrib "contrib-example.lisp")
 
 
 
@@ -68,7 +74,7 @@
 ;;; Hook example
 ;;;
 ;;; See in package.lisp and clfswm.lisp, clfswm-second-mode.lisp
-;;; or clfswm-pager.lisp for hook examples
+;;; for hook examples
 (setf *key-press-hook* (list (lambda (&rest args) ; function 1
 			       (format t "Keyp press (before): ~A~%" args)
 			       (force-output))
@@ -80,30 +86,22 @@
 
 
 
+
 ;;; A more complex example I use to record my desktop and show
 ;;; documentation associated to each key press.
+(defun display-osd (formatter &rest args)
+  (do-shell "pkill osd_cat")
+  (do-shell (format nil "echo ~A | osd_cat -d 3 -p bottom -o -45 -f -*-fixed-*-*-*-*-12-*-*-*-*-*-*-1"
+		    (apply #'format nil formatter args)))
+  (force-output))
+
 (defun documentation-key-from-code (hash-key code state)
-  (labels ((doc-from (key)
-	     (multiple-value-bind (function foundp)
-		 (gethash (list key state) hash-key)
-	       (when (and foundp (first function))
-		 (documentation (first function) 'function))))
-	   (from-code ()
-	     (doc-from code))
-	   (from-char ()
-	     (let ((char (keycode->char code state)))
-	       (doc-from char)))
-	   (from-string ()
-	     (let ((string (keysym->keysym-name (keycode->keysym *display* code 0))))
-	       (doc-from string))))
-    (cond ((from-code))
-	  ((from-char))
-	  ((from-string)))))
+  (documentation (first (find-key-from-code hash-key code state)) 'function))
 
 
 (defun key-string (hash-key code state)
-  (let* ((modifiers (make-state-keys state))
-	 (keysym (keysym->keysym-name (keycode->keysym *display* code 0)))
+  (let* ((modifiers (xlib:make-state-keys state))
+	 (keysym (keysym->keysym-name (xlib:keycode->keysym *display* code 0)))
 	 (doc (documentation-key-from-code hash-key code state)))
     (values (format nil "~:(~{~A+~}~A~) : ~S" modifiers keysym doc)
 	    doc)))
@@ -112,161 +110,116 @@
   (multiple-value-bind (str doc)
       (key-string hash-key code state)
     (when doc
-      (do-shell "pkill osd_cat")
-      (do-shell (format nil "echo ~A | osd_cat -d 3 -p bottom -o -45 -f -*-fixed-*-*-*-*-12-*-*-*-*-*-*-1" str))
-      (force-output))))
+      (display-osd "~A" str))))
 
 (defun display-key-osd-main (&rest event-slots &key code state &allow-other-keys)
+  (declare (ignore event-slots))
   (display-doc *main-keys* code state))
 
 (defun display-key-osd-second (&rest event-slots &key code state &allow-other-keys)
+  (declare (ignore event-slots))
   (display-doc *second-keys* code state))
 
-(defun display-key-pager (&rest event-slots &key code state &allow-other-keys)
-  (setf (gcontext-background *pager-gc*) (get-color "Black"))
-  (setf (gcontext-foreground *pager-gc*) (get-color "Red"))
-  (multiple-value-bind (str doc)
-      (key-string *pager-keys* code state)
-    (when doc
-      (draw-image-glyphs *pager-window* *pager-gc* 20 570
-			 (format nil "~A                                                  " str)))
-    (display-finish-output *display*)))
-
-;; Define new hook or add to precedent one
+;; Define new hook or add to the previous one
 (if (consp *key-press-hook*)
     (push #'display-key-osd-main *key-press-hook*)
     (setf *key-press-hook* (list #'display-key-osd-main #'handle-key-press)))
 (setf *sm-key-press-hook* (list #'display-key-osd-second #'sm-handle-key-press))
-(setf *pager-key-press-hook* (list #'pager-handle-key-press #'display-key-pager))
 
 ;;; -- Doc example end --
 
 
-
-;;;; Uncomment the lines below if you want to enable the larswm,
-;;;; dwm, wmii... cycling style.
-;;;;
-;;;; This leave the main window in one side of the screen and tile others
-;;;; on the other side. It can be configured in the rc file or interactively
-;;;; with the function 'reconfigure-tile-workspace'.
-;;;;
-(defun circulate-group-up ()
-  "Circulate up in group - larswm, dwm, wmii style"
-  (banish-pointer)
-  (minimize-group (current-group))
-  (no-focus)
-  (setf (workspace-group-list (current-workspace))
-	(rotate-list (workspace-group-list (current-workspace))))
-  (funcall *tile-workspace-function* (current-workspace))
-  (show-all-windows-in-workspace (current-workspace)))
-
-(defun circulate-group-down ()
-  "Circulate down in group - larswm, dwm, wmii style"
-  (banish-pointer)
-  (minimize-group (current-group))
-  (no-focus)
-  (setf (workspace-group-list (current-workspace))
-	(anti-rotate-list (workspace-group-list (current-workspace))))
-  (funcall *tile-workspace-function* (current-workspace))
-  (show-all-windows-in-workspace (current-workspace)))
-
-;;; -- Lasrwm style end --
-
-
-
-;;; Azerty keyboard configuration (first remove keys, then rebind)
-;; Main mode
-;;(undefine-main-key (#\t :mod-1))
-;;(undefine-main-key (#\b :mod-1))
-;;(undefine-main-key (#\b :mod-1 :control))
-;;(undefine-main-key ("1" :mod-1))
-;;(undefine-main-key ("2" :mod-1))
-;;(undefine-main-key ("3" :mod-1))
-;;(undefine-main-key ("4" :mod-1))
-;;(undefine-main-key ("5" :mod-1))
-;;(undefine-main-key ("6" :mod-1))
-;;(undefine-main-key ("7" :mod-1))
-;;(undefine-main-key ("8" :mod-1))
-;;(undefine-main-key ("9" :mod-1))
-;;(undefine-main-key ("0" :mod-1))
-;; Or better:
-(undefine-main-multi-keys (#\t :mod-1) (#\b :mod-1) (#\b :mod-1 :control)
-			  (#\1 :mod-1) (#\2 :mod-1) (#\3 :mod-1)
-			  (#\4 :mod-1) (#\5 :mod-1) (#\6 :mod-1)
-			  (#\7 :mod-1) (#\8 :mod-1) (#\9 :mod-1) (#\0 :mod-1))
-
-(define-main-key (#\< :control) 'second-key-mode)
-
+;;; -- Azerty configuration --
+;;; For the main mode
 (define-main-key ("twosuperior") 'banish-pointer)
-(define-main-key ("twosuperior" :mod-1) 'toggle-maximize-current-group)
 
-(define-main-key ("ampersand" :mod-1) 'b-main-focus-workspace-1)
-(define-main-key ("eacute" :mod-1) 'b-main-focus-workspace-2)
-(define-main-key ("quotedbl" :mod-1) 'b-main-focus-workspace-3)
-(define-main-key ("quoteright" :mod-1) 'b-main-focus-workspace-4)
-(define-main-key ("parenleft" :mod-1) 'b-main-focus-workspace-5)
-(define-main-key ("minus" :mod-1) 'b-main-focus-workspace-6)
-(define-main-key ("egrave" :mod-1) 'b-main-focus-workspace-7)
-(define-main-key ("underscore" :mod-1) 'b-main-focus-workspace-8)
-(define-main-key ("ccedilla" :mod-1) 'b-main-focus-workspace-9)
-(define-main-key ("agrave" :mod-1) 'b-main-focus-workspace-10)
+(undefine-main-multi-keys (#\t :mod-1) (#\b :mod-1) (#\b :mod-1 :control))
 
-;; Second mode
-(undefine-second-multi-keys (#\t) (#\b) (#\b :mod-1)
-			    (#\1 :mod-1) (#\2 :mod-1) (#\3 :mod-1)
-			    (#\4 :mod-1) (#\5 :mod-1) (#\6 :mod-1)
-			    (#\7 :mod-1) (#\8 :mod-1) (#\9 :mod-1) (#\0 :mod-1)
-			    (#\1 :control :mod-1) (#\2 :control :mod-1))
-
-(define-second-key (#\<) 'leave-second-mode-maximize)
+(undefine-main-multi-keys ("1" :mod-1) ("2" :mod-1) ("3" :mod-1)
+			  ("4" :mod-1) ("5" :mod-1) ("6" :mod-1)
+			  ("7" :mod-1) ("8" :mod-1) ("9" :mod-1) ("0" :mod-1))
+(define-main-key ("ampersand" :mod-1) 'bind-or-jump 1)
+(define-main-key ("eacute" :mod-1) 'bind-or-jump 2)
+(define-main-key ("quotedbl" :mod-1) 'bind-or-jump 3)
+(define-main-key ("quoteright" :mod-1) 'bind-or-jump 4)
+(define-main-key ("parenleft" :mod-1) 'bind-or-jump 5)
+(define-main-key ("minus" :mod-1) 'bind-or-jump 6)
+(define-main-key ("egrave" :mod-1) 'bind-or-jump 7)
+(define-main-key ("underscore" :mod-1) 'bind-or-jump 8)
+(define-main-key ("ccedilla" :mod-1) 'bind-or-jump 9)
+(define-main-key ("agrave" :mod-1) 'bind-or-jump 10)
 
 
-(define-second-key ("ampersand" :mod-1) 'b-second-focus-workspace-1)
-(define-second-key ("eacute" :mod-1) 'b-second-focus-workspace-2)
-(define-second-key ("quotedbl" :mod-1) 'b-second-focus-workspace-3)
-(define-second-key ("quoteright" :mod-1) 'b-second-focus-workspace-4)
-(define-second-key ("parenleft" :mod-1) 'b-second-focus-workspace-5)
-(define-second-key ("minus" :mod-1) 'b-second-focus-workspace-6)
-(define-second-key ("egrave" :mod-1) 'b-second-focus-workspace-7)
-(define-second-key ("underscore" :mod-1) 'b-second-focus-workspace-8)
-(define-second-key ("ccedilla" :mod-1) 'b-second-focus-workspace-9)
-(define-second-key ("agrave" :mod-1) 'b-second-focus-workspace-10)
-
-(define-second-key ("ampersand" :control :mod-1) 'renumber-workspaces)
-(define-second-key ("eacute" :control :mod-1) 'sort-workspaces)
-
-
-(define-second-key ("twosuperior") 'banish-pointer)
-(define-second-key ("twosuperior" :mod-1) 'toggle-maximize-current-group)
-
-(define-second-key (#\t) 'tile-current-workspace-vertically)
-(define-second-key (#\t :shift) 'tile-current-workspace-horizontally)
-
-
-;; Pager mode
-(undefine-pager-multi-keys (#\b)
-			   (#\1 :mod-1) (#\2 :mod-1) (#\3 :mod-1)
-			   (#\4 :mod-1) (#\5 :mod-1) (#\6 :mod-1)
-			   (#\7 :mod-1) (#\8 :mod-1) (#\9 :mod-1) (#\0 :mod-1)
-			   (#\1 :control :mod-1) (#\2 :control :mod-1))
-
-(define-pager-key ("twosuperior") 'banish-pointer)
-
-(define-pager-key ("ampersand" :mod-1) 'b-pager-focus-workspace-1)
-(define-pager-key ("eacute" :mod-1) 'b-pager-focus-workspace-2)
-(define-pager-key ("quotedbl" :mod-1) 'b-pager-focus-workspace-3)
-(define-pager-key ("quoteright" :mod-1) 'b-pager-focus-workspace-4)
-(define-pager-key ("parenleft" :mod-1) 'b-pager-focus-workspace-5)
-(define-pager-key ("minus" :mod-1) 'b-pager-focus-workspace-6)
-(define-pager-key ("egrave" :mod-1) 'b-pager-focus-workspace-7)
-(define-pager-key ("underscore" :mod-1) 'b-pager-focus-workspace-8)
-(define-pager-key ("ccedilla" :mod-1) 'b-pager-focus-workspace-9)
-(define-pager-key ("agrave" :mod-1) 'b-pager-focus-workspace-10)
-
-(define-pager-key ("ampersand" :control :mod-1) 'pager-renumber-workspaces)
-(define-pager-key ("eacute" :control :mod-1) 'pager-sort-workspaces)
-
+;;; For the second mode
+(undefine-second-multi-keys ("1" :mod-1) ("2" :mod-1) ("3" :mod-1)
+			    ("4" :mod-1) ("5" :mod-1) ("6" :mod-1)
+			    ("7" :mod-1) ("8" :mod-1) ("9" :mod-1) ("0" :mod-1))
+(define-second-key ("ampersand" :mod-1) 'bind-or-jump 1)
+(define-second-key ("eacute" :mod-1) 'bind-or-jump 2)
+(define-second-key ("quotedbl" :mod-1) 'bind-or-jump 3)
+(define-second-key ("quoteright" :mod-1) 'bind-or-jump 4)
+(define-second-key ("parenleft" :mod-1) 'bind-or-jump 5)
+(define-second-key ("minus" :mod-1) 'bind-or-jump 6)
+(define-second-key ("egrave" :mod-1) 'bind-or-jump 7)
+(define-second-key ("underscore" :mod-1) 'bind-or-jump 8)
+(define-second-key ("ccedilla" :mod-1) 'bind-or-jump 9)
+(define-second-key ("agrave" :mod-1) 'bind-or-jump 10)
 ;;; -- Azerty configuration end --
 
 
 
+;;; Init hook examples:
+(defun my-init-hook-1 ()
+  (dbg 'my-init-hook)
+  ;;(add-frame (create-frame :name "Default" :layout #'tile-left-layout :data (list '(:tile-size 0.6))) *root-frame*)
+  (add-frame (create-frame :name "The Gimp" :x 0.6 :y 0 :w 0.3 :h 0.2) *root-frame*)
+  (add-frame (create-frame :name "Net" :x 0.52 :y 0.3 :w 0.4 :h 0.3) *root-frame*)
+  (add-frame (create-frame :x 0.4 :y 0 :w 0.2 :h 0.3) (first (frame-child *root-frame*)))
+  (add-frame (create-frame :x 0.6 :y 0.4 :w 0.4 :h 0.2) (first (frame-child *root-frame*)))
+  (add-frame (create-frame :x 0.4 :y 0.7 :w 0.2 :h 0.3) (first (frame-child *root-frame*)))
+  (let ((frame (create-frame :name "The Qiv" :x 0 :y 0.4 :w 0.4 :h 0.2)))
+    (add-frame frame (first (frame-child *root-frame*)))
+    (add-frame (create-frame) frame))
+  (add-frame (create-frame :x 0.1 :y 0.55 :w 0.8 :h 0.43) *root-frame*)
+  (add-frame (create-frame :x 0.2 :y 0.1 :w 0.6 :h 0.4) (first (frame-child *root-frame*)))
+  (add-frame (create-frame :x 0.3 :y 0.55 :w 0.4 :h 0.3) (first (frame-child *root-frame*)))
+  (add-frame (create-frame :x 0.1 :y 0.1 :w 0.3 :h 0.6) (first (frame-child (first (frame-child *root-frame*)))))
+  (setf *current-child* (first (frame-child *current-root*)))
+  (setf (frame-layout *current-child*) #'tile-layout))
+
+(defun my-init-hook-2 ()
+  (dbg 'my-init-hook)
+  (add-frame (create-frame :name "Default" :layout #'tile-left-layout :data (list '(:tile-size 0.6))) *root-frame*)
+  (setf *current-child* (first (frame-child *current-root*)))
+  (setf (frame-layout *current-child*) #'tile-layout))
+
+
+(defun my-init-hook-3 ()
+  (dbg 'my-init-hook)
+  (add-frame (create-frame :name "plop" :x 0.1 :y 0.4 :w 0.7 :h 0.3) *root-frame*)
+  (add-frame (create-frame :name "Default" :layout nil :x 0.1 :y 0.5 :w 0.8 :h 0.5)
+	     *root-frame*)
+  (setf *current-child* (first (frame-child *current-root*)))
+  (setf (frame-layout *root-frame*) nil))
+
+
+
+(defun my-init-hook-4 ()
+  (let ((frame (add-frame (create-frame :name "Default"
+                                        :layout #'tile-left-layout
+					:x 0.05 :y 0.05 :w 0.9 :h 0.9)
+			  *root-frame*)))
+    (setf *current-child* frame)))
+
+
+;;; Use this hook and prevent yourself to create a new frame to emulate
+;;; the MS Windows desktop style :)
+(defun my-init-hook-ms-windows-style ()
+  (setf (frame-managed-type *root-frame*) nil))
+
+
+
+
+(setf *init-hook* #'my-init-hook-4)  ;; <- choose one in 1 to 4
+;;(setf *init-hook* nil)
+;;; Init hook end
