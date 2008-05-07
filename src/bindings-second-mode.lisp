@@ -88,11 +88,17 @@
 (define-second-key ("exclam") 'run-program-from-query-string)
 
 
-(define-second-key (#\t) 'leave-second-mode)
 (define-second-key ("Return") 'leave-second-mode)
 (define-second-key ("Escape") 'leave-second-mode)
 
 
+(defun tile-space-current-frame ()
+  "Tile with spaces the current frame"
+  (explode-frame *current-child*)
+  (set-tile-space-layout-once)
+  (leave-second-mode))
+
+(define-second-key (#\t) 'tile-space-current-frame)
 
 (define-second-key ("Home" :mod-1 :control :shift) 'quit-clfswm)
 

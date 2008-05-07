@@ -84,6 +84,10 @@ on the root window in the main mode with the mouse")
 (defparameter *color-unselected* "Blue")
 (defparameter *color-maybe-selected* "Yellow")
 
+;;; CONFIG: Default window size
+(defparameter *default-window-width* 400)
+(defparameter *default-window-height* 300)
+
 ;;; CONFIG: Second mode colors and fonts
 (defparameter *sm-border-color* "Green")
 (defparameter *sm-background-color* "Black")

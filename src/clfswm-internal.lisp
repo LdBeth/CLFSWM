@@ -757,10 +757,10 @@ For window: set current child to window or its parent according to window-parent
 		       (xlib:drawable-width window)))
 	   (rheight (or (and hints (or (xlib:wm-size-hints-height hints) (xlib:wm-size-hints-base-height hints)))
 			(xlib:drawable-height window))))
-      (setf (xlib:drawable-width window) (min (max min-width rwidth) max-width)
-	    (xlib:drawable-height window) (min (max min-height rheight) max-height))
-      (setf (xlib:drawable-x window) (truncate (+ (frame-rx *current-child*) (/ (- (frame-rw *current-child*) (xlib:drawable-width window)) 2)))
-	    (xlib:drawable-y window) (truncate (+ (frame-ry *current-child*) (/ (- (frame-rh *current-child*) (xlib:drawable-height window)) 2)))))))
+      (setf (xlib:drawable-width window) (min (max min-width rwidth *default-window-width*) max-width)
+	    (xlib:drawable-height window) (min (max min-height rheight *default-window-height*) max-height))
+            (setf (xlib:drawable-x window) (truncate (+ (frame-rx *current-child*) (/ (- (xlib:screen-width *screen*) (xlib:drawable-width window)) 2)))
+		  (xlib:drawable-y window) (truncate (+ (frame-ry *current-child*) (/ (- (xlib:screen-height *screen*) (xlib:drawable-height window)) 2)))))))
 
 
 

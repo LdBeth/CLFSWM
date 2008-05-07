@@ -1,3 +1,19 @@
+2008-05-07  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (place-window-from-hints): Give a
+	minimal size for windows.
+
+	* src/config.lisp (*default-window-width/height*): New parameters.
+
+	* src/clfswm-internal.lisp (place-window-from-hints): Center
+	windows in the screen instead of in there frame.
+
+	* src/bindings-second-mode.lisp (tile-space-current-frame): New
+	binding on C-t.
+
+	* src/clfswm-layout.lisp (register-layout): Intern the once name
+	in the right package.
+
 2008-05-05  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* doc/dot-clfswmrc: Update to  follow the new clfswm way.

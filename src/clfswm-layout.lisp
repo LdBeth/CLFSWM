@@ -66,10 +66,10 @@
 
 
 (defun register-layout (layout)
-  (let ((once-name (create-symbol (format nil "~A" layout) "-ONCE")))
+  (let ((once-name (intern (format nil "~A-ONCE" layout) :clfswm)))
     (setf (symbol-function once-name)
 	  (lambda ()
-	    (set-layout-dont-leave (intern (subseq (format nil "~A" layout) 4)))
+	    (set-layout-dont-leave (intern (subseq (format nil "~A" layout) 4) :clfswm))
 	    (show-all-children *current-root*)
 	    (fixe-real-size-current-child)
 	    (set-layout-dont-leave #'no-layout)))

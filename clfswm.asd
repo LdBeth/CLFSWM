@@ -57,7 +57,8 @@
 			 (:file "bindings"
 			  :depends-on ("clfswm" "clfswm-internal" "clfswm-util"))
 			 (:file "bindings-second-mode"
-			  :depends-on ("clfswm" "clfswm-util" "clfswm-query" "bindings" "clfswm-pack" "clfswm-menu" "menu-def"))))))
+			  :depends-on ("clfswm" "clfswm-util" "clfswm-query" "bindings" "clfswm-pack" "clfswm-menu" "menu-def"
+						"clfswm-layout"))))))
 
 
 
