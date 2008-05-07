@@ -122,8 +122,9 @@
   "Return the child window under the mouse"
   (with-xlib-protect
     (let ((win *root*))
-      (with-all-windows-frames (*current-root* child)
-	(when (and (<= (xlib:drawable-x child) x (+ (xlib:drawable-x child) (xlib:drawable-width child)))
+      (with-all-windows-frames-and-parent (*current-root* child parent)
+	(when (and (or (managed-window-p child parent) (equal parent *current-child*))
+		   (<= (xlib:drawable-x child) x (+ (xlib:drawable-x child) (xlib:drawable-width child)))
 		   (<= (xlib:drawable-y child) y (+ (xlib:drawable-y child) (xlib:drawable-height child))))
 	  (setf win child))
 	(when (and (<= (frame-rx child) x (+ (frame-rx child) (frame-rw child)))
@@ -136,8 +137,9 @@
   "Return the child under the mouse"
   (with-xlib-protect
     (let ((ret nil))
-      (with-all-windows-frames (*current-root* child)
-	(when (and (<= (xlib:drawable-x child) x (+ (xlib:drawable-x child) (xlib:drawable-width child)))
+      (with-all-windows-frames-and-parent (*current-root* child parent)
+	(when (and (or (managed-window-p child parent) (equal parent *current-child*))
+		   (<= (xlib:drawable-x child) x (+ (xlib:drawable-x child) (xlib:drawable-width child)))
 		   (<= (xlib:drawable-y child) y (+ (xlib:drawable-y child) (xlib:drawable-height child))))
 	  (setf ret child))
 	(when (and (<= (frame-rx child) x (+ (frame-rx child) (frame-rw child)))

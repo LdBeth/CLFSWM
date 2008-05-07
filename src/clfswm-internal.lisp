@@ -204,6 +204,17 @@
 			   (,rec ,sub-child))))))
        (,rec ,root))))
 
+(defmacro with-all-windows-frames-and-parent ((root child parent) body-window body-frame)
+  (let ((rec (gensym))
+	(sub-child (gensym)))
+    `(labels ((,rec (,child ,parent)
+		(typecase ,child
+		  (xlib:window ,body-window)
+		  (frame ,body-frame
+			 (dolist (,sub-child (reverse (frame-child ,child)))
+			   (,rec ,sub-child ,child))))))
+       (,rec ,root nil))))
+
 
 
 (defun frame-find-free-number ()

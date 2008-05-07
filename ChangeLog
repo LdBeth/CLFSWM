@@ -1,7 +1,11 @@
 2008-05-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-util.lisp (find-child-under-mouse): Take care of
+	unmanaged (hidden) windows.
+
 	* src/clfswm-internal.lisp (place-window-from-hints): Give a
 	minimal size for windows.
+	(with-all-windows-frames-and-parent): New function.
 
 	* src/config.lisp (*default-window-width/height*): New parameters.
 
