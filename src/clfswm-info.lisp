@@ -60,7 +60,6 @@
 (define-info-key (#\q) 'leave-info-mode)
 (define-info-key ("Return") 'leave-info-mode)
 (define-info-key ("Escape") 'leave-info-mode)
-(define-info-key (#\Space) 'leave-info-mode)
 
 (define-info-key ("twosuperior")
     (defun info-banish-pointer (info)

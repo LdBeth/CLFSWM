@@ -652,9 +652,9 @@ For window: set current child to window or its parent according to window-parent
   
   (defun bind-or-jump (n)
     "Bind or jump to a slot"
-    (let ((default-bind `("Return" bind-on-slot
-				   ,(format nil "Bind slot ~A on child: ~A" n (child-fullname *current-child*)))))
-      (setf current-slot (- n 1))
+    (setf current-slot (- n 1))
+    (let ((default-bind `("b" bind-on-slot
+			      ,(format nil "Bind slot ~A on child: ~A" n (child-fullname *current-child*)))))
       (info-mode-menu (aif (aref key-slots current-slot)
 			   `(,default-bind
 				("BackSpace" remove-binding-on-slot
@@ -663,7 +663,9 @@ For window: set current child to window or its parent according to window-parent
 			      ("Tab" jump-to-slot
 				     ,(format nil "Jump to child: ~A" (aif (aref key-slots current-slot)
 									   (child-fullname it)
-									   "Not set - Please, bind it with Return"))))
+									   "Not set - Please, bind it with 'b'")))
+			      ("Return" jump-to-slot "Same thing")
+			      ("space" jump-to-slot "Same thing"))
 			   (list default-bind))))))
 
 

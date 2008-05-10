@@ -1,3 +1,12 @@
+2008-05-10  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (bind-or-jump): Bind "Tab", "Return" and
+	"Space" to jump to a child. "B" to bind a slot on the current
+	child.
+
+	* src/bindings-second-mode.lisp: Use "Tab" instead of
+	"Iso_Left_Tab".
+
 2008-05-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (find-child-under-mouse): Take care of
