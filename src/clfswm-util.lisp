@@ -56,7 +56,7 @@
 
 
 (defun add-default-frame ()
-  "Add a default frame"
+  "Add a default frame in the current frame"
   (when (frame-p *current-child*)
     (let ((name (query-string "Frame name")))
       (push (create-frame :name name) (frame-child *current-child*))))
@@ -64,7 +64,7 @@
     
 
 (defun add-placed-frame ()
-  "Add a placed frame"
+  "Add a placed frame in the current frame"
   (when (frame-p *current-child*)
     (let ((name (query-string "Frame name"))
 	  (x (/ (query-number "Frame x in percent (%)") 100))

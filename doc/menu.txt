@@ -22,8 +22,8 @@ u: Renumber the current frame
 x: Create a new frame for each window in frame
 
 Frame-Adding-Menu
-a: Add a default frame
-p: Add a placed frame
+a: Add a default frame in the current frame
+p: Add a placed frame in the current frame
 
 Frame-Layout-Menu
 a: Maximize windows in there frame - leave frame to there size (no layout)

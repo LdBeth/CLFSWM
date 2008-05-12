@@ -71,11 +71,13 @@
 
 
 (defun produce-doc-html-in-file (filename)
+  (format t "Producing html keys documentation in ~S " filename)
   (with-open-file (stream filename :direction :output
 			  :if-exists :supersede :if-does-not-exist :create)
     (produce-doc-html (list *main-keys* *main-mouse* *second-keys* *second-mouse*
 			    *info-keys* *info-mouse*)
-		      stream)))
+		      stream))
+  (format t " done~%"))
 
 
 
@@ -103,11 +105,13 @@
 			   
 
 (defun produce-doc-in-file (filename)
+  (format t "Producing text keys documentation in ~S " filename)
   (with-open-file (stream filename :direction :output
 			  :if-exists :supersede :if-does-not-exist :create)
     (produce-doc (list *main-keys* *main-mouse* *second-keys* *second-mouse*
 		       *info-keys* *info-mouse*)
-		 stream)))
+		 stream))
+  (format t " done~%"))
 
 
 
@@ -136,9 +140,11 @@
 
   
 (defun produce-menu-doc-in-file (filename)
+  (format t "Producing text menus documentation in ~S " filename)
   (with-open-file (stream filename :direction :output
 			  :if-exists :supersede :if-does-not-exist :create)
-    (produce-menu-doc stream)))
+    (produce-menu-doc stream))
+  (format t " done~%"))
 
 
 
@@ -179,9 +185,11 @@
 
   
 (defun produce-menu-doc-html-in-file (filename)
+  (format t "Producing html menus documentation in ~S " filename)
   (with-open-file (stream filename :direction :output
 			  :if-exists :supersede :if-does-not-exist :create)
-    (produce-menu-doc-html stream)))
+    (produce-menu-doc-html stream))
+  (format t " done~%"))
 
 
 

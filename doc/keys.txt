@@ -13,7 +13,7 @@ Mod-1                Left            Select the previous brother frame
 Mod-1                Down            Select the previous level in frame
 Mod-1                Up              Select the next level in frame
 Mod-1                Tab             Select the next child
-Mod-1 Shift          Iso_left_tab    Select the previous child
+Mod-1 Shift          Tab             Select the previous child
 Mod-1                Return          Enter in the selected frame - ie make it the root frame
 Mod-1 Shift          Return          Leave the selected frame - ie make its parent the root frame
 Mod-1                Home            Switch to the root frame
@@ -59,8 +59,8 @@ Second mode keys:
 
 Mod-1                F1              Open the help and info window for the second mode
                      M               Open the main menu
-                     <               Open the main menu
-Control              <               Open the main menu
+                     Less            Open the main menu
+Control              Less            Open the main menu
                      F               Open the frame menu
                      W               Open the window menu
                      N               Open the action by name menu
@@ -80,7 +80,7 @@ Mod-1                Left            Select the previous brother frame
 Mod-1                Down            Select the previous level in frame
 Mod-1                Up              Select the next level in frame
 Mod-1                Tab             Select the next child
-Mod-1 Shift          Iso_left_tab    Select the previous child
+Mod-1 Shift          Tab             Select the previous child
 Mod-1                Return          Enter in the selected frame - ie make it the root frame
 Mod-1 Shift          Return          Leave the selected frame - ie make its parent the root frame
 Mod-1                Home            Switch to the root frame
@@ -89,6 +89,7 @@ Mod-1 Shift          Home            Switch and select the root frame
 Mod-1                B               Move the pointer to the lower right corner of the screen
                      O               Open the next window in a new frame in the root frame
 Control              O               Open the next window in a new frame in the parent frame
+                     A               Add a default frame in the current frame
 Control Shift        Escape          Delete the focus window in all frames and workspaces
 Mod-1 Control Shift  Escape          Destroy the focus window in all frames and workspaces
 Control              Escape          Remove the focus window in the current frame
@@ -137,7 +138,6 @@ Info mode keys:
                      Q               Leave the info mode
                      Return          Leave the info mode
                      Escape          Leave the info mode
-                                     Leave the info mode
                      Twosuperior     Move the pointer to the lower right corner of the screen
                      Down            Move one line down
                      Up              Move one line up

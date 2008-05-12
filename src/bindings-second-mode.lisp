@@ -66,8 +66,8 @@
 
 
 (define-second-key ("m") 'open-menu)
-(define-second-key (#\<) 'open-menu)
-(define-second-key (#\< :control) 'open-menu)
+(define-second-key ("less") 'open-menu)
+(define-second-key ("less" :control) 'open-menu)
 
 (define-second-key ("f") 'open-frame-menu)
 (define-second-key ("w") 'open-window-menu)
@@ -124,6 +124,8 @@
 (define-second-key (#\o) 'set-open-in-new-frame-in-root-frame-nw-hook)
 (define-second-key (#\o :control) 'set-open-in-new-frame-in-parent-frame-nw-hook)
 
+(define-second-key (#\a) 'add-default-frame)
+
 ;;;; Escape
 (define-second-key ("Escape" :control :shift) 'delete-focus-window)
 (define-second-key ("Escape" :mod-1 :control :shift) 'destroy-focus-window)
@@ -154,7 +156,7 @@
 (define-shell (#\e) b-start-emacs "start emacs" "exec emacs")
 (define-shell (#\e :control) b-start-emacsremote
   "start an emacs for another user"
-  "exec emacsremote-Eterm")
+  "exec xterm -e emacsremote")
 (define-shell (#\h) b-start-xclock "start an xclock" "exec xclock -d")
 
 
