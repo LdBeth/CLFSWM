@@ -1,5 +1,7 @@
 2008-05-12  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/*.lisp: Rename 'brother' frames to 'sister' frames.
+
 	* src/bindings-second-mode.lisp (define-second-key #\a): New
 	binding on 'add-default-frame'.
 

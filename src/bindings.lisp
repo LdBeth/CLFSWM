@@ -39,8 +39,8 @@
 
 (define-main-key ("Home" :mod-1 :control :shift) 'quit-clfswm)
 
-(define-main-key ("Right" :mod-1) 'select-next-brother)
-(define-main-key ("Left" :mod-1) 'select-previous-brother)
+(define-main-key ("Right" :mod-1) 'select-next-sister)
+(define-main-key ("Left" :mod-1) 'select-previous-sister)
 
 (define-main-key ("Down" :mod-1) 'select-previous-level)
 (define-main-key ("Up" :mod-1) 'select-next-level)
