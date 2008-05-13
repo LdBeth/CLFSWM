@@ -1,3 +1,8 @@
+2008-05-13  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (with-movement): Display frame info for all
+	frames in current root.
+
 2008-05-12  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/*.lisp: Rename 'brother' frames to 'sister' frames.

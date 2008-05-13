@@ -677,6 +677,7 @@ For window: set current child to window or its parent according to window-parent
   `(when (frame-p *current-child*)
      ,@body
      (show-all-children)
+     (display-all-frame-info)
      (draw-second-mode-window)
      (open-menu (find-menu 'frame-movement-menu))))
 
