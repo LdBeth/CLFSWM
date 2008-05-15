@@ -1,5 +1,8 @@
 2008-05-15  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-util.lisp (current-frame-manage-window-type): Fix a
+	typo in managed types.
+
 	* src/clfswm-internal.lisp (show-child): Always display frame info
 	even if the frame is hidden.
 

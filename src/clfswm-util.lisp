@@ -816,7 +816,7 @@ For window: set current child to window or its parent according to window-parent
   "Change window types to be managed by a frame"
   (when (frame-p *current-child*)
     (let* ((type-str (query-string "Managed window type: (all, normal, transient, maxsize, desktop, dock, toolbar, menu, utility, splash, dialog)"
-				   (format nil "~{~:(~A~)~}" (frame-managed-type *current-child*))))
+				   (format nil "~{~:(~A~) ~}" (frame-managed-type *current-child*))))
 	   (type-list (loop :for type :in (split-string type-str)
 			 :collect (intern (string-upcase type) :keyword))))
       (current-frame-manage-window-type-generic type-list))))
