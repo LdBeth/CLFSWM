@@ -804,6 +804,14 @@ For window: set current child to window or its parent according to window-parent
 
 
 ;;; Managed window type functions
+(defun current-frame-manage-window-type-generic (type-list)
+  (when (frame-p *current-child*)
+    (setf (frame-managed-type *current-child*) type-list
+	  (frame-forced-managed-window *current-child*) nil
+	  (frame-forced-unmanaged-window *current-child*) nil))
+  (leave-second-mode))
+
+
 (defun current-frame-manage-window-type ()
   "Change window types to be managed by a frame"
   (when (frame-p *current-child*)
@@ -811,14 +819,8 @@ For window: set current child to window or its parent according to window-parent
 				   (format nil "~{~:(~A~)~}" (frame-managed-type *current-child*))))
 	   (type-list (loop :for type :in (split-string type-str)
 			 :collect (intern (string-upcase type) :keyword))))
-      (setf (frame-managed-type *current-child*) type-list)))
-  (leave-second-mode))
+      (current-frame-manage-window-type-generic type-list))))
 
-
-(defun current-frame-manage-window-type-generic (type-list)
-  (when (frame-p *current-child*)
-    (setf (frame-managed-type *current-child*) type-list))
-  (leave-second-mode))
 
 (defun current-frame-manage-all-window-type ()
   "Manage all window type"
