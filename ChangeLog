@@ -1,3 +1,8 @@
+2008-05-15  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/xlib-util.lisp (resize-window): Use a better algorithme to
+	resize windows.
+
 2008-05-13  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (with-movement): Display frame info for all
