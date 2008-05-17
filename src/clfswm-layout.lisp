@@ -90,6 +90,8 @@
 
 
 
+
+
 ;;; No layout
 (defgeneric no-layout (child parent)
   (:documentation "Maximize windows in there frame - leave frame to there size (no layout)"))
@@ -155,17 +157,19 @@
 	   (len (max (1- (length managed-children)) 1))
 	   (dy (/ rh len))
 	   (size (or (frame-data-slot parent :tile-size) 0.8)))
-      (if (= pos 0)
-	  (values (1+ rx)
-		  (1+ ry)
-		  (- (round (* rw size)) 2)
-		  (- rh 2)
-		  t)
-	  (values (1+ (round (+ rx (* rw size))))
-		  (1+ (round (+ ry (* dy (1- pos)))))
-		  (- (round (* rw (- 1 size))) 2)
-		  (- (round dy) 2)
-		  t)))))
+      (if (> (length managed-children) 1)
+	  (if (= pos 0)
+	      (values (1+ rx)
+		      (1+ ry)
+		      (- (round (* rw size)) 2)
+		      (- rh 2)
+		      t)
+	      (values (1+ (round (+ rx (* rw size))))
+		      (1+ (round (+ ry (* dy (1- pos)))))
+		      (- (round (* rw (- 1 size))) 2)
+		      (- (round dy) 2)
+		      t))
+	  (no-layout child parent)))))
 
 
 (defun set-tile-left-layout ()
@@ -188,17 +192,19 @@
 	   (len (max (1- (length managed-children)) 1))
 	   (dy (/ rh len))
 	   (size (or (frame-data-slot parent :tile-size) 0.8)))
-      (if (= pos 0)
-	  (values (1+ (round (+ rx (* rw (- 1 size)))))
-		  (1+ ry)
-		  (- (round (* rw size)) 2)
-		  (- rh 2)
-		  t)
-	  (values (1+ rx)
-		  (1+ (round (+ ry (* dy (1- pos)))))
-		  (- (round (* rw (- 1 size))) 2)
-		  (- (round dy) 2)
-		  t)))))
+      (if (> (length managed-children) 1)
+	  (if (= pos 0)
+	      (values (1+ (round (+ rx (* rw (- 1 size)))))
+		      (1+ ry)
+		      (- (round (* rw size)) 2)
+		      (- rh 2)
+		      t)
+	      (values (1+ rx)
+		      (1+ (round (+ ry (* dy (1- pos)))))
+		      (- (round (* rw (- 1 size))) 2)
+		      (- (round dy) 2)
+		      t))
+	  (no-layout child parent)))))
 
 
 (defun set-tile-right-layout ()
@@ -223,17 +229,19 @@
 	   (len (max (1- (length managed-children)) 1))
 	   (dx (/ rw len))
 	   (size (or (frame-data-slot parent :tile-size) 0.8)))
-      (if (= pos 0)
-	  (values (1+ rx)
-		  (1+ ry)
-		  (- rw 2)
-		  (- (round (* rh size)) 2)
-		  t)
-	  (values (1+ (round (+ rx (* dx (1- pos)))))
-		  (1+ (round (+ ry (* rh size))))
-		  (- (round dx) 2)
-		  (- (round (* rh (- 1 size))) 2)
-		  t)))))
+      (if (> (length managed-children) 1)
+	  (if (= pos 0)
+	      (values (1+ rx)
+		      (1+ ry)
+		      (- rw 2)
+		      (- (round (* rh size)) 2)
+		      t)
+	      (values (1+ (round (+ rx (* dx (1- pos)))))
+		      (1+ (round (+ ry (* rh size))))
+		      (- (round dx) 2)
+		      (- (round (* rh (- 1 size))) 2)
+		      t))
+	  (no-layout child parent)))))
 
 
 (defun set-tile-top-layout ()
@@ -256,17 +264,19 @@
 	   (len (max (1- (length managed-children)) 1))
 	   (dx (/ rw len))
 	   (size (or (frame-data-slot parent :tile-size) 0.8)))
-      (if (= pos 0)
-	  (values (1+ rx)
-		  (1+ (round (+ ry (* rh (- 1 size)))))
-		  (- rw 2)
-		  (- (round (* rh size)) 2)
-		  t)
-	  (values (1+ (round (+ rx (* dx (1- pos)))))
-		  (1+ ry)
-		  (- (round dx) 2)
-		  (- (round (* rh (- 1 size))) 2)
-		  t)))))
+      (if (> (length managed-children) 1)
+	  (if (= pos 0)
+	      (values (1+ rx)
+		      (1+ (round (+ ry (* rh (- 1 size)))))
+		      (- rw 2)
+		      (- (round (* rh size)) 2)
+		      t)
+	      (values (1+ (round (+ rx (* dx (1- pos)))))
+		      (1+ ry)
+		      (- (round dx) 2)
+		      (- (round (* rh (- 1 size))) 2)
+		      t))
+	  (no-layout child parent)))))
 
 
 
@@ -308,3 +318,58 @@
   (set-layout #'tile-space-layout))
 
 (register-layout 'set-tile-space-layout)
+
+
+
+
+
+
+
+
+;;; Left and space layout: like left layout but leave a space on the left
+(defun layout-ask-space (msg slot &optional (default 100))
+  (when (frame-p *current-child*)
+    (let ((new-space (or (query-number msg (frame-data-slot *current-child* slot)) default)))
+      (setf (frame-data-slot *current-child* slot) new-space))))
+
+
+(defgeneric tile-left-space-layout (child parent)
+  (:documentation "Tile Left Space: main child on left and others on right. Leave some space on the left."))
+
+;;; TODO: if only one window -> max in its frame
+(defmethod tile-left-space-layout (child parent)
+  (with-slots (rx ry rw rh) parent
+    (let* ((managed-children (get-managed-child parent))
+	   (pos (position child managed-children))
+	   (len (max (1- (length managed-children)) 1))
+	   (dy (/ rh len))
+	   (size (or (frame-data-slot parent :tile-size) 0.8))
+	   (space (or (frame-data-slot parent :tile-left-space) 100)))
+      (if (> (length managed-children) 1)
+	  (if (= pos 0)
+	      (values (+ rx space 1)
+		      (1+ ry)
+		      (- (round (* rw size)) 2 space)
+		      (- rh 2)
+		      t)
+	      (values (1+ (round (+ rx (* rw size))))
+		      (1+ (round (+ ry (* dy (1- pos)))))
+		      (- (round (* rw (- 1 size))) 2)
+		      (- (round dy) 2)
+		      t))
+	  (multiple-value-bind (rnx rny rnw rnh)
+	      (no-layout child parent)
+	    (values (+ rnx space)
+		    rny
+		    (- rnw space)
+		    rnh
+		    t))))))
+
+
+(defun set-tile-left-space-layout ()
+  "Tile Left Space: main child on left and others on right. Leave some space on the left."
+  (layout-ask-size "Tile size in percent (%)" :tile-size)
+  (layout-ask-space "Tile space" :tile-left-space)
+  (set-layout #'tile-left-space-layout))
+
+(register-layout 'set-tile-left-space-layout)

@@ -1,5 +1,10 @@
 2008-05-17  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-layout.lisp (tile-left-space-layout): New layout.
+	(tile-left-layout, tile-right-layout, tile-top-layout)
+	(tile-bottom-layout): Use all the frame space when there is only
+	one child.
+
 	* src/clfswm-internal.lisp (place-window-from-hints): Center
 	unmanaged windows in the root screen.
 
