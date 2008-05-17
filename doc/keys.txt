@@ -158,3 +158,14 @@ Mouse buttons actions in info mode:
                      5               Move one line down
                      Motion          Grab text
 
+
+
+This documentation was produced with the CLFSWM auto-doc functions. To reproduce it, use the produce-doc-in-file or
+the produce-all-docs function from the Lisp REPL.
+
+Something like this:
+LISP> (in-package :clfswm)
+CLFSWM> (produce-doc-in-file "my-keys.txt")
+or
+CLFSWM> (produce-all-docs)
+

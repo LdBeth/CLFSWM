@@ -104,6 +104,9 @@
     <p>
       g: Tile Space: tile child in its frame leaving spaces between them
     </p>
+    <p>
+      h: Tile Left Space: main child on left and others on right. Leave some space on the left.
+    </p>
     <hr>
     <h3>
       <a name="FRAME-LAYOUT-ONCE-MENU"></a><a href="#FRAME-MENU">Frame-Layout-Once-Menu</a>
@@ -128,6 +131,9 @@
     </p>
     <p>
       g: Tile Space: tile child in its frame leaving spaces between them
+    </p>
+    <p>
+      h: Tile Left Space: main child on left and others on right. Leave some space on the left.
     </p>
     <hr>
     <h3>
@@ -358,5 +364,19 @@
       exclam: Run a program from the query input
     </p>
     <hr>
+    <p>
+      <small>
+        This documentation was produced with the CLFSWM auto-doc functions. To reproduce it, use the produce-menu-doc-html-in-file or
+the produce-all-docs function from the Lisp REPL.
+      </small>
+    </p>
+    <p>
+      <small>
+        Something like this:<br>
+LISP> (in-package :clfswm)<br>
+CLFSWM> (produce-menu-doc-html-in-file "my-menu.html")<br>
+or<br> CLFSWM> (produce-all-docs)
+      </small>
+    </p>
   </body>
 </html>

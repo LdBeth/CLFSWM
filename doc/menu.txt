@@ -33,6 +33,7 @@ d: Tile Right: main child on right and others on left
 e: Tile Top: main child on top and others on bottom
 f: Tile Bottom: main child on bottom and others on top
 g: Tile Space: tile child in its frame leaving spaces between them
+h: Tile Left Space: main child on left and others on right. Leave some space on the left.
 
 Frame-Layout-Once-Menu
 a: Maximize windows in there frame - leave frame to there size (no layout)
@@ -42,6 +43,7 @@ d: Tile Right: main child on right and others on left
 e: Tile Top: main child on top and others on bottom
 f: Tile Bottom: main child on bottom and others on top
 g: Tile Space: tile child in its frame leaving spaces between them
+h: Tile Left Space: main child on left and others on right. Leave some space on the left.
 
 Frame-Nw-Hook-Menu
 a: Open the next window in the current frame
@@ -126,3 +128,14 @@ Utility-Menu
 i: Identify a key
 colon: Eval a lisp form from the query input
 exclam: Run a program from the query input
+
+
+This documentation was produced with the CLFSWM auto-doc functions. To reproduce it, use the produce-menu-doc-in-file or
+the produce-all-docs function from the Lisp REPL.
+
+Something like this:
+LISP> (in-package :clfswm)
+CLFSWM> (produce-menu-doc-in-file "my-menu.txt")
+or
+CLFSWM> (produce-all-docs)
+

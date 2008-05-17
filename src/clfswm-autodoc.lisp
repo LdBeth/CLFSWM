@@ -66,7 +66,13 @@
 	       (dolist (hk hash-table-key-list)
 		 (push `(h3 (u ,(gethash 'name hk))) acc)
 		 (push (produce-keys hk) acc))
-	       (nreverse acc))))
+	       (nreverse acc))
+	(p (small "This documentation was produced with the CLFSWM auto-doc functions. To reproduce it, use the produce-doc-html-in-file or
+the produce-all-docs function from the Lisp REPL."))
+	(p (small "Something like this:<br>
+LISP> (in-package :clfswm)<br>
+CLFSWM> (produce-doc-html-in-file \"my-keys.html\")<br>
+or<br> CLFSWM> (produce-all-docs)"))))
      0 stream)))
 
 
@@ -100,7 +106,15 @@
 									(first k)))))
 			   (documentation (or (first v) (third v)) 'function))))
 	     hk)
-    (format stream "~2&")))
+    (format stream "~2&"))
+  (format stream "~2%This documentation was produced with the CLFSWM auto-doc functions. To reproduce it, use the produce-doc-in-file or
+the produce-all-docs function from the Lisp REPL.
+
+Something like this:
+LISP> (in-package :clfswm)
+CLFSWM> (produce-doc-in-file \"my-keys.txt\")
+or
+CLFSWM> (produce-all-docs)~2%"))
 
 			   
 
@@ -135,7 +149,15 @@
 			      (rec (menu-item-value item))))))))
     (format stream "Here is the map of the CLFSWM menu:~%")
     (format stream "(By default it is bound on second-mode + m)~%")
-    (rec *menu*)))
+    (rec *menu*)
+    (format stream "~2%This documentation was produced with the CLFSWM auto-doc functions. To reproduce it, use the produce-menu-doc-in-file or
+the produce-all-docs function from the Lisp REPL.
+
+Something like this:
+LISP> (in-package :clfswm)
+CLFSWM> (produce-menu-doc-in-file \"my-menu.txt\")
+or
+CLFSWM> (produce-all-docs)~2%")))
 
 
   
@@ -180,7 +202,13 @@
 		       (h1 ("a name=\"Top\"" "CLFSWM Menu"))
 		       (p "Here is the map of the CLFSWM menu:"
 			  "(By default it is bound on second-mode + m)")
-		       ,@(nreverse menu-list)))
+		       ,@(nreverse menu-list)
+		       (p (small "This documentation was produced with the CLFSWM auto-doc functions. To reproduce it, use the produce-menu-doc-html-in-file or
+the produce-all-docs function from the Lisp REPL."))
+		       (p (small "Something like this:<br>
+LISP> (in-package :clfswm)<br>
+CLFSWM> (produce-menu-doc-html-in-file \"my-menu.html\")<br>
+or<br> CLFSWM> (produce-all-docs)"))))
 		    0 stream))))
 
   

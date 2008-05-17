@@ -1,3 +1,8 @@
+2008-05-18  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-autodoc.lisp (produce-*-doc-*): Add a note to use the
+	autodoc functions.
+
 2008-05-17  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-nw-hooks.lisp (default-frame-nw-hook): Do not handle
