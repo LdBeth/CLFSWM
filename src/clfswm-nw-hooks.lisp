@@ -65,6 +65,15 @@
     (leave-frame)
     (select-previous-level)))
 
+(defun clear-nw-hook (frame)
+  "Clear the frame new window hook"
+  (setf (frame-nw-hook frame) nil))
+
+(defun clear-all-nw-hooks ()
+  "Clear all new window hooks for all frames"
+  (with-all-frames (*root-frame* frame)
+    (clear-nw-hook frame)))
+
 
 
 ;;; Default frame new window hook
@@ -90,7 +99,7 @@
   (pushnew window (frame-child *current-root*))
   (setf *current-child* (first (frame-child *current-root*)))
   (default-window-placement *current-root* window)
-  (setf (frame-nw-hook frame) nil))
+  (clear-nw-hook frame))
 
 (defun set-open-in-current-root-nw-hook ()
   "Open the next window in the current root"
@@ -108,7 +117,7 @@
     (pushnew window (frame-child new-frame))
     (setf *current-child* new-frame)
     (default-window-placement new-frame window))
-  (setf (frame-nw-hook frame) nil))
+  (clear-nw-hook frame))
 
 (defun set-open-in-new-frame-in-current-root-nw-hook ()
   "Open the next window in a new frame in the current root"
@@ -128,7 +137,7 @@
     (set-tile-space-layout-once)
     (setf *current-child* new-frame)
     (default-window-placement new-frame window))
-  (setf (frame-nw-hook frame) nil))
+  (clear-nw-hook frame))
 
 (defun set-open-in-new-frame-in-root-frame-nw-hook ()
   "Open the next window in a new frame in the root frame"
@@ -150,7 +159,7 @@
       (setf *current-child* new-frame)
       (default-window-placement new-frame window)
       (show-all-children *current-root*)))
-  (setf (frame-nw-hook frame) nil))
+  (clear-nw-hook frame))
 
 (defun set-open-in-new-frame-in-parent-frame-nw-hook ()
   "Open the next window in a new frame in the parent frame"
@@ -170,7 +179,8 @@
     (when (second (frame-child *current-child*))
       (rotatef (first (frame-child *current-child*))
 	       (second (frame-child *current-child*)))))
-  (default-window-placement *current-child* window))
+  (default-window-placement *current-child* window)
+  (clear-nw-hook frame))
 
 (defun set-leave-focus-frame-nw-hook ()
   "Open the next window in the current frame and leave the focus on the current child"
