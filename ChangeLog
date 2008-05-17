@@ -1,5 +1,9 @@
 2008-05-17  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-nw-hooks.lisp (default-frame-nw-hook): Do not handle
+	the ROX pinboard (ie: leave it lowered in the root window as
+	expected).
+
 	* src/clfswm-layout.lisp (tile-left-space-layout): New layout.
 	(tile-left-layout, tile-right-layout, tile-top-layout)
 	(tile-bottom-layout): Use all the frame space when there is only
