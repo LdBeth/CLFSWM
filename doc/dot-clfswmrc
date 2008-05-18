@@ -218,6 +218,13 @@
   (setf (frame-managed-type *root-frame*) nil))
 
 
+;;; Here is another example useful with the ROX filer: Only the
+;;; root frame fullscreen with some space on the left for icons.
+(defun my-init-hook-rox-filer ()
+  (setf (frame-layout *root-frame*) #'tile-left-space-layout
+	(frame-data-slot *root-frame* :tile-size) 0.9))
+
+
 
 
 (setf *init-hook* #'my-init-hook-4)  ;; <- choose one in 1 to 4
