@@ -7,6 +7,29 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
+- Use conpressed motion events for clisp. [Philippe]
+
+- A frame parameter to display or not the frame window. [Philippe]
+
+- Remote access to the clfswm REPL [Philippe]
+
+- cd/pwd a la shell to navigate throw frames. [Philippe] 
+
+- Hide/Unhide frame [Philippe]
+
+- Undo/redo (any idea to implement this is welcome)
+
+- Raise/lower frame - this can be done with children order [Philippe]
+
+- Show config -> list and display documentation for all tweakable global variables. [Philippe]
+
+- A Gimp layout example [Philippe]
+
+- Hook to open next window in named/numbered frame [Philippe]
+
+- Ensure-unique-number/name (new function) [Philippe]
+
+
 
 MAYBE
 =====
@@ -31,20 +54,3 @@ Operation:
     * up
     * down
 
-- Remote access to the clfswm REPL [Philippe]
-
-- cd/pwd a la shell to navigate throw frames. [Philippe] 
-
-- Hide/Unhide frame [Philippe]
-
-- Undo/redo (any idea to implement this is welcome)
-
-- Raise/lower frame - this can be done with children order [Philippe]
-
-- Show config -> list and display documentation for all tweakable global variables. [Philippe]
-
-- A Gimp layout example [Philippe]
-
-- Hook to open next window in named/numbered frame [Philippe]
-
-- Ensure-unique-number/name (new function) [Philippe]

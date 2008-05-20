@@ -195,10 +195,6 @@
   (setf *screen* (first (xlib:display-roots *display*))
 	*root* (xlib:screen-root *screen*)
 	*no-focus-window* (xlib:create-window :parent *root* :x 0 :y 0 :width 1 :height 1)
-	*root-gc* (xlib:create-gcontext :drawable *root*
-					:foreground (get-color *color-unselected*)
-					:background (get-color "Black")
-					:line-style :solid)
 	*default-font* (xlib:open-font *display* *default-font-string*)
 	*pixmap-buffer* (xlib:create-pixmap :width (xlib:screen-width *screen*)
 					    :height (xlib:screen-height *screen*)

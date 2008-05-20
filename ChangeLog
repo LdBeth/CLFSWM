@@ -1,3 +1,8 @@
+2008-05-20  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (remove-child-in-frame): Destroy the
+	frame window for the removed child and its children.
+
 2008-05-18  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-autodoc.lisp (produce-*-doc-*): Add a note to use the

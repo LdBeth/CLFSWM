@@ -37,7 +37,6 @@
 (defparameter *screen* nil)
 (defparameter *root* nil)
 (defparameter *no-focus-window* nil)
-(defparameter *root-gc* nil)
 
 (defparameter *pixmap-buffer* nil)
 

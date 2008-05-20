@@ -244,6 +244,8 @@
 
 
 
+
+
 (defun add-frame (frame parent)
   (push frame (frame-child parent))
   frame)
@@ -733,7 +735,13 @@ For window: set current child to window or its parent according to window-parent
 (defun remove-child-in-frame (child frame)
   "Remove the child in frame"
   (when (frame-p frame)
-    (setf (frame-child frame) (remove child (frame-child frame) :test #'equal))))
+    (setf (frame-child frame) (remove child (frame-child frame) :test #'equal))
+    (let ((frame-windows nil))
+      (with-all-frames (child f)
+	(pushnew (frame-window f) frame-windows))
+      (dolist (win frame-windows)
+	(unless (find-frame-window win)
+	  (xlib:destroy-window win))))))
 
 (defun remove-child-in-frames (child root)
   "Remove child in the frame root and in all its children"
