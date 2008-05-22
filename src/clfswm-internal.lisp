@@ -736,12 +736,10 @@ For window: set current child to window or its parent according to window-parent
   "Remove the child in frame"
   (when (frame-p frame)
     (setf (frame-child frame) (remove child (frame-child frame) :test #'equal))
-    (let ((frame-windows nil))
-      (with-all-frames (child f)
-	(pushnew (frame-window f) frame-windows))
-      (dolist (win frame-windows)
-	(unless (find-frame-window win)
-	  (xlib:destroy-window win))))))
+    (with-all-frames (child fr)
+      (unless (find-frame-window (frame-window fr))
+	(awhen (frame-gc fr) (xlib:free-gcontext it) (setf it nil))
+	(awhen (frame-window fr) (xlib:destroy-window it) (setf it nil))))))
 
 (defun remove-child-in-frames (child root)
   "Remove child in the frame root and in all its children"
