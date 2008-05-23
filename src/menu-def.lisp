@@ -62,6 +62,7 @@
 
 
 
+(add-sub-menu 'main "c" 'child-menu "Child menu")
 (add-sub-menu 'main "f" 'frame-menu "Frame menu")
 (add-sub-menu 'main "w" 'window-menu "Window menu")
 (add-sub-menu 'main "s" 'selection-menu "Selection menu")
@@ -71,6 +72,11 @@
 
 
 
+(add-menu-key 'child-menu "r" 'rename-current-child)
+(add-menu-key 'child-menu "x" 'remove-current-child-from-tree)
+(add-menu-key 'child-menu "Delete" 'remove-current-child)
+
+
 (add-sub-menu 'frame-menu "a" 'frame-adding-menu "Adding frame menu")
 (add-sub-menu 'frame-menu "l" 'frame-layout-menu "Frame layout menu")
 (add-sub-menu 'frame-menu "o" 'frame-layout-once-menu "Frame layout menu (Only once)")
@@ -78,7 +84,6 @@
 (add-sub-menu 'frame-menu "m" 'frame-movement-menu "Frame movement menu")
 (add-sub-menu 'frame-menu "w" 'managed-window-menu "Managed window type menu")
 (add-sub-menu 'frame-menu "i" 'frame-info-menu "Frame info menu")
-(add-menu-key 'frame-menu "r" 'rename-current-child)
 (add-menu-key 'frame-menu "u" 'renumber-current-frame)
 (add-menu-key 'frame-menu "x" 'explode-current-frame)
 

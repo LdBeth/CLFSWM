@@ -15,11 +15,11 @@ Should handle these soon.
 
 - cd/pwd a la shell to navigate throw frames. [Philippe] 
 
-- Hide/Unhide frame [Philippe]
+- Hide/Unhide child [Philippe]
 
 - Undo/redo (any idea to implement this is welcome)
 
-- Raise/lower frame - this can be done with children order [Philippe]
+- Raise/lower child - this can be done with children order [Philippe]
 
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
 

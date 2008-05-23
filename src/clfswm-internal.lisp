@@ -144,7 +144,8 @@
 (defgeneric rename-child (child name))
 
 (defmethod rename-child ((child frame) name)
-  (setf (frame-name child) name))
+  (setf (frame-name child) name)
+  (display-frame-info child))
 
 (defmethod rename-child ((child xlib:window) name)
   (setf (xlib:wm-name child) name))

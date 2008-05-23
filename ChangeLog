@@ -1,3 +1,8 @@
+2008-05-23  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (rename-current-child): Do not display the
+	frame info for a window.
+
 2008-05-20  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp (remove-child-in-frame): Destroy the

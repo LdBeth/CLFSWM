@@ -40,7 +40,6 @@
   (let ((name (query-string (format nil "New child name: (last: ~A)" (child-name *current-child*))
 			    (child-name *current-child*))))
     (rename-child *current-child* name)
-    (display-frame-info *current-child*)
     (leave-second-mode)))
 
 
@@ -178,7 +177,15 @@
   (remove-child-in-frame *current-child* (find-parent-frame *current-child* *current-root*))
   (setf *current-child* *current-root*)
   (leave-second-mode))
-      
+
+
+(defun remove-current-child-from-tree ()
+  "Remove the current child from the CLFSWM tree"
+  (remove-child-in-frame *current-child* (find-parent-frame *current-child* *current-root*))
+  (setf *current-child* *current-root*)
+  (leave-second-mode))
+
+
 
 (defun paste-selection-no-clear ()
   "Paste the selection in the current frame - Do not clear the selection after paste"
