@@ -83,9 +83,7 @@
 (add-sub-menu 'frame-menu "n" 'frame-nw-hook-menu "Frame new window hook menu")
 (add-sub-menu 'frame-menu "m" 'frame-movement-menu "Frame movement menu")
 (add-sub-menu 'frame-menu "w" 'managed-window-menu "Managed window type menu")
-(add-sub-menu 'frame-menu "i" 'frame-info-menu "Frame info menu")
-(add-menu-key 'frame-menu "u" 'renumber-current-frame)
-(add-menu-key 'frame-menu "x" 'explode-current-frame)
+(add-sub-menu 'frame-menu "s" 'frame-miscellaneous-menu "Frame miscallenous menu")
 
 
 (add-menu-key 'frame-adding-menu "a" 'add-default-frame)
@@ -126,8 +124,14 @@
 (add-menu-key 'managed-window-menu "u" 'current-frame-manage-no-window-type)
 
 
-(add-menu-key 'frame-info-menu "s" 'show-all-frames-info)
-(add-menu-key 'frame-info-menu "h" 'hide-all-frames-info)
+(add-menu-key 'frame-miscellaneous-menu "s" 'show-all-frames-info)
+(add-menu-key 'frame-miscellaneous-menu "i" 'hide-all-frames-info)
+(add-menu-key 'frame-miscellaneous-menu "h" 'hide-current-frame-window)
+(add-menu-key 'frame-miscellaneous-menu "w" 'show-current-frame-window)
+(add-menu-key 'frame-miscellaneous-menu "u" 'renumber-current-frame)
+(add-menu-key 'frame-miscellaneous-menu "x" 'explode-current-frame)
+
+
 
 
 (add-menu-key 'window-menu "i" 'display-current-window-info)

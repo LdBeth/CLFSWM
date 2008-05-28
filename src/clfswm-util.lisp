@@ -942,3 +942,22 @@ For window: set current child to window or its parent according to window-parent
   (stop-button-event))
 
 
+
+
+;;; Hide/Show frame window functions
+(defun hide/show-frame-window (frame value)
+  "Hide/show the frame window"
+  (when (frame-p frame)
+    (setf (frame-show-window-p *current-child*) value)
+    (show-all-children *current-root*))
+  (leave-second-mode))
+
+
+(defun hide-current-frame-window ()
+  "Hide the current frame window"
+  (hide/show-frame-window *current-child* nil))
+
+(defun show-current-frame-window ()
+  "Show the current frame window"
+  (hide/show-frame-window *current-child* t))
+

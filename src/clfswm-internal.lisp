@@ -453,12 +453,14 @@
 (defmethod show-child ((frame frame) parent display-p raise-p first-p)
   (declare (ignore parent))
   (with-xlib-protect
-    (when display-p
-      (with-slots (window) frame
-	(when (or *show-root-frame-p* (not (equal frame *current-root*)))
-	  (setf (xlib:window-background window) (get-color "Black"))
-	  (xlib:map-window window)
-	  (raise-if-needed window raise-p first-p))))
+    (with-slots (window show-window-p) frame
+      (if show-window-p
+	  (when display-p
+	    (when (or *show-root-frame-p* (not (equal frame *current-root*)))
+	      (setf (xlib:window-background window) (get-color "Black"))
+	      (xlib:map-window window)
+	      (raise-if-needed window raise-p first-p)))
+	  (hide-window window)))
     (display-frame-info frame)))
 
 

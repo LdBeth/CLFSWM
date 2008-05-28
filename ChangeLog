@@ -1,3 +1,8 @@
+2008-05-28  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (hide/show-frame-window): new function and
+	menu item.
+
 2008-05-23  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (rename-current-child): Do not display the

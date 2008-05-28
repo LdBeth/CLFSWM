@@ -9,15 +9,9 @@ Should handle these soon.
 
 - Use conpressed motion events for clisp. [Philippe]
 
-- A frame parameter to display or not the frame window. [Philippe]
-
-- Remote access to the clfswm REPL [Philippe]
-
 - cd/pwd a la shell to navigate throw frames. [Philippe] 
 
 - Hide/Unhide child [Philippe]
-
-- Undo/redo (any idea to implement this is welcome)
 
 - Raise/lower child - this can be done with children order [Philippe]
 
@@ -54,3 +48,6 @@ Operation:
     * up
     * down
 
+- Remote access to the clfswm REPL [Philippe]
+
+- Undo/redo (any idea to implement this is welcome)

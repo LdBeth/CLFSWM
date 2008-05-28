@@ -99,6 +99,11 @@
 			  :accessor frame-forced-unmanaged-window
 			  :initform nil
 			  :documentation "A list of forced unmanaged windows (wm-name or window)")
+   (show-window-p :initarg :show-window-p :accessor frame-show-window-p :initform t)
+   (hidden-list :initarg :hidden-list :accessor frame-hidden-list :initform nil
+		:documentation "A list of hidden children")
+   (n-focused-child :initarg :n-focused-child :accessor frame-n-focused-child :initform 0
+		    :documentation "A number to choose which child to focus")
    (window :initarg :window :accessor frame-window :initform nil)
    (gc :initarg :gc :accessor frame-gc :initform nil)
    (child :initarg :child :accessor frame-child :initform nil)
