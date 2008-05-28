@@ -9,8 +9,6 @@ Should handle these soon.
 
 - Use conpressed motion events for clisp. [Philippe]
 
-- Hide/Unhide child [Philippe]
-
 - Raise/lower child - this can be done with children order [Philippe]
 
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
