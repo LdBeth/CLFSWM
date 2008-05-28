@@ -75,6 +75,9 @@
 (add-menu-key 'child-menu "r" 'rename-current-child)
 (add-menu-key 'child-menu "x" 'remove-current-child-from-tree)
 (add-menu-key 'child-menu "Delete" 'remove-current-child)
+(add-menu-key 'child-menu "h" 'hide-current-child)
+(add-menu-key 'child-menu "u" 'unhide-a-child)
+(add-menu-key 'child-menu "a" 'unhide-all-children)
 
 
 (add-sub-menu 'frame-menu "a" 'frame-adding-menu "Adding frame menu")

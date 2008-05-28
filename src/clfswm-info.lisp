@@ -290,8 +290,10 @@ key is a character, a keycode or a keysym"
     (dolist (item item-list)
       (let ((key (first item)))
 	(undefine-info-key-fun (list key 0))))
-    (when (fboundp action)
-      (funcall action))))
+    (typecase action
+      (function (funcall action))
+      (symbol (when (fboundp action)
+		(funcall action))))))
 
 
 

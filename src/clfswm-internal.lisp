@@ -354,7 +354,7 @@
 
 (defun display-frame-info (frame)
   (let ((dy (+ (xlib:max-char-ascent *default-font*) (xlib:max-char-descent *default-font*))))
-    (with-slots (name number gc window child) frame
+    (with-slots (name number gc window child hidden-children) frame
       (clear-pixmap-buffer window gc)
       (setf (xlib:gcontext-foreground gc) (get-color (if (and (equal frame *current-root*)
 							      (equal frame *current-child*))
@@ -377,8 +377,11 @@
 				    (frame (format str "frame:~A[~A] " (frame-number child)
 						   (aif (frame-name child) it "")))))))))
 	(dolist (ch child)
-	  (when (xlib:window-p ch)
-	    (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy) (ensure-printable (xlib:wm-name ch))))))
+	  (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy) (ensure-printable (child-fullname ch))))
+	(setf (xlib:gcontext-foreground gc) (get-color "DarkGreen"))
+	(dolist (ch hidden-children)
+	  (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
+			    (format nil "~A - hidden" (ensure-printable (child-fullname ch))))))
       (copy-pixmap-buffer window gc))))
 
 

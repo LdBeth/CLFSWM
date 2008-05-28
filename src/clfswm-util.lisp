@@ -961,3 +961,48 @@ For window: set current child to window or its parent according to window-parent
   "Show the current frame window"
   (hide/show-frame-window *current-child* t))
 
+
+
+;;; Hide/Unhide current child
+(defun hide-current-child ()
+  "Hide the current child"
+  (let ((parent (find-parent-frame *current-child*)))
+    (when (frame-p parent)
+      (with-slots (child hidden-children) parent
+	(hide-all *current-child*)
+	(setf child (remove *current-child* child))
+	(pushnew *current-child* hidden-children)
+	(setf *current-child* parent))
+      (show-all-children)))
+  (leave-second-mode))
+
+
+(defun unhide-a-child ()
+  "Unhide a child in the current frame"
+  (when (frame-p *current-child*)
+    (with-slots (child hidden-children) *current-child*
+      (info-mode-menu (loop :for i :from 0
+			 :for h :in hidden-children
+			 :collect (list (code-char (+ (char-code #\a) i))
+					(let ((hd h))
+					  (lambda ()
+					    (setf hidden-children (remove hd hidden-children))
+					    (pushnew hd child)))
+					(format nil "Unhide ~A" (child-fullname h))))))
+    (show-all-children))
+  (leave-second-mode))
+
+
+(defun unhide-all-children ()
+  "Unhide all current frame hidden children"
+  (when (frame-p *current-child*)
+    (with-slots (child hidden-children) *current-child*
+      (dolist (c hidden-children)
+	(pushnew c child))
+      (setf hidden-children nil))
+    (show-all-children))
+  (leave-second-mode))
+
+
+
+    
