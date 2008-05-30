@@ -977,18 +977,26 @@ For window: set current child to window or its parent according to window-parent
   (leave-second-mode))
 
 
+(defun frame-unhide-child (hidden frame-src frame-dest)
+  "Unhide a hidden child from frame-src in frame-dest"
+  (with-slots (hidden-children) frame-src
+    (setf hidden-children (remove hidden hidden-children)))
+  (with-slots (child) frame-dest
+    (pushnew hidden child)))
+  
+
+
 (defun unhide-a-child ()
   "Unhide a child in the current frame"
   (when (frame-p *current-child*)
     (with-slots (child hidden-children) *current-child*
       (info-mode-menu (loop :for i :from 0
-			 :for h :in hidden-children
+			 :for hidden :in hidden-children
 			 :collect (list (code-char (+ (char-code #\a) i))
-					(let ((hd h))
+					(let ((lhd hidden))
 					  (lambda ()
-					    (setf hidden-children (remove hd hidden-children))
-					    (pushnew hd child)))
-					(format nil "Unhide ~A" (child-fullname h))))))
+					    (frame-unhide-child lhd *current-child* *current-child*)))
+					(format nil "Unhide ~A" (child-fullname hidden))))))
     (show-all-children))
   (leave-second-mode))
 
@@ -1002,6 +1010,27 @@ For window: set current child to window or its parent according to window-parent
       (setf hidden-children nil))
     (show-all-children))
   (leave-second-mode))
+
+
+(defun unhide-a-child-from-all-frames ()
+  "Unhide a child from all frames in the current frame"
+  (when (frame-p *current-child*)
+    (let ((acc nil)
+	  (keynum -1))
+      (with-all-frames (*root-frame* frame)
+	(when (frame-hidden-children frame)
+	  (push (format nil "~A" (child-fullname frame)) acc)
+	  (dolist (hidden (frame-hidden-children frame))
+	    (push (list (code-char (+ (char-code #\a) (incf keynum)))
+			(let ((lhd hidden))
+			  (lambda ()
+			    (frame-unhide-child lhd frame *current-child*)))
+			(format nil "Unhide ~A" (child-fullname hidden)))
+		  acc))))
+      (info-mode-menu (nreverse acc)))
+    (show-all-children))
+  (leave-second-mode))
+
 
 
 

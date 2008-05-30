@@ -1,3 +1,10 @@
+2008-05-30  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (unhide-a-child-from-all-frames): Unhide a
+	child from a choice in all frames with hidden children.
+
+	* src/clfswm-info.lisp (info-mode-menu): Handle separators.
+
 2008-05-28  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (hide-current-child, unhide-a-child)

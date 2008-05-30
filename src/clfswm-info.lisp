@@ -271,25 +271,29 @@
 
 (defun info-mode-menu (item-list &key (x 0) (y 0) (width nil) (height nil))
   "Open an info help menu.
-Item-list is: '((key function) (key function))
+Item-list is: '((key function) separator (key function))
 or with explicit docstring: '((key function \"documentation 1\") (key function \"bla bla\") (key function)) 
-key is a character, a keycode or a keysym"
+key is a character, a keycode or a keysym
+Separator is a string or a symbol (all but a list)"
   (let ((info-list nil)
 	(action nil))
     (dolist (item item-list)
-      (destructuring-bind (key function explicit-doc) (ensure-n-elems item 3)
-	(push (format nil "~@(~A~): ~A" key (or explicit-doc
-						(documentation function 'function)))
-	      info-list)
-	(define-info-key-fun (list key 0)
-	    (lambda (&optional args)
-	      (declare (ignore args))
-	      (setf action function)
-	      (throw 'exit-info-loop nil)))))
+      (typecase item
+	(cons (destructuring-bind (key function explicit-doc) (ensure-n-elems item 3)
+		(push (format nil "~@(~A~): ~A" key (or explicit-doc
+							(documentation function 'function)))
+		      info-list)
+		(define-info-key-fun (list key 0)
+		    (lambda (&optional args)
+		      (declare (ignore args))
+		      (setf action function)
+		      (throw 'exit-info-loop nil)))))
+	(t (push (format nil "-=- ~A -=-" item) info-list))))
     (info-mode (nreverse info-list) :x x :y y :width width :height height)
     (dolist (item item-list)
-      (let ((key (first item)))
-	(undefine-info-key-fun (list key 0))))
+      (when (consp item)
+	(let ((key (first item)))
+	  (undefine-info-key-fun (list key 0)))))
     (typecase action
       (function (funcall action))
       (symbol (when (fboundp action)

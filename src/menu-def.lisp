@@ -77,6 +77,7 @@
 (add-menu-key 'child-menu "Delete" 'remove-current-child)
 (add-menu-key 'child-menu "h" 'hide-current-child)
 (add-menu-key 'child-menu "u" 'unhide-a-child)
+(add-menu-key 'child-menu "f" 'unhide-a-child-from-all-frames)
 (add-menu-key 'child-menu "a" 'unhide-all-children)
 
 
