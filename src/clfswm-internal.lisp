@@ -77,6 +77,19 @@
 
 
 
+
+
+(defun frame-selected-child (frame)
+  (when (frame-p frame)
+    (with-slots (child selected-pos) frame
+      (let ((len (length child)))
+	(cond ((minusp selected-pos) (setf selected-pos 0))
+	      ((>= selected-pos len) (setf selected-pos (max (1- len) 0)))))
+      (nth selected-pos child))))
+
+
+
+
 ;;; Frame data manipulation functions
 (defun frame-data-slot (frame slot)
   "Return the value associated to data slot"
@@ -446,14 +459,14 @@
 
 
 
-(defun raise-if-needed (window raise-p first-p)
+(defun raise-if-needed (window raise-p selected-p)
   (when (or (eql raise-p t)
-	    (and (eql raise-p :first-only) first-p))
+	    (and (eql raise-p :first-only) selected-p))
     (raise-window window)))
 
-(defgeneric show-child (child parent display-p raise-p first-p))
+(defgeneric show-child (child parent display-p raise-p selected-p))
 
-(defmethod show-child ((frame frame) parent display-p raise-p first-p)
+(defmethod show-child ((frame frame) parent display-p raise-p selected-p)
   (declare (ignore parent))
   (with-xlib-protect
     (with-slots (window show-window-p) frame
@@ -462,22 +475,22 @@
 	    (when (or *show-root-frame-p* (not (equal frame *current-root*)))
 	      (setf (xlib:window-background window) (get-color "Black"))
 	      (xlib:map-window window)
-	      (raise-if-needed window raise-p first-p)))
+	      (raise-if-needed window raise-p selected-p)))
 	  (hide-window window)))
     (display-frame-info frame)))
 
 
-(defmethod show-child ((window xlib:window) parent display-p raise-p first-p)
+(defmethod show-child ((window xlib:window) parent display-p raise-p selected-p)
   (with-xlib-protect
     (if (or (managed-window-p window parent)
 	    (equal parent *current-child*))
 	(when display-p
 	  (xlib:map-window window)
-	  (raise-if-needed window raise-p first-p))
+	  (raise-if-needed window raise-p selected-p))
 	(hide-window window))))
 
-(defmethod show-child (child parent display-p raise-p first-p)
-  (declare (ignore child parent display-p raise-p first-p))
+(defmethod show-child (child parent display-p raise-p selected-p)
+  (declare (ignore child parent display-p raise-p selected-p))
   ())
 
 
@@ -532,7 +545,7 @@
   (labels ((rec (child)
 	     (typecase child
 	       (xlib:window (focus-window child))
-	       (frame (rec (first (frame-child child)))))))
+	       (frame (rec (frame-selected-child child))))))
     (no-focus)
     (rec *current-child*)))
 
@@ -544,17 +557,17 @@
   "Show all children from *current-root*. Start the effective display
 only for display-child and its children"
   (let ((geometry-change nil))
-    (labels ((rec (root parent first-p first-parent display-p)
+    (labels ((rec (root parent selected-p selected-parent-p display-p)
 	       (multiple-value-bind (raise-p change)
 		   (adapt-child-to-parent root parent)
 		 (when change (setf geometry-change change))
-		 (show-child root parent display-p raise-p first-p))
+		 (show-child root parent display-p raise-p selected-p))
 	       (select-child root (if (equal root *current-child*) t
-				      (if (and first-p first-parent) :maybe nil)))
+				      (if (and selected-p selected-parent-p) :maybe nil)))
 	       (when (frame-p root)
-		 (let ((first-child (first (frame-child root))))
+		 (let ((selected-child (frame-selected-child root)))
 		   (dolist (child (reverse (frame-child root)))
-		     (rec child root (equal child first-child) (and first-p first-parent)
+		     (rec child root (equal child selected-child) (and selected-p selected-parent-p)
 			  (or display-p (equal root display-child))))))))
       (rec *current-root* nil t t (equal display-child *current-root*))
       (set-focus-to-current-child)
@@ -582,10 +595,10 @@ only for display-child and its children"
   "Focus child - Return true if something has change"
   (when (and (frame-p parent)
 	     (member child (frame-child parent)))
-    (when (not (equal child (first (frame-child parent))))
-      (loop until (equal child (first (frame-child parent)))
-	 do (setf (frame-child parent) (rotate-list (frame-child parent))))
-      t)))
+      (when (not (equal child (frame-selected-child parent)))
+	(loop until (equal child (frame-selected-child parent))
+	   do (setf (frame-child parent) (rotate-list (frame-child parent))))
+	t)))
 
 (defun focus-child-rec (child parent)
   "Focus child and its parents - Return true if something has change"
@@ -648,7 +661,7 @@ For window: set current child to window or its parent according to window-parent
       (when (frame-p parent)
 	(with-slots (child) parent
 	  (setf child (funcall fun-rotate child))
-	  (setf *current-child* (first child)))))
+	  (setf *current-child* (frame-selected-child parent)))))
     (when frame-is-root?
       (setf *current-root* *current-child*))
     (show-all-children *current-root*)))
@@ -667,7 +680,7 @@ For window: set current child to window or its parent according to window-parent
   "Select the next level in frame"
   (select-current-frame :maybe)
   (when (frame-p *current-child*)
-    (awhen (first (frame-child *current-child*))
+    (awhen (frame-selected-child *current-child*)
       (setf *current-child* it)))
   (show-all-children))
 
@@ -713,6 +726,32 @@ For window: set current child to window or its parent according to window-parent
     (when (frame-p it)
       (setf *current-root* it)))
   (show-all-children *current-root*))
+
+
+
+
+(defun frame-lower-child ()
+  "Lower the child in the current frame"
+  (when (frame-p *current-child*)
+    (with-slots (child selected-pos) *current-child*
+      (unless (>= selected-pos (length child))
+	(when (nth (1+ selected-pos) child)
+	  (rotatef (nth selected-pos child)
+		   (nth (1+ selected-pos) child)))
+	(incf selected-pos)))
+    (show-all-children)))
+
+
+(defun frame-raise-child ()
+  "Raise the child in the current frame"
+  (when (frame-p *current-child*)
+    (with-slots (child selected-pos) *current-child*
+      (unless (< selected-pos 1)
+	(when (nth (1- selected-pos) child)
+	  (rotatef (nth selected-pos child)
+		   (nth (1- selected-pos) child)))
+	(decf selected-pos)))
+    (show-all-children)))
 
 
 (defun switch-to-root-frame (&key (show-later nil))

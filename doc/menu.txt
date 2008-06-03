@@ -2,12 +2,22 @@ Here is the map of the CLFSWM menu:
 (By default it is bound on second-mode + m)
 
 Main
+c: < Child menu >
 f: < Frame menu >
 w: < Window menu >
 s: < Selection menu >
 n: < Action by name menu >
 u: < Action by number menu >
 y: < Utility menu >
+
+Child-Menu
+r: Rename the current child
+x: Remove the current child from the CLFSWM tree
+Delete: Remove the current child from its parent frame
+h: Hide the current child
+u: Unhide a child in the current frame
+f: Unhide a child from all frames in the current frame
+a: Unhide all current frame hidden children
 
 Frame-Menu
 a: < Adding frame menu >
@@ -16,10 +26,7 @@ o: < Frame layout menu (Only once) >
 n: < Frame new window hook menu >
 m: < Frame movement menu >
 w: < Managed window type menu >
-i: < Frame info menu >
-r: Rename the current child
-u: Renumber the current frame
-x: Create a new frame for each window in frame
+s: < Frame miscallenous menu >
 
 Frame-Adding-Menu
 a: Add a default frame in the current frame
@@ -88,9 +95,13 @@ a: Manage all window type
 n: Manage only normal window type
 u: Do not manage any window type
 
-Frame-Info-Menu
+Frame-Miscellaneous-Menu
 s: Show all frames info windows
-h: Hide all frames info windows
+i: Hide all frames info windows
+h: Hide the current frame window
+w: Show the current frame window
+u: Renumber the current frame
+x: Create a new frame for each window in frame
 
 Window-Menu
 i: Display information on the current window

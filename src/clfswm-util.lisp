@@ -899,7 +899,7 @@ For window: set current child to window or its parent according to window-parent
 (defun get-current-window ()
   (typecase *current-child*
     (xlib:window  *current-child*)
-    (frame (first (frame-child *current-child*)))))
+    (frame (frame-selected-child *current-child*))))
 
 (defmacro with-current-window (&body body)
   "Bind 'window' to the current window"

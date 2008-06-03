@@ -102,8 +102,8 @@
    (show-window-p :initarg :show-window-p :accessor frame-show-window-p :initform t)
    (hidden-children :initarg :hidden-children :accessor frame-hidden-children :initform nil
 		    :documentation "A list of hidden children")
-   (n-focused-child :initarg :n-focused-child :accessor frame-n-focused-child :initform 0
-		    :documentation "A number to choose which child to focus")
+   (selected-pos :initarg :selected-pos :accessor frame-selected-pos :initform 0
+		 :documentation "The position in the child list of the selected child")
    (window :initarg :window :accessor frame-window :initform nil)
    (gc :initarg :gc :accessor frame-gc :initform nil)
    (child :initarg :child :accessor frame-child :initform nil)

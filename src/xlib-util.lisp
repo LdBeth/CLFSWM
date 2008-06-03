@@ -340,7 +340,6 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
   "Give the window focus."
   (when window
     (with-xlib-protect
-      (raise-window window)
       (xlib:set-input-focus *display* window :parent))))
 
 
