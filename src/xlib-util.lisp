@@ -95,6 +95,33 @@ Window types are in +WINDOW-TYPES+.")
 
 
 
+(defun in-corner (corner x y)
+  "Return t if (x, y) is in corner.
+Corner is one of :bottom-right :bottom-left :top-right :top-left"
+  (multiple-value-bind (xmin ymin xmax ymax)
+      (case corner
+	(:bottom-right (values (- (xlib:screen-width *screen*) *corner-size*)
+			       (- (xlib:screen-height *screen*) *corner-size*)
+			       (xlib:screen-width *screen*)
+			       (xlib:screen-height *screen*)))
+	(:bottom-left (values 0
+			      (- (xlib:screen-height *screen*) *corner-size*)
+			      *corner-size*
+			      (xlib:screen-height *screen*)))
+	(:top-left (values 0 0 *corner-size* *corner-size*))
+	(:top-right (values (- (xlib:screen-width *screen*) *corner-size*)
+			    0
+			    (xlib:screen-width *screen*)
+			    *corner-size*))
+	(t (values 10 10 0 0)))
+    (and (<= xmin x xmax)
+	 (<= ymin y ymax))))
+
+
+
+
+
+
 (defun window-state (win)
   "Get the state (iconic, normal, withdraw of a window."
   (first (xlib:get-property win :WM_STATE)))
@@ -626,20 +653,45 @@ Window types are in +WINDOW-TYPES+.")
 
 
 
+(defmacro with-grab-keyboard-and-pointer ((cursor mask old-cursor old-mask) &body body)
+  `(let ((pointer-grabbed (xgrab-pointer-p))
+	 (keyboard-grabbed (xgrab-keyboard-p)))
+     (xgrab-pointer *root* ,cursor ,mask)
+     (unless keyboard-grabbed
+       (xgrab-keyboard *root*))
+     ,@body
+     (if pointer-grabbed
+	 (xgrab-pointer *root* ,old-cursor ,old-mask)
+	 (xungrab-pointer))
+     (unless keyboard-grabbed
+       (xungrab-keyboard))))
+     
 
 (defun wait-no-key-or-button-press ()
-  (loop
-     (let ((key (loop for k across (xlib:query-keymap *display*)
-		   unless (zerop k) return t))
-	   (button (plusp (nth-value 4 (xlib:query-pointer *root*)))))
-       (when (and (not key) (not button))
-	 (loop while (xlib:event-case (*display* :discard-p t :peek-p nil :timeout 0)
-		       (:motion-notify () t)
-		       (:key-press () t)
-		       (:button-press () t)
-		       (:button-release () t)
-		       (t nil)))
-	 (return-from wait-no-key-or-button-press nil)))))
+  (with-grab-keyboard-and-pointer (66 67 66 67)
+    (loop
+       (let ((key (loop for k across (xlib:query-keymap *display*)
+		     unless (zerop k) return t))
+	     (button (plusp (nth-value 4 (xlib:query-pointer *root*)))))
+	 (when (and (not key) (not button))
+	   (loop while (xlib:event-case (*display* :discard-p t :peek-p nil :timeout 0)
+			 (:motion-notify () t)
+			 (:key-press () t)
+			 (:key-release () t)
+			 (:button-press () t)
+			 (:button-release () t)
+			 (t nil)))
+	   (return))))))
+
+
+(defun wait-a-key-or-button-press ()
+  (with-grab-keyboard-and-pointer (24 25 66 67)
+    (loop
+       (let ((key (loop for k across (xlib:query-keymap *display*)
+		     unless (zerop k) return t))
+	     (button (plusp (nth-value 4 (xlib:query-pointer *root*)))))
+	 (when (or key button)
+	   (return))))))
 
 
 

@@ -47,6 +47,11 @@ You can tweak this to what you want"
 ;;  (values 100 100 800 600))
 
 
+(defparameter  *corner-size* 3
+  "The size of the corner square")
+
+
+
 
 ;;; Hook definitions
 ;;;
@@ -77,6 +82,19 @@ You can tweak this to what you want"
 (defparameter *create-frame-on-root* nil
   "Set this variable to true if you want to allow to create a new frame
 on the root window in the main mode with the mouse")
+
+
+;;; CONFIG: Corner where to present windows (An expose like)
+(defparameter *present-windows-corner* :bottom-right
+  "Which corner enable the mouse present windows.
+One of :bottom-right :bottom-left :top-right :top-left")
+
+(defparameter *present-all-windows-corner* :bottom-left
+  "Which corner enable the mouse present all windows
+One of :bottom-right :bottom-left :top-right :top-left")
+
+
+
 
 
 ;;; CONFIG: Main mode colors

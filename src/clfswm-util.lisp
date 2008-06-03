@@ -481,6 +481,46 @@
 
 
 ;;; Mouse utilities
+(defmacro present-windows-generic ((first-restore-frame) &body body)
+  `(progn
+     (with-all-frames (,first-restore-frame frame)
+       (setf (frame-data-slot frame :old-layout) (frame-layout frame)
+	     (frame-layout frame) #'tile-space-layout))
+     (show-all-children *current-root*)
+     (wait-no-key-or-button-press)
+     (wait-a-key-or-button-press )
+     (wait-no-key-or-button-press)
+     (multiple-value-bind (x y) (xlib:query-pointer *root*)
+       (let* ((child (find-child-under-mouse x y))
+	      (parent (find-parent-frame child *root-frame*)))
+	 (when (and child parent)
+	   ,@body
+	   (focus-all-children child parent))))
+     (with-all-frames (,first-restore-frame frame)
+       (setf (frame-layout frame) (frame-data-slot frame :old-layout)
+	     (frame-data-slot frame :old-layout) nil))
+     (show-all-children *current-root*)))
+
+(defun have-to-present-windows (root-x root-y)
+  (when (and (frame-p *current-root*)
+	     (in-corner *present-windows-corner* root-x root-y))
+    (stop-button-event)
+    (present-windows-generic (*current-root*))
+    t))
+
+(defun have-to-present-all-windows (root-x root-y)
+  (when (and (frame-p *current-root*)
+	     (in-corner *present-all-windows-corner* root-x root-y))
+    (stop-button-event)
+    (switch-to-root-frame)
+    (present-windows-generic (*root-frame*)
+      (hide-all-children *root-frame*)
+      (setf *current-root* parent))
+    t))
+
+
+
+
 (defun move-frame (frame parent orig-x orig-y)
   (when frame
     (hide-all-children frame)
@@ -509,7 +549,7 @@ mouse-fun is #'move-frame or #'resize-frame"
 	 (child window)
 	 (parent (find-parent-frame child *current-root*))
 	 (root-p (or (equal window *root*)
-		     (and (frame-p child)
+		     (and (frame-p *current-root*)
 			  (equal child (frame-window *current-root*))))))
     (when (or (not root-p) *create-frame-on-root*)
       (unless parent
@@ -533,12 +573,20 @@ mouse-fun is #'move-frame or #'resize-frame"
 	(stop-button-event))))
 
 (defun mouse-click-to-focus-and-move (window root-x root-y)
-  "Move and focus the current frame or focus the current window parent"
-  (mouse-click-to-focus-generic window root-x root-y #'move-frame))
+  "Move and focus the current frame or focus the current window parent.
+On *present-windows-corner*: Present windows in the current root.
+On *present-all-windows-corner*: Present all windows in all frames."
+  (or (have-to-present-windows root-x root-y)
+      (have-to-present-all-windows root-x root-y)
+      (mouse-click-to-focus-generic window root-x root-y #'move-frame)))
 
 (defun mouse-click-to-focus-and-resize (window root-x root-y)
-  "Resize and focus the current frame or focus the current window parent"
-  (mouse-click-to-focus-generic window root-x root-y #'resize-frame))
+  "Resize and focus the current frame or focus the current window parent.
+On *present-windows-corner*: Present windows in the current root.
+On *present-all-windows-corner*: Present all windows in all frames."
+  (or (have-to-present-windows root-x root-y)
+      (have-to-present-all-windows root-x root-y)
+      (mouse-click-to-focus-generic window root-x root-y #'resize-frame)))
 
 
 

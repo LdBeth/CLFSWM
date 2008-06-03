@@ -35,6 +35,7 @@
 	   :dbg
 	   :dbgnl
 	   :setf/=
+	   :in-corner
 	   :create-symbol
 	   :split-string
 	   :expand-newline
@@ -82,7 +83,9 @@
 (in-package :tools)
 
 
+
 (setq *random-state* (make-random-state t))
+
 
 
 
@@ -167,6 +170,8 @@ Return the result of the last hook"
     `(let ((,gval ,val))
        (when (/= ,var ,gval)
 	 (setf ,var ,gval)))))
+
+
 
 
 (defun create-symbol (&rest names)

@@ -197,14 +197,22 @@
 
 ;;; Mouse action
 (defun sm-mouse-click-to-focus-and-move (window root-x root-y)
-  "Move and focus the current child - Create a new frame on the root window"
+  "Move and focus the current child - Create a new frame on the root window.
+On *present-windows-corner*: Present windows in the current root.
+On *present-all-windows-corner*: Present all windows in all frames."
   (declare (ignore window))
-  (mouse-focus-move/resize-generic root-x root-y #'move-frame nil))
+  (or (have-to-present-windows root-x root-y)
+      (have-to-present-all-windows root-x root-y)
+      (mouse-focus-move/resize-generic root-x root-y #'move-frame nil)))
 
 (defun sm-mouse-click-to-focus-and-resize (window root-x root-y)
-  "Resize and focus the current child - Create a new frame on the root window"
+  "Resize and focus the current child - Create a new frame on the root window.
+On *present-windows-corner*: Present windows in the current root.
+On *present-all-windows-corner*: Present all windows in all frames."
   (declare (ignore window))
-  (mouse-focus-move/resize-generic root-x root-y #'resize-frame nil))
+  (or (have-to-present-windows root-x root-y)
+      (have-to-present-all-windows root-x root-y)
+      (mouse-focus-move/resize-generic root-x root-y #'resize-frame nil)))
 
 
 

@@ -1,3 +1,11 @@
+2008-06-03  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (have-to-present-windows)
+	(have-to-present-all-windows): New functions to have an MaxOS
+	expose like on mouse click in screen corner.
+
+	* src/clfswm-info.lisp ("Page_Down", "Page_Up"): Add boundaries.
+
 2008-05-30  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (unhide-a-child-from-all-frames): Unhide a

@@ -110,13 +110,13 @@
 (define-info-key ("Page_Down")
     (defun info-next-ten-lines (info)
       "Move ten lines down"
-      (incf (info-y info) (* (info-ilh info) 10))
+      (setf (info-y info) (min (+ (info-y info) (* (info-ilh info) 10)) (info-max-y info)))
       (draw-info-window info)))
 
 (define-info-key ("Page_Up")
     (defun info-previous-ten-lines (info)
       "Move ten lines up"
-      (decf (info-y info) (* (info-ilh info) 10))
+      (setf (info-y info) (max (- (info-y info) (* (info-ilh info) 10)) 0))
       (draw-info-window info)))
 
 
