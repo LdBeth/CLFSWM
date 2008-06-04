@@ -1,5 +1,8 @@
 2008-06-04  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-nw-hooks.lisp (leave-focus-frame-nw-hook): Adapt
+	behaviour to the new raise/lower property.
+
 	* src/bindings.lisp (mouse-click-to-focus-and-move-window)
 	(mouse-click-to-focus-and-resize-window): Stop button event. This
 	prevent a keyboard/pointer freeze.

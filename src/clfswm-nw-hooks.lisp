@@ -175,10 +175,9 @@
   "Open the next window in the current frame and leave the focus on the current child"
   (leave-if-not-frame *current-child*)
   (when (frame-p *current-child*)
-    (pushnew window (frame-child *current-child*))
-    (when (second (frame-child *current-child*))
-      (rotatef (first (frame-child *current-child*))
-	       (second (frame-child *current-child*)))))
+    (with-slots (child) *current-child*
+      (pushnew window child)
+      (setf child (rotate-list child))))
   (default-window-placement *current-child* window)
   (clear-nw-hook frame))
 
