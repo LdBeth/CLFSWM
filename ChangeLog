@@ -2,6 +2,7 @@
 
 	* src/clfswm-nw-hooks.lisp (leave-focus-frame-nw-hook): Adapt
 	behaviour to the new raise/lower property.
+	Call clear-nw-hook before the rest of the hook.
 
 	* src/bindings.lisp (mouse-click-to-focus-and-move-window)
 	(mouse-click-to-focus-and-resize-window): Stop button event. This
