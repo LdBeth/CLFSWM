@@ -18,6 +18,8 @@ h: Hide the current child
 u: Unhide a child in the current frame
 f: Unhide a child from all frames in the current frame
 a: Unhide all current frame hidden children
+Page_Up: Lower the child in the current frame
+Page_Down: Raise the child in the current frame
 
 Frame-Menu
 a: < Adding frame menu >

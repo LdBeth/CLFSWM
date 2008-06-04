@@ -1,5 +1,11 @@
 2008-06-04  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/menu-def.lisp (child-menu): New menu entry on raise/lower
+	child in its frame.
+
+	* src/bindings-second-mode.lisp ("Page_Down", "Page_Up"): New
+	second mode binding on raise/lower child in its frame.
+
 	* src/clfswm-nw-hooks.lisp (leave-focus-frame-nw-hook): Adapt
 	behaviour to the new raise/lower property.
 	Call clear-nw-hook before the rest of the hook.

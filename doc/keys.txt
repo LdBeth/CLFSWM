@@ -89,6 +89,8 @@ Mod-1                Tab             Select the next child
 Mod-1 Shift          Tab             Select the previous child
 Mod-1                Return          Enter in the selected frame - ie make it the root frame
 Mod-1 Shift          Return          Leave the selected frame - ie make its parent the root frame
+Mod-1                Page_up         Lower the child in the current frame
+Mod-1                Page_down       Raise the child in the current frame
 Mod-1                Home            Switch to the root frame
 Mod-1 Shift          Home            Switch and select the root frame
                      Menu            Show all frames info windows until a key is release

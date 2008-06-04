@@ -79,6 +79,9 @@
 (add-menu-key 'child-menu "u" 'unhide-a-child)
 (add-menu-key 'child-menu "f" 'unhide-a-child-from-all-frames)
 (add-menu-key 'child-menu "a" 'unhide-all-children)
+(add-menu-key 'child-menu "Page_Up" 'frame-lower-child)
+(add-menu-key 'child-menu "Page_Down" 'frame-raise-child)
+
 
 
 (add-sub-menu 'frame-menu "a" 'frame-adding-menu "Adding frame menu")
