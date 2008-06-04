@@ -117,11 +117,14 @@
 (defun mouse-click-to-focus-and-move-window (window root-x root-y)
   "Move and focus the current child - Create a new frame on the root window"
   (declare (ignore window))
+  (stop-button-event)
   (mouse-focus-move/resize-generic root-x root-y #'move-frame t))
+
 
 (defun mouse-click-to-focus-and-resize-window (window root-x root-y)
   "Resize and focus the current child - Create a new frame on the root window"
   (declare (ignore window))
+  (stop-button-event)
   (mouse-focus-move/resize-generic root-x root-y #'resize-frame t))
 
 

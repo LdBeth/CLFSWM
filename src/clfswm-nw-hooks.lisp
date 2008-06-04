@@ -98,7 +98,7 @@
   "Open the next window in the current root"
   (leave-if-not-frame *current-root*)
   (pushnew window (frame-child *current-root*))
-  (setf *current-child* (first (frame-child *current-root*)))
+  (setf *current-child* (frame-selected-child *current-root*))
   (default-window-placement *current-root* window)
   (clear-nw-hook frame))
 

@@ -522,7 +522,7 @@
 
 
 (defun move-frame (frame parent orig-x orig-y)
-  (when frame
+  (when (and frame parent)
     (hide-all-children frame)
     (with-slots (window) frame
       (move-window window orig-x orig-y #'display-frame-info (list frame))
@@ -532,7 +532,7 @@
 
 
 (defun resize-frame (frame parent orig-x orig-y)
-  (when frame
+  (when (and frame parent)
     (hide-all-children frame)
     (with-slots (window) frame
       (resize-window window orig-x orig-y #'display-frame-info (list frame))

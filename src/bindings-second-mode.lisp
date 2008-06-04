@@ -244,13 +244,25 @@ On *present-all-windows-corner*: Present all windows in all frames."
   (leave-frame))
 
 
+(defun sm-mouse-click-to-focus-and-move-window (window root-x root-y)
+  "Move and focus the current child - Create a new frame on the root window"
+  (declare (ignore window))
+  (mouse-focus-move/resize-generic root-x root-y #'move-frame t))
+
+
+(defun sm-mouse-click-to-focus-and-resize-window (window root-x root-y)
+  "Resize and focus the current child - Create a new frame on the root window"
+  (declare (ignore window))
+  (mouse-focus-move/resize-generic root-x root-y #'resize-frame t))
+
+
 
 
 (define-second-mouse (1) 'sm-mouse-click-to-focus-and-move)
 (define-second-mouse (3) 'sm-mouse-click-to-focus-and-resize)
 
-(define-second-mouse (1 :mod-1) 'mouse-click-to-focus-and-move-window)
-(define-second-mouse (3 :mod-1) 'mouse-click-to-focus-and-resize-window)
+(define-second-mouse (1 :mod-1) 'sm-mouse-click-to-focus-and-move-window)
+(define-second-mouse (3 :mod-1) 'sm-mouse-click-to-focus-and-resize-window)
 
 (define-second-mouse (1 :control :mod-1) 'mouse-move-window-over-frame)
 
