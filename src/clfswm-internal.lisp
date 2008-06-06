@@ -419,24 +419,24 @@
 
 (defmethod adapt-child-to-parent ((window xlib:window) parent)
   (with-xlib-protect
-    (if (managed-window-p window parent)
-	(multiple-value-bind (nx ny nw nh raise-p)
-	    (get-parent-layout window parent)
-	  (setf nw (max nw 1)  nh (max nh 1))
-	  (let ((change (or (/= (xlib:drawable-x window) nx)
-			    (/= (xlib:drawable-y window) ny)
-			    (/= (xlib:drawable-width window) nw)
-			    (/= (xlib:drawable-height window) nh))))
-	    (setf (xlib:drawable-x window) nx
-		  (xlib:drawable-y window) ny
-		  (xlib:drawable-width window) nw
-		  (xlib:drawable-height window) nh)
-	    (values raise-p change)))
-	(values nil nil))))
+    (when (managed-window-p window parent)
+      (multiple-value-bind (nx ny nw nh)
+	  (get-parent-layout window parent)
+	(setf nw (max nw 1)  nh (max nh 1))
+	(let ((change (or (/= (xlib:drawable-x window) nx)
+			  (/= (xlib:drawable-y window) ny)
+			  (/= (xlib:drawable-width window) nw)
+			  (/= (xlib:drawable-height window) nh))))
+	  (setf (xlib:drawable-x window) nx
+		(xlib:drawable-y window) ny
+		(xlib:drawable-width window) nw
+		(xlib:drawable-height window) nh)
+	  change)))))
+
 
 (defmethod adapt-child-to-parent ((frame frame) parent)
   (with-xlib-protect
-    (multiple-value-bind (nx ny nw nh raise-p)
+    (multiple-value-bind (nx ny nw nh)
 	(get-parent-layout frame parent)
       (with-slots (rx ry rw rh window) frame
 	(setf rx nx  ry ny
@@ -450,23 +450,18 @@
 		(xlib:drawable-y window) ry
 		(xlib:drawable-width window) rw
 		(xlib:drawable-height window) rh)
-	  (values raise-p change))))))
+	  change)))))
 
 (defmethod adapt-child-to-parent (child parent)
   (declare (ignore child parent))
-  (values nil nil))
+  nil)
 
 
 
 
-(defun raise-if-needed (window raise-p selected-p)
-  (when (or (eql raise-p t)
-	    (and (eql raise-p :first-only) selected-p))
-    (raise-window window)))
+(defgeneric show-child (child parent display-p))
 
-(defgeneric show-child (child parent display-p raise-p selected-p))
-
-(defmethod show-child ((frame frame) parent display-p raise-p selected-p)
+(defmethod show-child ((frame frame) parent display-p)
   (declare (ignore parent))
   (with-xlib-protect
     (with-slots (window show-window-p) frame
@@ -475,22 +470,22 @@
 	    (when (or *show-root-frame-p* (not (equal frame *current-root*)))
 	      (setf (xlib:window-background window) (get-color "Black"))
 	      (xlib:map-window window)
-	      (raise-if-needed window raise-p selected-p)))
+	      (raise-window window)))
 	  (hide-window window)))
     (display-frame-info frame)))
 
 
-(defmethod show-child ((window xlib:window) parent display-p raise-p selected-p)
+(defmethod show-child ((window xlib:window) parent display-p)
   (with-xlib-protect
     (if (or (managed-window-p window parent)
 	    (equal parent *current-child*))
 	(when display-p
 	  (xlib:map-window window)
-	  (raise-if-needed window raise-p selected-p))
+	  (raise-window window))
 	(hide-window window))))
 
-(defmethod show-child (child parent display-p raise-p selected-p)
-  (declare (ignore child parent display-p raise-p selected-p))
+(defmethod show-child (child parent display-p)
+  (declare (ignore child parent display-p))
   ())
 
 
@@ -558,10 +553,9 @@
 only for display-child and its children"
   (let ((geometry-change nil))
     (labels ((rec (root parent selected-p selected-parent-p display-p)
-	       (multiple-value-bind (raise-p change)
-		   (adapt-child-to-parent root parent)
-		 (when change (setf geometry-change change))
-		 (show-child root parent display-p raise-p selected-p))
+	       (when (adapt-child-to-parent root parent)
+		 (setf geometry-change t))
+	       (show-child root parent display-p)
 	       (select-child root (if (equal root *current-child*) t
 				      (if (and selected-p selected-parent-p) :maybe nil)))
 	       (when (frame-p root)
@@ -705,11 +699,11 @@ For window: set current child to window or its parent according to window-parent
 
 (defun select-next-child ()
   "Select the next child"
-  (select-next/previous-child #'anti-rotate-list))
+  (select-next/previous-child #'rotate-list))
 
 (defun select-previous-child ()
   "Select the previous child"
-  (select-next/previous-child #'rotate-list))
+  (select-next/previous-child #'anti-rotate-list))
 
 
 

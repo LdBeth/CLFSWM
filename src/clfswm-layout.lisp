@@ -30,10 +30,9 @@
 ;;;
 ;;; To add a new layout:
 ;;;   1- define your own layout: a method returning the real size of the
-;;;      child in screen size (integer) as 5 values (rx, ry, rw, rh, raise-p).
+;;;      child in screen size (integer) as 5 values (rx, ry, rw, rh).
 ;;;      This method can use the float size of the child (x, y ,w , h).
 ;;;      It can be specialised for xlib:window or frame
-;;;      Raise-p is nil or :first-only or t
 ;;;   2- Define a seter function for your layout
 ;;;   3- Register your new layout with register-layout.
 
@@ -101,15 +100,13 @@
     (values (1+ rx)
 	    (1+ ry)
 	    (- rw 2)
-	    (- rh 2)
-	    :first-only)))
+	    (- rh 2))))
 
 (defmethod no-layout ((child frame) parent)
   (values (x-fl->px (frame-x child) parent)
 	  (y-fl->px (frame-y child) parent)
 	  (w-fl->px (frame-w child) parent)
-	  (h-fl->px (frame-h child) parent)
-	  t))
+	  (h-fl->px (frame-h child) parent)))
 
 
 
@@ -136,8 +133,7 @@
     (values (round (+ (frame-rx parent) (truncate (* (mod pos n) dx)) 1))
 	    (round (+ (frame-ry parent) (truncate (* (truncate (/ pos n)) dy)) 1))
 	    (round (- dx 2))
-	    (round (- dy 2))
-	    t)))
+	    (round (- dy 2)))))
 
 (defun set-tile-layout ()
   "Tile child in its frame"
@@ -162,13 +158,11 @@
 	      (values (1+ rx)
 		      (1+ ry)
 		      (- (round (* rw size)) 2)
-		      (- rh 2)
-		      t)
+		      (- rh 2))
 	      (values (1+ (round (+ rx (* rw size))))
 		      (1+ (round (+ ry (* dy (1- pos)))))
 		      (- (round (* rw (- 1 size))) 2)
-		      (- (round dy) 2)
-		      t))
+		      (- (round dy) 2)))
 	  (no-layout child parent)))))
 
 
@@ -197,13 +191,11 @@
 	      (values (1+ (round (+ rx (* rw (- 1 size)))))
 		      (1+ ry)
 		      (- (round (* rw size)) 2)
-		      (- rh 2)
-		      t)
+		      (- rh 2))
 	      (values (1+ rx)
 		      (1+ (round (+ ry (* dy (1- pos)))))
 		      (- (round (* rw (- 1 size))) 2)
-		      (- (round dy) 2)
-		      t))
+		      (- (round dy) 2)))
 	  (no-layout child parent)))))
 
 
@@ -234,13 +226,11 @@
 	      (values (1+ rx)
 		      (1+ ry)
 		      (- rw 2)
-		      (- (round (* rh size)) 2)
-		      t)
+		      (- (round (* rh size)) 2))
 	      (values (1+ (round (+ rx (* dx (1- pos)))))
 		      (1+ (round (+ ry (* rh size))))
 		      (- (round dx) 2)
-		      (- (round (* rh (- 1 size))) 2)
-		      t))
+		      (- (round (* rh (- 1 size))) 2)))
 	  (no-layout child parent)))))
 
 
@@ -269,13 +259,11 @@
 	      (values (1+ rx)
 		      (1+ (round (+ ry (* rh (- 1 size)))))
 		      (- rw 2)
-		      (- (round (* rh size)) 2)
-		      t)
+		      (- (round (* rh size)) 2))
 	      (values (1+ (round (+ rx (* dx (1- pos)))))
 		      (1+ ry)
 		      (- (round dx) 2)
-		      (- (round (* rh (- 1 size))) 2)
-		      t))
+		      (- (round (* rh (- 1 size))) 2)))
 	  (no-layout child parent)))))
 
 
@@ -309,8 +297,7 @@
       (values (round (+ rx (truncate (* (mod pos n) dx)) (* dx size) 1))
 	      (round (+ ry (truncate (* (truncate (/ pos n)) dy)) (* dy size) 1))
 	      (round (- dx (* dx size 2) 2))
-	      (round (- dy (* dy size 2) 2))
-	      t))))
+	      (round (- dy (* dy size 2) 2))))))
 
 (defun set-tile-space-layout ()
   "Tile Space: tile child in its frame leaving spaces between them"
@@ -350,20 +337,17 @@
 	      (values (+ rx space 1)
 		      (1+ ry)
 		      (- (round (* rw size)) 2 space)
-		      (- rh 2)
-		      t)
+		      (- rh 2))
 	      (values (1+ (round (+ rx (* rw size))))
 		      (1+ (round (+ ry (* dy (1- pos)))))
 		      (- (round (* rw (- 1 size))) 2)
-		      (- (round dy) 2)
-		      t))
+		      (- (round dy) 2)))
 	  (multiple-value-bind (rnx rny rnw rnh)
 	      (no-layout child parent)
 	    (values (+ rnx space)
 		    rny
 		    (- rnw space)
-		    rnh
-		    t))))))
+		    rnh))))))
 
 
 (defun set-tile-left-space-layout ()
