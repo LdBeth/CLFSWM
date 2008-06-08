@@ -459,9 +459,9 @@
 
 
 
-(defgeneric show-child (child parent display-p))
+(defgeneric show-child (child parent display-p raise-p))
 
-(defmethod show-child ((frame frame) parent display-p)
+(defmethod show-child ((frame frame) parent display-p raise-p)
   (declare (ignore parent))
   (with-xlib-protect
     (with-slots (window show-window-p) frame
@@ -470,22 +470,22 @@
 	    (when (or *show-root-frame-p* (not (equal frame *current-root*)))
 	      (setf (xlib:window-background window) (get-color "Black"))
 	      (xlib:map-window window)
-	      (raise-window window)))
+	      (when raise-p (raise-window window))))
 	  (hide-window window)))
     (display-frame-info frame)))
 
 
-(defmethod show-child ((window xlib:window) parent display-p)
+(defmethod show-child ((window xlib:window) parent display-p raise-p)
   (with-xlib-protect
     (if (or (managed-window-p window parent)
 	    (equal parent *current-child*))
 	(when display-p
 	  (xlib:map-window window)
-	  (raise-window window))
+	  (when raise-p (raise-window window)))
 	(hide-window window))))
 
-(defmethod show-child (child parent display-p)
-  (declare (ignore child parent display-p))
+(defmethod show-child (child parent display-p raise-p)
+  (declare (ignore child parent display-p raise-p))
   ())
 
 
@@ -503,6 +503,26 @@
   (declare (ignore child))
   ())
 
+
+
+
+(defgeneric child-coordinates (child))
+
+(defmethod child-coordinates ((frame frame))
+  (values (frame-rx frame)
+	  (frame-ry frame)
+	  (+ (frame-rx frame) (frame-rw frame))
+	  (+ (frame-ry frame) (frame-rh frame))))
+
+(defmethod child-coordinates ((window xlib:window))
+  (values (xlib:drawable-x window)
+	  (xlib:drawable-y window)
+	  (+ (xlib:drawable-x window) (xlib:drawable-width window))
+	  (+ (xlib:drawable-y window) (xlib:drawable-height window))))
+
+(defmethod child-coordinates (child)
+  (declare (ignore child))
+  (values 0 0 1 1))
 
 
 
@@ -547,23 +567,47 @@
 
 
 
+(defun raise-p-list (children)
+  (let ((acc nil))
+    (labels ((rec (list)
+	       (when list
+		 (multiple-value-bind (xo1 yo1 xo2 yo2)
+		     (child-coordinates (first list))
+		   (push (not (dolist (c (rest list))
+				(multiple-value-bind (x1 y1 x2 y2)
+				    (child-coordinates c)
+				  (when (and (<= x1 xo1)
+					     (>= x2 xo2)
+					     (<= y1 yo1)
+					     (>= y2 yo2))
+				    (return t)))))
+			 acc))
+		 (rec (rest list)))))
+      (rec children)
+      (nreverse acc))))
+
+
 
 (defun show-all-children (&optional (display-child *current-child*))
   "Show all children from *current-root*. Start the effective display
 only for display-child and its children"
   (let ((geometry-change nil))
-    (labels ((rec (root parent selected-p selected-parent-p display-p)
+    (labels ((rec (root parent selected-p selected-parent-p display-p raise-p)
 	       (when (adapt-child-to-parent root parent)
 		 (setf geometry-change t))
-	       (show-child root parent display-p)
+	       (show-child root parent display-p raise-p)
 	       (select-child root (if (equal root *current-child*) t
 				      (if (and selected-p selected-parent-p) :maybe nil)))
 	       (when (frame-p root)
-		 (let ((selected-child (frame-selected-child root)))
-		   (dolist (child (reverse (frame-child root)))
-		     (rec child root (equal child selected-child) (and selected-p selected-parent-p)
-			  (or display-p (equal root display-child))))))))
-      (rec *current-root* nil t t (equal display-child *current-root*))
+		 (let ((selected-child (frame-selected-child root))
+		       (reversed-children (reverse (frame-child root))))
+		   (loop for child in reversed-children
+		      for raise-p in (raise-p-list reversed-children)
+		      do (rec child root (equal child selected-child)
+			      (and selected-p selected-parent-p)
+			      (or display-p (equal root display-child))
+			      raise-p))))))
+      (rec *current-root* nil t t (equal display-child *current-root*) t)
       (set-focus-to-current-child)
       geometry-change)))
 
