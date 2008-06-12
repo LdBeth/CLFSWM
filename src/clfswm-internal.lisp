@@ -628,15 +628,14 @@ only for display-child and its children"
 
 
 
-
 (defun focus-child (child parent)
   "Focus child - Return true if something has change"
   (when (and (frame-p parent)
 	     (member child (frame-child parent)))
-      (when (not (equal child (frame-selected-child parent)))
-	(loop until (equal child (frame-selected-child parent))
-	   do (setf (frame-child parent) (rotate-list (frame-child parent))))
-	t)))
+    (when (not (equal child (frame-selected-child parent)))
+      (with-slots ((parent-child child) selected-pos) parent
+	(setf parent-child (nth-insert selected-pos child (remove child parent-child))))
+      t)))
 
 (defun focus-child-rec (child parent)
   "Focus child and its parents - Return true if something has change"

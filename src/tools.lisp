@@ -37,6 +37,7 @@
 	   :setf/=
 	   :in-corner
 	   :create-symbol
+	   :nth-insert
 	   :split-string
 	   :expand-newline
 	   :ensure-list
@@ -177,6 +178,15 @@ Return the result of the last hook"
 (defun create-symbol (&rest names)
   "Return a new symbol from names"
   (intern (string-upcase (apply #'concatenate 'string names))))
+
+
+
+(defun nth-insert (n elem list)
+  "Insert elem in (nth n list)"
+  (nconc (subseq list 0 n)
+	 (list elem)
+	 (subseq list n)))
+
 
 
 (defun split-string (string &optional (separator #\Space))

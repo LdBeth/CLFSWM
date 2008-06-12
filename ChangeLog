@@ -1,3 +1,8 @@
+2008-06-12  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (focus-child): Algorithm change to
+	raise only the selected child.
+
 2008-06-08  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp (raise-p-list, show-all-children):
