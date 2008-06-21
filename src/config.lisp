@@ -40,9 +40,10 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 ;;; CONFIG - Screen size
 (defun get-fullscreen-size ()
-  "Return the size of root child (values rx ry rw rh raise-p)
+  "Return the size of root child (values rx ry rw rh)
 You can tweak this to what you want"
-  (values -1 -1 (xlib:screen-width *screen*) (xlib:screen-height *screen*) nil))
+  (values -2 -2 (+ (xlib:screen-width *screen*) 2) (+ (xlib:screen-height *screen*) 2)))
+  ;;(values -1 -1 (xlib:screen-width *screen*) (xlib:screen-height *screen*)))
 ;; (values -1 -1 1024 768))
 ;;  (values 100 100 800 600))
 

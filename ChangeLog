@@ -1,3 +1,13 @@
+2008-06-21  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (show-all-children): Compute geometry
+	and selection first and then show only necessary children.
+	(show-child): remove unneeded display-p parameter.
+
+	* src/config.lisp (get-fullscreen-size): Place the frame border
+	outside the screen (this prevent the loose of 2 pixels per
+	directions :)
+
 2008-06-12  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp (focus-child): Algorithm change to

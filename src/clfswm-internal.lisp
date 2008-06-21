@@ -459,33 +459,32 @@
 
 
 
-(defgeneric show-child (child parent display-p raise-p))
+(defgeneric show-child (child parent raise-p))
 
-(defmethod show-child ((frame frame) parent display-p raise-p)
+(defmethod show-child ((frame frame) parent raise-p)
   (declare (ignore parent))
   (with-xlib-protect
     (with-slots (window show-window-p) frame
       (if show-window-p
-	  (when display-p
-	    (when (or *show-root-frame-p* (not (equal frame *current-root*)))
-	      (setf (xlib:window-background window) (get-color "Black"))
-	      (xlib:map-window window)
-	      (when raise-p (raise-window window))))
+	  (when (or *show-root-frame-p* (not (equal frame *current-root*)))
+	    (setf (xlib:window-background window) (get-color "Black"))
+	    (xlib:map-window window)
+	    (when raise-p (raise-window window)))
 	  (hide-window window)))
     (display-frame-info frame)))
 
 
-(defmethod show-child ((window xlib:window) parent display-p raise-p)
+(defmethod show-child ((window xlib:window) parent raise-p)
   (with-xlib-protect
     (if (or (managed-window-p window parent)
 	    (equal parent *current-child*))
-	(when display-p
+	(progn
 	  (xlib:map-window window)
 	  (when raise-p (raise-window window)))
 	(hide-window window))))
 
-(defmethod show-child (child parent display-p raise-p)
-  (declare (ignore child parent display-p raise-p))
+(defmethod show-child (child parent raise-p)
+  (declare (ignore child parent raise-p))
   ())
 
 
@@ -592,22 +591,25 @@
   "Show all children from *current-root*. Start the effective display
 only for display-child and its children"
   (let ((geometry-change nil))
-    (labels ((rec (root parent selected-p selected-parent-p display-p raise-p)
+    (labels ((rec-geom (root parent selected-p selected-parent-p)
 	       (when (adapt-child-to-parent root parent)
 		 (setf geometry-change t))
-	       (show-child root parent display-p raise-p)
-	       (select-child root (if (equal root *current-child*) t
-				      (if (and selected-p selected-parent-p) :maybe nil)))
+	       (select-child root (cond ((equal root *current-child*) t)
+					((and selected-p selected-parent-p) :maybe)
+					(t nil)))
 	       (when (frame-p root)
-		 (let ((selected-child (frame-selected-child root))
-		       (reversed-children (reverse (frame-child root))))
+		 (let ((selected-child (frame-selected-child root)))
+		   (dolist (child (reverse (frame-child root)))
+		     (rec-geom child root (equal child selected-child) (and selected-p selected-parent-p))))))
+	     (rec (root parent raise-p)
+	       (show-child root parent raise-p)
+	       (when (frame-p root)
+		 (let ((reversed-children (reverse (frame-child root))))
 		   (loop for child in reversed-children
 		      for raise-p in (raise-p-list reversed-children)
-		      do (rec child root (equal child selected-child)
-			      (and selected-p selected-parent-p)
-			      (or display-p (equal root display-child))
-			      raise-p))))))
-      (rec *current-root* nil t t (equal display-child *current-root*) t)
+		      do (rec child root raise-p))))))
+      (rec-geom *current-root* nil t t)
+      (rec display-child nil t)
       (set-focus-to-current-child)
       geometry-change)))
 

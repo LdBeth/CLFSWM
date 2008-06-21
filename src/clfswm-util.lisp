@@ -512,7 +512,7 @@
   (when (and (frame-p *current-root*)
 	     (in-corner *present-all-windows-corner* root-x root-y))
     (stop-button-event)
-    (switch-to-root-frame)
+    (switch-to-root-frame :show-later t)
     (present-windows-generic (*root-frame*)
       (hide-all-children *root-frame*)
       (setf *current-root* parent))
