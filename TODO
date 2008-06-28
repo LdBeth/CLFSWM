@@ -7,10 +7,6 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Raise Order when tile space layout
-
-- Use conpressed motion events for clisp. [Philippe]
-
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
 
 - A Gimp layout example (a main window and all others on the left) [Philippe]

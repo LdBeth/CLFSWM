@@ -1,3 +1,15 @@
+2008-06-28  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/xlib-util.lisp (move-window, resize-window): Compress motion
+	events.
+
+	* src/clfswm.lisp (handle-motion-notify): Compress motion events.
+
+	* src/clfswm-second-mode.lisp (sm-handle-motion-notify): Compress
+	motion events.
+
+	* src/clfswm-info.lisp (info-mode): Compress motion events.
+
 2008-06-21  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp (show-all-children): Compute geometry

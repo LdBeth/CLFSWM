@@ -490,10 +490,11 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
 	(pointer-grabbed-p (xgrab-pointer-p)))
     (labels ((motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
 	       (declare (ignore event-slots))
-	       (setf (xlib:drawable-x window) (+ root-x dx)
-		     (xlib:drawable-y window) (+ root-y dy))
-	       (when additional-fn
-	       	 (apply additional-fn additional-arg)))
+	       (unless (compress-motion-notify)
+		 (setf (xlib:drawable-x window) (+ root-x dx)
+		       (xlib:drawable-y window) (+ root-y dy))
+		 (when additional-fn
+		   (apply additional-fn additional-arg))))
 	     (handle-event (&rest event-slots &key event-key &allow-other-keys)
 	       (case event-key
 		 (:motion-notify (apply #'motion-notify event-slots))
@@ -532,10 +533,11 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
 	 (max-height (or (and hints (xlib:wm-size-hints-max-height hints)) most-positive-fixnum)))
     (labels ((motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
 	       (declare (ignore event-slots))
-	       (setf (xlib:drawable-width window) (min (max (+ orig-width (- root-x orig-x)) 10 min-width) max-width)
-		     (xlib:drawable-height window) (min (max (+ orig-height (- root-y orig-y)) 10 min-height) max-height))
-	       (when additional-fn
-	       	 (apply additional-fn additional-arg)))
+	       (unless (compress-motion-notify)
+		 (setf (xlib:drawable-width window) (min (max (+ orig-width (- root-x orig-x)) 10 min-width) max-width)
+		       (xlib:drawable-height window) (min (max (+ orig-height (- root-y orig-y)) 10 min-height) max-height))
+		 (when additional-fn
+		   (apply additional-fn additional-arg))))
 	     (handle-event (&rest event-slots &key event-key &allow-other-keys)
 	       (case event-key
 		 (:motion-notify (apply #'motion-notify event-slots))

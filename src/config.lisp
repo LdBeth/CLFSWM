@@ -32,7 +32,7 @@
 
 
 ;;; CONFIG - Compress motion notify ?
-(defparameter *have-to-compress-notify* nil
+(defparameter *have-to-compress-notify* t
   "This variable may be useful to speed up some slow version of CLX.
 It is particulary useful with CLISP/MIT-CLX.")
   
