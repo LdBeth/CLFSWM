@@ -518,6 +518,17 @@
       (setf *current-root* parent))
     t))
 
+(let ((vt-keyboard-on nil))
+  (defun have-to-present-virtual-keyboard (root-x root-y)
+    (when (and (frame-p *current-root*)
+	       (in-corner *present-virtual-keyboard-corner* root-x root-y))
+      (stop-button-event)
+      (do-shell (if vt-keyboard-on
+		    *virtual-keyboard-kill-cmd*
+		    *virtual-keyboard-cmd*))
+      (setf vt-keyboard-on (not vt-keyboard-on))
+      t)))
+  
 
 
 
@@ -578,6 +589,7 @@ On *present-windows-corner*: Present windows in the current root.
 On *present-all-windows-corner*: Present all windows in all frames."
   (or (have-to-present-windows root-x root-y)
       (have-to-present-all-windows root-x root-y)
+      (have-to-present-virtual-keyboard root-x root-y)
       (mouse-click-to-focus-generic window root-x root-y #'move-frame)))
 
 (defun mouse-click-to-focus-and-resize (window root-x root-y)
@@ -586,6 +598,7 @@ On *present-windows-corner*: Present windows in the current root.
 On *present-all-windows-corner*: Present all windows in all frames."
   (or (have-to-present-windows root-x root-y)
       (have-to-present-all-windows root-x root-y)
+      (have-to-present-virtual-keyboard root-x root-y)
       (mouse-click-to-focus-generic window root-x root-y #'resize-frame)))
 
 
@@ -943,7 +956,8 @@ For window: set current child to window or its parent according to window-parent
     (info-mode (list (format nil "Window:       ~A" window)
 		     (format nil "Window name:  ~A" (xlib:wm-name window))
 		     (format nil "Window class: ~A" (xlib:get-wm-class window))
-		     (format nil "Window type:  ~:(~A~)" (window-type window)))))
+		     (format nil "Window type:  ~:(~A~)" (window-type window))
+		     (format nil "Window id:    0x~X" (xlib:window-id window)))))
   (leave-second-mode))
 
 

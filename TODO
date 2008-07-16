@@ -9,6 +9,8 @@ Should handle these soon.
 
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
 
+- Fast switch between two children. [Philippe]
+
 - A Gimp layout example (a main window and all others on the left) [Philippe]
 
 - Hook to open next window in named/numbered frame [Philippe]
@@ -46,3 +48,4 @@ Operation:
 
 - Undo/redo (any idea to implement this is welcome)
 
+- Mouse support in menu?

@@ -80,7 +80,8 @@
 (defun default-frame-nw-hook (frame window)
   "Open the next window in the current frame"
   (declare (ignore frame))
-  (unless (string-equal (xlib:get-wm-class window) "ROX-Pinboard")
+  (unless (or (string-equal (xlib:get-wm-class window) "ROX-Pinboard")
+	      (string-equal (xlib:get-wm-class window) "xvkbd"))
     (leave-if-not-frame *current-child*)
     (when (frame-p *current-child*)
       (pushnew window (frame-child *current-child*)))

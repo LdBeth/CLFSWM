@@ -94,7 +94,12 @@ One of :bottom-right :bottom-left :top-right :top-left")
   "Which corner enable the mouse present all windows
 One of :bottom-right :bottom-left :top-right :top-left")
 
+(defparameter *present-virtual-keyboard-corner* :top-right
+  "Which corner enable the mouse present virtual keyboard.
+One of :bottom-right :bottom-left :top-right :top-left")
 
+(defparameter *virtual-keyboard-cmd* "xvkbd")
+(defparameter *virtual-keyboard-kill-cmd* "pkill xvkbd")
 
 
 
