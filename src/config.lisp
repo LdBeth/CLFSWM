@@ -98,7 +98,15 @@ One of :bottom-right :bottom-left :top-right :top-left")
   "Which corner enable the mouse present virtual keyboard.
 One of :bottom-right :bottom-left :top-right :top-left")
 
-(defparameter *virtual-keyboard-cmd* "xvkbd")
+(defparameter *virtual-keyboard-cmd* "xvkbd"
+  "The command to display the virtual keybaord
+  Here is an ~/.Xresources example for xvkbd:
+    xvkbd.windowGeometry: 300x100-0-0
+    xvkbd*Font: 6x12
+    xvkbd.modalKeytop: true
+    xvkbd.customization: -french
+    xvkbd.keypad: false
+  And make it always on top")
 (defparameter *virtual-keyboard-kill-cmd* "pkill xvkbd")
 
 

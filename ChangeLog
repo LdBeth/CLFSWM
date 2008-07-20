@@ -4,13 +4,6 @@
 	window id.
 	(have-to-present-virtual-keyboard): Add a virtual keyboard corner
 	(top right by default). By default 'xvkbd' is used.
-	Here is an ~/.Xresources example:
-	  xvkbd.windowGeometry: 300x100-0-0
-	  xvkbd*Font: 6x12
-	  xvkbd.modalKeytop: true
-	  xvkbd.customization: -french
-	  xvkbd.keypad: false
-
 
 2008-06-28  Philippe Brochard  <pbrochard@common-lisp.net>
 

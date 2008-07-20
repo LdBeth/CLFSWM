@@ -11,6 +11,8 @@ Should handle these soon.
 
 - Fast switch between two children. [Philippe]
 
+- Fast layout switch [Philippe]
+
 - A Gimp layout example (a main window and all others on the left) [Philippe]
 
 - Hook to open next window in named/numbered frame [Philippe]
