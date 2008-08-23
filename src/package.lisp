@@ -30,7 +30,19 @@
   ;;(:shadow :defun)
   (:export :main))
 
+
+
 (in-package :clfswm)
+
+
+
+;;; Compress motion notify ?
+;;; Note: this variable is overwriten in config.lisp
+(defparameter *have-to-compress-notify* t
+  "Config(): Compress event notify?
+This variable may be useful to speed up some slow version of CLX.
+It is particulary useful with CLISP/MIT-CLX.")
+
 
 
 (defparameter *display* nil)
@@ -44,31 +56,29 @@
 
 (defparameter *default-font* nil)
 ;;(defparameter *default-font-string* "9x15")
-(defparameter *default-font-string* "fixed")
+(defparameter *default-font-string* "fixed"
+  "Config(): The default font used in clfswm")
 
 
 (defparameter *child-selection* nil)
 
-(defparameter *layout-list* nil)
-(defparameter *nw-hook-list* nil)
-
-
-;;(defstruct frame (number (incf *current-frame-number*)) name
-;;	   (x 0) (y 0) (w 1) (h 1) rx ry rw rh
-;;	   layout window gc child)
-
 ;;; CONFIG - Default frame datas
 (defparameter *default-frame-data*
-  (list '(:tile-size 0.8) '(:tile-space-size 0.1)))
+  (list '(:tile-size 0.8) '(:tile-space-size 0.1)
+	'(:fast-layout (tile-left-layout tile-layout)))
+  "Config(): Default slots set in frame date")
 
 
 ;;; CONFIG - Default managed window type for a frame
 ;;; type can be  :all, :normal, :transient, :maxsize, :desktop, :dock, :toolbar, :menu, :utility, :splash, :dialog
-(defparameter *default-managed-type* '(:normal))
+(defparameter *default-managed-type* '(:normal)
+  "Config(): Default managed window types")
 ;;(defparameter *default-managed-type* '(:normal :maxsize :transient))
 ;;(defparameter *default-managed-type* '(:normal :transient :maxsize :desktop :dock :toolbar :menu :utility :splash :dialog))
 ;;(defparameter *default-managed-type* '())
 ;;(defparameter *default-managed-type* '(:all))
+
+
 
 (defclass frame ()
   ((name :initarg :name :accessor frame-name :initform nil)
@@ -140,37 +150,65 @@
 
 
 ;;; Main mode hooks (set in clfswm.lisp)
-(defparameter *button-press-hook* nil)
-(defparameter *button-release-hook* nil)
-(defparameter *motion-notify-hook* nil)
-(defparameter *key-press-hook* nil)
-(defparameter *configure-request-hook* nil)
-(defparameter *configure-notify-hook* nil)
-(defparameter *create-notify-hook* nil)
-(defparameter *destroy-notify-hook* nil)
-(defparameter *enter-notify-hook* nil)
-(defparameter *exposure-hook* nil)
-(defparameter *map-request-hook* nil)
-(defparameter *mapping-notify-hook* nil)
-(defparameter *property-notify-hook* nil)
-(defparameter *unmap-notify-hook* nil)
+(defparameter *button-press-hook* nil
+  "Config(Hook group):")
+(defparameter *button-release-hook* nil
+  "Config(Hook group):")
+(defparameter *motion-notify-hook* nil
+  "Config(Hook group):")
+(defparameter *key-press-hook* nil
+  "Config(Hook group):")
+(defparameter *configure-request-hook* nil
+  "Config(Hook group):")
+(defparameter *configure-notify-hook* nil
+  "Config(Hook group):")
+(defparameter *create-notify-hook* nil
+  "Config(Hook group):")
+(defparameter *destroy-notify-hook* nil
+  "Config(Hook group):")
+(defparameter *enter-notify-hook* nil
+  "Config(Hook group):")
+(defparameter *exposure-hook* nil
+  "Config(Hook group):")
+(defparameter *map-request-hook* nil
+  "Config(Hook group):")
+(defparameter *mapping-notify-hook* nil
+  "Config(Hook group):")
+(defparameter *property-notify-hook* nil
+  "Config(Hook group):")
+(defparameter *unmap-notify-hook* nil
+  "Config(Hook group):")
 
 
 ;;; Second mode hooks (set in clfswm-second-mode.lisp)
-(defparameter *sm-button-press-hook* nil)
-(defparameter *sm-button-release-hook* nil)
-(defparameter *sm-motion-notify-hook* nil)
-(defparameter *sm-key-press-hook* nil)
-(defparameter *sm-configure-request-hook* nil)
-(defparameter *sm-configure-notify-hook* nil)
-(defparameter *sm-map-request-hook* nil)
-(defparameter *sm-unmap-notify-hook* nil)
-(defparameter *sm-destroy-notify-hook* nil)
-(defparameter *sm-mapping-notify-hook* nil)
-(defparameter *sm-property-notify-hook* nil)
-(defparameter *sm-create-notify-hook* nil)
-(defparameter *sm-enter-notify-hook* nil)
-(defparameter *sm-exposure-hook* nil)
+(defparameter *sm-button-press-hook* nil
+  "Config(Hook group):")
+(defparameter *sm-button-release-hook* nil
+  "Config(Hook group):")
+(defparameter *sm-motion-notify-hook* nil
+  "Config(Hook group):")
+(defparameter *sm-key-press-hook* nil
+  "Config(Hook group):")
+(defparameter *sm-configure-request-hook* nil
+  "Config(Hook group):")
+(defparameter *sm-configure-notify-hook* nil
+  "Config(Hook group):")
+(defparameter *sm-map-request-hook* nil
+  "Config(Hook group):")
+(defparameter *sm-unmap-notify-hook* nil
+  "Config(Hook group):")
+(defparameter *sm-destroy-notify-hook* nil
+  "Config(Hook group):")
+(defparameter *sm-mapping-notify-hook* nil
+  "Config(Hook group):")
+(defparameter *sm-property-notify-hook* nil
+  "Config(Hook group):")
+(defparameter *sm-create-notify-hook* nil
+  "Config(Hook group):")
+(defparameter *sm-enter-notify-hook* nil
+  "Config(Hook group):")
+(defparameter *sm-exposure-hook* nil
+  "Config(Hook group):")
 
 
 

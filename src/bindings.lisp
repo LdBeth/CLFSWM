@@ -47,6 +47,7 @@
 
 (define-main-key ("Tab" :mod-1) 'select-next-child)
 (define-main-key ("Tab" :mod-1 :shift) 'select-previous-child)
+(define-main-key (#\Tab :shift) 'switch-to-last-child)
 
 (define-main-key ("Return" :mod-1) 'enter-frame)
 (define-main-key ("Return" :mod-1 :shift) 'leave-frame)
@@ -58,8 +59,9 @@
 (define-main-key ("Home" :mod-1) 'switch-to-root-frame)
 (define-main-key ("Home" :mod-1 :shift) 'switch-and-select-root-frame)
 
+(define-main-key ("Menu") 'fast-layout-switch)
 
-(define-main-key ("Menu") 'show-all-frames-info-key)
+(define-main-key ("Menu" :mod-1) 'show-all-frames-info-key)
 (define-main-key ("Menu" :shift) 'show-all-frames-info)
 (define-main-key ("Menu" :control) 'toggle-show-root-frame)
 
@@ -129,6 +131,7 @@
 
 
 (define-main-mouse (1) 'mouse-click-to-focus-and-move)
+(define-main-mouse (2) 'mouse-middle-click)
 (define-main-mouse (3) 'mouse-click-to-focus-and-resize)
 
 (define-main-mouse (1 :mod-1) 'mouse-click-to-focus-and-move-window)

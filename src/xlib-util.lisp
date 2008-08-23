@@ -25,7 +25,6 @@
 
 (in-package :clfswm)
 
-
 ;; Window states
 (defconstant +withdrawn-state+ 0)
 (defconstant +normal-state+ 1)
@@ -90,33 +89,6 @@ Window types are in +WINDOW-TYPES+.")
   (xlib:warp-pointer *root*
 		     (1- (xlib:screen-width *screen*))
 		     (1- (xlib:screen-height *screen*))))
-
-
-
-
-
-(defun in-corner (corner x y)
-  "Return t if (x, y) is in corner.
-Corner is one of :bottom-right :bottom-left :top-right :top-left"
-  (multiple-value-bind (xmin ymin xmax ymax)
-      (case corner
-	(:bottom-right (values (- (xlib:screen-width *screen*) *corner-size*)
-			       (- (xlib:screen-height *screen*) *corner-size*)
-			       (xlib:screen-width *screen*)
-			       (xlib:screen-height *screen*)))
-	(:bottom-left (values 0
-			      (- (xlib:screen-height *screen*) *corner-size*)
-			      *corner-size*
-			      (xlib:screen-height *screen*)))
-	(:top-left (values 0 0 *corner-size* *corner-size*))
-	(:top-right (values (- (xlib:screen-width *screen*) *corner-size*)
-			    0
-			    (xlib:screen-width *screen*)
-			    *corner-size*))
-	(t (values 10 10 0 0)))
-    (and (<= xmin x xmax)
-	 (<= ymin y ymax))))
-
 
 
 
@@ -358,13 +330,6 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
 (let ((cursor-font nil)
       (cursor nil)
       (pointer-grabbed nil))
-;;  (labels ((free-grab-pointer ()
-;;	     (when cursor
-;;	       (xlib:free-cursor cursor)
-;;	       (setf cursor nil))
-;;	     (when cursor-font
-;;	       (xlib:close-font cursor-font)
-  ;;	       (setf cursor-font nil))))
   (defun free-grab-pointer ()
     (when cursor
       (xlib:free-cursor cursor)
@@ -593,12 +558,32 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
 
 
 
-
-
-
-
 (defun get-color (color)
   (xlib:alloc-color (xlib:screen-default-colormap *screen*) color))
+
+
+(defgeneric ->color (color))
+
+(defmethod ->color ((color-name string))
+  color-name)
+
+(defmethod ->color ((color integer))
+  (labels ((hex->float (color)
+	     (/ (logand color #xFF) 256.0)))
+    (xlib:make-color :blue (hex->float color)
+		     :green (hex->float (ash color -8))
+		     :red (hex->float  (ash color -16)))))
+
+(defmethod ->color ((color list))
+  (destructuring-bind (red green blue) color
+    (xlib:make-color :blue red :green green :red blue)))
+
+(defmethod ->color ((color xlib:color))
+  color)
+
+(defmethod ->color (color)
+  (format t "Wrong color type: ~A~%" color)
+  "White")
 
 
 
@@ -725,4 +710,3 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
   (xlib:copy-area *pixmap-buffer* gc
 		  0 0 (xlib:drawable-width window) (xlib:drawable-height window)
 		  window 0 0))
-  

@@ -64,9 +64,6 @@
 
 
 
-
-
-
 (defgeneric frame-p (frame))
 (defmethod frame-p ((frame frame))
   (declare (ignore frame))
@@ -119,6 +116,12 @@
 		 (member window managed)
 		 (member (xlib:wm-name window) managed :test #'string-equal-p))))
       t))
+
+
+(defun never-managed-window-p (window)
+  (dolist (type *never-managed-window-list*)
+    (when (string-equal (funcall (first type) window) (second type))
+      (return t))))
 
 
 
@@ -889,8 +892,9 @@ managed."
 						(:transient 1)
 						(t 1)))
     (grab-all-buttons window)
-    (unless (do-all-frames-nw-hook window)
-      (call-hook *default-nw-hook* (list *root-frame* window)))
+    (unless (never-managed-window-p window)
+      (unless (do-all-frames-nw-hook window)
+	(call-hook *default-nw-hook* (list *root-frame* window))))
     (netwm-add-in-client-list window)))
 
 

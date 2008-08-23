@@ -77,21 +77,21 @@
 
 
 (defun delete-focus-window ()
-  "Delete the focus window in all frames and workspaces"
+  "Close focus window: Delete the focus window in all frames and workspaces"
   (let ((window (xlib:input-focus *display*)))
     (when (and window (not (xlib:window-equal window *no-focus-window*)))
-      (setf *current-child* *current-root*)
-      (remove-child-in-all-frames window)
+      (when (equal window *current-child*)
+	(setf *current-child* *current-root*))
       (send-client-message window :WM_PROTOCOLS
 			   (xlib:intern-atom *display* "WM_DELETE_WINDOW"))
       (show-all-children))))
 
 (defun destroy-focus-window ()
-  "Destroy the focus window in all frames and workspaces"
+  "Kill focus window: Destroy the focus window in all frames and workspaces"
   (let ((window (xlib:input-focus *display*)))
     (when (and window (not (xlib:window-equal window *no-focus-window*)))
-      (setf *current-child* *current-root*)
-      (remove-child-in-all-frames window)
+      (when (equal window *current-child*)
+	(setf *current-child* *current-root*))
       (xlib:kill-client *display* (xlib:window-id window))
       (show-all-children))))
 
@@ -480,57 +480,6 @@
 
 
 
-;;; Mouse utilities
-(defmacro present-windows-generic ((first-restore-frame) &body body)
-  `(progn
-     (with-all-frames (,first-restore-frame frame)
-       (setf (frame-data-slot frame :old-layout) (frame-layout frame)
-	     (frame-layout frame) #'tile-space-layout))
-     (show-all-children *current-root*)
-     (wait-no-key-or-button-press)
-     (wait-a-key-or-button-press )
-     (wait-no-key-or-button-press)
-     (multiple-value-bind (x y) (xlib:query-pointer *root*)
-       (let* ((child (find-child-under-mouse x y))
-	      (parent (find-parent-frame child *root-frame*)))
-	 (when (and child parent)
-	   ,@body
-	   (focus-all-children child parent))))
-     (with-all-frames (,first-restore-frame frame)
-       (setf (frame-layout frame) (frame-data-slot frame :old-layout)
-	     (frame-data-slot frame :old-layout) nil))
-     (show-all-children *current-root*)))
-
-(defun have-to-present-windows (root-x root-y)
-  (when (and (frame-p *current-root*)
-	     (in-corner *present-windows-corner* root-x root-y))
-    (stop-button-event)
-    (present-windows-generic (*current-root*))
-    t))
-
-(defun have-to-present-all-windows (root-x root-y)
-  (when (and (frame-p *current-root*)
-	     (in-corner *present-all-windows-corner* root-x root-y))
-    (stop-button-event)
-    (switch-to-root-frame :show-later t)
-    (present-windows-generic (*root-frame*)
-      (hide-all-children *root-frame*)
-      (setf *current-root* parent))
-    t))
-
-(let ((vt-keyboard-on nil))
-  (defun have-to-present-virtual-keyboard (root-x root-y)
-    (when (and (frame-p *current-root*)
-	       (in-corner *present-virtual-keyboard-corner* root-x root-y))
-      (stop-button-event)
-      (do-shell (if vt-keyboard-on
-		    *virtual-keyboard-kill-cmd*
-		    *virtual-keyboard-cmd*))
-      (setf vt-keyboard-on (not vt-keyboard-on))
-      t)))
-  
-
-
 
 (defun move-frame (frame parent orig-x orig-y)
   (when (and frame parent)
@@ -585,21 +534,21 @@ mouse-fun is #'move-frame or #'resize-frame"
 
 (defun mouse-click-to-focus-and-move (window root-x root-y)
   "Move and focus the current frame or focus the current window parent.
-On *present-windows-corner*: Present windows in the current root.
-On *present-all-windows-corner*: Present all windows in all frames."
-  (or (have-to-present-windows root-x root-y)
-      (have-to-present-all-windows root-x root-y)
-      (have-to-present-virtual-keyboard root-x root-y)
+Or do actions on corners"
+  (or (do-corner-action root-x root-y *corner-main-mode-left-button*)
       (mouse-click-to-focus-generic window root-x root-y #'move-frame)))
 
 (defun mouse-click-to-focus-and-resize (window root-x root-y)
   "Resize and focus the current frame or focus the current window parent.
-On *present-windows-corner*: Present windows in the current root.
-On *present-all-windows-corner*: Present all windows in all frames."
-  (or (have-to-present-windows root-x root-y)
-      (have-to-present-all-windows root-x root-y)
-      (have-to-present-virtual-keyboard root-x root-y)
+Or do actions on corners"
+  (or (do-corner-action root-x root-y *corner-main-mode-right-button*)
       (mouse-click-to-focus-generic window root-x root-y #'resize-frame)))
+
+(defun mouse-middle-click (window root-x root-y)
+  "Do actions on corners"
+  (declare (ignore window))
+  (or (do-corner-action root-x root-y *corner-main-mode-middle-button*)
+      (replay-button-event)))
 
 
 
@@ -1097,3 +1046,23 @@ For window: set current child to window or its parent according to window-parent
 
 
     
+(let ((last-child nil))
+  (defun init-last-child ()
+    (setf last-child nil))
+  (defun switch-to-last-child ()
+    "Store the current child and switch to the previous one"
+    (let ((current-child *current-child*))
+      (when last-child
+	(hide-all *current-root*)
+	(setf *current-root* last-child
+	      *current-child* *current-root*)
+	(focus-all-children *current-child* *current-child*)
+	(show-all-children *current-root*))
+      (setf last-child current-child))))
+
+
+
+
+
+
+

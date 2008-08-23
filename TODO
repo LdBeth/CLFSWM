@@ -7,11 +7,7 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Show config -> list and display documentation for all tweakable global variables. [Philippe]
-
-- Fast switch between two children. [Philippe]
-
-- Fast layout switch [Philippe]
+- Factorize layout
 
 - A Gimp layout example (a main window and all others on the left) [Philippe]
 
@@ -19,18 +15,29 @@ Should handle these soon.
 
 - Ensure-unique-number/name (new function) [Philippe]
 
+- Show config -> list and display documentation for all tweakable global variables. [Philippe]
+   A finir : remove src/test.lisp src/load-test.lisp
+   Dans ~/.clfswmrc:
+      ;;;; AUTO-CONFIG - Do not edit those lines by hands: they are overwritten by CLFSWM
+      (defparameter *ma-var* value)
+      ...
+      ;;;; AUTO-CONFIG End : You can add your configurations below this line.
+
+- Focus policy by frame
 
 
 MAYBE
 =====
 
-- cd/pwd a la shell to navigate throw frames. [Philippe] 
+- cd/pwd a la shell to navigate throw frames. [Philippe]
 
 - From stumpwm: [Philippe]
  "In other news stumpwm should catch unhandled errors, restart, and
  print an error message. And there is now a soft-restart command. With
  this in place I suspect you will need to restart stumpwm very rarely
  and it won't spontaneously bring down X."
+  => Reset all -> place clfswm in its starting state.
+
 
 - Zoom
 
@@ -46,8 +53,14 @@ Operation:
     * up
     * down
 
-- Remote access to the clfswm REPL [Philippe]
-
 - Undo/redo (any idea to implement this is welcome)
 
 - Mouse support in menu?
+
+- Remote access to the clfswm REPL [Philippe]
+   Protocol:  Server: Ask: random-number
+              Client: Reply: associated random-number
+              Server: Ok
+              Client: a lisp form (+ 2 2)
+              ...
+   Random-number a compile time: '((rnd-1-server rnd-1-client) (rnd-1-server rnd-1-client) (rnd-1-server rnd-1-client) ...)

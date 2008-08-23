@@ -25,6 +25,8 @@
 
 (in-package :clfswm)
 
+(defparameter *in-second-mode* nil)
+
 (defparameter *sm-window* nil)
 (defparameter *sm-font* nil)
 (defparameter *sm-gc* nil)
@@ -127,17 +129,17 @@
 
 
 ;;; CONFIG: Second mode hooks
-(setf *sm-button-press-hook* #'sm-handle-button-press
-      *sm-button-release-hook* #'sm-handle-button-release
-      *sm-motion-notify-hook* #'sm-handle-motion-notify
-      *sm-key-press-hook* #'sm-handle-key-press
-      *sm-configure-request-hook* #'sm-handle-configure-request
-      *sm-configure-notify-hook* #'sm-handle-configure-notify
-      *sm-destroy-notify-hook* #'sm-handle-destroy-notify
-      *sm-enter-notify-hook* #'sm-handle-enter-notify
-      *sm-exposure-hook* #'sm-handle-exposure
-      *sm-map-request-hook* #'sm-handle-map-request
-      *sm-unmap-notify-hook* #'sm-handle-unmap-notify)
+(setf *sm-button-press-hook* 'sm-handle-button-press
+      *sm-button-release-hook* 'sm-handle-button-release
+      *sm-motion-notify-hook* 'sm-handle-motion-notify
+      *sm-key-press-hook* 'sm-handle-key-press
+      *sm-configure-request-hook* 'sm-handle-configure-request
+      *sm-configure-notify-hook* 'sm-handle-configure-notify
+      *sm-destroy-notify-hook* 'sm-handle-destroy-notify
+      *sm-enter-notify-hook* 'sm-handle-enter-notify
+      *sm-exposure-hook* 'sm-handle-exposure
+      *sm-map-request-hook* 'sm-handle-map-request
+      *sm-unmap-notify-hook* 'sm-handle-unmap-notify)
 
 
 
@@ -170,7 +172,8 @@
 (defun second-key-mode ()
   "Switch to editing mode"
   ;;(dbg "Second key ignore" c)))))
-  (setf *sm-window* (xlib:create-window :parent *root*
+  (setf *in-second-mode* t
+	*sm-window* (xlib:create-window :parent *root*
 					:x (truncate (/ (- (xlib:screen-width *screen*) *sm-width*) 2))
 					:y 0
 					:width *sm-width* :height *sm-height*
@@ -209,11 +212,15 @@
   (wait-no-key-or-button-press)
   (when *second-mode-program*
     (do-shell *second-mode-program*)
-    (setf *second-mode-program* nil)))
+    (setf *second-mode-program* nil))
+  (setf *in-second-mode* nil))
 
 
 
 (defun leave-second-mode ()
   "Leave second mode"
-  (banish-pointer)
-  (throw 'exit-second-loop nil))
+  (cond (*in-second-mode*
+	 (banish-pointer)
+	 (throw 'exit-second-loop nil))
+	(t (show-all-children))))
+

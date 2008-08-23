@@ -34,15 +34,22 @@
 	   :call-hook
 	   :dbg
 	   :dbgnl
+	   :with-all-internal-symbols
+	   :export-all-functions :export-all-variables
+	   :export-all-functions-and-variables
+	   :empty-string-p
+	   :is-config-p :config-documentation :config-group
 	   :setf/=
-	   :in-corner
 	   :create-symbol
+	   :number->char
 	   :nth-insert
 	   :split-string
+	   :append-newline-space
 	   :expand-newline
 	   :ensure-list
 	   :ensure-printable
 	   :ensure-n-elems
+	   :begin-with-2-spaces
 	   :string-equal-p
 	   :find-assoc-word
 	   :print-space
@@ -162,9 +169,78 @@ Return the result of the last hook"
 
 
 
+;;; Symbols tools
+(defmacro with-all-internal-symbols ((var package) &body body)
+  "Bind symbol to all internal symbols in package"
+  `(do-symbols (,var ,package)
+     (multiple-value-bind (sym status)
+	 (find-symbol (symbol-name ,var) ,package)
+       (declare (ignore sym))
+       (when (eql status :internal)
+	 ,@body))))
+
+
+(defun export-all-functions (package &optional (verbose nil))
+  (with-all-internal-symbols (symbol package)
+    (when (fboundp symbol)
+      (when verbose
+	(format t "Exporting ~S~%" symbol))
+      (export symbol package))))
+	
+
+(defun export-all-variables (package &optional (verbose nil))
+  (with-all-internal-symbols (symbol package)
+    (when (boundp symbol)
+      (when verbose
+	(format t "Exporting ~S~%" symbol))
+      (export symbol package))))
+
+(defun export-all-functions-and-variables (package &optional (verbose nil))
+  (with-all-internal-symbols (symbol package)
+    (when (or (fboundp symbol) (boundp symbol))
+      (when verbose
+	(format t "Exporting ~S~%" symbol))
+      (export symbol package))))
+
+
+
+
+
+(defun empty-string-p (string)
+  (string= string ""))
+
+
+
+;;; Auto configuration tools
+;;;   Syntaxe: (defparameter symbol value "Config(config group): documentation string")
+(let* ((start-string "Config(")
+       (start-len (length start-string))
+       (stop-string "):")
+       (stop-len (length stop-string)))
+  (defun is-config-p (symbol)
+    (when (boundp symbol)
+      (let ((doc (documentation symbol 'variable)))
+	(and doc
+	     (= (or (search start-string doc :test #'string-equal) -1) 0)
+	     (search stop-string doc)
+	     t))))
+  
+  (defun config-documentation (symbol)
+    (when (is-config-p symbol)
+      (let ((doc (documentation symbol 'variable)))
+	(string-trim " " (subseq doc (+ (search stop-string doc) stop-len))))))
+
+  (defun config-group (symbol)
+    (when (is-config-p symbol)
+      (let* ((doc (documentation symbol 'variable))
+	     (group (string-trim " " (subseq doc (+ (search start-string doc) start-len)
+					     (search stop-string doc)))))
+	(if (empty-string-p group) "Miscellaneous group" group)))))
+
+
+
+
 ;;; Tools
-
-
 (defmacro setf/= (var val)
   "Set var to val only when var not equal to val"
   (let ((gval (gensym)))
@@ -178,6 +254,9 @@ Return the result of the last hook"
 (defun create-symbol (&rest names)
   "Return a new symbol from names"
   (intern (string-upcase (apply #'concatenate 'string names))))
+
+(defun number->char (number)
+  (code-char (+ (char-code #\a) number)))
 
 
 
@@ -196,6 +275,15 @@ Return the result of the last hook"
      as sub = (subseq string i j)
      unless (string= sub "") collect sub
      while j))
+
+
+(defun append-newline-space (string)
+  "Append spaces before Newline on each line"
+  (with-output-to-string (stream)
+    (loop for c across string do
+	 (when (equal c #\Newline)
+	   (princ " " stream))
+	 (princ c stream))))
 
 
 (defun expand-newline (list)
@@ -223,6 +311,11 @@ Return the result of the last hook"
     (cond ((= length n) list)
 	  ((< length n) (ensure-n-elems (append list '(nil)) n))
 	  ((> length n) (ensure-n-elems (butlast list) n)))))
+
+(defun begin-with-2-spaces (string)
+  (and (> (length string) 1)
+       (eql (char string 0) #\Space)
+       (eql (char string 1) #\Space)))
 
 (defun string-equal-p (x y)
   (when (stringp y) (string-equal x y)))

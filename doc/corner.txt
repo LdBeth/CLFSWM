@@ -1,0 +1,49 @@
+Here are the actions associated to screen corners in CLFSWM:
+
+*Corner-Main-Mode-Left-Button*:
+  Top-Left: ---
+  Top-Right: Present a virtual keyboard
+  Bottom-Right: Present all windows in the current frame (An expose like)
+  Bottom-Left: ---
+
+*Corner-Main-Mode-Middle-Button*:
+  Top-Left: Open the help and info window
+  Top-Right: Close or kill the current window (ask before doing anything)
+  Bottom-Right: ---
+  Bottom-Left: ---
+
+*Corner-Main-Mode-Right-Button*:
+  Top-Left: Hide/Unhide a terminal
+  Top-Right: Close or kill the current window (ask before doing anything)
+  Bottom-Right: Present all windows in all frames (An expose like)
+  Bottom-Left: ---
+
+*Corner-Second-Mode-Left-Button*:
+  Top-Left: ---
+  Top-Right: ---
+  Bottom-Right: Present all windows in the current frame (An expose like)
+  Bottom-Left: ---
+
+*Corner-Second-Mode-Middle-Button*:
+  Top-Left: Open the help and info window
+  Top-Right: ---
+  Bottom-Right: ---
+  Bottom-Left: ---
+
+*Corner-Second-Mode-Right-Button*:
+  Top-Left: ---
+  Top-Right: ---
+  Bottom-Right: Present all windows in all frames (An expose like)
+  Bottom-Left: ---
+
+
+This documentation was produced with the CLFSWM auto-doc functions.
+To reproduce it, use the produce-menu-doc-in-file or
+the produce-all-docs function from the Lisp REPL.
+
+Something like this:
+LISP> (in-package :clfswm)
+CLFSWM> (produce-corner-doc-in-file "my-corner.txt")
+or
+CLFSWM> (produce-all-docs)
+

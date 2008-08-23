@@ -99,7 +99,7 @@ or<br> CLFSWM> (produce-all-docs)"))))
     (format stream "~2%")
     (maphash #'(lambda (k v)
 		 (when (consp k)
-		   (format stream "~&~20@<~{~@(~A~) ~}~> ~13@<~@(~A~)~>   ~A~%"
+		   (format stream "~&  ~20@<~{~@(~A~) ~}~> ~13@<~@(~A~)~>   ~A~%"
 			   (state->modifiers (second k))
 			   (remove #\# (remove #\\ (format nil "~S" (or (and (stringp (first k))
 									     (intern (string-upcase (first k))))
@@ -107,8 +107,9 @@ or<br> CLFSWM> (produce-all-docs)"))))
 			   (documentation (or (first v) (third v)) 'function))))
 	     hk)
     (format stream "~2&"))
-  (format stream "~2%This documentation was produced with the CLFSWM auto-doc functions. To reproduce it, use the produce-doc-in-file or
-the produce-all-docs function from the Lisp REPL.
+  (format stream "~2%This documentation was produced with the CLFSWM auto-doc functions.
+To reproduce it, use the produce-doc-in-file or the produce-all-docs
+function from the Lisp REPL.
 
 Something like this:
 LISP> (in-package :clfswm)
@@ -221,6 +222,97 @@ or<br> CLFSWM> (produce-all-docs)"))))
 
 
 
+;;; Corner autodoc functions
+(defun produce-corner-doc (&optional (stream t))
+  (labels ((print-doc (corner-list)
+	     (format stream "~2&~:(~A~):~%" corner-list)
+	     (dolist (corner (symbol-value corner-list))
+	       (format stream "  ~:(~A:~) ~A~%" (first corner)
+		       (if (fboundp (second corner))
+			   (documentation (second corner) 'function)
+			   "---")))))
+    (format stream "Here are the actions associated to screen corners in CLFSWM:")
+    (dolist (corner '(*corner-main-mode-left-button* *corner-main-mode-middle-button* *corner-main-mode-right-button*
+		      *corner-second-mode-left-button* *corner-second-mode-middle-button* *corner-second-mode-right-button*))
+      (print-doc corner))
+    (format stream "~2%This documentation was produced with the CLFSWM auto-doc functions.
+To reproduce it, use the produce-menu-doc-in-file or
+the produce-all-docs function from the Lisp REPL.
+
+Something like this:
+LISP> (in-package :clfswm)
+CLFSWM> (produce-corner-doc-in-file \"my-corner.txt\")
+or
+CLFSWM> (produce-all-docs)~2%")))
+
+  
+(defun produce-corner-doc-in-file (filename)
+  (format t "Producing text corner documentation in ~S " filename)
+  (with-open-file (stream filename :direction :output
+			  :if-exists :supersede :if-does-not-exist :create)
+    (produce-corner-doc stream))
+  (format t " done~%"))
+
+
+
+(defun produce-corner-doc-html (&optional (stream t))
+  (let ((corner-html nil))
+    (labels ((one-corner (corner-list)
+	       (push `(h3 ,corner-list) corner-html)
+	       (push `("table class=\"ex\" cellspacing=\"5\" border=\"0\" width=\"100%\""
+		       ,@(loop :for corner :in (symbol-value corner-list)
+			    :collect `(tr ("td align=\"left\" width=\"1%\" style=\"color:#FF0000\" nowrap"
+					   ,(format nil "~:(~A~):" (first corner)))
+					  ("td style=\"color:#0000FF\" nowrap"
+					   ,(if (fboundp (second corner))
+						(documentation (second corner) 'function)
+						"---")))))
+		     corner-html))
+	     (fill-corner-list ()
+	       (dolist (corner '(*corner-main-mode-left-button* *corner-main-mode-middle-button* *corner-main-mode-right-button*
+				 *corner-second-mode-left-button* *corner-second-mode-middle-button* *corner-second-mode-right-button*))
+		 (one-corner corner))))
+      (fill-corner-list)
+      (produce-html `(html
+		      (head
+		       (title "CLFSWM Corners"))
+		      (body
+		       (h1 ("a name=\"Top\"" "CLFSWM Corners"))
+		       (p "Here are the actions associated to screen corners in CLFSWM:")
+		       ,@(nreverse corner-html)
+		       (p (small "This documentation was produced with the CLFSWM auto-doc functions. To reproduce it, use the produce-corner-doc-html-in-file or
+the produce-all-docs function from the Lisp REPL."))
+		       (p (small "Something like this:<br>
+LISP> (in-package :clfswm)<br>
+CLFSWM> (produce-corner-doc-html-in-file \"my-corner.html\")<br>
+or<br> CLFSWM> (produce-all-docs)"))))
+		    0 stream))))
+
+  
+(defun produce-corner-doc-html-in-file (filename)
+  (format t "Producing html corner documentation in ~S " filename)
+  (with-open-file (stream filename :direction :output
+			  :if-exists :supersede :if-does-not-exist :create)
+    (produce-corner-doc-html stream))
+  (format t " done~%"))
+
+
+;;; Configuration variables
+(defun produce-configuration-variables (stream &optional (group t))
+  (format stream "    * CLFSWM Configuration variables *~%")
+  (format stream "      ------------------------------~2%")
+  (format stream "  <= ~A =>~2%" (if (equal group t) "" group))
+  (with-all-internal-symbols (symbol :clfswm)
+    (when (and (is-config-p symbol)
+	       (or (equal group t)
+		   (string-equal group (config-group symbol))))
+      (format stream "~A = ~S~%~A~%" symbol (symbol-value symbol)
+	      (config-documentation symbol))))
+    (format stream "~2& Those variables can be changed in clfswm.
+Maybe you'll need to restart clfswm to take care of new values~2%"))
+
+
+
 
 
 
@@ -230,5 +322,11 @@ or<br> CLFSWM> (produce-all-docs)"))))
   (produce-doc-in-file "doc/keys.txt")
   (produce-doc-html-in-file "doc/keys.html")
   (produce-menu-doc-in-file "doc/menu.txt")
-  (produce-menu-doc-html-in-file "doc/menu.html"))
+  (produce-menu-doc-html-in-file "doc/menu.html")
+  (produce-corner-doc-in-file "doc/corner.txt")
+  (produce-corner-doc-html-in-file "doc/corner.html"))
+
+
+
+
 

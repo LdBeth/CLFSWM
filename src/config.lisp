@@ -32,10 +32,19 @@
 
 
 ;;; CONFIG - Compress motion notify ?
-(defparameter *have-to-compress-notify* t
-  "This variable may be useful to speed up some slow version of CLX.
-It is particulary useful with CLISP/MIT-CLX.")
+;; This variable may be useful to speed up some slow version of CLX.
+;; It is particulary useful with CLISP/MIT-CLX.
+(setf *have-to-compress-notify* t)
   
+
+
+;;; CONFIG - Never managed window list
+(defparameter *never-managed-window-list*
+  '((xlib:get-wm-class "ROX-Pinboard")
+    (xlib:get-wm-class "xvkbd")
+    (xlib:wm-name "clfswm-terminal"))
+  "Config(): CLFSWM will never manage windows of this type.
+A list of (predicate-function-on-window expected-string)")
 
 
 ;;; CONFIG - Screen size
@@ -49,7 +58,71 @@ You can tweak this to what you want"
 
 
 (defparameter  *corner-size* 3
-  "The size of the corner square")
+  "Config(Corner group): The size of the corner square")
+
+
+;;; CONFIG: Corner actions - See in clfswm-corner.lisp for
+;;;   allowed functions
+(defparameter *corner-main-mode-left-button*
+  '((:top-left nil)
+    (:top-right present-virtual-keyboard)
+    (:bottom-right present-windows)
+    (:bottom-left nil))
+  "Config(Corner group): Actions on corners in the main mode with the left mouse button")
+
+(defparameter *corner-main-mode-middle-button*
+  '((:top-left help-on-clfswm)
+    (:top-right ask-close/kill-current-window)
+    (:bottom-right nil)
+    (:bottom-left nil))
+  "Config(Corner group): Actions on corners in the main mode with the middle mouse button")
+
+(defparameter *corner-main-mode-right-button*
+  '((:top-left present-clfswm-terminal)
+    (:top-right ask-close/kill-current-window)
+    (:bottom-right present-all-windows)
+    (:bottom-left nil))
+  "Config(Corner group): Actions on corners in the main mode with the right mouse button")
+
+(defparameter *corner-second-mode-left-button*
+  '((:top-left nil)
+    (:top-right nil)
+    (:bottom-right present-windows)
+    (:bottom-left nil))
+  "Config(Corner group): Actions on corners in the second mode with the left mouse button")
+
+(defparameter *corner-second-mode-middle-button*
+  '((:top-left help-on-clfswm)
+    (:top-right nil)
+    (:bottom-right nil)
+    (:bottom-left nil))
+  "Config(Corner group): Actions on corners in the second mode with the middle mouse button")
+
+(defparameter *corner-second-mode-right-button*
+  '((:top-left nil)
+    (:top-right nil)
+    (:bottom-right present-all-windows)
+    (:bottom-left nil))
+  "Config(Corner group): Actions on corners in the second mode with the right mouse button")
+
+
+(defparameter *virtual-keyboard-cmd* "xvkbd"
+  "Config(Corner group): The command to display the virtual keybaord
+  Here is an ~/.Xresources example for xvkbd:
+    xvkbd.windowGeometry: 300x100-0-0
+    xvkbd*Font: 6x12
+    xvkbd.modalKeytop: true
+    xvkbd.customization: -french
+    xvkbd.keypad: false
+  And make it always on top")
+(defparameter *virtual-keyboard-kill-cmd* "pkill xvkbd"
+  "Config(Corner group): The command to stop the virtual keyboard")
+
+(defparameter *clfswm-terminal-name* "clfswm-terminal"
+  "Config(Corner group): The clfswm terminal name")
+(defparameter *clfswm-terminal-cmd* (format nil "xterm -T ~A" *clfswm-terminal-name*)
+  "Config(Corner group): The clfswm terminal command.
+This command must set the window title to *clfswm-terminal-name*")
 
 
 
@@ -64,97 +137,109 @@ You can tweak this to what you want"
 ;;;
 ;;; See clfswm.lisp for hooks examples.
 
-(defun default-init-hook ()
-  (let ((frame (add-frame (create-frame :name "Default"
-                                        :layout nil :x 0.05 :y 0.05
-                                        :w 0.9 :h 0.9) *root-frame*)))
-    (setf *current-child* frame)))
-
 (defparameter *init-hook* 'default-init-hook
-  "Init hook. This hook is run just after the first root frame is created")
+  "Config(Hook group): Init hook. This hook is run just after the first root frame is created")
 
 (defparameter *default-nw-hook* 'default-frame-nw-hook
-  "Default action to do on newly created windows")
+  "Config(Hook group): Default action to do on newly created windows")
 
 
 
 
 ;;; CONFIG
 (defparameter *create-frame-on-root* nil
-  "Set this variable to true if you want to allow to create a new frame
+  "Config(): Create frame on root.
+Set this variable to true if you want to allow to create a new frame
 on the root window in the main mode with the mouse")
 
 
-;;; CONFIG: Corner where to present windows (An expose like)
-(defparameter *present-windows-corner* :bottom-right
-  "Which corner enable the mouse present windows.
-One of :bottom-right :bottom-left :top-right :top-left")
-
-(defparameter *present-all-windows-corner* :bottom-left
-  "Which corner enable the mouse present all windows
-One of :bottom-right :bottom-left :top-right :top-left")
-
-(defparameter *present-virtual-keyboard-corner* :top-right
-  "Which corner enable the mouse present virtual keyboard.
-One of :bottom-right :bottom-left :top-right :top-left")
-
-(defparameter *virtual-keyboard-cmd* "xvkbd"
-  "The command to display the virtual keybaord
-  Here is an ~/.Xresources example for xvkbd:
-    xvkbd.windowGeometry: 300x100-0-0
-    xvkbd*Font: 6x12
-    xvkbd.modalKeytop: true
-    xvkbd.customization: -french
-    xvkbd.keypad: false
-  And make it always on top")
-(defparameter *virtual-keyboard-kill-cmd* "pkill xvkbd")
-
-
-
 ;;; CONFIG: Main mode colors
-(defparameter *color-selected* "Red")
-(defparameter *color-unselected* "Blue")
-(defparameter *color-maybe-selected* "Yellow")
+(defparameter *color-selected* "Red"
+  "Config(Main mode group): Color of selected window")
+(defparameter *color-unselected* "Blue"
+  "Config(Main mode group): Color of unselected color")
+(defparameter *color-maybe-selected* "Yellow"
+  "Config(Main mode group): Color of maybe selected windows")
 
 ;;; CONFIG: Default window size
-(defparameter *default-window-width* 400)
-(defparameter *default-window-height* 300)
+(defparameter *default-window-width* 400
+  "Config(): Default window width")
+(defparameter *default-window-height* 300
+  "Config(): Default window height")
 
 ;;; CONFIG: Second mode colors and fonts
-(defparameter *sm-border-color* "Green")
-(defparameter *sm-background-color* "Black")
-(defparameter *sm-foreground-color* "Red")
-(defparameter *sm-font-string* "9x15bold")
-(defparameter *sm-width* 300)
-(defparameter *sm-height* 25)
+(defparameter *sm-border-color* "Green"
+  "Config(Second mode group): Second mode window border color")
+(defparameter *sm-background-color* "Black"
+  "Config(Second mode group): Second mode window background color")
+(defparameter *sm-foreground-color* "Red"
+  "Config(Second mode group): Second mode window foreground color")
+(defparameter *sm-font-string* "9x15bold"
+  "Config(Second mode group): Second mode window font string")
+(defparameter *sm-width* 300
+  "Config(Second mode group): Second mode window width")
+(defparameter *sm-height* 25
+  "Config(Second mode group): Second mode window height")
 
 
 
 
 
 ;;; CONFIG - Identify key colors
-(defparameter *identify-font-string* "9x15")
-(defparameter *identify-background* "black")
-(defparameter *identify-foreground* "green")
-(defparameter *identify-border* "red")
+(defparameter *identify-font-string* "9x15"
+  "Config(Identify key group): Identify window font string")
+(defparameter *identify-background* "black"
+  "Config(Identify key group): Identify window background color")
+(defparameter *identify-foreground* "green"
+  "Config(Identify key group): Identify window foreground color")
+(defparameter *identify-border* "red"
+  "Config(Identify key group): Identify window border color")
 
 ;;; CONFIG - Query string colors
-(defparameter *query-font-string* "9x15")
-(defparameter *query-background* "black")
-(defparameter *query-foreground* "green")
-(defparameter *query-border* "red")
+(defparameter *query-font-string* "9x15"
+  "Config(Query string group): Query string window font string")
+(defparameter *query-background* "black"
+  "Config(Query string group): Query string window background color")
+(defparameter *query-foreground* "green"
+  "Config(Query string group): Query string window foreground color")
+(defparameter *query-border* "red"
+  "Config(Query string group): Query string window border color")
 
 
 ;;; CONFIG - Info mode
+(defparameter *info-background* "black"
+  "Config(Info mode group): Info window background color")
+(defparameter *info-foreground* "green"
+  "Config(Info mode group): Info window foreground color")
+(defparameter *info-border* "red"
+  "Config(Info mode group): Info window border color")
+(defparameter *info-line-cursor* "white"
+  "Config(Info mode group): Info window line cursor color color")
+(defparameter *info-font-string* "9x15"
+  "Config(Info mode group): Info window font string")
 
-(defparameter *info-background* "black")
-(defparameter *info-foreground* "green")
-(defparameter *info-border* "red")
-(defparameter *info-line-cursor* "white")
-(defparameter *info-font-string* "9x15")
+;;; CONFIG - Show key binding colors
+(defparameter *info-color-title* "Magenta"
+  "Config(Info mode group): Colored info title color")
+(defparameter *info-color-underline* "Yellow"
+  "Config(Info mode group): Colored info underline color")
+(defparameter *info-color-first* "Cyan"
+  "Config(Info mode group): Colored info first color")
+(defparameter *info-color-second* "lightblue"
+  "Config(Info mode group): Colored info second color")
+
+
+;;; CONFIG - Menu colors
+;;; Set *info-foreground* to change the default menu foreground
+(defparameter *menu-color-submenu* "Cyan"
+  "Config(Menu group): Submenu color in menu")
+(defparameter *menu-color-comment* "Yellow"
+  "Config(Menu group): Comment color in menu")
+(defparameter *menu-color-key* "Magenta"
+  "Config(Menu group): Key color in menu")
+(defparameter *menu-color-menu-key* (->color #xFF9AFF)
+  "Config(Menu group): Menu key color in menu")
 
 
 
-;;; Tiling to side parameters
-(defparameter *tile-workspace-function* 'tile-workspace-top)
-(defparameter *tile-border-size* 200)
+

@@ -110,6 +110,7 @@
 
 (define-second-key ("Tab" :mod-1) 'select-next-child)
 (define-second-key ("Tab" :mod-1 :shift) 'select-previous-child)
+(define-second-key (#\Tab :shift) 'switch-to-last-child)
 
 (define-second-key ("Return" :mod-1) 'enter-frame)
 (define-second-key ("Return" :mod-1 :shift) 'leave-frame)
@@ -183,7 +184,7 @@
 (define-second-key ("0" :mod-1) 'bind-or-jump 10)
 
 
-;; For an azery keyboard:
+;; For a French azery keyboard:
 ;;(undefine-second-multi-keys (#\1 :mod-1) (#\2 :mod-1) (#\3 :mod-1)
 ;;			    (#\4 :mod-1) (#\5 :mod-1) (#\6 :mod-1)
 ;;			    (#\7 :mod-1) (#\8 :mod-1) (#\9 :mod-1) (#\0 :mod-1))
@@ -203,21 +204,24 @@
 ;;; Mouse action
 (defun sm-mouse-click-to-focus-and-move (window root-x root-y)
   "Move and focus the current child - Create a new frame on the root window.
-On *present-windows-corner*: Present windows in the current root.
-On *present-all-windows-corner*: Present all windows in all frames."
+Or do corners actions"
   (declare (ignore window))
-  (or (have-to-present-windows root-x root-y)
-      (have-to-present-all-windows root-x root-y)
+  (or (do-corner-action root-x root-y *corner-second-mode-left-button*)
       (mouse-focus-move/resize-generic root-x root-y #'move-frame nil)))
 
 (defun sm-mouse-click-to-focus-and-resize (window root-x root-y)
   "Resize and focus the current child - Create a new frame on the root window.
-On *present-windows-corner*: Present windows in the current root.
-On *present-all-windows-corner*: Present all windows in all frames."
+Or do corners actions"
   (declare (ignore window))
-  (or (have-to-present-windows root-x root-y)
-      (have-to-present-all-windows root-x root-y)
+  (or (do-corner-action root-x root-y *corner-second-mode-right-button*)
       (mouse-focus-move/resize-generic root-x root-y #'resize-frame nil)))
+
+(defun sm-mouse-middle-click (window root-x root-y)
+  "Do actions on corners"
+  (declare (ignore window))
+  (or (do-corner-action root-x root-y *corner-second-mode-middle-button*)
+      (replay-button-event)))
+
 
 
 
@@ -264,6 +268,7 @@ On *present-all-windows-corner*: Present all windows in all frames."
 
 
 (define-second-mouse (1) 'sm-mouse-click-to-focus-and-move)
+(define-second-mouse (2) 'sm-mouse-middle-click)
 (define-second-mouse (3) 'sm-mouse-click-to-focus-and-resize)
 
 (define-second-mouse (1 :mod-1) 'sm-mouse-click-to-focus-and-move-window)

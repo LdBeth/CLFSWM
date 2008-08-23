@@ -43,14 +43,29 @@
 
 
 (defun draw-info-window (info)
-  (clear-pixmap-buffer (info-window info) (info-gc info))
-  (loop for line in (info-list info)
-     for y from 0 do
-     (xlib:draw-glyphs *pixmap-buffer* (info-gc info)
-		       (- (info-ilw info) (info-x info))
-		       (- (+ (* (info-ilh info) y) (info-ilh info)) (info-y info))
-		       (format nil "~A" line)))
-  (copy-pixmap-buffer (info-window info) (info-gc info)))
+  (labels ((print-line (line posx posy &optional (color *info-foreground*))
+	     (setf (xlib:gcontext-foreground (info-gc info)) (get-color color))
+	     (xlib:draw-glyphs *pixmap-buffer* (info-gc info)
+			 (- (+ (info-ilw info) (* posx (info-ilw info))) (info-x info))
+			 (- (+ (* (info-ilh info) posy) (info-ilh info)) (info-y info))
+			 (format nil "~A" line))
+	     (+ posx (length line))))
+    (clear-pixmap-buffer (info-window info) (info-gc info))
+    (loop for line in (info-list info)
+       for y from 0 do
+	 (typecase line
+	   (cons (typecase (first line)
+		   (cons (let ((posx 0))
+			   (dolist (l line)
+			     (typecase l
+			       (cons (setf posx (print-line (first l) posx y (second l))))
+			       (t (setf posx (print-line l posx y)))))))
+		   (t (print-line (first line) 0 y (second line)))))
+	   (t (print-line line 0 y))))
+    (copy-pixmap-buffer (info-window info) (info-gc info))))
+
+    
+
 
 
 ;;;,-----
@@ -178,90 +193,102 @@
 ;;;`-----
 
 (defun info-mode (info-list &key (x 0) (y 0) (width nil) (height nil))
-  "Open the info mode. Info-list is a list of info: One string per line"
-  (when info-list
-    (let* ((pointer-grabbed (xgrab-pointer-p))
-	   (keyboard-grabbed (xgrab-keyboard-p))
-	   (font (xlib:open-font *display* *info-font-string*))
-	   (ilw (xlib:max-char-width font))
-	   (ilh (+ (xlib:max-char-ascent font) (xlib:max-char-descent font) 1))
-	   (window (xlib:create-window :parent *root*
-				       :x x :y y
-				       :width (or width
-						  (min (* (+ (loop for l in info-list maximize (length l)) 2) ilw)
-						       (- (xlib:screen-width *screen*) 2 x)))
-				       :height (or height
-						   (min (+ (* (length info-list) ilh) (/ ilh 2))
-							(- (xlib:screen-height *screen*) 2 y)))
+  "Open the info mode. Info-list is a list of info: One string per line
+Or for colored output: a list (line_string color)
+Or ((1_word color) (2_word color) 3_word (4_word color)...)"
+  (labels ((compute-size (line)
+	     (typecase line
+	       (cons (typecase (first line)
+		       (cons (let ((val 0))
+			       (dolist (l line val)
+				 (incf val (typecase l
+					     (cons (length (first l)))
+					     (t (length l)))))))
+		       (t (length (first line)))))
+	       (t (length line)))))
+    (when info-list
+      (let* ((pointer-grabbed (xgrab-pointer-p))
+	     (keyboard-grabbed (xgrab-keyboard-p))
+	     (font (xlib:open-font *display* *info-font-string*))
+	     (ilw (xlib:max-char-width font))
+	     (ilh (+ (xlib:max-char-ascent font) (xlib:max-char-descent font) 1))
+	     (window (xlib:create-window :parent *root*
+					 :x x :y y
+					 :width (or width
+						    (min (* (+ (loop for l in info-list maximize (compute-size l)) 2) ilw)
+							 (- (xlib:screen-width *screen*) 2 x)))
+					 :height (or height
+						     (min (+ (* (length info-list) ilh) (/ ilh 2))
+							  (- (xlib:screen-height *screen*) 2 y)))
+					 :background (get-color *info-background*)
+					 :colormap (xlib:screen-default-colormap *screen*)
+					 :border-width 1
+					 :border (get-color *info-border*)
+					 :event-mask '(:exposure)))
+	     (gc (xlib:create-gcontext :drawable window
+				       :foreground (get-color *info-foreground*)
 				       :background (get-color *info-background*)
-				       :colormap (xlib:screen-default-colormap *screen*)
-				       :border-width 1
-				       :border (get-color *info-border*)
-				       :event-mask '(:exposure)))
-	   (gc (xlib:create-gcontext :drawable window
-				     :foreground (get-color *info-foreground*)
-				     :background (get-color *info-background*)
-				     :font font
-				     :line-style :solid))
-	   (info (make-info :window window :gc gc :x 0 :y 0 :list info-list
-							    :font font :ilw ilw :ilh ilh
-							    :max-x (* (loop for l in info-list maximize (length l)) ilw)
-							    :max-y (* (length info-list) ilh))))
-      (labels ((handle-key (&rest event-slots &key root code state &allow-other-keys)
-		 (declare (ignore event-slots root))
-		 (funcall-key-from-code *info-keys* code state info))
-	       (handle-motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
-		 (declare (ignore event-slots))
-		 (unless (compress-motion-notify)
-		   (funcall-button-from-code *info-mouse* 'motion 0 window root-x root-y *fun-press* (list info))))
-	       (handle-button-press (&rest event-slots &key window root-x root-y code state &allow-other-keys)
-		 (declare (ignore event-slots))
-		 (funcall-button-from-code *info-mouse* code state window root-x root-y *fun-press* (list info)))
-	       (handle-button-release (&rest event-slots &key window root-x root-y code state &allow-other-keys)
-		 (declare (ignore event-slots))
-		 (funcall-button-from-code *info-mouse* code state window root-x root-y *fun-release* (list info)))
-	       (info-handle-unmap-notify (&rest event-slots)
-		 (apply #'handle-unmap-notify event-slots)
-		 (draw-info-window info))
-	       (info-handle-destroy-notify (&rest event-slots)
-		 (apply #'handle-destroy-notify event-slots)
-		 (draw-info-window info))
-	       (handle-events (&rest event-slots &key display event-key &allow-other-keys)
-		 (declare (ignore display))
-		 (case event-key
-		   (:key-press (apply #'handle-key event-slots) t)
-		   (:button-press (apply #'handle-button-press event-slots) t)
-		   (:button-release (apply #'handle-button-release event-slots) t)
-		   (:motion-notify (apply #'handle-motion-notify event-slots) t)
-		   (:map-request nil)
-		   (:unmap-notify (apply #'info-handle-unmap-notify event-slots) t)
-		   (:destroy-notify (apply #'info-handle-destroy-notify event-slots) t)
-		   (:mapping-notify nil)
-		   (:property-notify nil)
-		   (:create-notify nil)
-		   (:enter-notify nil)
-		   (:exposure (draw-info-window info)))
-		 t))
-	(xlib:map-window window)
-	(draw-info-window info)
-	(xgrab-pointer *root* 68 69)
-	(unless keyboard-grabbed
-	  (xgrab-keyboard *root*))
-	(unwind-protect
-	     (catch 'exit-info-loop
-	       (loop
-		  (xlib:display-finish-output *display*)
-		  (xlib:process-event *display* :handler #'handle-events)))
-	  (if pointer-grabbed
-	      (xgrab-pointer *root* 66 67)
-	      (xungrab-pointer))
+				       :font font
+				       :line-style :solid))
+	     (info (make-info :window window :gc gc :x 0 :y 0 :list info-list
+			      :font font :ilw ilw :ilh ilh
+			      :max-x (* (loop for l in info-list maximize (compute-size l)) ilw)
+			      :max-y (* (length info-list) ilh))))
+	(labels ((handle-key (&rest event-slots &key root code state &allow-other-keys)
+		   (declare (ignore event-slots root))
+		   (funcall-key-from-code *info-keys* code state info))
+		 (handle-motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
+		   (declare (ignore event-slots))
+		   (unless (compress-motion-notify)
+		     (funcall-button-from-code *info-mouse* 'motion 0 window root-x root-y *fun-press* (list info))))
+		 (handle-button-press (&rest event-slots &key window root-x root-y code state &allow-other-keys)
+		   (declare (ignore event-slots))
+		   (funcall-button-from-code *info-mouse* code state window root-x root-y *fun-press* (list info)))
+		 (handle-button-release (&rest event-slots &key window root-x root-y code state &allow-other-keys)
+		   (declare (ignore event-slots))
+		   (funcall-button-from-code *info-mouse* code state window root-x root-y *fun-release* (list info)))
+		 (info-handle-unmap-notify (&rest event-slots)
+		   (apply #'handle-unmap-notify event-slots)
+		   (draw-info-window info))
+		 (info-handle-destroy-notify (&rest event-slots)
+		   (apply #'handle-destroy-notify event-slots)
+		   (draw-info-window info))
+		 (handle-events (&rest event-slots &key display event-key &allow-other-keys)
+		   (declare (ignore display))
+		   (case event-key
+		     (:key-press (apply #'handle-key event-slots) t)
+		     (:button-press (apply #'handle-button-press event-slots) t)
+		     (:button-release (apply #'handle-button-release event-slots) t)
+		     (:motion-notify (apply #'handle-motion-notify event-slots) t)
+		     (:map-request nil)
+		     (:unmap-notify (apply #'info-handle-unmap-notify event-slots) t)
+		     (:destroy-notify (apply #'info-handle-destroy-notify event-slots) t)
+		     (:mapping-notify nil)
+		     (:property-notify nil)
+		     (:create-notify nil)
+		     (:enter-notify nil)
+		     (:exposure (draw-info-window info)))
+		   t))
+	  (xlib:map-window window)
+	  (draw-info-window info)
+	  (xgrab-pointer *root* 68 69)
 	  (unless keyboard-grabbed
-	    (xungrab-keyboard))
-	  (xlib:free-gcontext gc)
-	  (xlib:destroy-window window)
-	  (xlib:close-font font)
-	  (display-all-frame-info)
-	  (wait-no-key-or-button-press))))))
+	    (xgrab-keyboard *root*))
+	  (unwind-protect
+	       (catch 'exit-info-loop
+		 (loop
+		    (xlib:display-finish-output *display*)
+		    (xlib:process-event *display* :handler #'handle-events)))
+	    (if pointer-grabbed
+		(xgrab-pointer *root* 66 67)
+		(xungrab-pointer))
+	    (unless keyboard-grabbed
+	      (xungrab-keyboard))
+	    (xlib:free-gcontext gc)
+	    (xlib:destroy-window window)
+	    (xlib:close-font font)
+	    (display-all-frame-info)
+	    (wait-no-key-or-button-press)))))))
 
 
 
@@ -273,30 +300,39 @@
 Item-list is: '((key function) separator (key function))
 or with explicit docstring: '((key function \"documentation 1\") (key function \"bla bla\") (key function)) 
 key is a character, a keycode or a keysym
-Separator is a string or a symbol (all but a list)"
+Separator is a string or a symbol (all but a list)
+Function can be a function or a list (function color) for colored output"
   (let ((info-list nil)
 	(action nil))
-    (dolist (item item-list)
-      (typecase item
-	(cons (destructuring-bind (key function explicit-doc) (ensure-n-elems item 3)
-		(push (format nil "~@(~A~): ~A" key (or explicit-doc
-							(documentation function 'function)))
-		      info-list)
-		(define-info-key-fun (list key 0)
-		    (lambda (&optional args)
-		      (declare (ignore args))
-		      (setf action function)
-		      (throw 'exit-info-loop nil)))))
-	(t (push (format nil "-=- ~A -=-" item) info-list))))
-    (info-mode (nreverse info-list) :x x :y y :width width :height height)
-    (dolist (item item-list)
-      (when (consp item)
-	(let ((key (first item)))
-	  (undefine-info-key-fun (list key 0)))))
-    (typecase action
-      (function (funcall action))
-      (symbol (when (fboundp action)
-		(funcall action))))))
+    (labels ((define-key (key function)
+	       (define-info-key-fun (list key 0)
+		   (lambda (&optional args)
+		     (declare (ignore args))
+		     (setf action function)
+		     (throw 'exit-info-loop nil)))))
+      (dolist (item item-list)
+	(typecase item
+	  (cons (destructuring-bind (key function explicit-doc) (ensure-n-elems item 3)
+		  (typecase function
+		    (cons (push (list (list (format nil "~A" key) *menu-color-menu-key*)
+				      (list (format nil ": ~A" (or explicit-doc (documentation (first function) 'function)))
+					    (second function)))
+				info-list)
+			  (define-key key (first function)))
+		    (t (push (list (list (format nil "~A" key) *menu-color-key*)
+				   (format nil ": ~A" (or explicit-doc (documentation function 'function))))
+			     info-list)
+		       (define-key key function)))))
+	  (t (push (list (format nil "-=- ~A -=-" item) *menu-color-comment*) info-list))))
+      (info-mode (nreverse info-list) :x x :y y :width width :height height)
+      (dolist (item item-list)
+	(when (consp item)
+	  (let ((key (first item)))
+	    (undefine-info-key-fun (list key 0)))))
+      (typecase action
+	(function (funcall action))
+	(symbol (when (fboundp action)
+		  (funcall action)))))))
 
 
 
@@ -306,27 +342,31 @@ Separator is a string or a symbol (all but a list)"
   "Produce a key menu based on list item"
   (loop for l in list
      for i from 0
-     collect (list (code-char (+ (char-code #\a) i)) l)))
+     collect (list (number->char i) l)))
 
 
 ;;;,-----
 ;;;| CONFIG - Info mode functions
 ;;;`-----
-(defun append-space (string)
-  "Append spaces before Newline on each line"
-  (with-output-to-string (stream)
-    (loop for c across string do
-	 (when (equal c #\Newline)
-	   (princ " " stream))
-	 (princ c stream))))
-
+(defun key-binding-colorize-line (list)
+  (loop :for line :in list
+     :collect (cond ((search "* CLFSWM Keys *" line) (list line *info-color-title*))
+		    ((search "---" line) (list line *info-color-underline*))
+		    ((begin-with-2-spaces line)
+		     (list (list (subseq line 0 22) *info-color-second*)
+			   (list (subseq line 22 35) *info-color-first*)
+			   (subseq line 35)))
+		    (t line))))
+     
 
 (defun show-key-binding (&rest hash-table-key)
   "Show the binding of each hash-table-key"
-  (info-mode (split-string (append-space (with-output-to-string (stream)
-					   (produce-doc hash-table-key
-							stream)))
-			   #\Newline)))
+  (info-mode (key-binding-colorize-line
+	      (split-string (append-newline-space
+			     (with-output-to-string (stream)
+			       (produce-doc hash-table-key
+					    stream)))
+			    #\Newline))))
 
 
 (defun show-global-key-binding ()
@@ -343,41 +383,105 @@ Separator is a string or a symbol (all but a list)"
   (show-key-binding *second-keys* *second-mouse*))
 
 
+
+(defun corner-help-colorize-line (list)
+  (loop :for line :in list
+     :collect (cond ((search "CLFSWM:" line) (list line *info-color-title*))
+		    ((search "*:" line) (list line *info-color-underline*))
+		    ((begin-with-2-spaces line)
+		     (let ((pos (position #\: line)))
+		       (if pos
+			   (list (list (subseq line 0 (1+ pos)) *info-color-first*)
+				 (subseq line (1+ pos)))
+			   line)))		       
+		    (t line))))
+
+(defun show-corner-help ()
+  "Help on clfswm corner"
+  (info-mode (corner-help-colorize-line
+	      (split-string (append-newline-space
+			     (with-output-to-string (stream)
+			       (produce-corner-doc stream)))
+			    #\Newline))))
+
+
+(defun configuration-variable-colorize-line (list)
+  (loop :for line :in list
+     :collect (cond ((search "CLFSWM " line) (list line *info-color-title*))
+		    ((search "* =" line)
+		     (let ((pos (position #\= line)))
+		       (list (list (subseq line 0 (1+ pos)) *info-color-first*)
+			     (list (subseq line (1+ pos)) *info-color-second*))))
+		    ((search "<=" line) (list line *info-color-underline*))
+		    (t line))))
+
+
+(defun show-config-variable ()
+  "Show all configurable variables"
+  (let ((all-groups nil)
+	(result nil))
+    (with-all-internal-symbols (symbol :clfswm)
+      (when (is-config-p symbol)
+	(pushnew (config-group symbol) all-groups :test #'string-equal)))
+    (labels ((rec ()
+	       (setf result nil)
+	       (info-mode-menu (loop :for group :in all-groups
+				  :for i :from 0
+				  :collect (list (number->char i)
+						 (let ((group group))
+						   (lambda ()
+						     (setf result group)))
+						 group)))
+	       (when result
+		 (info-mode (configuration-variable-colorize-line
+			     (split-string (append-newline-space
+					    (with-output-to-string (stream)
+					      (produce-configuration-variables stream result)))
+					   #\Newline)))
+		 (rec))))
+      (rec))))
+
+
+
+
 (defun show-date ()
   "Show the current time and date"
-  (info-mode (list (date-string))))
+  (info-mode (list (list `("Current date:" ,*menu-color-comment*) (date-string)))))
 
 
 
 
 
 
-(defun info-on-shell (program)
+(defun info-on-shell (msg program)
   (let ((lines (do-shell program nil t)))
-    (info-mode (loop for line = (read-line lines nil nil)
-		  while line
-		  collect line))))
+    (info-mode (append (list (list msg *menu-color-comment*))
+		       (loop for line = (read-line lines nil nil)
+			  while line
+			  collect line)))))
 
 
 (defun show-cpu-proc ()
   "Show current processes sorted by CPU usage"
-  (info-on-shell "ps --cols=1000 --sort='-%cpu,uid,pgid,ppid,pid' -e -o user,pid,stime,pcpu,pmem,args"))
+  (info-on-shell "Current processes sorted by CPU usage:"
+		 "ps --cols=1000 --sort='-%cpu,uid,pgid,ppid,pid' -e -o user,pid,stime,pcpu,pmem,args"))
 
 (defun show-mem-proc ()
   "Show current processes sorted by memory usage"
-  (info-on-shell "ps --cols=1000 --sort='-vsz,uid,pgid,ppid,pid' -e -o user,pid,stime,pcpu,pmem,args"))
+  (info-on-shell "Current processes sorted by MEMORY usage:"
+		 "ps --cols=1000 --sort='-vsz,uid,pgid,ppid,pid' -e -o user,pid,stime,pcpu,pmem,args"))
 
 (defun show-xmms-status ()
   "Show the current xmms status"
-  (info-on-shell "xmms-shell -e status"))
+  (info-on-shell "XMMS status:" "xmms-shell -e status"))
 
 (defun show-xmms-playlist ()
   "Show the current xmms playlist"
-  (info-on-shell "xmms-shell -e list"))
+  (info-on-shell "XMMS Playlist:" "xmms-shell -e list"))
 
 
 (defun xmms-info-menu ()
-  "Open the xmms menu"
+  "< Open the xmms menu >"
   (info-mode-menu '((#\s show-xmms-status)
 		    (#\l show-xmms-playlist))))
 
@@ -385,14 +489,14 @@ Separator is a string or a symbol (all but a list)"
 
 (defun show-cd-info ()
   "Show the current CD track"
-  (info-on-shell "pcd i"))
+  (info-on-shell "Current CD track:" "pcd i"))
 
 (defun show-cd-playlist ()
   "Show the current CD playlist"
-  (info-on-shell "pcd mi"))
+  (info-on-shell "Current CD playlist:" "pcd mi"))
 
 (defun info-on-cd-menu ()
-  "Open the CD info menu"
+  "< Open the CD info menu >"
   (info-mode-menu '((#\i show-cd-info)
 		    (#\l show-cd-playlist))))
 
@@ -401,28 +505,33 @@ Separator is a string or a symbol (all but a list)"
   "Show the current CLFSWM version"
   (info-mode (list *version*)))
 
+
 (defun help-on-clfswm ()
   "Open the help and info window"
-  (info-mode-menu '((#\h show-global-key-binding)
+  (info-mode-menu `((#\h show-global-key-binding)
 		    (#\b show-main-mode-key-binding)
-		    (#\t show-date)
-		    (#\c show-cpu-proc)
+		    (#\c show-corner-help)
+		    (#\g show-config-variable)
+		    (#\d show-date)
+		    (#\p show-cpu-proc)
 		    (#\m show-mem-proc)
-		    (#\x xmms-info-menu)
+		    (#\x (xmms-info-menu ,*menu-color-submenu*))
 		    (#\v show-version)
-		    (#\d info-on-cd-menu))))
+		    (#\i (info-on-cd-menu ,*menu-color-submenu*)))))
 
 
 (defun help-on-second-mode ()
   "Open the help and info window for the second mode"
-  (info-mode-menu '((#\h show-global-key-binding)
+  (info-mode-menu `((#\h show-global-key-binding)
 		    (#\b show-second-mode-key-binding)
-		    (#\t show-date)
-		    (#\c show-cpu-proc)
+		    (#\c show-corner-help)
+		    (#\g show-config-variable)
+		    (#\d show-date)
+		    (#\p show-cpu-proc)
 		    (#\m show-mem-proc)
-		    (#\x xmms-info-menu)
+		    (#\x (xmms-info-menu ,*menu-color-submenu*))
 		    (#\v show-version)
-		    (#\d info-on-cd-menu))))
+		    (#\i (info-on-cd-menu ,*menu-color-submenu*)))))
 
 
 

@@ -139,18 +139,18 @@
 
 
 ;;; CONFIG: Main mode hooks
-(setf *key-press-hook* #'handle-key-press
-      *configure-request-hook* #'handle-configure-request
-      *configure-notify-hook* #'handle-configure-notify
-      *destroy-notify-hook* #'handle-destroy-notify
-      *enter-notify-hook* #'handle-enter-notify
-      *exposure-hook* #'handle-exposure
-      *map-request-hook* #'handle-map-request
-      *unmap-notify-hook* #'handle-unmap-notify
-      *create-notify-hook* #'handle-create-notify
-      *button-press-hook* #'handle-button-press
-      *button-release-hook* #'handle-button-release
-      *motion-notify-hook* #'handle-motion-notify)
+(setf *key-press-hook* 'handle-key-press
+      *configure-request-hook* 'handle-configure-request
+      *configure-notify-hook* 'handle-configure-notify
+      *destroy-notify-hook* 'handle-destroy-notify
+      *enter-notify-hook* 'handle-enter-notify
+      *exposure-hook* 'handle-exposure
+      *map-request-hook* 'handle-map-request
+      *unmap-notify-hook* 'handle-unmap-notify
+      *create-notify-hook* 'handle-create-notify
+      *button-press-hook* 'handle-button-press
+      *button-release-hook* 'handle-button-release
+      *motion-notify-hook* 'handle-motion-notify)
 
 
 
@@ -192,6 +192,14 @@
 	  (getenv "DISPLAY") display-str)))
 
 
+
+(defun default-init-hook ()
+  (let ((frame (add-frame (create-frame :name "Default"
+                                        :layout nil :x 0.05 :y 0.05
+                                        :w 0.9 :h 0.9) *root-frame*)))
+    (setf *current-child* frame)))
+
+
 (defun init-display ()
   (setf *screen* (first (xlib:display-roots *display*))
 	*root* (xlib:screen-root *screen*)
@@ -203,6 +211,9 @@
 					    :drawable *root*))
   (xgrab-init-pointer)
   (xgrab-init-keyboard)
+  (init-last-child)
+  (init-virtual-keyboard)
+  (init-clfswm-terminal)
   (xlib:map-window *no-focus-window*)
   (dbg *display*)
   (setf (xlib:window-event-mask *root*) (xlib:make-event-mask :substructure-redirect

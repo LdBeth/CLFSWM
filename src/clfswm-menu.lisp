@@ -102,9 +102,11 @@
 	(action nil))
     (dolist (item (menu-item menu))
       (let ((value (menu-item-value item)))
-	(push (format nil "~A: ~A" (menu-item-key item) (typecase value
-							  (menu (format nil "< ~A >" (menu-doc value)))
-							  (t (documentation value 'function))))
+	(push (typecase value
+		(menu (list (list (format nil "~A" (menu-item-key item)) *menu-color-menu-key*)
+			    (list (format nil ": < ~A >" (menu-doc value)) *menu-color-submenu*)))
+		(t (list (list (format nil "~A" (menu-item-key item)) *menu-color-key*)
+			 (format nil ": ~A" (documentation value 'function)))))
 	      info-list)
 	(define-info-key-fun (list (menu-item-key item) 0)
 	    (lambda (&optional args)

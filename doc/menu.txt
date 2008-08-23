@@ -35,24 +35,31 @@ a: Add a default frame in the current frame
 p: Add a placed frame in the current frame
 
 Frame-Layout-Menu
+*: < Frame fast layout menu >
 a: Maximize windows in there frame - leave frame to there size (no layout)
-b: Tile child in its frame
-c: Tile Left: main child on left and others on right
-d: Tile Right: main child on right and others on left
-e: Tile Top: main child on top and others on bottom
-f: Tile Bottom: main child on bottom and others on top
-g: Tile Space: tile child in its frame leaving spaces between them
-h: Tile Left Space: main child on left and others on right. Leave some space on the left.
+b: Tile child in its frame (vertical)
+c:  Tile child in its frame (horizontal)
+d: Tile Space: tile child in its frame leaving spaces between them
+e: Tile Left: main child on left and others on right
+f:   Tile Right: main child on right and others on left
+g:   Tile Top: main child on top and others on bottom
+h:   Tile Bottom: main child on bottom and others on top
+i: Tile Left Space: main child on left and others on right. Leave some space on the left.
+
+Frame-Fast-Layout-Menu
+a: Switch between two layouts
+b: Define the two fast layouts
 
 Frame-Layout-Once-Menu
 a: Maximize windows in there frame - leave frame to there size (no layout)
-b: Tile child in its frame
-c: Tile Left: main child on left and others on right
-d: Tile Right: main child on right and others on left
-e: Tile Top: main child on top and others on bottom
-f: Tile Bottom: main child on bottom and others on top
-g: Tile Space: tile child in its frame leaving spaces between them
-h: Tile Left Space: main child on left and others on right. Leave some space on the left.
+b: Tile child in its frame (vertical)
+c:  Tile child in its frame (horizontal)
+d: Tile Space: tile child in its frame leaving spaces between them
+e: Tile Left: main child on left and others on right
+f:   Tile Right: main child on right and others on left
+g:   Tile Top: main child on top and others on bottom
+h:   Tile Bottom: main child on bottom and others on top
+i: Tile Left Space: main child on left and others on right. Leave some space on the left.
 
 Frame-Nw-Hook-Menu
 a: Open the next window in the current frame

@@ -1,3 +1,54 @@
+2008-08-23  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-info.lisp (show-config-variable): New function.
+
+2008-08-19  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-layout.lisp (tile-horizontal-layout): New layout.
+
+	* src/clfswm-info.lisp: Colored help for key binding and corners
+	actions.
+
+2008-08-18  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (delete-focus-window)
+	(destroy-focus-window): Remove chid only in 
+	handle-unmap/destroy-notify. Focus *current-root* only when
+	closing/killing the current child.
+
+	* src/clfswm-autodoc.lisp (produce-corner-*-doc): New autodoc
+	functions or corners.
+
+2008-08-17  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-corner.lisp (present-clfswm-terminal): New corner
+	action: Hide/Unhide a terminal on mouse corner action. (By default
+	right mouse button on the top left corner).
+
+	* src/config.lisp (*never-managed-window-list*): New config
+	variable.
+
+	* src/clfswm-internal.lisp (never-managed-window-p): New function:
+	Handle never managed window in a more simple way.
+
+	* src/clfswm-corner.lisp: New file and new and more simple method
+	to define corners actions.
+
+2008-08-15  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-info.lisp (info-mode): Info line can now be colored.
+
+	* src/clfswm-layout.lisp (fast-layout-switch)
+	(define-fast-layout-switch): New functions: Switch between two
+	layouts.
+
+	* src/clfswm-second-mode.lisp (leave-second-mode): Takes care if
+	really in the second mode. So leave-second-mode can be used even
+	in the main mode.
+
+	* src/clfswm-util.lisp (switch-to-last-child): New function:
+	Store the current child and switch to the previous one.
+
 2008-07-16  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (display-current-window-info): Display the

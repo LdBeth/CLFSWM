@@ -91,6 +91,50 @@
 
 
 
+(defun fast-layout-switch ()
+  "Switch between two layouts"
+  (when (frame-p *current-child*)
+    (with-slots (layout) *current-child*
+      (let* ((layout-list (frame-data-slot *current-child* :fast-layout))
+	     (first-layout (symbol-function (first layout-list)))
+	     (second-layout (symbol-function (second layout-list))))
+	(setf layout (if (eql layout first-layout)
+			 second-layout
+			 first-layout))
+	(leave-second-mode)))))
+
+(defun define-fast-layout-switch ()
+  "Define the two fast layouts"
+  (when (frame-p *current-child*)
+    (labels ((ask-new-layout (msg)
+	       (let* ((new-layout nil)
+		      (menu-list (loop :for item :in (rest (menu-item (find-menu 'frame-layout-menu)))
+				    :for i :from 0
+				    :as fun-name = (intern (subseq (format nil "~A" (menu-item-value item)) 4) :clfswm)
+				    :as fun = (let ((nl fun-name))
+						(lambda () (setf new-layout nl)))
+				    :collect (list (code-char (+ (char-code #\a) i)) fun (documentation fun-name 'function)))))
+		 (push msg menu-list)
+		 (info-mode-menu menu-list)
+		 new-layout)))
+      (let* ((layout-list (frame-data-slot *current-child* :fast-layout))
+	     (first-layout (first layout-list))
+	     (second-layout (second layout-list)))
+	(awhen (ask-new-layout (format nil "Please, choose the first layout (last: ~:(~A~))" first-layout))
+	  (setf first-layout it))
+	(awhen (ask-new-layout (format nil "Please, choose the second layout (last: ~:(~A~))" second-layout))
+	  (setf second-layout it))
+	(setf (frame-data-slot *current-child* :fast-layout)
+	      (list first-layout second-layout))))
+    (leave-second-mode)))
+
+
+(add-sub-menu 'frame-layout-menu #\* 'frame-fast-layout-menu "Frame fast layout menu")
+(add-menu-key 'frame-fast-layout-menu "a" 'fast-layout-switch)
+(add-menu-key 'frame-fast-layout-menu "b" 'define-fast-layout-switch)
+
+
+
 ;;; No layout
 (defgeneric no-layout (child parent)
   (:documentation "Maximize windows in there frame - leave frame to there size (no layout)"))
@@ -121,7 +165,7 @@
 
 ;;; Tile layout
 (defgeneric tile-layout (child parent)
-  (:documentation "Tile child in its frame"))
+  (:documentation "Tile child in its frame (vertical)"))
 
 (defmethod tile-layout (child parent)
   (let* ((managed-children (get-managed-child parent))
@@ -136,17 +180,66 @@
 	    (round (- dy 2)))))
 
 (defun set-tile-layout ()
-  "Tile child in its frame"
+  "Tile child in its frame (vertical)"
   (set-layout #'tile-layout))
 
 (register-layout 'set-tile-layout)
 
 
-;;; Tile Left
-(defgeneric tile-left-layout (child parent)
-  (:documentation "Tile Left: main child on left and others on right"))
+(defgeneric tile-horizontal-layout (child parent)
+  (:documentation "Tile child in its frame (horizontal)"))
 
-(defmethod tile-left-layout (child parent)
+(defmethod tile-horizontal-layout (child parent)
+  (let* ((managed-children (get-managed-child parent))
+	 (pos (position child managed-children))
+	 (len (length managed-children))
+	 (n (ceiling (sqrt len)))
+	 (dx (/ (frame-rw parent) (ceiling (/ len n))))
+	 (dy (/ (frame-rh parent) n)))
+    (values (round (+ (frame-rx parent) (truncate (* (truncate (/ pos n)) dx)) 1))
+	    (round (+ (frame-ry parent) (truncate (* (mod pos n) dy)) 1))
+	    (round (- dx 2))
+	    (round (- dy 2)))))
+
+(defun set-tile-horizontal-layout ()
+  " Tile child in its frame (horizontal)"
+  (set-layout #'tile-horizontal-layout))
+
+(register-layout 'set-tile-horizontal-layout)
+
+
+
+
+
+;;; Space layout
+(defun tile-space-layout (child parent)
+  "Tile Space: tile child in its frame leaving spaces between them"
+  (with-slots (rx ry rw rh) parent
+    (let* ((managed-children (get-managed-child parent))
+	   (pos (position child managed-children))
+	   (len (length managed-children))
+	   (n (ceiling (sqrt len)))
+	   (dx (/ rw n))
+	   (dy (/ rh (ceiling (/ len n))))
+	   (size (or (frame-data-slot parent :tile-space-size) 0.1)))
+      (when (> size 0.5) (setf size 0.45))
+      (values (round (+ rx (truncate (* (mod pos n) dx)) (* dx size) 1))
+	      (round (+ ry (truncate (* (truncate (/ pos n)) dy)) (* dy size) 1))
+	      (round (- dx (* dx size 2) 2))
+	      (round (- dy (* dy size 2) 2))))))
+
+(defun set-tile-space-layout ()
+  "Tile Space: tile child in its frame leaving spaces between them"
+  (layout-ask-size "Space size in percent (%)" :tile-space-size 10)
+  (set-layout #'tile-space-layout))
+
+(register-layout 'set-tile-space-layout)
+
+
+
+;;; Tile Left
+(defun tile-left-layout (child parent)
+  "Tile Left: main child on left and others on right"
   (with-slots (rx ry rw rh) parent
     (let* ((managed-children (get-managed-child parent))
 	   (pos (position child managed-children))
@@ -176,10 +269,8 @@
 
 
 ;;; Tile right
-(defgeneric tile-right-layout (child parent)
-  (:documentation "Tile Right: main child on right and others on left"))
-
-(defmethod tile-right-layout (child parent)
+(defun tile-right-layout (child parent)
+  "Tile Right: main child on right and others on left"
   (with-slots (rx ry rw rh) parent
     (let* ((managed-children (get-managed-child parent))
 	   (pos (position child managed-children))
@@ -200,7 +291,7 @@
 
 
 (defun set-tile-right-layout ()
-  "Tile Right: main child on right and others on left"
+  "  Tile Right: main child on right and others on left"
   (layout-ask-size "Tile size in percent (%)" :tile-size)
   (set-layout #'tile-right-layout))
 
@@ -211,10 +302,8 @@
 
 
 ;;; Tile Top
-(defgeneric tile-top-layout (child parent)
-  (:documentation "Tile Top: main child on top and others on bottom"))
-
-(defmethod tile-top-layout (child parent)
+(defun tile-top-layout (child parent)
+  "Tile Top: main child on top and others on bottom"
   (with-slots (rx ry rw rh) parent
     (let* ((managed-children (get-managed-child parent))
 	   (pos (position child managed-children))
@@ -235,7 +324,7 @@
 
 
 (defun set-tile-top-layout ()
-  "Tile Top: main child on top and others on bottom"
+  "  Tile Top: main child on top and others on bottom"
   (layout-ask-size "Tile size in percent (%)" :tile-size)
   (set-layout #'tile-top-layout))
 
@@ -244,10 +333,8 @@
 
 
 ;;; Tile Bottom
-(defgeneric tile-bottom-layout (child parent)
-  (:documentation "Tile Bottom: main child on bottom and others on top"))
-
-(defmethod tile-bottom-layout (child parent)
+(defun tile-bottom-layout (child parent)
+  "Tile Bottom: main child on bottom and others on top"
   (with-slots (rx ry rw rh) parent
     (let* ((managed-children (get-managed-child parent))
 	   (pos (position child managed-children))
@@ -269,43 +356,12 @@
 
 
 (defun set-tile-bottom-layout ()
-  "Tile Bottom: main child on bottom and others on top"
+  "  Tile Bottom: main child on bottom and others on top"
   (layout-ask-size "Tile size in percent (%)" :tile-size)
   (set-layout #'tile-bottom-layout))
 
 
 (register-layout 'set-tile-bottom-layout)
-
-
-
-
-
-;;; Space layout
-(defgeneric tile-space-layout (child parent)
-  (:documentation "Tile Space: tile child in its frame leaving spaces between them"))
-
-(defmethod tile-space-layout (child parent)
-  (with-slots (rx ry rw rh) parent
-    (let* ((managed-children (get-managed-child parent))
-	   (pos (position child managed-children))
-	   (len (length managed-children))
-	   (n (ceiling (sqrt len)))
-	   (dx (/ rw n))
-	   (dy (/ rh (ceiling (/ len n))))
-	   (size (or (frame-data-slot parent :tile-space-size) 0.1)))
-      (when (> size 0.5) (setf size 0.45))
-      (values (round (+ rx (truncate (* (mod pos n) dx)) (* dx size) 1))
-	      (round (+ ry (truncate (* (truncate (/ pos n)) dy)) (* dy size) 1))
-	      (round (- dx (* dx size 2) 2))
-	      (round (- dy (* dy size 2) 2))))))
-
-(defun set-tile-space-layout ()
-  "Tile Space: tile child in its frame leaving spaces between them"
-  (layout-ask-size "Space size in percent (%)" :tile-space-size 10)
-  (set-layout #'tile-space-layout))
-
-(register-layout 'set-tile-space-layout)
-
 
 
 
@@ -320,11 +376,8 @@
       (setf (frame-data-slot *current-child* slot) new-space))))
 
 
-(defgeneric tile-left-space-layout (child parent)
-  (:documentation "Tile Left Space: main child on left and others on right. Leave some space on the left."))
-
-;;; TODO: if only one window -> max in its frame
-(defmethod tile-left-space-layout (child parent)
+(defun tile-left-space-layout (child parent)
+  "Tile Left Space: main child on left and others on right. Leave some space on the left."
   (with-slots (rx ry rw rh) parent
     (let* ((managed-children (get-managed-child parent))
 	   (pos (position child managed-children))

@@ -49,7 +49,6 @@
     (leave-second-mode)))
 
 (defun register-nw-hook (hook)
-  (setf *nw-hook-list* (append *nw-hook-list* (list hook)))
   (add-menu-key 'frame-nw-hook-menu (code-char *nw-hook-current-key*) hook)
   (incf *nw-hook-current-key*))
 
@@ -80,12 +79,10 @@
 (defun default-frame-nw-hook (frame window)
   "Open the next window in the current frame"
   (declare (ignore frame))
-  (unless (or (string-equal (xlib:get-wm-class window) "ROX-Pinboard")
-	      (string-equal (xlib:get-wm-class window) "xvkbd"))
-    (leave-if-not-frame *current-child*)
-    (when (frame-p *current-child*)
-      (pushnew window (frame-child *current-child*)))
-    (default-window-placement *current-child* window)))
+  (leave-if-not-frame *current-child*)
+  (when (frame-p *current-child*)
+    (pushnew window (frame-child *current-child*)))
+  (default-window-placement *current-child* window))
 
 (defun set-default-frame-nw-hook ()
   "Open the next window in the current frame"

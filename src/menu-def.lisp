@@ -47,19 +47,6 @@
 
 
 
-;;(defun frame-layout-menu ()
-;;  "< Frame layout menu >"
-;;  (info-mode-menu (keys-from-list *layout-list*)))
-;;
-;;(defun frame-layout-once-menu ()
-;;  "< Frame layout menu (Set only once) >"
-;;  (info-mode-menu (keys-from-list (loop :for l :in *layout-list*
-;;				     :collect (create-symbol (format nil "~A" l) "-ONCE")))))
-;;
-;;(defun frame-nw-hook-menu ()
-;;  "< Frame new window hook menu >"
-;;  (info-mode-menu (keys-from-list *nw-hook-list*)))
-
 
 
 (add-sub-menu 'main "c" 'child-menu "Child menu")
