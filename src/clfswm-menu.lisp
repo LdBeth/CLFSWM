@@ -94,6 +94,13 @@
 
 
 
+(defun add-menu-comment (menu-name &optional (comment "---"))
+  (add-item (make-menu-item :key nil :value comment) (find-menu menu-name)))
+
+
+
+
+
 
 ;;; Display menu functions
 (defun open-menu (&optional (menu *menu*))
@@ -105,14 +112,16 @@
 	(push (typecase value
 		(menu (list (list (format nil "~A" (menu-item-key item)) *menu-color-menu-key*)
 			    (list (format nil ": < ~A >" (menu-doc value)) *menu-color-submenu*)))
+		(string (list (list (format nil "~A" (menu-item-value item)) *menu-color-comment*)))
 		(t (list (list (format nil "~A" (menu-item-key item)) *menu-color-key*)
 			 (format nil ": ~A" (documentation value 'function)))))
 	      info-list)
-	(define-info-key-fun (list (menu-item-key item) 0)
-	    (lambda (&optional args)
-	      (declare (ignore args))
-	      (setf action value)
-	      (throw 'exit-info-loop nil)))))
+	(when (menu-item-key item)
+	  (define-info-key-fun (list (menu-item-key item) 0)
+	      (lambda (&optional args)
+		(declare (ignore args))
+		(setf action value)
+		(throw 'exit-info-loop nil))))))
     (info-mode (nreverse info-list))
     (dolist (item (menu-item menu))
       (undefine-info-key-fun (list (menu-item-key item) 0)))

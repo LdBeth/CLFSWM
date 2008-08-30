@@ -76,8 +76,10 @@
 (add-sub-menu 'frame-menu "o" 'frame-layout-once-menu "Frame layout menu (Only once)")
 (add-sub-menu 'frame-menu "n" 'frame-nw-hook-menu "Frame new window hook menu")
 (add-sub-menu 'frame-menu "m" 'frame-movement-menu "Frame movement menu")
-(add-sub-menu 'frame-menu "w" 'managed-window-menu "Managed window type menu")
+(add-sub-menu 'frame-menu "f" 'frame-focus-policy "Frame focus policy menu")
+(add-sub-menu 'frame-menu "w" 'frame-managed-window-menu "Managed window type menu")
 (add-sub-menu 'frame-menu "s" 'frame-miscellaneous-menu "Frame miscallenous menu")
+
 
 
 (add-menu-key 'frame-adding-menu "a" 'add-default-frame)
@@ -112,10 +114,13 @@
 (add-menu-key 'frame-resize-menu #\a 'current-frame-resize-all-dir-minimal)
 
 
-(add-menu-key 'managed-window-menu "m" 'current-frame-manage-window-type)
-(add-menu-key 'managed-window-menu "a" 'current-frame-manage-all-window-type)
-(add-menu-key 'managed-window-menu "n" 'current-frame-manage-only-normal-window-type)
-(add-menu-key 'managed-window-menu "u" 'current-frame-manage-no-window-type)
+(add-menu-key 'frame-focus-policy "c" 'current-frame-set-click-focus-policy)
+(add-menu-key 'frame-focus-policy "s" 'current-frame-set-sloppy-focus-policy)
+
+(add-menu-key 'frame-managed-window-menu "m" 'current-frame-manage-window-type)
+(add-menu-key 'frame-managed-window-menu "a" 'current-frame-manage-all-window-type)
+(add-menu-key 'frame-managed-window-menu "n" 'current-frame-manage-only-normal-window-type)
+(add-menu-key 'frame-managed-window-menu "u" 'current-frame-manage-no-window-type)
 
 
 (add-menu-key 'frame-miscellaneous-menu "s" 'show-all-frames-info)

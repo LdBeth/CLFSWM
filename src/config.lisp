@@ -38,6 +38,8 @@
   
 
 
+
+
 ;;; CONFIG - Never managed window list
 (defparameter *never-managed-window-list*
   '((xlib:get-wm-class "ROX-Pinboard")

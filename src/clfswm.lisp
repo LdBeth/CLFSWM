@@ -119,8 +119,14 @@
 
 
 
-(defun handle-enter-notify  (&rest event-slots &key root-x root-y &allow-other-keys)
-  (declare (ignore event-slots root-x root-y)))
+(defun handle-enter-notify  (&rest event-slots &key window root-x root-y &allow-other-keys)
+  (declare (ignore event-slots))
+  (when (eql :sloppy (if (frame-p *current-child*)
+			 (frame-focus-policy *current-child*)
+			 *default-focus-policy*))
+    (unless (and (> root-x (- (xlib:screen-width *screen*) 3))
+		 (> root-y (- (xlib:screen-height *screen*) 3)))
+      (focus-window window))))
 
 
 

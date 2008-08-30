@@ -1,3 +1,14 @@
+2008-08-30  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-layout.lisp (main-window-right-layout): A possible
+	GIMP layout: one or more main windows on one side of the
+	frame. Others on the other size.
+
+	* src/clfswm-util.lisp
+	(current-frame-set-click/sloppy-focus-policy): Each frame can have
+	a different focus policy (one of :click or :sloppy).
+	The default focus policy is set with *default-focus-policy*.
+
 2008-08-23  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-info.lisp (show-config-variable): New function.

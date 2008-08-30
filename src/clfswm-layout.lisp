@@ -38,7 +38,7 @@
 
 
 
-(defparameter *layout-current-key* (char-code #\a))
+(defparameter *layout-current-key* (1- (char-code #\a)))
 
 
 ;;; Generic functions
@@ -73,9 +73,8 @@
 	    (fixe-real-size-current-child)
 	    (set-layout-dont-leave #'no-layout)))
     (setf (documentation once-name 'function) (documentation layout 'function))
-    (add-menu-key 'frame-layout-menu (code-char *layout-current-key*) layout)
-    (add-menu-key 'frame-layout-once-menu (code-char *layout-current-key*) once-name)
-    (incf *layout-current-key*)))
+    (add-menu-key 'frame-layout-menu (code-char (incf *layout-current-key*)) layout)
+    (add-menu-key 'frame-layout-once-menu (code-char *layout-current-key*) once-name)))
 
 
 
@@ -291,7 +290,7 @@
 
 
 (defun set-tile-right-layout ()
-  "  Tile Right: main child on right and others on left"
+  " Tile Right: main child on right and others on left"
   (layout-ask-size "Tile size in percent (%)" :tile-size)
   (set-layout #'tile-right-layout))
 
@@ -324,7 +323,7 @@
 
 
 (defun set-tile-top-layout ()
-  "  Tile Top: main child on top and others on bottom"
+  " Tile Top: main child on top and others on bottom"
   (layout-ask-size "Tile size in percent (%)" :tile-size)
   (set-layout #'tile-top-layout))
 
@@ -356,7 +355,7 @@
 
 
 (defun set-tile-bottom-layout ()
-  "  Tile Bottom: main child on bottom and others on top"
+  " Tile Bottom: main child on bottom and others on top"
   (layout-ask-size "Tile size in percent (%)" :tile-size)
   (set-layout #'tile-bottom-layout))
 
@@ -410,3 +409,73 @@
   (set-layout #'tile-left-space-layout))
 
 (register-layout 'set-tile-left-space-layout)
+
+
+
+
+;;; Main windows layout - A possible GIMP layout
+;;;   The windows in the main list are tiled on the frame
+;;;   others windows are on one side of the frame.
+(defun main-window-right-layout (child parent)
+  "Main window right: Main windows on the right. Others on the left."
+  (with-slots (rx ry rw rh) parent
+    (let* ((main-windows (frame-data-slot parent :main-window-list))
+	   (len (length main-windows))
+	   (size (or (frame-data-slot parent :tile-size) 0.8)))
+      (if (zerop len)
+	  (no-layout child parent)
+	  (if (member child main-windows)
+	      (let* ((dy (/ rh len))
+		     (pos (position child main-windows)))
+		(values (1+ (round (+ rx (* rw (- 1 size)))))
+			(1+ (round (+ ry (* dy pos))))
+			(- (round (* rw size)) 2)
+			(- (round dy) 2)))
+	      (values (1+ rx)
+		      (1+ ry)
+		      (- (round (* rw (- 1 size))) 2)
+		      (- rh 2)))))))
+	  
+(defun set-main-window-right-layout ()
+  "Main window right: Main windows on the right. Others on the left."
+  (layout-ask-size "Split size in percent (%)" :tile-size)
+  (set-layout #'main-window-right-layout))
+
+
+(defun add-in-main-window-list ()
+  "Add the current window in the main window list"
+  (when (frame-p *current-child*)
+    (with-current-window
+      (when (member window (get-managed-child *current-child*))
+	(pushnew window (frame-data-slot *current-child* :main-window-list)))))
+  (leave-second-mode))
+
+
+(defun remove-in-main-window-list ()
+  "Remove the current window from the main window list"
+  (when (frame-p *current-child*)
+    (with-current-window
+      (when (member window (get-managed-child *current-child*))
+	(setf (frame-data-slot *current-child* :main-window-list)
+	      (remove window (frame-data-slot *current-child* :main-window-list))))))
+  (leave-second-mode))
+
+(defun clear-main-window-list ()
+  "Clear the main window list"
+  (when (frame-p *current-child*)
+    (setf (frame-data-slot *current-child* :main-window-list) nil))
+  (leave-second-mode))
+
+
+(add-sub-menu 'frame-layout-menu (code-char (incf *layout-current-key*))
+	      'frame-main-window-layout-menu "Main window layout menu")
+
+
+(add-menu-key 'frame-main-window-layout-menu "r" 'set-main-window-right-layout)
+(add-menu-key 'frame-main-window-layout-menu "l" 'set-main-window-right-layout)
+(add-menu-key 'frame-main-window-layout-menu "t" 'set-main-window-right-layout)
+(add-menu-key 'frame-main-window-layout-menu "b" 'set-main-window-right-layout)
+(add-menu-comment 'frame-main-window-layout-menu "-=- Actions on main windows list -=-")
+(add-menu-key 'frame-main-window-layout-menu "a" 'add-in-main-window-list)
+(add-menu-key 'frame-main-window-layout-menu "v" 'remove-in-main-window-list)
+(add-menu-key 'frame-main-window-layout-menu "c" 'clear-main-window-list)

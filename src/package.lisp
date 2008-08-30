@@ -65,7 +65,8 @@ It is particulary useful with CLISP/MIT-CLX.")
 ;;; CONFIG - Default frame datas
 (defparameter *default-frame-data*
   (list '(:tile-size 0.8) '(:tile-space-size 0.1)
-	'(:fast-layout (tile-left-layout tile-layout)))
+	'(:fast-layout (tile-left-layout tile-layout))
+	'(:main-layout-windows nil))
   "Config(): Default slots set in frame date")
 
 
@@ -77,6 +78,12 @@ It is particulary useful with CLISP/MIT-CLX.")
 ;;(defparameter *default-managed-type* '(:normal :transient :maxsize :desktop :dock :toolbar :menu :utility :splash :dialog))
 ;;(defparameter *default-managed-type* '())
 ;;(defparameter *default-managed-type* '(:all))
+
+
+;;; CONFIG - Default focus policy
+(defparameter *default-focus-policy* :click
+  "Config(): Default mouse focus policy. One of :click or :sloppy")
+
 
 
 
@@ -114,6 +121,8 @@ It is particulary useful with CLISP/MIT-CLX.")
 		    :documentation "A list of hidden children")
    (selected-pos :initarg :selected-pos :accessor frame-selected-pos :initform 0
 		 :documentation "The position in the child list of the selected child")
+   (focus-policy :initarg :focus-ploicy :accessor frame-focus-policy
+		 :initform *default-focus-policy*)
    (window :initarg :window :accessor frame-window :initform nil)
    (gc :initarg :gc :accessor frame-gc :initform nil)
    (child :initarg :child :accessor frame-child :initform nil)

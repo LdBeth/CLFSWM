@@ -10,6 +10,8 @@ Should handle these soon.
 - Factorize layout
 
 - A Gimp layout example (a main window and all others on the left) [Philippe]
+  + Alt-Tab cycle only on non-main windows
+  + Focus policy to sloppy focus.
 
 - Hook to open next window in named/numbered frame [Philippe]
 

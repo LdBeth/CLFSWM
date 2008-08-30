@@ -1066,3 +1066,15 @@ For window: set current child to window or its parent according to window-parent
 
 
 
+;;; Focus policy functions
+(defun current-frame-set-click-focus-policy ()
+  "Set a click focus policy for the current frame"
+  (when (frame-p *current-child*)
+    (setf (frame-focus-policy *current-child*) :click))
+  (leave-second-mode))
+
+(defun current-frame-set-sloppy-focus-policy ()
+  "Set a sloppy focus policy for the current frame"
+  (when (frame-p *current-child*)
+    (setf (frame-focus-policy *current-child*) :sloppy))
+  (leave-second-mode))
