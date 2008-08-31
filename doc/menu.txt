@@ -24,9 +24,9 @@ Page_Down: Raise the child in the current frame
 Frame-Menu
 a: < Adding frame menu >
 l: < Frame layout menu >
-o: < Frame layout menu (Only once) >
 n: < Frame new window hook menu >
 m: < Frame movement menu >
+f: < Frame focus policy menu >
 w: < Managed window type menu >
 s: < Frame miscallenous menu >
 
@@ -35,31 +35,40 @@ a: Add a default frame in the current frame
 p: Add a placed frame in the current frame
 
 Frame-Layout-Menu
-*: < Frame fast layout menu >
-a: Maximize windows in there frame - leave frame to there size (no layout)
-b: Tile child in its frame (vertical)
-c:  Tile child in its frame (horizontal)
-d: Tile Space: tile child in its frame leaving spaces between them
-e: Tile Left: main child on left and others on right
-f:   Tile Right: main child on right and others on left
-g:   Tile Top: main child on top and others on bottom
-h:   Tile Bottom: main child on bottom and others on top
-i: Tile Left Space: main child on left and others on right. Leave some space on the left.
+a: < Frame fast layout menu >
+b: No layout: Maximize windows in there frame - Leave frame to there size
+c: < Frame tile layout menu >
+d: < Tile in one direction layout menu >
+e: < Tile with some space on one side menu >
+f: < Main window layout menu >
 
 Frame-Fast-Layout-Menu
-a: Switch between two layouts
-b: Define the two fast layouts
+s: Switch between two layouts
+p: Push the current layout in the fast layout list
 
-Frame-Layout-Once-Menu
-a: Maximize windows in there frame - leave frame to there size (no layout)
-b: Tile child in its frame (vertical)
-c:  Tile child in its frame (horizontal)
-d: Tile Space: tile child in its frame leaving spaces between them
-e: Tile Left: main child on left and others on right
-f:   Tile Right: main child on right and others on left
-g:   Tile Top: main child on top and others on bottom
-h:   Tile Bottom: main child on bottom and others on top
-i: Tile Left Space: main child on left and others on right. Leave some space on the left.
+Frame-Tile-Layout-Menu
+v: Tile child in its frame (vertical)
+h: Tile child in its frame (horizontal)
+s: Tile Space: tile child in its frame leaving spaces between them
+
+Frame-Tile-Dir-Layout-Menu
+l: Tile Left: main child on left and others on right
+r: Tile Right: main child on right and others on left
+t: Tile Top: main child on top and others on bottom
+b: Tile Bottom: main child on bottom and others on top
+
+Frame-Tile-Space-Layout-Menu
+a: Tile Left Space: main child on left and others on right. Leave some space on the left.
+
+Frame-Main-Window-Layout-Menu
+r: Main window right: Main windows on the right. Others on the left.
+l: Main window left: Main windows on the left. Others on the right.
+t: Main window top: Main windows on the top. Others on the bottom.
+b: Main window bottom: Main windows on the bottom. Others on the top.
+-=- Actions on main windows list -=-
+a: Add the current window in the main window list
+v: Remove the current window from the main window list
+c: Clear the main window list
 
 Frame-Nw-Hook-Menu
 a: Open the next window in the current frame
@@ -98,7 +107,11 @@ Right: Resize the current frame right to its half width
 d: Resize down the current frame
 a: Resize down the current frame to its minimal size
 
-Managed-Window-Menu
+Frame-Focus-Policy
+c: Set a click focus policy for the current frame
+s: Set a sloppy focus policy for the current frame
+
+Frame-Managed-Window-Menu
 m: Change window types to be managed by a frame
 a: Manage all window type
 n: Manage only normal window type

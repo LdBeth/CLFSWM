@@ -25,23 +25,22 @@ Main mode keys:
   Mod-1                Menu            Show all frames info windows until a key is release
   Shift                Menu            Show all frames info windows
   Control              Menu            Show/Hide the root frame
-  Mod-1                B               Move the pointer to the lower right corner of the screen
   Control Shift        Escape          Close focus window: Delete the focus window in all frames and workspaces
   Mod-1 Control Shift  Escape          Kill focus window: Destroy the focus window in all frames and workspaces
   Control              Escape          Remove the focus window in the current frame
   Shift                Escape          Unhide all hidden windows into the current child
-  Mod-1                T               Switch to editing mode
   Control              Less            Switch to editing mode
-  Mod-1                |1|             Bind or jump to a slot
-  Mod-1                |2|             Bind or jump to a slot
-  Mod-1                |3|             Bind or jump to a slot
-  Mod-1                |4|             Bind or jump to a slot
-  Mod-1                |5|             Bind or jump to a slot
-  Mod-1                |6|             Bind or jump to a slot
-  Mod-1                |7|             Bind or jump to a slot
-  Mod-1                |8|             Bind or jump to a slot
-  Mod-1                |9|             Bind or jump to a slot
-  Mod-1                |0|             Bind or jump to a slot
+  Mod-1                Agrave          Bind or jump to a slot
+  Mod-1                Ccedilla        Bind or jump to a slot
+  Mod-1                Underscore      Bind or jump to a slot
+  Mod-1                Egrave          Bind or jump to a slot
+  Mod-1                Minus           Bind or jump to a slot
+  Mod-1                Parenleft       Bind or jump to a slot
+  Mod-1                Quoteright      Bind or jump to a slot
+  Mod-1                Quotedbl        Bind or jump to a slot
+  Mod-1                Eacute          Bind or jump to a slot
+  Mod-1                Ampersand       Bind or jump to a slot
+                       Twosuperior     Move the pointer to the lower right corner of the screen
 
 
 Mouse buttons actions in main mode:
@@ -116,16 +115,16 @@ Second mode keys:
                        H               start an xclock
   Shift                Menu            Show all frames info windows
   Control              Menu            Show/Hide the root frame
-  Mod-1                |1|             Bind or jump to a slot
-  Mod-1                |2|             Bind or jump to a slot
-  Mod-1                |3|             Bind or jump to a slot
-  Mod-1                |4|             Bind or jump to a slot
-  Mod-1                |5|             Bind or jump to a slot
-  Mod-1                |6|             Bind or jump to a slot
-  Mod-1                |7|             Bind or jump to a slot
-  Mod-1                |8|             Bind or jump to a slot
-  Mod-1                |9|             Bind or jump to a slot
-  Mod-1                |0|             Bind or jump to a slot
+  Mod-1                Agrave          Bind or jump to a slot
+  Mod-1                Ccedilla        Bind or jump to a slot
+  Mod-1                Underscore      Bind or jump to a slot
+  Mod-1                Egrave          Bind or jump to a slot
+  Mod-1                Minus           Bind or jump to a slot
+  Mod-1                Parenleft       Bind or jump to a slot
+  Mod-1                Quoteright      Bind or jump to a slot
+  Mod-1                Quotedbl        Bind or jump to a slot
+  Mod-1                Eacute          Bind or jump to a slot
+  Mod-1                Ampersand       Bind or jump to a slot
 
 
 Mouse buttons actions in second mode:

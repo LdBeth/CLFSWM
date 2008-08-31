@@ -7,8 +7,6 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Factorize layout
-
 - A Gimp layout example (a main window and all others on the left) [Philippe]
   + Alt-Tab cycle only on non-main windows
   + Focus policy to sloppy focus.
@@ -18,14 +16,12 @@ Should handle these soon.
 - Ensure-unique-number/name (new function) [Philippe]
 
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
-   A finir : remove src/test.lisp src/load-test.lisp
-   Dans ~/.clfswmrc:
+   TODO : remove src/test.lisp src/load-test.lisp
+   In ~/.clfswmrc:
       ;;;; AUTO-CONFIG - Do not edit those lines by hands: they are overwritten by CLFSWM
       (defparameter *ma-var* value)
       ...
       ;;;; AUTO-CONFIG End : You can add your configurations below this line.
-
-- Focus policy by frame
 
 
 MAYBE

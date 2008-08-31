@@ -73,7 +73,6 @@
 
 (add-sub-menu 'frame-menu "a" 'frame-adding-menu "Adding frame menu")
 (add-sub-menu 'frame-menu "l" 'frame-layout-menu "Frame layout menu")
-(add-sub-menu 'frame-menu "o" 'frame-layout-once-menu "Frame layout menu (Only once)")
 (add-sub-menu 'frame-menu "n" 'frame-nw-hook-menu "Frame new window hook menu")
 (add-sub-menu 'frame-menu "m" 'frame-movement-menu "Frame movement menu")
 (add-sub-menu 'frame-menu "f" 'frame-focus-policy "Frame focus policy menu")

@@ -1,3 +1,12 @@
+2008-08-31  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-menu.lisp (add-menu-comment): Add comments in menu.
+
+	* src/clfswm-layout.lisp (main-window-left-layout)
+	(main-window-bottom-layout, main-window-top-layout): New
+	functions.
+	Factorize layouts in menu.
+
 2008-08-30  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-layout.lisp (main-window-right-layout): A possible

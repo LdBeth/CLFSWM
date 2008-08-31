@@ -95,10 +95,10 @@
 (defun tile-space-current-frame ()
   "Tile with spaces the current frame"
   (explode-frame *current-child*)
-  (set-tile-space-layout-once)
+  (set-layout-once #'tile-space-layout)
   (leave-second-mode))
 
-(define-second-key (#\t) 'tile-space-current-frame)
+(define-second-key ("t") 'tile-space-current-frame)
 
 (define-second-key ("Home" :mod-1 :control :shift) 'quit-clfswm)
 

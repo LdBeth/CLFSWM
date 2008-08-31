@@ -139,10 +139,12 @@ CLFSWM> (produce-all-docs)~2%"))
 	     (dolist (item (menu-item base))
 	       (typecase item
 		 (menu (format stream "~A: ~A~%" (menu-name item) (menu-doc item)))
-		 (menu-item (format stream "~A: ~A~%" (menu-item-key item)
-				    (typecase (menu-item-value item)
-				      (menu (format nil "< ~A >" (menu-doc (menu-item-value item))))
-				      (t (documentation (menu-item-value item) 'function)))))))
+		 (menu-item (aif (menu-item-key item)
+				 (format stream "~A: ~A~%" it
+					 (typecase (menu-item-value item)
+					   (menu (format nil "< ~A >" (menu-doc (menu-item-value item))))
+					   (t (documentation (menu-item-value item) 'function))))
+				 (format stream "~A~%" (menu-item-value item))))))
 	     (dolist (item (menu-item base))
 	       (typecase item
 		 (menu (rec item))
@@ -182,12 +184,14 @@ CLFSWM> (produce-all-docs)~2%")))
 	       (dolist (item (menu-item base))
 		 (typecase item
 		   (menu (push `(p ,(format nil "~A: ~A" (menu-name item) (menu-doc item))) menu-list))
-		   (menu-item (push `(p ,(format nil "~A: ~A" (menu-item-key item)
-						 (typecase (menu-item-value item)
-						   (menu (format nil "<a href=\"#~A\">< ~A ></a>"
-								 (menu-name (menu-item-value item))
-								 (menu-doc (menu-item-value item))))
-						   (t (documentation (menu-item-value item) 'function)))))
+		   (menu-item (push `(p ,(aif (menu-item-key item)
+					      (format nil "~A: ~A" it
+						      (typecase (menu-item-value item)
+							(menu (format nil "<a href=\"#~A\">< ~A ></a>"
+								      (menu-name (menu-item-value item))
+								      (menu-doc (menu-item-value item))))
+							(t (documentation (menu-item-value item) 'function))))
+					      (format nil "~A" (menu-item-value item))))
 				    menu-list))))
 	       (push '<hr> menu-list)
 	       (dolist (item (menu-item base))

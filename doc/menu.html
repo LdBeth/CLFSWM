@@ -80,16 +80,16 @@
       l: <a href="#FRAME-LAYOUT-MENU">< Frame layout menu ></a>
     </p>
     <p>
-      o: <a href="#FRAME-LAYOUT-ONCE-MENU">< Frame layout menu (Only once) ></a>
-    </p>
-    <p>
       n: <a href="#FRAME-NW-HOOK-MENU">< Frame new window hook menu ></a>
     </p>
     <p>
       m: <a href="#FRAME-MOVEMENT-MENU">< Frame movement menu ></a>
     </p>
     <p>
-      w: <a href="#MANAGED-WINDOW-MENU">< Managed window type menu ></a>
+      f: <a href="#FRAME-FOCUS-POLICY">< Frame focus policy menu ></a>
+    </p>
+    <p>
+      w: <a href="#FRAME-MANAGED-WINDOW-MENU">< Managed window type menu ></a>
     </p>
     <p>
       s: <a href="#FRAME-MISCELLANEOUS-MENU">< Frame miscallenous menu ></a>
@@ -109,75 +109,96 @@
       <a name="FRAME-LAYOUT-MENU"></a><a href="#FRAME-MENU">Frame-Layout-Menu</a>
     </h3>
     <p>
-      *: <a href="#FRAME-FAST-LAYOUT-MENU">< Frame fast layout menu ></a>
+      a: <a href="#FRAME-FAST-LAYOUT-MENU">< Frame fast layout menu ></a>
     </p>
     <p>
-      a: Maximize windows in there frame - leave frame to there size (no layout)
+      b: No layout: Maximize windows in there frame - Leave frame to there size
     </p>
     <p>
-      b: Tile child in its frame (vertical)
+      c: <a href="#FRAME-TILE-LAYOUT-MENU">< Frame tile layout menu ></a>
     </p>
     <p>
-      c:  Tile child in its frame (horizontal)
+      d: <a href="#FRAME-TILE-DIR-LAYOUT-MENU">< Tile in one direction layout menu ></a>
     </p>
     <p>
-      d: Tile Space: tile child in its frame leaving spaces between them
+      e: <a href="#FRAME-TILE-SPACE-LAYOUT-MENU">< Tile with some space on one side menu ></a>
     </p>
     <p>
-      e: Tile Left: main child on left and others on right
-    </p>
-    <p>
-      f:   Tile Right: main child on right and others on left
-    </p>
-    <p>
-      g:   Tile Top: main child on top and others on bottom
-    </p>
-    <p>
-      h:   Tile Bottom: main child on bottom and others on top
-    </p>
-    <p>
-      i: Tile Left Space: main child on left and others on right. Leave some space on the left.
+      f: <a href="#FRAME-MAIN-WINDOW-LAYOUT-MENU">< Main window layout menu ></a>
     </p>
     <hr>
     <h3>
       <a name="FRAME-FAST-LAYOUT-MENU"></a><a href="#FRAME-LAYOUT-MENU">Frame-Fast-Layout-Menu</a>
     </h3>
     <p>
-      a: Switch between two layouts
+      s: Switch between two layouts
     </p>
     <p>
-      b: Define the two fast layouts
+      p: Push the current layout in the fast layout list
     </p>
     <hr>
     <h3>
-      <a name="FRAME-LAYOUT-ONCE-MENU"></a><a href="#FRAME-MENU">Frame-Layout-Once-Menu</a>
+      <a name="FRAME-TILE-LAYOUT-MENU"></a><a href="#FRAME-LAYOUT-MENU">Frame-Tile-Layout-Menu</a>
     </h3>
     <p>
-      a: Maximize windows in there frame - leave frame to there size (no layout)
+      v: Tile child in its frame (vertical)
     </p>
     <p>
-      b: Tile child in its frame (vertical)
+      h: Tile child in its frame (horizontal)
     </p>
     <p>
-      c:  Tile child in its frame (horizontal)
+      s: Tile Space: tile child in its frame leaving spaces between them
+    </p>
+    <hr>
+    <h3>
+      <a name="FRAME-TILE-DIR-LAYOUT-MENU"></a><a href="#FRAME-LAYOUT-MENU">Frame-Tile-Dir-Layout-Menu</a>
+    </h3>
+    <p>
+      l: Tile Left: main child on left and others on right
     </p>
     <p>
-      d: Tile Space: tile child in its frame leaving spaces between them
+      r: Tile Right: main child on right and others on left
     </p>
     <p>
-      e: Tile Left: main child on left and others on right
+      t: Tile Top: main child on top and others on bottom
     </p>
     <p>
-      f:   Tile Right: main child on right and others on left
+      b: Tile Bottom: main child on bottom and others on top
+    </p>
+    <hr>
+    <h3>
+      <a name="FRAME-TILE-SPACE-LAYOUT-MENU"></a><a href="#FRAME-LAYOUT-MENU">Frame-Tile-Space-Layout-Menu</a>
+    </h3>
+    <p>
+      a: Tile Left Space: main child on left and others on right. Leave some space on the left.
+    </p>
+    <hr>
+    <h3>
+      <a name="FRAME-MAIN-WINDOW-LAYOUT-MENU"></a><a href="#FRAME-LAYOUT-MENU">Frame-Main-Window-Layout-Menu</a>
+    </h3>
+    <p>
+      r: Main window right: Main windows on the right. Others on the left.
     </p>
     <p>
-      g:   Tile Top: main child on top and others on bottom
+      l: Main window left: Main windows on the left. Others on the right.
     </p>
     <p>
-      h:   Tile Bottom: main child on bottom and others on top
+      t: Main window top: Main windows on the top. Others on the bottom.
     </p>
     <p>
-      i: Tile Left Space: main child on left and others on right. Leave some space on the left.
+      b: Main window bottom: Main windows on the bottom. Others on the top.
+    </p>
+    <p>
+      -=- Actions on main windows list -=-
+    </p>
+    <p>
+      a: Add the current window in the main window list
+    </p>
+    <p>
+      v: Remove the current window from the main window list
+    </p>
+    <p>
+      c: Clear the main window list
     </p>
     <hr>
     <h3>
@@ -282,7 +303,17 @@
     </p>
     <hr>
     <h3>
-      <a name="MANAGED-WINDOW-MENU"></a><a href="#FRAME-MENU">Managed-Window-Menu</a>
+      <a name="FRAME-FOCUS-POLICY"></a><a href="#FRAME-MENU">Frame-Focus-Policy</a>
+    </h3>
+    <p>
+      c: Set a click focus policy for the current frame
+    </p>
+    <p>
+      s: Set a sloppy focus policy for the current frame
+    </p>
+    <hr>
+    <h3>
+      <a name="FRAME-MANAGED-WINDOW-MENU"></a><a href="#FRAME-MENU">Frame-Managed-Window-Menu</a>
     </h3>
     <p>
       m: Change window types to be managed by a frame

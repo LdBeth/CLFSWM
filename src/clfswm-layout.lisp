@@ -34,7 +34,8 @@
 ;;;      This method can use the float size of the child (x, y ,w , h).
 ;;;      It can be specialised for xlib:window or frame
 ;;;   2- Define a seter function for your layout
-;;;   3- Register your new layout with register-layout.
+;;;   3- Register your new layout with register-layout or create
+;;;      a sub menu for it with register-layout-sub-menu.
 
 
 
@@ -53,6 +54,12 @@
   (when (frame-p *current-child*)
     (setf (frame-layout *current-child*) layout)))
 
+(defun set-layout-once (layout-name)
+  (set-layout-dont-leave layout-name)
+  (show-all-children *current-root*)
+  (fixe-real-size-current-child)
+  (set-layout-dont-leave #'no-layout))
+
 
 (defun get-managed-child (parent)
   "Return only the windows that are managed for tiling"
@@ -62,20 +69,22 @@
 	       (frame-child parent))))
 
 
+(defun next-layout-key ()
+  (code-char (incf *layout-current-key*)))
 
 
 (defun register-layout (layout)
-  (let ((once-name (intern (format nil "~A-ONCE" layout) :clfswm)))
-    (setf (symbol-function once-name)
-	  (lambda ()
-	    (set-layout-dont-leave (intern (subseq (format nil "~A" layout) 4) :clfswm))
-	    (show-all-children *current-root*)
-	    (fixe-real-size-current-child)
-	    (set-layout-dont-leave #'no-layout)))
-    (setf (documentation once-name 'function) (documentation layout 'function))
-    (add-menu-key 'frame-layout-menu (code-char (incf *layout-current-key*)) layout)
-    (add-menu-key 'frame-layout-once-menu (code-char *layout-current-key*) once-name)))
+  (add-menu-key 'frame-layout-menu (next-layout-key) layout))
 
+
+(defun register-layout-sub-menu (name doc layout-list)
+  (add-sub-menu 'frame-layout-menu (next-layout-key) name doc)
+  (loop :for item :in layout-list
+     :for i :from 0
+     :do (typecase item
+	   (cons (add-menu-key name (first item) (second item)))
+	   (string (add-menu-comment name item))
+	   (t (add-menu-key name (number->char i) item)))))
 
 
 
@@ -95,48 +104,33 @@
   (when (frame-p *current-child*)
     (with-slots (layout) *current-child*
       (let* ((layout-list (frame-data-slot *current-child* :fast-layout))
-	     (first-layout (symbol-function (first layout-list)))
-	     (second-layout (symbol-function (second layout-list))))
+	     (first-layout (ensure-function (first layout-list)))
+	     (second-layout (ensure-function (second layout-list))))
 	(setf layout (if (eql layout first-layout)
 			 second-layout
 			 first-layout))
 	(leave-second-mode)))))
 
-(defun define-fast-layout-switch ()
-  "Define the two fast layouts"
+
+(defun push-in-fast-layout-list ()
+  "Push the current layout in the fast layout list"
   (when (frame-p *current-child*)
-    (labels ((ask-new-layout (msg)
-	       (let* ((new-layout nil)
-		      (menu-list (loop :for item :in (rest (menu-item (find-menu 'frame-layout-menu)))
-				    :for i :from 0
-				    :as fun-name = (intern (subseq (format nil "~A" (menu-item-value item)) 4) :clfswm)
-				    :as fun = (let ((nl fun-name))
-						(lambda () (setf new-layout nl)))
-				    :collect (list (code-char (+ (char-code #\a) i)) fun (documentation fun-name 'function)))))
-		 (push msg menu-list)
-		 (info-mode-menu menu-list)
-		 new-layout)))
-      (let* ((layout-list (frame-data-slot *current-child* :fast-layout))
-	     (first-layout (first layout-list))
-	     (second-layout (second layout-list)))
-	(awhen (ask-new-layout (format nil "Please, choose the first layout (last: ~:(~A~))" first-layout))
-	  (setf first-layout it))
-	(awhen (ask-new-layout (format nil "Please, choose the second layout (last: ~:(~A~))" second-layout))
-	  (setf second-layout it))
-	(setf (frame-data-slot *current-child* :fast-layout)
-	      (list first-layout second-layout))))
+    (setf (frame-data-slot *current-child* :fast-layout)
+	  (list (frame-layout *current-child*)
+		(first (frame-data-slot *current-child* :fast-layout))))
     (leave-second-mode)))
 
 
-(add-sub-menu 'frame-layout-menu #\* 'frame-fast-layout-menu "Frame fast layout menu")
-(add-menu-key 'frame-fast-layout-menu "a" 'fast-layout-switch)
-(add-menu-key 'frame-fast-layout-menu "b" 'define-fast-layout-switch)
+
+(register-layout-sub-menu 'frame-fast-layout-menu "Frame fast layout menu"
+			  '(("s" fast-layout-switch)
+			    ("p" push-in-fast-layout-list)))
 
 
 
 ;;; No layout
 (defgeneric no-layout (child parent)
-  (:documentation "Maximize windows in there frame - leave frame to there size (no layout)"))
+  (:documentation "No layout: Maximize windows in there frame - Leave frame to there size"))
 
 (defmethod no-layout ((child xlib:window) parent)
   (with-slots (rx ry rw rh) parent
@@ -154,7 +148,7 @@
 
 
 (defun set-no-layout ()
-  "Maximize windows in there frame - leave frame to there size (no layout)"
+  "No layout: Maximize windows in there frame - Leave frame to there size"
   (set-layout #'no-layout))
 
 (register-layout 'set-no-layout)
@@ -182,8 +176,6 @@
   "Tile child in its frame (vertical)"
   (set-layout #'tile-layout))
 
-(register-layout 'set-tile-layout)
-
 
 (defgeneric tile-horizontal-layout (child parent)
   (:documentation "Tile child in its frame (horizontal)"))
@@ -201,14 +193,8 @@
 	    (round (- dy 2)))))
 
 (defun set-tile-horizontal-layout ()
-  " Tile child in its frame (horizontal)"
+  "Tile child in its frame (horizontal)"
   (set-layout #'tile-horizontal-layout))
-
-(register-layout 'set-tile-horizontal-layout)
-
-
-
-
 
 ;;; Space layout
 (defun tile-space-layout (child parent)
@@ -227,12 +213,20 @@
 	      (round (- dx (* dx size 2) 2))
 	      (round (- dy (* dy size 2) 2))))))
 
+
+
+
 (defun set-tile-space-layout ()
   "Tile Space: tile child in its frame leaving spaces between them"
   (layout-ask-size "Space size in percent (%)" :tile-space-size 10)
   (set-layout #'tile-space-layout))
 
-(register-layout 'set-tile-space-layout)
+
+
+(register-layout-sub-menu 'frame-tile-layout-menu "Frame tile layout menu"
+			  '(("v" set-tile-layout)
+			    ("h" set-tile-horizontal-layout)
+			    ("s" set-tile-space-layout)))
 
 
 
@@ -263,8 +257,6 @@
   (layout-ask-size "Tile size in percent (%)" :tile-size)
   (set-layout #'tile-left-layout))
 
-(register-layout 'set-tile-left-layout)
-
 
 
 ;;; Tile right
@@ -290,12 +282,11 @@
 
 
 (defun set-tile-right-layout ()
-  " Tile Right: main child on right and others on left"
+  "Tile Right: main child on right and others on left"
   (layout-ask-size "Tile size in percent (%)" :tile-size)
   (set-layout #'tile-right-layout))
 
 
-(register-layout 'set-tile-right-layout)
 
 
 
@@ -323,11 +314,10 @@
 
 
 (defun set-tile-top-layout ()
-  " Tile Top: main child on top and others on bottom"
+  "Tile Top: main child on top and others on bottom"
   (layout-ask-size "Tile size in percent (%)" :tile-size)
   (set-layout #'tile-top-layout))
 
-(register-layout 'set-tile-top-layout)
 
 
 
@@ -355,13 +345,16 @@
 
 
 (defun set-tile-bottom-layout ()
-  " Tile Bottom: main child on bottom and others on top"
+  "Tile Bottom: main child on bottom and others on top"
   (layout-ask-size "Tile size in percent (%)" :tile-size)
   (set-layout #'tile-bottom-layout))
 
 
-(register-layout 'set-tile-bottom-layout)
-
+(register-layout-sub-menu 'frame-tile-dir-layout-menu "Tile in one direction layout menu"
+			  '(("l" set-tile-left-layout)
+			    ("r" set-tile-right-layout)
+			    ("t" set-tile-top-layout)
+			    ("b" set-tile-bottom-layout)))
 
 
 
@@ -371,7 +364,7 @@
 ;;; Left and space layout: like left layout but leave a space on the left
 (defun layout-ask-space (msg slot &optional (default 100))
   (when (frame-p *current-child*)
-    (let ((new-space (or (query-number msg (frame-data-slot *current-child* slot)) default)))
+    (let ((new-space (or (query-number msg (or (frame-data-slot *current-child* slot) default)) default)))
       (setf (frame-data-slot *current-child* slot) new-space))))
 
 
@@ -408,7 +401,8 @@
   (layout-ask-space "Tile space" :tile-left-space)
   (set-layout #'tile-left-space-layout))
 
-(register-layout 'set-tile-left-space-layout)
+(register-layout-sub-menu 'frame-tile-space-layout-menu "Tile with some space on one side menu"
+			  '(set-tile-left-space-layout))
 
 
 
@@ -442,6 +436,91 @@
   (set-layout #'main-window-right-layout))
 
 
+
+
+(defun main-window-left-layout (child parent)
+  "Main window left: Main windows on the left. Others on the right."
+  (with-slots (rx ry rw rh) parent
+    (let* ((main-windows (frame-data-slot parent :main-window-list))
+	   (len (length main-windows))
+	   (size (or (frame-data-slot parent :tile-size) 0.8)))
+      (if (zerop len)
+	  (no-layout child parent)
+	  (if (member child main-windows)
+	      (let* ((dy (/ rh len))
+		     (pos (position child main-windows)))
+		(values (1+ rx)
+			(1+ (round (+ ry (* dy pos))))
+			(- (round (* rw size)) 2)
+			(- (round dy) 2)))
+	      (values (1+ (round (+ rx (* rw size))))
+		      (1+ ry)
+		      (- (round (* rw (- 1 size))) 2)
+		      (- rh 2)))))))
+	  
+(defun set-main-window-left-layout ()
+  "Main window left: Main windows on the left. Others on the right."
+  (layout-ask-size "Split size in percent (%)" :tile-size)
+  (set-layout #'main-window-left-layout))
+
+
+
+(defun main-window-top-layout (child parent)
+  "Main window top: Main windows on the top. Others on the bottom."
+  (with-slots (rx ry rw rh) parent
+    (let* ((main-windows (frame-data-slot parent :main-window-list))
+	   (len (length main-windows))
+	   (size (or (frame-data-slot parent :tile-size) 0.8)))
+      (if (zerop len)
+	  (no-layout child parent)
+	  (if (member child main-windows)
+	      (let* ((dx (/ rw len))
+		     (pos (position child main-windows)))
+		(values (1+ (round (+ rx (* dx pos))))
+			(1+ ry)
+			(- (round dx) 2)
+			(- (round (* rh size)) 2)))
+	      (values (1+ rx)
+		      (1+ (round (+ ry (* rh size))))
+		      (- rw 2)
+		      (- (round (* rh (- 1 size))) 2)))))))
+	  
+(defun set-main-window-top-layout ()
+  "Main window top: Main windows on the top. Others on the bottom."
+  (layout-ask-size "Split size in percent (%)" :tile-size)
+  (set-layout #'main-window-top-layout))
+
+
+
+(defun main-window-bottom-layout (child parent)
+  "Main window bottom: Main windows on the bottom. Others on the top."
+  (with-slots (rx ry rw rh) parent
+    (let* ((main-windows (frame-data-slot parent :main-window-list))
+	   (len (length main-windows))
+	   (size (or (frame-data-slot parent :tile-size) 0.8)))
+      (if (zerop len)
+	  (no-layout child parent)
+	  (if (member child main-windows)
+	      (let* ((dx (/ rw len))
+		     (pos (position child main-windows)))
+		(values (1+ (round (+ rx (* dx pos))))
+			(1+ (round (+ ry (* rh (- 1 size)))))
+			(- (round dx) 2)
+			(- (round (* rh size)) 2)))
+	      (values (1+ rx)
+		      (1+ ry)
+		      (- rw 2)
+		      (- (round (* rh (- 1 size))) 2)))))))
+	  
+(defun set-main-window-bottom-layout ()
+  "Main window bottom: Main windows on the bottom. Others on the top."
+  (layout-ask-size "Split size in percent (%)" :tile-size)
+  (set-layout #'main-window-bottom-layout))
+
+
+
+
+
 (defun add-in-main-window-list ()
   "Add the current window in the main window list"
   (when (frame-p *current-child*)
@@ -466,16 +545,12 @@
     (setf (frame-data-slot *current-child* :main-window-list) nil))
   (leave-second-mode))
 
-
-(add-sub-menu 'frame-layout-menu (code-char (incf *layout-current-key*))
-	      'frame-main-window-layout-menu "Main window layout menu")
-
-
-(add-menu-key 'frame-main-window-layout-menu "r" 'set-main-window-right-layout)
-(add-menu-key 'frame-main-window-layout-menu "l" 'set-main-window-right-layout)
-(add-menu-key 'frame-main-window-layout-menu "t" 'set-main-window-right-layout)
-(add-menu-key 'frame-main-window-layout-menu "b" 'set-main-window-right-layout)
-(add-menu-comment 'frame-main-window-layout-menu "-=- Actions on main windows list -=-")
-(add-menu-key 'frame-main-window-layout-menu "a" 'add-in-main-window-list)
-(add-menu-key 'frame-main-window-layout-menu "v" 'remove-in-main-window-list)
-(add-menu-key 'frame-main-window-layout-menu "c" 'clear-main-window-list)
+(register-layout-sub-menu 'frame-main-window-layout-menu "Main window layout menu"
+			  '(("r" set-main-window-right-layout)
+			    ("l" set-main-window-left-layout)
+			    ("t" set-main-window-top-layout)
+			    ("b" set-main-window-bottom-layout)
+			    "-=- Actions on main windows list -=-"
+			    ("a" add-in-main-window-list)
+			    ("v" remove-in-main-window-list)
+			    ("c" clear-main-window-list)))

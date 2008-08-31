@@ -134,7 +134,7 @@
     (pushnew window (frame-child new-frame))
     (switch-to-root-frame :show-later t)
     (setf *current-child* *current-root*)
-    (set-tile-space-layout-once)
+    (set-layout-once #'tile-space-layout)
     (setf *current-child* new-frame)
     (default-window-placement new-frame window)))
 

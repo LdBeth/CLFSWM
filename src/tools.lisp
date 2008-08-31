@@ -37,6 +37,7 @@
 	   :with-all-internal-symbols
 	   :export-all-functions :export-all-variables
 	   :export-all-functions-and-variables
+	   :ensure-function
 	   :empty-string-p
 	   :is-config-p :config-documentation :config-group
 	   :setf/=
@@ -202,6 +203,12 @@ Return the result of the last hook"
 	(format t "Exporting ~S~%" symbol))
       (export symbol package))))
 
+
+
+(defun ensure-function (object)
+  (if (functionp object)
+      object
+      (symbol-function object)))
 
 
 
