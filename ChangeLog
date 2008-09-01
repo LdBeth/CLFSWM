@@ -1,3 +1,14 @@
+2008-09-01  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-layout.lisp (set-gimp-layout): Change the layout to
+	main-window-right-layout. Change the keybinding for (shift)alt+tab
+	to not select windows in the main window lisst.
+	Bind F8 to add a window in the main window list.
+	Bind F9 to remove a window in the main window list.
+	Change the focus policy to :sloppy.
+	(set-previous-layout): Restore the previous layout, keybinding and
+	focus policy.
+
 2008-08-31  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-menu.lisp (add-menu-comment): Add comments in menu.

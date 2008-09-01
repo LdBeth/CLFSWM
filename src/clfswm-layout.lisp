@@ -545,8 +545,76 @@
     (setf (frame-data-slot *current-child* :main-window-list) nil))
   (leave-second-mode))
 
-(register-layout-sub-menu 'frame-main-window-layout-menu "Main window layout menu"
-			  '(("r" set-main-window-right-layout)
+
+
+
+
+
+
+
+(defun select-next/previous-child-no-main-window (fun-rotate)
+  "Select the next/previous child - Skip windows in main window list"
+  (when (frame-p *current-child*)
+    (with-slots (child) *current-child*
+      (let* ((main-windows (frame-data-slot *current-child* :main-window-list))
+	     (to-skip? (not (= (length main-windows)
+			       (length child)))))
+	(labels ((rec ()
+		   (setf child (funcall fun-rotate child))
+		   (when (and to-skip?
+			      (member (frame-selected-child *current-child*) main-windows))
+		     (rec))))
+	  (unselect-all-frames)
+	  (rec)
+	  (show-all-children))))))
+
+
+(defun select-next-child-no-main-window ()
+  "Select the next child - Skip windows in main window list"
+  (select-next/previous-child-no-main-window #'rotate-list))
+
+(defun select-previous-child-no-main-window ()
+  "Select the previous child - Skip windows in main window list"
+  (select-next/previous-child-no-main-window #'anti-rotate-list))
+
+
+
+(defun set-gimp-layout ()
+  "A GIMP Layout: Mod-1+F8 to add define a main window. Mod-1+F9 to undefine it"
+  (when (frame-p *current-child*)
+    (define-main-key ("F8" :mod-1) 'add-in-main-window-list)
+    (define-main-key ("F9" :mod-1) 'remove-in-main-window-list)
+    (define-main-key ("Tab" :mod-1) 'select-next-child-no-main-window)
+    (define-main-key ("Tab" :mod-1 :shift) 'select-previous-child-no-main-window)
+    (setf (frame-data-slot *current-child* :focus-policy-save)
+	  (frame-focus-policy *current-child*))
+    (setf (frame-focus-policy *current-child*) :sloppy)
+    (setf (frame-data-slot *current-child* :layout-save)
+	  (frame-layout *current-child*))
+    (set-main-window-right-layout)))
+
+
+(defun set-previous-layout ()
+  "Restore the previous layout"
+  (undefine-main-key ("F8" :mod-1))
+  (undefine-main-key ("F9" :mod-1))
+  (define-main-key ("Tab" :mod-1) 'select-next-child)
+  (define-main-key ("Tab" :mod-1 :shift) 'select-previous-child)
+  (setf (frame-focus-policy *current-child*)
+	(frame-data-slot *current-child* :focus-policy-save))
+  (setf (frame-layout *current-child*)
+	(frame-data-slot *current-child* :layout-save))
+  (leave-second-mode))
+
+
+
+
+(register-layout-sub-menu 'frame-main-window-layout-menu "Main window layout menu (GIMP layout)"
+			  '("-=- GIMP Layout -=-"
+			    ("g" set-gimp-layout)
+			    ("p" set-previous-layout)
+			    "-=- Main window layout -=-"
+			    ("r" set-main-window-right-layout)
 			    ("l" set-main-window-left-layout)
 			    ("t" set-main-window-top-layout)
 			    ("b" set-main-window-bottom-layout)
@@ -554,3 +622,5 @@
 			    ("a" add-in-main-window-list)
 			    ("v" remove-in-main-window-list)
 			    ("c" clear-main-window-list)))
+
+
