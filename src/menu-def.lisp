@@ -27,6 +27,8 @@
 
 (in-package :clfswm)
 
+(init-menu)
+
 ;;; Here is a small example of menu manipulation:
 
 ;;(add-menu-key 'main "a" 'help-on-second-mode)
@@ -45,10 +47,6 @@
 
 ;;(define-second-key ("a") 'open-menu)
 
-
-
-
-
 (add-sub-menu 'main "c" 'child-menu "Child menu")
 (add-sub-menu 'main "f" 'frame-menu "Frame menu")
 (add-sub-menu 'main "w" 'window-menu "Window menu")
@@ -56,6 +54,7 @@
 (add-sub-menu 'main "n" 'action-by-name-menu "Action by name menu")
 (add-sub-menu 'main "u" 'action-by-number-menu "Action by number menu")
 (add-sub-menu 'main "y" 'utility-menu "Utility menu")
+(add-sub-menu 'main #\* 'clfswm-menu "CLFSWM menu")
 
 
 
@@ -168,4 +167,8 @@
 (add-menu-key 'utility-menu "i" 'identify-key)
 (add-menu-key 'utility-menu "colon" 'eval-from-query-string)
 (add-menu-key 'utility-menu "exclam" 'run-program-from-query-string)
+
+
+(add-menu-key 'clfswm-menu "r" 'reload-clfswm)
+(add-menu-key 'clfswm-menu "x" 'exit-clfswm)
 

@@ -1,5 +1,18 @@
 2008-09-02  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-menu.lisp (init-menu): New function.
+
+	* src/clfswm-util.lisp (reload-clfswm): New function to reload
+	CLFSWM.
+	(exit-clfswm): Rename quit-clfswm to exit-clfswm.
+
+	* src/clfswm.lisp (main, main-unprotected): Handle error in a
+	superior main function. Now CLFSWM can't break the X session. It
+	just reinitialize the display and run a new main loop.
+
+	* src/clfswm-corner.lisp: Make *clfswm-terminal* and
+	*vt-keyboard-on* global to avoid warnings when loading clfswm.
+
 	* src/clfswm-layout.lisp: Add a specific GIMP layout menu.
 	(help-on-gimp-layout): Describe how to use the GIMP layout.
 

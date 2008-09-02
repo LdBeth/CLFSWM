@@ -33,11 +33,7 @@
 
 (define-main-key ("F1" :mod-1) 'help-on-clfswm)
 
-(defun quit-clfswm ()
-  "Quit clfswm"
-  (throw 'exit-main-loop nil))
-
-(define-main-key ("Home" :mod-1 :control :shift) 'quit-clfswm)
+(define-main-key ("Home" :mod-1 :control :shift) 'exit-clfswm)
 
 (define-main-key ("Right" :mod-1) 'select-next-sister)
 (define-main-key ("Left" :mod-1) 'select-previous-sister)
@@ -180,13 +176,13 @@
 ;;
 ;;;;(define-main-key ("F1" :mod-1) 'help-on-clfswm)
 ;;;;
-;;(defun quit-clfswm ()
+;;(defun exit-clfswm ()
 ;;  "Quit clfswm"
 ;;  (throw 'exit-main-loop nil))
 ;;
 ;;
 ;;
-;;(define-main-key ("Home" :mod-1 :control :shift) 'quit-clfswm)
+;;(define-main-key ("Home" :mod-1 :control :shift) 'exit-clfswm)
 ;;
 ;;(define-main-key (#\t :mod-1) 'second-key-mode)
 ;;(define-main-key ("less" :control) 'second-key-mode)

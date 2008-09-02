@@ -99,6 +99,8 @@
 
 
 
+(defun init-menu ()
+  (setf *menu* (make-menu :name 'main :doc "Main menu")))
 
 
 

@@ -215,12 +215,12 @@
 					    :height (xlib:screen-height *screen*)
 					    :depth (xlib:screen-root-depth *screen*)
 					    :drawable *root*)
-	*in-second-mode* nil)
+	*in-second-mode* nil
+	*clfswm-terminal* nil
+	*vt-keyboard-on* nil)
   (xgrab-init-pointer)
   (xgrab-init-keyboard)
   (init-last-child)
-  (init-virtual-keyboard)
-  (init-clfswm-terminal)
   (xlib:map-window *no-focus-window*)
   (dbg *display*)
   (setf (xlib:window-event-mask *root*) (xlib:make-event-mask :substructure-redirect
@@ -242,7 +242,7 @@
   (show-all-children *current-root*)
   (grab-main-keys)
   (xlib:display-finish-output *display*))
-
+  
 
 
 (defun xdg-config-home ()
@@ -269,25 +269,28 @@
 
 
 
-(defun main (&key (display (or (getenv "DISPLAY") ":0")) protocol
-	     (base-dir (directory-namestring (or *load-truename* ""))))
+(defun main-unprotected (&key (display (or (getenv "DISPLAY") ":0")) protocol
+			 (base-dir (directory-namestring (or *load-truename* "")))
+			 error-msg)
   (setf *contrib-dir* base-dir)
   (read-conf-file)
   (handler-case
       (open-display display protocol)
     (xlib:access-error (c)
-      (format t "~&~A~&Maybe another window manager is running.~%" c)
+      (format t "~&~A~&Maybe another window manager is running. [1]~%" c)
       (force-output)
-      (return-from main 'init-display-error)))
+      (return-from main-unprotected 'init-display-error)))
   (handler-case
       (init-display)
     (xlib:access-error (c)
       (ungrab-main-keys)
       (xlib:destroy-window *no-focus-window*)
       (xlib:close-display *display*)
-      (format t "~&~A~&Maybe another window manager is running.~%" c)
+      (format t "~&~A~&Maybe another window manager is running. [2]~%" c)
       (force-output)
-      (return-from main 'init-display-error)))
+      (return-from main-unprotected 'init-display-error)))
+  (when error-msg
+    (info-mode error-msg))
   (unwind-protect
        (catch 'exit-main-loop
 	 (main-loop))
@@ -295,6 +298,22 @@
     (xlib:destroy-window *no-focus-window*)
     (xlib:free-pixmap *pixmap-buffer*)
     (xlib:close-display *display*)))
-      
+
+
+
+(defun main (&key (display (or (getenv "DISPLAY") ":0")) protocol
+	     (base-dir (directory-namestring (or *load-truename* ""))))
+  (let (error-msg)
+    (catch 'exit-clfswm
+      (loop
+	 (handler-case
+	     (main-unprotected :display display :protocol protocol :base-dir base-dir
+			       :error-msg error-msg)
+	   (error (c)
+	     (let ((msg (format nil "CLFSWM Error: ~A." c)))
+	       (format t "~&~A~%Reinitializing...~%" msg)
+	       (setf error-msg (list (list msg *info-color-title*)
+				     "Reinitializing...")))))))))
+
 
 

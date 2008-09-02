@@ -109,46 +109,42 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
     (setf *current-root* parent))
   t)
 
-(let ((vt-keyboard-on nil))
-  (defun init-virtual-keyboard ()
-    (setf vt-keyboard-on nil))
-  (defun present-virtual-keyboard ()
-    "Present a virtual keyboard"
-    (stop-button-event)
-    (do-shell (if vt-keyboard-on
-		  *virtual-keyboard-kill-cmd*
-		  *virtual-keyboard-cmd*))
-    (setf vt-keyboard-on (not vt-keyboard-on))
-    t))
+
+(defun present-virtual-keyboard ()
+  "Present a virtual keyboard"
+  (stop-button-event)
+  (do-shell (if *vt-keyboard-on*
+		*virtual-keyboard-kill-cmd*
+		*virtual-keyboard-cmd*))
+  (setf *vt-keyboard-on* (not *vt-keyboard-on*))
+  t)
 
 
-(let ((terminal nil))
-  (defun init-clfswm-terminal ()
-    (setf terminal nil))
-  (defun present-clfswm-terminal ()
-    "Hide/Unhide a terminal"
-    (stop-button-event)
-    (let ((found nil))
-      (dolist (win (xlib:query-tree *root*))
-	(when (string-equal (xlib:wm-name win) *clfswm-terminal-name*)
-	  (setf found t)
-	  (unless (equal terminal win)
-	    (setf terminal win)
-	    (hide-window terminal))))
-      (unless found
-	(do-shell *clfswm-terminal-cmd*)
-	(loop :with done = nil :until done
-	   :do (dolist (win (xlib:query-tree *root*))
-		 (when (string-equal (xlib:wm-name win) *clfswm-terminal-name*)
-		   (setf terminal win
-			 done t))))
-	(hide-window terminal)))
-    (cond ((window-hidden-p terminal) (unhide-window terminal)
-	   (focus-window terminal)
-	   (raise-window terminal))
-	  (t (hide-window terminal)
-	     (show-all-children nil)))
-    t))
+
+(defun present-clfswm-terminal ()
+  "Hide/Unhide a terminal"
+  (stop-button-event)
+  (let ((found nil))
+    (dolist (win (xlib:query-tree *root*))
+      (when (string-equal (xlib:wm-name win) *clfswm-terminal-name*)
+	(setf found t)
+	(unless (equal *clfswm-terminal* win)
+	  (setf *clfswm-terminal* win)
+	  (hide-window *clfswm-terminal*))))
+    (unless found
+      (do-shell *clfswm-terminal-cmd*)
+      (loop :with done = nil :until done
+	 :do (dolist (win (xlib:query-tree *root*))
+	       (when (string-equal (xlib:wm-name win) *clfswm-terminal-name*)
+		 (setf *clfswm-terminal* win
+		       done t))))
+      (hide-window *clfswm-terminal*)))
+  (cond ((window-hidden-p *clfswm-terminal*) (unhide-window *clfswm-terminal*)
+	 (focus-window *clfswm-terminal*)
+	 (raise-window *clfswm-terminal*))
+	(t (hide-window *clfswm-terminal*)
+	   (show-all-children nil)))
+  t)
 
 
 (defun ask-close/kill-current-window ()

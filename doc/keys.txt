@@ -7,7 +7,7 @@ Main mode keys:
 --------------
 
   Mod-1                F1              Open the help and info window
-  Mod-1 Control Shift  Home            Quit clfswm
+  Mod-1 Control Shift  Home            Exit clfswm
   Mod-1                Right           Select the next sister frame
   Mod-1                Left            Select the previous sister frame
   Mod-1                Down            Select the previous level in frame
@@ -80,7 +80,7 @@ Second mode keys:
                        Return          Leave second mode
                        Escape          Leave second mode
                        T               Tile with spaces the current frame
-  Mod-1 Control Shift  Home            Quit clfswm
+  Mod-1 Control Shift  Home            Exit clfswm
   Mod-1                Right           Select the next sister frame
   Mod-1                Left            Select the previous sister frame
   Mod-1                Down            Select the previous level in frame

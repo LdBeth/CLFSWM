@@ -100,7 +100,7 @@
 
 (define-second-key ("t") 'tile-space-current-frame)
 
-(define-second-key ("Home" :mod-1 :control :shift) 'quit-clfswm)
+(define-second-key ("Home" :mod-1 :control :shift) 'exit-clfswm)
 
 (define-second-key ("Right" :mod-1) 'select-next-sister)
 (define-second-key ("Left" :mod-1) 'select-previous-sister)

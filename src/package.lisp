@@ -28,7 +28,9 @@
 (defpackage clfswm
   (:use :common-lisp :my-html :tools :version)
   ;;(:shadow :defun)
-  (:export :main))
+  (:export :main
+	   :reload-clfswm
+	   :exit-clfswm))
 
 
 
@@ -155,7 +157,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defstruct menu-item key value)
 
 
-(defvar *menu* (make-menu :name 'main :doc "Main menu"))
+(defparameter *menu* (make-menu :name 'main :doc "Main menu"))
 
 
 ;;; Main mode hooks (set in clfswm.lisp)
@@ -221,6 +223,10 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 
 (defparameter *in-second-mode* nil)
+
+
+(defparameter *vt-keyboard-on* nil)
+(defparameter *clfswm-terminal* nil)
 
 ;; For debug - redefine defun
 ;;(shadow :defun)

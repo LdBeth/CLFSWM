@@ -34,6 +34,19 @@
 
 
 
+(defun exit-clfswm ()
+  "Exit clfswm"
+  (throw 'exit-clfswm nil))
+
+
+(defun reload-clfswm ()
+  "Reload clfswm"
+  (format t "~&-*- Reloading CLFSWM -*-~%")
+  (asdf:oos 'asdf:load-op :clfswm)
+  (throw 'exit-main-loop nil))
+
+
+
 
 (defun rename-current-child ()
   "Rename the current child"

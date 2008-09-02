@@ -9,6 +9,7 @@ s: < Selection menu >
 n: < Action by name menu >
 u: < Action by number menu >
 y: < Utility menu >
+*: < CLFSWM menu >
 
 Child-Menu
 r: Rename the current child
@@ -41,6 +42,7 @@ c: < Frame tile layout menu >
 d: < Tile in one direction layout menu >
 e: < Tile with some space on one side menu >
 f: < Main window layout menu >
+g: < The GIMP layout menu >
 
 Frame-Fast-Layout-Menu
 s: Switch between two layouts
@@ -61,6 +63,20 @@ Frame-Tile-Space-Layout-Menu
 a: Tile Left Space: main child on left and others on right. Leave some space on the left.
 
 Frame-Main-Window-Layout-Menu
+r: Main window right: Main windows on the right. Others on the left.
+l: Main window left: Main windows on the left. Others on the right.
+t: Main window top: Main windows on the top. Others on the bottom.
+b: Main window bottom: Main windows on the bottom. Others on the top.
+-=- Actions on main windows list -=-
+a: Add the current window in the main window list
+v: Remove the current window from the main window list
+c: Clear the main window list
+
+Frame-Gimp-Layout-Menu
+g: The GIMP Layout
+p: Restore the previous layout
+h: Help on the GIMP layout
+-=- Main window layout -=-
 r: Main window right: Main windows on the right. Others on the left.
 l: Main window left: Main windows on the left. Others on the right.
 t: Main window top: Main windows on the top. Others on the bottom.
@@ -161,6 +177,10 @@ Utility-Menu
 i: Identify a key
 colon: Eval a lisp form from the query input
 exclam: Run a program from the query input
+
+Clfswm-Menu
+r: Reload clfswm
+x: Exit clfswm
 
 
 This documentation was produced with the CLFSWM auto-doc functions. To reproduce it, use the produce-menu-doc-in-file or
