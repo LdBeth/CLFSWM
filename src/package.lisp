@@ -220,6 +220,7 @@ It is particulary useful with CLISP/MIT-CLX.")
   "Config(Hook group):")
 
 
+(defparameter *in-second-mode* nil)
 
 ;; For debug - redefine defun
 ;;(shadow :defun)

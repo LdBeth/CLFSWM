@@ -548,7 +548,15 @@
 
 
 
-
+(register-layout-sub-menu 'frame-main-window-layout-menu "Main window layout menu"
+			  '(("r" set-main-window-right-layout)
+			    ("l" set-main-window-left-layout)
+			    ("t" set-main-window-top-layout)
+			    ("b" set-main-window-bottom-layout)
+			    "-=- Actions on main windows list -=-"
+			    ("a" add-in-main-window-list)
+			    ("v" remove-in-main-window-list)
+			    ("c" clear-main-window-list)))
 
 
 
@@ -578,19 +586,34 @@
   (select-next/previous-child-no-main-window #'anti-rotate-list))
 
 
+(defun mouse-click-to-focus-and-move-no-main-window (window root-x root-y)
+  "Move and focus the current frame or focus the current window parent.
+Or do actions on corners - Skip windows in main window list"
+  (unless (do-corner-action root-x root-y *corner-main-mode-left-button*)
+    (if (and (frame-p *current-child*)
+	     (member window (frame-data-slot *current-child* :main-window-list)))
+	(replay-button-event) 
+	(mouse-click-to-focus-generic window root-x root-y #'move-frame))))
+
+
 
 (defun set-gimp-layout ()
-  "A GIMP Layout: Mod-1+F8 to add define a main window. Mod-1+F9 to undefine it"
+  "The GIMP Layout"
   (when (frame-p *current-child*)
+    ;; Note: There is no need to ungrab/grab keys because this
+    ;; is done when leaving the second mode.
     (define-main-key ("F8" :mod-1) 'add-in-main-window-list)
     (define-main-key ("F9" :mod-1) 'remove-in-main-window-list)
+    (define-main-key ("F10" :mod-1) 'clear-main-window-list)
     (define-main-key ("Tab" :mod-1) 'select-next-child-no-main-window)
     (define-main-key ("Tab" :mod-1 :shift) 'select-previous-child-no-main-window)
+    (define-main-mouse (1) 'mouse-click-to-focus-and-move-no-main-window)
     (setf (frame-data-slot *current-child* :focus-policy-save)
 	  (frame-focus-policy *current-child*))
     (setf (frame-focus-policy *current-child*) :sloppy)
     (setf (frame-data-slot *current-child* :layout-save)
 	  (frame-layout *current-child*))
+    ;; Set the default layout and leave the second mode.
     (set-main-window-right-layout)))
 
 
@@ -598,8 +621,10 @@
   "Restore the previous layout"
   (undefine-main-key ("F8" :mod-1))
   (undefine-main-key ("F9" :mod-1))
+  (undefine-main-key ("F10" :mod-1))
   (define-main-key ("Tab" :mod-1) 'select-next-child)
   (define-main-key ("Tab" :mod-1 :shift) 'select-previous-child)
+  (define-main-mouse (1) 'mouse-click-to-focus-and-move)
   (setf (frame-focus-policy *current-child*)
 	(frame-data-slot *current-child* :focus-policy-save))
   (setf (frame-layout *current-child*)
@@ -607,12 +632,27 @@
   (leave-second-mode))
 
 
+(defun help-on-gimp-layout ()
+  "Help on the GIMP layout"
+  (info-mode `(("-=- Help on The GIMP layout -=-" ,*info-color-title*)
+	       ""
+	       "The GIMP layout is a main-window-layout with a sloppy focus policy."
+	       "You can change the main windows direction with the layout menu."
+	       ""
+	       "Press Alt+F8 to add a window to the main windows list."
+	       "Press Alt+F9 to remove a window from the main windows list."
+	       "Press Alt+F10 to clear the main windows list."
+	       ""
+	       "You can select a main window with the right mouse button."
+	       ""
+	       "Use the layout menu to restore the previous layout and keybinding."))
+  (leave-second-mode))
 
 
-(register-layout-sub-menu 'frame-main-window-layout-menu "Main window layout menu (GIMP layout)"
-			  '("-=- GIMP Layout -=-"
-			    ("g" set-gimp-layout)
+(register-layout-sub-menu 'frame-gimp-layout-menu "The GIMP layout menu"
+			  '(("g" set-gimp-layout)
 			    ("p" set-previous-layout)
+			    ("h" help-on-gimp-layout)
 			    "-=- Main window layout -=-"
 			    ("r" set-main-window-right-layout)
 			    ("l" set-main-window-left-layout)

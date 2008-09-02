@@ -25,8 +25,6 @@
 
 (in-package :clfswm)
 
-(defparameter *in-second-mode* nil)
-
 (defparameter *sm-window* nil)
 (defparameter *sm-font* nil)
 (defparameter *sm-gc* nil)

@@ -1,3 +1,8 @@
+2008-09-02  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-layout.lisp: Add a specific GIMP layout menu.
+	(help-on-gimp-layout): Describe how to use the GIMP layout.
+
 2008-09-01  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-layout.lisp (set-gimp-layout): Change the layout to

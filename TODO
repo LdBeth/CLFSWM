@@ -7,9 +7,15 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- A Gimp layout example (a main window and all others on the left) [Philippe]
-  + Alt-Tab cycle only on non-main windows
-  + Focus policy to sloppy focus.
+- From stumpwm: [Philippe]
+ "In other news stumpwm should catch unhandled errors, restart, and
+ print an error message. And there is now a soft-restart command. With
+ this in place I suspect you will need to restart stumpwm very rarely
+ and it won't spontaneously bring down X."
+  => Reset all -> place clfswm in its starting state.
+
+- Sloppy focus strict -> focus windows only in the current frame
+  Sloppy select -> select frame on mouse enter.
 
 - Hook to open next window in named/numbered frame [Philippe]
 
@@ -28,13 +34,6 @@ MAYBE
 =====
 
 - cd/pwd a la shell to navigate throw frames. [Philippe]
-
-- From stumpwm: [Philippe]
- "In other news stumpwm should catch unhandled errors, restart, and
- print an error message. And there is now a soft-restart command. With
- this in place I suspect you will need to restart stumpwm very rarely
- and it won't spontaneously bring down X."
-  => Reset all -> place clfswm in its starting state.
 
 
 - Zoom
