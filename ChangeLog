@@ -2,6 +2,8 @@
 
 	* src/clfswm.lisp (handle-enter-notify): Add a sloppy strict focus
 	policy -> Sloppy focus only for windows in the current frame.
+	(main-unprotected): Exit clfswm on init error (ie: when another
+	window manager is running).
 
 	* src/clfswm-util.lisp (reset-clfswm): New function.
 

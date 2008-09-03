@@ -26,6 +26,7 @@
 (in-package :clfswm)
 
 
+
 ;;; Conversion functions
 ;;; Float -> Pixel conversion
 (defun x-fl->px (x parent)

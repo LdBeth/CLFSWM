@@ -275,6 +275,20 @@
 
 
 
+
+
+
+(defun exit-clfswm ()
+  "Exit clfswm"
+  (throw 'exit-clfswm nil))
+
+(defun reset-clfswm ()
+  "Reset clfswm"
+  (throw 'exit-main-loop nil))
+
+
+
+
 (defun main-unprotected (&key (display (or (getenv "DISPLAY") ":0")) protocol
 			 (base-dir (directory-namestring (or *load-truename* "")))
 			 error-msg)
@@ -285,7 +299,7 @@
     (xlib:access-error (c)
       (format t "~&~A~&Maybe another window manager is running. [1]~%" c)
       (force-output)
-      (return-from main-unprotected 'init-display-error)))
+      (exit-clfswm)))
   (handler-case
       (init-display)
     (xlib:access-error (c)
@@ -294,7 +308,7 @@
       (xlib:close-display *display*)
       (format t "~&~A~&Maybe another window manager is running. [2]~%" c)
       (force-output)
-      (return-from main-unprotected 'init-display-error)))
+      (exit-clfswm)))
   (when error-msg
     (info-mode error-msg))
   (unwind-protect
