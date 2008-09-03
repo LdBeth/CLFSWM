@@ -179,7 +179,8 @@ colon: Eval a lisp form from the query input
 exclam: Run a program from the query input
 
 Clfswm-Menu
-r: Reload clfswm
+r: Reset clfswm
+l: Reload clfswm
 x: Exit clfswm
 
 

@@ -38,12 +38,16 @@
   "Exit clfswm"
   (throw 'exit-clfswm nil))
 
+(defun reset-clfswm ()
+  "Reset clfswm"
+  (throw 'exit-main-loop nil))
+
 
 (defun reload-clfswm ()
   "Reload clfswm"
   (format t "~&-*- Reloading CLFSWM -*-~%")
   (asdf:oos 'asdf:load-op :clfswm)
-  (throw 'exit-main-loop nil))
+  (reset-clfswm))
 
 
 

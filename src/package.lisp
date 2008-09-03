@@ -30,6 +30,7 @@
   ;;(:shadow :defun)
   (:export :main
 	   :reload-clfswm
+	   :reset-clfswm
 	   :exit-clfswm))
 
 

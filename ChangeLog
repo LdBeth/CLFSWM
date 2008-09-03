@@ -1,3 +1,7 @@
+2008-09-03  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (reset-clfswm): New function.
+
 2008-09-02  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-menu.lisp (init-menu): New function.

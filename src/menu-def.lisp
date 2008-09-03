@@ -169,6 +169,7 @@
 (add-menu-key 'utility-menu "exclam" 'run-program-from-query-string)
 
 
-(add-menu-key 'clfswm-menu "r" 'reload-clfswm)
+(add-menu-key 'clfswm-menu "r" 'reset-clfswm)
+(add-menu-key 'clfswm-menu "l" 'reload-clfswm)
 (add-menu-key 'clfswm-menu "x" 'exit-clfswm)
 
