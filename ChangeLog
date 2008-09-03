@@ -1,5 +1,8 @@
 2008-09-03  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm.lisp (handle-enter-notify): Add a sloppy strict focus
+	policy -> Sloppy focus only for windows in the current frame.
+
 	* src/clfswm-util.lisp (reset-clfswm): New function.
 
 2008-09-02  Philippe Brochard  <pbrochard@common-lisp.net>

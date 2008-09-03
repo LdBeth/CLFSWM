@@ -114,6 +114,8 @@
 
 (add-menu-key 'frame-focus-policy "c" 'current-frame-set-click-focus-policy)
 (add-menu-key 'frame-focus-policy "s" 'current-frame-set-sloppy-focus-policy)
+(add-menu-key 'frame-focus-policy "t" 'current-frame-set-sloppy-strict-focus-policy)
+
 
 (add-menu-key 'frame-managed-window-menu "m" 'current-frame-manage-window-type)
 (add-menu-key 'frame-managed-window-menu "a" 'current-frame-manage-all-window-type)

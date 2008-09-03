@@ -124,8 +124,9 @@ d: Resize down the current frame
 a: Resize down the current frame to its minimal size
 
 Frame-Focus-Policy
-c: Set a click focus policy for the current frame
-s: Set a sloppy focus policy for the current frame
+c: Set a click focus policy for the current frame.
+s: Set a sloppy focus policy for the current frame.
+t: Set a (strict) sloppy focus policy only for windows in the current frame.
 
 Frame-Managed-Window-Menu
 m: Change window types to be managed by a frame

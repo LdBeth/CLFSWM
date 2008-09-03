@@ -7,15 +7,12 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Sloppy focus strict -> focus windows only in the current frame
-  Sloppy select -> select frame on mouse enter.
-
 - Hook to open next window in named/numbered frame [Philippe]
 
 - Ensure-unique-number/name (new function) [Philippe]
 
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
-   TODO : remove src/test.lisp src/load-test.lisp
+   TODO :
    In ~/.clfswmrc:
       ;;;; AUTO-CONFIG - Do not edit those lines by hands: they are overwritten by CLFSWM
       (defparameter *ma-var* value)
