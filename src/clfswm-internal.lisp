@@ -252,7 +252,7 @@
 				     :colormap (xlib:screen-default-colormap *screen*)
 				     :border-width 1
 				     :border (get-color "Red")
-				     :event-mask '(:exposure :button-press :button-release :pointer-motion)))
+				     :event-mask '(:exposure :button-press :button-release :pointer-motion :enter-window)))
 	 (gc (xlib:create-gcontext :drawable window
 				   :foreground (get-color "Green")
 				   :background (get-color "Black")
@@ -366,6 +366,22 @@
 	(hidden-windows (remove-if-not #'window-hidden-p
 				       (copy-list (xlib:query-tree *root*)))))
     (set-difference hidden-windows all-windows)))
+
+
+
+;;; Current window utilities
+(defun get-current-window ()
+  (typecase *current-child*
+    (xlib:window  *current-child*)
+    (frame (frame-selected-child *current-child*))))
+
+(defmacro with-current-window (&body body)
+  "Bind 'window' to the current window"
+  `(let ((window (get-current-window)))
+      (when (xlib:window-p window)
+	,@body)))
+
+
 
 
 

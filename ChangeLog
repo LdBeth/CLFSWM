@@ -1,3 +1,15 @@
+2008-09-12  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/menu-def.lisp: Add a menu to set a focus policy for all
+	frames.
+
+	* src/clfswm-util.lisp (set-focus-policy-generic-for-all)
+	(all-frames-set-*-focus-policy): Set a focus policy for all
+	frames.
+
+	* src/clfswm.lisp (handle-enter-notify): sloppy-select
+	mode. Select a child and its parents on mouse over.
+
 2008-09-03  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm.lisp (handle-enter-notify): Add a sloppy strict focus

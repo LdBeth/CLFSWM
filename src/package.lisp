@@ -85,7 +85,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 ;;; CONFIG - Default focus policy
 (defparameter *default-focus-policy* :click
-  "Config(): Default mouse focus policy. One of :click, :sloppy or :sloppy-strict.")
+  "Config(): Default mouse focus policy. One of :click, :sloppy, :sloppy-strict or :sloppy-select.")
 
 
 

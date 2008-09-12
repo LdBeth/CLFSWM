@@ -864,21 +864,6 @@ For window: set current child to window or its parent according to window-parent
 
 
 
-;;; Current window utilities
-(defun get-current-window ()
-  (typecase *current-child*
-    (xlib:window  *current-child*)
-    (frame (frame-selected-child *current-child*))))
-
-(defmacro with-current-window (&body body)
-  "Bind 'window' to the current window"
-  `(let ((window (get-current-window)))
-      (when (xlib:window-p window)
-	,@body)))
-
-
-
-
 
 ;;; Force window functions
 (defun force-window-in-frame ()
@@ -1090,5 +1075,33 @@ For window: set current child to window or its parent according to window-parent
 
 (defun current-frame-set-sloppy-strict-focus-policy ()
   "Set a (strict) sloppy focus policy only for windows in the current frame."
-    (set-focus-policy-generic :sloppy-strict))
+  (set-focus-policy-generic :sloppy-strict))
+
+(defun current-frame-set-sloppy-select-policy ()
+  "Set a sloppy select policy for the current frame."
+    (set-focus-policy-generic :sloppy-select))
+
+
+
+(defun set-focus-policy-generic-for-all (focus-policy)
+  (with-all-frames (*root-frame* frame)
+    (setf (frame-focus-policy frame) focus-policy))
+  (leave-second-mode))
+  
+
+(defun all-frames-set-click-focus-policy ()
+  "Set a click focus policy for all frames."
+  (set-focus-policy-generic-for-all :click))
+  
+(defun all-frames-set-sloppy-focus-policy ()
+  "Set a sloppy focus policy for all frames."
+  (set-focus-policy-generic-for-all :sloppy))
+
+(defun all-frames-set-sloppy-strict-focus-policy ()
+  "Set a (strict) sloppy focus policy for all frames."
+  (set-focus-policy-generic-for-all :sloppy-strict))
+
+(defun all-frames-set-sloppy-select-policy ()
+  "Set a sloppy select policy for all frames."
+    (set-focus-policy-generic-for-all :sloppy-select))
 

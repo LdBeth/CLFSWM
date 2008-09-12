@@ -112,9 +112,18 @@
 (add-menu-key 'frame-resize-menu #\a 'current-frame-resize-all-dir-minimal)
 
 
-(add-menu-key 'frame-focus-policy "c" 'current-frame-set-click-focus-policy)
-(add-menu-key 'frame-focus-policy "s" 'current-frame-set-sloppy-focus-policy)
-(add-menu-key 'frame-focus-policy "t" 'current-frame-set-sloppy-strict-focus-policy)
+(add-menu-comment 'frame-focus-policy "-=- For the current frame -=-")
+(add-menu-key 'frame-focus-policy "a" 'current-frame-set-click-focus-policy)
+(add-menu-key 'frame-focus-policy "b" 'current-frame-set-sloppy-focus-policy)
+(add-menu-key 'frame-focus-policy "c" 'current-frame-set-sloppy-strict-focus-policy)
+(add-menu-key 'frame-focus-policy "d" 'current-frame-set-sloppy-select-policy)
+(add-menu-comment 'frame-focus-policy "-=- For all frames -=-")
+(add-menu-key 'frame-focus-policy "e" 'all-frames-set-click-focus-policy)
+(add-menu-key 'frame-focus-policy "f" 'all-frames-set-sloppy-focus-policy)
+(add-menu-key 'frame-focus-policy "g" 'all-frames-set-sloppy-strict-focus-policy)
+(add-menu-key 'frame-focus-policy "h" 'all-frames-set-sloppy-select-policy)
+
+
 
 
 (add-menu-key 'frame-managed-window-menu "m" 'current-frame-manage-window-type)
