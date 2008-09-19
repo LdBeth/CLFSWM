@@ -80,7 +80,7 @@ Second mode keys:
                        Exclam          Run a program from the query input
                        Return          Leave second mode
                        Escape          Leave second mode
-                       T               Tile with spaces the current frame
+                       T               Tile the current frame
   Mod-1 Control Shift  Home            Exit clfswm
   Mod-1                Right           Select the next sister frame
   Mod-1                Left            Select the previous sister frame

@@ -93,7 +93,7 @@
 
 
 (defun tile-current-frame ()
-  "Tile with spaces the current frame"
+  "Tile the current frame"
   (set-layout-once #'tile-layout)
   (leave-second-mode))
 
