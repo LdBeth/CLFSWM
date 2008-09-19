@@ -352,17 +352,19 @@ Window types are in +WINDOW-TYPES+.")
       (setf pointer-grabbed t)
       (let* ((white (xlib:make-color :red 1.0 :green 1.0 :blue 1.0))
 	     (black (xlib:make-color :red 0.0 :green 0.0 :blue 0.0)))
-	(if cursor-char
-	    (setf cursor-font (xlib:open-font *display* "cursor")
-		  cursor (xlib:create-glyph-cursor :source-font cursor-font
-						   :source-char cursor-char
-						   :mask-font cursor-font
-						   :mask-char cursor-mask-char
-						   :foreground black
-						   :background white))
-	    (setf cursor nil))
-	(xlib:grab-pointer root pointer-mask
-			   :owner-p owner-p  :sync-keyboard-p nil :sync-pointer-p nil :cursor cursor)))
+	(cond (cursor-char
+	       (setf cursor-font (xlib:open-font *display* "cursor")
+		     cursor (xlib:create-glyph-cursor :source-font cursor-font
+						      :source-char (or cursor-char 68)
+						      :mask-font cursor-font
+						      :mask-char (or cursor-mask-char 69)
+						      :foreground black
+						      :background white))
+	       (xlib:grab-pointer root pointer-mask
+				  :owner-p owner-p  :sync-keyboard-p nil :sync-pointer-p nil :cursor cursor))
+	      (t
+	       (xlib:grab-pointer root pointer-mask
+				  :owner-p owner-p  :sync-keyboard-p nil :sync-pointer-p nil)))))
 
     (defun xungrab-pointer ()
       "Remove the grab on the cursor and restore the cursor shape."

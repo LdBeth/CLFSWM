@@ -1,3 +1,13 @@
+2008-09-19  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/bindings-second-mode.lisp: Bind "t" to tile-current-frame.
+
+	* src/menu-def.lisp: Change key binding for the CLFSWM menu
+	entry.
+
+	* src/xlib-util.lisp (xgrab-pointer): Handle the case where cursor
+	is nil. (workaround on some CLX implementation).
+
 2008-09-12  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/menu-def.lisp: Add a menu to set a focus policy for all

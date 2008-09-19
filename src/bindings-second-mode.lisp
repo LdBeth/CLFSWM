@@ -92,13 +92,12 @@
 (define-second-key ("Escape") 'leave-second-mode)
 
 
-(defun tile-space-current-frame ()
+(defun tile-current-frame ()
   "Tile with spaces the current frame"
-  (explode-frame *current-child*)
-  (set-layout-once #'tile-space-layout)
+  (set-layout-once #'tile-layout)
   (leave-second-mode))
 
-(define-second-key ("t") 'tile-space-current-frame)
+(define-second-key ("t") 'tile-current-frame)
 
 (define-second-key ("Home" :mod-1 :control :shift) 'exit-clfswm)
 
