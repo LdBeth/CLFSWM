@@ -9,7 +9,7 @@ s: < Selection menu >
 n: < Action by name menu >
 u: < Action by number menu >
 y: < Utility menu >
-*: < CLFSWM menu >
+m: < CLFSWM menu >
 
 Child-Menu
 r: Rename the current child
