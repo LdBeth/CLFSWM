@@ -93,6 +93,8 @@ c: Open the next window in a new frame in the current root
 d: Open the next window in a new frame in the root frame
 e: Open the next window in a new frame in the parent frame
 f: Open the next window in the current frame and leave the focus on the current child
+g: Open the next window in a named frame
+h: Open the next window in a numbered frame
 
 Frame-Movement-Menu
 p: < Frame pack menu >
