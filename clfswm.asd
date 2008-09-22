@@ -47,10 +47,10 @@
 				:depends-on ("package" "clfswm-info"))
 			 (:file "menu-def"
 				:depends-on ("clfswm-menu" "clfswm"))
+			 (:file "clfswm-query"
+				:depends-on ("package" "config" "xlib-util"))
 			 (:file "clfswm-util"
 				:depends-on ("clfswm" "keysyms" "clfswm-info" "clfswm-second-mode" "clfswm-query" "clfswm-menu" "clfswm-autodoc" "clfswm-corner"))
-			 (:file "clfswm-query"
-				:depends-on ("package" "config"))
 			 (:file "clfswm-layout"
 				:depends-on ("package" "clfswm-internal" "clfswm-util" "clfswm-info" "menu-def"))
 			 (:file "clfswm-pack"
