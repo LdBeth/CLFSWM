@@ -1,5 +1,13 @@
 2008-09-22  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-nw-hooks.lisp (named-frame-nw-hook): New new window
+	hook: open the next window in a named frame.
+	(numbered-frame-nw-hook): New new window hook: open the next
+	window in a numbered frame.
+
+	* src/clfswm-query.lisp (query-string): Grab the keyboard in all
+	cases. So query-string can be called even in the main mode.
+
 	* src/clfswm-internal.lisp (show-all-children): Do not raise a
 	child by default => far less flickering.
 

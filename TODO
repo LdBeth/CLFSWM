@@ -7,9 +7,11 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Hook to open next window in named/numbered frame [Philippe]
-
 - Ensure-unique-number/name (new function) [Philippe]
+
+
+MAYBE
+=====
 
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
    TODO :
@@ -19,9 +21,6 @@ Should handle these soon.
       ...
       ;;;; AUTO-CONFIG End : You can add your configurations below this line.
 
-
-MAYBE
-=====
 
 - cd/pwd a la shell to navigate throw frames. [Philippe]
 

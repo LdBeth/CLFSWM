@@ -321,9 +321,6 @@
 
 
 ;;; Frame name actions
-;;;(loop :for str :in '("The Gimp" "The klm" "klm" "abc")  ;; Test
-;;;   :when (zerop (or (search "ThE" str :test #'string-equal) -1))
-;;;   :collect str)
 (defun ask-frame-name (msg)
   "Ask a frame name"
   (let ((all-frame-name nil)

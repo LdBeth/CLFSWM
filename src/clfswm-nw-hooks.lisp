@@ -185,3 +185,45 @@
   (set-nw-hook #'leave-focus-frame-nw-hook))
 
 (register-nw-hook 'set-leave-focus-frame-nw-hook)
+
+
+
+
+
+(defun nw-hook-open-in-frame (window frame)
+  (when (frame-p frame)
+    (pushnew window (frame-child frame))
+    (unless (find-child frame *current-root*)
+      (hide-all *current-root*)
+      (setf *current-root* frame))
+    (setf *current-child* frame)
+    (focus-all-children window frame)
+    (default-window-placement frame window)
+    (show-all-children *current-root*)))
+
+;;; Open a new window in a named frame
+(defun named-frame-nw-hook (frame window)
+  (clear-nw-hook frame)
+  (let* ((frame-name (ask-frame-name "Open the next window in frame named:"))
+	 (new-frame (find-frame-by-name frame-name)))
+    (nw-hook-open-in-frame window new-frame)))
+
+(defun set-named-frame-nw-hook ()
+  "Open the next window in a named frame"
+  (set-nw-hook #'named-frame-nw-hook))
+
+(register-nw-hook 'set-named-frame-nw-hook)
+
+
+;;; Open a new window in a numbered frame
+(defun numbered-frame-nw-hook (frame window)
+  (clear-nw-hook frame)
+  (let ((new-frame (find-frame-by-number (query-number "Open a new frame in the group numbered:"))))
+    (nw-hook-open-in-frame window new-frame)))
+
+(defun set-numbered-frame-nw-hook ()
+  "Open the next window in a numbered frame"
+  (set-nw-hook #'numbered-frame-nw-hook))
+
+(register-nw-hook 'set-numbered-frame-nw-hook)
+
