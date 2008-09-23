@@ -20,8 +20,11 @@
 (setf *color-unselected* "Blue")
 
 
-;;(defparameter *fullscreen* '(0 4 800 570))
-(defparameter *fullscreen* '(0 0 1024 750))
+;;; How to change the default fullscreen size
+(defun get-fullscreen-size ()
+  "Return the size of root child (values rx ry rw rh)
+You can tweak this to what you want"
+  (values -2 -2 (+ (xlib:screen-width *screen*) 2) (- (xlib:screen-height *screen*) 20)))
 
 
 ;;; Contributed code example
@@ -54,7 +57,7 @@
 
 
 ;;;; Reloading example
-(defun reload-clfswm ()
+(defun my-reload-clfswm ()
   "Reload clfswm"
   (format t "RELOADING... ")
   (ungrab-main-keys)
@@ -64,7 +67,7 @@
   (format t "Done!~%"))
 
 
-(define-main-key ("F2" :mod-1) 'reload-clfswm)
+(define-main-key ("F2" :mod-1) 'my-reload-clfswm)
 
 (define-main-key ("F3" :mod-1) (lambda ()
 				 (do-shell "rxvt")))
@@ -91,7 +94,7 @@
 ;;; documentation associated to each key press.
 (defun display-osd (formatter &rest args)
   (do-shell "pkill osd_cat")
-  (do-shell (format nil "echo ~A | osd_cat -d 3 -p bottom -o -45 -f -*-fixed-*-*-*-*-12-*-*-*-*-*-*-1"
+  (do-shell (format nil "echo ~A | osd_cat -d 3 -p bottom -o -60 -f -*-fixed-*-*-*-*-16-*-*-*-*-*-*-1"
 		    (apply #'format nil formatter args)))
   (force-output))
 
@@ -120,11 +123,50 @@
   (declare (ignore event-slots))
   (display-doc *second-keys* code state))
 
-;; Define new hook or add to the previous one
+;; Define new hook or add to precedent one
 (if (consp *key-press-hook*)
     (push #'display-key-osd-main *key-press-hook*)
     (setf *key-press-hook* (list #'display-key-osd-main #'handle-key-press)))
 (setf *sm-key-press-hook* (list #'display-key-osd-second #'sm-handle-key-press))
+
+
+;;; Display menu functions
+(defun open-menu (&optional (menu *menu*))
+  "Open the main menu"
+  (let ((info-list nil)
+	(action nil))
+    (dolist (item (menu-item menu))
+      (let ((value (menu-item-value item)))
+	(push (typecase value
+		(menu (list (list (format nil "~A" (menu-item-key item)) *menu-color-menu-key*)
+			    (list (format nil ": < ~A >" (menu-doc value)) *menu-color-submenu*)))
+		(string (list (list (format nil "~A" (menu-item-value item)) *menu-color-comment*)))
+		(t (list (list (format nil "~A" (menu-item-key item)) *menu-color-key*)
+			 (format nil ": ~A" (documentation value 'function)))))
+	      info-list)
+	(when (menu-item-key item)
+	  (define-info-key-fun (list (menu-item-key item) 0)
+	      (lambda (&optional args)
+		(declare (ignore args))
+		(setf action value)
+		(throw 'exit-info-loop nil))))))
+    (info-mode (nreverse info-list))
+    (dolist (item (menu-item menu))
+      (undefine-info-key-fun (list (menu-item-key item) 0)))
+    (typecase action
+      (menu
+       (display-osd "Open Menu: ~A" (menu-doc action)) ;; <- Display here
+       (open-menu action))
+      (t (when (fboundp action)
+	   (display-osd "~A" (documentation action 'function)) ;; <- Display here
+	   (funcall action))))))
+
+
+
+(defun get-fullscreen-size ()
+  "Return the size of root child (values rx ry rw rh)
+You can tweak this to what you want"
+  (values -2 -2 (+ (xlib:screen-width *screen*) 2) (- (xlib:screen-height *screen*) 20)))
 
 ;;; -- Doc example end --
 
