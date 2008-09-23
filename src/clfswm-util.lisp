@@ -1102,3 +1102,47 @@ For window: set current child to window or its parent according to window-parent
   "Set a sloppy select policy for all frames."
     (set-focus-policy-generic-for-all :sloppy-select))
 
+
+
+;;; Ensure unique name/number functions
+(defun extract-number-from-name (name)
+  (when (stringp name)
+    (let* ((pos (1+ (or (position #\. name :from-end t) -1)))
+	   (number (parse-integer name :junk-allowed t :start pos)))
+      (values number
+	      (if number (subseq name 0 (1- pos)) name)))))
+    
+
+		   
+
+(defun ensure-unique-name ()
+  "Ensure that all children names are unique"
+  (with-all-children (*root-frame* child)
+    (multiple-value-bind (num1 name1)
+	(extract-number-from-name (child-name child))
+      (declare (ignore num1))
+      (when name1
+	(let ((acc nil))
+	  (with-all-children (*root-frame* c)
+	    (unless (equal child c))
+	    (multiple-value-bind (num2 name2)
+		(extract-number-from-name (child-name c))
+	      (when (string-equal name1 name2)
+		(push num2 acc))))
+	  (dbg acc)
+	  (when (> (length acc) 1)
+	    (setf (child-name child)
+		  (format nil "~A.~A" name1
+			  (1+ (find-free-number (loop for i in acc when i collect (1- i)))))))))))
+  (leave-second-mode))
+
+(defun ensure-unique-number ()
+  "Ensure that all children numbers are unique"
+  (let ((num -1))
+    (with-all-frames (*root-frame* frame)
+      (setf (frame-number frame) (incf num))))
+  (leave-second-mode))
+
+
+
+  

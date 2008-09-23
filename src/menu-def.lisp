@@ -59,6 +59,8 @@
 
 
 (add-menu-key 'child-menu "r" 'rename-current-child)
+(add-menu-key 'child-menu "e" 'ensure-unique-name)
+(add-menu-key 'child-menu "n" 'ensure-unique-number)
 (add-menu-key 'child-menu "x" 'remove-current-child-from-tree)
 (add-menu-key 'child-menu "Delete" 'remove-current-child)
 (add-menu-key 'child-menu "h" 'hide-current-child)

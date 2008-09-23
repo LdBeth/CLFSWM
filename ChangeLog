@@ -1,3 +1,9 @@
+2008-09-23  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (ensure-unique-name): New function and menu
+	entry.
+	(ensure-unique-number): New function and menu entry.
+
 2008-09-22  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-nw-hooks.lisp (named-frame-nw-hook): New new window

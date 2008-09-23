@@ -141,6 +141,22 @@
   "???")
 
 
+(defgeneric set-child-name (child name))
+
+(defmethod set-child-name ((child xlib:window) name)
+  (setf (xlib:wm-name child) name))
+
+(defmethod set-child-name ((child frame) name)
+  (setf (frame-name child) name))
+
+(defmethod set-child-name (child name)
+  (declare (ignore child name)))
+
+(defsetf child-name set-child-name)
+
+
+
+
 (defgeneric child-fullname (child))
 
 (defmethod child-fullname ((child xlib:window))
