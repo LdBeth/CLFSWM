@@ -13,6 +13,8 @@ m: < CLFSWM menu >
 
 Child-Menu
 r: Rename the current child
+e: Ensure that all children names are unique
+n: Ensure that all children numbers are unique
 x: Remove the current child from the CLFSWM tree
 Delete: Remove the current child from its parent frame
 h: Hide the current child
