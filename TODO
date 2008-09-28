@@ -7,9 +7,7 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-
-MAYBE
-=====
+- Handle numlock properly (add :mod-2 in bindings if necessary)
 
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
    TODO :
@@ -19,6 +17,18 @@ MAYBE
       ...
       ;;;; AUTO-CONFIG End : You can add your configurations below this line.
 
+- Remote access to the clfswm REPL [Philippe]
+   Protocol:  Server: Ask: random-number
+              Client: Reply: associated random-number
+              Server: Ok
+              Client: a lisp form (+ 2 2)
+              ...
+   Random-number at compile time: '((rnd-1-server rnd-1-client) (rnd-1-server rnd-1-client) (rnd-1-server rnd-1-client) ...)
+
+
+
+MAYBE
+=====
 
 - cd/pwd a la shell to navigate throw frames. [Philippe]
 
@@ -40,10 +50,3 @@ Operation:
 
 - Mouse support in menu?
 
-- Remote access to the clfswm REPL [Philippe]
-   Protocol:  Server: Ask: random-number
-              Client: Reply: associated random-number
-              Server: Ok
-              Client: a lisp form (+ 2 2)
-              ...
-   Random-number a compile time: '((rnd-1-server rnd-1-client) (rnd-1-server rnd-1-client) (rnd-1-server rnd-1-client) ...)

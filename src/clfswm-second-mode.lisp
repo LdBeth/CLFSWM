@@ -219,6 +219,8 @@
   "Leave second mode"
   (cond (*in-second-mode*
 	 (banish-pointer)
+	 (setf *in-second-mode* nil)
 	 (throw 'exit-second-loop nil))
-	(t (show-all-children))))
+	(t (setf *in-second-mode* nil)
+	   (show-all-children))))
 
