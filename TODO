@@ -8,6 +8,11 @@ URGENT PROBLEMS
 Should handle these soon.
 
 - Handle numlock properly (add :mod-2 in bindings if necessary)
+   (with-numlock)  -> add :mod-2 in *default-modifiers*
+   (without-numlock)
+
+- Fix a bug with bind or jump on non existing frame.
+- Fix a bug with wrong background frame color.
 
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
    TODO :
@@ -17,6 +22,8 @@ Should handle these soon.
       ...
       ;;;; AUTO-CONFIG End : You can add your configurations below this line.
 
+- Use the update-menus command to have application menus in clfswm.
+
 - Remote access to the clfswm REPL [Philippe]
    Protocol:  Server: Ask: random-number
               Client: Reply: associated random-number
@@ -25,6 +32,7 @@ Should handle these soon.
               ...
    Random-number at compile time: '((rnd-1-server rnd-1-client) (rnd-1-server rnd-1-client) (rnd-1-server rnd-1-client) ...)
 
+- Support clisp/new-clx and prevent to crash clisp with this CLX version.
 
 
 MAYBE
