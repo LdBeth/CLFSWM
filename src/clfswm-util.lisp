@@ -665,11 +665,13 @@ For window: set current child to window or its parent according to window-parent
 
   (defun jump-to-slot ()
     "Jump to slot"
-    (hide-all *current-root*)
-    (setf *current-root* (aref key-slots current-slot)
-	  *current-child* *current-root*)
-    (focus-all-children *current-child* *current-child*)
-    (show-all-children *current-root*))
+    (let ((jump-child (aref key-slots current-slot)))
+      (when (find-child jump-child *root-frame*)
+	(hide-all *current-root*)
+	(setf *current-root* jump-child
+	      *current-child* *current-root*)
+	(focus-all-children *current-child* *current-child*)
+	(show-all-children *current-root*))))
   
   (defun bind-or-jump (n)
     "Bind or jump to a slot"

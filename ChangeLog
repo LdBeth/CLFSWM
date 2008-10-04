@@ -1,3 +1,11 @@
+2008-10-04  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (jump-to-slot): Prevent to jump on a
+	deleted child.
+
+2008-09-23  Philippe Brochard  <pbrochard@common-lisp.net>
+	* *: **** Release 0809 ****
+
 2008-09-23  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (ensure-unique-name): New function and menu
