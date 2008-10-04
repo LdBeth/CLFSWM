@@ -11,7 +11,6 @@ Should handle these soon.
    (with-numlock)  -> add :mod-2 in *default-modifiers*
    (without-numlock)
 
-- Fix a bug with bind or jump on non existing frame.
 - Fix a bug with wrong background frame color.
 
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
