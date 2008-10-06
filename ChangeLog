@@ -1,3 +1,8 @@
+2008-10-06  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/xlib-util.lisp (my-character->keysyms): Use a macro to avoid
+	warning with clisp/new-clx.
+
 2008-10-04  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (jump-to-slot): Prevent to jump on a

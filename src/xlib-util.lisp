@@ -590,16 +590,16 @@ Window types are in +WINDOW-TYPES+.")
 
 
 
-(defun my-character->keysyms (ch)
+(defmacro my-character->keysyms (ch)
   "Convert a char to a keysym"
   ;; XLIB:CHARACTER->KEYSYMS should probably be implemented in NEW-CLX
   ;; some day.  Or just copied from MIT-CLX or some other CLX
   ;; implementation (see translate.lisp and keysyms.lisp).  For now,
   ;; we do like this.  It suffices for modifiers and ASCII symbols.
   (if (fboundp 'xlib:character->keysyms)
-      (xlib:character->keysyms ch)
-      (list
-       (case ch
+      `(xlib:character->keysyms ,ch)
+      `(list
+       (case ,ch
 	 (:character-set-switch #xFF7E)
 	 (:left-shift #xFFE1)
 	 (:right-shift #xFFE2)
@@ -616,12 +616,13 @@ Window types are in +WINDOW-TYPES+.")
 	 (:left-hyper #xFFED)
 	 (:right-hyper #xFFEE)
 	 (t
-	  (etypecase ch
+	  (etypecase ,ch
 	    (character
 	     ;; Latin-1 characters have their own value as keysym
-	     (if (< 31 (char-code ch) 256)
-		 (char-code ch)
-		 (error "Don't know how to get keysym from ~A" ch)))))))))
+	     (if (< 31 (char-code ,ch) 256)
+		 (char-code ,ch)
+		 (error "Don't know how to get keysym from ~A" ,ch)))))))))
+
 
 
 
