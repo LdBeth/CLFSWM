@@ -182,8 +182,9 @@
 		  (xlib:process-event *display* :handler #'handle-query))
 	  (xlib:destroy-window window)
 	  (xlib:close-font font)
-	  (xungrab-keyboard)
-	  (grab-main-keys)
+	  (unless grab-keyboard-p
+	    (xungrab-keyboard)
+	    (grab-main-keys))
 	  (if grab-pointer-p
 	      (xgrab-pointer *root* 66 67)
 	      (xungrab-pointer))))

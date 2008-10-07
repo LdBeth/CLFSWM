@@ -1,5 +1,8 @@
 2008-10-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-query.lisp (query-string): Do not ungrab keyboard if
+	it's already grabbed.
+
 	* src/clfswm-internal.lisp (display-frame-info): Use configurable
 	colors and fix a bug with background.
 	(display-frame-info): Set window background when displaying info.

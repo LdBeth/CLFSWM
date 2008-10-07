@@ -207,8 +207,8 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 		       (t (length (first line)))))
 	       (t (length line)))))
     (when info-list
-      (let* ((pointer-grabbed (xgrab-pointer-p))
-	     (keyboard-grabbed (xgrab-keyboard-p))
+      (let* ((pointer-grabbed-p (xgrab-pointer-p))
+	     (keyboard-grabbed-p (xgrab-keyboard-p))
 	     (font (xlib:open-font *display* *info-font-string*))
 	     (ilw (xlib:max-char-width font))
 	     (ilh (+ (xlib:max-char-ascent font) (xlib:max-char-descent font) 1))
@@ -272,17 +272,17 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 	  (xlib:map-window window)
 	  (draw-info-window info)
 	  (xgrab-pointer *root* 68 69)
-	  (unless keyboard-grabbed
+	  (unless keyboard-grabbed-p
 	    (xgrab-keyboard *root*))
 	  (unwind-protect
 	       (catch 'exit-info-loop
 		 (loop
 		    (xlib:display-finish-output *display*)
 		    (xlib:process-event *display* :handler #'handle-events)))
-	    (if pointer-grabbed
+	    (if pointer-grabbed-p
 		(xgrab-pointer *root* 66 67)
 		(xungrab-pointer))
-	    (unless keyboard-grabbed
+	    (unless keyboard-grabbed-p
 	      (xungrab-keyboard))
 	    (xlib:free-gcontext gc)
 	    (xlib:destroy-window window)
