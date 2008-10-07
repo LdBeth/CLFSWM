@@ -1,3 +1,8 @@
+2008-10-07  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (display-frame-info): Use configurable
+	colors and fix a bug with background.
+
 2008-10-06  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/xlib-util.lisp (my-character->keysyms): Use a macro to avoid

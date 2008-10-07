@@ -163,6 +163,17 @@ on the root window in the main mode with the mouse")
 (defparameter *color-maybe-selected* "Yellow"
   "Config(Main mode group): Color of maybe selected windows")
 
+
+;;; CONFIG: Frame colors
+(defparameter *frame-background* "Black"
+  "Config(Frame colors group): Frame background")
+(defparameter *frame-foreground* "Green"
+  "Config(Frame colors group): Frame foreground")
+(defparameter *frame-foreground-root* "Red"
+  "Config(Frame colors group): Frame foreground when the frame is the root frame")
+(defparameter *frame-foreground-hidden* "Darkgreen"
+  "Config(Frame colors group): Frame foreground for hidden windows")
+
 ;;; CONFIG: Default window size
 (defparameter *default-window-width* 400
   "Config(): Default window width")

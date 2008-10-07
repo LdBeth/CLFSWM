@@ -264,14 +264,14 @@
 				     :y 0
 				     :width 200
 				     :height 200
-				     :background (get-color "Black")
+				     :background (get-color *frame-background*)
 				     :colormap (xlib:screen-default-colormap *screen*)
 				     :border-width 1
-				     :border (get-color "Red")
+				     :border (get-color *color-selected*)
 				     :event-mask '(:exposure :button-press :button-release :pointer-motion :enter-window)))
 	 (gc (xlib:create-gcontext :drawable window
-				   :foreground (get-color "Green")
-				   :background (get-color "Black")
+				   :foreground (get-color *frame-foreground*)
+				   :background (get-color *frame-background*)
 				   :font *default-font*
 				   :line-style :solid)))
     (apply #'make-instance 'frame :number number :window window :gc gc args)))
@@ -404,10 +404,11 @@
 (defun display-frame-info (frame)
   (let ((dy (+ (xlib:max-char-ascent *default-font*) (xlib:max-char-descent *default-font*))))
     (with-slots (name number gc window child hidden-children) frame
+      (setf (xlib:gcontext-background gc) (get-color *frame-background*))
       (clear-pixmap-buffer window gc)
       (setf (xlib:gcontext-foreground gc) (get-color (if (and (equal frame *current-root*)
 							      (equal frame *current-child*))
-							 "Red" "Green")))
+							 *frame-foreground-root* *frame-foreground*)))
       (xlib:draw-glyphs *pixmap-buffer* gc 5 dy		 
 			(format nil "Frame: ~A~A"
 				number
@@ -427,7 +428,7 @@
 						   (aif (frame-name child) it "")))))))))
 	(dolist (ch child)
 	  (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy) (ensure-printable (child-fullname ch))))
-	(setf (xlib:gcontext-foreground gc) (get-color "DarkGreen"))
+	(setf (xlib:gcontext-foreground gc) (get-color *frame-foreground-hidden*))
 	(dolist (ch hidden-children)
 	  (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
 			    (format nil "~A - hidden" (ensure-printable (child-fullname ch))))))

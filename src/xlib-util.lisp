@@ -503,7 +503,7 @@ Window types are in +WINDOW-TYPES+.")
 	       (unless (compress-motion-notify)
 		 (setf (xlib:drawable-width window) (min (max (+ orig-width (- root-x orig-x)) 10 min-width) max-width)
 		       (xlib:drawable-height window) (min (max (+ orig-height (- root-y orig-y)) 10 min-height) max-height))
-		 (when additional-fn
+		 (when additional-fn  
 		   (apply additional-fn additional-arg))))
 	     (handle-event (&rest event-slots &key event-key &allow-other-keys)
 	       (case event-key
@@ -520,8 +520,8 @@ Window types are in +WINDOW-TYPES+.")
 	       t))
       (unless pointer-grabbed-p
 	(xgrab-pointer *root* nil nil))
-      (when additional-fn
-	(apply additional-fn additional-arg))
+;      (when additional-fn
+;	(apply additional-fn additional-arg))
       (loop until done
 	 do (with-xlib-protect
 	      (xlib:display-finish-output *display*)
