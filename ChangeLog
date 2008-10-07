@@ -2,6 +2,7 @@
 
 	* src/clfswm-internal.lisp (display-frame-info): Use configurable
 	colors and fix a bug with background.
+	(display-frame-info): Set window background when displaying info.
 
 2008-10-06  Philippe Brochard  <pbrochard@common-lisp.net>
 

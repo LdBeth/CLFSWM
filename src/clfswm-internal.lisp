@@ -404,7 +404,8 @@
 (defun display-frame-info (frame)
   (let ((dy (+ (xlib:max-char-ascent *default-font*) (xlib:max-char-descent *default-font*))))
     (with-slots (name number gc window child hidden-children) frame
-      (setf (xlib:gcontext-background gc) (get-color *frame-background*))
+      (setf (xlib:gcontext-background gc) (get-color *frame-background*)
+	    (xlib:window-background window) (get-color *frame-background*))
       (clear-pixmap-buffer window gc)
       (setf (xlib:gcontext-foreground gc) (get-color (if (and (equal frame *current-root*)
 							      (equal frame *current-child*))
