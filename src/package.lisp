@@ -160,7 +160,6 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 (defparameter *menu* (make-menu :name 'main :doc "Main menu"))
 
-
 ;;; Main mode hooks (set in clfswm.lisp)
 (defparameter *button-press-hook* nil
   "Config(Hook group):")

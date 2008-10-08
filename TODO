@@ -19,8 +19,6 @@ Should handle these soon.
       ...
       ;;;; AUTO-CONFIG End : You can add your configurations below this line.
 
-- Use the update-menus command to have application menus in clfswm.
-
 - Remote access to the clfswm REPL [Philippe]
    Protocol:  Server: Ask: random-number
               Client: Reply: associated random-number

@@ -51,7 +51,7 @@
   (with-all-menu (root item)
     (when (and (menu-p item)
 	       (equal name (menu-name item)))
-	(return-from find-menu item))))
+      (return-from find-menu item))))
 
 
 (defun find-item-by-key (key &optional (root *menu*))
@@ -76,26 +76,36 @@
 
 
 ;;; Convenient functions
-(defun add-menu-key (menu-name key value)
-  (add-item (make-menu-item :key key :value value) (find-menu menu-name)))
-
-(defun add-sub-menu (menu-name key sub-menu-name &optional (doc "Sub menu"))
-  (add-item (make-menu-item :key key :value (make-menu :name sub-menu-name :doc doc)) (find-menu menu-name)))
-
-
-(defun del-menu-key (menu-name key)
-  (del-item-by-key key (find-menu menu-name)))
-
-(defun del-menu-value (menu-name value)
-  (del-item-by-value value (find-menu menu-name)))
-
-(defun del-sub-menu (menu-name sub-menu-name)
-  (del-item-by-value (find-menu sub-menu-name) (find-menu menu-name)))
+(defun find-next-menu-key (key menu)
+  "key is :next for the next free key in menu or a string"
+  (if (eql key :next)
+      (string (number->char (length (menu-item menu))))
+      key))
 
 
+(defun add-menu-key (menu-name key value &optional (root *menu*))
+  (let ((menu (find-menu menu-name root)))
+    (add-item (make-menu-item :key (find-next-menu-key key menu) :value value) (find-menu menu-name root))))
 
-(defun add-menu-comment (menu-name &optional (comment "---"))
-  (add-item (make-menu-item :key nil :value comment) (find-menu menu-name)))
+(defun add-sub-menu (menu-name key sub-menu-name &optional (doc "Sub menu") (root *menu*))
+  (let ((menu (find-menu menu-name root)))
+    (add-item (make-menu-item :key (find-next-menu-key key menu) :value (make-menu :name sub-menu-name :doc doc)) menu)))
+
+
+
+(defun del-menu-key (menu-name key &optional (root *menu*))
+  (del-item-by-key key (find-menu menu-name root)))
+
+(defun del-menu-value (menu-name value &optional (root *menu*))
+  (del-item-by-value value (find-menu menu-name root)))
+
+(defun del-sub-menu (menu-name sub-menu-name &optional (root *menu*))
+  (del-item-by-value (find-menu sub-menu-name) (find-menu menu-name root)))
+
+
+
+(defun add-menu-comment (menu-name &optional (comment "---") (root *menu*))
+  (add-item (make-menu-item :key nil :value comment) (find-menu menu-name root)))
 
 
 
@@ -131,4 +141,5 @@
       (menu (open-menu action))
       (t (when (fboundp action)
 	   (funcall action))))))
+
 

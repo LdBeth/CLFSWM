@@ -1147,4 +1147,56 @@ For window: set current child to window or its parent according to window-parent
 
 
 
+;;; Standard menu functions - Based on the 'update-menus' command
+(defun um-extract-value (name line)
+  (let* ((fullname (format nil "~A=\"" name))
+	 (pos (search fullname line)))
+    (when (numberp pos)
+      (let* ((start (+ pos (length fullname)))
+	     (end (position #\" line :start start)))
+	(when (numberp end)
+	  (subseq line start end))))))
+
+
+(defun um-create-section (menu section-list)
+  (if section-list
+      (let* ((sec (intern (string-upcase (first section-list)) :clfswm))
+	     (submenu (find-menu sec menu)))
+	(if submenu
+	    (um-create-section submenu (rest section-list))
+	    (progn
+	      (add-sub-menu (menu-name menu) :next sec (format nil "~A" sec) menu)
+	      (um-create-section (find-menu sec menu) (rest section-list)))))
+      menu))
+	    
+
+(defun update-menus ()
+  (let ((output (do-shell "update-menus --stdout"))
+	(menu (make-menu :name 'main :doc "Main menu")))
+    (loop for line = (read-line output nil nil)
+	  while line
+	  do (let ((command (um-extract-value "command" line)))
+	       (when command
+		 (let* ((sub-menu (um-create-section menu (split-string (um-extract-value "section" line) #\/)))
+			(title (um-extract-value " title" line))
+			(doc (um-extract-value "description" line))
+			(name (intern title :clfswm)))
+		   (setf (symbol-function name) (lambda ()
+						  (do-shell command)
+						  (leave-second-mode))
+			 (documentation name 'function) (format nil "~A~A" title (if doc (format nil " - ~A" doc) "")))
+		   (add-menu-key (menu-name sub-menu) :next name sub-menu)))))
+    menu))
+
+
+(defun show-standard-menu ()
+  "< Standard menu >"
+  (let ((menu (update-menus)))
+    (if (menu-item menu)
+       (open-menu menu)
+       (info-mode '("Command 'update-menus' not found")))))
+
+
+
+
   

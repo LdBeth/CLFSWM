@@ -47,6 +47,7 @@
 
 ;;(define-second-key ("a") 'open-menu)
 
+(add-menu-key 'main "d" 'show-standard-menu)
 (add-sub-menu 'main "c" 'child-menu "Child menu")
 (add-sub-menu 'main "f" 'frame-menu "Frame menu")
 (add-sub-menu 'main "w" 'window-menu "Window menu")
