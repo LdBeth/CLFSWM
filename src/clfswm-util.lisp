@@ -1170,9 +1170,8 @@ For window: set current child to window or its parent according to window-parent
       menu))
 	    
 
-(defun update-menus ()
-  (let ((output (do-shell "update-menus --stdout"))
-	(menu (make-menu :name 'main :doc "Main menu")))
+(defun update-menus (&optional (menu (make-menu :name 'main :doc "Main menu")))
+  (let ((output (do-shell "update-menus --stdout")))
     (loop for line = (read-line output nil nil)
 	  while line
 	  do (let ((command (um-extract-value "command" line)))

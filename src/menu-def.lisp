@@ -47,7 +47,8 @@
 
 ;;(define-second-key ("a") 'open-menu)
 
-(add-menu-key 'main "d" 'show-standard-menu)
+;;(add-menu-key 'main "d" 'show-standard-menu)
+(add-sub-menu 'main "d" 'standard-menu "Standard menu")
 (add-sub-menu 'main "c" 'child-menu "Child menu")
 (add-sub-menu 'main "f" 'frame-menu "Frame menu")
 (add-sub-menu 'main "w" 'window-menu "Window menu")
@@ -57,6 +58,8 @@
 (add-sub-menu 'main "y" 'utility-menu "Utility menu")
 (add-sub-menu 'main "m" 'clfswm-menu "CLFSWM menu")
 
+
+(update-menus (find-menu 'standard-menu))
 
 
 (add-menu-key 'child-menu "r" 'rename-current-child)

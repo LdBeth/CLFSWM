@@ -45,8 +45,6 @@
 						       "clfswm-autodoc" "clfswm-corner"))
 			 (:file "clfswm-menu"
 				:depends-on ("package" "clfswm-info"))
-			 (:file "menu-def"
-				:depends-on ("clfswm-menu" "clfswm"))
 			 (:file "clfswm-query"
 				:depends-on ("package" "config" "xlib-util"))
 			 (:file "clfswm-util"
@@ -61,7 +59,9 @@
 				:depends-on ("clfswm" "clfswm-internal" "clfswm-util"))
 			 (:file "bindings-second-mode"
 				:depends-on ("clfswm" "clfswm-util" "clfswm-query" "bindings" "clfswm-pack" "clfswm-menu" "menu-def"
-						      "clfswm-layout"))))))
+						      "clfswm-layout"))
+			 (:file "menu-def"
+				:depends-on ("clfswm-menu" "clfswm" "clfswm-util"))))))
 
 
 

@@ -1,3 +1,8 @@
+2008-10-09  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/menu-def.lisp: Use a menu instead of a function for the
+	standard menu.
+
 2008-10-08  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (show-standard-menu): Display the standard
