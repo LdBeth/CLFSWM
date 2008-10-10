@@ -1,3 +1,8 @@
+2008-10-10  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-menu.lisp (open-menu): Remember parent menu to undo
+	menu opening.
+
 2008-10-09  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/menu-def.lisp: Use a menu instead of a function for the

@@ -115,7 +115,7 @@
 
 
 ;;; Display menu functions
-(defun open-menu (&optional (menu *menu*))
+(defun open-menu (&optional (menu *menu*) (parent nil))
   "Open the main menu"
   (let ((info-list nil)
 	(action nil))
@@ -138,7 +138,9 @@
     (dolist (item (menu-item menu))
       (undefine-info-key-fun (list (menu-item-key item) 0)))
     (typecase action
-      (menu (open-menu action))
+      (menu (open-menu action (cons menu parent)))
+      (null (awhen (first parent)
+	      (open-menu it (rest parent))))
       (t (when (fboundp action)
 	   (funcall action))))))
 
