@@ -38,6 +38,12 @@
   
 
 
+;;; CONFIG - Default modifiers
+(defparameter *default-modifiers* '()
+  "Config(): Default modifiers list to append to explicit modifiers
+Example: :mod-2 for num_lock, :lock for Caps_lock...")
+
+
 
 
 ;;; CONFIG - Never managed window list

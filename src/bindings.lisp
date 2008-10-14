@@ -31,6 +31,8 @@
 ;;;| CONFIG - Bindings main mode
 ;;;`-----
 
+(with-numlock)
+
 (define-main-key ("F1" :mod-1) 'help-on-clfswm)
 
 (define-main-key ("Home" :mod-1 :control :shift) 'exit-clfswm)

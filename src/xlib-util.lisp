@@ -656,21 +656,39 @@ Window types are in +WINDOW-TYPES+.")
        (xungrab-keyboard))))
      
 
+
+
+
+
+(let ((modifier-list nil))
+  (defun init-modifier-list ()
+    (dolist (name '("Shift_L" "Shift_R" "Control_L" "Control_R"
+		    "Alt_L" "Alt_R" "Meta_L" "Meta_R" "Hyper_L" "Hyper_R"
+		    "Mode_switch" "script_switch" "ISO_Level3_Shift"
+		    "Caps_Lock" "Scroll_Lock" "Num_Lock"))
+      (awhen (xlib:keysym->keycodes *display* (keysym-name->keysym name))
+	(push it modifier-list))))
+
+  (defun modifier-p (code)
+    (member code modifier-list)))
+
 (defun wait-no-key-or-button-press ()
   (with-grab-keyboard-and-pointer (66 67 66 67)
     (loop
-       (let ((key (loop for k across (xlib:query-keymap *display*)
-		     unless (zerop k) return t))
-	     (button (plusp (nth-value 4 (xlib:query-pointer *root*)))))
-	 (when (and (not key) (not button))
-	   (loop while (xlib:event-case (*display* :discard-p t :peek-p nil :timeout 0)
-			 (:motion-notify () t)
-			 (:key-press () t)
-			 (:key-release () t)
-			 (:button-press () t)
-			 (:button-release () t)
-			 (t nil)))
-	   (return))))))
+     (let ((key (loop for k across (xlib:query-keymap *display*)
+		      for code from 0
+		      when (and (plusp k) (not (modifier-p code))) return t))
+	   (button (member (nth-value 4 (xlib:query-pointer *root*))
+			   '(:button-1 :button-2 :button-3 :button-4 :button-5))))
+       (when (and (not key) (not button))
+	 (loop while (xlib:event-case (*display* :discard-p t :peek-p nil :timeout 0)
+		       (:motion-notify () t)
+		       (:key-press () t)
+		       (:key-release () t)
+		       (:button-press () t)
+		       (:button-release () t)
+		       (t nil)))
+	 (return))))))
 
 
 (defun wait-a-key-or-button-press ()

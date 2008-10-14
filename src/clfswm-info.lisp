@@ -305,7 +305,7 @@ Function can be a function or a list (function color) for colored output"
   (let ((info-list nil)
 	(action nil))
     (labels ((define-key (key function)
-	       (define-info-key-fun (list key 0)
+	       (define-info-key-fun (list key (modifiers->state *default-modifiers*))
 		   (lambda (&optional args)
 		     (declare (ignore args))
 		     (setf action function)
@@ -328,7 +328,7 @@ Function can be a function or a list (function color) for colored output"
       (dolist (item item-list)
 	(when (consp item)
 	  (let ((key (first item)))
-	    (undefine-info-key-fun (list key 0)))))
+	    (undefine-info-key-fun (list key (modifiers->state *default-modifiers*))))))
       (typecase action
 	(function (funcall action))
 	(symbol (when (fboundp action)

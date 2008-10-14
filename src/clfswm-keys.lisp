@@ -30,6 +30,8 @@
 (defparameter *fun-release* #'second)
 
 
+
+
 (defun define-hash-table-key-name (hash-table name)
   (setf (gethash 'name hash-table) name))
 
@@ -49,20 +51,21 @@
 	(undefine-name (create-symbol "undefine-" name "-key"))
 	(undefine-multi-name (create-symbol "undefine-" name "-multi-keys")))
     `(progn
-       (defun ,name-key-fun (key function &rest args)
-	 "Define a new key, a key is '(char '(modifier list))"
-	 (setf (gethash key ,hashtable) (list function args)))
+      (defun ,name-key-fun (key function &rest args)
+	"Define a new key, a key is '(char '(modifier list))"
+	(setf (gethash key ,hashtable) (list function args)))
       
-       (defmacro ,name-key ((key &rest modifiers) function &rest args)
-	 `(,',name-key-fun (list ,key ,(modifiers->state modifiers)) ,function ,@args))
+      (defmacro ,name-key ((key &rest modifiers) function &rest args)
+	`(,',name-key-fun (list ,key ,(modifiers->state (append modifiers *default-modifiers*))) ,function ,@args))
       
-       (defmacro ,undefine-name ((key &rest modifiers))
-	 `(remhash (list ,key ,(modifiers->state modifiers)) ,',hashtable))
+      (defmacro ,undefine-name ((key &rest modifiers))
+	`(remhash (list ,key ,(modifiers->state (append modifiers *default-modifiers*))) ,',hashtable))
 
-       (defmacro ,undefine-multi-name (&rest keys)
-	 `(progn
-	    ,@(loop for k in keys
-		 collect `(,',undefine-name ,k)))))))
+      (defmacro ,undefine-multi-name (&rest keys)
+	`(progn
+	  ,@(loop for k in keys
+		  collect `(,',undefine-name ,k)))))))
+
 
 
 (defmacro define-define-mouse (name hashtable)
@@ -75,10 +78,10 @@
 	 (setf (gethash button ,hashtable) (list function-press function-release args)))
       
        (defmacro ,name-mouse ((button &rest modifiers) function-press &optional function-release &rest args)
-	 `(,',name-mouse-fun (list ,button ,(modifiers->state modifiers)) ,function-press ,function-release ,@args))
+	 `(,',name-mouse-fun (list ,button ,(modifiers->state (append modifiers *default-modifiers*))) ,function-press ,function-release ,@args))
 
        (defmacro ,undefine-name ((key &rest modifiers))
-	 `(remhash (list ,key ,(modifiers->state modifiers)) ,',hashtable)))))
+	 `(remhash (list ,key ,(modifiers->state (append modifiers *default-modifiers*))) ,',hashtable)))))
 
 
 

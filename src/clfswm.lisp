@@ -231,6 +231,7 @@
 	*in-second-mode* nil
 	*clfswm-terminal* nil
 	*vt-keyboard-on* nil)
+  (init-modifier-list)
   (xgrab-init-pointer)
   (xgrab-init-keyboard)
   (init-last-child)

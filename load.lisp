@@ -23,7 +23,6 @@
 ;;;
 ;;; --------------------------------------------------------------------------
 
-
 (defparameter *base-dir* (directory-namestring *load-truename*))
 (export '*base-dir*)
 

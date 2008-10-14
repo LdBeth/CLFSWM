@@ -10,6 +10,10 @@ Should handle these soon.
 - Handle numlock properly (add :mod-2 in bindings if necessary)
    (with-numlock)  -> add :mod-2 in *default-modifiers*
    (without-numlock)
+  alias :mod-1 -> :alt   :mod-2 -> :numlock
+  =>  *default-modifiers* is done. <=
+
+- hook to create bindings and menu -> build keys and menu at runtime.
 
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
    TODO :

@@ -260,7 +260,7 @@
 		      (keysym (keysym->keysym-name (xlib:keycode->keysym *display* code (cond  ((member :shift modifiers) 1)
 											       ((member :mod-5 modifiers) 2)
 											       (t 0))))))
-		 (setf done (and (equal key #\q) (null modifiers)))
+		 (setf done (and (equal key #\q) (equal modifiers *default-modifiers*)))
 		 (dbg code keysym key modifiers)
 		 (print-key code state keysym key modifiers)
 		 (force-output)))
