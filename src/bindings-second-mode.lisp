@@ -32,9 +32,7 @@
 ;;;|
 ;;;| CONFIG - Second mode bindings
 ;;;`-----
-
-
-(define-second-key ("F1" :mod-1) 'help-on-second-mode)
+(add-hook *binding-hook* 'init-*second-keys* 'init-*second-mouse*)
 
 (defun open-frame-menu ()
   "Open the frame menu"
@@ -64,89 +62,10 @@
   "Open the frame resize menu"
   (open-menu (find-menu 'frame-resize-menu)))
 
-
-(define-second-key ("m") 'open-menu)
-(define-second-key ("less") 'open-menu)
-(define-second-key ("less" :control) 'open-menu)
-
-(define-second-key ("f") 'open-frame-menu)
-(define-second-key ("w") 'open-window-menu)
-(define-second-key ("n") 'open-action-by-name-menu)
-(define-second-key ("u") 'open-action-by-number-menu)
-
-(define-second-key ("p") 'open-frame-pack-menu)
-(define-second-key ("l") 'open-frame-fill-menu)
-(define-second-key ("r") 'open-frame-resize-menu)
-
-
-
-;;(define-second-key (#\g :control) 'stop-all-pending-actions)
-
-(define-second-key ("i") 'identify-key)
-(define-second-key ("colon") 'eval-from-query-string)
-
-(define-second-key ("exclam") 'run-program-from-query-string)
-
-
-(define-second-key ("Return") 'leave-second-mode)
-(define-second-key ("Escape") 'leave-second-mode)
-
-
 (defun tile-current-frame ()
   "Tile the current frame"
   (set-layout-once #'tile-layout)
   (leave-second-mode))
-
-(define-second-key ("t") 'tile-current-frame)
-
-(define-second-key ("Home" :mod-1 :control :shift) 'exit-clfswm)
-
-(define-second-key ("Right" :mod-1) 'select-next-sister)
-(define-second-key ("Left" :mod-1) 'select-previous-sister)
-
-(define-second-key ("Down" :mod-1) 'select-previous-level)
-(define-second-key ("Up" :mod-1) 'select-next-level)
-
-(define-second-key ("Tab" :mod-1) 'select-next-child)
-(define-second-key ("Tab" :mod-1 :shift) 'select-previous-child)
-(define-second-key (#\Tab :shift) 'switch-to-last-child)
-
-(define-second-key ("Return" :mod-1) 'enter-frame)
-(define-second-key ("Return" :mod-1 :shift) 'leave-frame)
-
-
-(define-second-key ("Page_Up" :mod-1) 'frame-lower-child)
-(define-second-key ("Page_Down" :mod-1) 'frame-raise-child)
-
-
-(define-second-key ("Home" :mod-1) 'switch-to-root-frame)
-(define-second-key ("Home" :mod-1 :shift) 'switch-and-select-root-frame)
-
-(define-second-key ("Menu") 'toggle-show-root-frame)
-
-(define-second-key (#\b :mod-1) 'banish-pointer)
-
-(define-second-key (#\o) 'set-open-in-new-frame-in-root-frame-nw-hook)
-(define-second-key (#\o :control) 'set-open-in-new-frame-in-parent-frame-nw-hook)
-
-(define-second-key (#\a) 'add-default-frame)
-
-;;;; Escape
-(define-second-key ("Escape" :control :shift) 'delete-focus-window)
-(define-second-key ("Escape" :mod-1 :control :shift) 'destroy-focus-window)
-(define-second-key ("Escape" :control) 'remove-focus-window)
-(define-second-key ("Escape" :shift) 'unhide-all-windows-in-current-child)
-
-
-;;; Selection
-(define-second-key ("x" :control) 'cut-current-child)
-(define-second-key ("x" :control :mod-1) 'clear-selection)
-(define-second-key ("c" :control) 'copy-current-child)
-(define-second-key ("v" :control) 'paste-selection)
-(define-second-key ("v" :control :shift) 'paste-selection-no-clear)
-(define-second-key ("Delete") 'remove-current-child)
-
-
 
 ;;; default shell programs
 (defmacro define-shell (key name docstring cmd)
@@ -157,30 +76,80 @@
 	 (setf *second-mode-program* ,cmd)
 	 (leave-second-mode))))
 
-(define-shell (#\c) b-start-xterm "start an xterm" "exec xterm")
-(define-shell (#\e) b-start-emacs "start emacs" "exec emacs")
-(define-shell (#\e :control) b-start-emacsremote
-  "start an emacs for another user"
-  "exec xterm -e emacsremote")
-(define-shell (#\h) b-start-xclock "start an xclock" "exec xclock -d")
 
 
-(define-second-key ("Menu") 'show-all-frames-info-key)
-(define-second-key ("Menu" :shift) 'show-all-frames-info)
-(define-second-key ("Menu" :control) 'toggle-show-root-frame)
+(defun set-default-second-keys ()
+  (define-second-key ("F1" :mod-1) 'help-on-second-mode)
+  (define-second-key ("m") 'open-menu)
+  (define-second-key ("less") 'open-menu)
+  (define-second-key ("less" :control) 'open-menu)
+  (define-second-key ("f") 'open-frame-menu)
+  (define-second-key ("w") 'open-window-menu)
+  (define-second-key ("n") 'open-action-by-name-menu)
+  (define-second-key ("u") 'open-action-by-number-menu)
+  (define-second-key ("p") 'open-frame-pack-menu)
+  (define-second-key ("l") 'open-frame-fill-menu)
+  (define-second-key ("r") 'open-frame-resize-menu)
+  ;;(define-second-key (#\g :control) 'stop-all-pending-actions)
+  (define-second-key ("i") 'identify-key)
+  (define-second-key ("colon") 'eval-from-query-string)
+  (define-second-key ("exclam") 'run-program-from-query-string)
+  (define-second-key ("Return") 'leave-second-mode)
+  (define-second-key ("Escape") 'leave-second-mode)
+  (define-second-key ("t") 'tile-current-frame)
+  (define-second-key ("Home" :mod-1 :control :shift) 'exit-clfswm)
+  (define-second-key ("Right" :mod-1) 'select-next-sister)
+  (define-second-key ("Left" :mod-1) 'select-previous-sister)
+  (define-second-key ("Down" :mod-1) 'select-previous-level)
+  (define-second-key ("Up" :mod-1) 'select-next-level)
+  (define-second-key ("Tab" :mod-1) 'select-next-child)
+  (define-second-key ("Tab" :mod-1 :shift) 'select-previous-child)
+  (define-second-key (#\Tab :shift) 'switch-to-last-child)
+  (define-second-key ("Return" :mod-1) 'enter-frame)
+  (define-second-key ("Return" :mod-1 :shift) 'leave-frame)
+  (define-second-key ("Page_Up" :mod-1) 'frame-lower-child)
+  (define-second-key ("Page_Down" :mod-1) 'frame-raise-child)
+  (define-second-key ("Home" :mod-1) 'switch-to-root-frame)
+  (define-second-key ("Home" :mod-1 :shift) 'switch-and-select-root-frame)
+  (define-second-key ("Menu") 'toggle-show-root-frame)
+  (define-second-key (#\b :mod-1) 'banish-pointer)
+  (define-second-key (#\o) 'set-open-in-new-frame-in-root-frame-nw-hook)
+  (define-second-key (#\o :control) 'set-open-in-new-frame-in-parent-frame-nw-hook)
+  (define-second-key (#\a) 'add-default-frame)
+  ;; Escape
+  (define-second-key ("Escape" :control :shift) 'delete-focus-window)
+  (define-second-key ("Escape" :mod-1 :control :shift) 'destroy-focus-window)
+  (define-second-key ("Escape" :control) 'remove-focus-window)
+  (define-second-key ("Escape" :shift) 'unhide-all-windows-in-current-child)
+  ;; Selection
+  (define-second-key ("x" :control) 'cut-current-child)
+  (define-second-key ("x" :control :mod-1) 'clear-selection)
+  (define-second-key ("c" :control) 'copy-current-child)
+  (define-second-key ("v" :control) 'paste-selection)
+  (define-second-key ("v" :control :shift) 'paste-selection-no-clear)
+  (define-second-key ("Delete") 'remove-current-child)
+  (define-shell (#\c) b-start-xterm "start an xterm" "exec xterm")
+  (define-shell (#\e) b-start-emacs "start emacs" "exec emacs")
+  (define-shell (#\e :control) b-start-emacsremote
+    "start an emacs for another user"
+    "exec xterm -e emacsremote")
+  (define-shell (#\h) b-start-xclock "start an xclock" "exec xclock -d")
+  (define-second-key ("Menu") 'show-all-frames-info-key)
+  (define-second-key ("Menu" :shift) 'show-all-frames-info)
+  (define-second-key ("Menu" :control) 'toggle-show-root-frame)
+  ;; Bind or jump functions
+  (define-second-key ("1" :mod-1) 'bind-or-jump 1)
+  (define-second-key ("2" :mod-1) 'bind-or-jump 2)
+  (define-second-key ("3" :mod-1) 'bind-or-jump 3)
+  (define-second-key ("4" :mod-1) 'bind-or-jump 4)
+  (define-second-key ("5" :mod-1) 'bind-or-jump 5)
+  (define-second-key ("6" :mod-1) 'bind-or-jump 6)
+  (define-second-key ("7" :mod-1) 'bind-or-jump 7)
+  (define-second-key ("8" :mod-1) 'bind-or-jump 8)
+  (define-second-key ("9" :mod-1) 'bind-or-jump 9)
+  (define-second-key ("0" :mod-1) 'bind-or-jump 10))
 
-
-;;; Bind or jump functions
-(define-second-key ("1" :mod-1) 'bind-or-jump 1)
-(define-second-key ("2" :mod-1) 'bind-or-jump 2)
-(define-second-key ("3" :mod-1) 'bind-or-jump 3)
-(define-second-key ("4" :mod-1) 'bind-or-jump 4)
-(define-second-key ("5" :mod-1) 'bind-or-jump 5)
-(define-second-key ("6" :mod-1) 'bind-or-jump 6)
-(define-second-key ("7" :mod-1) 'bind-or-jump 7)
-(define-second-key ("8" :mod-1) 'bind-or-jump 8)
-(define-second-key ("9" :mod-1) 'bind-or-jump 9)
-(define-second-key ("0" :mod-1) 'bind-or-jump 10)
+(add-hook *binding-hook* 'set-default-second-keys)
 
 
 ;; For a French azery keyboard:
@@ -265,535 +234,16 @@ Or do corners actions"
 
 
 
+(defun set-default-second-mouse ()
+  (define-second-mouse (1) 'sm-mouse-click-to-focus-and-move)
+  (define-second-mouse (2) 'sm-mouse-middle-click)
+  (define-second-mouse (3) 'sm-mouse-click-to-focus-and-resize)
+  (define-second-mouse (1 :mod-1) 'sm-mouse-click-to-focus-and-move-window)
+  (define-second-mouse (3 :mod-1) 'sm-mouse-click-to-focus-and-resize-window)
+  (define-second-mouse (1 :control :mod-1) 'mouse-move-window-over-frame)
+  (define-second-mouse (4) 'sm-mouse-select-next-level)
+  (define-second-mouse (5) 'sm-mouse-select-previous-level)
+  (define-second-mouse (4 :mod-1) 'sm-mouse-enter-frame)
+  (define-second-mouse (5 :mod-1) 'sm-mouse-leave-frame))
 
-(define-second-mouse (1) 'sm-mouse-click-to-focus-and-move)
-(define-second-mouse (2) 'sm-mouse-middle-click)
-(define-second-mouse (3) 'sm-mouse-click-to-focus-and-resize)
-
-(define-second-mouse (1 :mod-1) 'sm-mouse-click-to-focus-and-move-window)
-(define-second-mouse (3 :mod-1) 'sm-mouse-click-to-focus-and-resize-window)
-
-(define-second-mouse (1 :control :mod-1) 'mouse-move-window-over-frame)
-
-(define-second-mouse (4) 'sm-mouse-select-next-level)
-(define-second-mouse (5) 'sm-mouse-select-previous-level)
-
-(define-second-mouse (4 :mod-1) 'sm-mouse-enter-frame)
-(define-second-mouse (5 :mod-1) 'sm-mouse-leave-frame)
-
-
-
-
-
-
-;;;; Escape
-;;(define-second-key ("Escape" :control :shift) 'delete-current-window)
-;;(define-second-key ("Escape" :mod-1 :control :shift) 'destroy-current-window)
-;;(define-second-key ("Escape" :control) 'remove-current-window)
-;;(define-second-key ("Escape" :shift) 'unhide-all-windows-in-current-frame)
-;;
-;;
-;;;; Up
-;;(define-second-key ("Up" :mod-1) 'circulate-frame-up)
-;;(define-second-key ("Up" :mod-1 :shift) 'circulate-frame-up-move-window)
-;;(define-second-key ("Up" :mod-1 :shift :control) 'circulate-frame-up-copy-window)
-;;
-;;
-;;;; Down
-;;(define-second-key ("Down" :mod-1) 'circulate-frame-down)
-;;(define-second-key ("Down" :mod-1 :shift) 'circulate-frame-down-move-window)
-;;(define-second-key ("Down" :mod-1 :shift :control) 'circulate-frame-down-copy-window)
-;;
-;;
-;;;; Right
-;;(define-second-key ("Right" :mod-1) 'circulate-workspace-up)
-;;(define-second-key ("Right" :mod-1 :shift) 'circulate-workspace-up-move-frame)
-;;(define-second-key ("Right" :mod-1 :shift :control) 'circulate-workspace-up-copy-frame)
-;;
-;;
-;;;; Left
-;;(define-second-key ("Left" :mod-1) 'circulate-workspace-down)
-;;(define-second-key ("Left" :mod-1 :shift) 'circulate-workspace-down-move-frame)
-;;(define-second-key ("Left" :mod-1 :shift :control) 'circulate-workspace-down-copy-frame)
-;;
-;;
-;;(defmacro define-second-focus-workspace-by-number (key number)
-;;  "Define a second key to focus a workspace by its number"
-;;  `(define-second-key ,key
-;;       (defun ,(create-symbol (format nil "b-second-focus-workspace-~A" number)) ()
-;;	 ,(format nil "Focus workspace ~A" number)
-;;	 (circulate-workspace-by-number ,number))))
-;;
-;;(define-second-focus-workspace-by-number (#\1 :mod-1) 1)
-;;(define-second-focus-workspace-by-number (#\2 :mod-1) 2)
-;;(define-second-focus-workspace-by-number (#\3 :mod-1) 3)
-;;(define-second-focus-workspace-by-number (#\4 :mod-1) 4)
-;;(define-second-focus-workspace-by-number (#\5 :mod-1) 5)
-;;(define-second-focus-workspace-by-number (#\6 :mod-1) 6)
-;;(define-second-focus-workspace-by-number (#\7 :mod-1) 7)
-;;(define-second-focus-workspace-by-number (#\8 :mod-1) 8)
-;;(define-second-focus-workspace-by-number (#\9 :mod-1) 9)
-;;(define-second-focus-workspace-by-number (#\0 :mod-1) 10)
-;;
-;;(define-second-key (#\1 :control :mod-1) 'renumber-workspaces)
-;;(define-second-key (#\2 :control :mod-1) 'sort-workspaces)
-;;
-;;
-;;
-;;
-;;
-;;(define-second-key ("Tab" :mod-1) 'rotate-window-up)
-;;(define-second-key ("Tab" :mod-1 :shift) 'rotate-window-down)
-;;
-;;(define-second-key (#\b) 'banish-pointer)
-;;
-;;(define-second-key (#\b :mod-1) 'toggle-maximize-current-frame)
-;;
-;;(define-second-key (#\x) 'pager-mode)
-;;
-;;
-;;(define-second-key (#\k :mod-1) 'destroy-current-window)
-;;(define-second-key (#\k) 'remove-current-window)
-;;
-;;
-;;(define-second-key (#\g) 'create-new-default-frame)
-;;(define-second-key (#\g :mod-1) 'remove-current-frame)
-;;
-;;(define-second-key (#\w) 'create-new-default-workspace)
-;;(define-second-key (#\w :mod-1) 'remove-current-workspace)
-;;
-;;(define-second-key (#\o)
-;;    (defun b-open-next-window-in-new-workspace ()
-;;      "Open the next window in a new workspace"
-;;      (setf *open-next-window-in-new-workspace* t)
-;;      (leave-second-mode)))
-;;
-;;(define-second-key (#\o :control)
-;;    (defun b-open-next-window-in-workspace-numbered ()
-;;      "Open the next window in a numbered workspace"
-;;      (let ((number (parse-integer (or (query-string "Open next window in workspace:") "")
-;;				   :junk-allowed t)))
-;;	(when (numberp number)
-;;	  (setf *open-next-window-in-new-workspace* number)))
-;;      (leave-second-mode)))
-;;
-;;
-;;(define-second-key (#\o :mod-1)
-;;    (defun b-open-next-window-in-new-frame-once ()
-;;      "Open the next window in a new frame and all others in the same frame"
-;;      (setf *open-next-window-in-new-frame* :once)
-;;      (leave-second-mode)))
-;;
-;;(define-second-key (#\o :mod-1 :control)
-;;    (defun b-open-next-window-in-new-frame ()
-;;      "Open each next window in a new frame"
-;;      (setf *open-next-window-in-new-frame* t)
-;;      (leave-second-mode)))
-;;
-;;
-;;
-;;(defmacro define-shell (key name docstring cmd)
-;;  "Define a second key to start a shell command"
-;;  `(define-second-key ,key
-;;       (defun ,name ()
-;;	 ,docstring
-;;	 (setf *second-mode-program* ,cmd)
-;;	 (leave-second-mode))))
-;;
-;;(define-shell (#\c) b-start-xterm "start an xterm" "exec xterm")
-;;(define-shell (#\e) b-start-emacs "start emacs" "exec emacs")
-;;(define-shell (#\e :control) b-start-emacsremote
-;;  "start an emacs for another user"
-;;  "exec emacsremote-Eterm")
-;;(define-shell (#\h) b-start-xclock "start an xclock" "exec xclock -d")
-;;
-;;
-;;(define-second-key (#\a) 'force-window-center-in-frame)
-;;(define-second-key (#\a :mod-1) 'force-window-in-frame)
-;;
-;;
-;;(define-second-key (#\d :mod-1)
-;;    (defun b-show-debuging-info ()
-;;      "Show debuging info"
-;;      (dbg *workspace-list*)
-;;      (dbg *screen*)
-;;      (dbg (xlib:query-tree *root*))))
-;;
-;;(define-second-key (#\t :control) 'tile-current-workspace-vertically)
-;;(define-second-key (#\t :shift :control) 'tile-current-workspace-horizontally)
-;;
-;;(define-second-key (#\y) 'tile-current-workspace-to)
-;;(define-second-key (#\y :mod-1) 'reconfigure-tile-workspace)
-;;(define-second-key (#\y :control) 'explode-current-frame)
-;;(define-second-key (#\y :control :shift) 'implode-current-frame)
-;;    
-;;;;;,-----
-;;;;;| Moving/Resizing frames
-;;;;;`-----
-;;(define-second-key (#\p)
-;;    (defun b-pack-frame-on-next-arrow ()
-;;      "Pack frame on next arrow action"
-;;      (setf *arrow-action* :pack)))
-;;
-;;
-;;(defun fill-frame-in-all-directions ()
-;;  "Fill frame in all directions"
-;;  (fill-current-frame-up)
-;;  (fill-current-frame-left)
-;;  (fill-current-frame-right)
-;;  (fill-current-frame-down))
-;;
-;;
-;;(define-second-key (#\f)
-;;    (defun b-fill-frame ()
-;;      "Fill frame on next arrow action (fill in all directions on second f keypress)"
-;;      (case *arrow-action*
-;;	(:fill (fill-frame-in-all-directions)
-;;	       (setf *arrow-action* nil))
-;;	(t (setf *arrow-action* :fill)))))
-;;
-;;(define-second-key (#\f :mod-1) 'fill-frame-in-all-directions)
-;;
-;;(define-second-key (#\f :shift)
-;;    (defun b-fill-frame-vert ()
-;;      "Fill frame vertically"
-;;      (fill-current-frame-up)
-;;      (fill-current-frame-down)))
-;;
-;;(define-second-key (#\f :control)
-;;    (defun b-fill-frame-horiz ()
-;;      "Fill frame horizontally"
-;;      (fill-current-frame-left)
-;;      (fill-current-frame-right)))
-;;
-;;
-;;(define-second-key (#\r)
-;;    (defun b-resize-half ()
-;;      "Resize frame to its half width or heigth on next arraw action"
-;;      (setf *arrow-action* :resize-half)))
-;;
-;;
-;;(define-second-key (#\l) 'resize-minimal-current-frame)
-;;(define-second-key (#\l :mod-1) 'resize-down-current-frame)
-;;
-;;
-;;(define-second-key (#\m) 'center-current-frame)
-;;   
-;;
-;;(define-second-key ("Up")
-;;    (defun b-move-or-pack-up ()
-;;      "Move, pack, fill or resize frame up"
-;;      (case *arrow-action*
-;;	(:pack (pack-current-frame-up))
-;;	(:fill (fill-current-frame-up))
-;;	(:resize-half (resize-half-height-up-current-frame))
-;;	(t (move-frame (current-frame) 0 -10)))
-;;      (setf *arrow-action* nil)))
-;;
-;;(define-second-key ("Down")
-;;    (defun b-move-or-pack-down ()
-;;      "Move, pack, fill or resize frame down"
-;;      (case *arrow-action*
-;;	(:pack (pack-current-frame-down))
-;;	(:fill (fill-current-frame-down))
-;;	(:resize-half (resize-half-height-down-current-frame))
-;;	(t (move-frame (current-frame) 0 +10)))
-;;      (setf *arrow-action* nil)))
-;;
-;;(define-second-key ("Right")
-;;    (defun b-move-or-pack-right ()
-;;      "Move, pack, fill or resize frame right"
-;;      (case *arrow-action*
-;;	(:pack (pack-current-frame-right))
-;;	(:fill (fill-current-frame-right))
-;;	(:resize-half (resize-half-width-right-current-frame))
-;;	(t (move-frame (current-frame) +10 0)))
-;;      (setf *arrow-action* nil)))
-;;
-;;(define-second-key ("Left")
-;;    (defun b-move-or-pack-left ()
-;;      "Move, pack, fill or resize frame left"
-;;      (case *arrow-action*
-;;	(:pack (pack-current-frame-left))
-;;	(:fill (fill-current-frame-left))
-;;	(:resize-half (resize-half-width-left-current-frame))
-;;	(t (move-frame (current-frame) -10 0)))
-;;      (setf *arrow-action* nil)))
-;;
-;;
-;;(define-second-key ("Up" :shift)
-;;    (defun b-resize-up ()
-;;      "Resize frame up"
-;;      (resize-frame (current-frame) 0 -10)))
-;;
-;;(define-second-key ("Down" :shift)
-;;    (defun b-resize-down ()
-;;      "Resize frame down"
-;;      (resize-frame (current-frame) 0 +10)))
-;;
-;;(define-second-key ("Right" :shift)
-;;    (defun b-resize-right ()
-;;      "Resize frame right"
-;;      (resize-frame (current-frame) +10 0)))
-;;
-;;(define-second-key ("Left" :shift)
-;;    (defun b-resize-left ()
-;;      "Resize frame left"
-;;      (resize-frame (current-frame) -10 0)))
-;;
-;;
-;;;;;,-----
-;;;;;| Mouse second mode functions
-;;;;;`-----
-;;(defun select-frame-under-mouse (root-x root-y)
-;;  (let ((frame (find-frame-under-mouse root-x root-y)))
-;;    (when frame
-;;      (no-focus)
-;;      (focus-frame frame (current-workspace))
-;;      (focus-window (current-window))
-;;      (show-all-frame (current-workspace) nil))))
-;;
-;;(defun mouse-leave-second-mode-maximize (root-x root-y)
-;;  "Leave second mode and maximize current frame"
-;;  (select-frame-under-mouse root-x root-y)
-;;  (maximize-frame (current-frame))
-;;  (show-all-windows-in-workspace (current-workspace))
-;;  (throw 'exit-second-loop nil))
-;;
-;;(defun mouse-leave-second-mode (root-x root-y)
-;;  "Leave second mode"
-;;  (select-frame-under-mouse root-x root-y)
-;;  (show-all-windows-in-workspace (current-workspace))
-;;  (throw 'exit-second-loop nil))
-;;
-;;
-;;
-;;
-;;(defun mouse-circulate-window-up (root-x root-y)
-;;  "Rotate window up" 
-;;  (declare (ignore root-x root-y))
-;;  (rotate-window-up))
-;;
-;;
-;;(defun mouse-circulate-window-down (root-x root-y)
-;;  "Rotate window down" 
-;;  (declare (ignore root-x root-y))
-;;  (rotate-window-down))
-;;
-;;
-;;
-;;(defun mouse-circulate-workspace-up (root-x root-y)
-;;  "Circulate up in workspaces" 
-;;  (declare (ignore root-x root-y))
-;;  (circulate-workspace-up))
-;;
-;;
-;;(defun mouse-circulate-workspace-down (root-x root-y)
-;;  "Circulate down in workspaces" 
-;;  (declare (ignore root-x root-y))
-;;  (circulate-workspace-down))
-;;
-;;
-;;
-;;
-;;(defun init-motion-vars ()
-;;  (setf *motion-action* nil
-;;	*motion-object* nil
-;;	*motion-start-frame* nil
-;;	*motion-dx* nil
-;;	*motion-dy* nil))
-;;
-;;
-;;(let ((accept-motion t)
-;;      (selected-frame nil))
-;;  (defun mouse-motion (root-x root-y)
-;;    "Move or resize frame. Move window from a frame to another.
-;;Go to top left or rigth corner to change workspaces."
-;;    (let ((frame (find-frame-under-mouse root-x root-y)))
-;;      (unless (equal selected-frame frame)
-;;	(select-frame-under-mouse root-x root-y)
-;;	(setf selected-frame frame)))
-;;    (if (<= root-y 5)
-;;	(cond ((and accept-motion (<= root-x 5))
-;;	       (case *motion-action*
-;;		 (:move-frame
-;;		  (remove-frame-in-workspace *motion-object* (current-workspace))))
-;;	       (circulate-workspace-down)
-;;	       (minimize-frame (current-frame))
-;;	       (case *motion-action*
-;;		 (:move-frame
-;;		  (add-frame-in-workspace *motion-object* (current-workspace))))
-;;	       (warp-pointer *root* (1- (xlib:screen-width *screen*)) 100)
-;;	       (setf accept-motion nil))
-;;	      ((and accept-motion (>= root-x (- (xlib:screen-width *screen*) 5)))
-;;	       (case *motion-action*
-;;		 (:move-frame
-;;		  (remove-frame-in-workspace *motion-object* (current-workspace))))
-;;	       (circulate-workspace-up)
-;;	       (minimize-frame (current-frame))
-;;	       (case *motion-action*
-;;		 (:move-frame
-;;		  (add-frame-in-workspace *motion-object* (current-workspace))))
-;;	       (warp-pointer *root* 0 100)
-;;	       (setf accept-motion nil))
-;;	      (t (setf accept-motion t)))
-;;	(setf accept-motion t))
-;;    (case *motion-action*
-;;      (:move-frame
-;;       (hide-frame *root* *motion-object*)
-;;       (setf (frame-x *motion-object*) (+ root-x *motion-dx*)
-;;	     (frame-y *motion-object*) (+ root-y *motion-dy*))
-;;       (show-frame *root* *root-gc* *motion-object*)
-;;       (adapt-all-window-in-frame *motion-object*)
-;;       (show-all-frame (current-workspace) nil))
-;;      (:resize-frame
-;;       (hide-frame *root* *motion-object*)
-;;       (setf (frame-width *motion-object*) (max (+ (frame-width *motion-object*) (- root-x *motion-dx*)) 100)
-;;	     (frame-height *motion-object*) (max (+ (frame-height *motion-object*) (- root-y *motion-dy*)) 100)
-;;	     *motion-dx* root-x *motion-dy* root-y)
-;;       (show-frame *root* *root-gc* *motion-object*)
-;;       (adapt-all-window-in-frame *motion-object*)
-;;       (show-all-frame (current-workspace) nil)))))
-;;
-;;
-;;
-;;(defun move-selected-frame (root-x root-y)
-;;  "Move selected frame or create a new frame on the root window"
-;;  (select-frame-under-mouse root-x root-y)
-;;  (setf *motion-object* (find-frame-under-mouse root-x root-y))
-;;  (if *motion-object*
-;;      (setf *motion-action* :move-frame
-;;	    *motion-dx* (- (frame-x *motion-object*) root-x)
-;;	    *motion-dy* (- (frame-y *motion-object*) root-y))
-;;      (progn
-;;	(setf *motion-object* (make-frame :x root-x :y root-y :width 100 :height 100 :fullscreenp nil))
-;;	(warp-pointer *root* (+ root-x 100) (+ root-y 100))
-;;	(add-frame-in-workspace *motion-object* (current-workspace))
-;;	(show-all-frame (current-workspace))
-;;	(setf *motion-action* :resize-frame
-;;	      *motion-dx* (+ root-x 100)
-;;	      *motion-dy* (+ root-y 100)))))
-;;
-;;
-;;
-;;(defun copy-selected-frame (root-x root-y)
-;;  "Copy selected frame"
-;;  (xgrab-pointer *root* 50 51)
-;;  (select-frame-under-mouse root-x root-y)
-;;  (setf *motion-object* (find-frame-under-mouse root-x root-y))
-;;  (when *motion-object*
-;;    (setf *motion-action* :copy-frame
-;;	  *motion-object* (copy-frame *motion-object*)
-;;	  *motion-dx* (- (frame-x *motion-object*) root-x)
-;;	  *motion-dy* (- (frame-y *motion-object*) root-y))))
-;;;;    (add-frame-in-workspace *motion-object* (current-workspace))))
-;;
-;;
-;;
-;;(defun release-move-selected-frame (root-x root-y)
-;;  "Release button"
-;;  (when *motion-object*
-;;    (case *motion-action*
-;;      (:move-frame
-;;       (move-frame-to *motion-object* (+ root-x *motion-dx*) (+ root-y *motion-dy*)))
-;;      (:resize-frame
-;;       (resize-frame *motion-object* 0 0))))
-;;  (init-motion-vars)
-;;  (select-frame-under-mouse root-x root-y))
-;;
-;;
-;;(defun release-copy-selected-frame (root-x root-y)
-;;  "Release button"
-;;  (xgrab-pointer *root* 66 67)
-;;  (when *motion-object*
-;;    (unless (frame-windows-already-in-workspace *motion-object* (current-workspace))
-;;      (add-frame-in-workspace *motion-object* (current-workspace))
-;;      (move-frame-to *motion-object* (+ root-x *motion-dx*) (+ root-y *motion-dy*))))
-;;  (init-motion-vars)
-;;  (select-frame-under-mouse root-x root-y)
-;;  (show-all-windows-in-workspace (current-workspace)))
-;;
-;;
-;;
-;;(defun resize-selected-frame (root-x root-y)
-;;  "Resize selected frame"
-;;  (select-frame-under-mouse root-x root-y)
-;;  (setf *motion-object* (find-frame-under-mouse root-x root-y))
-;;  (when *motion-object*
-;;    (setf *motion-action* :resize-frame
-;;	  *motion-dx* root-x
-;;	  *motion-dy* root-y)))
-;;
-;;
-;;(defun release-resize-selected-frame (root-x root-y)
-;;  "Release button"
-;;  (when *motion-object*
-;;    (resize-frame *motion-object* 0 0))
-;;  (init-motion-vars)
-;;  (select-frame-under-mouse root-x root-y))
-;;
-;;
-;;
-;;(defun move-selected-window (root-x root-y)
-;;  "Move selected window"
-;;  (xgrab-pointer *root* 50 51)
-;;  (select-frame-under-mouse root-x root-y)
-;;  (setf *motion-object* (current-window)
-;;	*motion-action* :move-window)
-;;  (when *motion-object*
-;;    (setf *motion-start-frame* (current-frame))))
-;;
-;;
-;;(defun release-move-selected-window (root-x root-y)
-;;  "Release button"
-;;  (xgrab-pointer *root* 66 67)
-;;  (select-frame-under-mouse root-x root-y)
-;;  (when *motion-object*
-;;    (remove-window-in-frame *motion-object* *motion-start-frame*)
-;;    (add-window-in-frame *motion-object* (current-frame)))
-;;  (init-motion-vars)
-;;  (select-frame-under-mouse root-x root-y)
-;;  (show-all-windows-in-workspace (current-workspace)))
-;;
-;;
-;;
-;;(defun copy-selected-window (root-x root-y)
-;;  "Copy selected window"
-;;  (move-selected-window root-x root-y)
-;;  (setf *motion-action* :copy-window))
-;;
-;;(defun release-copy-selected-window (root-x root-y)
-;;  "Release button"
-;;  (xgrab-pointer *root* 66 67)
-;;  (select-frame-under-mouse root-x root-y)
-;;  (when *motion-object*
-;;    (unless (window-already-in-workspace *motion-object* (current-workspace))
-;;      (add-window-in-frame *motion-object* (current-frame))))
-;;  (init-motion-vars)
-;;  (select-frame-under-mouse root-x root-y)
-;;  (show-all-windows-in-workspace (current-workspace)))
-;;
-;;
-;;
-;;
-;;
-;;
-;;(define-second-mouse (1) 'move-selected-frame 'release-move-selected-frame)
-;;(define-second-mouse (1 :mod-1) 'resize-selected-frame 'release-resize-selected-frame)
-;;(define-second-mouse (1 :control) 'copy-selected-frame 'release-copy-selected-frame)
-;;
-;;(define-second-mouse (2) nil 'mouse-leave-second-mode-maximize)
-;;(define-second-mouse (2 :control) nil 'mouse-leave-second-mode)
-;;
-;;(define-second-mouse (3) 'move-selected-window 'release-move-selected-window)
-;;(define-second-mouse (3  :control) 'copy-selected-window 'release-copy-selected-window)
-;;
-;;
-;;(define-second-mouse (4) 'mouse-circulate-window-up nil)
-;;(define-second-mouse (5) 'mouse-circulate-window-down nil)
-;;
-;;(define-second-mouse (4 :mod-1) 'mouse-circulate-workspace-up nil)
-;;(define-second-mouse (5 :mod-1) 'mouse-circulate-workspace-down nil)
-;;
-;;(define-second-mouse ('Motion) 'mouse-motion nil)
-
+(add-hook *binding-hook* 'set-default-second-mouse)

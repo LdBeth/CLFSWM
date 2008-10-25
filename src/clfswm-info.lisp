@@ -72,67 +72,61 @@
 ;;;| Key binding
 ;;;`-----
 
-(define-info-key (#\q) 'leave-info-mode)
-(define-info-key ("Return") 'leave-info-mode)
-(define-info-key ("Escape") 'leave-info-mode)
+(add-hook *binding-hook* 'init-*info-keys* 'init-*info-mouse*)
 
-(define-info-key ("twosuperior")
-    (defun info-banish-pointer (info)
-      "Move the pointer to the lower right corner of the screen"
-      (declare (ignore info))
-      (banish-pointer)))
+(defun set-default-info-keys ()
+  (define-info-key (#\q) 'leave-info-mode)
+  (define-info-key ("Return") 'leave-info-mode)
+  (define-info-key ("Escape") 'leave-info-mode)
+  (define-info-key ("twosuperior")
+      (defun info-banish-pointer (info)
+	"Move the pointer to the lower right corner of the screen"
+	(declare (ignore info))
+	(banish-pointer)))
+  (define-info-key ("Down")
+      (defun info-next-line (info)
+	"Move one line down"
+	(setf (info-y info) (min (+ (info-y info) (info-ilh info)) (info-max-y info)))
+	(draw-info-window info)))
+  (define-info-key ("Up")
+      (defun info-previous-line (info)
+	"Move one line up"
+	(setf (info-y info) (max (- (info-y info) (info-ilh info)) 0))
+	(draw-info-window info)))
+  (define-info-key ("Left")
+      (defun info-previous-char (info)
+	"Move one char left"
+	(setf (info-x info) (max (- (info-x info) (info-ilw info)) 0))
+	(draw-info-window info)))
+  (define-info-key ("Right")
+      (defun info-next-char (info)
+	"Move one char right"
+	(setf (info-x info) (min (+ (info-x info) (info-ilw info)) (info-max-x info)))
+	(draw-info-window info)))
+  (define-info-key ("Home")
+      (defun info-first-line (info)
+	"Move to first line"
+	(setf (info-x info) 0
+	      (info-y info) 0)
+	(draw-info-window info)))
+  (define-info-key ("End")
+      (defun info-end-line (info)
+	"Move to last line"
+	(setf (info-x info) 0
+	      (info-y info) (- (* (length (info-list info)) (info-ilh info)) (xlib:drawable-height (info-window info))))
+	(draw-info-window info)))
+  (define-info-key ("Page_Down")
+      (defun info-next-ten-lines (info)
+	"Move ten lines down"
+	(setf (info-y info) (min (+ (info-y info) (* (info-ilh info) 10)) (info-max-y info)))
+	(draw-info-window info)))
+  (define-info-key ("Page_Up")
+      (defun info-previous-ten-lines (info)
+	"Move ten lines up"
+	(setf (info-y info) (max (- (info-y info) (* (info-ilh info) 10)) 0))
+	(draw-info-window info))))
 
-(define-info-key ("Down")
-    (defun info-next-line (info)
-      "Move one line down"
-      (setf (info-y info) (min (+ (info-y info) (info-ilh info)) (info-max-y info)))
-      (draw-info-window info)))
-
-(define-info-key ("Up")
-    (defun info-previous-line (info)
-      "Move one line up"
-      (setf (info-y info) (max (- (info-y info) (info-ilh info)) 0))
-      (draw-info-window info)))
-
-(define-info-key ("Left")
-    (defun info-previous-char (info)
-      "Move one char left"
-      (setf (info-x info) (max (- (info-x info) (info-ilw info)) 0))
-      (draw-info-window info)))
-
-(define-info-key ("Right")
-    (defun info-next-char (info)
-      "Move one char right"
-      (setf (info-x info) (min (+ (info-x info) (info-ilw info)) (info-max-x info)))
-      (draw-info-window info)))
-
-
-(define-info-key ("Home")
-    (defun info-first-line (info)
-      "Move to first line"
-      (setf (info-x info) 0
-	    (info-y info) 0)
-      (draw-info-window info)))
-
-(define-info-key ("End")
-    (defun info-end-line (info)
-      "Move to last line"
-      (setf (info-x info) 0
-	    (info-y info) (- (* (length (info-list info)) (info-ilh info)) (xlib:drawable-height (info-window info))))
-      (draw-info-window info)))
-
-
-(define-info-key ("Page_Down")
-    (defun info-next-ten-lines (info)
-      "Move ten lines down"
-      (setf (info-y info) (min (+ (info-y info) (* (info-ilh info) 10)) (info-max-y info)))
-      (draw-info-window info)))
-
-(define-info-key ("Page_Up")
-    (defun info-previous-ten-lines (info)
-      "Move ten lines up"
-      (setf (info-y info) (max (- (info-y info) (* (info-ilh info) 10)) 0))
-      (draw-info-window info)))
+(add-hook *binding-hook* 'set-default-info-keys)
 
 
 
@@ -180,12 +174,14 @@
 
 
 
+(defun set-default-info-mouse ()
+  (define-info-mouse (1) 'info-begin-grab 'info-end-grab)
+  (define-info-mouse (2) 'mouse-leave-info-mode)
+  (define-info-mouse (4) 'info-mouse-previous-line)
+  (define-info-mouse (5) 'info-mouse-next-line)
+  (define-info-mouse ('Motion) 'info-mouse-motion nil))
 
-(define-info-mouse (1) 'info-begin-grab 'info-end-grab)
-(define-info-mouse (2) 'mouse-leave-info-mode)
-(define-info-mouse (4) 'info-mouse-previous-line)
-(define-info-mouse (5) 'info-mouse-next-line)
-(define-info-mouse ('Motion) 'info-mouse-motion nil)
+(add-hook *binding-hook* 'set-default-info-mouse)
 
 
 ;;;,-----
@@ -305,7 +301,7 @@ Function can be a function or a list (function color) for colored output"
   (let ((info-list nil)
 	(action nil))
     (labels ((define-key (key function)
-	       (define-info-key-fun (list key (modifiers->state *default-modifiers*))
+	       (define-info-key-fun (list key)
 		   (lambda (&optional args)
 		     (declare (ignore args))
 		     (setf action function)
@@ -328,7 +324,7 @@ Function can be a function or a list (function color) for colored output"
       (dolist (item item-list)
 	(when (consp item)
 	  (let ((key (first item)))
-	    (undefine-info-key-fun (list key (modifiers->state *default-modifiers*))))))
+	    (undefine-info-key-fun (list key)))))
       (typecase action
 	(function (funcall action))
 	(symbol (when (fboundp action)

@@ -33,24 +33,6 @@
   "Execute the program string if not nil")
 
 
-;;(defun draw-second-mode-window ()
-;;  (xlib:clear-area *sm-window*)
-;;  (let* ((text (format nil "Workspace ~A ~:(~A~) ~A ~A ~A"
-;;		       (workspace-number (current-workspace))
-;;		       (if *arrow-action* *arrow-action* "")
-;;		       (if *motion-action* *motion-action* "")
-;;		       (cond ((numberp *open-next-window-in-new-workspace*)
-;;			      (format nil ">W:~A" *open-next-window-in-new-workspace*))
-;;			     (*open-next-window-in-new-workspace* ">W")
-;;			     (t ""))
-;;		       (cond ((equal *open-next-window-in-new-frame* :once) ">G")
-;;			     (*open-next-window-in-new-frame* ">G+")
-;;			     (t ""))))
-;;	 (len (length text)))
-;;    (xlib:draw-image-glyphs *sm-window* *sm-gc*
-;;			    (truncate (/ (- *sm-width* (* (xlib:max-char-width *sm-font*) len)) 2))
-;;			    (truncate (/ (+ *sm-height* (- (font-ascent *sm-font*) (font-descent *sm-font*))) 2))
-;;			    text)))
 
 
 (defun draw-second-mode-window ()

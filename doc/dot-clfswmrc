@@ -8,6 +8,13 @@
 (in-package :clfswm)
 
 
+
+;;;; Uncomment the line above if you need default modifiers (or not)
+;;(with-capslock)
+;;(with-numlock)
+;;(without-capslock)
+;;(without-cnumlock)
+
 ;;;; Uncomment the line above if you want to enable the notify event compression.
 ;;;; This variable may be useful to speed up some slow version of CLX
 ;;;; It is particulary useful with CLISP/MIT-CLX.

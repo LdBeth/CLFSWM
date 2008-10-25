@@ -31,65 +31,50 @@
 ;;;| CONFIG - Bindings main mode
 ;;;`-----
 
-(define-main-key ("F1" :mod-1) 'help-on-clfswm)
 
-(define-main-key ("Home" :mod-1 :control :shift) 'exit-clfswm)
+(add-hook *binding-hook* 'init-*main-keys* 'init-*main-mouse*)
 
-(define-main-key ("Right" :mod-1) 'select-next-sister)
-(define-main-key ("Left" :mod-1) 'select-previous-sister)
+(defun set-default-main-keys ()
+  (define-main-key ("F1" :mod-1) 'help-on-clfswm)
+  (define-main-key ("Home" :mod-1 :control :shift) 'exit-clfswm)
+  (define-main-key ("Right" :mod-1) 'select-next-sister)
+  (define-main-key ("Left" :mod-1) 'select-previous-sister)
+  (define-main-key ("Down" :mod-1) 'select-previous-level)
+  (define-main-key ("Up" :mod-1) 'select-next-level)
+  (define-main-key ("Tab" :mod-1) 'select-next-child)
+  (define-main-key ("Tab" :mod-1 :shift) 'select-previous-child)
+  (define-main-key ("Tab" :shift) 'switch-to-last-child)
+  (define-main-key ("Return" :mod-1) 'enter-frame)
+  (define-main-key ("Return" :mod-1 :shift) 'leave-frame)
+  (define-main-key ("Page_Up" :mod-1) 'frame-lower-child)
+  (define-main-key ("Page_Down" :mod-1) 'frame-raise-child)
+  (define-main-key ("Home" :mod-1) 'switch-to-root-frame)
+  (define-main-key ("Home" :mod-1 :shift) 'switch-and-select-root-frame)
+  (define-main-key ("Menu") 'fast-layout-switch)
+  (define-main-key ("Menu" :mod-1) 'show-all-frames-info-key)
+  (define-main-key ("Menu" :shift) 'show-all-frames-info)
+  (define-main-key ("Menu" :control) 'toggle-show-root-frame)
+  (define-main-key (#\b :mod-1) 'banish-pointer)
+  ;; Escape
+  (define-main-key ("Escape" :control :shift) 'delete-focus-window)
+  (define-main-key ("Escape" :mod-1 :control :shift) 'destroy-focus-window)
+  (define-main-key ("Escape" :control) 'remove-focus-window)
+  (define-main-key ("Escape" :shift) 'unhide-all-windows-in-current-child)
+  (define-main-key (#\t :mod-1) 'second-key-mode)
+  (define-main-key ("less" :control) 'second-key-mode)
+  ;; Bind or jump functions
+  (define-main-key ("1" :mod-1) 'bind-or-jump 1)
+  (define-main-key ("2" :mod-1) 'bind-or-jump 2)
+  (define-main-key ("3" :mod-1) 'bind-or-jump 3)
+  (define-main-key ("4" :mod-1) 'bind-or-jump 4)
+  (define-main-key ("5" :mod-1) 'bind-or-jump 5)
+  (define-main-key ("6" :mod-1) 'bind-or-jump 6)
+  (define-main-key ("7" :mod-1) 'bind-or-jump 7)
+  (define-main-key ("8" :mod-1) 'bind-or-jump 8)
+  (define-main-key ("9" :mod-1) 'bind-or-jump 9)
+  (define-main-key ("0" :mod-1) 'bind-or-jump 10))
 
-(define-main-key ("Down" :mod-1) 'select-previous-level)
-(define-main-key ("Up" :mod-1) 'select-next-level)
-
-(define-main-key ("Tab" :mod-1) 'select-next-child)
-(define-main-key ("Tab" :mod-1 :shift) 'select-previous-child)
-(define-main-key ("Tab" :shift) 'switch-to-last-child)
-
-(define-main-key ("Return" :mod-1) 'enter-frame)
-(define-main-key ("Return" :mod-1 :shift) 'leave-frame)
-
-(define-main-key ("Page_Up" :mod-1) 'frame-lower-child)
-(define-main-key ("Page_Down" :mod-1) 'frame-raise-child)
-
-
-(define-main-key ("Home" :mod-1) 'switch-to-root-frame)
-(define-main-key ("Home" :mod-1 :shift) 'switch-and-select-root-frame)
-
-(define-main-key ("Menu") 'fast-layout-switch)
-
-(define-main-key ("Menu" :mod-1) 'show-all-frames-info-key)
-(define-main-key ("Menu" :shift) 'show-all-frames-info)
-(define-main-key ("Menu" :control) 'toggle-show-root-frame)
-
-(define-main-key (#\b :mod-1) 'banish-pointer)
-
-
-;;;; Escape
-(define-main-key ("Escape" :control :shift) 'delete-focus-window)
-(define-main-key ("Escape" :mod-1 :control :shift) 'destroy-focus-window)
-(define-main-key ("Escape" :control) 'remove-focus-window)
-(define-main-key ("Escape" :shift) 'unhide-all-windows-in-current-child)
-
-
-(define-main-key (#\t :mod-1) 'second-key-mode)
-(define-main-key ("less" :control) 'second-key-mode)
-
-
-
-
-
-
-;;; Bind or jump functions
-(define-main-key ("1" :mod-1) 'bind-or-jump 1)
-(define-main-key ("2" :mod-1) 'bind-or-jump 2)
-(define-main-key ("3" :mod-1) 'bind-or-jump 3)
-(define-main-key ("4" :mod-1) 'bind-or-jump 4)
-(define-main-key ("5" :mod-1) 'bind-or-jump 5)
-(define-main-key ("6" :mod-1) 'bind-or-jump 6)
-(define-main-key ("7" :mod-1) 'bind-or-jump 7)
-(define-main-key ("8" :mod-1) 'bind-or-jump 8)
-(define-main-key ("9" :mod-1) 'bind-or-jump 9)
-(define-main-key ("0" :mod-1) 'bind-or-jump 10)
+(add-hook *binding-hook* 'set-default-main-keys)
 
 
 ;; For an azery keyboard:
@@ -125,121 +110,18 @@
   (stop-button-event)
   (mouse-focus-move/resize-generic root-x root-y #'resize-frame t))
 
+(defun set-default-main-mouse ()
+  (define-main-mouse (1) 'mouse-click-to-focus-and-move)
+  (define-main-mouse (2) 'mouse-middle-click)
+  (define-main-mouse (3) 'mouse-click-to-focus-and-resize)
+  (define-main-mouse (1 :mod-1) 'mouse-click-to-focus-and-move-window)
+  (define-main-mouse (3 :mod-1) 'mouse-click-to-focus-and-resize-window)
+  (define-main-mouse (1 :control :mod-1) 'mouse-move-window-over-frame)
+  (define-main-mouse (4) 'mouse-select-next-level)
+  (define-main-mouse (5) 'mouse-select-previous-level)
+  (define-main-mouse (4 :mod-1) 'mouse-enter-frame)
+  (define-main-mouse (5 :mod-1) 'mouse-leave-frame))
 
-(define-main-mouse (1) 'mouse-click-to-focus-and-move)
-(define-main-mouse (2) 'mouse-middle-click)
-(define-main-mouse (3) 'mouse-click-to-focus-and-resize)
+(add-hook *binding-hook* 'set-default-main-mouse)
 
-(define-main-mouse (1 :mod-1) 'mouse-click-to-focus-and-move-window)
-(define-main-mouse (3 :mod-1) 'mouse-click-to-focus-and-resize-window)
-
-(define-main-mouse (1 :control :mod-1) 'mouse-move-window-over-frame)
-
-(define-main-mouse (4) 'mouse-select-next-level)
-(define-main-mouse (5) 'mouse-select-previous-level)
-
-(define-main-mouse (4 :mod-1) 'mouse-enter-frame)
-(define-main-mouse (5 :mod-1) 'mouse-leave-frame)
-
-;;(define-main-mouse (1) 'handle-click-to-focus 'test-mouse-binding)
-;;(define-main-mouse ('motion) 'test-mouse-binding)
-
-
-;;(define-main-key ("a") (lambda ()
-;;			 (dbg 'key-a)
-;;			 (show-all-children *root-frame*)))
-;;
-;;(define-main-key ("b") (lambda ()
-;;			 (dbg 'key-b)
-;;			   (let* ((window (xlib:create-window :parent *root*
-;;							 :x 300
-;;							 :y 200
-;;							 :width 400
-;;							 :height 300
-;;							 :background (get-color "Black")
-;;							 :colormap (xlib:screen-default-colormap *screen*)
-;;							 :border-width 1
-;;							 :border (get-color "Red")
-;;							 :class :input-output
-;;							 :event-mask '(:exposure)))
-;;				  (gc (xlib:create-gcontext :drawable window
-;;						       :foreground (get-color "Green")
-;;						       :background (get-color "Red")
-;;						       :font *default-font*
-;;						       :line-style :solid)))
-;;			     (xlib:map-window window)
-;;			     (draw-line window gc 10 10 200 200)
-;;			     (xlib:display-finish-output *display*)
-;;			     (xlib:draw-glyphs window gc 10 10 (format nil "~A" 10))
-;;			     (dbg 'ici))))
-;;    
-;;
-;;;;(define-main-key ("F1" :mod-1) 'help-on-clfswm)
-;;;;
-;;(defun exit-clfswm ()
-;;  "Quit clfswm"
-;;  (throw 'exit-main-loop nil))
-;;
-;;
-;;
-;;(define-main-key ("Home" :mod-1 :control :shift) 'exit-clfswm)
-;;
-;;(define-main-key (#\t :mod-1) 'second-key-mode)
-;;(define-main-key ("less" :control) 'second-key-mode)
-;;
-;;(define-main-key ("Tab" :mod-1) 'rotate-window-up)
-;;(define-main-key ("Tab" :mod-1 :shift) 'rotate-window-down)
-;;
-;;(define-main-key (#\b :mod-1) 'banish-pointer)
-;;(define-main-key (#\b :mod-1 :control) 'toggle-maximize-current-frame)
-;;
-;;;; Escape
-;;(define-main-key ("Escape" :control :shift) 'delete-current-window)
-;;(define-main-key ("Escape" :mod-1 :control :shift) 'destroy-current-window)
-;;(define-main-key ("Escape" :control) 'remove-current-window)
-;;(define-main-key ("Escape" :shift) 'unhide-all-windows-in-current-frame)
-;;
-;;
-;;;; Up
-;;(define-main-key ("Up" :mod-1) 'circulate-frame-up)
-;;(define-main-key ("Up" :mod-1 :shift) 'circulate-frame-up-move-window)
-;;(define-main-key ("Up" :mod-1 :shift :control) 'circulate-frame-up-copy-window)
-;;
-;;
-;;;; Down
-;;(define-main-key ("Down" :mod-1) 'circulate-frame-down)
-;;(define-main-key ("Down" :mod-1 :shift) 'circulate-frame-down-move-window)
-;;(define-main-key ("Down" :mod-1 :shift :control) 'circulate-frame-down-copy-window)
-;;
-;;
-;;;; Right
-;;(define-main-key ("Right" :mod-1) 'circulate-workspace-up)
-;;(define-main-key ("Right" :mod-1 :shift) 'circulate-workspace-up-move-frame)
-;;(define-main-key ("Right" :mod-1 :shift :control) 'circulate-workspace-up-copy-frame)
-;;
-;;
-;;;; Left
-;;(define-main-key ("Left" :mod-1) 'circulate-workspace-down)
-;;(define-main-key ("Left" :mod-1 :shift) 'circulate-workspace-down-move-frame)
-;;(define-main-key ("Left" :mod-1 :shift :control) 'circulate-workspace-down-copy-frame)
-;;
-;;
-;;
-;;(defmacro define-main-focus-workspace-by-number (key number)
-;;  "Define a main key to focus a workspace by its number"
-;;  `(define-main-key ,key
-;;    (defun ,(create-symbol (format nil "b-main-focus-workspace-~A" number)) ()
-;;      ,(format nil "Focus workspace ~A" number)
-;;      (circulate-workspace-by-number ,number))))
-;;
-;;(define-main-focus-workspace-by-number (#\1 :mod-1) 1)
-;;(define-main-focus-workspace-by-number (#\2 :mod-1) 2)
-;;(define-main-focus-workspace-by-number (#\3 :mod-1) 3)
-;;(define-main-focus-workspace-by-number (#\4 :mod-1) 4)
-;;(define-main-focus-workspace-by-number (#\5 :mod-1) 5)
-;;(define-main-focus-workspace-by-number (#\6 :mod-1) 6)
-;;(define-main-focus-workspace-by-number (#\7 :mod-1) 7)
-;;(define-main-focus-workspace-by-number (#\8 :mod-1) 8)
-;;(define-main-focus-workspace-by-number (#\9 :mod-1) 9)
-;;(define-main-focus-workspace-by-number (#\0 :mod-1) 10)
 

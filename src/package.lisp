@@ -145,12 +145,12 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defparameter *show-root-frame-p* nil)
 
 
-(defparameter *main-keys* (make-hash-table :test 'equal))
-(defparameter *main-mouse* (make-hash-table :test 'equal))
-(defparameter *second-keys* (make-hash-table :test 'equal))
-(defparameter *second-mouse* (make-hash-table :test 'equal))
-(defparameter *info-keys*  (make-hash-table :test 'equal))
-(defparameter *info-mouse*  (make-hash-table :test 'equal))
+(defparameter *main-keys* nil)
+(defparameter *main-mouse* nil)
+(defparameter *second-keys* nil) 
+(defparameter *second-mouse* nil)
+(defparameter *info-keys* nil)
+(defparameter *info-mouse* nil)
 
 
 
@@ -219,6 +219,10 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defparameter *sm-enter-notify-hook* nil
   "Config(Hook group):")
 (defparameter *sm-exposure-hook* nil
+  "Config(Hook group):")
+
+
+(defparameter *binding-hook* nil
   "Config(Hook group):")
 
 

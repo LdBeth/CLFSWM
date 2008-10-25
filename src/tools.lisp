@@ -32,6 +32,7 @@
 	   :awhen
 	   :aif
 	   :call-hook
+	   :add-hook
 	   :dbg
 	   :dbgnl
 	   :with-all-internal-symbols
@@ -122,6 +123,10 @@ Return the result of the last hook"
 		   (t (setf result (apply hook args)))))))
       (rec hook)
       result)))
+
+
+(defmacro add-hook (hook &rest value)
+  `(setf ,hook (append ,hook (list ,@value))))
 
 
 

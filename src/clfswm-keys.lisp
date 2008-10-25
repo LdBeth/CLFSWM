@@ -31,41 +31,61 @@
 
 
 
+(defun with-capslock ()
+  (pushnew :lock *default-modifiers*))
 
-(defun define-hash-table-key-name (hash-table name)
-  (setf (gethash 'name hash-table) name))
+(defun without-capslock ()
+  (setf *default-modifiers* (remove :lock *default-modifiers*)))
+
+(defun with-numlock ()
+  (pushnew :mod-2 *default-modifiers*))
+
+(defun without-cnumlock ()
+  (setf *default-modifiers* (remove :mod-2 *default-modifiers*)))
+
+
 
 ;;; CONFIG - Key mode names
+(defmacro define-init-hash-table-key (hash-table name)
+  (let ((init-name (create-symbol "init-" (format nil "~A" hash-table))))
+    `(progn
+      (defun ,init-name ()
+	(setf ,hash-table (make-hash-table :test 'equal))
+	(setf (gethash 'name ,hash-table) ,name))
+      (,init-name))))
 
-(define-hash-table-key-name *main-keys* "Main mode keys")
-(define-hash-table-key-name *main-mouse* "Mouse buttons actions in main mode")
-(define-hash-table-key-name *second-keys* "Second mode keys")
-(define-hash-table-key-name *second-mouse* "Mouse buttons actions in second mode")
-(define-hash-table-key-name *info-keys* "Info mode keys")
-(define-hash-table-key-name *info-mouse* "Mouse buttons actions in info mode")
+(define-init-hash-table-key *main-keys* "Main mode keys")
+(define-init-hash-table-key *main-mouse* "Mouse buttons actions in main mode")
+(define-init-hash-table-key *second-keys* "Second mode keys")
+(define-init-hash-table-key *second-mouse* "Mouse buttons actions in second mode")
+(define-init-hash-table-key *info-keys* "Info mode keys")
+(define-init-hash-table-key *info-mouse* "Mouse buttons actions in info mode")
 
+
+(defun key->list (key)
+  (list (first key) (modifiers->state (append (rest key) *default-modifiers*))))
 
 (defmacro define-define-key (name hashtable)
   (let ((name-key-fun (create-symbol "define-" name "-key-fun"))
 	(name-key (create-symbol "define-" name "-key"))
+	(undefine-name-fun (create-symbol "undefine-" name "-key-fun"))
 	(undefine-name (create-symbol "undefine-" name "-key"))
 	(undefine-multi-name (create-symbol "undefine-" name "-multi-keys")))
     `(progn
       (defun ,name-key-fun (key function &rest args)
-	"Define a new key, a key is '(char '(modifier list))"
-	(setf (gethash key ,hashtable) (list function args)))
-      
+	"Define a new key, a key is '(char modifier1 modifier2...))"
+	(setf (gethash (key->list key) ,hashtable) (list function args)))
       (defmacro ,name-key ((key &rest modifiers) function &rest args)
-	`(,',name-key-fun (list ,key ,(modifiers->state (append modifiers *default-modifiers*))) ,function ,@args))
-      
+	`(,',name-key-fun (list ,key ,@modifiers) ,function ,@args))
+      (defun ,undefine-name-fun (key)
+	"Undefine a new key, a key is '(char modifier1 modifier2...))"
+	(remhash (key->list key) ,hashtable))
       (defmacro ,undefine-name ((key &rest modifiers))
-	`(remhash (list ,key ,(modifiers->state (append modifiers *default-modifiers*))) ,',hashtable))
-
+	`(,',undefine-name-fun (list ,key ,@modifiers)))
       (defmacro ,undefine-multi-name (&rest keys)
 	`(progn
 	  ,@(loop for k in keys
 		  collect `(,',undefine-name ,k)))))))
-
 
 
 (defmacro define-define-mouse (name hashtable)
@@ -75,24 +95,17 @@
     `(progn
        (defun ,name-mouse-fun (button function-press &optional function-release &rest args)
 	 "Define a new mouse button action, a button is '(button number '(modifier list))"
-	 (setf (gethash button ,hashtable) (list function-press function-release args)))
-      
+	 (setf (gethash (key->list button) ,hashtable) (list function-press function-release args)))
        (defmacro ,name-mouse ((button &rest modifiers) function-press &optional function-release &rest args)
-	 `(,',name-mouse-fun (list ,button ,(modifiers->state (append modifiers *default-modifiers*))) ,function-press ,function-release ,@args))
-
+	 `(,',name-mouse-fun (list ,button ,@modifiers) ,function-press ,function-release ,@args))
        (defmacro ,undefine-name ((key &rest modifiers))
-	 `(remhash (list ,key ,(modifiers->state (append modifiers *default-modifiers*))) ,',hashtable)))))
+	 `(remhash (list ,key ,@modifiers) ,',hashtable)))))
 
 
 
 (define-define-key "main" *main-keys*)
 (define-define-key "second" *second-keys*)
 (define-define-key "info" *info-keys*)
-
-
-
-(defun undefine-info-key-fun (key)
-  (remhash key *info-keys*))
 
 (define-define-mouse "main-mouse" *main-mouse*)
 (define-define-mouse "second-mouse" *second-mouse*)

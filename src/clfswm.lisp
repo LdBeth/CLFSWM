@@ -235,6 +235,7 @@
   (xgrab-init-pointer)
   (xgrab-init-keyboard)
   (init-last-child)
+  (call-hook *binding-hook*)
   (xlib:map-window *no-focus-window*)
   (dbg *display*)
   (setf (xlib:window-event-mask *root*) (xlib:make-event-mask :substructure-redirect

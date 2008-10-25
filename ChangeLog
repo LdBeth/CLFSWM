@@ -1,3 +1,19 @@
+2008-10-26  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-keys.lisp (with-capslock, without-capslock) 
+	(with-numlock, without-cnumlock): New functions.
+
+2008-10-25  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-info.lisp: Use the *binding-hook* to create info
+	keys and mouse bindings.
+
+	* src/bindings-second-mode.lisp: Use the *binding-hook* to create
+	second keys and mouse bindings.
+
+	* src/bindings.lisp: Use the *binding-hook* to create main keys
+	and mouse bindings.
+
 2008-10-10  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-menu.lisp (open-menu): Remember parent menu to undo
