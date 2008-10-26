@@ -62,8 +62,15 @@
 (define-init-hash-table-key *info-mouse* "Mouse buttons actions in info mode")
 
 
+
+(defun unalias-modifiers (list)
+  (dolist (mod *modifier-alias*)
+    (setf list (substitute (second mod) (first mod) list)))
+  list)
+
 (defun key->list (key)
-  (list (first key) (modifiers->state (append (rest key) *default-modifiers*))))
+  (list (first key) (modifiers->state (append (unalias-modifiers (rest key))
+					      (unalias-modifiers *default-modifiers*)))))
 
 (defmacro define-define-key (name hashtable)
   (let ((name-key-fun (create-symbol "define-" name "-key-fun"))

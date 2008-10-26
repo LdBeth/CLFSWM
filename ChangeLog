@@ -1,5 +1,11 @@
 2008-10-26  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-keys.lisp (unalias-modifiers): Convert a modifier
+	alias in a real modifier.
+
+	* src/package.lisp (*modifier-alias*): New list of modifier alias
+	For example: :alt is :mod-1, :numlock is :mod-2...
+
 	* src/tools.lisp (remove-hook): New function.
 
 	* src/clfswm-keys.lisp (with-capslock, without-capslock) 

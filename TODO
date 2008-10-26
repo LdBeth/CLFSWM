@@ -7,8 +7,6 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Make alias for :mod-1 -> :alt   :mod-2 -> :numlock
-
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
    TODO :
    In ~/.clfswmrc:
