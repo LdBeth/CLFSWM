@@ -21,23 +21,64 @@
 ;; (setf *have-to-compress-notify* t)
 
 
+
+;;; -- Azerty configuration --
+;;; For the main mode
+;;(defun my-binding ()
+;;  (define-main-key ("twosuperior") 'banish-pointer)
+;;  (undefine-main-multi-keys (#\t :mod-1) (#\b :mod-1) (#\b :mod-1 :control))
+;;  (undefine-main-multi-keys ("1" :mod-1) ("2" :mod-1) ("3" :mod-1)
+;;			    ("4" :mod-1) ("5" :mod-1) ("6" :mod-1)
+;;			    ("7" :mod-1) ("8" :mod-1) ("9" :mod-1) ("0" :mod-1))
+;;  (define-main-key ("ampersand" :mod-1) 'bind-or-jump 1)
+;;  (define-main-key ("eacute" :mod-1) 'bind-or-jump 2)
+;;  (define-main-key ("quotedbl" :mod-1) 'bind-or-jump 3)
+;;  (define-main-key ("quoteright" :mod-1) 'bind-or-jump 4)
+;;  (define-main-key ("parenleft" :mod-1) 'bind-or-jump 5)
+;;  (define-main-key ("minus" :mod-1) 'bind-or-jump 6)
+;;  (define-main-key ("egrave" :mod-1) 'bind-or-jump 7)
+;;  (define-main-key ("underscore" :mod-1) 'bind-or-jump 8)
+;;  (define-main-key ("ccedilla" :mod-1) 'bind-or-jump 9)
+;;  (define-main-key ("agrave" :mod-1) 'bind-or-jump 10)
+;;  ;; For the second mode
+;;  (undefine-second-multi-keys ("1" :mod-1) ("2" :mod-1) ("3" :mod-1)
+;;			      ("4" :mod-1) ("5" :mod-1) ("6" :mod-1)
+;;			      ("7" :mod-1) ("8" :mod-1) ("9" :mod-1) ("0" :mod-1))
+;;  (define-second-key ("ampersand" :mod-1) 'bind-or-jump 1)
+;;  (define-second-key ("eacute" :mod-1) 'bind-or-jump 2)
+;;  (define-second-key ("quotedbl" :mod-1) 'bind-or-jump 3)
+;;  (define-second-key ("quoteright" :mod-1) 'bind-or-jump 4)
+;;  (define-second-key ("parenleft" :mod-1) 'bind-or-jump 5)
+;;  (define-second-key ("minus" :mod-1) 'bind-or-jump 6)
+;;  (define-second-key ("egrave" :mod-1) 'bind-or-jump 7)
+;;  (define-second-key ("underscore" :mod-1) 'bind-or-jump 8)
+;;  (define-second-key ("ccedilla" :mod-1) 'bind-or-jump 9)
+;;  (define-second-key ("agrave" :mod-1) 'bind-or-jump 10))
+;;
+;;(add-hook *binding-hook* 'my-binding)
+;;
+;;(dbg *binding-hook*)
+;;;;; -- Azerty configuration end --
+
+
+
 ;;; Color configuration example
 ;;;
 ;;; See in package.lisp for all variables
-(setf *color-unselected* "Blue")
+;;(setf *color-unselected* "Blue")
 
 
 ;;; How to change the default fullscreen size
-(defun get-fullscreen-size ()
-  "Return the size of root child (values rx ry rw rh)
-You can tweak this to what you want"
-  (values -2 -2 (+ (xlib:screen-width *screen*) 2) (- (xlib:screen-height *screen*) 20)))
+;;(defun get-fullscreen-size ()
+;;  "Return the size of root child (values rx ry rw rh)
+;;You can tweak this to what you want"
+;;  (values -2 -2 (+ (xlib:screen-width *screen*) 2) (- (xlib:screen-height *screen*) 20)))
 
 
 ;;; Contributed code example
 ;;; See in the clfswm/contrib directory to find some contributed code
 ;;; and se load-contrib to load them. For example:
-(load-contrib "contrib-example.lisp")
+;;(load-contrib "contrib-example.lisp")
 
 
 
@@ -46,38 +87,18 @@ You can tweak this to what you want"
 ;;;
 ;;; See bindings.lisp, bindings-second-mode.lisp and bindings-pager.lisp
 ;;; for all default bindings definitions.
-(undefine-main-key ("F1" :mod-1))
-(define-main-key ("F5" :mod-1) 'help-on-clfswm)
-
-
-
-;;; Binding example for apwal
-(define-second-key (#\Space)
-    (defun tpm-apwal ()
-      "Run Apwal"
-      (do-shell "exec apwal")
-      (show-all-windows-in-workspace (current-workspace))
-      (throw 'exit-second-loop nil)))
-
-
-
-
-
-;;;; Reloading example
-(defun my-reload-clfswm ()
-  "Reload clfswm"
-  (format t "RELOADING... ")
-  (ungrab-main-keys)
-  (setf *main-keys* (make-hash-table :test 'equal))
-  (asdf:oos 'asdf:load-op :clfswm)
-  (grab-main-keys)
-  (format t "Done!~%"))
-
-
-(define-main-key ("F2" :mod-1) 'my-reload-clfswm)
-
-(define-main-key ("F3" :mod-1) (lambda ()
-				 (do-shell "rxvt")))
+;;(defun binding-example ()
+;;  (undefine-main-key ("F1" :mod-1))
+;;  (define-main-key ("F5" :mod-1) 'help-on-clfswm)
+;;  ;; Binding example for apwal
+;;  (define-second-key (#\Space)
+;;      (defun tpm-apwal ()
+;;	"Run Apwal"
+;;	(do-shell "exec apwal")
+;;	(show-all-windows-in-workspace (current-workspace))
+;;	(throw 'exit-second-loop nil))))
+;;
+;;(add-hook *binding-hook* 'binding-example)
 
 
 
@@ -85,197 +106,158 @@ You can tweak this to what you want"
 ;;;
 ;;; See in package.lisp and clfswm.lisp, clfswm-second-mode.lisp
 ;;; for hook examples
-(setf *key-press-hook* (list (lambda (&rest args) ; function 1
-			       (format t "Keyp press (before): ~A~%" args)
-			       (force-output))
-			     #'handle-key-press	; function 2 (default)
-			     (lambda (&rest args) ; function 3
-			       (declare (ignore args))
-			       (format t "Keyp press (after)~%")
-			       (force-output))))
+;;(setf *key-press-hook* (list (lambda (&rest args) ; function 1
+;;			       (format t "Keyp press (before): ~A~%" args)
+;;			       (force-output))
+;;			     #'handle-key-press	; function 2 (default)
+;;			     (lambda (&rest args) ; function 3
+;;			       (declare (ignore args))
+;;			       (format t "Keyp press (after)~%")
+;;			       (force-output))))
 
 
 
 
 ;;; A more complex example I use to record my desktop and show
 ;;; documentation associated to each key press.
-(defun display-osd (formatter &rest args)
-  (do-shell "pkill osd_cat")
-  (do-shell (format nil "echo ~A | osd_cat -d 3 -p bottom -o -60 -f -*-fixed-*-*-*-*-16-*-*-*-*-*-*-1"
-		    (apply #'format nil formatter args)))
-  (force-output))
-
-(defun documentation-key-from-code (hash-key code state)
-  (documentation (first (find-key-from-code hash-key code state)) 'function))
-
-
-(defun key-string (hash-key code state)
-  (let* ((modifiers (xlib:make-state-keys state))
-	 (keysym (keysym->keysym-name (xlib:keycode->keysym *display* code 0)))
-	 (doc (documentation-key-from-code hash-key code state)))
-    (values (format nil "~:(~{~A+~}~A~) : ~S" modifiers keysym doc)
-	    doc)))
-
-(defun display-doc (hash-key code state)
-  (multiple-value-bind (str doc)
-      (key-string hash-key code state)
-    (when doc
-      (display-osd "~A" str))))
-
-(defun display-key-osd-main (&rest event-slots &key code state &allow-other-keys)
-  (declare (ignore event-slots))
-  (display-doc *main-keys* code state))
-
-(defun display-key-osd-second (&rest event-slots &key code state &allow-other-keys)
-  (declare (ignore event-slots))
-  (display-doc *second-keys* code state))
-
-;; Define new hook or add to precedent one
-(if (consp *key-press-hook*)
-    (push #'display-key-osd-main *key-press-hook*)
-    (setf *key-press-hook* (list #'display-key-osd-main #'handle-key-press)))
-(setf *sm-key-press-hook* (list #'display-key-osd-second #'sm-handle-key-press))
-
-
-;;; Display menu functions
-(defun open-menu (&optional (menu *menu*))
-  "Open the main menu"
-  (let ((info-list nil)
-	(action nil))
-    (dolist (item (menu-item menu))
-      (let ((value (menu-item-value item)))
-	(push (typecase value
-		(menu (list (list (format nil "~A" (menu-item-key item)) *menu-color-menu-key*)
-			    (list (format nil ": < ~A >" (menu-doc value)) *menu-color-submenu*)))
-		(string (list (list (format nil "~A" (menu-item-value item)) *menu-color-comment*)))
-		(t (list (list (format nil "~A" (menu-item-key item)) *menu-color-key*)
-			 (format nil ": ~A" (documentation value 'function)))))
-	      info-list)
-	(when (menu-item-key item)
-	  (define-info-key-fun (list (menu-item-key item) 0)
-	      (lambda (&optional args)
-		(declare (ignore args))
-		(setf action value)
-		(throw 'exit-info-loop nil))))))
-    (info-mode (nreverse info-list))
-    (dolist (item (menu-item menu))
-      (undefine-info-key-fun (list (menu-item-key item) 0)))
-    (typecase action
-      (menu
-       (display-osd "Open Menu: ~A" (menu-doc action)) ;; <- Display here
-       (open-menu action))
-      (t (when (fboundp action)
-	   (display-osd "~A" (documentation action 'function)) ;; <- Display here
-	   (funcall action))))))
-
-
-
-(defun get-fullscreen-size ()
-  "Return the size of root child (values rx ry rw rh)
-You can tweak this to what you want"
-  (values -2 -2 (+ (xlib:screen-width *screen*) 2) (- (xlib:screen-height *screen*) 20)))
-
-;;; -- Doc example end --
-
-
-;;; -- Azerty configuration --
-;;; For the main mode
-(define-main-key ("twosuperior") 'banish-pointer)
-
-(undefine-main-multi-keys (#\t :mod-1) (#\b :mod-1) (#\b :mod-1 :control))
-
-(undefine-main-multi-keys ("1" :mod-1) ("2" :mod-1) ("3" :mod-1)
-			  ("4" :mod-1) ("5" :mod-1) ("6" :mod-1)
-			  ("7" :mod-1) ("8" :mod-1) ("9" :mod-1) ("0" :mod-1))
-(define-main-key ("ampersand" :mod-1) 'bind-or-jump 1)
-(define-main-key ("eacute" :mod-1) 'bind-or-jump 2)
-(define-main-key ("quotedbl" :mod-1) 'bind-or-jump 3)
-(define-main-key ("quoteright" :mod-1) 'bind-or-jump 4)
-(define-main-key ("parenleft" :mod-1) 'bind-or-jump 5)
-(define-main-key ("minus" :mod-1) 'bind-or-jump 6)
-(define-main-key ("egrave" :mod-1) 'bind-or-jump 7)
-(define-main-key ("underscore" :mod-1) 'bind-or-jump 8)
-(define-main-key ("ccedilla" :mod-1) 'bind-or-jump 9)
-(define-main-key ("agrave" :mod-1) 'bind-or-jump 10)
+;;(defun display-osd (formatter &rest args)
+;;  (do-shell "pkill osd_cat")
+;;  (do-shell (format nil "echo ~A | osd_cat -d 3 -p bottom -o -60 -f -*-fixed-*-*-*-*-16-*-*-*-*-*-*-1"
+;;		    (apply #'format nil formatter args)))
+;;  (force-output))
+;;
+;;(defun documentation-key-from-code (hash-key code state)
+;;  (documentation (first (find-key-from-code hash-key code state)) 'function))
+;;
+;;
+;;(defun key-string (hash-key code state)
+;;  (let* ((modifiers (xlib:make-state-keys state))
+;;	 (keysym (keysym->keysym-name (xlib:keycode->keysym *display* code 0)))
+;;	 (doc (documentation-key-from-code hash-key code state)))
+;;    (values (format nil "~:(~{~A+~}~A~) : ~S" modifiers keysym doc)
+;;	    doc)))
+;;
+;;(defun display-doc (hash-key code state)
+;;  (multiple-value-bind (str doc)
+;;      (key-string hash-key code state)
+;;    (when doc
+;;      (display-osd "~A" str))))
+;;
+;;(defun display-key-osd-main (&rest event-slots &key code state &allow-other-keys)
+;;  (declare (ignore event-slots))
+;;  (display-doc *main-keys* code state))
+;;
+;;(defun display-key-osd-second (&rest event-slots &key code state &allow-other-keys)
+;;  (declare (ignore event-slots))
+;;  (display-doc *second-keys* code state))
+;;
+;;;; Define new hook or add to precedent one
+;;(if (consp *key-press-hook*)
+;;    (push #'display-key-osd-main *key-press-hook*)
+;;    (setf *key-press-hook* (list #'display-key-osd-main #'handle-key-press)))
+;;(setf *sm-key-press-hook* (list #'display-key-osd-second #'sm-handle-key-press))
+;;
+;;
+;;;;; Display menu functions
+;;(defun open-menu (&optional (menu *menu*))
+;;  "Open the main menu"
+;;  (let ((info-list nil)
+;;	(action nil))
+;;    (dolist (item (menu-item menu))
+;;      (let ((value (menu-item-value item)))
+;;	(push (typecase value
+;;		(menu (list (list (format nil "~A" (menu-item-key item)) *menu-color-menu-key*)
+;;			    (list (format nil ": < ~A >" (menu-doc value)) *menu-color-submenu*)))
+;;		(string (list (list (format nil "~A" (menu-item-value item)) *menu-color-comment*)))
+;;		(t (list (list (format nil "~A" (menu-item-key item)) *menu-color-key*)
+;;			 (format nil ": ~A" (documentation value 'function)))))
+;;	      info-list)
+;;	(when (menu-item-key item)
+;;	  (define-info-key-fun (list (menu-item-key item) 0)
+;;	      (lambda (&optional args)
+;;		(declare (ignore args))
+;;		(setf action value)
+;;		(throw 'exit-info-loop nil))))))
+;;    (info-mode (nreverse info-list))
+;;    (dolist (item (menu-item menu))
+;;      (undefine-info-key-fun (list (menu-item-key item) 0)))
+;;    (typecase action
+;;      (menu
+;;       (display-osd "Open Menu: ~A" (menu-doc action)) ;; <- Display here
+;;       (open-menu action))
+;;      (t (when (fboundp action)
+;;	   (display-osd "~A" (documentation action 'function)) ;; <- Display here
+;;	   (funcall action))))))
+;;
+;;
+;;
+;;(defun get-fullscreen-size ()
+;;  "Return the size of root child (values rx ry rw rh)
+;;You can tweak this to what you want"
+;;  (values -2 -2 (+ (xlib:screen-width *screen*) 2) (- (xlib:screen-height *screen*) 20)))
+;;
+;;;;; -- Doc example end --
 
 
-;;; For the second mode
-(undefine-second-multi-keys ("1" :mod-1) ("2" :mod-1) ("3" :mod-1)
-			    ("4" :mod-1) ("5" :mod-1) ("6" :mod-1)
-			    ("7" :mod-1) ("8" :mod-1) ("9" :mod-1) ("0" :mod-1))
-(define-second-key ("ampersand" :mod-1) 'bind-or-jump 1)
-(define-second-key ("eacute" :mod-1) 'bind-or-jump 2)
-(define-second-key ("quotedbl" :mod-1) 'bind-or-jump 3)
-(define-second-key ("quoteright" :mod-1) 'bind-or-jump 4)
-(define-second-key ("parenleft" :mod-1) 'bind-or-jump 5)
-(define-second-key ("minus" :mod-1) 'bind-or-jump 6)
-(define-second-key ("egrave" :mod-1) 'bind-or-jump 7)
-(define-second-key ("underscore" :mod-1) 'bind-or-jump 8)
-(define-second-key ("ccedilla" :mod-1) 'bind-or-jump 9)
-(define-second-key ("agrave" :mod-1) 'bind-or-jump 10)
-;;; -- Azerty configuration end --
-
-
-
-;;; Init hook examples:
-(defun my-init-hook-1 ()
-  (dbg 'my-init-hook)
-  ;;(add-frame (create-frame :name "Default" :layout #'tile-left-layout :data (list '(:tile-size 0.6))) *root-frame*)
-  (add-frame (create-frame :name "The Gimp" :x 0.6 :y 0 :w 0.3 :h 0.2) *root-frame*)
-  (add-frame (create-frame :name "Net" :x 0.52 :y 0.3 :w 0.4 :h 0.3) *root-frame*)
-  (add-frame (create-frame :x 0.4 :y 0 :w 0.2 :h 0.3) (first (frame-child *root-frame*)))
-  (add-frame (create-frame :x 0.6 :y 0.4 :w 0.4 :h 0.2) (first (frame-child *root-frame*)))
-  (add-frame (create-frame :x 0.4 :y 0.7 :w 0.2 :h 0.3) (first (frame-child *root-frame*)))
-  (let ((frame (create-frame :name "The Qiv" :x 0 :y 0.4 :w 0.4 :h 0.2)))
-    (add-frame frame (first (frame-child *root-frame*)))
-    (add-frame (create-frame) frame))
-  (add-frame (create-frame :x 0.1 :y 0.55 :w 0.8 :h 0.43) *root-frame*)
-  (add-frame (create-frame :x 0.2 :y 0.1 :w 0.6 :h 0.4) (first (frame-child *root-frame*)))
-  (add-frame (create-frame :x 0.3 :y 0.55 :w 0.4 :h 0.3) (first (frame-child *root-frame*)))
-  (add-frame (create-frame :x 0.1 :y 0.1 :w 0.3 :h 0.6) (first (frame-child (first (frame-child *root-frame*)))))
-  (setf *current-child* (first (frame-child *current-root*)))
-  (setf (frame-layout *current-child*) #'tile-layout))
-
-(defun my-init-hook-2 ()
-  (dbg 'my-init-hook)
-  (add-frame (create-frame :name "Default" :layout #'tile-left-layout :data (list '(:tile-size 0.6))) *root-frame*)
-  (setf *current-child* (first (frame-child *current-root*)))
-  (setf (frame-layout *current-child*) #'tile-layout))
-
-
-(defun my-init-hook-3 ()
-  (dbg 'my-init-hook)
-  (add-frame (create-frame :name "plop" :x 0.1 :y 0.4 :w 0.7 :h 0.3) *root-frame*)
-  (add-frame (create-frame :name "Default" :layout nil :x 0.1 :y 0.5 :w 0.8 :h 0.5)
-	     *root-frame*)
-  (setf *current-child* (first (frame-child *current-root*)))
-  (setf (frame-layout *root-frame*) nil))
-
-
-
-(defun my-init-hook-4 ()
-  (let ((frame (add-frame (create-frame :name "Default"
-                                        :layout #'tile-left-layout
-					:x 0.05 :y 0.05 :w 0.9 :h 0.9)
-			  *root-frame*)))
-    (setf *current-child* frame)))
-
-
-;;; Use this hook and prevent yourself to create a new frame to emulate
-;;; the MS Windows desktop style :)
-(defun my-init-hook-ms-windows-style ()
-  (setf (frame-managed-type *root-frame*) nil))
-
-
-;;; Here is another example useful with the ROX filer: Only the
-;;; root frame fullscreen with some space on the left for icons.
-(defun my-init-hook-rox-filer ()
-  (setf (frame-layout *root-frame*) #'tile-left-space-layout
-	(frame-data-slot *root-frame* :tile-size) 0.9))
-
-
-
-
-(setf *init-hook* #'my-init-hook-4)  ;; <- choose one in 1 to 4
-;;(setf *init-hook* nil)
-;;; Init hook end
+;;;;; Init hook examples:
+;;(defun my-init-hook-1 ()
+;;  (dbg 'my-init-hook)
+;;  ;;(add-frame (create-frame :name "Default" :layout #'tile-left-layout :data (list '(:tile-size 0.6))) *root-frame*)
+;;  (add-frame (create-frame :name "The Gimp" :x 0.6 :y 0 :w 0.3 :h 0.2) *root-frame*)
+;;  (add-frame (create-frame :name "Net" :x 0.52 :y 0.3 :w 0.4 :h 0.3) *root-frame*)
+;;  (add-frame (create-frame :x 0.4 :y 0 :w 0.2 :h 0.3) (first (frame-child *root-frame*)))
+;;  (add-frame (create-frame :x 0.6 :y 0.4 :w 0.4 :h 0.2) (first (frame-child *root-frame*)))
+;;  (add-frame (create-frame :x 0.4 :y 0.7 :w 0.2 :h 0.3) (first (frame-child *root-frame*)))
+;;  (let ((frame (create-frame :name "The Qiv" :x 0 :y 0.4 :w 0.4 :h 0.2)))
+;;    (add-frame frame (first (frame-child *root-frame*)))
+;;    (add-frame (create-frame) frame))
+;;  (add-frame (create-frame :x 0.1 :y 0.55 :w 0.8 :h 0.43) *root-frame*)
+;;  (add-frame (create-frame :x 0.2 :y 0.1 :w 0.6 :h 0.4) (first (frame-child *root-frame*)))
+;;  (add-frame (create-frame :x 0.3 :y 0.55 :w 0.4 :h 0.3) (first (frame-child *root-frame*)))
+;;  (add-frame (create-frame :x 0.1 :y 0.1 :w 0.3 :h 0.6) (first (frame-child (first (frame-child *root-frame*)))))
+;;  (setf *current-child* (first (frame-child *current-root*)))
+;;  (setf (frame-layout *current-child*) #'tile-layout))
+;;
+;;(defun my-init-hook-2 ()
+;;  (dbg 'my-init-hook)
+;;  (add-frame (create-frame :name "Default" :layout #'tile-left-layout :data (list '(:tile-size 0.6))) *root-frame*)
+;;  (setf *current-child* (first (frame-child *current-root*)))
+;;  (setf (frame-layout *current-child*) #'tile-layout))
+;;
+;;
+;;(defun my-init-hook-3 ()
+;;  (dbg 'my-init-hook)
+;;  (add-frame (create-frame :name "plop" :x 0.1 :y 0.4 :w 0.7 :h 0.3) *root-frame*)
+;;  (add-frame (create-frame :name "Default" :layout nil :x 0.1 :y 0.5 :w 0.8 :h 0.5)
+;;	     *root-frame*)
+;;  (setf *current-child* (first (frame-child *current-root*)))
+;;  (setf (frame-layout *root-frame*) nil))
+;;
+;;
+;;
+;;(defun my-init-hook-4 ()
+;;  (let ((frame (add-frame (create-frame :name "Default"
+;;                                        :layout #'tile-left-layout
+;;					:x 0.05 :y 0.05 :w 0.9 :h 0.9)
+;;			  *root-frame*)))
+;;    (setf *current-child* frame)))
+;;
+;;
+;;;;; Use this hook and prevent yourself to create a new frame to emulate
+;;;;; the MS Windows desktop style :)
+;;(defun my-init-hook-ms-windows-style ()
+;;  (setf (frame-managed-type *root-frame*) nil))
+;;
+;;
+;;;;; Here is another example useful with the ROX filer: Only the
+;;;;; root frame fullscreen with some space on the left for icons.
+;;(defun my-init-hook-rox-filer ()
+;;  (setf (frame-layout *root-frame*) #'tile-left-space-layout
+;;	(frame-data-slot *root-frame* :tile-size) 0.9))
+;;
+;;
+;;
+;;
+;;(setf *init-hook* #'my-init-hook-4)  ;; <- choose one in 1 to 4
+;;;;(setf *init-hook* nil)
+;;;;; Init hook end

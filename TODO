@@ -7,11 +7,7 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Handle numlock properly (add :mod-2 in bindings if necessary)
-   (with-numlock)  -> add :mod-2 in *default-modifiers*
-   (without-numlock)
-  alias :mod-1 -> :alt   :mod-2 -> :numlock
-  =>  *default-modifiers* is done. <=
+- Make alias for :mod-1 -> :alt   :mod-2 -> :numlock
 
 - hook to create bindings and menu -> build keys and menu at runtime.
 
