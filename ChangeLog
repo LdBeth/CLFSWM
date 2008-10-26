@@ -1,5 +1,7 @@
 2008-10-26  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/tools.lisp (remove-hook): New function.
+
 	* src/clfswm-keys.lisp (with-capslock, without-capslock) 
 	(with-numlock, without-cnumlock): New functions.
 

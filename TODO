@@ -9,8 +9,6 @@ Should handle these soon.
 
 - Make alias for :mod-1 -> :alt   :mod-2 -> :numlock
 
-- hook to create bindings and menu -> build keys and menu at runtime.
-
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
    TODO :
    In ~/.clfswmrc:
@@ -19,21 +17,18 @@ Should handle these soon.
       ...
       ;;;; AUTO-CONFIG End : You can add your configurations below this line.
 
-- Remote access to the clfswm REPL [Philippe]
-   Protocol:  Server: Ask: random-number
-              Client: Reply: associated random-number
-              Server: Ok
-              Client: a lisp form (+ 2 2)
-              ...
-   Random-number at compile time: '((rnd-1-server rnd-1-client) (rnd-1-server rnd-1-client) (rnd-1-server rnd-1-client) ...)
-
 - Support clisp/new-clx and prevent to crash clisp with this CLX version.
+
+- Mouse support in menu
+
+- Remote access to the clfswm REPL [Philippe]
+   this can be done with net.lisp or via xprop (ie the Stumpwm way).
 
 
 MAYBE
 =====
 
-- cd/pwd a la shell to navigate throw frames. [Philippe]
+- cd/pwd a la shell to navigate through frames. [Philippe]
 
 - Zoom
 
@@ -51,5 +46,4 @@ Operation:
 
 - Undo/redo (any idea to implement this is welcome)
 
-- Mouse support in menu?
 

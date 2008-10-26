@@ -40,7 +40,7 @@
 (defun with-numlock ()
   (pushnew :mod-2 *default-modifiers*))
 
-(defun without-cnumlock ()
+(defun without-numlock ()
   (setf *default-modifiers* (remove :mod-2 *default-modifiers*)))
 
 
