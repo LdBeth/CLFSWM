@@ -1,5 +1,7 @@
 2008-10-26  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	*  *: Rename 'sister' frame to 'brother' frame.
+
 	* src/clfswm-keys.lisp (unalias-modifiers): Convert a modifier
 	alias in a real modifier.
 

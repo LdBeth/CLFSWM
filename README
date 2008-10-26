@@ -21,7 +21,7 @@
  Here is the default key binding to navigate throw this tree:
 
   * Alt-Tab: circulate throw children of the current child.
-  * Alt-Left/Right: circulate throw brother children (ie: this is like
+  * Alt-Left/Right: circulate through brother children (ie: this is like
       workspaces for a more conventional window manager)
   * Alt-Up: select the first child of the current frame.
   * Alt-Down: select the parent of the current child.

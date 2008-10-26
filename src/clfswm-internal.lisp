@@ -727,8 +727,8 @@ For window: set current child to window or its parent according to window-parent
 
 
 
-(defun select-next/previous-sister (fun-rotate)
-  "Select the next/previous sister frame"
+(defun select-next/previous-brother (fun-rotate)
+  "Select the next/previous brother frame"
   (let ((frame-is-root? (and (equal *current-root* *current-child*)
 			     (not (equal *current-root* *root-frame*)))))
     (if frame-is-root?
@@ -744,13 +744,13 @@ For window: set current child to window or its parent according to window-parent
     (show-all-children *current-root*)))
 
 
-(defun select-next-sister ()
-  "Select the next sister frame"
-  (select-next/previous-sister #'anti-rotate-list))
+(defun select-next-brother ()
+  "Select the next brother frame"
+  (select-next/previous-brother #'anti-rotate-list))
 
-(defun select-previous-sister ()
-  "Select the previous sister frame"
-  (select-next/previous-sister #'rotate-list))
+(defun select-previous-brother ()
+  "Select the previous brother frame"
+  (select-next/previous-brother #'rotate-list))
 
 
 (defun select-next-level ()
