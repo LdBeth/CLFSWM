@@ -794,6 +794,28 @@ For window: set current child to window or its parent according to window-parent
   (with-movement (resize-minimal-frame *current-child*)))
 
 
+;;; Children navigation
+(defun with-movement-select-next-brother ()
+  "Select the next brother frame"
+  (with-movement (select-next-brother)))
+
+(defun with-movement-select-previous-brother ()
+  "Select the previous brother frame"
+  (with-movement (select-previous-brother)))
+
+(defun with-movement-select-next-level ()
+  "Select the next level"
+  (with-movement (select-next-level)))
+
+(defun with-movement-select-previous-level ()
+  "Select the previous levelframe"
+  (with-movement (select-previous-level)))
+
+(defun with-movement-select-next-child ()
+  "Select the next child"
+  (with-movement (select-next-child)))
+
+
 
 ;;; Adapt frame functions
 (defun adapt-current-frame-to-window-hints-generic (width-p height-p)

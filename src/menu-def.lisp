@@ -94,6 +94,11 @@
 (add-sub-menu 'frame-movement-menu "f" 'frame-fill-menu "Frame fill menu")
 (add-sub-menu 'frame-movement-menu "r" 'frame-resize-menu "Frame resize menu")
 (add-menu-key 'frame-movement-menu "c" 'center-current-frame)
+(add-menu-key 'frame-movement-menu "Right" 'with-movement-select-next-brother)
+(add-menu-key 'frame-movement-menu "Left" 'with-movement-select-previous-brother)
+(add-menu-key 'frame-movement-menu "Up" 'with-movement-select-next-level)
+(add-menu-key 'frame-movement-menu "Down" 'with-movement-select-previous-level)
+(add-menu-key 'frame-movement-menu "Tab" 'with-movement-select-next-child)
 
 
 (add-menu-key 'frame-pack-menu "Up" 'current-frame-pack-up)

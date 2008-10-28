@@ -405,6 +405,16 @@ Window types are in +WINDOW-TYPES+.")
 		    :sync-pointer-p t
 		    :sync-keyboard-p nil))
 
+;;(dbg "todo: confirm this")
+;;(defun grab-all-buttons (window) 
+;;  (ungrab-all-buttons window)
+;;  (dotimes (i 5)
+;;    (xlib:grab-button window i '(:button-press :button-release :pointer-motion)
+;;		      :modifiers :any
+;;		      :owner-p nil
+;;		      :sync-pointer-p t
+;;		      :sync-keyboard-p nil)))
+
 
 (defun ungrab-all-keys (window)
   (xlib:ungrab-key window :any :modifiers :any))
@@ -520,8 +530,8 @@ Window types are in +WINDOW-TYPES+.")
 	       t))
       (unless pointer-grabbed-p
 	(xgrab-pointer *root* nil nil))
-;      (when additional-fn
-;	(apply additional-fn additional-arg))
+      (when additional-fn
+	(apply additional-fn additional-arg))
       (loop until done
 	 do (with-xlib-protect
 	      (xlib:display-finish-output *display*)

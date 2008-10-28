@@ -15,8 +15,6 @@ Should handle these soon.
       ...
       ;;;; AUTO-CONFIG End : You can add your configurations below this line.
 
-- Support clisp/new-clx and prevent to crash clisp with this CLX version.
-
 - Mouse support in menu
 
 - Remote access to the clfswm REPL [Philippe]
