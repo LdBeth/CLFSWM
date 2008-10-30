@@ -405,17 +405,6 @@ Window types are in +WINDOW-TYPES+.")
 		    :sync-pointer-p t
 		    :sync-keyboard-p nil))
 
-;;(dbg "todo: confirm this")
-;;(defun grab-all-buttons (window) 
-;;  (ungrab-all-buttons window)
-;;  (dotimes (i 5)
-;;    (xlib:grab-button window i '(:button-press :button-release :pointer-motion)
-;;		      :modifiers :any
-;;		      :owner-p nil
-;;		      :sync-pointer-p t
-;;		      :sync-keyboard-p nil)))
-
-
 (defun ungrab-all-keys (window)
   (xlib:ungrab-key window :any :modifiers :any))
 
@@ -688,8 +677,9 @@ Window types are in +WINDOW-TYPES+.")
      (let ((key (loop for k across (xlib:query-keymap *display*)
 		      for code from 0
 		      when (and (plusp k) (not (modifier-p code))) return t))
-	   (button (member (nth-value 4 (xlib:query-pointer *root*))
-			   '(:button-1 :button-2 :button-3 :button-4 :button-5))))
+	   (button (loop for b in (xlib:make-state-keys (nth-value 4 (xlib:query-pointer *root*)))
+			 when (member b '(:button-1 :button-2 :button-3 :button-4 :button-5))
+			 return t)))
        (when (and (not key) (not button))
 	 (loop while (xlib:event-case (*display* :discard-p t :peek-p nil :timeout 0)
 		       (:motion-notify () t)
@@ -704,11 +694,13 @@ Window types are in +WINDOW-TYPES+.")
 (defun wait-a-key-or-button-press ()
   (with-grab-keyboard-and-pointer (24 25 66 67)
     (loop
-       (let ((key (loop for k across (xlib:query-keymap *display*)
-		     unless (zerop k) return t))
-	     (button (plusp (nth-value 4 (xlib:query-pointer *root*)))))
-	 (when (or key button)
-	   (return))))))
+     (let ((key (loop for k across (xlib:query-keymap *display*)
+		      unless (zerop k) return t))
+	   (button (loop for b in (xlib:make-state-keys (nth-value 4 (xlib:query-pointer *root*)))
+			 when (member b '(:button-1 :button-2 :button-3 :button-4 :button-5))
+			 return t)))
+       (when (or key button)
+	 (return))))))
 
 
 

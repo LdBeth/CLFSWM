@@ -1,3 +1,8 @@
+2008-10-30  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/xlib-util.lisp (wait-no-key-or-button-press) 
+	(wait-a-key-or-button-press): Check buttons press/release correctly"
+
 2008-10-28  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/menu-def.lisp: Add children navigation menu in the movement
