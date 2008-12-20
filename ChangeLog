@@ -1,6 +1,14 @@
+2008-12-20  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm.lisp (handle-motion-notify): Add a	needed window
+	argument.
+
+	* src/clfswm-second-mode.lisp (sm-handle-motion-notify): Add a
+	needed window argument.
+
 2008-10-30  Philippe Brochard  <pbrochard@common-lisp.net>
 
-	* src/xlib-util.lisp (wait-no-key-or-button-press) 
+	* src/xlib-util.lisp (wait-no-key-or-button-press)
 	(wait-a-key-or-button-press): Check buttons press/release correctly"
 
 2008-10-28  Philippe Brochard  <pbrochard@common-lisp.net>
@@ -20,7 +28,7 @@
 
 	* src/tools.lisp (remove-hook): New function.
 
-	* src/clfswm-keys.lisp (with-capslock, without-capslock) 
+	* src/clfswm-keys.lisp (with-capslock, without-capslock)
 	(with-numlock, without-cnumlock): New functions.
 
 2008-10-25  Philippe Brochard  <pbrochard@common-lisp.net>
@@ -184,7 +192,7 @@
 2008-08-18  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (delete-focus-window)
-	(destroy-focus-window): Remove chid only in 
+	(destroy-focus-window): Remove chid only in
 	handle-unmap/destroy-notify. Focus *current-root* only when
 	closing/killing the current child.
 
@@ -641,9 +649,9 @@
 	* src/clfswm-internal.lisp (child-fullname): New function
 
 	* src/clfswm-info.lisp (info-mode-menu): Add an explicit optional
-	docstring in info-mode-menu. An item can be 
+	docstring in info-mode-menu. An item can be
 	'((key function) (key function)) or with docstring
-	'((key function "documentation 1") (key function "bla bla") (key function)) 
+	'((key function "documentation 1") (key function "bla bla") (key function))
 
 	* src/tools.lisp (ensure-n-elems): New function.
 
@@ -683,7 +691,7 @@
 	* src/clfswm.lisp (init-display): Create a default frame in the root frame.
 
 	* src/clfswm-internal.lisp (place-frame): Place frame from real (pixel) coordinates.
-	(with-all-*): Reverse the child list to manage the first child last (like in 
+	(with-all-*): Reverse the child list to manage the first child last (like in
 	show-all-children).
 
 	* src/config.lisp (*create-frame-on-root*): New variable: Create a new frame on the
@@ -715,7 +723,7 @@
 	* src/clfswm-layout.lisp (no-layout): Use :first-only to raise only the
 	first child.
 
-	* src/clfswm-internal.lisp (hide-all): Split hide-all-children in hide-all 
+	* src/clfswm-internal.lisp (hide-all): Split hide-all-children in hide-all
 	and hide-all-children.
 	(raise-if-needed): New function.
 	(show-child): Use a first-p parameter to raise windows only when they are
@@ -723,7 +731,7 @@
 
 2008-03-26  Philippe Brochard  <pbrochard@common-lisp.net>
 
-	* src/clfswm-internal.lisp (select-next/previous-level): Don't use show-all-children 
+	* src/clfswm-internal.lisp (select-next/previous-level): Don't use show-all-children
 	-> less flickering.
 
 2008-03-25  Philippe Brochard  <pbrochard@common-lisp.net>
@@ -745,12 +753,12 @@
 2008-03-16  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-nw-hooks.lisp: Register system for new window hooks.
-	Bind control+o to open the next window in a new group in the root group 
+	Bind control+o to open the next window in a new group in the root group
 	 (as open in next window in a new workspace in 0801 version).
 
 2008-03-15  Philippe Brochard  <pbrochard@common-lisp.net>
 
-	* src/clfswm-util.lisp (show/hide-all-groups-info/key): Show/hide all groups info 
+	* src/clfswm-util.lisp (show/hide-all-groups-info/key): Show/hide all groups info
 	window.
 
 2008-03-14  Philippe Brochard  <pbrochard@common-lisp.net>
@@ -920,11 +928,11 @@
 	* clfswm*: Color change for the pager. Typo or better description
 	in bindings definitions. Define bindings for a qwerty keyboard by
 	default. dot-clfswmrc show examples to switch to an azerty
-	keyboard. 
+	keyboard.
 	License change to GPL v3.
 	* config.lisp: new file - group all globals variables in this
 	file.
-	
+
 2007-08-26  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* xlib-util.lisp (hide-window): Remove structure-notivy events
@@ -941,14 +949,14 @@
 
 2007-05-13  Philippe Brochard  <pbrochard@common-lisp.net>
 
-	* clfswm-pack.lisp (tile-current-workspace-to/right/left/top/bottom):  
+	* clfswm-pack.lisp (tile-current-workspace-to/right/left/top/bottom):
 	Tile the current workspace with the current window on one side and
 	others on the other (this emulate the larswm, dwm, wmii way). See
 	the default configuration file to enable this mode by default.
 
 	* clfswm-pager.lisp (pager-tile-current-workspace-to): idem for
 	the pager.
-	
+
 2007-05-12  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm-pager.lisp (pager-draw-window-in-group): Add
@@ -1013,7 +1021,7 @@
 2007-04-22  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm.lisp (read-conf-file): New function to read a lisp
-	configuration file at startup. 
+	configuration file at startup.
 	(focus-group-under-mouse): Check if group isn't the current group
 	( prevent a bug with unclutter ).
 
@@ -1080,7 +1088,7 @@
 	* package.lisp (*default-group*): Default group is the same size
 	of a fullscreened group.
 
-	* bindings*: Use shift to move, control+shift to copy. 
+	* bindings*: Use shift to move, control+shift to copy.
 
 	* *.lisp: Add comments for configuration or alternatives. So grep
 	for CONFIG to see where you can configure clfswm. And grep for
@@ -1144,10 +1152,10 @@
 
 2006-10-17  Philippe Brochard  <pbrochard@common-lisp.net>
 
-	* bindings-pager.lisp (mouse-pager-move-selected-group) 
-	(mouse-pager-copy-selected-group) 
-	(mouse-pager-move-selected-window) 
-	(mouse-pager-copy-selected-window, mouse-pager-rotate-window-up) 
+	* bindings-pager.lisp (mouse-pager-move-selected-group)
+	(mouse-pager-copy-selected-group)
+	(mouse-pager-move-selected-window)
+	(mouse-pager-copy-selected-window, mouse-pager-rotate-window-up)
 	(mouse-pager-rotate-window-down): New functions to have mouse in
 	pager mode.
 
@@ -1175,9 +1183,9 @@
 
 2006-10-08  Philippe Brochard  <pbrochard@common-lisp.net>
 
-	* clfswm-keys.lisp (undefine-main-key, undefine-second-key, undefine-mouse-action):  
+	* clfswm-keys.lisp (undefine-main-key, undefine-second-key, undefine-mouse-action):
 	new function to remove a previous defined key or mouse combination.
-	
+
 2006-10-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* clfswm.lisp (main): Check for access error in init-display.
@@ -1192,7 +1200,7 @@
 
 2006-10-06  Philippe Brochard  <pbrochard@common-lisp.net>
 
-	* clfswm-keys.lisp (define-ungrab/grab): use a cond instead of a 
+	* clfswm-keys.lisp (define-ungrab/grab): use a cond instead of a
 	boggus typecase.
 
 2006-10-05  Philippe Brochard  <pbrochard@common-lisp.net>

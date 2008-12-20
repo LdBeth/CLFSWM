@@ -47,10 +47,10 @@
   (unless (funcall-button-from-code *main-mouse* code state window root-x root-y *fun-release*)
     (replay-button-event)))
 
-(defun handle-motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
+(defun handle-motion-notify (&rest event-slots &key window root-x root-y &allow-other-keys)
   (declare (ignore event-slots))
   (unless (compress-motion-notify)
-    (funcall-button-from-code *main-mouse* 'motion 0 root-x root-y *fun-press*)))
+    (funcall-button-from-code *main-mouse* 'motion 0 window root-x root-y *fun-press*)))
 
 
 (defun handle-configure-request (&rest event-slots &key stack-mode #|parent|# window #|above-sibling|#
@@ -257,7 +257,7 @@
   (show-all-children *current-root*)
   (grab-main-keys)
   (xlib:display-finish-output *display*))
-  
+
 
 
 (defun xdg-config-home ()

@@ -60,10 +60,10 @@
   ;;  (focus-frame-under-mouse root-x root-y)
   (draw-second-mode-window))
 
-(defun sm-handle-motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
+(defun sm-handle-motion-notify (&rest event-slots &key window root-x root-y &allow-other-keys)
   (declare (ignore event-slots))
   (unless (compress-motion-notify)
-    (funcall-button-from-code *second-mouse* 'motion 0 root-x root-y *fun-press*)))
+    (funcall-button-from-code *second-mouse* 'motion 0 window root-x root-y *fun-press*)))
 
 (defun sm-handle-button-press (&rest event-slots &key window root-x root-y code state &allow-other-keys)
   (declare (ignore event-slots))
