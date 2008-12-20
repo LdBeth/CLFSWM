@@ -114,7 +114,7 @@ Window types are in +WINDOW-TYPES+.")
 (defun window-hidden-p (window)
   (eql (window-state window) +iconic-state+))
 
-  
+
 
 (defun unhide-window (window)
   (when window
@@ -144,13 +144,13 @@ Window types are in +WINDOW-TYPES+.")
 ;;	"_NET_DESKTOP_VIEWPORT"       "_NET_DESKTOP_NAMES"
 ;;	"_NET_ACTIVE_WINDOW"          "_NET_WORKAREA"
 ;;	"_NET_SUPPORTING_WM_CHECK"    "_NET_VIRTUAL_ROOTS"
-;;	"_NET_DESKTOP_LAYOUT"         
+;;	"_NET_DESKTOP_LAYOUT"
 ;;
 ;;        "_NET_RESTACK_WINDOW"         "_NET_REQUEST_FRAME_EXTENTS"
 ;;        "_NET_MOVERESIZE_WINDOW"      "_NET_CLOSE_WINDOW"
 ;;        "_NET_WM_MOVERESIZE"
 ;;
-;;	"_NET_WM_SYNC_REQUEST"        "_NET_WM_PING"    
+;;	"_NET_WM_SYNC_REQUEST"        "_NET_WM_PING"
 ;;
 ;;	"_NET_WM_NAME"                "_NET_WM_VISIBLE_NAME"
 ;;	"_NET_WM_ICON_NAME"           "_NET_WM_VISIBLE_ICON_NAME"
@@ -173,7 +173,7 @@ Window types are in +WINDOW-TYPES+.")
 ;;				      "_NET_WM_STATE_ABOVE"
 ;;				      "_NET_WM_STATE_BELOW"
 ;;				      "_NET_WM_STATE_DEMANDS_ATTENTION"
-;;			
+;;
 ;;	"_NET_WM_ALLOWED_ACTIONS"
 ;;	"_NET_WM_ACTION_MOVE"
 ;;	"_NET_WM_ACTION_RESIZE"
@@ -207,7 +207,7 @@ Window types are in +WINDOW-TYPES+.")
 ;;(defun set-atoms-property (window atoms property-atom &key (mode :replace))
 ;;  "Sets the property designates by `property-atom'. ATOMS is a list of atom-id
 ;;   or a list of keyword atom-names."
-;;  (xlib:change-property window property-atom atoms :ATOM 32 
+;;  (xlib:change-property window property-atom atoms :ATOM 32
 ;;			:mode mode
 ;;			:transform (unless (integerp (car atoms))
 ;;				     (lambda (atom-key)
@@ -323,7 +323,7 @@ Window types are in +WINDOW-TYPES+.")
 (defun no-focus ()
   "don't focus any window but still read keyboard events."
   (xlib:set-input-focus *display* *no-focus-window* :pointer-root))
-  
+
 
 
 
@@ -343,7 +343,7 @@ Window types are in +WINDOW-TYPES+.")
 
     (defun xgrab-pointer-p ()
       pointer-grabbed)
-    
+
     (defun xgrab-pointer (root cursor-char cursor-mask-char
 			  &optional (pointer-mask '(:enter-window :pointer-motion
 						    :button-press :button-release)) owner-p)
@@ -379,12 +379,12 @@ Window types are in +WINDOW-TYPES+.")
 
   (defun xgrab-keyboard-p ()
     keyboard-grabbed)
-  
+
   (defun xgrab-keyboard (root)
     (setf keyboard-grabbed t)
     (xlib:grab-keyboard root :owner-p nil :sync-keyboard-p nil :sync-pointer-p nil))
 
-  
+
   (defun xungrab-keyboard ()
     (setf keyboard-grabbed nil)
     (xlib:ungrab-keyboard *display*)))
@@ -392,7 +392,7 @@ Window types are in +WINDOW-TYPES+.")
 
 
 
-    
+
 
 (defun ungrab-all-buttons (window)
   (xlib:ungrab-button window :any :modifiers :any))
@@ -447,7 +447,7 @@ Window types are in +WINDOW-TYPES+.")
 
 
 
-;;; Mouse action on window 
+;;; Mouse action on window
 (defun move-window (window orig-x orig-y &optional additional-fn additional-arg)
   (raise-window window)
   (let ((done nil)
@@ -502,7 +502,7 @@ Window types are in +WINDOW-TYPES+.")
 	       (unless (compress-motion-notify)
 		 (setf (xlib:drawable-width window) (min (max (+ orig-width (- root-x orig-x)) 10 min-width) max-width)
 		       (xlib:drawable-height window) (min (max (+ orig-height (- root-y orig-y)) 10 min-height) max-height))
-		 (when additional-fn  
+		 (when additional-fn
 		   (apply additional-fn additional-arg))))
 	     (handle-event (&rest event-slots &key event-key &allow-other-keys)
 	       (case event-key
@@ -559,8 +559,15 @@ Window types are in +WINDOW-TYPES+.")
 
 
 
-(defun get-color (color)
-  (xlib:alloc-color (xlib:screen-default-colormap *screen*) color))
+(let ((color-hash (make-hash-table :test 'equal)))
+  (defun get-color (color)
+    (multiple-value-bind (val foundp)
+	(gethash color color-hash)
+      (if foundp
+	  val
+	  (setf (gethash color color-hash)
+		(xlib:alloc-color (xlib:screen-default-colormap *screen*) color))))))
+
 
 
 (defgeneric ->color (color))
@@ -653,7 +660,7 @@ Window types are in +WINDOW-TYPES+.")
 	 (xungrab-pointer))
      (unless keyboard-grabbed
        (xungrab-keyboard))))
-     
+
 
 
 
@@ -727,7 +734,7 @@ Window types are in +WINDOW-TYPES+.")
   (xlib:draw-rectangle *pixmap-buffer* gc
 		       0 0 (xlib:drawable-width window) (xlib:drawable-height window)
 		       t)
-  (rotatef (xlib:gcontext-foreground gc) (xlib:gcontext-background gc)))
+    (rotatef (xlib:gcontext-foreground gc) (xlib:gcontext-background gc)))
 
 (defun copy-pixmap-buffer (window gc)
   (xlib:copy-area *pixmap-buffer* gc

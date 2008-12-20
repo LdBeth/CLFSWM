@@ -41,14 +41,14 @@
 
 
 
-
 (defun draw-info-window (info)
   (labels ((print-line (line posx posy &optional (color *info-foreground*))
-	     (setf (xlib:gcontext-foreground (info-gc info)) (get-color color))
-	     (xlib:draw-glyphs *pixmap-buffer* (info-gc info)
-			 (- (+ (info-ilw info) (* posx (info-ilw info))) (info-x info))
-			 (- (+ (* (info-ilh info) posy) (info-ilh info)) (info-y info))
-			 (format nil "~A" line))
+	     ;;(setf (xlib:gcontext-foreground (info-gc info)) (get-color color))
+	     (xlib:with-gcontext ((info-gc info) :foreground (get-color color))
+	       (xlib:draw-glyphs *pixmap-buffer* (info-gc info)
+				 (- (+ (info-ilw info) (* posx (info-ilw info))) (info-x info))
+				 (- (+ (* (info-ilh info) posy) (info-ilh info)) (info-y info))
+				 (format nil "~A" line)))
 	     (+ posx (length line))))
     (clear-pixmap-buffer (info-window info) (info-gc info))
     (loop for line in (info-list info)
@@ -64,7 +64,7 @@
 	   (t (print-line line 0 y))))
     (copy-pixmap-buffer (info-window info) (info-gc info))))
 
-    
+
 
 
 
@@ -294,7 +294,7 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 (defun info-mode-menu (item-list &key (x 0) (y 0) (width nil) (height nil))
   "Open an info help menu.
 Item-list is: '((key function) separator (key function))
-or with explicit docstring: '((key function \"documentation 1\") (key function \"bla bla\") (key function)) 
+or with explicit docstring: '((key function \"documentation 1\") (key function \"bla bla\") (key function))
 key is a character, a keycode or a keysym
 Separator is a string or a symbol (all but a list)
 Function can be a function or a list (function color) for colored output"
@@ -353,7 +353,7 @@ Function can be a function or a list (function color) for colored output"
 			   (list (subseq line 22 35) *info-color-first*)
 			   (subseq line 35)))
 		    (t line))))
-     
+
 
 (defun show-key-binding (&rest hash-table-key)
   "Show the binding of each hash-table-key"
@@ -389,7 +389,7 @@ Function can be a function or a list (function color) for colored output"
 		       (if pos
 			   (list (list (subseq line 0 (1+ pos)) *info-color-first*)
 				 (subseq line (1+ pos)))
-			   line)))		       
+			   line)))
 		    (t line))))
 
 (defun show-corner-help ()
