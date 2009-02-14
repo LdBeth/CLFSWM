@@ -92,13 +92,19 @@
 
 
 
-(defun handle-map-request (&rest event-slots &key window send-event-p &allow-other-keys)
+(defun handle-map-request (&rest event-slots &key window send-event-p override-redirect-p &allow-other-keys)
   (declare (ignore event-slots))
   (unless send-event-p
     (unhide-window window)
     (process-new-window window)
     (xlib:map-window window)
-    (show-all-children)))
+    ;;; Quick hack to manage correctly fullscreen windows
+    (let* ((hints (xlib:wm-normal-hints window))
+	   (win-gravity (and hints (xlib:wm-size-hints-win-gravity hints))))
+      (when win-gravity
+	(show-all-children)))))
+
+
 
 (defun handle-unmap-notify (&rest event-slots &key send-event-p event-window window &allow-other-keys)
   (declare (ignore event-slots))

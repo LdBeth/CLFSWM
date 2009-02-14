@@ -331,7 +331,7 @@
     (when (member to-find (frame-child frame))
       (return-from find-parent-frame frame))))
 
-  
+
 
 (defun find-frame-window (window &optional (root *root-frame*))
   "Return the frame with the window window"
@@ -410,7 +410,7 @@
       (setf (xlib:gcontext-foreground gc) (get-color (if (and (equal frame *current-root*)
 							      (equal frame *current-child*))
 							 *frame-foreground-root* *frame-foreground*)))
-      (xlib:draw-glyphs *pixmap-buffer* gc 5 dy		 
+      (xlib:draw-glyphs *pixmap-buffer* gc 5 dy
 			(format nil "Frame: ~A~A"
 				number
 				(if name  (format nil " - ~A" name) "")))
