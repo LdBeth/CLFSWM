@@ -98,10 +98,10 @@
     (unhide-window window)
     (process-new-window window)
     (xlib:map-window window)
-    ;;; Quick hack to manage correctly fullscreen windows
     (let* ((hints (xlib:wm-normal-hints window))
-	   (win-gravity (and hints (xlib:wm-size-hints-win-gravity hints))))
-      (when win-gravity
+	   (width (and hints (xlib:wm-size-hints-width hints)))
+	   (height (and hints (xlib:wm-size-hints-height hints))))
+      (when (and width height)
 	(show-all-children)))))
 
 
