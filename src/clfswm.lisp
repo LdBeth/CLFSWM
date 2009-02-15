@@ -92,7 +92,7 @@
 
 
 
-(defun handle-map-request (&rest event-slots &key window send-event-p override-redirect-p &allow-other-keys)
+(defun handle-map-request (&rest event-slots &key window send-event-p &allow-other-keys)
   (declare (ignore event-slots))
   (unless send-event-p
     (unhide-window window)
