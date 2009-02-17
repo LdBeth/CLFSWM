@@ -1,3 +1,8 @@
+2009-02-17  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/xlib-util.lisp (null-size-window-p): Better check of null
+	sized windows.
+
 2009-02-14  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm.lisp (handle-map-request): Add a fix to manage

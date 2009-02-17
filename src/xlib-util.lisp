@@ -115,6 +115,18 @@ Window types are in +WINDOW-TYPES+.")
   (eql (window-state window) +iconic-state+))
 
 
+(defun null-size-window-p (window)
+  (let ((hints (xlib:wm-normal-hints window)))
+    (and hints
+	 (not (or (xlib:wm-size-hints-width hints)
+		  (xlib:wm-size-hints-height hints)
+		  (xlib:wm-size-hints-win-gravity hints)))
+	 (xlib:wm-size-hints-user-specified-position-p hints))))
+
+
+
+
+
 
 (defun unhide-window (window)
   (when window

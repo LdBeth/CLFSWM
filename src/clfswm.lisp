@@ -98,11 +98,8 @@
     (unhide-window window)
     (process-new-window window)
     (xlib:map-window window)
-    (let* ((hints (xlib:wm-normal-hints window))
-	   (width (and hints (xlib:wm-size-hints-width hints)))
-	   (height (and hints (xlib:wm-size-hints-height hints))))
-      (when (and width height)
-	(show-all-children)))))
+    (unless (null-size-window-p window)
+      (show-all-children))))
 
 
 
