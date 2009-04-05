@@ -1,3 +1,10 @@
+2009-04-05  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/package.lisp (): Use *default-font-string* for all
+	font-string.
+
+	* src/clfswm-info.lisp (info-mode): Ensure integer windows size.
+
 2009-02-17  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/xlib-util.lisp (null-size-window-p): Better check of null

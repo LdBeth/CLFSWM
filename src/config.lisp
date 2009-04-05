@@ -35,7 +35,7 @@
 ;; This variable may be useful to speed up some slow version of CLX.
 ;; It is particulary useful with CLISP/MIT-CLX.
 (setf *have-to-compress-notify* t)
-  
+
 
 
 ;;; CONFIG - Default modifiers
@@ -193,7 +193,7 @@ on the root window in the main mode with the mouse")
   "Config(Second mode group): Second mode window background color")
 (defparameter *sm-foreground-color* "Red"
   "Config(Second mode group): Second mode window foreground color")
-(defparameter *sm-font-string* "9x15bold"
+(defparameter *sm-font-string* *default-font-string*
   "Config(Second mode group): Second mode window font string")
 (defparameter *sm-width* 300
   "Config(Second mode group): Second mode window width")
@@ -205,7 +205,7 @@ on the root window in the main mode with the mouse")
 
 
 ;;; CONFIG - Identify key colors
-(defparameter *identify-font-string* "9x15"
+(defparameter *identify-font-string* *default-font-string*
   "Config(Identify key group): Identify window font string")
 (defparameter *identify-background* "black"
   "Config(Identify key group): Identify window background color")
@@ -215,7 +215,7 @@ on the root window in the main mode with the mouse")
   "Config(Identify key group): Identify window border color")
 
 ;;; CONFIG - Query string colors
-(defparameter *query-font-string* "9x15"
+(defparameter *query-font-string* *default-font-string*
   "Config(Query string group): Query string window font string")
 (defparameter *query-background* "black"
   "Config(Query string group): Query string window background color")
@@ -234,7 +234,7 @@ on the root window in the main mode with the mouse")
   "Config(Info mode group): Info window border color")
 (defparameter *info-line-cursor* "white"
   "Config(Info mode group): Info window line cursor color color")
-(defparameter *info-font-string* "9x15"
+(defparameter *info-font-string* *default-font-string*
   "Config(Info mode group): Info window font string")
 
 ;;; CONFIG - Show key binding colors

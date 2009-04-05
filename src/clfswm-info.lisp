@@ -214,7 +214,7 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 						    (min (* (+ (loop for l in info-list maximize (compute-size l)) 2) ilw)
 							 (- (xlib:screen-width *screen*) 2 x)))
 					 :height (or height
-						     (min (+ (* (length info-list) ilh) (/ ilh 2))
+						     (min (round (+ (* (length info-list) ilh) (/ ilh 2)))
 							  (- (xlib:screen-height *screen*) 2 y)))
 					 :background (get-color *info-background*)
 					 :colormap (xlib:screen-default-colormap *screen*)

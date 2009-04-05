@@ -153,7 +153,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 (defparameter *main-keys* nil)
 (defparameter *main-mouse* nil)
-(defparameter *second-keys* nil) 
+(defparameter *second-keys* nil)
 (defparameter *second-mouse* nil)
 (defparameter *info-keys* nil)
 (defparameter *info-mouse* nil)
