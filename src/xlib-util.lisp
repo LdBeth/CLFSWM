@@ -658,6 +658,10 @@ Window types are in +WINDOW-TYPES+.")
 (defun state->modifiers (state)
   (xlib:make-state-keys state))
 
+(defun keycode->keysym (code modifiers)
+  (xlib:keycode->keysym *display* code (cond  ((member :shift modifiers) 1)
+					      ((member :mod-5 modifiers) 2)
+					      (t 0))))
 
 
 (defmacro with-grab-keyboard-and-pointer ((cursor mask old-cursor old-mask) &body body)

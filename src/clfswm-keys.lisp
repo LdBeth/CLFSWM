@@ -132,7 +132,7 @@
      (maphash #'(lambda (k v)
 		  (declare (ignore v))
 		  (when (consp k)
-		    (handler-case 
+		    (handler-case
 			(let* ((key (first k))
 			       (modifiers (second k))
 			       (keycode (typecase key
@@ -181,15 +181,11 @@
 	       (function-from string)))
 	   (from-string-shift ()
 	     (let* ((modifiers (state->modifiers state))
-		    (string (keysym->keysym-name (xlib:keycode->keysym *display* code (cond  ((member :shift modifiers) 1)
-											     ((member :mod-5 modifiers) 2)
-											     (t 0))))))
+		    (string (keysym->keysym-name (keycode->keysym code modifiers))))
 	       (function-from string)))
 	   (from-string-no-shift ()
 	     (let* ((modifiers (state->modifiers state))
-		    (string (keysym->keysym-name (xlib:keycode->keysym *display* code (cond  ((member :shift modifiers) 1)
-											     ((member :mod-5 modifiers) 2)
-											     (t 0))))))
+		    (string (keysym->keysym-name (keycode->keysym code modifiers))))
 	       (function-from string (modifiers->state (remove :shift modifiers))))))
     (or (from-code) (from-char) (from-string) (from-string-shift) (from-string-no-shift))))
 

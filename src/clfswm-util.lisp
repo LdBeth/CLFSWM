@@ -58,7 +58,7 @@
       (setf (frame-number *current-child*) number)
       (leave-second-mode))))
 
-    
+
 
 
 (defun add-default-frame ()
@@ -67,7 +67,7 @@
     (let ((name (query-string "Frame name")))
       (push (create-frame :name name) (frame-child *current-child*))))
   (leave-second-mode))
-    
+
 
 (defun add-placed-frame ()
   "Add a placed frame in the current frame"
@@ -213,7 +213,7 @@
 
 
 
-  
+
 
 
 
@@ -257,9 +257,7 @@
 	       (declare (ignore event-slots root))
 	       (let* ((modifiers (state->modifiers state))
 		      (key (keycode->char code state))
-		      (keysym (keysym->keysym-name (xlib:keycode->keysym *display* code (cond  ((member :shift modifiers) 1)
-											       ((member :mod-5 modifiers) 2)
-											       (t 0))))))
+		      (keysym (keysym->keysym-name (keycode->keysym code modifiers))))
 		 (setf done (and (equal key #\q) (equal modifiers *default-modifiers*)))
 		 (dbg code keysym key modifiers)
 		 (print-key code state keysym key modifiers)
@@ -504,7 +502,7 @@
 	    (frame-h frame) (h-px->fl (xlib:drawable-height window) parent)))
     (show-all-children frame)))
 
-	   
+
 
 (defun mouse-click-to-focus-generic (window root-x root-y mouse-fn)
   "Focus the current frame or focus the current window parent
@@ -672,7 +670,7 @@ For window: set current child to window or its parent according to window-parent
 	      *current-child* *current-root*)
 	(focus-all-children *current-child* *current-child*)
 	(show-all-children *current-root*))))
-  
+
   (defun bind-or-jump (n)
     "Bind or jump to a slot"
     (setf current-slot (- n 1))
@@ -766,7 +764,7 @@ For window: set current child to window or its parent according to window-parent
     (let ((parent (find-parent-frame *current-child* *current-root*)))
       (fill-frame-left *current-child* parent)
       (fill-frame-right *current-child* parent))))
-    
+
 
 ;;; Resize
 (defun current-frame-resize-up ()
@@ -1007,7 +1005,7 @@ For window: set current child to window or its parent according to window-parent
     (setf hidden-children (remove hidden hidden-children)))
   (with-slots (child) frame-dest
     (pushnew hidden child)))
-  
+
 
 
 (defun unhide-a-child ()
@@ -1058,7 +1056,7 @@ For window: set current child to window or its parent according to window-parent
 
 
 
-    
+
 (let ((last-child nil))
   (defun init-last-child ()
     (setf last-child nil))
@@ -1084,12 +1082,12 @@ For window: set current child to window or its parent according to window-parent
   (when (frame-p *current-child*)
     (setf (frame-focus-policy *current-child*) focus-policy))
   (leave-second-mode))
-  
+
 
 (defun current-frame-set-click-focus-policy ()
   "Set a click focus policy for the current frame."
   (set-focus-policy-generic :click))
-  
+
 (defun current-frame-set-sloppy-focus-policy ()
   "Set a sloppy focus policy for the current frame."
   (set-focus-policy-generic :sloppy))
@@ -1108,12 +1106,12 @@ For window: set current child to window or its parent according to window-parent
   (with-all-frames (*root-frame* frame)
     (setf (frame-focus-policy frame) focus-policy))
   (leave-second-mode))
-  
+
 
 (defun all-frames-set-click-focus-policy ()
   "Set a click focus policy for all frames."
   (set-focus-policy-generic-for-all :click))
-  
+
 (defun all-frames-set-sloppy-focus-policy ()
   "Set a sloppy focus policy for all frames."
   (set-focus-policy-generic-for-all :sloppy))
@@ -1135,9 +1133,9 @@ For window: set current child to window or its parent according to window-parent
 	   (number (parse-integer name :junk-allowed t :start pos)))
       (values number
 	      (if number (subseq name 0 (1- pos)) name)))))
-    
 
-		   
+
+
 
 (defun ensure-unique-name ()
   "Ensure that all children names are unique"
@@ -1190,7 +1188,7 @@ For window: set current child to window or its parent according to window-parent
 	      (add-sub-menu (menu-name menu) :next sec (format nil "~A" sec) menu)
 	      (um-create-section (find-menu sec menu) (rest section-list)))))
       menu))
-	    
+
 
 (defun update-menus (&optional (menu (make-menu :name 'main :doc "Main menu")))
   (let ((output (do-shell "update-menus --stdout")))
@@ -1220,4 +1218,3 @@ For window: set current child to window or its parent according to window-parent
 
 
 
-  

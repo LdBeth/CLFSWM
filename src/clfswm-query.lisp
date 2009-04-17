@@ -28,7 +28,7 @@
 
 (defun query-show-paren (orig-string pos)
   "Replace matching parentheses with brackets"
-  (let ((string (copy-seq orig-string))) 
+  (let ((string (copy-seq orig-string)))
     (labels ((have-to-find-right? ()
 	       (and (< pos (length string)) (char= (aref string pos) #\()))
 	     (have-to-find-left? ()
@@ -59,7 +59,7 @@
   (defun clear-history ()
     "Clear the query-string history"
     (setf history nil))
-  
+
   (defun query-string (msg &optional (default ""))
     "Query a string from the keyboard. Display msg as prompt"
     (let* ((done nil)
@@ -116,9 +116,7 @@
 	       (handle-query-key (&rest event-slots &key root code state &allow-other-keys)
 		 (declare (ignore event-slots root))
 		 (let* ((modifiers (state->modifiers state))
-			(keysym (xlib:keycode->keysym *display* code (cond  ((member :shift modifiers) 1)
-									    ((member :mod-5 modifiers) 2)
-									    (t 0))))
+			(keysym (keycode->keysym code modifiers))
 			(char (xlib:keysym->character *display* keysym))
 			(keysym-name (keysym->keysym-name keysym)))
 		   (setf done (cond ((string-equal keysym-name "Return") :Return)

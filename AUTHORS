@@ -7,15 +7,15 @@ Philippe Brochard   pbrochard at common-lisp dot net
 Contributors
 ------------
 
-Xavier Maillard     xma at gnu dot org
+Xavier Maillard     xma at gnu dot org test
 Cyrille THOUVENIN
 
 
 -----------------------------------
 
-Some of the CLFSWM code is based on 
+Some of the CLFSWM code is based on
 
 tinywm: http://incise.org/index.cgi/TinyWM
 
-And on the excellent Shawn Betts (sabetts at vcn bc ca) 
+And on the excellent Shawn Betts (sabetts at vcn bc ca)
 Stumpwm: http://www.nongnu.org/stumpwm/
