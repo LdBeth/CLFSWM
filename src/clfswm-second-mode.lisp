@@ -125,33 +125,78 @@
 
 
 
-(defun sm-handle-event (&rest event-slots &key display event-key &allow-other-keys)
-  (declare (ignore display))
-  ;; (dbg event-key)
-  (with-xlib-protect
-    (case event-key
-      (:button-press (call-hook *sm-button-press-hook* event-slots))
-      (:button-release (call-hook *sm-button-release-hook* event-slots))
-      (:motion-notify (call-hook *sm-motion-notify-hook* event-slots))
-      (:key-press (call-hook *sm-key-press-hook* event-slots))
-      (:configure-request (call-hook *sm-configure-request-hook* event-slots))
-      (:configure-notify (call-hook *sm-configure-notify-hook* event-slots))
-      (:map-request (call-hook *sm-map-request-hook* event-slots))
-      (:unmap-notify (call-hook *sm-unmap-notify-hook* event-slots))
-      (:destroy-notify (call-hook *sm-destroy-notify-hook* event-slots))
-      (:mapping-notify (call-hook *sm-mapping-notify-hook* event-slots))
-      (:property-notify (call-hook *sm-property-notify-hook* event-slots))
-      (:create-notify (call-hook *sm-create-notify-hook* event-slots))
-      (:enter-notify (call-hook *sm-enter-notify-hook* event-slots))
-      (:exposure (call-hook *sm-exposure-hook* event-slots))))
-  ;;(dbg "Ignore handle event" c event-slots)))
-  t)
+;;(defun sm-handle-event (&rest event-slots &key display event-key &allow-other-keys)
+;;  (declare (ignore display))
+;;  ;; (dbg event-key)
+;;  (with-xlib-protect
+;;    (case event-key
+;;      (:button-press (call-hook *sm-button-press-hook* event-slots))
+;;      (:button-release (call-hook *sm-button-release-hook* event-slots))
+;;      (:motion-notify (call-hook *sm-motion-notify-hook* event-slots))
+;;      (:key-press (call-hook *sm-key-press-hook* event-slots))
+;;      (:configure-request (call-hook *sm-configure-request-hook* event-slots))
+;;      (:configure-notify (call-hook *sm-configure-notify-hook* event-slots))
+;;      (:map-request (call-hook *sm-map-request-hook* event-slots))
+;;      (:unmap-notify (call-hook *sm-unmap-notify-hook* event-slots))
+;;      (:destroy-notify (call-hook *sm-destroy-notify-hook* event-slots))
+;;      (:mapping-notify (call-hook *sm-mapping-notify-hook* event-slots))
+;;      (:property-notify (call-hook *sm-property-notify-hook* event-slots))
+;;      (:create-notify (call-hook *sm-create-notify-hook* event-slots))
+;;      (:enter-notify (call-hook *sm-enter-notify-hook* event-slots))
+;;      (:exposure (call-hook *sm-exposure-hook* event-slots))))
+;;  ;;(dbg "Ignore handle event" c event-slots)))
+;;  t)
 
 
 
-(defun second-key-mode ()
-  "Switch to editing mode"
-  ;;(dbg "Second key ignore" c)))))
+;;(defun second-key-mode ()
+;;  "Switch to editing mode"
+;;  ;;(dbg "Second key ignore" c)))))
+;;  (setf *in-second-mode* t
+;;	*sm-window* (xlib:create-window :parent *root*
+;;					:x (truncate (/ (- (xlib:screen-width *screen*) *sm-width*) 2))
+;;					:y 0
+;;					:width *sm-width* :height *sm-height*
+;;					:background (get-color *sm-background-color*)
+;;					:border-width 1
+;;					:border (get-color *sm-border-color*)
+;;					:colormap (xlib:screen-default-colormap *screen*)
+;;					:event-mask '(:exposure))
+;;	*sm-font* (xlib:open-font *display* *sm-font-string*)
+;;	*sm-gc* (xlib:create-gcontext :drawable *sm-window*
+;;				      :foreground (get-color *sm-foreground-color*)
+;;				      :background (get-color *sm-background-color*)
+;;				      :font *sm-font*
+;;				      :line-style :solid))
+;;  (xlib:map-window *sm-window*)
+;;  (draw-second-mode-window)
+;;  (no-focus)
+;;  (ungrab-main-keys)
+;;  (xgrab-keyboard *root*)
+;;  (xgrab-pointer *root* 66 67)
+;;  (unwind-protect
+;;       (catch 'exit-second-loop
+;;	 (loop
+;;	    (raise-window *sm-window*)
+;;	    (xlib:display-finish-output *display*)
+;;	    (xlib:process-event *display* :handler #'sm-handle-event)
+;;	    (xlib:display-finish-output *display*)))
+;;    (xlib:free-gcontext *sm-gc*)
+;;    (xlib:close-font *sm-font*)
+;;    (xlib:destroy-window *sm-window*)
+;;    (xungrab-keyboard)
+;;    (xungrab-pointer)
+;;    (grab-main-keys)
+;;    (show-all-children)
+;;    (display-all-frame-info))
+;;  (wait-no-key-or-button-press)
+;;  (when *second-mode-program*
+;;    (do-shell *second-mode-program*)
+;;    (setf *second-mode-program* nil))
+;;  (setf *in-second-mode* nil))
+
+
+(defun sm-enter-function ()
   (setf *in-second-mode* t
 	*sm-window* (xlib:create-window :parent *root*
 					:x (truncate (/ (- (xlib:screen-width *screen*) *sm-width*) 2))
@@ -173,28 +218,46 @@
   (no-focus)
   (ungrab-main-keys)
   (xgrab-keyboard *root*)
-  (xgrab-pointer *root* 66 67)
-  (unwind-protect
-       (catch 'exit-second-loop
-	 (loop
-	    (raise-window *sm-window*)
-	    (xlib:display-finish-output *display*)
-	    (xlib:process-event *display* :handler #'sm-handle-event)
-	    (xlib:display-finish-output *display*)))
-    (xlib:free-gcontext *sm-gc*)
-    (xlib:close-font *sm-font*)
-    (xlib:destroy-window *sm-window*)
-    (xungrab-keyboard)
-    (xungrab-pointer)
-    (grab-main-keys)
-    (show-all-children)
-    (display-all-frame-info))
+  (xgrab-pointer *root* 66 67))
+
+(defun sm-loop-function ()
+  (raise-window *sm-window*))
+
+(defun sm-leave-function ()
+  (xlib:free-gcontext *sm-gc*)
+  (xlib:close-font *sm-font*)
+  (xlib:destroy-window *sm-window*)
+  (xungrab-keyboard)
+  (xungrab-pointer)
+  (grab-main-keys)
+  (show-all-children)
+  (display-all-frame-info)
   (wait-no-key-or-button-press)
   (when *second-mode-program*
     (do-shell *second-mode-program*)
     (setf *second-mode-program* nil))
   (setf *in-second-mode* nil))
 
+
+(defun second-key-mode ()
+  (generic-mode :enter-function #'sm-enter-function
+		:loop-function #'sm-loop-function
+		:leave-function #'sm-leave-function
+		:button-press-hook *sm-button-press-hook*
+		:button-release-hook *sm-button-release-hook*
+		:key-press-hook *sm-key-press-hook*
+		:key-release-hook *sm-key-release-hook*
+		:motion-notify-hook *sm-motion-notify-hook*
+		:configure-request-hook *sm-configure-request-hook*
+		:configure-notify-hook *sm-configure-notify-hook*
+		:map-request-hook *sm-map-request-hook*
+		:unmap-notify-hook *sm-unmap-notify-hook*
+		:destroy-notify-hook *sm-destroy-notify-hook*
+		:mapping-notify-hook *sm-mapping-notify-hook*
+		:property-notify-hook *sm-property-notify-hook*
+		:create-notify-hook *sm-create-notify-hook*
+		:enter-notify-hook *sm-enter-notify-hook*
+		:exposure-hook *sm-exposure-hook*))
 
 
 (defun leave-second-mode ()

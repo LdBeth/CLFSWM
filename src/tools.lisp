@@ -31,6 +31,7 @@
   (:export :it
 	   :awhen
 	   :aif
+	   :nfuncall
 	   :call-hook
 	   :add-hook
 	   :remove-hook
@@ -90,7 +91,7 @@
 	   :subst-strings
 	   :test-find-string))
 
-	    
+
 (in-package :tools)
 
 
@@ -107,6 +108,10 @@
 
 (defmacro aif (test then &optional else)
   `(let ((it ,test)) (if it ,then ,else)))
+
+(defun nfuncall (function)
+  (when function
+    (funcall function)))
 
 
 ;;;,-----
@@ -198,7 +203,7 @@ Return the result of the last hook"
       (when verbose
 	(format t "Exporting ~S~%" symbol))
       (export symbol package))))
-	
+
 
 (defun export-all-variables (package &optional (verbose nil))
   (with-all-internal-symbols (symbol package)
@@ -242,7 +247,7 @@ Return the result of the last hook"
 	     (= (or (search start-string doc :test #'string-equal) -1) 0)
 	     (search stop-string doc)
 	     t))))
-  
+
   (defun config-documentation (symbol)
     (when (is-config-p symbol)
       (let ((doc (documentation symbol 'variable)))
@@ -348,7 +353,7 @@ Return the result of the last hook"
 	 (pos-2 (position delim line :start (1+ (or pos-1 0)))))
     (when (and pos pos-1 pos-2)
       (subseq line (1+ pos-1) pos-2))))
-    
+
 
 (defun print-space (n &optional (stream *standard-output*))
   "Print n spaces on stream"
@@ -414,15 +419,15 @@ of the program to return.
 							 :stream :wait wt)))
 	      (unless proc
 		(error "Cannot create process."))
-	      (make-two-way-stream 
-	       (sb-ext:process-output proc)              
+	      (make-two-way-stream
+	       (sb-ext:process-output proc)
 	       (sb-ext:process-input proc)))
     #+:lispworks (system:open-pipe fullstring :direction :io)
     #+:allegro (let ((proc (excl:run-shell-command
 			    (apply #'vector program program args)
 			    :input :stream :output :stream :wait wt)))
 		 (unless proc
-		   (error "Cannot create process."))   
+		   (error "Cannot create process."))
 		 proc)
     #+:ecl(ext:run-program program args :input :stream :output :stream
 			   :error :output)
@@ -493,8 +498,8 @@ of the program to return.
   #+gcl (lisp:quit)
   #+lispworks (lw:quit)
   #+(or allegro-cl allegro-cl-trial) (excl:exit))
-  
-  
+
+
 
 
 (defun remove-plist (plist &rest keys)
@@ -568,7 +573,7 @@ Useful for re-using the &REST arg after removing some options."
 	     ((zerop (or (position #\! line) -1))
 	      (funcall shell-fun (subseq line 1)))
 	     (t (format t "~{~A~^ ;~%~}~%"
-			(multiple-value-list 
+			(multiple-value-list
 			 (ignore-errors (eval (read-from-string line))))))))))
 
 
@@ -617,7 +622,7 @@ Useful for re-using the &REST arg after removing some options."
 		 ret)))
        ((null char) ret)))
 
-  
+
 ;;;(defun near-position2 (chars str &key (start 0))
 ;;;  (loop for i in chars
 ;;;	minimize (position i str :start start)))
@@ -679,14 +684,14 @@ Useful for re-using the &REST arg after removing some options."
 
 
 (defun append-formated-list (base-str
-			     lst 
+			     lst
 			     &key (test-not-fun #'(lambda (x) x nil))
 			     (print-fun #'(lambda (x) x))
 			     (default-str ""))
   (let ((str base-str) (first t))
     (dolist (i lst)
       (cond ((funcall test-not-fun i) nil)
-	    (t (setq str 
+	    (t (setq str
 		     (concatenate 'string str
 				  (if first "" ", ")
 				  (format nil "~A"

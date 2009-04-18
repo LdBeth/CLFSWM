@@ -29,6 +29,8 @@
 				:depends-on ("package" "config" "xlib-util" "keysyms"))
 			 (:file "clfswm-autodoc"
 				:depends-on ("package" "clfswm-keys" "my-html" "tools" "config"))
+			 (:file "clfswm-generic-mode"
+				:depends-on ("package" "tools"))
 			 (:file "clfswm-internal"
 				:depends-on ("xlib-util" "clfswm-keys" "netwm-util" "tools" "config"))
 			 (:file "clfswm"
@@ -37,7 +39,7 @@
 			 (:file "version"
 				:depends-on ("tools"))
 			 (:file "clfswm-second-mode"
-				:depends-on ("package" "clfswm" "clfswm-internal"))
+				:depends-on ("package" "clfswm" "clfswm-internal" "clfswm-generic-mode"))
 			 (:file "clfswm-corner"
 				:depends-on ("package" "config" "clfswm-internal"))
 			 (:file "clfswm-info"

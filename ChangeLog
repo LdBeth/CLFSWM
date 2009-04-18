@@ -1,3 +1,8 @@
+2009-04-18  Xavier Maillard  <xma@gnu.org>
+
+	* src/clfswm-generic-mode.lisp (generic-mode): Add a generic mode
+	to define all other modes.
+
 2009-04-05  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/package.lisp (): Use *default-font-string* for all

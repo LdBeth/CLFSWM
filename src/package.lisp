@@ -175,6 +175,8 @@ It is particulary useful with CLISP/MIT-CLX.")
   "Config(Hook group):")
 (defparameter *key-press-hook* nil
   "Config(Hook group):")
+(defparameter *key-release-hook* nil
+  "Config(Hook group):")
 (defparameter *configure-request-hook* nil
   "Config(Hook group):")
 (defparameter *configure-notify-hook* nil
@@ -205,6 +207,8 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defparameter *sm-motion-notify-hook* nil
   "Config(Hook group):")
 (defparameter *sm-key-press-hook* nil
+  "Config(Hook group):")
+(defparameter *sm-key-release-hook* nil
   "Config(Hook group):")
 (defparameter *sm-configure-request-hook* nil
   "Config(Hook group):")
