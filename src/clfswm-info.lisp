@@ -192,17 +192,17 @@
   "Open the info mode. Info-list is a list of info: One string per line
 Or for colored output: a list (line_string color)
 Or ((1_word color) (2_word color) 3_word (4_word color)...)"
-  (labels ((compute-size (line)
-	     (typecase line
-	       (cons (typecase (first line)
-		       (cons (let ((val 0))
-			       (dolist (l line val)
-				 (incf val (typecase l
-					     (cons (length (first l)))
-					     (t (length l)))))))
-		       (t (length (first line)))))
-	       (t (length line)))))
-    (when info-list
+  (when info-list
+    (labels ((compute-size (line)
+	       (typecase line
+		 (cons (typecase (first line)
+			 (cons (let ((val 0))
+				 (dolist (l line val)
+				   (incf val (typecase l
+					       (cons (length (first l)))
+					       (t (length l)))))))
+			 (t (length (first line)))))
+		 (t (length line)))))
       (let* ((pointer-grabbed-p (xgrab-pointer-p))
 	     (keyboard-grabbed-p (xgrab-keyboard-p))
 	     (font (xlib:open-font *display* *info-font-string*))
@@ -248,23 +248,7 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 		   (draw-info-window info))
 		 (info-handle-destroy-notify (&rest event-slots)
 		   (apply #'handle-destroy-notify event-slots)
-		   (draw-info-window info))
-		 (handle-events (&rest event-slots &key display event-key &allow-other-keys)
-		   (declare (ignore display))
-		   (case event-key
-		     (:key-press (apply #'handle-key event-slots) t)
-		     (:button-press (apply #'handle-button-press event-slots) t)
-		     (:button-release (apply #'handle-button-release event-slots) t)
-		     (:motion-notify (apply #'handle-motion-notify event-slots) t)
-		     (:map-request nil)
-		     (:unmap-notify (apply #'info-handle-unmap-notify event-slots) t)
-		     (:destroy-notify (apply #'info-handle-destroy-notify event-slots) t)
-		     (:mapping-notify nil)
-		     (:property-notify nil)
-		     (:create-notify nil)
-		     (:enter-notify nil)
-		     (:exposure (draw-info-window info)))
-		   t))
+		   (draw-info-window info)))
 	  (xlib:map-window window)
 	  (draw-info-window info)
 	  (xgrab-pointer *root* 68 69)
@@ -272,9 +256,10 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 	    (xgrab-keyboard *root*))
 	  (unwind-protect
 	       (catch 'exit-info-loop
-		 (loop
-		    (xlib:display-finish-output *display*)
-		    (xlib:process-event *display* :handler #'handle-events)))
+		 (generic-mode :button-press-hook #'handle-button-press
+			       :button-release-hook #'handle-button-release
+			       :motion-notify-hook #'handle-motion-notify
+			       :key-press-hook #'handle-key))
 	    (if pointer-grabbed-p
 		(xgrab-pointer *root* 66 67)
 		(xungrab-pointer))
@@ -285,8 +270,6 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 	    (xlib:close-font font)
 	    (display-all-frame-info)
 	    (wait-no-key-or-button-press)))))))
-
-
 
 
 

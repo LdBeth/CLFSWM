@@ -1,3 +1,7 @@
+2009-04-19  Xavier Maillard  <xma@gnu.org>
+
+	* src/clfswm-info.lisp (info-mode): Use generic-mode for info-mode.
+
 2009-04-18  Xavier Maillard  <xma@gnu.org>
 
 	* src/clfswm-generic-mode.lisp (generic-mode): Add a generic mode
