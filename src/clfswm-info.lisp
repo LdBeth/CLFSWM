@@ -256,7 +256,10 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 	    (xgrab-keyboard *root*))
 	  (unwind-protect
 	       (catch 'exit-info-loop
-		 (generic-mode :button-press-hook #'handle-button-press
+		 (generic-mode :loop-function (lambda ()
+						(raise-window (info-window info))
+						(draw-info-window info))
+			       :button-press-hook #'handle-button-press
 			       :button-release-hook #'handle-button-release
 			       :motion-notify-hook #'handle-motion-notify
 			       :key-press-hook #'handle-key))

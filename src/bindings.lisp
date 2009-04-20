@@ -41,8 +41,9 @@
   (define-main-key ("Left" :mod-1) 'select-previous-brother)
   (define-main-key ("Down" :mod-1) 'select-previous-level)
   (define-main-key ("Up" :mod-1) 'select-next-level)
-  (define-circulate-modifier "Alt_L")
-  (define-circulate-reverse-modifier '("Shift_L" "Shift_R"))
+  ;; Work in progress
+  ;;  (define-circulate-modifier "Alt_L")
+  ;;  (define-circulate-reverse-modifier '("Shift_L" "Shift_R"))
   (define-main-key ("Tab" :mod-1) 'select-next-child)
   (define-main-key ("Tab" :mod-1 :shift) 'select-previous-child)
   (define-main-key ("Tab" :shift) 'switch-to-last-child)
