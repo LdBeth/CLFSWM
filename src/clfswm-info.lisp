@@ -242,37 +242,30 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 		   (funcall-button-from-code *info-mouse* code state window root-x root-y *fun-press* (list info)))
 		 (handle-button-release (&rest event-slots &key window root-x root-y code state &allow-other-keys)
 		   (declare (ignore event-slots))
-		   (funcall-button-from-code *info-mouse* code state window root-x root-y *fun-release* (list info)))
-		 (info-handle-unmap-notify (&rest event-slots)
-		   (apply #'handle-unmap-notify event-slots)
-		   (draw-info-window info))
-		 (info-handle-destroy-notify (&rest event-slots)
-		   (apply #'handle-destroy-notify event-slots)
-		   (draw-info-window info)))
+		   (funcall-button-from-code *info-mouse* code state window root-x root-y *fun-release* (list info))))
 	  (xlib:map-window window)
 	  (draw-info-window info)
 	  (xgrab-pointer *root* 68 69)
 	  (unless keyboard-grabbed-p
 	    (xgrab-keyboard *root*))
-	  (unwind-protect
-	       (catch 'exit-info-loop
-		 (generic-mode :loop-function (lambda ()
-						(raise-window (info-window info))
-						(draw-info-window info))
-			       :button-press-hook #'handle-button-press
-			       :button-release-hook #'handle-button-release
-			       :motion-notify-hook #'handle-motion-notify
-			       :key-press-hook #'handle-key))
-	    (if pointer-grabbed-p
-		(xgrab-pointer *root* 66 67)
-		(xungrab-pointer))
-	    (unless keyboard-grabbed-p
-	      (xungrab-keyboard))
-	    (xlib:free-gcontext gc)
-	    (xlib:destroy-window window)
-	    (xlib:close-font font)
-	    (display-all-frame-info)
-	    (wait-no-key-or-button-press)))))))
+	  (generic-mode 'exit-info-loop
+			:loop-function (lambda ()
+					 (raise-window (info-window info))
+					 (draw-info-window info))
+			:button-press-hook #'handle-button-press
+			:button-release-hook #'handle-button-release
+			:motion-notify-hook #'handle-motion-notify
+			:key-press-hook #'handle-key)
+	  (if pointer-grabbed-p
+	      (xgrab-pointer *root* 66 67)
+	      (xungrab-pointer))
+	  (unless keyboard-grabbed-p
+	    (xungrab-keyboard))
+	  (xlib:free-gcontext gc)
+	  (xlib:destroy-window window)
+	  (xlib:close-font font)
+	  (display-all-frame-info)
+	  (wait-no-key-or-button-press))))))
 
 
 

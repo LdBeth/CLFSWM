@@ -1,3 +1,7 @@
+2009-04-22  Xavier Maillard  <xma@gnu.org>
+
+	* src/clfswm-query.lisp (query-string): Use a generic mode.
+
 2009-04-19  Xavier Maillard  <xma@gnu.org>
 
 	* src/clfswm-info.lisp (info-mode): Use generic-mode for info-mode.

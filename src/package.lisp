@@ -157,7 +157,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defparameter *second-mouse* nil)
 (defparameter *info-keys* nil)
 (defparameter *info-mouse* nil)
-
+(defparameter *query-keys* nil)
 
 
 (defstruct menu name item doc)

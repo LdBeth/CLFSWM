@@ -60,7 +60,7 @@
 (define-init-hash-table-key *second-mouse* "Mouse buttons actions in second mode")
 (define-init-hash-table-key *info-keys* "Info mode keys")
 (define-init-hash-table-key *info-mouse* "Mouse buttons actions in info mode")
-
+(define-init-hash-table-key *query-keys* "Query mode keys")
 
 
 (defun unalias-modifiers (list)
@@ -113,6 +113,7 @@
 (define-define-key "main" *main-keys*)
 (define-define-key "second" *second-keys*)
 (define-define-key "info" *info-keys*)
+(define-define-key "query" *query-keys*)
 
 (define-define-mouse "main-mouse" *main-mouse*)
 (define-define-mouse "second-mouse" *second-mouse*)

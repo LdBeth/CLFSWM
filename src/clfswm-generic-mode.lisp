@@ -26,7 +26,7 @@
 (in-package :clfswm)
 
 
-(defun generic-mode (&key enter-function loop-function leave-function
+(defun generic-mode (exit-tag &key enter-function loop-function leave-function
 		     (button-press-hook *button-press-hook*)
 		     (button-release-hook *button-release-hook*)
 		     (motion-notify-hook *motion-notify-hook*)
@@ -67,7 +67,7 @@
 	     t))
     (nfuncall enter-function)
     (unwind-protect
-	 (catch 'exit-second-loop
+	 (catch exit-tag
 	   (loop
 	      (nfuncall loop-function)
 	      (xlib:display-finish-output *display*)

@@ -241,7 +241,8 @@
 
 
 (defun second-key-mode ()
-  (generic-mode :enter-function #'sm-enter-function
+  (generic-mode 'exit-second-loop
+		:enter-function #'sm-enter-function
 		:loop-function #'sm-loop-function
 		:leave-function #'sm-leave-function
 		:button-press-hook *sm-button-press-hook*
