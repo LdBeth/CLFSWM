@@ -310,8 +310,9 @@
 
 (defun run-program-from-query-string ()
   "Run a program from the query input"
-  (let ((program (query-string "Run:")))
-    (when (and program (not (equal program "")))
+  (multiple-value-bind (program return)
+      (query-string "Run:")
+    (when (and (equal return :return) program (not (equal program "")))
       (setf *second-mode-program* program)
       (leave-second-mode))))
 
