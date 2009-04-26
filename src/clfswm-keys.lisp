@@ -62,6 +62,10 @@
 (define-init-hash-table-key *info-mouse* "Mouse buttons actions in info mode")
 (define-init-hash-table-key *query-keys* "Query mode keys")
 
+(define-init-hash-table-key *circulate-keys* "Circulate mode keys")
+(define-init-hash-table-key *circulate-keys-release* "Circulate mode release keys")
+
+
 
 (defun unalias-modifiers (list)
   (dolist (mod *modifier-alias*)
@@ -114,6 +118,9 @@
 (define-define-key "second" *second-keys*)
 (define-define-key "info" *info-keys*)
 (define-define-key "query" *query-keys*)
+
+(define-define-key "circulate" *circulate-keys*)
+(define-define-key "circulate-release" *circulate-keys-release*)
 
 (define-define-mouse "main-mouse" *main-mouse*)
 (define-define-mouse "second-mouse" *second-mouse*)

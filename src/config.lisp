@@ -237,6 +237,22 @@ on the root window in the main mode with the mouse")
 (defparameter *info-font-string* *default-font-string*
   "Config(Info mode group): Info window font string")
 
+;;; CONFIG - Circulate string colors
+(defparameter *circulate-font-string* *default-font-string*
+  "Config(Circulate mode group): Circulate string window font string")
+(defparameter *circulate-background* "black"
+  "Config(Circulate mode group): Circulate string window background color")
+(defparameter *circulate-foreground* "green"
+  "Config(Circulate mode group): Circulate string window foreground color")
+(defparameter *circulate-border* "red"
+  "Config(Circulate mode group): Circulate string window border color")
+(defparameter *circulate-width* 400
+  "Config(Circulate mode group): Circulate mode window width")
+(defparameter *circulate-height* 15
+  "Config(Circulate mode group): Circulate mode window height")
+
+
+
 ;;; CONFIG - Show key binding colors
 (defparameter *info-color-title* "Magenta"
   "Config(Info mode group): Colored info title color")

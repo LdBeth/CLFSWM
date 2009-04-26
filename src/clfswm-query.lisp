@@ -137,8 +137,6 @@
 
 
 
-(add-hook *binding-hook* 'set-default-query-keys)
-
 (labels ((generic-backspace (del-pos)
 	   (when (>= del-pos 0)
 	     (setf *query-string* (concatenate 'string
@@ -223,6 +221,8 @@
   "Delete the end of the line"
   (setf *query-string* (subseq *query-string* 0 *query-pos*)))
 
+
+(add-hook *binding-hook* 'set-default-query-keys)
 
 (defun set-default-query-keys ()
   (define-query-key ("Return") 'leave-query-mode-valid)

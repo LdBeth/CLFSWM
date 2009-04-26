@@ -158,6 +158,8 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defparameter *info-keys* nil)
 (defparameter *info-mouse* nil)
 (defparameter *query-keys* nil)
+(defparameter *circulate-keys* nil)
+(defparameter *circulate-keys-release* nil)
 
 
 (defstruct menu name item doc)
