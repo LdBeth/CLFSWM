@@ -127,6 +127,7 @@
   (define-circulate-key ("Escape") 'leave-circulate-mode)
   (define-circulate-key ("Tab" :mod-1) 'circulate-select-next-child)
   (define-circulate-key ("Tab" :mod-1 :shift) 'circulate-select-previous-child)
+  (define-circulate-key ("Iso_Left_Tab" :mod-1 :shift) 'circulate-select-previous-child)
   (define-circulate-key ("Right" :mod-1) 'circulate-select-next-brother)
   (define-circulate-key ("Left" :mod-1) 'circulate-select-previous-brother)
 
@@ -165,8 +166,7 @@
 	    (setf leave nil)
 	    (return)))
     (when leave
-      (leave-circulate-mode)))
-  (raise-window *circulate-window*))
+      (leave-circulate-mode))))
 
 (defun circulate-handle-key-press (&rest event-slots &key root code state &allow-other-keys)
   (declare (ignore event-slots root))
@@ -180,10 +180,6 @@
 (defun circulate-handle-key-release (&rest event-slots &key root code state &allow-other-keys)
   (declare (ignore event-slots root))
   (funcall-key-from-code *circulate-keys-release* code state))
-
-(defun circulate-handle-exposure (&rest event-slots)
-  (apply #'handle-exposure event-slots)
-  (draw-circulate-mode-window))
 
 
 
@@ -222,8 +218,7 @@
 		  :loop-function #'circulate-loop-function
 		  :leave-function #'circulate-leave-function
 		  :key-press-hook #'circulate-handle-key-press
-		  :key-release-hook #'circulate-handle-key-release
-		  :exposure-hook #'circulate-handle-exposure)
+		  :key-release-hook #'circulate-handle-key-release)
     (unless grab-keyboard-p
       (xungrab-keyboard)
       (grab-main-keys))

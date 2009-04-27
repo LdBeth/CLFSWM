@@ -1,3 +1,8 @@
+2009-04-27  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-circulate-mode.lisp (circulate-mode): Optimisation in
+	window redraw.
+
 2009-04-22  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (run-program-from-query-string): Launch
