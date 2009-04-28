@@ -35,7 +35,6 @@
 
 (defparameter *circulate-leave-key* nil)
 
-
 (defun draw-circulate-mode-window ()
   (raise-window *circulate-window*)
   (clear-pixmap-buffer *circulate-window* *circulate-gc*)

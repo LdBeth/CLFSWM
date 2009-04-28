@@ -33,8 +33,6 @@
   "Execute the program string if not nil")
 
 
-
-
 (defun draw-second-mode-window ()
   (raise-window *sm-window*)
   (clear-pixmap-buffer *sm-window* *sm-gc*)
@@ -63,8 +61,7 @@
 (defun sm-handle-motion-notify (&rest event-slots &key window root-x root-y &allow-other-keys)
   (declare (ignore event-slots))
   (unless (compress-motion-notify)
-    (funcall-button-from-code *second-mouse* 'motion 0 window root-x root-y *fun-press*)
-    (draw-second-mode-window)))
+    (funcall-button-from-code *second-mouse* 'motion 0 window root-x root-y *fun-press*)))
 
 (defun sm-handle-button-press (&rest event-slots &key window root-x root-y code state &allow-other-keys)
   (declare (ignore event-slots))
