@@ -1,5 +1,9 @@
 2009-05-05  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-circulate-mode.lisp (reorder-child)
+	(reorder-brother): Reinitialise on circulate type change
+	child to brother or brother to child.
+
 	* src/*.lisp (*): Use map-window instead of xlib:map-window. So
 	calls xlib:display-finish-output on each map-request. So speed up
 	the window display.

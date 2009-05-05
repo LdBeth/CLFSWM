@@ -54,29 +54,6 @@
   "Leave the circulate mode"
   (throw 'exit-circulate-loop nil))
 
-(defun reorder-child (direction)
-  (with-slots (child) *current-child*
-    (when *circulate-orig*
-      (let ((elem (nth (mod  (incf *circulate-hit* direction) (length *circulate-orig*)) *circulate-orig*)))
-	(setf child (nconc (list elem) (remove elem *circulate-orig*))))))
-  (show-all-children)
-  (draw-circulate-mode-window))
-
-
-(defun reorder-brother (direction)
-  (let ((frame-is-root? (and (equal *current-root* *current-child*)
-			     (not (equal *current-root* *root-frame*)))))
-    (if frame-is-root?
-	(hide-all *current-root*)
-	(select-current-frame nil))
-    (let ((elem (nth (mod  (incf *circulate-hit* direction) (length *circulate-orig*)) *circulate-orig*)))
-      (setf (frame-child *circulate-parent*) (nconc (list elem) (remove elem *circulate-orig*))
-	    *current-child* (frame-selected-child *circulate-parent*)))
-    (when frame-is-root?
-      (setf *current-root* *current-child*))
-    (show-all-children *current-root*)
-    (draw-circulate-mode-window)))
-
 
 
 (defun reset-circulate-child ()
@@ -88,6 +65,36 @@
   (setf *circulate-parent* (find-parent-frame *current-child*))
   (when (frame-p *circulate-parent*)
     (setf *circulate-orig* (frame-child *circulate-parent*))))
+
+
+
+(defun reorder-child (direction)
+  (with-slots (child) *current-child*
+    (unless *circulate-orig*
+      (reset-circulate-child))
+    (let ((elem (nth (mod (incf *circulate-hit* direction) (length *circulate-orig*)) *circulate-orig*)))
+      (setf child (nconc (list elem) (remove elem *circulate-orig*)))))
+  (show-all-children)
+  (draw-circulate-mode-window))
+
+
+(defun reorder-brother (direction)
+  (let ((frame-is-root? (and (equal *current-root* *current-child*)
+			     (not (equal *current-root* *root-frame*)))))
+    (if frame-is-root?
+	(hide-all *current-root*)
+	(select-current-frame nil))
+    (unless (and *circulate-orig* *circulate-parent*)
+      (reset-circulate-brother))
+    (let ((elem (nth (mod  (incf *circulate-hit* direction) (length *circulate-orig*)) *circulate-orig*)))
+      (setf (frame-child *circulate-parent*) (nconc (list elem) (remove elem *circulate-orig*))
+	    *current-child* (frame-selected-child *circulate-parent*)))
+    (when frame-is-root?
+      (setf *current-root* *current-child*))
+    (show-all-children *current-root*)
+    (draw-circulate-mode-window)))
+
+
 
 
 
