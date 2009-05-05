@@ -201,7 +201,7 @@
 					     :background (get-color *circulate-background*)
 					     :font *circulate-font*
 					     :line-style :solid))
-  (xlib:map-window *circulate-window*)
+  (map-window *circulate-window*)
   (draw-circulate-mode-window)
   (when child-direction
     (reorder-child child-direction))

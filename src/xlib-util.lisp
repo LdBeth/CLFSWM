@@ -134,9 +134,15 @@ Window types are in +WINDOW-TYPES+.")
       (when (window-hidden-p window)
 	(xlib:map-window window)
 	(setf (window-state window) +normal-state+
-	      (xlib:window-event-mask window) *window-events*)))))
+	      (xlib:window-event-mask window) *window-events*))))
+  (xlib:display-finish-output *display*))
 
 
+(defun map-window (window)
+  (when window
+    (with-xlib-protect
+      (xlib:map-window window)
+      (xlib:display-finish-output *display*))))
 
 
 
@@ -256,7 +262,8 @@ Window types are in +WINDOW-TYPES+.")
       (setf (window-state window) +iconic-state+
 	    (xlib:window-event-mask window) (remove :structure-notify *window-events*))
       (xlib:unmap-window window)
-      (setf (xlib:window-event-mask window) *window-events*))))
+      (setf (xlib:window-event-mask window) *window-events*)))
+  (xlib:display-finish-output *display*))
 
 
 
@@ -318,13 +325,15 @@ Window types are in +WINDOW-TYPES+.")
     (with-xlib-protect
       (when (window-hidden-p window)
 	(unhide-window window))
-      (setf (xlib:window-priority window) :top-if))))
+      (setf (xlib:window-priority window) :top-if)))
+  (xlib:display-finish-output *display*))
 
 (defun focus-window (window)
   "Give the window focus."
   (when window
     (with-xlib-protect
-      (xlib:set-input-focus *display* window :parent))))
+      (xlib:set-input-focus *display* window :parent)))
+  (xlib:display-finish-output *display*))
 
 
 
@@ -334,7 +343,8 @@ Window types are in +WINDOW-TYPES+.")
 
 (defun no-focus ()
   "don't focus any window but still read keyboard events."
-  (xlib:set-input-focus *display* *no-focus-window* :pointer-root))
+  (xlib:set-input-focus *display* *no-focus-window* :pointer-root)
+  (xlib:display-finish-output *display*))
 
 
 

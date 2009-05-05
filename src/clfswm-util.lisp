@@ -118,7 +118,7 @@
     (dolist (window (get-hidden-windows))
       (unhide-window window)
       (process-new-window window)
-      (xlib:map-window window)))
+      (map-window window)))
   (show-all-children))
 
 
@@ -269,7 +269,7 @@
 		 (:exposure (print-key nil nil nil nil nil)))
 	       t))
       (xgrab-pointer *root* 92 93)
-      (xlib:map-window window)
+      (map-window window)
       (format t "~&Press 'q' to stop the identify loop~%")
       (print-key nil nil nil nil nil)
       (force-output)
@@ -522,7 +522,7 @@ mouse-fun is #'move-frame or #'resize-frame"
 		    parent *current-root*
 		    mouse-fn #'resize-frame)
 	      (place-frame child parent root-x root-y 10 10)
-	      (xlib:map-window (frame-window child))
+	      (map-window (frame-window child))
 	      (pushnew child (frame-child *current-root*)))
 	    (setf child (find-frame-window window *current-root*)
 		  parent (find-parent-frame child *current-root*)))
@@ -569,7 +569,7 @@ For window: set current child to window or its parent according to window-parent
 	    parent *current-root*
 	    mouse-fn #'resize-frame)
       (place-frame child parent root-x root-y 10 10)
-      (xlib:map-window (frame-window child))
+      (map-window (frame-window child))
       (pushnew child (frame-child *current-root*)))
     (typecase child
       (xlib:window

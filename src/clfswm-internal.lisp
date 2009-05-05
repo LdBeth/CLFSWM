@@ -506,7 +506,7 @@
       (if show-window-p
 	  (when (or *show-root-frame-p* (not (equal frame *current-root*)))
 	    (setf (xlib:window-background window) (get-color "Black"))
-	    (xlib:map-window window)
+	    (map-window window)
 	    (when raise-p (raise-window window)))
 	  (hide-window window)))
     (display-frame-info frame)))
@@ -517,7 +517,7 @@
     (if (or (managed-window-p window parent)
 	    (equal parent *current-child*))
 	(progn
-	  (xlib:map-window window)
+	  (map-window window)
 	  (when raise-p (raise-window window)))
 	(hide-window window))))
 
@@ -911,7 +911,7 @@ managed."
 	      (format t "Processing ~S: type=~A ~S~%" (xlib:wm-name win) (window-type win) win)
 	      (unhide-window win)
 	      (process-new-window win)
-	      (xlib:map-window win)
+	      (map-window win)
 	      (raise-window win)
 	      (pushnew (xlib:window-id win) id-list))))))
     (netwm-set-client-list id-list)))

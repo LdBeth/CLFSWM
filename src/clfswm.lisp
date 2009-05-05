@@ -97,7 +97,7 @@
   (unless send-event-p
     (unhide-window window)
     (process-new-window window)
-    (xlib:map-window window)
+    (map-window window)
     (unless (null-size-window-p window)
       (show-all-children))))
 
@@ -239,7 +239,7 @@
   (xgrab-init-keyboard)
   (init-last-child)
   (call-hook *binding-hook*)
-  (xlib:map-window *no-focus-window*)
+  (map-window *no-focus-window*)
   (dbg *display*)
   (setf (xlib:window-event-mask *root*) (xlib:make-event-mask :substructure-redirect
 							      :substructure-notify

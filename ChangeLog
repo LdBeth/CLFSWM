@@ -1,3 +1,12 @@
+2009-05-05  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/*.lisp (*): Use map-window instead of xlib:map-window. So
+	calls xlib:display-finish-output on each map-request. So speed up
+	the window display.
+
+	* src/xlib-util.lisp (map-window): New function. Call
+	xlib:display-finish-output on each map request.
+
 2009-04-28  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-second-mode.lisp (sm-handle-motion-notify):

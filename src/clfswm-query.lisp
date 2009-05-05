@@ -122,7 +122,7 @@
 					 :background (get-color *query-background*)
 					 :font *query-font*
 					 :line-style :solid))
-  (xlib:map-window *query-window*)
+  (map-window *query-window*)
   (query-print-string)
   (wait-no-key-or-button-press))
 

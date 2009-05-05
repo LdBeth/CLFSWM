@@ -211,7 +211,7 @@
 				      :background (get-color *sm-background-color*)
 				      :font *sm-font*
 				      :line-style :solid))
-  (xlib:map-window *sm-window*)
+  (map-window *sm-window*)
   (draw-second-mode-window)
   (no-focus)
   (ungrab-main-keys)
