@@ -1,3 +1,8 @@
+2009-05-09  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-layout.lisp (maximize-layout): New layout: Maximize
+	windows and frames in there parent frame.
+
 2009-05-05  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/*.lisp: Add support for Clozure Common Lisp (CCL).

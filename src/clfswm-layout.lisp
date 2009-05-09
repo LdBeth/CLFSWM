@@ -33,7 +33,7 @@
 ;;;      child in screen size (integer) as 5 values (rx, ry, rw, rh).
 ;;;      This method can use the float size of the child (x, y ,w , h).
 ;;;      It can be specialised for xlib:window or frame
-;;;   2- Define a seter function for your layout
+;;;   2- Define a setter function for your layout
 ;;;   3- Register your new layout with register-layout or create
 ;;;      a sub menu for it with register-layout-sub-menu.
 
@@ -152,6 +152,26 @@
   (set-layout #'no-layout))
 
 (register-layout 'set-no-layout)
+
+
+;;; Maximize layout
+(defgeneric maximize-layout (child parent)
+  (:documentation "Maximize layout: Maximize windows and frames in there parent frame"))
+
+(defmethod maximize-layout (child parent)
+  (declare (ignore child))
+  (with-slots (rx ry rw rh) parent
+    (values (1+ rx)
+	    (1+ ry)
+	    (- rw 2)
+	    (- rh 2))))
+
+
+(defun set-maximize-layout ()
+  "Maximize layout: Maximize windows and frames in there parent frame"
+  (set-layout #'maximize-layout))
+
+(register-layout 'set-maximize-layout)
 
 
 
@@ -429,7 +449,7 @@
 		      (1+ ry)
 		      (- (round (* rw (- 1 size))) 2)
 		      (- rh 2)))))))
-	  
+
 (defun set-main-window-right-layout ()
   "Main window right: Main windows on the right. Others on the left."
   (layout-ask-size "Split size in percent (%)" :tile-size)
@@ -457,7 +477,7 @@
 		      (1+ ry)
 		      (- (round (* rw (- 1 size))) 2)
 		      (- rh 2)))))))
-	  
+
 (defun set-main-window-left-layout ()
   "Main window left: Main windows on the left. Others on the right."
   (layout-ask-size "Split size in percent (%)" :tile-size)
@@ -484,7 +504,7 @@
 		      (1+ (round (+ ry (* rh size))))
 		      (- rw 2)
 		      (- (round (* rh (- 1 size))) 2)))))))
-	  
+
 (defun set-main-window-top-layout ()
   "Main window top: Main windows on the top. Others on the bottom."
   (layout-ask-size "Split size in percent (%)" :tile-size)
@@ -511,7 +531,7 @@
 		      (1+ ry)
 		      (- rw 2)
 		      (- (round (* rh (- 1 size))) 2)))))))
-	  
+
 (defun set-main-window-bottom-layout ()
   "Main window bottom: Main windows on the bottom. Others on the top."
   (layout-ask-size "Split size in percent (%)" :tile-size)
@@ -592,7 +612,7 @@ Or do actions on corners - Skip windows in main window list"
   (unless (do-corner-action root-x root-y *corner-main-mode-left-button*)
     (if (and (frame-p *current-child*)
 	     (member window (frame-data-slot *current-child* :main-window-list)))
-	(replay-button-event) 
+	(replay-button-event)
 	(mouse-click-to-focus-generic window root-x root-y #'move-frame))))
 
 

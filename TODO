@@ -7,6 +7,9 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
+- toggle-maximize-in-parent: maximize the current child in its parent (set its float coordinates
+    to 0 0 1 1)
+
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
    TODO :
    In ~/.clfswmrc:
