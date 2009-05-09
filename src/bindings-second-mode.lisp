@@ -107,6 +107,7 @@
   (define-second-key (#\Tab :shift) 'switch-to-last-child)
   (define-second-key ("Return" :mod-1) 'enter-frame)
   (define-second-key ("Return" :mod-1 :shift) 'leave-frame)
+  (define-second-key ("Return" :mod-5) 'frame-toggle-maximize)
   (define-second-key ("Page_Up" :mod-1) 'frame-lower-child)
   (define-second-key ("Page_Down" :mod-1) 'frame-raise-child)
   (define-second-key ("Home" :mod-1) 'switch-to-root-frame)

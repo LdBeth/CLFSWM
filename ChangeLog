@@ -1,5 +1,8 @@
 2009-05-09  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-util.lisp (frame-toggle-maximize): New function:
+	Maximize/Unmaximize the current frame in its parent frame.
+
 	* src/clfswm-layout.lisp (maximize-layout): New layout: Maximize
 	windows and frames in there parent frame.
 

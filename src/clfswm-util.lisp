@@ -214,6 +214,27 @@
 
 
 
+;;; Maximize function
+(defun frame-toggle-maximize ()
+  "Maximize/Unmaximize the current frame in its parent frame"
+  (when (frame-p *current-child*)
+    (let ((unmaximized-coords (frame-data-slot *current-child* :unmaximized-coords)))
+      (if unmaximized-coords
+	  (with-slots (x y w h) *current-child*
+	    (destructuring-bind (nx ny nw nh) unmaximized-coords
+	      (setf (frame-data-slot *current-child* :unmaximized-coords) nil
+		    x nx y ny w nw h nh)))
+	  (with-slots (x y w h) *current-child*
+	    (setf (frame-data-slot *current-child* :unmaximized-coords)
+		  (list x y w h)
+		  x 0 y 0 w 1 h 1))))
+    (show-all-children *current-root*)))
+
+
+
+
+
+
 
 
 
@@ -1215,7 +1236,6 @@ For window: set current child to window or its parent according to window-parent
     (if (menu-item menu)
        (open-menu menu)
        (info-mode '("Command 'update-menus' not found")))))
-
 
 
 

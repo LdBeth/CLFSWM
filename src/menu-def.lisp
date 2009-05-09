@@ -77,6 +77,7 @@
 
 
 (add-sub-menu 'frame-menu "a" 'frame-adding-menu "Adding frame menu")
+(add-menu-key 'frame-menu "x" 'frame-toggle-maximize)
 (add-sub-menu 'frame-menu "l" 'frame-layout-menu "Frame layout menu")
 (add-sub-menu 'frame-menu "n" 'frame-nw-hook-menu "Frame new window hook menu")
 (add-sub-menu 'frame-menu "m" 'frame-movement-menu "Frame movement menu")
