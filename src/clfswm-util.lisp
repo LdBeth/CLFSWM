@@ -228,7 +228,8 @@
 	    (setf (frame-data-slot *current-child* :unmaximized-coords)
 		  (list x y w h)
 		  x 0 y 0 w 1 h 1))))
-    (show-all-children *current-root*)))
+    (show-all-children (find-parent-frame *current-child*))
+    (leave-second-mode)))
 
 
 

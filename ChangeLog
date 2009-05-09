@@ -1,3 +1,8 @@
+2009-05-10  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (frame-toggle-maximize): Redisplay only the
+	parent frame of the  current frame.
+
 2009-05-09  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (frame-toggle-maximize): New function:
