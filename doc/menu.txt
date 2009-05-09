@@ -13,188 +13,6 @@ y: < Utility menu >
 m: < CLFSWM menu >
 
 Standard-Menu
-a: < GAMES >
-b: < APPS >
-c: < XSHELLS >
-d: < HELP >
-
-Games
-a: < PUZZLES >
-b: < ARCADE >
-c: < BOARD >
-d: < TETRIS-LIKE >
-
-Puzzles
-a: LMarbles
-b: Glotski
-c: Fish Fillets
-d: Pathological
-e: Einstein
-
-Arcade
-a: Thrust
-b: Thrust
-c: lbreakout2
-d: Ri-li
-e: xmoto
-f: Toppler
-g: Childsplay
-h: Barrage
-i: trackballs
-j: rrootage
-k: Abuse
-
-Board
-a: eboard
-
-Tetris-Like
-a: LTris
-b: Frozen-Bubble
-
-Apps
-a: < NET >
-b: < SYSTEM >
-c: < VIEWERS >
-d: < PROGRAMMING >
-e: < EMULATORS >
-f: < EDITORS >
-g: < MATH >
-h: < GRAPHICS >
-i: < TOOLS >
-j: < DATABASES >
-k: < EDUCATION >
-l: < SOUND >
-m: < SHELLS >
-
-Net
-a: Lynx
-b: Lynx Manual
-c: Iceweasel
-d: Icedove Mail
-e: Mutt
-f: Links 2
-g: Links 2 (text)
-h: w3m
-i: Licq
-j: Telnet
-
-System
-a: X-Terminal as root (GKsu)
-b: Aptitude
-c: RT2500 configuration utility
-d: Top
-e: Pstree
-f: Pstree
-g: reportbug
-h: KControl
-i: KInfoCenter
-j: Task selector
-k: < LANGUAGE-ENVIRONMENT >
-l: ROX Filer
-m: KDebugDialog
-n: KDCOP
-o: GDM flexiserver
-p: GDM flexiserver in Xnest
-q: GDM Photo Setup
-r: GDM Setup
-s: Kicker
-t: < ADMIN >
-
-Language-Environment
-a: Native Language Environment
-b: Native Language Environment - remove
-c: Japanese environment
-d: Thai environment
-e: Korean environment
-f: Danish environment
-g: German environment
-h: Spanish environment
-i: French environment
-j: Russian environment
-k: Belarusian environment
-l: Bulgarian environment
-m: Macedonian environment
-n: Serbian environment
-o: Ukrainian environment
-p: Polish environment
-q: Catalan environment
-r: Lithuanian environment
-s: Turkish environment
-
-Admin
-a: alsaconf - Configure your soundcards for the ALSA system
-
-Viewers
-a: GV
-b: gmplayer
-c: Xpdf
-d: VLC media player
-e: ImageMagick
-
-Programming
-a: Tclsh8.4
-b: TkWish8.4
-c: Python (v2.4)
-d: BeanShell (text)
-e: BeanShell (windowed)
-f: Guile 1.8
-g: GDB
-
-Emulators
-a: hatari
-
-Editors
-a: Emacs 21 (X11)
-b: Emacs 21 (text)
-c: Nano
-d: AbiWord Word Processor
-e: OpenOffice.org Writer
-
-Math
-a: OpenOffice.org Math
-b: Bc
-c: Dc
-d: OpenOffice.org Calc
-
-Graphics
-a: tuxpaint
-b: tuxpaint-config
-c: xfig - XFig is a menu-driven tool that allows the user   	  	     to draw and manipulate objects interactively in   	  	     an X window. The resulting pictures can be saved,  		     printed on postscript printers, or converted to a  		     variety of other formats (e.g. to allow inclusion  		     in LaTeX documents or web pages) using the  		     transfig program.
-d: The GIMP
-e: OpenOffice.org Draw
-f: OpenOffice.org Impress
-
-Tools
-a: k3b
-b: xvkbd
-c: Rclock
-
-Databases
-a: OpenOffice.org Base
-b: HSQLDB Database Manager
-c: HSQLDB Database Manager (Swing)
-d: HSQLDB Query Tool
-e: HSQLDB Transfer Tool
-
-Education
-a: gcompris
-b: gcompris profile editor
-
-Sound
-a: Alsamixergui
-
-Shells
-a: Bash
-b: Sh
-c: tcsh
-
-Xshells
-a: XTerm
-b: XTerm (Unicode)
-c: Rxvt
-
-Help
-a: Info
 
 Child-Menu
 r: Rename the current child
@@ -211,6 +29,7 @@ Page_Down: Raise the child in the current frame
 
 Frame-Menu
 a: < Adding frame menu >
+x: Maximize/Unmaximize the current frame in its parent frame
 l: < Frame layout menu >
 n: < Frame new window hook menu >
 m: < Frame movement menu >
@@ -225,11 +44,12 @@ p: Add a placed frame in the current frame
 Frame-Layout-Menu
 a: < Frame fast layout menu >
 b: No layout: Maximize windows in there frame - Leave frame to there size
-c: < Frame tile layout menu >
-d: < Tile in one direction layout menu >
-e: < Tile with some space on one side menu >
-f: < Main window layout menu >
-g: < The GIMP layout menu >
+c: Maximize layout: Maximize windows and frames in there parent frame
+d: < Frame tile layout menu >
+e: < Tile in one direction layout menu >
+f: < Tile with some space on one side menu >
+g: < Main window layout menu >
+h: < The GIMP layout menu >
 
 Frame-Fast-Layout-Menu
 s: Switch between two layouts
@@ -288,6 +108,11 @@ p: < Frame pack menu >
 f: < Frame fill menu >
 r: < Frame resize menu >
 c: Center the current frame
+Right: Select the next brother frame
+Left: Select the previous brother frame
+Up: Select the next level
+Down: Select the previous levelframe
+Tab: Select the next child
 
 Frame-Pack-Menu
 Up: Pack the current frame up
