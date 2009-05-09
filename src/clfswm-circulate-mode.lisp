@@ -95,7 +95,7 @@
 		*current-child* (frame-selected-child *circulate-parent*)))
 	(when frame-is-root?
 	  (setf *current-root* *current-child*))))
-    (show-all-children *current-root*)
+    (show-all-children (find-parent-frame *current-child*))
     (draw-circulate-mode-window)))
 
 

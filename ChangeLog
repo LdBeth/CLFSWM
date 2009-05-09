@@ -2,6 +2,8 @@
 
 	* src/clfswm-circulate-mode.lisp (reorder-child)
 	(reorder-brother): Handle empty frames.
+	(reorder-brother): Redisplay only the parent frame of the  current
+	child.
 
 	* src/clfswm-util.lisp (frame-toggle-maximize): Redisplay only the
 	parent frame of the  current frame.
