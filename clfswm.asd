@@ -34,7 +34,7 @@
 			 (:file "clfswm-internal"
 				:depends-on ("xlib-util" "clfswm-keys" "netwm-util" "tools" "config"))
 			 (:file "clfswm-circulate-mode"
-				:depends-on ("xlib-util" "clfswm-keys"
+				:depends-on ("xlib-util" "clfswm-keys" "clfswm-generic-mode"
 							 "clfswm-internal" "netwm-util" "tools" "config"))
 			 (:file "clfswm"
 				:depends-on ("xlib-util" "netwm-util" "clfswm-keys" "config"

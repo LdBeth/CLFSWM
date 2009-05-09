@@ -1,5 +1,7 @@
 2009-05-10  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* clfswm.asd: Dependency fix for clfswm-generic-mode.
+
 	* src/clfswm-circulate-mode.lisp (reorder-child)
 	(reorder-brother): Handle empty frames.
 	(reorder-brother): Redisplay only the parent frame of the  current
