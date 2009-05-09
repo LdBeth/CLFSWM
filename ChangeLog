@@ -1,5 +1,8 @@
 2009-05-10  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-circulate-mode.lisp (reorder-child)
+	(reorder-brother): Handle empty frames.
+
 	* src/clfswm-util.lisp (frame-toggle-maximize): Redisplay only the
 	parent frame of the  current frame.
 

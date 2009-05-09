@@ -72,10 +72,12 @@
   (with-slots (child) *current-child*
     (unless *circulate-orig*
       (reset-circulate-child))
-    (let ((elem (nth (mod (incf *circulate-hit* direction) (length *circulate-orig*)) *circulate-orig*)))
-      (setf child (nconc (list elem) (remove elem *circulate-orig*)))))
-  (show-all-children)
-  (draw-circulate-mode-window))
+    (let ((len (length *circulate-orig*)))
+      (when (plusp len)
+	(let ((elem (nth (mod (incf *circulate-hit* direction) len) *circulate-orig*)))
+	  (setf child (nconc (list elem) (remove elem *circulate-orig*)))))
+      (show-all-children)
+      (draw-circulate-mode-window))))
 
 
 (defun reorder-brother (direction)
@@ -86,11 +88,13 @@
 	(select-current-frame nil))
     (unless (and *circulate-orig* *circulate-parent*)
       (reset-circulate-brother))
-    (let ((elem (nth (mod  (incf *circulate-hit* direction) (length *circulate-orig*)) *circulate-orig*)))
-      (setf (frame-child *circulate-parent*) (nconc (list elem) (remove elem *circulate-orig*))
-	    *current-child* (frame-selected-child *circulate-parent*)))
-    (when frame-is-root?
-      (setf *current-root* *current-child*))
+    (let ((len (length *circulate-orig*)))
+      (when (plusp len)
+	(let ((elem (nth (mod  (incf *circulate-hit* direction) len) *circulate-orig*)))
+	  (setf (frame-child *circulate-parent*) (nconc (list elem) (remove elem *circulate-orig*))
+		*current-child* (frame-selected-child *circulate-parent*)))
+	(when frame-is-root?
+	  (setf *current-root* *current-child*))))
     (show-all-children *current-root*)
     (draw-circulate-mode-window)))
 
