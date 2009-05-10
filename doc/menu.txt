@@ -29,13 +29,13 @@ Page_Down: Raise the child in the current frame
 
 Frame-Menu
 a: < Adding frame menu >
-x: Maximize/Unmaximize the current frame in its parent frame
 l: < Frame layout menu >
 n: < Frame new window hook menu >
 m: < Frame movement menu >
 f: < Frame focus policy menu >
 w: < Managed window type menu >
 s: < Frame miscallenous menu >
+x: Maximize/Unmaximize the current frame in its parent frame
 
 Frame-Adding-Menu
 a: Add a default frame in the current frame

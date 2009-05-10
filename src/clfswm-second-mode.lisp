@@ -238,6 +238,7 @@
 
 
 (defun second-key-mode ()
+  "Switch to editing mode"
   (generic-mode 'exit-second-loop
 		:enter-function #'sm-enter-function
 		:loop-function #'sm-loop-function

@@ -77,14 +77,13 @@
 
 
 (add-sub-menu 'frame-menu "a" 'frame-adding-menu "Adding frame menu")
-(add-menu-key 'frame-menu "x" 'frame-toggle-maximize)
 (add-sub-menu 'frame-menu "l" 'frame-layout-menu "Frame layout menu")
 (add-sub-menu 'frame-menu "n" 'frame-nw-hook-menu "Frame new window hook menu")
 (add-sub-menu 'frame-menu "m" 'frame-movement-menu "Frame movement menu")
 (add-sub-menu 'frame-menu "f" 'frame-focus-policy "Frame focus policy menu")
 (add-sub-menu 'frame-menu "w" 'frame-managed-window-menu "Managed window type menu")
 (add-sub-menu 'frame-menu "s" 'frame-miscellaneous-menu "Frame miscallenous menu")
-
+(add-menu-key 'frame-menu "x" 'frame-toggle-maximize)
 
 
 (add-menu-key 'frame-adding-menu "a" 'add-default-frame)
