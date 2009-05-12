@@ -1,3 +1,15 @@
+2009-05-13  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-second-mode.lisp (sm-handle-motion-notify): Handle
+	motion with a default modifier.
+
+	* src/clfswm.lisp (handle-motion-notify): Handle motion with a
+	default modifier.
+
+	* src/clfswm-info.lisp (info-mode): Handle motion with a default
+	modifier.
+	(info-mode): Optimization in loop function.
+
 2009-05-10  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-circulate-mode.lisp (reorder-brother): Handle

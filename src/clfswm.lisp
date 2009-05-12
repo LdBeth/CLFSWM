@@ -50,7 +50,9 @@
 (defun handle-motion-notify (&rest event-slots &key window root-x root-y &allow-other-keys)
   (declare (ignore event-slots))
   (unless (compress-motion-notify)
-    (funcall-button-from-code *main-mouse* 'motion 0 window root-x root-y *fun-press*)))
+    (funcall-button-from-code *main-mouse* 'motion
+			      (modifiers->state *default-modifiers*)
+			      window root-x root-y *fun-press*)))
 
 
 (defun handle-configure-request (&rest event-slots &key stack-mode #|parent|# window #|above-sibling|#

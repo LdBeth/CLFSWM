@@ -179,7 +179,7 @@
   (define-info-mouse (2) 'mouse-leave-info-mode)
   (define-info-mouse (4) 'info-mouse-previous-line)
   (define-info-mouse (5) 'info-mouse-next-line)
-  (define-info-mouse ('Motion) 'info-mouse-motion nil))
+  (define-info-mouse ('motion) 'info-mouse-motion nil))
 
 (add-hook *binding-hook* 'set-default-info-mouse)
 
@@ -236,7 +236,8 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 		 (handle-motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
 		   (declare (ignore event-slots))
 		   (unless (compress-motion-notify)
-		     (funcall-button-from-code *info-mouse* 'motion 0 window root-x root-y *fun-press* (list info))))
+		     (funcall-button-from-code *info-mouse* 'motion (modifiers->state *default-modifiers*)
+					       window root-x root-y *fun-press* (list info))))
 		 (handle-button-press (&rest event-slots &key window root-x root-y code state &allow-other-keys)
 		   (declare (ignore event-slots))
 		   (funcall-button-from-code *info-mouse* code state window root-x root-y *fun-press* (list info)))
@@ -250,8 +251,7 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 	    (xgrab-keyboard *root*))
 	  (generic-mode 'exit-info-loop
 			:loop-function (lambda ()
-					 (raise-window (info-window info))
-					 (draw-info-window info))
+					 (raise-window (info-window info)))
 			:button-press-hook #'handle-button-press
 			:button-release-hook #'handle-button-release
 			:motion-notify-hook #'handle-motion-notify
