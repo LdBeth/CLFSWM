@@ -1,5 +1,8 @@
 2009-05-13  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-circulate-mode.lisp (reorder-brother): Ensure that
+	the parent is a frame.
+
 	* src/clfswm-second-mode.lisp (sm-handle-motion-notify): Handle
 	motion with a default modifier.
 

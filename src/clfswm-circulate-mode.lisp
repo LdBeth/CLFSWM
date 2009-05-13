@@ -90,9 +90,10 @@
       (reset-circulate-brother))
     (let ((len (length *circulate-orig*)))
       (when (plusp len)
-	(let ((elem (nth (mod  (incf *circulate-hit* direction) len) *circulate-orig*)))
-	  (setf (frame-child *circulate-parent*) (nconc (list elem) (remove elem *circulate-orig*))
-		*current-child* (frame-selected-child *circulate-parent*)))
+	(when (frame-p *circulate-parent*)
+	  (let ((elem (nth (mod  (incf *circulate-hit* direction) len) *circulate-orig*)))
+	    (setf (frame-child *circulate-parent*) (nconc (list elem) (remove elem *circulate-orig*))
+		  *current-child* (frame-selected-child *circulate-parent*))))
 	(when frame-is-root?
 	  (setf *current-root* *current-child*))))
     (show-all-children (if frame-is-root?
