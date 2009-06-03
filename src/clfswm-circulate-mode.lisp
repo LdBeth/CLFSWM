@@ -69,6 +69,7 @@
 
 
 (defun reorder-child (direction)
+  (no-focus)
   (with-slots (child) *current-child*
     (unless *circulate-orig*
       (reset-circulate-child))
@@ -81,6 +82,7 @@
 
 
 (defun reorder-brother (direction)
+  (no-focus)
   (let ((frame-is-root? (and (equal *current-root* *current-child*)
 			     (not (equal *current-root* *root-frame*)))))
     (if frame-is-root?

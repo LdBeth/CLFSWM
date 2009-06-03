@@ -107,24 +107,27 @@
 
 
 (defun query-enter-function ()
-  (setf *query-font* (xlib:open-font *display* *query-font-string*)
-	*query-window* (xlib:create-window :parent *root*
-					   :x 0 :y 0
-					   :width (- (xlib:screen-width *screen*) 2)
-					   :height (* 3 (+ (xlib:max-char-ascent *query-font*) (xlib:max-char-descent *query-font*)))
-					   :background (get-color *query-background*)
-					   :border-width 1
-					   :border (get-color *query-border*)
-					   :colormap (xlib:screen-default-colormap *screen*)
-					   :event-mask '(:exposure :key-press))
-	*query-gc* (xlib:create-gcontext :drawable *query-window*
-					 :foreground (get-color *query-foreground*)
-					 :background (get-color *query-background*)
-					 :font *query-font*
-					 :line-style :solid))
-  (map-window *query-window*)
-  (query-print-string)
-  (wait-no-key-or-button-press))
+  (let ((width (- (xlib:screen-width *screen*) 2))
+	(height (* 3 (+ (xlib:max-char-ascent *query-font*) (xlib:max-char-descent *query-font*)))))
+    (with-placement (*query-mode-placement* x y width height)
+      (setf *query-font* (xlib:open-font *display* *query-font-string*)
+	    *query-window* (xlib:create-window :parent *root*
+					       :x x :y y
+					       :width width
+					       :height height
+					       :background (get-color *query-background*)
+					       :border-width 1
+					       :border (get-color *query-border*)
+					       :colormap (xlib:screen-default-colormap *screen*)
+					       :event-mask '(:exposure :key-press))
+	    *query-gc* (xlib:create-gcontext :drawable *query-window*
+					     :foreground (get-color *query-foreground*)
+					     :background (get-color *query-background*)
+					     :font *query-font*
+					     :line-style :solid))
+      (map-window *query-window*)
+      (query-print-string)
+      (wait-no-key-or-button-press))))
 
 
 (defun query-leave-function ()

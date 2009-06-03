@@ -86,11 +86,8 @@ Window types are in +WINDOW-TYPES+.")
 
 (defun banish-pointer ()
   "Move the pointer to the lower right corner of the screen"
-  (xlib:warp-pointer *root*
-		     (1- (xlib:screen-width *screen*))
-		     (1- (xlib:screen-height *screen*))))
-
-
+  (with-placement (*banish-pointer-placement* x y)
+    (xlib:warp-pointer *root* x y)))
 
 
 

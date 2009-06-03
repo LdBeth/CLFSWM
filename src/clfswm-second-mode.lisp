@@ -197,22 +197,22 @@
 
 
 (defun sm-enter-function ()
-  (setf *in-second-mode* t
-	*sm-window* (xlib:create-window :parent *root*
-					:x (truncate (/ (- (xlib:screen-width *screen*) *sm-width*) 2))
-					:y 0
-					:width *sm-width* :height *sm-height*
+  (with-placement (*second-mode-placement* x y *sm-width* *sm-height*)
+    (setf *in-second-mode* t
+	  *sm-window* (xlib:create-window :parent *root*
+					  :x x :y y
+					  :width *sm-width* :height *sm-height*
+					  :background (get-color *sm-background-color*)
+					  :border-width 1
+					  :border (get-color *sm-border-color*)
+					  :colormap (xlib:screen-default-colormap *screen*)
+					  :event-mask '(:exposure))
+	  *sm-font* (xlib:open-font *display* *sm-font-string*)
+	  *sm-gc* (xlib:create-gcontext :drawable *sm-window*
+					:foreground (get-color *sm-foreground-color*)
 					:background (get-color *sm-background-color*)
-					:border-width 1
-					:border (get-color *sm-border-color*)
-					:colormap (xlib:screen-default-colormap *screen*)
-					:event-mask '(:exposure))
-	*sm-font* (xlib:open-font *display* *sm-font-string*)
-	*sm-gc* (xlib:create-gcontext :drawable *sm-window*
-				      :foreground (get-color *sm-foreground-color*)
-				      :background (get-color *sm-background-color*)
-				      :font *sm-font*
-				      :line-style :solid))
+					:font *sm-font*
+					:line-style :solid)))
   (map-window *sm-window*)
   (draw-second-mode-window)
   (no-focus)

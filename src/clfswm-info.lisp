@@ -188,7 +188,7 @@
 ;;;| Main mode
 ;;;`-----
 
-(defun info-mode (info-list &key (x 0) (y 0) (width nil) (height nil))
+(defun info-mode (info-list &key (width nil) (height nil))
   "Open the info mode. Info-list is a list of info: One string per line
 Or for colored output: a list (line_string color)
 Or ((1_word color) (2_word color) 3_word (4_word color)...)"
@@ -203,74 +203,77 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 					       (t (length l)))))))
 			 (t (length (first line)))))
 		 (t (length line)))))
-      (let* ((pointer-grabbed-p (xgrab-pointer-p))
-	     (keyboard-grabbed-p (xgrab-keyboard-p))
-	     (font (xlib:open-font *display* *info-font-string*))
+      (let* ((font (xlib:open-font *display* *info-font-string*))
 	     (ilw (xlib:max-char-width font))
 	     (ilh (+ (xlib:max-char-ascent font) (xlib:max-char-descent font) 1))
-	     (window (xlib:create-window :parent *root*
-					 :x x :y y
-					 :width (or width
-						    (min (* (+ (loop for l in info-list maximize (compute-size l)) 2) ilw)
-							 (- (xlib:screen-width *screen*) 2 x)))
-					 :height (or height
-						     (min (round (+ (* (length info-list) ilh) (/ ilh 2)))
-							  (- (xlib:screen-height *screen*) 2 y)))
-					 :background (get-color *info-background*)
-					 :colormap (xlib:screen-default-colormap *screen*)
-					 :border-width 1
-					 :border (get-color *info-border*)
-					 :event-mask '(:exposure)))
-	     (gc (xlib:create-gcontext :drawable window
-				       :foreground (get-color *info-foreground*)
-				       :background (get-color *info-background*)
-				       :font font
-				       :line-style :solid))
-	     (info (make-info :window window :gc gc :x 0 :y 0 :list info-list
-			      :font font :ilw ilw :ilh ilh
-			      :max-x (* (loop for l in info-list maximize (compute-size l)) ilw)
-			      :max-y (* (length info-list) ilh))))
-	(labels ((handle-key (&rest event-slots &key root code state &allow-other-keys)
-		   (declare (ignore event-slots root))
-		   (funcall-key-from-code *info-keys* code state info))
-		 (handle-motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
-		   (declare (ignore event-slots))
-		   (unless (compress-motion-notify)
-		     (funcall-button-from-code *info-mouse* 'motion (modifiers->state *default-modifiers*)
-					       window root-x root-y *fun-press* (list info))))
-		 (handle-button-press (&rest event-slots &key window root-x root-y code state &allow-other-keys)
-		   (declare (ignore event-slots))
-		   (funcall-button-from-code *info-mouse* code state window root-x root-y *fun-press* (list info)))
-		 (handle-button-release (&rest event-slots &key window root-x root-y code state &allow-other-keys)
-		   (declare (ignore event-slots))
-		   (funcall-button-from-code *info-mouse* code state window root-x root-y *fun-release* (list info))))
-	  (map-window window)
-	  (draw-info-window info)
-	  (xgrab-pointer *root* 68 69)
-	  (unless keyboard-grabbed-p
-	    (xgrab-keyboard *root*))
-	  (generic-mode 'exit-info-loop
-			:loop-function (lambda ()
-					 (raise-window (info-window info)))
-			:button-press-hook #'handle-button-press
-			:button-release-hook #'handle-button-release
-			:motion-notify-hook #'handle-motion-notify
-			:key-press-hook #'handle-key)
-	  (if pointer-grabbed-p
-	      (xgrab-pointer *root* 66 67)
-	      (xungrab-pointer))
-	  (unless keyboard-grabbed-p
-	    (xungrab-keyboard))
-	  (xlib:free-gcontext gc)
-	  (xlib:destroy-window window)
-	  (xlib:close-font font)
-	  (display-all-frame-info)
-	  (wait-no-key-or-button-press))))))
+	     (width (or width
+			(min (* (+ (loop for l in info-list maximize (compute-size l)) 2) ilw)
+			     (xlib:screen-width *screen*))))
+	     (height (or height
+			 (min (round (+ (* (length info-list) ilh) (/ ilh 2)))
+			      (xlib:screen-height *screen*)))))
+	(with-placement (*info-mode-placement* x y width height)
+	  (let* ((pointer-grabbed-p (xgrab-pointer-p))
+		 (keyboard-grabbed-p (xgrab-keyboard-p))
+		 (window (xlib:create-window :parent *root*
+					     :x x :y y
+					     :width width
+					     :height height
+					     :background (get-color *info-background*)
+					     :colormap (xlib:screen-default-colormap *screen*)
+					     :border-width 1
+					     :border (get-color *info-border*)
+					     :event-mask '(:exposure)))
+		 (gc (xlib:create-gcontext :drawable window
+					   :foreground (get-color *info-foreground*)
+					   :background (get-color *info-background*)
+					   :font font
+					   :line-style :solid))
+		 (info (make-info :window window :gc gc :x 0 :y 0 :list info-list
+				  :font font :ilw ilw :ilh ilh
+				  :max-x (* (loop for l in info-list maximize (compute-size l)) ilw)
+				  :max-y (* (length info-list) ilh))))
+	    (labels ((handle-key (&rest event-slots &key root code state &allow-other-keys)
+		       (declare (ignore event-slots root))
+		       (funcall-key-from-code *info-keys* code state info))
+		     (handle-motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
+		       (declare (ignore event-slots))
+		       (unless (compress-motion-notify)
+			 (funcall-button-from-code *info-mouse* 'motion (modifiers->state *default-modifiers*)
+						   window root-x root-y *fun-press* (list info))))
+		     (handle-button-press (&rest event-slots &key window root-x root-y code state &allow-other-keys)
+		       (declare (ignore event-slots))
+		       (funcall-button-from-code *info-mouse* code state window root-x root-y *fun-press* (list info)))
+		     (handle-button-release (&rest event-slots &key window root-x root-y code state &allow-other-keys)
+		       (declare (ignore event-slots))
+		       (funcall-button-from-code *info-mouse* code state window root-x root-y *fun-release* (list info))))
+	      (map-window window)
+	      (draw-info-window info)
+	      (xgrab-pointer *root* 68 69)
+	      (unless keyboard-grabbed-p
+		(xgrab-keyboard *root*))
+	      (generic-mode 'exit-info-loop
+			    :loop-function (lambda ()
+					     (raise-window (info-window info)))
+			    :button-press-hook #'handle-button-press
+			    :button-release-hook #'handle-button-release
+			    :motion-notify-hook #'handle-motion-notify
+			    :key-press-hook #'handle-key)
+	      (if pointer-grabbed-p
+		  (xgrab-pointer *root* 66 67)
+		  (xungrab-pointer))
+	      (unless keyboard-grabbed-p
+		(xungrab-keyboard))
+	      (xlib:free-gcontext gc)
+	      (xlib:destroy-window window)
+	      (xlib:close-font font)
+	      (display-all-frame-info)
+	      (wait-no-key-or-button-press))))))))
 
 
 
 
-(defun info-mode-menu (item-list &key (x 0) (y 0) (width nil) (height nil))
+(defun info-mode-menu (item-list &key (width nil) (height nil))
   "Open an info help menu.
 Item-list is: '((key function) separator (key function))
 or with explicit docstring: '((key function \"documentation 1\") (key function \"bla bla\") (key function))
@@ -299,7 +302,7 @@ Function can be a function or a list (function color) for colored output"
 			     info-list)
 		       (define-key key function)))))
 	  (t (push (list (format nil "-=- ~A -=-" item) *menu-color-comment*) info-list))))
-      (info-mode (nreverse info-list) :x x :y y :width width :height height)
+      (info-mode (nreverse info-list) :width width :height height)
       (dolist (item item-list)
 	(when (consp item)
 	  (let ((key (first item)))

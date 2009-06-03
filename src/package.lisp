@@ -94,8 +94,6 @@ It is particulary useful with CLISP/MIT-CLX.")
   "Config(): Default mouse focus policy. One of :click, :sloppy, :sloppy-strict or :sloppy-select.")
 
 
-
-
 (defclass frame ()
   ((name :initarg :name :accessor frame-name :initform nil)
    (number :initarg :number :accessor frame-number :initform 0)
@@ -243,6 +241,24 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 (defparameter *vt-keyboard-on* nil)
 (defparameter *clfswm-terminal* nil)
+
+
+;;; Placement variables. A list of two absolute coordinates
+;;; or a function: 'Y-X-placement' for absolute placement or
+;;; 'Y-X-child-placement' for child relative placement.
+;;; Where Y-X are one of:
+;;;
+;;; top-left     top-middle     top-right
+;;; middle-left  middle-middle  middle-right
+;;; bottom-left  bottom-middle  bottom-right
+;;;
+(defparameter *banish-pointer-placement* 'bottom-left-placement)
+(defparameter *second-mode-placement* 'top-middle-child-placement)
+(defparameter *info-mode-placement* 'top-middle-child-placement)
+(defparameter *query-mode-placement* 'bottom-left-placement)
+
+
+
 
 ;; For debug - redefine defun
 ;;(shadow :defun)
