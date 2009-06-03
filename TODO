@@ -7,10 +7,6 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Add a hook for banish-pointer -> by default to bottom right corner
-
-- Add a placement hook for all windows (second-mode, info-mode...)
-
 - Alt+button draw on the selected frame if in the root frame
 
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
