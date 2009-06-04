@@ -107,11 +107,11 @@
 
 
 (defun query-enter-function ()
+  (setf *query-font* (xlib:open-font *display* *query-font-string*))
   (let ((width (- (xlib:screen-width *screen*) 2))
 	(height (* 3 (+ (xlib:max-char-ascent *query-font*) (xlib:max-char-descent *query-font*)))))
     (with-placement (*query-mode-placement* x y width height)
-      (setf *query-font* (xlib:open-font *display* *query-font-string*)
-	    *query-window* (xlib:create-window :parent *root*
+      (setf *query-window* (xlib:create-window :parent *root*
 					       :x x :y y
 					       :width width
 					       :height height
