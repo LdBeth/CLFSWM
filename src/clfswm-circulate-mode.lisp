@@ -39,8 +39,8 @@
   (raise-window *circulate-window*)
   (clear-pixmap-buffer *circulate-window* *circulate-gc*)
   (let* ((text (format nil "Current: ~A  Focus: ~A"
-		       (child-fullname *current-child*)
-		       (child-fullname (xlib:input-focus *display*))))
+		       (ensure-printable (child-fullname *current-child*))
+		       (ensure-printable (child-fullname (xlib:input-focus *display*)))))
 	 (len (length text)))
     (xlib:draw-glyphs *pixmap-buffer* *circulate-gc*
 		      (truncate (/ (- *circulate-width* (* (xlib:max-char-width *circulate-font*) len)) 2))

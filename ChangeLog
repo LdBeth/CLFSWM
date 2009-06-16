@@ -1,5 +1,8 @@
 2009-06-16  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-circulate-mode.lisp (draw-circulate-mode-window):
+	Ensure that all characters are printable.
+
 	* src/config.lisp (get-fullscreen-size): Adjust default fullscreen
 	sizes.
 
