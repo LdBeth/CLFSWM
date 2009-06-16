@@ -52,6 +52,7 @@
 	   :expand-newline
 	   :ensure-list
 	   :ensure-printable
+	   :limit-length
 	   :ensure-n-elems
 	   :begin-with-2-spaces
 	   :string-equal-p
@@ -326,6 +327,9 @@ Return the result of the last hook"
 (defun ensure-printable (string &optional (new #\?))
   "Ensure a string is printable in ascii"
   (or (substitute-if-not new #'standard-char-p (or string "")) ""))
+
+(defun limit-length (string &optional (length 10))
+  (subseq string 0 (min (length string) length)))
 
 
 (defun ensure-n-elems (list n)

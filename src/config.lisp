@@ -252,6 +252,10 @@ on the root window in the main mode with the mouse")
   "Config(Circulate mode group): Circulate mode window height")
 
 
+(defparameter *circulate-text-limite* 30
+  "Config(Circulate mode group): Maximum text limite in the circulate window")
+
+
 
 ;;; CONFIG - Show key binding colors
 (defparameter *info-color-title* "Magenta"

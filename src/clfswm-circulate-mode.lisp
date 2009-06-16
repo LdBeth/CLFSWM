@@ -38,9 +38,11 @@
 (defun draw-circulate-mode-window ()
   (raise-window *circulate-window*)
   (clear-pixmap-buffer *circulate-window* *circulate-gc*)
-  (let* ((text (format nil "Current: ~A  Focus: ~A"
-		       (ensure-printable (child-fullname *current-child*))
-		       (ensure-printable (child-fullname (xlib:input-focus *display*)))))
+  (let* ((text (format nil "~A [~A]"
+		       (limit-length (ensure-printable (child-name (xlib:input-focus *display*)))
+				     *circulate-text-limite*)
+		       (limit-length (ensure-printable (child-name *current-child*))
+				     *circulate-text-limite*)))
 	 (len (length text)))
     (xlib:draw-glyphs *pixmap-buffer* *circulate-gc*
 		      (truncate (/ (- *circulate-width* (* (xlib:max-char-width *circulate-font*) len)) 2))
@@ -140,13 +142,14 @@
 
 (defun set-default-circulate-keys ()
   (define-circulate-key ("Escape") 'leave-circulate-mode)
+  (define-circulate-key ("g" :control) 'leave-circulate-mode)
+  (define-circulate-key ("Escape" :alt) 'leave-circulate-mode)
+  (define-circulate-key ("g" :control :alt) 'leave-circulate-mode)
   (define-circulate-key ("Tab" :mod-1) 'circulate-select-next-child)
   (define-circulate-key ("Tab" :mod-1 :shift) 'circulate-select-previous-child)
   (define-circulate-key ("Iso_Left_Tab" :mod-1 :shift) 'circulate-select-previous-child)
   (define-circulate-key ("Right" :mod-1) 'circulate-select-next-brother)
   (define-circulate-key ("Left" :mod-1) 'circulate-select-previous-brother)
-
-
   (define-circulate-release-key ("Alt_L" :alt) 'leave-circulate-mode))
 
 
@@ -201,45 +204,46 @@
 (defun circulate-mode (&key child-direction brother-direction)
   (setf *circulate-hit* 0)
   (set-circulate-leave-key)
-  (setf *circulate-font* (xlib:open-font *display* *circulate-font-string*)
-	*circulate-window* (xlib:create-window :parent *root*
-					       :x (truncate (/ (- (xlib:screen-width *screen*) *circulate-width*) 2))
-					       :y (- (xlib:screen-height *screen*) *circulate-height* 2)
-					       :width *circulate-width*
-					       :height *circulate-height*
+  (with-placement (*circulate-mode-placement* x y *circulate-width* *circulate-height*)
+    (setf *circulate-font* (xlib:open-font *display* *circulate-font-string*)
+	  *circulate-window* (xlib:create-window :parent *root*
+						 :x x
+						 :y y
+						 :width *circulate-width*
+						 :height *circulate-height*
+						 :background (get-color *circulate-background*)
+						 :border-width 1
+						 :border (get-color *circulate-border*)
+						 :colormap (xlib:screen-default-colormap *screen*)
+						 :event-mask '(:exposure :key-press))
+	  *circulate-gc* (xlib:create-gcontext :drawable *circulate-window*
+					       :foreground (get-color *circulate-foreground*)
 					       :background (get-color *circulate-background*)
-					       :border-width 1
-					       :border (get-color *circulate-border*)
-					       :colormap (xlib:screen-default-colormap *screen*)
-					       :event-mask '(:exposure :key-press))
-	*circulate-gc* (xlib:create-gcontext :drawable *circulate-window*
-					     :foreground (get-color *circulate-foreground*)
-					     :background (get-color *circulate-background*)
-					     :font *circulate-font*
-					     :line-style :solid))
-  (map-window *circulate-window*)
-  (draw-circulate-mode-window)
-  (when child-direction
-    (reorder-child child-direction))
-  (when brother-direction
-    (reorder-brother brother-direction))
-  (let ((grab-keyboard-p (xgrab-keyboard-p))
-	(grab-pointer-p (xgrab-pointer-p)))
-    (xgrab-pointer *root* 92 93)
-    (unless grab-keyboard-p
-      (ungrab-main-keys)
-      (xgrab-keyboard *root*))
-    (generic-mode 'exit-circulate-loop
-		  :loop-function #'circulate-loop-function
-		  :leave-function #'circulate-leave-function
-		  :key-press-hook #'circulate-handle-key-press
-		  :key-release-hook #'circulate-handle-key-release)
-    (unless grab-keyboard-p
-      (xungrab-keyboard)
-      (grab-main-keys))
-    (if grab-pointer-p
-	(xgrab-pointer *root* 66 67)
-	(xungrab-pointer))))
+					       :font *circulate-font*
+					       :line-style :solid))
+    (map-window *circulate-window*)
+    (draw-circulate-mode-window)
+    (when child-direction
+      (reorder-child child-direction))
+    (when brother-direction
+      (reorder-brother brother-direction))
+    (let ((grab-keyboard-p (xgrab-keyboard-p))
+	  (grab-pointer-p (xgrab-pointer-p)))
+      (xgrab-pointer *root* 92 93)
+      (unless grab-keyboard-p
+	(ungrab-main-keys)
+	(xgrab-keyboard *root*))
+      (generic-mode 'exit-circulate-loop
+		    :loop-function #'circulate-loop-function
+		    :leave-function #'circulate-leave-function
+		    :key-press-hook #'circulate-handle-key-press
+		    :key-release-hook #'circulate-handle-key-release)
+      (unless grab-keyboard-p
+	(xungrab-keyboard)
+	(grab-main-keys))
+      (if grab-pointer-p
+	  (xgrab-pointer *root* 66 67)
+	  (xungrab-pointer)))))
 
 
 (defun select-next-child ()

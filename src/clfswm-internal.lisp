@@ -469,6 +469,7 @@
 		(xlib:drawable-y window) ny
 		(xlib:drawable-width window) nw
 		(xlib:drawable-height window) nh)
+	  (xlib:display-finish-output *display*)
 	  change)))))
 
 
@@ -488,6 +489,7 @@
 		(xlib:drawable-y window) ry
 		(xlib:drawable-width window) rw
 		(xlib:drawable-height window) rh)
+	  (xlib:display-finish-output *display*)
 	  change)))))
 
 (defmethod adapt-child-to-parent (child parent)

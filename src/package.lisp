@@ -256,6 +256,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defparameter *second-mode-placement* 'top-middle-child-placement)
 (defparameter *info-mode-placement* 'top-left-child-placement)
 (defparameter *query-mode-placement* 'top-left-child-placement)
+(defparameter *circulate-mode-placement* 'bottom-middle-child-placement)
 
 
 
