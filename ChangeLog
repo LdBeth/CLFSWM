@@ -1,5 +1,8 @@
 2009-06-16  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/config.lisp (get-fullscreen-size): Adjust default fullscreen
+	sizes.
+
 	* src/clfswm-placement.lisp (*-child-placement): Adjust
 	coordinates to one pixel in the current child.
 
