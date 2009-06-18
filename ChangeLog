@@ -1,3 +1,11 @@
+2009-06-18  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/config.lisp (get-fullscreen-size):  One pixel adjustment
+ 	(again).
+
+	* src/clfswm-placement.lisp (*-child-placement): One pixel
+	adjustment (again).
+
 2009-06-16  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-circulate-mode.lisp (draw-circulate-mode-window):

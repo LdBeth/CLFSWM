@@ -38,7 +38,7 @@
 #+SBCL
 (require :sb-posix)
 
-#+SBCL
+#+(or SBCL ECL)
 (require :clx)
 
 #-ASDF

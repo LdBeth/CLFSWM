@@ -127,22 +127,22 @@
   (declare (ignore width height))
   (with-current-child-coord (x y w h)
     (declare (ignore w h))
-    (values (1+ x)
-	    (1+ y))))
+    (values (+ x 2)
+	    (+ y 2))))
 
 (defun top-middle-child-placement (&optional (width 0) (height 0))
   (declare (ignore height))
   (with-current-child-coord (x y w h)
     (declare (ignore h))
     (values (+ x (truncate (/ (- w width) 2)))
-	    (1+ y))))
+	    (+ y 2))))
 
 (defun top-right-child-placement (&optional (width 0) (height 0))
   (declare (ignore height))
   (with-current-child-coord (x y w h)
     (declare (ignore h))
-    (values (+ x (- w width 1))
-	    (1+ y))))
+    (values (+ x (- w width 2))
+	    (+ y 2))))
 
 
 
@@ -150,7 +150,7 @@
   (declare (ignore width))
   (with-current-child-coord (x y w h)
     (declare (ignore w))
-    (values (1+ x)
+    (values (+ x 2)
 	    (+ y (truncate (/ (- h height) 2))))))
 
 (defun middle-middle-child-placement (&optional (width 0) (height 0))
@@ -160,7 +160,7 @@
 
 (defun middle-right-child-placement (&optional (width 0) (height 0))
   (with-current-child-coord (x y w h)
-    (values (+ x (- w width 1))
+    (values (+ x (- w width 2))
 	    (+ y (truncate (/ (- h height) 2))))))
 
 
@@ -168,15 +168,15 @@
   (declare (ignore width))
   (with-current-child-coord (x y w h)
     (declare (ignore w))
-    (values (1+ x)
-	    (+ y (- h height 1)))))
+    (values (+ x 2)
+	    (+ y (- h height 2)))))
 
 (defun bottom-middle-child-placement (&optional (width 0) (height 0))
   (with-current-child-coord (x y w h)
     (values (+ x (truncate (/ (- w width) 2)))
-	    (+ y (- h height 1)))))
+	    (+ y (- h height 2)))))
 
 (defun bottom-right-child-placement (&optional (width 0) (height 0))
   (with-current-child-coord (x y w h)
-    (values (+ x (- w width 1))
-	    (+ y (- h height 1)))))
+    (values (+ x (- w width 2))
+	    (+ y (- h height 2)))))

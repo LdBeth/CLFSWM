@@ -59,7 +59,7 @@ A list of (predicate-function-on-window expected-string)")
 (defun get-fullscreen-size ()
   "Return the size of root child (values rx ry rw rh)
 You can tweak this to what you want"
-  (values -1 -1 (+ (xlib:screen-width *screen*)) (+ (xlib:screen-height *screen*))))
+  (values -2 -2 (+ (xlib:screen-width *screen*) 2) (+ (xlib:screen-height *screen*) 2)))
   ;;(values -1 -1 (xlib:screen-width *screen*) (xlib:screen-height *screen*)))
 ;; (values -1 -1 1024 768))
 ;;  (values 100 100 800 600))
