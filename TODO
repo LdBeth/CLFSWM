@@ -7,17 +7,15 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Alt+button draw on the selected frame if in the root frame
+- Mouse support in menu
 
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
    TODO :
    In ~/.clfswmrc:
       ;;;; AUTO-CONFIG - Do not edit those lines by hands: they are overwritten by CLFSWM
-      (defparameter *ma-var* value)
+      (defparameter *my-var* value)
       ...
       ;;;; AUTO-CONFIG End : You can add your configurations below this line.
-
-- Mouse support in menu
 
 - Remote access to the clfswm REPL [Philippe]
    this can be done with net.lisp or via xprop (ie the Stumpwm way).
