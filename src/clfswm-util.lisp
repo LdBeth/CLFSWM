@@ -695,7 +695,7 @@ For window: set current child to window or its parent according to window-parent
 	(show-all-children *current-root*))))
 
   (defun bind-or-jump (n)
-    "Bind or jump to a slot"
+    "Bind or jump to a slot (a frame or a window)"
     (setf current-slot (- n 1))
     (let ((default-bind `("b" bind-on-slot
 			      ,(format nil "Bind slot ~A on child: ~A" n (child-fullname *current-child*)))))

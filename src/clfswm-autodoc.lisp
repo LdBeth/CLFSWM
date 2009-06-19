@@ -26,6 +26,12 @@
 (in-package :clfswm)
 
 
+(defun is-string-keysym (k)
+  (when (stringp k)
+    (or (parse-integer k :junk-allowed t)
+	(intern (string-upcase k)))))
+
+
 (defun produce-doc-html (hash-table-key-list &optional (stream t))
   "Produce an html doc from a hash-table key"
   (labels ((clean-string (str)
@@ -48,9 +54,7 @@
 					      ,(clean-string (format nil "~{~@(~S ~)~}" (state->modifiers (second k)))))
 					     ("td align=\"center\" nowrap"
 					      ,(clean-string (format nil "~@(~S~)"
-								     (or (and (stringp (first k))
-									      (intern (string-upcase (first k))))
-									 (first k)))))
+								     (or (is-string-keysym (first k)) (first k)))))
 					     ("td style=\"color:#0000FF\" nowrap" ,(documentation (or (first v) (third v)) 'function)))
 					   acc)))
 			       hk)
@@ -101,9 +105,7 @@ or<br> CLFSWM> (produce-all-docs)"))))
 		 (when (consp k)
 		   (format stream "~&  ~20@<~{~@(~A~) ~}~> ~13@<~@(~A~)~>   ~A~%"
 			   (state->modifiers (second k))
-			   (remove #\# (remove #\\ (format nil "~S" (or (and (stringp (first k))
-									     (intern (string-upcase (first k))))
-									(first k)))))
+			   (remove #\# (remove #\\ (format nil "~S" (or (is-string-keysym (first k)) (first k)))))
 			   (documentation (or (first v) (third v)) 'function))))
 	     hk)
     (format stream "~2&"))
@@ -117,7 +119,7 @@ CLFSWM> (produce-doc-in-file \"my-keys.txt\")
 or
 CLFSWM> (produce-all-docs)~2%"))
 
-			   
+
 
 (defun produce-doc-in-file (filename)
   (format t "Producing text keys documentation in ~S " filename)
@@ -163,7 +165,7 @@ or
 CLFSWM> (produce-all-docs)~2%")))
 
 
-  
+
 (defun produce-menu-doc-in-file (filename)
   (format t "Producing text menus documentation in ~S " filename)
   (with-open-file (stream filename :direction :output
@@ -216,7 +218,7 @@ CLFSWM> (produce-menu-doc-html-in-file \"my-menu.html\")<br>
 or<br> CLFSWM> (produce-all-docs)"))))
 		    0 stream))))
 
-  
+
 (defun produce-menu-doc-html-in-file (filename)
   (format t "Producing html menus documentation in ~S " filename)
   (with-open-file (stream filename :direction :output
@@ -249,7 +251,7 @@ CLFSWM> (produce-corner-doc-in-file \"my-corner.txt\")
 or
 CLFSWM> (produce-all-docs)~2%")))
 
-  
+
 (defun produce-corner-doc-in-file (filename)
   (format t "Producing text corner documentation in ~S " filename)
   (with-open-file (stream filename :direction :output
@@ -292,7 +294,7 @@ CLFSWM> (produce-corner-doc-html-in-file \"my-corner.html\")<br>
 or<br> CLFSWM> (produce-all-docs)"))))
 		    0 stream))))
 
-  
+
 (defun produce-corner-doc-html-in-file (filename)
   (format t "Producing html corner documentation in ~S " filename)
   (with-open-file (stream filename :direction :output
