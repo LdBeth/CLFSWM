@@ -240,6 +240,7 @@
   (xgrab-init-pointer)
   (xgrab-init-keyboard)
   (init-last-child)
+  (reset-help-menu-list)
   (call-hook *binding-hook*)
   (map-window *no-focus-window*)
   (dbg *display*)

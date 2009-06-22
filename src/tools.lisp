@@ -133,7 +133,10 @@ Return the result of the last hook"
 
 
 (defmacro add-hook (hook &rest value)
-  `(setf ,hook (append ,hook (list ,@value))))
+  `(setf ,hook (append (typecase ,hook
+			 (list ,hook)
+			 (t (list ,hook)))
+		       (list ,@value))))
 
 (defmacro remove-hook (hook &rest value)
   (let ((i (gensym)))

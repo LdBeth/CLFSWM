@@ -484,32 +484,15 @@ Function can be a function or a list (function color) for colored output"
   (info-mode (list *version*)))
 
 
+
 (defun help-on-clfswm ()
   "Open the help and info window"
-  (info-mode-menu `((#\h show-global-key-binding)
-		    (#\b show-main-mode-key-binding)
-		    (#\c show-corner-help)
-		    (#\g show-config-variable)
-		    (#\d show-date)
-		    (#\p show-cpu-proc)
-		    (#\m show-mem-proc)
-		    (#\x (xmms-info-menu ,*menu-color-submenu*))
-		    (#\v show-version)
-		    (#\i (info-on-cd-menu ,*menu-color-submenu*)))))
+  (info-mode-menu *help-menu-list*))
 
 
 (defun help-on-second-mode ()
   "Open the help and info window for the second mode"
-  (info-mode-menu `((#\h show-global-key-binding)
-		    (#\b show-second-mode-key-binding)
-		    (#\c show-corner-help)
-		    (#\g show-config-variable)
-		    (#\d show-date)
-		    (#\p show-cpu-proc)
-		    (#\m show-mem-proc)
-		    (#\x (xmms-info-menu ,*menu-color-submenu*))
-		    (#\v show-version)
-		    (#\i (info-on-cd-menu ,*menu-color-submenu*)))))
+  (info-mode-menu *help-menu-list*))
 
 
 

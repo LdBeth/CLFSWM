@@ -171,9 +171,13 @@
 
 
 (defun circulate-leave-function ()
-  (xlib:destroy-window *circulate-window*)
-  (xlib:close-font *circulate-font*)
-  (xlib:display-finish-output *display*))
+  (when *circulate-window*
+    (xlib:destroy-window *circulate-window*))
+  (when *circulate-font*
+    (xlib:close-font *circulate-font*))
+  (xlib:display-finish-output *display*)
+  (setf *circulate-window* nil
+	*circulate-font* nil))
 
 (defun circulate-loop-function ()
   ;;; Check if the key modifier is alway pressed
@@ -238,6 +242,7 @@
 		    :leave-function #'circulate-leave-function
 		    :key-press-hook #'circulate-handle-key-press
 		    :key-release-hook #'circulate-handle-key-release)
+      (circulate-leave-function)
       (unless grab-keyboard-p
 	(xungrab-keyboard)
 	(grab-main-keys))

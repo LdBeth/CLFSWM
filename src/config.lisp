@@ -280,5 +280,18 @@ on the root window in the main mode with the mouse")
   "Config(Menu group): Menu key color in menu")
 
 
+;;; Help menu list
+(defparameter *help-menu-list* nil
+  "Config(Info mode group): List of menus in the help menu")
 
-
+(defun reset-help-menu-list ()
+  (setf *help-menu-list* `((#\h show-global-key-binding)
+			   (#\b show-main-mode-key-binding)
+			   (#\c show-corner-help)
+			   (#\g show-config-variable)
+			   (#\d show-date)
+			   (#\p show-cpu-proc)
+			   (#\m show-mem-proc)
+			   (#\x (xmms-info-menu ,*menu-color-submenu*))
+			   (#\v show-version)
+			   (#\i (info-on-cd-menu ,*menu-color-submenu*)))))

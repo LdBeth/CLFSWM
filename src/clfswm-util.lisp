@@ -30,7 +30,7 @@
   (let ((truename (concatenate 'string *contrib-dir* "contrib/" file)))
     (format t "Loading contribution file: ~A~%" truename)
     (when (probe-file truename)
-      (load truename))))
+      (load truename :verbose nil))))
 
 
 (defun reload-clfswm ()

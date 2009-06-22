@@ -1,3 +1,7 @@
+2009-06-22  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/mpd.lisp: New file to handle the Music Player Daemon (MPD)
+
 2009-06-19  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-autodoc.lisp (produce-doc, produce-doc-html): Minor
