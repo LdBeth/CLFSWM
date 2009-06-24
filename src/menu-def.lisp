@@ -47,7 +47,7 @@
 
 ;;(define-second-key ("a") 'open-menu)
 
-;;(add-menu-key 'main "d" 'show-standard-menu)
+(add-sub-menu 'main "F1" 'help-menu "Help menu")
 (add-sub-menu 'main "d" 'standard-menu "Standard menu")
 (add-sub-menu 'main "c" 'child-menu "Child menu")
 (add-sub-menu 'main "f" 'frame-menu "Frame menu")
@@ -60,6 +60,24 @@
 
 
 (update-menus (find-menu 'standard-menu))
+
+(add-menu-key 'help-menu "h" 'show-global-key-binding)
+(add-menu-key 'help-menu "b" 'show-main-mode-key-binding)
+(add-menu-key 'help-menu "s" 'show-second-mode-key-binding)
+(add-menu-key 'help-menu "c" 'show-corner-help)
+(add-menu-key 'help-menu "g" 'show-config-variable)
+(add-menu-key 'help-menu "d" 'show-date)
+(add-menu-key 'help-menu "p" 'show-cpu-proc)
+(add-menu-key 'help-menu "m" 'show-mem-proc)
+(add-sub-menu 'help-menu "x" 'xmms-info-menu "XMMS menu")
+(add-menu-key 'help-menu "v" 'show-version)
+(add-sub-menu 'help-menu "i" 'info-on-cd-menu "CD info menu")
+
+(add-menu-key 'xmms-info-menu "s" 'show-xmms-status)
+(add-menu-key 'xmms-info-menu "l" 'show-xmms-playlist)
+
+(add-menu-key 'info-on-cd-menu "i" 'show-cd-info)
+(add-menu-key 'info-on-cd-menu "l" 'show-cd-playlist)
 
 
 (add-menu-key 'child-menu "r" 'rename-current-child)

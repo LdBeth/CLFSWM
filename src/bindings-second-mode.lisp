@@ -34,6 +34,7 @@
 ;;;`-----
 (add-hook *binding-hook* 'init-*second-keys* 'init-*second-mouse*)
 
+
 (defun open-frame-menu ()
   "Open the frame menu"
   (open-menu (find-menu 'frame-menu)))
@@ -79,7 +80,7 @@
 
 
 (defun set-default-second-keys ()
-  (define-second-key ("F1" :mod-1) 'help-on-second-mode)
+  (define-second-key ("F1" :mod-1) 'help-on-clfswm)
   (define-second-key ("m") 'open-menu)
   (define-second-key ("less") 'open-menu)
   (define-second-key ("less" :control) 'open-menu)

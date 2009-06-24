@@ -458,11 +458,6 @@ Function can be a function or a list (function color) for colored output"
   (info-on-shell "XMMS Playlist:" "xmms-shell -e list"))
 
 
-(defun xmms-info-menu ()
-  "< Open the xmms menu >"
-  (info-mode-menu '((#\s show-xmms-status)
-		    (#\l show-xmms-playlist))))
-
 
 
 (defun show-cd-info ()
@@ -473,26 +468,11 @@ Function can be a function or a list (function color) for colored output"
   "Show the current CD playlist"
   (info-on-shell "Current CD playlist:" "pcd mi"))
 
-(defun info-on-cd-menu ()
-  "< Open the CD info menu >"
-  (info-mode-menu '((#\i show-cd-info)
-		    (#\l show-cd-playlist))))
-
 
 (defun show-version ()
   "Show the current CLFSWM version"
   (info-mode (list *version*)))
 
-
-
-(defun help-on-clfswm ()
-  "Open the help and info window"
-  (info-mode-menu *help-menu-list*))
-
-
-(defun help-on-second-mode ()
-  "Open the help and info window for the second mode"
-  (info-mode-menu *help-menu-list*))
 
 
 

@@ -34,6 +34,13 @@
 
 (add-hook *binding-hook* 'init-*main-keys* 'init-*main-mouse*)
 
+
+
+(defun help-on-clfswm ()
+  "Open the help and info window"
+  (open-menu (find-menu 'help-menu)))
+
+
 (defun set-default-main-keys ()
   (define-main-key ("F1" :mod-1) 'help-on-clfswm)
   (define-main-key ("Home" :mod-1 :control :shift) 'exit-clfswm)
