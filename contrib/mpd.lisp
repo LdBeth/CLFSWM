@@ -33,6 +33,11 @@
 (format t "Loading MPD code... ")
 
 
+(defun mpd-menu ()
+  "Open the Music Player Daemon (MPD) menu"
+  (open-menu (find-menu 'mpd-menu)))
+
+
 (defun start-sonata ()
   "Start sonata"
   (do-shell "exec sonata"))
@@ -40,15 +45,18 @@
 
 (defun show-mpd-info ()
   "Show MPD informations"
-  (info-on-shell "MPD informations:" "mpc"))
+  (info-on-shell "MPD informations:" "mpc")
+  (mpd-menu))
 
 (defun mpd-previous ()
   "Play the previous song in the current playlist"
-  (do-shell "mpc prev"))
+  (info-on-shell "MPD:" "mpc prev")
+  (mpd-menu))
 
 (defun mpd-next ()
   "Play the next song in the current playlist"
-  (do-shell "mpc next"))
+  (info-on-shell "MPD:" "mpc next")
+  (mpd-menu))
 
 (defun mpd-toggle ()
   "Toggles Play/Pause, plays if stopped"
@@ -75,27 +83,22 @@
 
 (defun show-mpd-playlist ()
   "Show the current MPD playlist"
-  (info-on-shell "Current MPD playlist:" "mpc playlist"))
+  (info-on-shell "Current MPD playlist:" "mpc playlist")
+  (mpd-menu))
 
-(defun mpd-menu ()
-  "< Open the MPD menu >"
-  (info-mode-menu '((#\i show-mpd-info)
-		    (#\p mpd-previous)
-		    (#\n mpd-next)
-		    (#\t mpd-toggle)
-		    (#\y mpd-play)
-		    (#\k mpd-stop)
-		    (#\x mpd-seek-+5%)
-		    (#\w mpd-seek--5%)
-		    (#\l show-mpd-playlist)
-		    (#\s start-sonata))))
+(add-sub-menu 'help-menu "F2" 'mpd-menu "Music Player Daemon (MPD) menu")
 
+(add-menu-key 'mpd-menu "i" 'show-mpd-info)
+(add-menu-key 'mpd-menu "p" 'mpd-previous)
+(add-menu-key 'mpd-menu "n" 'mpd-next)
+(add-menu-key 'mpd-menu "t" 'mpd-toggle)
+(add-menu-key 'mpd-menu "y" 'mpd-play)
+(add-menu-key 'mpd-menu "k" 'mpd-stop)
+(add-menu-key 'mpd-menu "x" 'mpd-seek-+5%)
+(add-menu-key 'mpd-menu "w" 'mpd-seek--5%)
+(add-menu-key 'mpd-menu "l" 'show-mpd-playlist)
+(add-menu-key 'mpd-menu "s" 'start-sonata)
 
-(defun add-mpd-menu-to-help-menu ()
-  (setf *help-menu-list* (append *help-menu-list*
-				 `((#\s (mpd-menu ,*menu-color-submenu*))))))
-
-(add-hook *init-hook* 'add-mpd-menu-to-help-menu)
 
 (defun mpd-binding ()
   (define-main-key ("F2" :alt) 'mpd-menu))

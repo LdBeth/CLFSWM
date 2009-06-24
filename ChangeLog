@@ -1,5 +1,7 @@
 2009-06-24  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* contrib/mpd.lisp: Use a standard menu.
+
 	* src/clfswm-info.lisp: Use a standard menu for the help-menu.
 
 2009-06-22  Philippe Brochard  <pbrochard@common-lisp.net>
