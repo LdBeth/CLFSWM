@@ -1,3 +1,7 @@
+2009-06-27  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/keyb_fr.lisp: New file to handle an azerty keyboard.
+
 2009-06-24  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/mpd.lisp: Use a standard menu.
