@@ -2,6 +2,7 @@ Here is the map of the CLFSWM menu:
 (By default it is bound on second-mode + m)
 
 Main
+F1: < Help menu >
 d: < Standard menu >
 c: < Child menu >
 f: < Frame menu >
@@ -11,6 +12,40 @@ n: < Action by name menu >
 u: < Action by number menu >
 y: < Utility menu >
 m: < CLFSWM menu >
+
+Help-Menu
+h: Show all key binding
+b: Show the main mode binding
+s: Show the second mode key binding
+c: Help on clfswm corner
+g: Show all configurable variables
+d: Show the current time and date
+p: Show current processes sorted by CPU usage
+m: Show current processes sorted by memory usage
+x: < XMMS menu >
+v: Show the current CLFSWM version
+i: < CD info menu >
+F2: < Music Player Daemon (MPD) menu >
+
+Xmms-Info-Menu
+s: Show the current xmms status
+l: Show the current xmms playlist
+
+Info-On-Cd-Menu
+i: Show the current CD track
+l: Show the current CD playlist
+
+Mpd-Menu
+i: Show MPD informations
+p: Play the previous song in the current playlist
+n: Play the next song in the current playlist
+t: Toggles Play/Pause, plays if stopped
+y: Start playing
+k: Stop the currently playing playlists
+x: Seeks to +5%
+w: Seeks to -5%
+l: Show the current MPD playlist
+s: Start sonata
 
 Standard-Menu
 
@@ -43,13 +78,14 @@ p: Add a placed frame in the current frame
 
 Frame-Layout-Menu
 a: < Frame fast layout menu >
-b: No layout: Maximize windows in there frame - Leave frame to there size
-c: Maximize layout: Maximize windows and frames in there parent frame
-d: < Frame tile layout menu >
-e: < Tile in one direction layout menu >
-f: < Tile with some space on one side menu >
-g: < Main window layout menu >
-h: < The GIMP layout menu >
+b: No layout: Maximize windows in there frame - Leave frames to there original size
+c: No layout: Maximize windows in there frame - Leave frames to there actual size
+d: Maximize layout: Maximize windows and frames in there parent frame
+e: < Frame tile layout menu >
+f: < Tile in one direction layout menu >
+g: < Tile with some space on one side menu >
+h: < Main window layout menu >
+i: < The GIMP layout menu >
 
 Frame-Fast-Layout-Menu
 s: Switch between two layouts

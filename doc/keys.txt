@@ -43,6 +43,7 @@ Main mode keys:
   Mod-1                8               Bind or jump to a slot (a frame or a window)
   Mod-1                9               Bind or jump to a slot (a frame or a window)
   Mod-1                0               Bind or jump to a slot (a frame or a window)
+  Mod-1                F2              Open the Music Player Daemon (MPD) menu
 
 
 Mouse buttons actions in main mode:
@@ -65,7 +66,7 @@ Or do actions on corners
 Second mode keys:
 ----------------
 
-  Mod-1                F1              Open the help and info window for the second mode
+  Mod-1                F1              Open the help and info window
                        M               Open the main menu
                        Less            Open the main menu
   Control              Less            Open the main menu
@@ -99,8 +100,8 @@ Second mode keys:
   Mod-1 Shift          Home            Switch and select the root frame
                        Menu            Show all frames info windows until a key is release
   Mod-1                B               Move the pointer to the lower right corner of the screen
-                       O               Open the next window in a new frame in the root frame
-  Control              O               Open the next window in a new frame in the parent frame
+                       O               Open the next window in a new frame in the parent frame
+  Control              O               Open the next window in a new frame in the root frame
                        A               Add a default frame in the current frame
   Control Shift        Escape          Close focus window: Delete the focus window in all frames and workspaces
   Mod-1 Control Shift  Escape          Kill focus window: Destroy the focus window in all frames and workspaces

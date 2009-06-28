@@ -130,7 +130,7 @@
 
 ;;; No layout
 (defgeneric no-layout (child parent)
-  (:documentation "No layout: Maximize windows in there frame - Leave frame to there size"))
+  (:documentation "No layout: Maximize windows in there frame - Leave frames to there original size"))
 
 (defmethod no-layout ((child xlib:window) parent)
   (with-slots (rx ry rw rh) parent
@@ -148,10 +148,19 @@
 
 
 (defun set-no-layout ()
-  "No layout: Maximize windows in there frame - Leave frame to there size"
+  "No layout: Maximize windows in there frame - Leave frames to there original size"
   (set-layout #'no-layout))
 
 (register-layout 'set-no-layout)
+
+;;; No layout remember size
+(defun set-no-layout-remember-size ()
+  "No layout: Maximize windows in there frame - Leave frames to there actual size"
+  (fixe-real-size-current-child)
+  (set-no-layout))
+
+(register-layout 'set-no-layout-remember-size)
+
 
 
 ;;; Maximize layout
