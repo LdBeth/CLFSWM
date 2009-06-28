@@ -155,7 +155,9 @@
       (pushnew new-frame (frame-child parent))
       (pushnew window (frame-child new-frame))
       (hide-all *current-root*)
-      (setf *current-root* parent)
+      (setf *current-root* parent
+	    *current-child* parent)
+      (set-layout-once #'tile-space-layout)
       (setf *current-child* new-frame)
       (default-window-placement new-frame window)
       (show-all-children *current-root*))))

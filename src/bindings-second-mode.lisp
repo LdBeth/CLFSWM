@@ -115,8 +115,8 @@
   (define-second-key ("Home" :mod-1 :shift) 'switch-and-select-root-frame)
   (define-second-key ("Menu") 'toggle-show-root-frame)
   (define-second-key (#\b :mod-1) 'banish-pointer)
-  (define-second-key (#\o) 'set-open-in-new-frame-in-root-frame-nw-hook)
-  (define-second-key (#\o :control) 'set-open-in-new-frame-in-parent-frame-nw-hook)
+  (define-second-key (#\o) 'set-open-in-new-frame-in-parent-frame-nw-hook)
+  (define-second-key (#\o :control) 'set-open-in-new-frame-in-root-frame-nw-hook)
   (define-second-key (#\a) 'add-default-frame)
   ;; Escape
   (define-second-key ("Escape" :control :shift) 'delete-focus-window)

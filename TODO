@@ -7,8 +7,7 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- New: in contrib: keyb-fr.lisp (french binding)
-       pcd / xmms modules...
+- New: Put CD player / xmms modules in contrib/ ...
 
 - Mouse support in menu
 
