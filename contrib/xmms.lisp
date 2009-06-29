@@ -21,10 +21,12 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 ;;;
-;;; Documentation: If you want to use this file, just add this line in
-;;; your configuration file:
+;;; Documentation: Handle the XMMS player
+;;;   This code needs xmmsctrl.
+;;    If you want to use this file, just add this line in
+;;;   your configuration file:
 ;;;
-;;;   (load-contrib "xmms.lisp")
+;;;     (load-contrib "xmms.lisp")
 ;;;
 ;;; --------------------------------------------------------------------------
 

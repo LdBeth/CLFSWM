@@ -71,11 +71,6 @@
 (add-menu-key 'help-menu "m" 'show-mem-proc)
 (add-menu-key 'help-menu "v" 'show-version)
 
-;;(add-sub-menu 'help-menu "i" 'info-on-cd-menu "CD info menu")
-;;
-;;(add-menu-key 'info-on-cd-menu "i" 'show-cd-info)
-;;(add-menu-key 'info-on-cd-menu "l" 'show-cd-playlist)
-
 
 (add-menu-key 'child-menu "r" 'rename-current-child)
 (add-menu-key 'child-menu "e" 'ensure-unique-name)
