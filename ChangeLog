@@ -1,3 +1,7 @@
+2009-06-29  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/xmms.lisp: New file to handle the xmms player.
+
 2009-06-28  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-layout.lisp (set-no-layout-remember-size): New layout:

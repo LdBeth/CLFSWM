@@ -272,7 +272,6 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 
 
 
-
 (defun info-mode-menu (item-list &key (width nil) (height nil))
   "Open an info help menu.
 Item-list is: '((key function) separator (key function))
@@ -448,16 +447,6 @@ Function can be a function or a list (function color) for colored output"
   "Show current processes sorted by memory usage"
   (info-on-shell "Current processes sorted by MEMORY usage:"
 		 "ps --cols=1000 --sort='-vsz,uid,pgid,ppid,pid' -e -o user,pid,stime,pcpu,pmem,args"))
-
-(defun show-xmms-status ()
-  "Show the current xmms status"
-  (info-on-shell "XMMS status:" "xmms-shell -e status"))
-
-(defun show-xmms-playlist ()
-  "Show the current xmms playlist"
-  (info-on-shell "XMMS Playlist:" "xmms-shell -e list"))
-
-
 
 
 (defun show-cd-info ()

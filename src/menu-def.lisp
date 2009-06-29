@@ -69,15 +69,12 @@
 (add-menu-key 'help-menu "d" 'show-date)
 (add-menu-key 'help-menu "p" 'show-cpu-proc)
 (add-menu-key 'help-menu "m" 'show-mem-proc)
-(add-sub-menu 'help-menu "x" 'xmms-info-menu "XMMS menu")
 (add-menu-key 'help-menu "v" 'show-version)
-(add-sub-menu 'help-menu "i" 'info-on-cd-menu "CD info menu")
 
-(add-menu-key 'xmms-info-menu "s" 'show-xmms-status)
-(add-menu-key 'xmms-info-menu "l" 'show-xmms-playlist)
-
-(add-menu-key 'info-on-cd-menu "i" 'show-cd-info)
-(add-menu-key 'info-on-cd-menu "l" 'show-cd-playlist)
+;;(add-sub-menu 'help-menu "i" 'info-on-cd-menu "CD info menu")
+;;
+;;(add-menu-key 'info-on-cd-menu "i" 'show-cd-info)
+;;(add-menu-key 'info-on-cd-menu "l" 'show-cd-playlist)
 
 
 (add-menu-key 'child-menu "r" 'rename-current-child)
