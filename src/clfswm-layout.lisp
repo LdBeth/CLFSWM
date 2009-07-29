@@ -186,11 +186,28 @@
 
 
 ;;; Tile layout
+(defun set-layout-managed-children ()
+  (when (frame-p *current-child*)
+    (setf (frame-data-slot *current-child* :layout-managed-children)
+	  (copy-list (get-managed-child *current-child*)))))
+
+(defun update-layout-managed-children (child parent)
+  (let ((managed-children (frame-data-slot parent :layout-managed-children))
+	(managed-in-parent (get-managed-child parent)))
+    (dolist (ch managed-in-parent)
+      (unless (member ch managed-children)
+	(setf managed-children (append managed-children (list child)))))
+    (setf managed-children (remove-if-not (lambda (x)
+					    (member x managed-in-parent :test #'equal))
+					  managed-children))
+    (setf (frame-data-slot parent :layout-managed-children) managed-children)
+    managed-children))
+
 (defgeneric tile-layout (child parent)
   (:documentation "Tile child in its frame (vertical)"))
 
 (defmethod tile-layout (child parent)
-  (let* ((managed-children (get-managed-child parent))
+  (let* ((managed-children (update-layout-managed-children child parent))
 	 (pos (position child managed-children))
 	 (len (length managed-children))
 	 (n (ceiling (sqrt len)))
@@ -203,14 +220,17 @@
 
 (defun set-tile-layout ()
   "Tile child in its frame (vertical)"
+  (set-layout-managed-children)
   (set-layout #'tile-layout))
 
 
+
+;; Horizontal tiling layout
 (defgeneric tile-horizontal-layout (child parent)
   (:documentation "Tile child in its frame (horizontal)"))
 
 (defmethod tile-horizontal-layout (child parent)
-  (let* ((managed-children (get-managed-child parent))
+  (let* ((managed-children (update-layout-managed-children child parent))
 	 (pos (position child managed-children))
 	 (len (length managed-children))
 	 (n (ceiling (sqrt len)))
@@ -223,7 +243,53 @@
 
 (defun set-tile-horizontal-layout ()
   "Tile child in its frame (horizontal)"
+  (set-layout-managed-children)
   (set-layout #'tile-horizontal-layout))
+
+
+
+;; One column layout
+(defgeneric one-column-layout (child parent)
+  (:documentation "One column layout"))
+
+(defmethod one-column-layout (child parent)
+  (let* ((managed-children (update-layout-managed-children child parent))
+	 (pos (position child managed-children))
+	 (len (length managed-children))
+	 (dy (/ (frame-rh parent) len)))
+    (values (round (+ (frame-rx parent) 1))
+	    (round (+ (frame-ry parent) (*  pos dy) 1))
+	    (round (- (frame-rw parent) 2))
+	    (round (- dy 2)))))
+
+(defun set-one-column-layout ()
+  "One column layout"
+  (set-layout-managed-children)
+  (set-layout #'one-column-layout))
+
+
+;; One line layout
+(defgeneric one-line-layout (child parent)
+  (:documentation "One line layout"))
+
+(defmethod one-line-layout (child parent)
+  (let* ((managed-children (update-layout-managed-children child parent))
+	 (pos (position child managed-children))
+	 (len (length managed-children))
+	 (dx (/ (frame-rw parent) len)))
+    (values (round (+ (frame-rx parent) (*  pos dx) 1))
+	    (round (+ (frame-ry parent) 1))
+	    (round (- dx 2))
+	    (round (- (frame-rh parent) 2)))))
+
+(defun set-one-line-layout ()
+  "One line layout"
+  (set-layout-managed-children)
+  (set-layout #'one-line-layout))
+
+
+
+
 
 ;;; Space layout
 (defun tile-space-layout (child parent)
@@ -255,6 +321,8 @@
 (register-layout-sub-menu 'frame-tile-layout-menu "Frame tile layout menu"
 			  '(("v" set-tile-layout)
 			    ("h" set-tile-horizontal-layout)
+			    ("c" set-one-column-layout)
+			    ("l" set-one-line-layout)
 			    ("s" set-tile-space-layout)))
 
 
