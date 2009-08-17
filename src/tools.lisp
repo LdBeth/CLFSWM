@@ -546,7 +546,7 @@ Useful for re-using the &REST arg after removing some options."
   #+lucid (apply #'lcl:run-program prog :wait wait :arguments args opts)
   #+sbcl (apply #'sb-ext:run-program prog args :wait wait :output *standard-output* opts)
   #+ecl (apply #'ext:run-program prog args opts)
-  #+ccl (applay #'ccl:run-program prog args opts :wait wait)
+  #+ccl (apply #'ccl:run-program prog args opts :wait wait)
   #-(or allegro clisp cmu gcl liquid lispworks lucid sbcl ecl ccl)
   (error 'not-implemented :proc (list 'run-prog prog opts)))
 
