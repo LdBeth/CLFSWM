@@ -42,6 +42,10 @@
   "Start sonata"
   (do-shell "exec sonata"))
 
+(defun start-gmpc ()
+  "Start gmpc"
+  (do-shell "exec gmpc"))
+
 
 (defun show-mpd-info ()
   "Show MPD informations"
@@ -98,7 +102,8 @@
   (add-menu-key 'mpd-menu "x" 'mpd-seek-+5%)
   (add-menu-key 'mpd-menu "w" 'mpd-seek--5%)
   (add-menu-key 'mpd-menu "l" 'show-mpd-playlist)
-  (add-menu-key 'mpd-menu "s" 'start-sonata))
+  (add-menu-key 'mpd-menu "s" 'start-sonata)
+  (add-menu-key 'mpd-menu "g" 'start-gmpc))
 
 
 (defun mpd-binding ()

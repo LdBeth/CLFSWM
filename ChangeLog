@@ -1,3 +1,7 @@
+2009-10-10  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/mpd.lisp (start-gmpc): Add gmpc in the mpd menu.
+
 2009-07-29  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-layout.lisp (tile-layout, tile-horizontal-layout):
