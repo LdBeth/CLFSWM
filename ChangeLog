@@ -1,3 +1,16 @@
+2009-11-07  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/bindings-second-mode.lisp (set-default-second-keys):
+	Simplification of Escape key to close/kill/remove the focus window
+	and unhide all windows.
+
+	* src/bindings.lisp (set-default-main-keys): Simplification of
+	Escape key to close/kill/remove the focus window and unhide all
+	windows.
+
+	* src/clfswm-util.lisp (ask-close/kill-current-window): Add remove
+	focus and unhide all windows capabilities.
+
 2009-10-10  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/mpd.lisp (start-gmpc): Add gmpc in the mpd menu.

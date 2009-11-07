@@ -103,7 +103,7 @@
       (show-all-children))))
 
 (defun remove-focus-window ()
-  "Remove the focus window in the current frame"
+  "Remove the focus window from the current frame"
   (let ((window (xlib:input-focus *display*)))
     (when (and window (not (xlib:window-equal window *no-focus-window*)))
       (setf *current-child* *current-root*)
@@ -1238,5 +1238,21 @@ For window: set current child to window or its parent according to window-parent
        (open-menu menu)
        (info-mode '("Command 'update-menus' not found")))))
 
+
+
+;;; Close/Kill focused window
+
+(defun ask-close/kill-current-window ()
+  "Close or kill the current window (ask before doing anything)"
+  (let ((window (xlib:input-focus *display*)))
+    (info-mode-menu
+     (if (and window (not (xlib:window-equal window *no-focus-window*)))
+	 `(,(format nil "Focus window: ~A" (xlib:wm-name window))
+	    (#\c delete-focus-window "Close the focus window")
+	    (#\k destroy-focus-window "Kill the focus window")
+	    (#\r remove-focus-window)
+	    (#\u unhide-all-windows-in-current-child))
+	 `(,(format nil "Focus window: None")
+	    (#\u unhide-all-windows-in-current-child))))))
 
 

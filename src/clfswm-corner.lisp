@@ -54,7 +54,7 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
 	  ((and (<= 0 x cs) (<= (- sh cs) y sh)) :bottom-left)
 	  ((and (<= (- sw cs) x sw) (<= (- sh cs) y sh)) :bottom-right)
 	  (t nil))))
-  
+
 
 
 
@@ -146,12 +146,4 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
 	   (show-all-children nil)))
   t)
 
-
-(defun ask-close/kill-current-window ()
-  "Close or kill the current window (ask before doing anything)"
-  (let ((window (xlib:input-focus *display*)))
-    (when (and window (not (xlib:window-equal window *no-focus-window*)))
-      (info-mode-menu `(,(format nil "Focus window: ~A" (xlib:wm-name window))
-			 (#\c delete-focus-window "Close the focus window")
-			 (#\k destroy-focus-window "Kill the focus window"))))))
 

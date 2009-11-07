@@ -119,10 +119,7 @@
   (define-second-key (#\o :control) 'set-open-in-new-frame-in-root-frame-nw-hook)
   (define-second-key (#\a) 'add-default-frame)
   ;; Escape
-  (define-second-key ("Escape" :control :shift) 'delete-focus-window)
-  (define-second-key ("Escape" :mod-1 :control :shift) 'destroy-focus-window)
-  (define-second-key ("Escape" :control) 'remove-focus-window)
-  (define-second-key ("Escape" :shift) 'unhide-all-windows-in-current-child)
+  (define-second-key ("Escape" :control) 'ask-close/kill-current-window)
   ;; Selection
   (define-second-key ("x" :control) 'cut-current-child)
   (define-second-key ("x" :control :mod-1) 'clear-selection)

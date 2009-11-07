@@ -64,10 +64,8 @@
   (define-main-key ("Menu" :control) 'toggle-show-root-frame)
   (define-main-key (#\b :mod-1) 'banish-pointer)
   ;; Escape
-  (define-main-key ("Escape" :control :shift) 'delete-focus-window)
-  (define-main-key ("Escape" :mod-1 :control :shift) 'destroy-focus-window)
-  (define-main-key ("Escape" :control) 'remove-focus-window)
-  (define-main-key ("Escape" :shift) 'unhide-all-windows-in-current-child)
+  (define-main-key ("Escape" :control) 'ask-close/kill-current-window)
+  ;; Second mode
   (define-main-key (#\t :mod-1) 'second-key-mode)
   (define-main-key ("less" :control) 'second-key-mode)
   ;; Bind or jump functions
