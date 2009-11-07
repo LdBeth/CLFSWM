@@ -7,7 +7,9 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Mouse support in menu
+- Mouse support in menu -> very urgent
+
+- Close/Kill/Unhide... menu bound to control+escape key
 
 - Show config -> list and display documentation for all tweakable global variables. [Philippe]
    TODO :
