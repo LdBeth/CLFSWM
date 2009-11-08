@@ -22,32 +22,309 @@ g: Show all configurable variables
 d: Show the current time and date
 p: Show current processes sorted by CPU usage
 m: Show current processes sorted by memory usage
-x: < XMMS menu >
 v: Show the current CLFSWM version
-i: < CD info menu >
-F2: < Music Player Daemon (MPD) menu >
-
-Xmms-Info-Menu
-s: Show the current xmms status
-l: Show the current xmms playlist
-
-Info-On-Cd-Menu
-i: Show the current CD track
-l: Show the current CD playlist
-
-Mpd-Menu
-i: Show MPD informations
-p: Play the previous song in the current playlist
-n: Play the next song in the current playlist
-t: Toggles Play/Pause, plays if stopped
-y: Start playing
-k: Stop the currently playing playlists
-x: Seeks to +5%
-w: Seeks to -5%
-l: Show the current MPD playlist
-s: Start sonata
 
 Standard-Menu
+a: < WINDOW MANAGERS >
+b: < APPLICATIONS >
+c: < GAMES >
+d: < HELP >
+
+Window Managers
+a: X Window Snapshot
+b: X Window Snapshot
+
+Applications
+a: < SYSTEM >
+b: < OFFICE >
+c: < NETWORK >
+d: < VIDEO >
+e: < SCIENCE >
+f: < SOUND >
+g: < TERMINAL EMULATORS >
+h: < VIEWERS >
+i: < FILE MANAGEMENT >
+j: < TEXT >
+k: < GRAPHICS >
+l: < EDITORS >
+m: < DATA MANAGEMENT >
+n: < PROGRAMMING >
+o: < TOOLS >
+p: < SHELLS >
+q: < ACCESSIBILITY >
+
+System
+a: < HARDWARE >
+b: < ADMINISTRATION >
+c: < MONITORING >
+d: < PACKAGE MANAGEMENT >
+e: < SECURITY >
+f: < LANGUAGE ENVIRONMENT >
+g: X Window Snapshot
+h: X Window Snapshot
+
+Hardware
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+
+Administration
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
+e: X Window Snapshot
+f: X Window Snapshot
+g: X Window Snapshot
+h: X Window Snapshot
+i: X Window Snapshot
+j: X Window Snapshot
+k: X Window Snapshot
+l: X Window Snapshot
+m: X Window Snapshot
+n: X Window Snapshot
+o: X Window Snapshot
+p: X Window Snapshot
+q: X Window Snapshot
+r: X Window Snapshot
+s: X Window Snapshot
+t: X Window Snapshot
+u: X Window Snapshot
+v: X Window Snapshot
+w: X Window Snapshot
+x: X Window Snapshot
+y: X Window Snapshot
+
+Monitoring
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
+e: X Window Snapshot
+f: X Window Snapshot
+g: X Window Snapshot
+
+Package Management
+a: X Window Snapshot
+b: X Window Snapshot
+
+Security
+a: X Window Snapshot
+
+Language Environment
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
+e: X Window Snapshot
+f: X Window Snapshot
+g: X Window Snapshot
+h: X Window Snapshot
+i: X Window Snapshot
+j: X Window Snapshot
+k: X Window Snapshot
+l: X Window Snapshot
+m: X Window Snapshot
+n: X Window Snapshot
+o: X Window Snapshot
+p: X Window Snapshot
+q: X Window Snapshot
+r: X Window Snapshot
+s: X Window Snapshot
+
+Office
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
+e: X Window Snapshot
+
+Network
+a: < WEB BROWSING >
+b: < COMMUNICATION >
+c: < MONITORING >
+d: < FILE TRANSFER >
+e: < WEB NEWS >
+
+Web Browsing
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
+
+Communication
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
+e: X Window Snapshot
+f: X Window Snapshot
+g: X Window Snapshot
+
+Monitoring
+a: X Window Snapshot
+
+File Transfer
+a: X Window Snapshot
+b: X Window Snapshot
+
+Web News
+a: X Window Snapshot
+
+Video
+a: X Window Snapshot
+b: X Window Snapshot
+
+Science
+a: < MATHEMATICS >
+
+Mathematics
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
+e: X Window Snapshot
+
+Sound
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
+e: X Window Snapshot
+f: X Window Snapshot
+g: X Window Snapshot
+h: X Window Snapshot
+i: X Window Snapshot
+j: X Window Snapshot
+k: X Window Snapshot
+l: X Window Snapshot
+m: X Window Snapshot
+n: X Window Snapshot
+o: X Window Snapshot
+p: X Window Snapshot
+
+Terminal Emulators
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
+
+Viewers
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
+e: X Window Snapshot
+f: X Window Snapshot
+g: X Window Snapshot
+h: X Window Snapshot
+i: X Window Snapshot
+j: X Window Snapshot
+
+File Management
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
+e: X Window Snapshot
+f: X Window Snapshot
+
+Text
+a: X Window Snapshot
+b: X Window Snapshot
+
+Graphics
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
+e: X Window Snapshot
+f: X Window Snapshot
+
+Editors
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
+e: X Window Snapshot
+f: X Window Snapshot
+
+Data Management
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
+e: X Window Snapshot
+
+Programming
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
+
+Tools
+a: X Window Snapshot
+
+Shells
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+
+Accessibility
+a: X Window Snapshot
+
+Games
+a: < ACTION >
+b: < BOARD >
+c: < CARD >
+d: < PUZZLES >
+e: < BLOCKS >
+f: < TOYS >
+
+Action
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+
+Board
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
+e: X Window Snapshot
+f: X Window Snapshot
+g: X Window Snapshot
+
+Card
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+
+Puzzles
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
+e: X Window Snapshot
+f: X Window Snapshot
+
+Blocks
+a: X Window Snapshot
+b: X Window Snapshot
+
+Toys
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
+e: X Window Snapshot
+f: X Window Snapshot
+
+Help
+a: X Window Snapshot
+b: X Window Snapshot
+c: X Window Snapshot
+d: X Window Snapshot
 
 Child-Menu
 r: Rename the current child
@@ -94,6 +371,8 @@ p: Push the current layout in the fast layout list
 Frame-Tile-Layout-Menu
 v: Tile child in its frame (vertical)
 h: Tile child in its frame (horizontal)
+c: One column layout
+l: One line layout
 s: Tile Space: tile child in its frame leaving spaces between them
 
 Frame-Tile-Dir-Layout-Menu

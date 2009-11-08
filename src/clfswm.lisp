@@ -305,9 +305,11 @@
 
 (defun main-unprotected (&key (display (or (getenv "DISPLAY") ":0")) protocol
 			 (base-dir (directory-namestring (or *load-truename* "")))
+			 (read-conf-file-p t)
 			 error-msg)
   (setf *contrib-dir* base-dir)
-  (read-conf-file)
+  (when read-conf-file-p
+    (read-conf-file))
   (handler-case
       (open-display display protocol)
     (xlib:access-error (c)
@@ -336,12 +338,14 @@
 
 
 (defun main (&key (display (or (getenv "DISPLAY") ":0")) protocol
-	     (base-dir (directory-namestring (or *load-truename* ""))))
+	     (base-dir (directory-namestring (or *load-truename* "")))
+	     (read-conf-file-p t))
   (let (error-msg)
     (catch 'exit-clfswm
       (loop
 	 (handler-case
 	     (main-unprotected :display display :protocol protocol :base-dir base-dir
+			       :read-conf-file-p read-conf-file-p
 			       :error-msg error-msg)
 	   (error (c)
 	     (let ((msg (format nil "CLFSWM Error: ~A." c)))

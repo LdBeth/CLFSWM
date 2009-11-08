@@ -27,10 +27,7 @@ Main mode keys:
   Shift                Menu            Show all frames info windows
   Control              Menu            Show/Hide the root frame
   Mod-1                B               Move the pointer to the lower right corner of the screen
-  Control Shift        Escape          Close focus window: Delete the focus window in all frames and workspaces
-  Mod-1 Control Shift  Escape          Kill focus window: Destroy the focus window in all frames and workspaces
-  Control              Escape          Remove the focus window in the current frame
-  Shift                Escape          Unhide all hidden windows into the current child
+  Control              Escape          Close or kill the current window (ask before doing anything)
   Mod-1                T               Switch to editing mode
   Control              Less            Switch to editing mode
   Mod-1                1               Bind or jump to a slot (a frame or a window)
@@ -43,7 +40,6 @@ Main mode keys:
   Mod-1                8               Bind or jump to a slot (a frame or a window)
   Mod-1                9               Bind or jump to a slot (a frame or a window)
   Mod-1                0               Bind or jump to a slot (a frame or a window)
-  Mod-1                F2              Open the Music Player Daemon (MPD) menu
 
 
 Mouse buttons actions in main mode:
@@ -103,10 +99,7 @@ Second mode keys:
                        O               Open the next window in a new frame in the parent frame
   Control              O               Open the next window in a new frame in the root frame
                        A               Add a default frame in the current frame
-  Control Shift        Escape          Close focus window: Delete the focus window in all frames and workspaces
-  Mod-1 Control Shift  Escape          Kill focus window: Destroy the focus window in all frames and workspaces
-  Control              Escape          Remove the focus window in the current frame
-  Shift                Escape          Unhide all hidden windows into the current child
+  Control              Escape          Close or kill the current window (ask before doing anything)
   Control              X               Cut the current child to the selection
   Mod-1 Control        X               Clear the current selection
   Control              C               Copy the current child to the selection

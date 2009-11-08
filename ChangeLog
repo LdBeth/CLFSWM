@@ -1,3 +1,10 @@
+2009-11-08  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm.lisp (main): Add a read-conf-file-p parameter to
+	prevent reading the configuration file (this may be useful to
+	produce the original documentation without user modifications
+	with the rc configuration file).
+
 2009-11-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/bindings-second-mode.lisp (set-default-second-keys):

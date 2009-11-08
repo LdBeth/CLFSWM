@@ -54,4 +54,9 @@
 
 (in-package :clfswm)
 
-(clfswm:main)
+(ignore-errors
+  (main :read-conf-file-p t))
+
+;;(produce-all-docs)
+
+
