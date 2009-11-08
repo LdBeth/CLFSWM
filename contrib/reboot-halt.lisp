@@ -39,8 +39,8 @@
 
 
 (defun do-with-terminal (command)
-  ;;(do-shell (format nil "xterm -e '~A'" command)))
-  (do-shell (format nil "xterm -e 'echo ~A; sleep 3'" command)))  ;; test
+  (do-shell (format nil "xterm -e '~A'" command)))
+  ;;(do-shell (format nil "xterm -e 'echo ~A; sleep 3'" command)))  ;; test
 
 (defun do-suspend ()
   "Suspend the computer to RAM"
