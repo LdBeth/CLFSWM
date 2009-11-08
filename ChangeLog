@@ -1,5 +1,8 @@
 2009-11-08  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* contrib/reboot-halt.lisp: Add a Suspend/Reboot/Halt menu in
+	contrib.
+
 	* src/clfswm.lisp (main): Add a read-conf-file-p parameter to
 	prevent reading the configuration file (this may be useful to
 	produce the original documentation without user modifications
