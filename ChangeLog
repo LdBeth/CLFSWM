@@ -2,6 +2,7 @@
 
 	* src/clfswm-info.lisp (info-mode): Begining of mouse support in
 	info mode.
+	(set-default-info-keys): Add cursor key support in info mode.
 
 2009-11-08  Philippe Brochard  <pbrochard@common-lisp.net>
 

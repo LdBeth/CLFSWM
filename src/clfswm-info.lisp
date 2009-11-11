@@ -64,17 +64,35 @@
   (setf *info-selected-item* (find-info-item-from-mouse root-x root-y info)))
 
 
+(defun info-y-display-coords (info posy)
+  (- (+ (* (info-ilh info) posy) (info-ilh info)) (info-y info)))
+
+(defun incf-info-selected-item (info n)
+  (setf *info-selected-item*
+	(min (if *info-selected-item*
+		 (+ *info-selected-item* n)
+		 0)
+	     (1- (or (length (info-list info)) 1)))))
+
+(defun decf-info-selected-item (info n)
+  (declare (ignore info))
+  (setf *info-selected-item*
+	(max (if *info-selected-item*
+		 (- *info-selected-item* n)
+		 0)
+	     0)))
+
+
 
 (defun draw-info-window (info)
   (labels ((print-line (line posx posy &optional (color *info-foreground*))
-	     ;;(setf (xlib:gcontext-foreground (info-gc info)) (get-color color))
 	     (xlib:with-gcontext ((info-gc info) :foreground (get-color color)
 				  :background (if (equal posy *info-selected-item*)
 						  (get-color *info-selected-background*)
 						  (get-color *info-background*)))
 	       (xlib:draw-image-glyphs *pixmap-buffer* (info-gc info)
 				 (- (+ (info-ilw info) (* posx (info-ilw info))) (info-x info))
-				 (- (+ (* (info-ilh info) posy) (info-ilh info)) (info-y info))
+				 (info-y-display-coords info posy)
 				 (format nil "~A" line)))
 	     (+ posx (length line))))
     (clear-pixmap-buffer (info-window info) (info-gc info))
@@ -114,52 +132,62 @@
   (define-info-key ("Down")
       (defun info-next-line (info)
 	"Move one line down"
-	(setf (info-y info) (min (+ (info-y info) (info-ilh info)) (info-max-y info)))
-	(setf *info-selected-item* nil)
+	(incf-info-selected-item info 1)
+	(when (> (info-y-display-coords info *info-selected-item*)
+		 (+ (xlib:drawable-y (info-window info))
+		    (xlib:drawable-height (info-window info))))
+	  (setf (info-y info) (min (+ (info-y info) (info-ilh info)) (info-max-y info))))
 	(draw-info-window info)))
   (define-info-key ("Up")
       (defun info-previous-line (info)
 	"Move one line up"
-	(setf (info-y info) (max (- (info-y info) (info-ilh info)) 0))
-	(setf *info-selected-item* nil)
+	(decf-info-selected-item info 1)
+	(when (< (info-y-display-coords info *info-selected-item*)
+		 (+ (xlib:drawable-y (info-window info))
+		    (info-ilh info)))
+	  (setf (info-y info) (max (- (info-y info) (info-ilh info)) 0)))
 	(draw-info-window info)))
   (define-info-key ("Left")
       (defun info-previous-char (info)
 	"Move one char left"
 	(setf (info-x info) (max (- (info-x info) (info-ilw info)) 0))
-	(setf *info-selected-item* nil)
 	(draw-info-window info)))
   (define-info-key ("Right")
       (defun info-next-char (info)
 	"Move one char right"
 	(setf (info-x info) (min (+ (info-x info) (info-ilw info)) (info-max-x info)))
-	(setf *info-selected-item* nil)
 	(draw-info-window info)))
   (define-info-key ("Home")
       (defun info-first-line (info)
 	"Move to first line"
 	(setf (info-x info) 0
 	      (info-y info) 0)
-	(setf *info-selected-item* nil)
+	(setf *info-selected-item* 0)
 	(draw-info-window info)))
   (define-info-key ("End")
       (defun info-end-line (info)
 	"Move to last line"
 	(setf (info-x info) 0
 	      (info-y info) (- (* (length (info-list info)) (info-ilh info)) (xlib:drawable-height (info-window info))))
-	(setf *info-selected-item* nil)
+	(setf *info-selected-item* (1- (or (length (info-list info)) 1)))
 	(draw-info-window info)))
   (define-info-key ("Page_Down")
       (defun info-next-ten-lines (info)
 	"Move ten lines down"
-	(setf (info-y info) (min (+ (info-y info) (* (info-ilh info) 10)) (info-max-y info)))
-	(setf *info-selected-item* nil)
+	(incf-info-selected-item info 10)
+	(when (> (info-y-display-coords info *info-selected-item*)
+		 (+ (xlib:drawable-y (info-window info))
+		    (xlib:drawable-height (info-window info))))
+	  (setf (info-y info) (min (+ (info-y info) (* (info-ilh info) 10)) (info-max-y info))))
 	(draw-info-window info)))
   (define-info-key ("Page_Up")
       (defun info-previous-ten-lines (info)
 	"Move ten lines up"
-	(setf (info-y info) (max (- (info-y info) (* (info-ilh info) 10)) 0))
-	(setf *info-selected-item* nil)
+	(decf-info-selected-item info 10)
+	(when (< (info-y-display-coords info *info-selected-item*)
+		 (+ (xlib:drawable-y (info-window info))
+		    (info-ilh info)))
+	  (setf (info-y info) (max (- (info-y info) (* (info-ilh info) 10)) 0)))
 	(draw-info-window info))))
 
 (add-hook *binding-hook* 'set-default-info-keys)
@@ -254,7 +282,7 @@
 Or for colored output: a list (line_string color)
 Or ((1_word color) (2_word color) 3_word (4_word color)...)"
   (when info-list
-    (setf *info-selected-item* nil)
+    (setf *info-selected-item* 0)
     (labels ((compute-size (line)
 	       (typecase line
 		 (cons (typecase (first line)
@@ -350,7 +378,7 @@ Function can be a function or a list (function color) for colored output"
 		   (lambda (&optional args)
 		     (declare (ignore args))
 		     (setf action function)
-		     (throw 'exit-info-loop nil)))))
+		     (leave-info-mode nil)))))
       (dolist (item item-list)
 	(typecase item
 	  (cons (destructuring-bind (key function explicit-doc) (ensure-n-elems item 3)

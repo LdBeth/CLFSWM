@@ -133,7 +133,7 @@
 	      (lambda (&optional args)
 		(declare (ignore args))
 		(setf action value)
-		(throw 'exit-info-loop nil))))))
+		(leave-info-mode nil))))))
     (let ((selected-item (info-mode (nreverse info-list))))
       (dolist (item (menu-item menu))
 	(undefine-info-key-fun (list (menu-item-key item))))
