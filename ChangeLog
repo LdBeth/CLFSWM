@@ -1,3 +1,8 @@
+2009-11-11  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-info.lisp (info-mode): Begining of mouse support in
+	info mode.
+
 2009-11-08  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/reboot-halt.lisp: Add a Suspend/Reboot/Halt menu in

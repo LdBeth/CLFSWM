@@ -134,14 +134,17 @@
 		(declare (ignore args))
 		(setf action value)
 		(throw 'exit-info-loop nil))))))
-    (info-mode (nreverse info-list))
-    (dolist (item (menu-item menu))
-      (undefine-info-key-fun (list (menu-item-key item))))
-    (typecase action
-      (menu (open-menu action (cons menu parent)))
-      (null (awhen (first parent)
-	      (open-menu it (rest parent))))
-      (t (when (fboundp action)
-	   (funcall action))))))
+    (let ((selected-item (info-mode (nreverse info-list))))
+      (dolist (item (menu-item menu))
+	(undefine-info-key-fun (list (menu-item-key item))))
+      (when selected-item
+	(awhen (nth selected-item (menu-item menu))
+	  (setf action (menu-item-value it))))
+      (typecase action
+	(menu (open-menu action (cons menu parent)))
+	(null (awhen (first parent)
+		(open-menu it (rest parent))))
+	(t (when (fboundp action)
+	     (funcall action)))))))
 
 

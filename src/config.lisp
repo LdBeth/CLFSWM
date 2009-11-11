@@ -72,7 +72,7 @@ You can tweak this to what you want"
 ;;; CONFIG: Corner actions - See in clfswm-corner.lisp for
 ;;;   allowed functions
 (defparameter *corner-main-mode-left-button*
-  '((:top-left nil)
+  '((:top-left open-menu)
     (:top-right present-virtual-keyboard)
     (:bottom-right present-windows)
     (:bottom-left nil))
@@ -234,8 +234,13 @@ on the root window in the main mode with the mouse")
   "Config(Info mode group): Info window border color")
 (defparameter *info-line-cursor* "white"
   "Config(Info mode group): Info window line cursor color color")
+(defparameter *info-selected-background* "blue"
+  "Config(Info mode group): Info selected item background color")
 (defparameter *info-font-string* *default-font-string*
   "Config(Info mode group): Info window font string")
+
+(defparameter *info-click-to-select* t
+  "Config(Info mode group): If true, click on info window select item. Otherwise, click to drag the menu")
 
 ;;; CONFIG - Circulate string colors
 (defparameter *circulate-font-string* *default-font-string*

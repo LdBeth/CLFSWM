@@ -28,40 +28,67 @@
 (defstruct info window gc font list ilw ilh x y max-x max-y)
 
 
+(defparameter *info-selected-item* nil)
+
+
 (defun leave-info-mode (info)
   "Leave the info mode"
+  (declare (ignore info))
+  (setf *info-selected-item* nil)
+  (throw 'exit-info-loop nil))
+
+(defun leave-info-mode-and-valid (info)
+  "Leave the info mode and valid the selected item"
   (declare (ignore info))
   (throw 'exit-info-loop nil))
 
 (defun mouse-leave-info-mode (window root-x root-y info)
   "Leave the info mode"
   (declare (ignore window root-x root-y info))
+  (setf *info-selected-item* nil)
   (throw 'exit-info-loop nil))
 
+
+
+(defun find-info-item-from-mouse (root-x root-y info)
+  (if (< (xlib:drawable-x (info-window info)) root-x
+	 (+ (xlib:drawable-x (info-window info))
+	    (xlib:drawable-width (info-window info))))
+      (truncate (/ (- (+ (- root-y (xlib:drawable-y (info-window info)))
+			 (xlib:max-char-ascent (info-font info))
+			 (info-y info)) (info-ilh info)) (info-ilh info)))
+      nil))
+
+
+(defun set-info-item-form-mouse (root-x root-y info)
+  (setf *info-selected-item* (find-info-item-from-mouse root-x root-y info)))
 
 
 
 (defun draw-info-window (info)
   (labels ((print-line (line posx posy &optional (color *info-foreground*))
 	     ;;(setf (xlib:gcontext-foreground (info-gc info)) (get-color color))
-	     (xlib:with-gcontext ((info-gc info) :foreground (get-color color))
-	       (xlib:draw-glyphs *pixmap-buffer* (info-gc info)
+	     (xlib:with-gcontext ((info-gc info) :foreground (get-color color)
+				  :background (if (equal posy *info-selected-item*)
+						  (get-color *info-selected-background*)
+						  (get-color *info-background*)))
+	       (xlib:draw-image-glyphs *pixmap-buffer* (info-gc info)
 				 (- (+ (info-ilw info) (* posx (info-ilw info))) (info-x info))
 				 (- (+ (* (info-ilh info) posy) (info-ilh info)) (info-y info))
 				 (format nil "~A" line)))
 	     (+ posx (length line))))
     (clear-pixmap-buffer (info-window info) (info-gc info))
     (loop for line in (info-list info)
-       for y from 0 do
-	 (typecase line
-	   (cons (typecase (first line)
-		   (cons (let ((posx 0))
-			   (dolist (l line)
-			     (typecase l
-			       (cons (setf posx (print-line (first l) posx y (second l))))
-			       (t (setf posx (print-line l posx y)))))))
-		   (t (print-line (first line) 0 y (second line)))))
-	   (t (print-line line 0 y))))
+       for y from 0
+       do (typecase line
+	    (cons (typecase (first line)
+		    (cons (let ((posx 0))
+			    (dolist (l line)
+			      (typecase l
+				(cons (setf posx (print-line (first l) posx y (second l))))
+				(t (setf posx (print-line l posx y)))))))
+		    (t (print-line (first line) 0 y (second line)))))
+	    (t (print-line line 0 y))))
     (copy-pixmap-buffer (info-window info) (info-gc info))))
 
 
@@ -76,7 +103,8 @@
 
 (defun set-default-info-keys ()
   (define-info-key (#\q) 'leave-info-mode)
-  (define-info-key ("Return") 'leave-info-mode)
+  (define-info-key ("Return") 'leave-info-mode-and-valid)
+  (define-info-key ("space") 'leave-info-mode-and-valid)
   (define-info-key ("Escape") 'leave-info-mode)
   (define-info-key ("twosuperior")
       (defun info-banish-pointer (info)
@@ -87,43 +115,51 @@
       (defun info-next-line (info)
 	"Move one line down"
 	(setf (info-y info) (min (+ (info-y info) (info-ilh info)) (info-max-y info)))
+	(setf *info-selected-item* nil)
 	(draw-info-window info)))
   (define-info-key ("Up")
       (defun info-previous-line (info)
 	"Move one line up"
 	(setf (info-y info) (max (- (info-y info) (info-ilh info)) 0))
+	(setf *info-selected-item* nil)
 	(draw-info-window info)))
   (define-info-key ("Left")
       (defun info-previous-char (info)
 	"Move one char left"
 	(setf (info-x info) (max (- (info-x info) (info-ilw info)) 0))
+	(setf *info-selected-item* nil)
 	(draw-info-window info)))
   (define-info-key ("Right")
       (defun info-next-char (info)
 	"Move one char right"
 	(setf (info-x info) (min (+ (info-x info) (info-ilw info)) (info-max-x info)))
+	(setf *info-selected-item* nil)
 	(draw-info-window info)))
   (define-info-key ("Home")
       (defun info-first-line (info)
 	"Move to first line"
 	(setf (info-x info) 0
 	      (info-y info) 0)
+	(setf *info-selected-item* nil)
 	(draw-info-window info)))
   (define-info-key ("End")
       (defun info-end-line (info)
 	"Move to last line"
 	(setf (info-x info) 0
 	      (info-y info) (- (* (length (info-list info)) (info-ilh info)) (xlib:drawable-height (info-window info))))
+	(setf *info-selected-item* nil)
 	(draw-info-window info)))
   (define-info-key ("Page_Down")
       (defun info-next-ten-lines (info)
 	"Move ten lines down"
 	(setf (info-y info) (min (+ (info-y info) (* (info-ilh info) 10)) (info-max-y info)))
+	(setf *info-selected-item* nil)
 	(draw-info-window info)))
   (define-info-key ("Page_Up")
       (defun info-previous-ten-lines (info)
 	"Move ten lines up"
 	(setf (info-y info) (max (- (info-y info) (* (info-ilh info) 10)) 0))
+	(setf *info-selected-item* nil)
 	(draw-info-window info))))
 
 (add-hook *binding-hook* 'set-default-info-keys)
@@ -153,18 +189,20 @@
 
 (defun info-mouse-next-line (window root-x root-y info)
   "Move one line down"
-  (declare (ignore window root-x root-y))
+  (declare (ignore window))
   (setf (info-y info) (min (+ (info-y info) (info-ilh info)) (info-max-y info)))
+  (set-info-item-form-mouse root-x root-y info)
   (draw-info-window info))
 
 (defun info-mouse-previous-line (window root-x root-y info)
   "Move one line up"
-  (declare (ignore window root-x root-y))
+  (declare (ignore window))
   (setf (info-y info) (max (- (info-y info) (info-ilh info)) 0))
+  (set-info-item-form-mouse root-x root-y info)
   (draw-info-window info))
 
 
-(defun info-mouse-motion (window root-x root-y info)
+(defun info-mouse-motion-drag (window root-x root-y info)
   "Grab text"
   (declare (ignore window))
   (when (and *info-start-grab-x* *info-start-grab-y*)
@@ -174,12 +212,35 @@
 
 
 
+
+
+
+
+(defun info-mouse-select-item (window root-x root-y info)
+  (declare (ignore window))
+  (set-info-item-form-mouse root-x root-y info)
+  (leave-info-mode-and-valid info))
+
+(defun info-mouse-motion-click (window root-x root-y info)
+  (declare (ignore window))
+  (let ((last *info-selected-item*))
+    (set-info-item-form-mouse root-x root-y info)
+    (unless (equal last *info-selected-item*)
+      (draw-info-window info))))
+
+
+
 (defun set-default-info-mouse ()
-  (define-info-mouse (1) 'info-begin-grab 'info-end-grab)
+  (if *info-click-to-select*
+      (define-info-mouse (1) nil 'info-mouse-select-item)
+      (define-info-mouse (1) 'info-begin-grab 'info-end-grab))
   (define-info-mouse (2) 'mouse-leave-info-mode)
+  (define-info-mouse (3) 'mouse-leave-info-mode)
   (define-info-mouse (4) 'info-mouse-previous-line)
   (define-info-mouse (5) 'info-mouse-next-line)
-  (define-info-mouse ('motion) 'info-mouse-motion nil))
+  (if *info-click-to-select*
+      (define-info-mouse ('motion) 'info-mouse-motion-click nil)
+      (define-info-mouse ('motion) 'info-mouse-motion-drag nil)))
 
 (add-hook *binding-hook* 'set-default-info-mouse)
 
@@ -193,6 +254,7 @@
 Or for colored output: a list (line_string color)
 Or ((1_word color) (2_word color) 3_word (4_word color)...)"
   (when info-list
+    (setf *info-selected-item* nil)
     (labels ((compute-size (line)
 	       (typecase line
 		 (cons (typecase (first line)
@@ -252,6 +314,7 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 	      (xgrab-pointer *root* 68 69)
 	      (unless keyboard-grabbed-p
 		(xgrab-keyboard *root*))
+	      (wait-no-key-or-button-press)
 	      (generic-mode 'exit-info-loop
 			    :loop-function (lambda ()
 					     (raise-window (info-window info)))
@@ -268,7 +331,8 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 	      (xlib:destroy-window window)
 	      (xlib:close-font font)
 	      (display-all-frame-info)
-	      (wait-no-key-or-button-press))))))))
+	      (wait-no-key-or-button-press)
+	      *info-selected-item*)))))))
 
 
 
@@ -301,15 +365,23 @@ Function can be a function or a list (function color) for colored output"
 			     info-list)
 		       (define-key key function)))))
 	  (t (push (list (format nil "-=- ~A -=-" item) *menu-color-comment*) info-list))))
-      (info-mode (nreverse info-list) :width width :height height)
-      (dolist (item item-list)
-	(when (consp item)
-	  (let ((key (first item)))
-	    (undefine-info-key-fun (list key)))))
-      (typecase action
-	(function (funcall action))
-	(symbol (when (fboundp action)
-		  (funcall action)))))))
+      (let ((selected-item (info-mode (nreverse info-list) :width width :height height)))
+	(dolist (item item-list)
+	  (when (consp item)
+	    (let ((key (first item)))
+	      (undefine-info-key-fun (list key)))))
+	(when selected-item
+	  (awhen (nth selected-item item-list)
+	    (when (consp it)
+	      (destructuring-bind (key function explicit-doc) (ensure-n-elems it 3)
+		(declare (ignore key explicit-doc))
+		(typecase function
+		  (cons (setf action (first function)))
+		  (t (setf action function)))))))
+	(typecase action
+	  (function (funcall action))
+	  (symbol (when (fboundp action)
+		    (funcall action))))))))
 
 
 
