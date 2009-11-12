@@ -613,6 +613,15 @@ Window types are in +WINDOW-TYPES+.")
   "White")
 
 
+(defun color->rgb (color)
+  (multiple-value-bind (r g b)
+      (xlib:color-rgb color)
+    (+ (ash (round (* 256 r)) +16)
+       (ash (round (* 256 g)) +8)
+       (round (* 256 b)))))
+
+
+
 
 
 (defmacro my-character->keysyms (ch)

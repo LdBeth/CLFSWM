@@ -265,11 +265,6 @@
 
 
 
-(defun xdg-config-home ()
-  (pathname-directory (concatenate 'string (or (getenv "XDG_CONFIG_HOME")
-					       (getenv "HOME"))
-				   "/")))
-
 
 (defun read-conf-file ()
   (let* ((user-conf (probe-file (merge-pathnames (user-homedir-pathname) #p".clfswmrc")))

@@ -1,3 +1,8 @@
+2009-11-12  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (save-configuration-variables): New
+	function to save all configuration variables in clfswmrc.
+
 2009-11-11  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-info.lisp (info-mode): Begining of mouse support in
