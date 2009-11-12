@@ -267,11 +267,7 @@
 
 
 (defun read-conf-file ()
-  (let* ((user-conf (probe-file (merge-pathnames (user-homedir-pathname) #p".clfswmrc")))
-	 (etc-conf (probe-file #p"/etc/clfswmrc"))
-	 (config-user-conf (probe-file (make-pathname :directory (append (xdg-config-home) '("clfswm"))
-						      :name "clfswmrc")))
-	 (conf (or config-user-conf user-conf etc-conf)))
+  (let* ((conf (conf-file-name)))
     (if conf
 	(handler-case (load conf)
 	  (error (c)
