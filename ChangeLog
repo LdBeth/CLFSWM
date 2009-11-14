@@ -1,3 +1,8 @@
+2009-11-14  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-configuration.lisp (create-configuration-menu): New
+	menu to configure all clfswm variables while clfswm is running.
+
 2009-11-12  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (save-configuration-variables): New

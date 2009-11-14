@@ -46,6 +46,7 @@
 	   :setf/=
 	   :create-symbol
 	   :number->char
+	   :simple-type-of
 	   :nth-insert
 	   :split-string
 	   :append-newline-space
@@ -284,6 +285,12 @@ Return the result of the last hook"
 
 (defun number->char (number)
   (code-char (+ (char-code #\a) number)))
+
+(defun simple-type-of (object)
+  (let ((type (type-of object)))
+    (typecase type
+      (cons (first type))
+      (t type))))
 
 
 

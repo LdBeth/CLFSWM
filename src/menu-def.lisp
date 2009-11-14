@@ -56,10 +56,13 @@
 (add-sub-menu 'main "n" 'action-by-name-menu "Action by name menu")
 (add-sub-menu 'main "u" 'action-by-number-menu "Action by number menu")
 (add-sub-menu 'main "y" 'utility-menu "Utility menu")
+(add-sub-menu 'main "o" 'configuration-menu "Configuration menu")
 (add-sub-menu 'main "m" 'clfswm-menu "CLFSWM menu")
 
 
 (update-menus (find-menu 'standard-menu))
+
+(create-configuration-menu)
 
 (add-menu-key 'help-menu "h" 'show-global-key-binding)
 (add-menu-key 'help-menu "b" 'show-main-mode-key-binding)
