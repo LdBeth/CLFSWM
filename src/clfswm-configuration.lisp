@@ -85,7 +85,7 @@
 (defun save-variables-in-conf-file (stream)
   (multiple-value-bind (all-groups all-variables)
       (find-configuration-variables)
-    (format stream "~2&;;; ### Internal variables definitions                    ### ;;;~%")
+    (format stream "~&;;; ### Internal variables definitions                    ### ;;;~%")
     (format stream ";;; ### You can edit this part when clfswm is not running ### ;;;~%")
     (format stream ";;; ### And you can remove this part to revert to the     ### ;;;~%")
     (format stream ";;; ### original configuration variables values.          ### ;;;~%")
