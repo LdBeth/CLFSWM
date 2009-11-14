@@ -169,7 +169,7 @@
 	       do (when (equal (second var) group)
 		    (add-menu-key menu (number->char (incf j))
 				  (create-conf-function (first var))))))))
-  (add-menu-key 'configuration-menu "*" 'save-configuration-variables))
+  (add-menu-key 'configuration-menu "F2" 'save-configuration-variables))
 
 
 
