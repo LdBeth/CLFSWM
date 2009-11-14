@@ -160,7 +160,6 @@
   "Configuration menu"
   (multiple-value-bind (all-groups all-variables)
       (find-configuration-variables)
-    (add-menu-key 'configuration-menu "a" 'save-configuration-variables)
     (loop for group in all-groups
        for i from 1
        do (let ((menu (group->menu group)))
@@ -169,7 +168,8 @@
 	       with j = -1
 	       do (when (equal (second var) group)
 		    (add-menu-key menu (number->char (incf j))
-				  (create-conf-function (first var)))))))))
+				  (create-conf-function (first var))))))))
+  (add-menu-key 'configuration-menu "*" 'save-configuration-variables))
 
 
 
