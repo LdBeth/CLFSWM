@@ -161,7 +161,7 @@
   (multiple-value-bind (all-groups all-variables)
       (find-configuration-variables)
     (loop for group in all-groups
-       for i from 1
+       for i from 0
        do (let ((menu (group->menu group)))
 	    (add-sub-menu 'configuration-menu (number->char i) menu group)
 	    (loop for var in all-variables
