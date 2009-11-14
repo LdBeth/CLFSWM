@@ -87,6 +87,8 @@
       (find-configuration-variables)
     (format stream "~2&;;; ### Internal variables definitions                    ### ;;;~%")
     (format stream ";;; ### You can edit this part when clfswm is not running ### ;;;~%")
+    (format stream ";;; ### And you can remove this part to revert to the     ### ;;;~%")
+    (format stream ";;; ### original configuration variables values.          ### ;;;~%")
     (format stream "(in-package :clfswm)~2%")
     (format stream "(setf~%")
     (dolist (group all-groups)
