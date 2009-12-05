@@ -60,3 +60,13 @@
 ;;(produce-all-docs)
 
 
+;;; For debuging: start Xnest or Zephyr and
+;;; add the lines above in a dot-clfswmrc-debug file
+;;(setf *default-modifiers* '(:mod-2))
+;;
+;;(defun my-add-escape ()
+;;  (define-main-key ("Escape" :mod-2) 'exit-clfswm))
+;;
+;;(add-hook *binding-hook* 'my-add-escape)
+;;
+;;(clfswm:main :display ":1" :alternate-conf #P"/where/is/dot-clfswmrc-debug")

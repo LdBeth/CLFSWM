@@ -32,12 +32,17 @@
 					       (getenv "HOME"))
 				   "/")))
 
-(defun conf-file-name ()
-  (let* ((user-conf (probe-file (merge-pathnames (user-homedir-pathname) #p".clfswmrc")))
-	 (etc-conf (probe-file #p"/etc/clfswmrc"))
-	 (config-user-conf (probe-file (make-pathname :directory (append (xdg-config-home) '("clfswm"))
-						      :name "clfswmrc"))))
-    (or config-user-conf user-conf etc-conf)))
+(let ((saved-conf-name nil))
+  (defun conf-file-name (&optional alternate-name)
+    (unless (and saved-conf-name (not alternate-name))
+      (let* ((user-conf (probe-file (merge-pathnames (user-homedir-pathname) #p".clfswmrc")))
+	     (etc-conf (probe-file #p"/etc/clfswmrc"))
+	     (config-user-conf (probe-file (make-pathname :directory (append (xdg-config-home) '("clfswm"))
+							  :name "clfswmrc")))
+	     (alternate-conf (probe-file alternate-name)))
+	(setf saved-conf-name (or alternate-conf config-user-conf user-conf etc-conf))))
+    (print saved-conf-name)
+    saved-conf-name))
 
 
 

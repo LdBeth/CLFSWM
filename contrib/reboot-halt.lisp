@@ -55,7 +55,7 @@
   (do-with-terminal "sudo halt"))
 
 (unless (find-menu 'reboot-halt-menu)
-  (add-sub-menu 'help-menu "Pause" 'reboot-halt-menu "Suspend/Reboot/Halt menu")
+  (add-sub-menu 'clfswm-menu "Pause" 'reboot-halt-menu "Suspend/Reboot/Halt menu")
   (add-menu-key 'reboot-halt-menu "s" 'do-suspend)
   (add-menu-key 'reboot-halt-menu "r" 'do-reboot)
   (add-menu-key 'reboot-halt-menu "h" 'do-halt))

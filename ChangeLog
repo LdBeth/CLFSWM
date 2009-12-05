@@ -1,3 +1,10 @@
+2009-12-05  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm.lisp (main): Add an alternate configuration filename
+	parameter.
+
+	* load.lisp: Add a debuging code example.
+
 2009-11-14  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-configuration.lisp (create-configuration-menu): New
