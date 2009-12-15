@@ -59,6 +59,9 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defparameter *root* nil)
 (defparameter *no-focus-window* nil)
 
+(defparameter *loop-timeout* 0.1
+  "Config(): Maximum time (in seconds) to wait before calling *loop-hook*")
+
 (defparameter *pixmap-buffer* nil)
 
 (defparameter *contrib-dir* "")
@@ -166,6 +169,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 (defparameter *menu* (make-menu :name 'main :doc "Main menu"))
 
+
 ;;; Main mode hooks (set in clfswm.lisp)
 (defparameter *button-press-hook* nil
   "Config(Hook group):")
@@ -233,7 +237,10 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 
 (defparameter *binding-hook* nil
-  "Config(Hook group):")
+  "Config(Hook group): Hook executed when keys/buttons are bounds")
+
+(defparameter *loop-hook* nil
+  "Config(Hook group): Kook executed on each event loop")
 
 
 (defparameter *in-second-mode* nil)

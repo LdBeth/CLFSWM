@@ -1,3 +1,11 @@
+2009-12-15  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm.lisp (main-loop): Add a *loop-hook* parameter and a
+	loop timeout.
+
+	* src/clfswm-generic-mode.lisp (generic-mode): Add a loop-hook
+	parameter and a loop timeout.
+
 2009-12-05  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm.lisp (main): Add an alternate configuration filename

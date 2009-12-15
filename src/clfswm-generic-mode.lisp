@@ -27,6 +27,7 @@
 
 
 (defun generic-mode (exit-tag &key enter-function loop-function leave-function
+		     (loop-hook *loop-hook*)
 		     (button-press-hook *button-press-hook*)
 		     (button-release-hook *button-release-hook*)
 		     (motion-notify-hook *motion-notify-hook*)
@@ -69,8 +70,9 @@
     (unwind-protect
 	 (catch exit-tag
 	   (loop
+	      (call-hook loop-hook)
 	      (nfuncall loop-function)
 	      (xlib:display-finish-output *display*)
-	      (xlib:process-event *display* :handler #'handler-function)
+	      (xlib:process-event *display* :handler #'handler-function :timeout *loop-timeout*)
 	      (xlib:display-finish-output *display*)))
       (nfuncall leave-function))))

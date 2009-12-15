@@ -205,8 +205,9 @@
 (defun main-loop ()
   (loop
      (with-xlib-protect
+	 (call-hook *loop-hook*)
        (xlib:display-finish-output *display*)
-       (xlib:process-event *display* :handler #'handle-event))))
+       (xlib:process-event *display* :handler #'handle-event :timeout *loop-timeout*))))
 ;;(dbg "Main loop finish" c)))))
 
 
