@@ -133,9 +133,10 @@
     "start an emacs for another user"
     "exec xterm -e emacsremote")
   (define-shell (#\h) b-start-xclock "start an xclock" "exec xclock -d")
-  (define-second-key ("Menu") 'show-all-frames-info-key)
-  (define-second-key ("Menu" :shift) 'show-all-frames-info)
-  (define-second-key ("Menu" :control) 'toggle-show-root-frame)
+  (define-second-key ("F10" :mod-1) 'fast-layout-switch)
+  (define-second-key ("F10" :shift) 'show-all-frames-info-key)
+  (define-second-key ("F10" :shift :mod-1) 'show-all-frames-info)
+  (define-second-key ("F10" :control) 'toggle-show-root-frame)
   ;; Bind or jump functions
   (define-second-key ("1" :mod-1) 'bind-or-jump 1)
   (define-second-key ("2" :mod-1) 'bind-or-jump 2)
