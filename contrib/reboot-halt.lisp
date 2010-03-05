@@ -40,11 +40,19 @@
 
 (defun do-with-terminal (command)
   (do-shell (format nil "xterm -e '~A'" command)))
-  ;;(do-shell (format nil "xterm -e 'echo ~A; sleep 3'" command)))  ;; test
+;;(do-shell (format nil "xterm -e 'echo ~A; sleep 3'" command)))  ;; test
+
+(defun do-nothing ()
+  "Do nothing"
+  ())
 
 (defun do-suspend ()
   "Suspend the computer to RAM"
   (do-with-terminal "sudo pm-suspend"))
+
+(defun do-hibernate ()
+  "Suspend the computer to DISK"
+  (do-with-terminal "sudo pm-hibernate"))
 
 (defun do-reboot ()
   "Reboot the computer"
@@ -56,7 +64,9 @@
 
 (unless (find-menu 'reboot-halt-menu)
   (add-sub-menu 'clfswm-menu "Pause" 'reboot-halt-menu "Suspend/Reboot/Halt menu")
+  (add-menu-key 'reboot-halt-menu "-" 'do-nothing)
   (add-menu-key 'reboot-halt-menu "s" 'do-suspend)
+  (add-menu-key 'reboot-halt-menu "d" 'do-hibernate)
   (add-menu-key 'reboot-halt-menu "r" 'do-reboot)
   (add-menu-key 'reboot-halt-menu "h" 'do-halt))
 
