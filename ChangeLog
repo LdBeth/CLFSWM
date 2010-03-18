@@ -1,3 +1,8 @@
+2010-03-18  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-layout.lisp (set-tile-space-layout): Set default
+	to 1%.
+
 2009-12-15  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm.lisp (main-loop): Add a *loop-hook* parameter and a
