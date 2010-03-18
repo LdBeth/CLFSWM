@@ -313,7 +313,7 @@
 
 (defun set-tile-space-layout ()
   "Tile Space: tile child in its frame leaving spaces between them"
-  (layout-ask-size "Space size in percent (%)" :tile-space-size 1)
+  (layout-ask-size "Space size in percent (%)" :tile-space-size 0.01)
   (set-layout #'tile-space-layout))
 
 
