@@ -202,6 +202,16 @@
 (add-menu-key 'utility-menu "i" 'identify-key)
 (add-menu-key 'utility-menu "colon" 'eval-from-query-string)
 (add-menu-key 'utility-menu "exclam" 'run-program-from-query-string)
+(add-sub-menu 'utility-menu "o" 'other-window-manager-menu "Other window manager menu")
+
+(add-menu-key 'other-window-manager-menu "x" 'run-xterm)
+(add-menu-key 'other-window-manager-menu "t" 'run-twm)
+(add-menu-key 'other-window-manager-menu "i" 'run-icewm)
+(add-menu-key 'other-window-manager-menu "g" 'run-gnome-session)
+(add-menu-key 'other-window-manager-menu "k" 'run-startkde)
+(add-menu-key 'other-window-manager-menu "c" 'run-xfce4-session)
+(add-menu-key 'other-window-manager-menu "l" 'run-lxde)
+(add-menu-key 'other-window-manager-menu "p" 'run-prompt-wm)
 
 
 (add-menu-key 'clfswm-menu "r" 'reset-clfswm)

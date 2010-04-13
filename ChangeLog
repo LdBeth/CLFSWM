@@ -1,3 +1,8 @@
+2010-04-11  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (run-other-window-manager): Add the ability
+	to launch an other window manager and to return to clfswm.
+
 2010-03-18  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-layout.lisp (set-tile-space-layout): Set default

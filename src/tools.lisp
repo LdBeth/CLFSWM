@@ -422,12 +422,19 @@ of the program to return.
              (make-two-way-stream
               (ext:process-output proc)
               (ext:process-input proc)))
-    #+:clisp (let ((proc (ext:run-program program :arguments args
-						  :input :stream :output
-						  :stream :wait (or wt t))))
-	       (unless proc
-		 (error "Cannot create process."))
-	       proc)
+    ;;    #+:clisp (let ((proc (ext:run-program program :arguments args
+    ;;						  :input :stream :output :stream :wait (or wt t))))
+    ;;	       (unless proc
+    ;;		 (error "Cannot create process."))
+    ;;	       proc)
+    #+:clisp (if wt
+		 (ext:run-program program :arguments args
+				  :input :terminal :output :terminal :wait t)
+		 (let ((proc (ext:run-program program :arguments args
+					      :input :stream :output :stream :wait wt)))
+		   (unless proc
+		     (error "Cannot create process."))
+		   proc))
     #+:sbcl (let ((proc (sb-ext:run-program program args :input
 							 :stream :output
 							 :stream :wait wt)))

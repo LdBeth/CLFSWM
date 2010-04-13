@@ -163,6 +163,9 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defparameter *circulate-keys-release* nil)
 
 
+(defparameter *other-window-manager* nil)
+
+
 (defstruct menu name item doc)
 (defstruct menu-item key value)
 

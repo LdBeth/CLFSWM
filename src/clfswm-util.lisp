@@ -1277,3 +1277,60 @@ For window: set current child to window or its parent according to window-parent
 	 `(,(format nil "Focus window: None")
 	    (#\u unhide-all-windows-in-current-child))))))
 
+
+
+;;; Other window manager functions
+(defun get-proc-list ()
+  (let ((proc (do-shell "ps x -o pid=" nil nil))
+	(proc-list nil))
+    (sleep 0.5)
+    (loop for line = (read-line proc nil nil)
+       while line
+       do (push line proc-list))
+    (dbg proc-list)
+    proc-list))
+
+(defun run-other-window-manager ()
+  (let ((proc-start (get-proc-list)))
+    (do-shell *other-window-manager* nil t)
+    (let* ((proc-end (get-proc-list))
+	   (proc-diff (set-difference proc-end proc-start :test #'equal)))
+      (dbg proc-diff)
+      (dolist (proc proc-diff)
+	(dbg 'killing-sigterm proc)
+	(do-shell (format nil "kill ~A 2> /dev/null" proc) nil t))
+      (sleep 0.5)
+      (dolist (proc proc-diff)
+	(dbg 'killing-sigkill proc)
+	(do-shell (format nil "kill -9 ~A 2> /dev/null" proc) nil t)))
+    (setf *other-window-manager* nil)))
+
+
+(defun do-run-other-window-manager (window-manager)
+  (setf *other-window-manager* window-manager)
+  (throw 'exit-main-loop nil))
+
+(defmacro def-run-other-window-manager (name &optional definition)
+  (let ((definition (or definition name)))
+    `(defun ,(create-symbol "run-" name) ()
+       ,(format nil "Run ~A" definition)
+       (do-run-other-window-manager ,(format nil "~A" name)))))
+
+(def-run-other-window-manager "xterm")
+(def-run-other-window-manager "icewm")
+(def-run-other-window-manager "twm")
+(def-run-other-window-manager "gnome-session" "Gnome")
+(def-run-other-window-manager "startkde" "KDE")
+(def-run-other-window-manager "xfce4-session" "XFCE")
+
+(defun run-lxde ()
+  "Run LXDE"
+  (do-run-other-window-manager "lxsession; xterm -e \"echo '  /----------------------------------\\' ; echo '  |  CLFSWM Note:                    |' ; echo '  |    Close this window when done.  |' ; echo '  \\----------------------------------/'; echo; echo; $SHELL\""))
+
+
+(defun run-prompt-wm ()
+  "Prompt for an other window manager"
+  (let ((wm (query-string "Run an other window manager:" "icewm")))
+    (do-run-other-window-manager wm)))
+
+

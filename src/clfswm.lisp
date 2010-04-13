@@ -329,7 +329,6 @@
     (xlib:close-display *display*)))
 
 
-
 (defun main (&key (display (or (getenv "DISPLAY") ":0")) protocol
 	     (base-dir (directory-namestring (or *load-truename* "")))
 	     (read-conf-file-p t)
@@ -338,10 +337,12 @@
     (catch 'exit-clfswm
       (loop
 	 (handler-case
-	     (main-unprotected :display display :protocol protocol :base-dir base-dir
-			       :read-conf-file-p read-conf-file-p
-			       :alternate-conf alternate-conf
-			       :error-msg error-msg)
+	     (if *other-window-manager*
+		 (run-other-window-manager)
+		 (main-unprotected :display display :protocol protocol :base-dir base-dir
+				   :read-conf-file-p read-conf-file-p
+				   :alternate-conf alternate-conf
+				   :error-msg error-msg))
 	   (error (c)
 	     (let ((msg (format nil "CLFSWM Error: ~A." c)))
 	       (format t "~&~A~%Reinitializing...~%" msg)
