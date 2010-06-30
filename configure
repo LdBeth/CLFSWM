@@ -1,0 +1,122 @@
+#! /bin/sh
+
+PROJECT_NAME=clfswm
+CONFIGURE_VERSION=0.1
+
+
+usage () {
+    echo "'configure' configures $PROJECT_NAME to adapt to many kinds of systems.
+
+Usage: ./configure [OPTION]... [VAR=VALUE]...
+
+Defaults for the options are specified in brackets.
+
+Configuration:
+  -h, --help                display this help and exit
+  -V, --version             display version information and exit
+  --with-lisp=LISP          use a particular Lisp implementation [ask]
+  --with-lisp-eval-opt=OPT  use a particular Lisp eval command line option
+  --with-lisp-load-opt=OPT  use a particular Lisp load command line option
+  --with-lisp-ext=OPT       use a particular Lisp extension filename
+  --with-lisp-core=CORE     use a particular Lisp core (initial memory image)
+  --prefix=PREFIX           install architecture-independent files in PREFIX
+			    [/usr/local]
+
+By default, 'make install' will install all the files in
+'/usr/local/bin', '/usr/local/lib' etc.  You can specify
+an installation prefix other than '/usr/local' using '--prefix',
+for instance '--prefix=$HOME'."
+    exit 0
+}
+
+
+version () {
+    echo "Configure version: $CONFIGURE_VERSION"
+    exit 0
+}
+
+
+
+TEMP=`getopt -o hV: --long help,version,srcdir:,with-lisp:,with-lisp-eval-opt:,with-lisp-load-opt:,with-lisp-ext:,with-lisp-core:,prefix: -- "$@"`
+PREFIX=/usr/local
+
+if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
+
+eval set -- "$TEMP"
+
+while true ; do
+    case "$1" in
+	-h|--help) usage ; shift ;;
+	-V|--version) version ; shift ;;
+	--srcdir) SRCDIR=$2 ; shift 2 ;;
+	--with-lisp) LISP=$2 ; shift 2 ;;
+	--with-lisp-eval-opt) EVAL_OPT=$2 ; shift 2 ;;
+	--with-lisp-load-opt) LOAD_OPT=$2 ; shift 2 ;;
+	--with-lisp-ext) EXT=$2 ; shift 2 ;;
+	--with-lisp-core) CORE=$2 ; shift 2 ;;
+	--prefix) PREFIX=$2 ; shift 2 ;;
+	--) shift ; break ;;
+	*) echo "Internal error!" ; exit 1 ;;
+    esac
+done
+
+DESTDIR=$PREFIX
+
+
+if [ "x$LISP" = "x" ]; then
+    echo "Please, choose a Lisp implementation in:
+1) SBCL 2) CMUCL 3) CLISP 4) ECL 5) CCL 6) Other"
+    read REP_LISP
+    case $REP_LISP in
+	1) LISP=sbcl ;;
+	2) LISP=cmucl ;;
+	3) LISP=clisp ;;
+	4) LISP=ecl ;;
+	5) LISP=ccl ;;
+	6) echo -n "Please, enter your Lisp implementation: "
+	    read LISP ;;
+	*) echo "Error"; exit -1 ;;
+    esac
+fi
+
+
+case $LISP in
+    clisp) LISP=$(which clisp)
+	EVAL_OPT="-x -q"
+	LOAD_OPT=""
+	EXT=fas ;;
+    sbcl) LISP=$(which sbcl)
+	EVAL_OPT="--eval"
+	LOAD_OPT="--load"
+	EXT=fasl ;;
+    cmucl) LISP=$(which cmucl)
+	EVAL_OPT="-eval"
+	LOAD_OPT="-load"
+	EXT=x86f ;;
+    ecl) LISP=$(which ecl)
+	EVAL_OPT="-eval"
+	LOAD_OPT="-load"
+	EXT=fas ;;
+    ccl) LISP=$(which ccl)
+	EVAL_OPT="-e"
+	LOAD_OPT="-l"
+	EXT=lx32fsl ;;
+esac
+
+echo "Configuration:"
+echo SRCDIR = $SRCDIR
+echo PREFIX = $PREFIX
+echo "LISP=$LISP  EVAL_OPT=$EVAL_OPT  LOAD_OPT=$LOAD_OPT  EXT=$EXT CORE=$CORE"
+
+sed -e "s#+PROJECT_NAME+#$PROJECT_NAME#g" \
+    -e "s#+DESTDIR+#$DESTDIR#g" \
+    -e "s#+LISP+#$LISP#g" \
+    -e "s#+EVAL_OPT+#$EVAL_OPT#g" \
+    -e "s#+LOAD_OPT+#$LOAD_OPT#g" \
+    -e "s#+EXT+#$EXT#g" \
+    -e "s#+CORE+#$CORE#g" \
+    Makefile.template > Makefile
+
+echo ""
+echo "Type 'make' to build $PROJECT_NAME"
+echo ""

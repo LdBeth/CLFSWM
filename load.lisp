@@ -54,6 +54,7 @@
 
 (in-package :clfswm)
 
+#-BUILD
 (ignore-errors
   (main :read-conf-file-p t))
 
