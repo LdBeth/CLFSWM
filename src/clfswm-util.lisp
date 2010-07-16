@@ -553,31 +553,35 @@
   "Focus the current frame or focus the current window parent
 mouse-fun is #'move-frame or #'resize-frame"
   (let* ((to-replay t)
-	 (child window)
-	 (parent (find-parent-frame child *current-root*))
+	 (child (find-child-under-mouse root-x root-y))
+	 (parent (find-parent-frame child))
 	 (root-p (or (equal window *root*)
 		     (and (frame-p *current-root*)
 			  (equal child (frame-window *current-root*))))))
-    (when (or (not root-p) *create-frame-on-root*)
-      (unless parent
-	(if root-p
-	    (progn
-	      (setf child (create-frame)
-		    parent *current-root*
-		    mouse-fn #'resize-frame)
-	      (place-frame child parent root-x root-y 10 10)
-	      (map-window (frame-window child))
-	      (pushnew child (frame-child *current-root*)))
-	    (setf child (find-frame-window window *current-root*)
-		  parent (find-parent-frame child *current-root*)))
-	(when child
+    (labels ((add-new-frame ()
+	       (setf child (create-frame)
+		     parent *current-root*
+		     mouse-fn #'resize-frame)
+	       (place-frame child parent root-x root-y 10 10)
+	       (map-window (frame-window child))
+	       (pushnew child (frame-child *current-root*))))
+      (when (or (not root-p) *create-frame-on-root*)
+	(unless parent
+	  (if root-p
+	      (add-new-frame)
+	      (progn
+		(unless (equal (type-of child) 'frame)
+		  (setf child (find-frame-window child *current-root*)))
+		(setf parent (find-parent-frame child)))))
+	(when (and child parent (focus-all-children child parent))
+	  (when (show-all-children)
+	    (setf to-replay nil)))
+	(when (equal (type-of child) 'frame)
 	  (funcall mouse-fn child parent root-x root-y)))
-      (when (and child parent (focus-all-children child parent))
-	(when (show-all-children)
-	  (setf to-replay nil))))
-    (if to-replay
-	(replay-button-event)
-	(stop-button-event))))
+      (if to-replay
+	  (replay-button-event)
+	  (stop-button-event)))))
+
 
 (defun mouse-click-to-focus-and-move (window root-x root-y)
   "Move and focus the current frame or focus the current window parent.

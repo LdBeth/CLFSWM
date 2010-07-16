@@ -2,6 +2,8 @@
 
 	* src/clfswm-util.lisp (identify-key): Add a timeout in
 	xlib:process-event.
+	(mouse-click-to-focus-generic): Use find-child-under-mouse instead
+	of the window passed by xlib:process-event.
 
 	* src/xlib-util.lisp (move-window, resize-window)
 	(wait-mouse-button-release): Add a timeout in xlib:process-event.
