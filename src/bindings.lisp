@@ -116,6 +116,8 @@
   (stop-button-event)
   (mouse-focus-move/resize-generic root-x root-y #'resize-frame t))
 
+
+
 (defun set-default-main-mouse ()
   (define-main-mouse (1) 'mouse-click-to-focus-and-move)
   (define-main-mouse (2) 'mouse-middle-click)

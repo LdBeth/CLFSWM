@@ -39,7 +39,7 @@
 	     (etc-conf (probe-file #p"/etc/clfswmrc"))
 	     (config-user-conf (probe-file (make-pathname :directory (append (xdg-config-home) '("clfswm"))
 							  :name "clfswmrc")))
-	     (alternate-conf (probe-file alternate-name)))
+	     (alternate-conf (and alternate-name (probe-file alternate-name))))
 	(setf saved-conf-name (or alternate-conf config-user-conf user-conf etc-conf))))
     (print saved-conf-name)
     saved-conf-name))
@@ -320,7 +320,7 @@
       (unwind-protect
 	   (loop until done do
 		(xlib:display-finish-output *display*)
-		(xlib:process-event *display* :handler #'handle-identify))
+		(xlib:process-event *display* :handler #'handle-identify :timeout *loop-timeout*))
 	(xlib:destroy-window window)
 	(xlib:close-font font)
 	(xgrab-pointer *root* 66 67)))))

@@ -63,6 +63,7 @@
 
 ;;; For debuging: start Xnest or Zephyr and
 ;;; add the lines above in a dot-clfswmrc-debug file
+;;; mod-2 is the numlock key on some keyboards.
 ;;(setf *default-modifiers* '(:mod-2))
 ;;
 ;;(defun my-add-escape ()

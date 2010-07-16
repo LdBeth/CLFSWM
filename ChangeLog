@@ -1,3 +1,11 @@
+2010-07-16  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (identify-key): Add a timeout in
+	xlib:process-event.
+
+	* src/xlib-util.lisp (move-window, resize-window)
+	(wait-mouse-button-release): Add a timeout in xlib:process-event.
+
 2010-04-11  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (run-other-window-manager): Add the ability

@@ -500,7 +500,7 @@ Window types are in +WINDOW-TYPES+.")
       (loop until done
 	 do (with-xlib-protect
 	      (xlib:display-finish-output *display*)
-	      (xlib:process-event *display* :handler #'handle-event)))
+	      (xlib:process-event *display* :handler #'handle-event :timeout *loop-timeout*)))
       (unless pointer-grabbed-p
 	(xungrab-pointer)))))
 
@@ -543,7 +543,7 @@ Window types are in +WINDOW-TYPES+.")
       (loop until done
 	 do (with-xlib-protect
 	      (xlib:display-finish-output *display*)
-	      (xlib:process-event *display* :handler #'handle-event)))
+	      (xlib:process-event *display* :handler #'handle-event :timeout *loop-timeout*)))
       (unless pointer-grabbed-p
 	(xungrab-pointer)))))
 
@@ -571,7 +571,7 @@ Window types are in +WINDOW-TYPES+.")
       (loop until done
 	 do (with-xlib-protect
 	      (xlib:display-finish-output *display*)
-	      (xlib:process-event *display* :handler #'handle-event)))
+	      (xlib:process-event *display* :handler #'handle-event :timeout *loop-timeout*)))
       (unless pointer-grabbed-p
 	(xungrab-pointer)))))
 
