@@ -76,11 +76,12 @@
 	(if (find-child window *current-root*)
 	    (let ((parent (find-parent-frame window *current-root*)))
 	      (if (and parent (managed-window-p window parent))
-		  (progn
-		    (adapt-child-to-parent window parent)
-		    (send-configuration-notify window))
+		  (adapt-child-to-parent window parent)
 		  (adjust-from-request)))
 	    (adjust-from-request))
+	(send-configuration-notify window (xlib:drawable-x window) (xlib:drawable-y window)
+				   (xlib:drawable-width window) (xlib:drawable-height window)
+				   (xlib:drawable-border-width window))
 	(when (has-stackmode value-mask)
 	  (case stack-mode
 	    (:above (raise-window window))))))))
@@ -156,7 +157,6 @@
 
 (defun handle-create-notify (&rest event-slots)
   (declare (ignore event-slots)))
-
 
 
 

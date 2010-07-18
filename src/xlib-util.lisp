@@ -70,7 +70,7 @@ Window types are in +WINDOW-TYPES+.")
 	 ,@body)
      ((or xlib:match-error xlib:window-error xlib:drawable-error) (c)
        (declare (ignore c)))))
-      ;;(dbg c ',body))))
+       ;;(dbg c ',body))))
 
 
 
@@ -128,16 +128,18 @@ Window types are in +WINDOW-TYPES+.")
 (defun unhide-window (window)
   (when window
     (with-xlib-protect
-      (when (window-hidden-p window)
-	(xlib:map-window window)
-	(setf (window-state window) +normal-state+
-	      (xlib:window-event-mask window) *window-events*))))
+	(when (window-hidden-p window)
+	  (xlib:map-subwindows window)
+	  (xlib:map-window window)
+	  (setf (window-state window) +normal-state+
+		(xlib:window-event-mask window) *window-events*))))
   (xlib:display-finish-output *display*))
 
 
 (defun map-window (window)
   (when window
     (with-xlib-protect
+      (xlib:map-subwindows window)
       (xlib:map-window window)
       (xlib:display-finish-output *display*))))
 
@@ -286,21 +288,18 @@ Window types are in +WINDOW-TYPES+.")
 
 
 
-;; Stolen from Eclipse
-(defun send-configuration-notify (window)
+;;; Stolen from Eclipse
+(defun send-configuration-notify (window x y w h bw)
   "Send a synthetic configure notify event to the given window (ICCCM 4.1.5)"
-  (multiple-value-bind (x y)
-      (xlib:translate-coordinates window 0 0 (xlib:drawable-root window))
-    (xlib:send-event window
-		     :configure-notify
-		     (xlib:make-event-mask :structure-notify)
-		     :event-window window :window window
-		     :x x :y y
-		     :override-redirect-p nil
-		     :border-width (xlib:drawable-border-width window)
-		     :width (xlib:drawable-width window)
-		     :height (xlib:drawable-height window)
-		     :propagate-p nil)))
+  (xlib:send-event window :configure-notify (xlib:make-event-mask :structure-notify)
+                   :event-window window
+                   :window window
+                   :x x :y y
+                   :width w
+                   :height h
+                   :border-width bw
+                   :propagate-p nil))
+
 
 
 (defun send-client-message (window type &rest data)

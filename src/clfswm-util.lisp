@@ -111,8 +111,11 @@
     (when (and window (not (xlib:window-equal window *no-focus-window*)))
       (when (equal window *current-child*)
 	(setf *current-child* *current-root*))
+      (hide-child window)
+      (remove-child-in-frame window (find-parent-frame window))
       (send-client-message window :WM_PROTOCOLS
 			   (xlib:intern-atom *display* "WM_DELETE_WINDOW"))
+      (xlib:display-finish-output *display*)
       (show-all-children))))
 
 (defun destroy-focus-window ()
@@ -121,7 +124,10 @@
     (when (and window (not (xlib:window-equal window *no-focus-window*)))
       (when (equal window *current-child*)
 	(setf *current-child* *current-root*))
+      (hide-child window)
+      (remove-child-in-frame window (find-parent-frame window))
       (xlib:kill-client *display* (xlib:window-id window))
+      (xlib:display-finish-output *display*)
       (show-all-children))))
 
 (defun remove-focus-window ()
