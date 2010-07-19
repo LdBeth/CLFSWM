@@ -579,11 +579,13 @@ mouse-fun is #'move-frame or #'resize-frame"
 		(unless (equal (type-of child) 'frame)
 		  (setf child (find-frame-window child *current-root*)))
 		(setf parent (find-parent-frame child)))))
-	(when (and child parent (focus-all-children child parent))
-	  (when (show-all-children)
-	    (setf to-replay nil)))
+	(when (and child parent)
+	  (focus-all-children child parent)
+	  (show-all-children))
 	(when (equal (type-of child) 'frame)
-	  (funcall mouse-fn child parent root-x root-y)))
+	  (funcall mouse-fn child parent root-x root-y))
+  	(when (show-all-children *current-root*)
+	  (setf to-replay nil)))
       (if to-replay
 	  (replay-button-event)
 	  (stop-button-event)))))
@@ -634,7 +636,7 @@ For window: set current child to window or its parent according to window-parent
 		   child root-x root-y)))
       (frame (funcall mouse-fn child parent root-x root-y)))
     (focus-all-children child parent window-parent)
-    (show-all-children)))
+    (show-all-children *current-root*)))
 
 
 
@@ -1005,6 +1007,7 @@ For window: set current child to window or its parent according to window-parent
   "Move the window under the mouse cursor to another frame"
   (declare (ignore window))
   (let ((child (find-child-under-mouse root-x root-y)))
+    (dbg child (frame-child child))
     (unless (equal child *current-root*)
       (hide-child child)
       (remove-child-in-frame child (find-parent-frame child))
@@ -1015,7 +1018,13 @@ For window: set current child to window or its parent according to window-parent
 	  (when (xlib:window-p dest)
 	    (setf dest (find-parent-frame dest)))
 	  (unless (equal child dest)
-	    (move-child-to child dest))))))
+	    ;;(move-child-to child dest))))))
+	    (dbg dest (frame-child dest))
+	    (pushnew child (frame-child dest))
+	    (dbg dest (frame-child dest))
+	    (dbg child (frame-child child))
+	    ;;(focus-all-children child dest)
+	    (show-all-children *current-root*))))))
   (stop-button-event))
 
 

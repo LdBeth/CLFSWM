@@ -1,3 +1,8 @@
+2010-07-20  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (mouse-click-to-focus-generic): Redisplay
+	all children in *current-root* after moving/resizing a frame.
+
 2010-07-18  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (delete-focus-window)
