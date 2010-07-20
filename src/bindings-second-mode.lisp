@@ -240,7 +240,7 @@ Or do corners actions"
   (define-second-mouse (3) 'sm-mouse-click-to-focus-and-resize)
   (define-second-mouse (1 :mod-1) 'sm-mouse-click-to-focus-and-move-window)
   (define-second-mouse (3 :mod-1) 'sm-mouse-click-to-focus-and-resize-window)
-  (define-second-mouse (1 :control :mod-1) 'mouse-move-window-over-frame)
+  (define-second-mouse (1 :control :mod-1) 'mouse-move-child-over-frame)
   (define-second-mouse (4) 'sm-mouse-select-next-level)
   (define-second-mouse (5) 'sm-mouse-select-previous-level)
   (define-second-mouse (4 :mod-1) 'sm-mouse-enter-frame)
