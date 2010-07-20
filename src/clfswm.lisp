@@ -111,7 +111,7 @@
   (unless (and (not send-event-p)
 	       (not (xlib:window-equal window event-window)))
     (when (find-child window *root-frame*)
-      (remove-child-in-all-frames window)
+      (delete-child-in-all-frames window)
       (show-all-children))))
 
 
@@ -120,7 +120,7 @@
   (unless (or send-event-p
 	      (xlib:window-equal window event-window))
     (when (find-child window *root-frame*)
-      (remove-child-in-all-frames window)
+      (delete-child-in-all-frames window)
       (show-all-children))))
 
 

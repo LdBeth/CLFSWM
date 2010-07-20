@@ -56,7 +56,7 @@
 
 #-BUILD
 (ignore-errors
-  (main-unprotected :read-conf-file-p t))
+  (main :read-conf-file-p t))
 
 ;;(produce-all-docs)
 

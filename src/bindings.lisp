@@ -124,7 +124,7 @@
   (define-main-mouse (3) 'mouse-click-to-focus-and-resize)
   (define-main-mouse (1 :mod-1) 'mouse-click-to-focus-and-move-window)
   (define-main-mouse (3 :mod-1) 'mouse-click-to-focus-and-resize-window)
-  (define-main-mouse (1 :control :mod-1) 'mouse-move-window-over-frame)
+  (define-main-mouse (1 :control :mod-1) 'mouse-move-child-over-frame)
   (define-main-mouse (4) 'mouse-select-next-level)
   (define-main-mouse (5) 'mouse-select-previous-level)
   (define-main-mouse (4 :mod-1) 'mouse-enter-frame)

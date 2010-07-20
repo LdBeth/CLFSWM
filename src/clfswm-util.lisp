@@ -1002,14 +1002,13 @@ For window: set current child to window or its parent according to window-parent
 
 
 
-;;; Moving window with the mouse function
-(defun mouse-move-window-over-frame (window root-x root-y)
-  "Move the window under the mouse cursor to another frame"
+;;; Moving child with the mouse button
+(defun mouse-move-child-over-frame (window root-x root-y)
+  "Move the child under the mouse cursor to another frame"
   (declare (ignore window))
   (let ((child (find-child-under-mouse root-x root-y)))
-    (dbg child (frame-child child))
     (unless (equal child *current-root*)
-      (hide-child child)
+      (hide-all child)
       (remove-child-in-frame child (find-parent-frame child))
       (wait-mouse-button-release 50 51)
       (multiple-value-bind (x y)
@@ -1018,12 +1017,7 @@ For window: set current child to window or its parent according to window-parent
 	  (when (xlib:window-p dest)
 	    (setf dest (find-parent-frame dest)))
 	  (unless (equal child dest)
-	    ;;(move-child-to child dest))))))
-	    (dbg dest (frame-child dest))
-	    (pushnew child (frame-child dest))
-	    (dbg dest (frame-child dest))
-	    (dbg child (frame-child child))
-	    ;;(focus-all-children child dest)
+	    (move-child-to child dest)
 	    (show-all-children *current-root*))))))
   (stop-button-event))
 

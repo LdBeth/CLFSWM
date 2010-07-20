@@ -815,19 +815,12 @@ For window: set current child to window or its parent according to window-parent
 (defun remove-child-in-frame (child frame)
   "Remove the child in frame"
   (when (frame-p frame)
-    (setf (frame-child frame) (remove child (frame-child frame) :test #'equal))
-    (with-all-frames (child fr)
-      (unless (find-frame-window (frame-window fr))
-	(awhen (frame-gc fr) (xlib:free-gcontext it) (setf it nil))
-	(awhen (frame-window fr) (xlib:destroy-window it) (setf it nil))))))
+    (setf (frame-child frame) (remove child (frame-child frame) :test #'equal))))
 
 (defun remove-child-in-frames (child root)
   "Remove child in the frame root and in all its children"
   (with-all-frames (root frame)
-    (remove-child-in-frame child frame))
-  (when (xlib:window-p child)
-    (netwm-remove-in-client-list child)))
-
+    (remove-child-in-frame child frame)))
 
 
 (defun remove-child-in-all-frames (child)
@@ -837,6 +830,27 @@ For window: set current child to window or its parent according to window-parent
   (when (equal child *current-child*)
     (setf *current-child* *current-root*))
   (remove-child-in-frames child *root-frame*))
+
+
+(defun delete-child-in-frames (child root)
+  "Delete child in the frame root and in all its children
+Warning:frame window and gc are freeed."
+  (with-all-frames (root frame)
+    (remove-child-in-frame child frame)
+    (unless (find-frame-window (frame-window frame))
+      (awhen (frame-gc frame) (xlib:free-gcontext it) (setf it nil))
+      (awhen (frame-window frame) (xlib:destroy-window it) (setf it nil))))
+  (when (xlib:window-p child)
+    (netwm-remove-in-client-list child)))
+
+
+(defun delete-child-in-all-frames (child)
+  "Delete child in all frames from *root-frame*"
+  (when (equal child *current-root*)
+    (setf *current-root* (find-parent-frame child)))
+  (when (equal child *current-child*)
+    (setf *current-child* *current-root*))
+  (delete-child-in-frames child *root-frame*))
 
 
 
