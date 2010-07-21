@@ -243,7 +243,7 @@ It is particulary useful with CLISP/MIT-CLX.")
   "Config(Hook group): Hook executed when keys/buttons are bounds")
 
 (defparameter *loop-hook* nil
-  "Config(Hook group): Kook executed on each event loop")
+  "Config(Hook group): Hook executed on each event loop")
 
 
 (defparameter *in-second-mode* nil)
@@ -262,11 +262,16 @@ It is particulary useful with CLISP/MIT-CLX.")
 ;;; middle-left  middle-middle  middle-right
 ;;; bottom-left  bottom-middle  bottom-right
 ;;;
-(defparameter *banish-pointer-placement* 'bottom-right-placement)
-(defparameter *second-mode-placement* 'top-middle-placement)
-(defparameter *info-mode-placement* 'top-left-placement)
-(defparameter *query-mode-placement* 'top-left-placement)
-(defparameter *circulate-mode-placement* 'bottom-middle-placement)
+(defparameter *banish-pointer-placement* 'bottom-right-placement
+  "Config(Placement group): Pointer banishment placement")
+(defparameter *second-mode-placement* 'top-middle-placement
+  "Config(Placement group): Second mode window placement")
+(defparameter *info-mode-placement* 'top-left-placement
+  "Config(Placement group): Info mode window placement")
+(defparameter *query-mode-placement* 'top-left-placement
+  "Config(Placement group): Query mode window placement")
+(defparameter *circulate-mode-placement* 'bottom-middle-placement
+  "Config(Placement group): Circulate mode window placement")
 
 
 

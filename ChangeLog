@@ -1,5 +1,7 @@
 2010-07-21  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/package.lisp: Add a placement configuration group.
+
 	* src/binding*.lisp: Bind control+g to escape the current action
 	like emacs.
 
