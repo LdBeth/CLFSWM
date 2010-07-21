@@ -230,6 +230,7 @@
 (defun set-default-query-keys ()
   (define-query-key ("Return") 'leave-query-mode-valid)
   (define-query-key ("Escape") 'leave-query-mode)
+  (define-query-key ("g" :control) 'leave-query-mode)
   (define-query-key ("Tab") 'leave-query-mode-complet)
   (define-query-key ("BackSpace") 'query-backspace)
   (define-query-key ("BackSpace" :control) 'query-backspace-word)

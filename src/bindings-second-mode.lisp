@@ -97,6 +97,7 @@
   (define-second-key ("exclam") 'run-program-from-query-string)
   (define-second-key ("Return") 'leave-second-mode)
   (define-second-key ("Escape") 'leave-second-mode)
+  (define-second-key ("g" :control) 'leave-second-mode)
   (define-second-key ("t") 'tile-current-frame)
   (define-second-key ("Home" :mod-1 :control :shift) 'exit-clfswm)
   (define-second-key ("Right" :mod-1) 'select-next-brother)

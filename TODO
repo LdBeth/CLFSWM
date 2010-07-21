@@ -7,8 +7,6 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Bind control+g to escape all actions like emacs.
-
 - Remote access to the clfswm REPL [Philippe]
    this can be done with net.lisp or via xprop (ie the Stumpwm way).
    Protocol:

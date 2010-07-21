@@ -124,6 +124,7 @@
   (define-info-key ("Return") 'leave-info-mode-and-valid)
   (define-info-key ("space") 'leave-info-mode-and-valid)
   (define-info-key ("Escape") 'leave-info-mode)
+  (define-info-key ("g" :control) 'leave-info-mode)
   (define-info-key ("twosuperior")
       (defun info-banish-pointer (info)
 	"Move the pointer to the lower right corner of the screen"

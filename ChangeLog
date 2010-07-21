@@ -1,5 +1,8 @@
 2010-07-21  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/binding*.lisp: Bind control+g to escape the current action
+	like emacs.
+
 	* src/clfswm-internal.lisp
 	(delete-child-and-children-in-all-frames): New function and
 	binding: Second mode - Control+Delete delete the current child and
