@@ -262,11 +262,11 @@ It is particulary useful with CLISP/MIT-CLX.")
 ;;; middle-left  middle-middle  middle-right
 ;;; bottom-left  bottom-middle  bottom-right
 ;;;
-(defparameter *banish-pointer-placement* 'bottom-right-child-placement)
-(defparameter *second-mode-placement* 'top-middle-child-placement)
-(defparameter *info-mode-placement* 'top-left-child-placement)
-(defparameter *query-mode-placement* 'top-left-child-placement)
-(defparameter *circulate-mode-placement* 'bottom-middle-child-placement)
+(defparameter *banish-pointer-placement* 'bottom-right-placement)
+(defparameter *second-mode-placement* 'top-middle-placement)
+(defparameter *info-mode-placement* 'top-left-placement)
+(defparameter *query-mode-placement* 'top-left-placement)
+(defparameter *circulate-mode-placement* 'bottom-middle-placement)
 
 
 

@@ -143,11 +143,14 @@ Window types are in +WINDOW-TYPES+.")
       (xlib:map-window window)
       (xlib:display-finish-output *display*))))
 
+(defun delete-window (window)
+  (send-client-message window :WM_PROTOCOLS
+		       (xlib:intern-atom *display* "WM_DELETE_WINDOW"))
+  (xlib:display-finish-output *display*))
 
-
-
-
-
+(defun destroy-window (window)
+  (xlib:kill-client *display* (xlib:window-id window))
+  (xlib:display-finish-output *display*))
 
 
 

@@ -105,30 +105,22 @@
 
 
 
-(defun delete-focus-window ()
-  "Close focus window: Delete the focus window in all frames and workspaces"
+(defun delete-focus-window-generic (close-fun)
   (let ((window (xlib:input-focus *display*)))
     (when (and window (not (xlib:window-equal window *no-focus-window*)))
       (when (equal window *current-child*)
 	(setf *current-child* *current-root*))
       (hide-child window)
-      (remove-child-in-frame window (find-parent-frame window))
-      (send-client-message window :WM_PROTOCOLS
-			   (xlib:intern-atom *display* "WM_DELETE_WINDOW"))
-      (xlib:display-finish-output *display*)
+      (delete-child-and-children-in-all-frames window)
       (show-all-children))))
+
+(defun delete-focus-window ()
+  "Close focus window: Delete the focus window in all frames and workspaces"
+  (delete-focus-window-generic 'delete-window))
 
 (defun destroy-focus-window ()
   "Kill focus window: Destroy the focus window in all frames and workspaces"
-  (let ((window (xlib:input-focus *display*)))
-    (when (and window (not (xlib:window-equal window *no-focus-window*)))
-      (when (equal window *current-child*)
-	(setf *current-child* *current-root*))
-      (hide-child window)
-      (remove-child-in-frame window (find-parent-frame window))
-      (xlib:kill-client *display* (xlib:window-id window))
-      (xlib:display-finish-output *display*)
-      (show-all-children))))
+  (delete-focus-window-generic 'destroy-window))
 
 (defun remove-focus-window ()
   "Remove the focus window from the current frame"
@@ -213,13 +205,11 @@
   (setf *current-child* *current-root*)
   (leave-second-mode))
 
-
-(defun remove-current-child-from-tree ()
-  "Remove the current child from the CLFSWM tree"
-  (remove-child-in-frame *current-child* (find-parent-frame *current-child* *current-root*))
-  (setf *current-child* *current-root*)
+(defun delete-current-child ()
+  "Delete the current child and its children"
+  (hide-all *current-child*)
+  (delete-child-and-children-in-all-frames *current-child*)
   (leave-second-mode))
-
 
 
 (defun paste-selection-no-clear ()
