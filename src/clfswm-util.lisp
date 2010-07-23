@@ -206,7 +206,7 @@
   (leave-second-mode))
 
 (defun delete-current-child ()
-  "Delete the current child and its children"
+  "Delete the current child and its children in all frames"
   (hide-all *current-child*)
   (delete-child-and-children-in-all-frames *current-child*)
   (leave-second-mode))

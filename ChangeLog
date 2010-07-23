@@ -1,3 +1,9 @@
+2010-07-23  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (delete-current-child): Invert bindings and
+	menu entry between delete-current-child and remove-current-child.
+	ie: Delete a child and its children in all frames by default.
+
 2010-07-21  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/package.lisp: Add a placement configuration group.

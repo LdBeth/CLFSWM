@@ -296,6 +296,7 @@
 	(xgrab-pointer *root* 66 67)
 	(xungrab-pointer)))
   (when (member *query-return* '(:Return :Complet))
+    (pushnew default *query-history* :test #'equal)
     (push *query-string* *query-history*))
   (values *query-string*
 	  *query-return*))
