@@ -32,6 +32,8 @@
 	   :awhen
 	   :aif
 	   :nfuncall
+	   :pfuncall
+	   :symbol-search
 	   :call-hook
 	   :add-hook
 	   :remove-hook
@@ -115,6 +117,15 @@
   (when function
     (funcall function)))
 
+(defun pfuncall (function &rest args)
+  (when (or (functionp function)
+	    (and (symbolp function) (fboundp function)))
+    (apply function args)))
+
+
+(defun symbol-search (search symbol)
+  "Search the string 'search' in the symbol name of 'symbol'"
+  (search search (symbol-name symbol) :test #'string-equal))
 
 ;;;,-----
 ;;;| Minimal hook

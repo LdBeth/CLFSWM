@@ -25,8 +25,11 @@ install:
 	mkdir -p $(DESTDIR)/bin
 	@echo "2) Installing: Copying files"
 	cp -R `pwd`/load.lisp $(DESTDIR)/lib/$(PROJECT_NAME)/
-	cp -R `pwd`/src/*.$(EXT)  $(DESTDIR)/lib/$(PROJECT_NAME)/src
+	cp -R `pwd`/clfswm.asd $(DESTDIR)/lib/$(PROJECT_NAME)/
+	cp -R `pwd`/src/*.lisp  $(DESTDIR)/lib/$(PROJECT_NAME)/src
 	cp -R `pwd`/contrib/*   $(DESTDIR)/lib/$(PROJECT_NAME)/contrib
+	@sleep 1
+	cp -R `pwd`/src/*.$(EXT)  $(DESTDIR)/lib/$(PROJECT_NAME)/src
 	@echo "3) Installing: Creating starter script"
 	echo "#!/bin/sh" > $(DESTDIR)/bin/$(PROJECT_NAME)
 	echo "$(LISP) $(CORE) $(LOAD_OPT) $(DESTDIR)/lib/$(PROJECT_NAME)/load.lisp" >> $(DESTDIR)/bin/$(PROJECT_NAME)
@@ -41,7 +44,7 @@ uninstall:
 	rm -rf $(DESTDIR)/lib/$(PROJECT_NAME)/
 
 clean:
-	find . \( -name *~ -o -name *.fas -o -name *.fasl -o -name *.lib -o -name *.lx32fsl -o -name *.x86f \) -print0 | xargs -0 rm -f
+	find . \( -name "*~" -o -name "*.fas" -o -name "*.fasl" -o -name "*.lib" -o -name "*.lx32fsl" -o -name "*.x86f" \) -print0 | xargs -0 rm -f
 
 dist: clean
 	cd .. && tar czvf $(PROJECT_NAME)-`date +%y%m%d`.tar.gz $(PROJECT_NAME)
