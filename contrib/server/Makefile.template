@@ -1,0 +1,49 @@
+# -*- makefile -*-
+PROJECT_NAME=+PROJECT_NAME+
+DESTDIR=+DESTDIR+
+
+LISP=+LISP+
+EVAL_OPT=+EVAL_OPT+
+LOAD_OPT=+LOAD_OPT+
+EXT=+EXT+
+CORE=+CORE+
+EXTRA_OPT=+EXTRA_OPT+
+
+all: build
+	@echo "ALL"
+
+build:
+	@echo "Building"
+	$(LISP) $(CORE) $(EVAL_OPT) '(progn (pushnew :BUILD *features*) (load "load.lisp") (quit))'
+	@echo ""
+	@echo "Type 'make install' to install $(PROJECT_NAME) in '$(DESTDIR)/bin/$(PROJECT_NAME)'"
+	@echo ""
+
+install:
+	@echo "1) Installing: Creating directories"
+	mkdir -p $(DESTDIR)/lib/$(PROJECT_NAME)/
+	mkdir -p $(DESTDIR)/bin
+	@echo "2) Installing: Copying files"
+	cp -R `pwd`/../asdf.lisp $(DESTDIR)/lib/$(PROJECT_NAME)/
+	cp -R `pwd`/*.asd $(DESTDIR)/lib/$(PROJECT_NAME)/
+	cp -R `pwd`/*.lisp $(DESTDIR)/lib/$(PROJECT_NAME)/
+	@sleep 1
+	cp -R `pwd`/*.$(EXT) $(DESTDIR)/lib/$(PROJECT_NAME)/
+	@echo "3) Installing: Creating starter script"
+	echo "#!/bin/sh" > $(DESTDIR)/bin/$(PROJECT_NAME)
+	echo "$(LISP) $(CORE) $(LOAD_OPT) $(DESTDIR)/lib/$(PROJECT_NAME)/load.lisp $(EXTRA_OPT) \"\$$*\"" >> $(DESTDIR)/bin/$(PROJECT_NAME)
+	chmod a+x $(DESTDIR)/bin/$(PROJECT_NAME)
+	@echo ""
+	@echo "$(PROJECT_NAME) has been installed in '$(DESTDIR)/bin/$(PROJECT_NAME)'"
+	@echo ""
+
+
+uninstall:
+	rm -rf $(DESTDIR)/bin/$(PROJECT_NAME)
+	rm -rf $(DESTDIR)/lib/$(PROJECT_NAME)/
+
+clean:
+	find . \( -name "*~" -o -name "*.fas" -o -name "*.fasl" -o -name "*.lib" -o -name "*.lx32fsl" -o -name "*.x86f" \) -print0 | xargs -0 rm -f
+
+dist: clean
+	cd .. && tar czvf $(PROJECT_NAME)-`date +%y%m%d`.tar.gz $(PROJECT_NAME)

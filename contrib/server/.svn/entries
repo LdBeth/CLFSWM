@@ -1,0 +1,217 @@
+10
+
+dir
+0
+svn+ssh://pbrochard@common-lisp.net/project/clfswm/svn/clfswm/contrib/server
+svn+ssh://pbrochard@common-lisp.net/project/clfswm/svn
+add
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+a42fa774-7830-0410-a598-a0bf735cded7
+
+clfswm-client.fas
+file
+
+
+
+add
+
+configure
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+load.lisp
+file
+
+
+
+add
+
+Makefile.template
+file
+
+
+
+add
+
+util-server.asd
+file
+
+
+
+add
+
+test.sh
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+md5.lib
+file
+
+
+
+add
+
+net.lib
+file
+
+
+
+add
+
+md5.lisp
+file
+
+
+
+add
+
+net.lisp
+file
+
+
+
+add
+
+key.lib
+file
+
+
+
+add
+
+md5.fas
+file
+
+
+
+add
+
+net.fas
+file
+
+
+
+add
+
+key.lisp
+file
+
+
+
+add
+
+key.fas
+file
+
+
+
+add
+
+crypt.lib
+file
+
+
+
+add
+
+crypt.lisp
+file
+
+
+
+add
+
+crypt.fas
+file
+
+
+
+add
+
+test2.sh
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+clfswm-client.lib
+file
+
+
+
+add
+
+server.lisp
+file
+
+
+
+add
+
+clfswm-client.lisp
+file
+
+
+
+add
+
+Makefile
+file
+
+
+
+add
+
+clfswm-client.asd
+file
+
+
+
+add
+
