@@ -1,3 +1,15 @@
+2010-08-16  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/package.lisp: Remove event handler hooks as they're not
+	needed anymore (To replace them: use closure and define-handler).
+
+	* src/xlib-util.lisp (move-window, resize-window)
+	(wait-mouse-button-release): Use a generic mode.
+
+	* src/*.lisp: Replace the case to handle event with a more (tricky)
+	lispy  method which bind a function to each keywords associated
+	to graphics events.
+
 2010-07-23  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (delete-current-child): Invert bindings and

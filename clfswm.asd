@@ -31,10 +31,10 @@
 				:depends-on ("package" "config" "xlib-util" "keysyms"))
 			 (:file "clfswm-autodoc"
 				:depends-on ("package" "clfswm-keys" "my-html" "tools" "config"))
-			 (:file "clfswm-generic-mode"
-				:depends-on ("package" "tools" "xlib-util"))
 			 (:file "clfswm-internal"
 				:depends-on ("xlib-util" "clfswm-keys" "netwm-util" "tools" "config"))
+			 (:file "clfswm-generic-mode"
+				:depends-on ("package" "tools" "xlib-util" "clfswm-internal"))
 			 (:file "clfswm-circulate-mode"
 				:depends-on ("xlib-util" "clfswm-keys" "clfswm-generic-mode"
 							 "clfswm-internal" "netwm-util" "tools" "config"))

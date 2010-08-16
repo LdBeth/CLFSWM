@@ -190,8 +190,7 @@
     (when leave
       (leave-circulate-mode))))
 
-(defun circulate-handle-key-press (&rest event-slots &key root code state &allow-other-keys)
-  (declare (ignore event-slots root))
+(define-handler circulate-mode :key-press (code state)
   (unless (funcall-key-from-code *circulate-keys* code state)
     (setf *circulate-hit* 0
 	  *circulate-orig* nil
@@ -199,8 +198,7 @@
     (funcall-key-from-code *main-keys* code state)))
 
 
-(defun circulate-handle-key-release (&rest event-slots &key root code state &allow-other-keys)
-  (declare (ignore event-slots root))
+(define-handler circulate-mode :key-release (code state)
   (funcall-key-from-code *circulate-keys-release* code state))
 
 
@@ -237,11 +235,10 @@
       (unless grab-keyboard-p
 	(ungrab-main-keys)
 	(xgrab-keyboard *root*))
-      (generic-mode 'exit-circulate-loop
+      (generic-mode 'circulate-mode 'exit-circulate-loop
 		    :loop-function #'circulate-loop-function
 		    :leave-function #'circulate-leave-function
-		    :key-press-hook #'circulate-handle-key-press
-		    :key-release-hook #'circulate-handle-key-release)
+		    :original-mode '(main-mode))
       (circulate-leave-function)
       (unless grab-keyboard-p
 	(xungrab-keyboard)
@@ -280,133 +277,3 @@
     (setf *circulate-orig* (frame-child *circulate-parent*)))
   (circulate-mode :brother-direction -1))
 
-
-;;;; New circulate mode - work in progress
-;;(let ((modifier nil)
-;;      (reverse-modifiers nil))
-;;  (defun define-circulate-modifier (keysym)
-;;    (setf modifier (multiple-value-list (xlib:keysym->keycodes *display* (keysym-name->keysym keysym)))))
-;;  (defun define-circulate-reverse-modifier (keysym-list)
-;;    (setf reverse-modifiers keysym-list))
-;;  (defun select-next-* (orig direction set-fun)
-;;    (let ((done nil)
-;;	  (hit 0))
-;;      (labels ((is-reverse-modifier (code state)
-;;		 (member (keysym->keysym-name (keycode->keysym code (state->modifiers state)))
-;;			 reverse-modifiers :test #'string=))
-;;	       (reorder ()
-;;		 (let ((elem (nth (mod (incf hit direction) (length orig)) orig)))
-;;		   (funcall set-fun (nconc (list elem) (remove elem orig)))))
-;;	       (handle-key-press (&rest event-slots &key code state &allow-other-keys)
-;;		 (declare (ignore event-slots))
-;;		 ;;(dbg 'press root code state)
-;;		 ;;(dbg (first reverse-modifiers) (state->modifiers state))
-;;		 (if (is-reverse-modifier code state)
-;;		     (setf direction -1)
-;;		     (reorder)))
-;;	       (handle-key-release (&rest event-slots &key code state &allow-other-keys)
-;;		 (declare (ignore event-slots))
-;;		 ;;(dbg 'release root code state)
-;;		 (when (is-reverse-modifier code state)
-;;		   (setf direction 1))
-;;		 (when (member code modifier)
-;;		   (setf done t)))
-;;	       (handle-select-next-child-event (&rest event-slots &key display event-key &allow-other-keys)
-;;		 (declare (ignore display))
-;;		 (with-xlib-protect
-;;		     (case event-key
-;;		       (:key-press (apply #'handle-key-press event-slots))
-;;		       (:key-release (apply #'handle-key-release event-slots))))
-;;		 t))
-;;	(ungrab-main-keys)
-;;	(xgrab-keyboard *root*)
-;;	(reorder)
-;;	(loop until done do
-;;	     (with-xlib-protect
-;;		 (xlib:display-finish-output *display*)
-;;	       (xlib:process-event *display* :handler #'handle-select-next-child-event)))
-;;	(xungrab-keyboard)
-;;	(grab-main-keys)))))
-;;
-;;(defun set-select-next-child (new)
-;;  (setf (frame-child *current-child*) new)
-;;  (show-all-children))
-;;
-;;(defun select-next-child ()
-;;  "Select the next child"
-;;  (select-next-* (frame-child *current-child*) 1 #'set-select-next-child))
-;;
-;;(defun select-previous-child ()
-;;  "Select the previous child"
-;;  (select-next-* (frame-child *current-child*) -1 #'set-select-next-child))
-;;
-;;(let ((parent nil))
-;;  (defun set-select-next-brother (new)
-;;    (let ((frame-is-root? (and (equal *current-root* *current-child*)
-;;			       (not (equal *current-root* *root-frame*)))))
-;;      (if frame-is-root?
-;;	  (hide-all *current-root*)
-;;	  (select-current-frame nil))
-;;      (setf (frame-child  parent) new
-;;	    *current-child* (frame-selected-child parent))
-;;      (when frame-is-root?
-;;	(setf *current-root* *current-child*))
-;;      (show-all-children *current-root*)))
-;;
-;;  (defun select-next-brother ()
-;;    "Select the next brother frame"
-;;    (setf parent (find-parent-frame *current-child*))
-;;    (when (frame-p parent)
-;;      (select-next-* (frame-child parent) 1 #'set-select-next-brother)))
-;;
-;;  (defun select-previous-brother ()
-;;    "Select the previous brother frame"
-;;    (setf parent (find-parent-frame *current-child*))
-;;    (when (frame-p parent)
-;;      (select-next-* (frame-child parent) -1 #'set-select-next-brother))))
-
-
-;;;;; This is only transitional
-;;(defun select-next/previous-child (fun-rotate)
-;;  "Select the next/previous child"
-;;  (when (frame-p *current-child*)
-;;    (unselect-all-frames)
-;;    (with-slots (child) *current-child*
-;;      (setf child (funcall fun-rotate child)))
-;;    (show-all-children)))
-;;
-;;
-;;(defun select-next-child ()
-;;  "Select the next child"
-;;  (select-next/previous-child #'rotate-list))
-;;
-;;(defun select-previous-child ()
-;;  "Select the previous child"
-;;  (select-next/previous-child #'anti-rotate-list))
-;;
-;;
-;;(defun select-next/previous-brother (fun-rotate)
-;;  "Select the next/previous brother frame"
-;;  (let ((frame-is-root? (and (equal *current-root* *current-child*)
-;;			     (not (equal *current-root* *root-frame*)))))
-;;    (if frame-is-root?
-;;	(hide-all *current-root*)
-;;	(select-current-frame nil))
-;;    (let ((parent (find-parent-frame *current-child*)))
-;;      (when (frame-p parent)
-;;	(with-slots (child) parent
-;;	  (setf child (funcall fun-rotate child))
-;;	  (setf *current-child* (frame-selected-child parent)))))
-;;    (when frame-is-root?
-;;      (setf *current-root* *current-child*))
-;;    (show-all-children *current-root*)))
-;;
-;;
-;;(defun select-next-brother ()
-;;  "Select the next brother frame"
-;;  (select-next/previous-brother #'anti-rotate-list))
-;;
-;;(defun select-previous-brother ()
-;;  "Select the previous brother frame"
-;;  (select-next/previous-brother #'rotate-list))
-;;;;; end transitional part

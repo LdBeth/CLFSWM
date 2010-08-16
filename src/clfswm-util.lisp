@@ -680,13 +680,6 @@ For window: set current child to window or its parent according to window-parent
 ;;;;;,-----
 ;;;;;| Various definitions
 ;;;;;`-----
-;;(defun stop-all-pending-actions ()
-;;  "Stop all pending actions (actions like open in new workspace/frame)"
-;;  (setf *open-next-window-in-new-workspace* nil
-;;	*open-next-window-in-new-frame* nil
-;;	*arrow-action* nil
-;;	*pager-arrow-action* nil))
-;;
 
 (defun show-help (&optional (browser "dillo") (tempfile "/tmp/clfswm.html"))
   "Show current keys and buttons bindings"

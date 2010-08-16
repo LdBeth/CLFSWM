@@ -7,16 +7,7 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Remote access to the clfswm REPL [Philippe]
-   this can be done with net.lisp or via xprop (ie the Stumpwm way).
-   Protocol:
-     - start-server => create a new file /tmp/clfswm-server-port with right (rw-------)
-         and place a key which change on each connection.
-     - client must read this file and send the key before using the command line.
-     - server change its key when the connection is done.
-     - add a minimal cript in the protocol (for example a rotN) with N coded in the key.
-
-
+Nothing here :)
 
 MAYBE
 =====
@@ -37,6 +28,6 @@ Operation:
     * up
     * down
 
-- Undo/redo (any idea to implement this is welcome)
+- Undo/redo
 
 

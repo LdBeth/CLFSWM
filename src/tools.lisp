@@ -34,6 +34,7 @@
 	   :nfuncall
 	   :pfuncall
 	   :symbol-search
+	   :symb
 	   :call-hook
 	   :add-hook
 	   :remove-hook
@@ -126,6 +127,16 @@
 (defun symbol-search (search symbol)
   "Search the string 'search' in the symbol name of 'symbol'"
   (search search (symbol-name symbol) :test #'string-equal))
+
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defun mkstr (&rest args)
+    (with-output-to-string (s)
+      (dolist (a args)
+	(princ a s))))
+
+  (defun symb (&rest args)
+    (values (intern (apply #'mkstr args)))))
+
 
 ;;;,-----
 ;;;| Minimal hook

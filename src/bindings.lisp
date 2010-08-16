@@ -83,22 +83,6 @@
 (add-hook *binding-hook* 'set-default-main-keys)
 
 
-;; For an azery keyboard:
-;;(undefine-main-multi-keys (#\1 :mod-1) (#\2 :mod-1) (#\3 :mod-1)
-;;			  (#\4 :mod-1) (#\5 :mod-1) (#\6 :mod-1)
-;;			  (#\7 :mod-1) (#\8 :mod-1) (#\9 :mod-1) (#\0 :mod-1))
-;;(define-main-key ("ampersand" :mod-1) 'bind-or-jump 1)
-;;(define-main-key ("eacute" :mod-1) 'bind-or-jump 2)
-;;(define-main-key ("quotedbl" :mod-1) 'bind-or-jump 3)
-;;(define-main-key ("quoteright" :mod-1) 'bind-or-jump 4)
-;;(define-main-key ("parenleft" :mod-1) 'bind-or-jump 5)
-;;(define-main-key ("minus" :mod-1) 'bind-or-jump 6)
-;;(define-main-key ("egrave" :mod-1) 'bind-or-jump 7)
-;;(define-main-key ("underscore" :mod-1) 'bind-or-jump 8)
-;;(define-main-key ("ccedilla" :mod-1) 'bind-or-jump 9)
-;;(define-main-key ("agrave" :mod-1) 'bind-or-jump 10)
-
-
 
 
 

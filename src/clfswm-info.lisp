@@ -274,83 +274,80 @@
 (add-hook *binding-hook* 'set-default-info-mouse)
 
 
-;;;,-----
-;;;| Main mode
-;;;`-----
 
-(defun info-mode (info-list &key (width nil) (height nil))
-  "Open the info mode. Info-list is a list of info: One string per line
+(let (info)
+  (define-handler info-mode :key-press (code state)
+    (funcall-key-from-code *info-keys* code state info))
+
+  (define-handler info-mode :motion-notify (window root-x root-y)
+    (unless (compress-motion-notify)
+      (funcall-button-from-code *info-mouse* 'motion (modifiers->state *default-modifiers*)
+				window root-x root-y *fun-press* (list info))))
+
+  (define-handler info-mode :button-press (window root-x root-y code state)
+    (funcall-button-from-code *info-mouse* code state window root-x root-y *fun-press* (list info)))
+
+  (define-handler info-mode :button-release (window root-x root-y code state)
+    (funcall-button-from-code *info-mouse* code state window root-x root-y *fun-release* (list info)))
+
+
+
+  (defun info-mode (info-list &key (width nil) (height nil))
+    "Open the info mode. Info-list is a list of info: One string per line
 Or for colored output: a list (line_string color)
 Or ((1_word color) (2_word color) 3_word (4_word color)...)"
-  (when info-list
-    (setf *info-selected-item* 0)
-    (labels ((compute-size (line)
-	       (typecase line
-		 (cons (typecase (first line)
-			 (cons (let ((val 0))
-				 (dolist (l line val)
-				   (incf val (typecase l
-					       (cons (length (first l)))
-					       (t (length l)))))))
-			 (t (length (first line)))))
-		 (t (length line)))))
-      (let* ((font (xlib:open-font *display* *info-font-string*))
-	     (ilw (xlib:max-char-width font))
-	     (ilh (+ (xlib:max-char-ascent font) (xlib:max-char-descent font) 1))
-	     (width (or width
-			(min (* (+ (loop for l in info-list maximize (compute-size l)) 2) ilw)
-			     (xlib:screen-width *screen*))))
-	     (height (or height
-			 (min (round (+ (* (length info-list) ilh) (/ ilh 2)))
-			      (xlib:screen-height *screen*)))))
-	(with-placement (*info-mode-placement* x y width height)
-	  (let* ((pointer-grabbed-p (xgrab-pointer-p))
-		 (keyboard-grabbed-p (xgrab-keyboard-p))
-		 (window (xlib:create-window :parent *root*
-					     :x x :y y
-					     :width width
-					     :height height
+    (when info-list
+      (setf *info-selected-item* 0)
+      (labels ((compute-size (line)
+		 (typecase line
+		   (cons (typecase (first line)
+			   (cons (let ((val 0))
+				   (dolist (l line val)
+				     (incf val (typecase l
+						 (cons (length (first l)))
+						 (t (length l)))))))
+			   (t (length (first line)))))
+		   (t (length line)))))
+	(let* ((font (xlib:open-font *display* *info-font-string*))
+	       (ilw (xlib:max-char-width font))
+	       (ilh (+ (xlib:max-char-ascent font) (xlib:max-char-descent font) 1))
+	       (width (or width
+			  (min (* (+ (loop for l in info-list maximize (compute-size l)) 2) ilw)
+			       (xlib:screen-width *screen*))))
+	       (height (or height
+			   (min (round (+ (* (length info-list) ilh) (/ ilh 2)))
+				(xlib:screen-height *screen*)))))
+	  (with-placement (*info-mode-placement* x y width height)
+	    (let* ((pointer-grabbed-p (xgrab-pointer-p))
+		   (keyboard-grabbed-p (xgrab-keyboard-p))
+		   (window (xlib:create-window :parent *root*
+					       :x x :y y
+					       :width width
+					       :height height
+					       :background (get-color *info-background*)
+					       :colormap (xlib:screen-default-colormap *screen*)
+					       :border-width 1
+					       :border (get-color *info-border*)
+					       :event-mask '(:exposure)))
+		   (gc (xlib:create-gcontext :drawable window
+					     :foreground (get-color *info-foreground*)
 					     :background (get-color *info-background*)
-					     :colormap (xlib:screen-default-colormap *screen*)
-					     :border-width 1
-					     :border (get-color *info-border*)
-					     :event-mask '(:exposure)))
-		 (gc (xlib:create-gcontext :drawable window
-					   :foreground (get-color *info-foreground*)
-					   :background (get-color *info-background*)
-					   :font font
-					   :line-style :solid))
-		 (info (make-info :window window :gc gc :x 0 :y 0 :list info-list
-				  :font font :ilw ilw :ilh ilh
-				  :max-x (* (loop for l in info-list maximize (compute-size l)) ilw)
-				  :max-y (* (length info-list) ilh))))
-	    (labels ((handle-key (&rest event-slots &key root code state &allow-other-keys)
-		       (declare (ignore event-slots root))
-		       (funcall-key-from-code *info-keys* code state info))
-		     (handle-motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
-		       (declare (ignore event-slots))
-		       (unless (compress-motion-notify)
-			 (funcall-button-from-code *info-mouse* 'motion (modifiers->state *default-modifiers*)
-						   window root-x root-y *fun-press* (list info))))
-		     (handle-button-press (&rest event-slots &key window root-x root-y code state &allow-other-keys)
-		       (declare (ignore event-slots))
-		       (funcall-button-from-code *info-mouse* code state window root-x root-y *fun-press* (list info)))
-		     (handle-button-release (&rest event-slots &key window root-x root-y code state &allow-other-keys)
-		       (declare (ignore event-slots))
-		       (funcall-button-from-code *info-mouse* code state window root-x root-y *fun-release* (list info))))
+					     :font font
+					     :line-style :solid)))
+	      (setf info (make-info :window window :gc gc :x 0 :y 0 :list info-list
+				    :font font :ilw ilw :ilh ilh
+				    :max-x (* (loop for l in info-list maximize (compute-size l)) ilw)
+				    :max-y (* (length info-list) ilh)))
 	      (map-window window)
 	      (draw-info-window info)
 	      (xgrab-pointer *root* 68 69)
 	      (unless keyboard-grabbed-p
 		(xgrab-keyboard *root*))
 	      (wait-no-key-or-button-press)
-	      (generic-mode 'exit-info-loop
-			    :loop-function (lambda ()
-					     (raise-window (info-window info)))
-			    :button-press-hook #'handle-button-press
-			    :button-release-hook #'handle-button-release
-			    :motion-notify-hook #'handle-motion-notify
-			    :key-press-hook #'handle-key)
+	      (generic-mode 'info-mode 'exit-info-loop
+				 :loop-function (lambda ()
+						  (raise-window (info-window info)))
+				 :original-mode '(main-mode))
 	      (if pointer-grabbed-p
 		  (xgrab-pointer *root* 66 67)
 		  (xungrab-pointer))

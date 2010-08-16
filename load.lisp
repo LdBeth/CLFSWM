@@ -49,6 +49,9 @@
 
 (push *base-dir* asdf:*central-registry*)
 
+;;;; Uncomment the line above if you want to follow the
+;;;; handle event mecanism.
+;;(pushnew :event-debug *features*)
 
 (asdf:oos 'asdf:load-op :clfswm)
 
@@ -61,8 +64,8 @@
 ;;(produce-all-docs)
 
 
-;;; For debuging: start Xnest or Zephyr and
-;;; add the lines above in a dot-clfswmrc-debug file
+;;; For debuging: start another sever (for example: 'startx -- :1'), Xnest
+;;; or Zephyr and add the lines above in a dot-clfswmrc-debug file
 ;;; mod-2 is the numlock key on some keyboards.
 ;;(setf *default-modifiers* '(:mod-2))
 ;;

@@ -70,7 +70,84 @@ Window types are in +WINDOW-TYPES+.")
 	 ,@body)
      ((or xlib:match-error xlib:window-error xlib:drawable-error) (c)
        (declare (ignore c)))))
-       ;;(dbg c ',body))))
+;;(dbg c ',body))))
+
+
+
+
+;;;
+;;; Events management functions.
+;;;
+(defparameter *unhandled-events* nil)
+(defparameter *current-event-mode* nil)
+
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defun keyword->handle-event (mode keyword)
+    (symb 'handle-event-fun "-" mode "-" keyword)))
+
+(defun handle-event->keyword (symbol)
+  (let* ((name (string-downcase (symbol-name symbol)))
+	 (pos (search "handle-event-fun-" name)))
+    (when (and pos (zerop pos))
+      (let ((pos-mod (search "mode" name)))
+	(when pos-mod
+	  (values (intern (string-upcase (subseq name (+ pos-mod 5))) :keyword)
+		  (subseq name (length "handle-event-fun-") (1- pos-mod))))))))
+
+
+(defmacro with-handle-event-symbol ((mode) &body body)
+  "Bind symbol to all handle event functions available in mode"
+  `(let ((pattern (format nil "handle-event-fun-~A" ,mode)))
+     (with-all-internal-symbols (symbol :clfswm)
+       (let ((pos (symbol-search pattern symbol)))
+	 (when (and pos (zerop pos))
+	   ,@body)))))
+
+
+(defun find-handle-event-function (&optional (mode ""))
+  "Print all handle event functions available in mode"
+  (with-handle-event-symbol (mode)
+    (print symbol)))
+
+(defun assoc-keyword-handle-event (mode)
+  "Associate all keywords in mode to their corresponding handle event functions.
+For example: main-mode :key-press is bound to handle-event-fun-main-mode-key-press"
+  (setf *current-event-mode* mode)
+  (with-handle-event-symbol (mode)
+    (let ((keyword (handle-event->keyword symbol)))
+      (when (fboundp symbol)
+	#+:event-debug
+	(format t "~&Associating: ~S with ~S~%" symbol keyword)
+	(setf (symbol-function keyword) (symbol-function symbol))))))
+
+(defun unassoc-keyword-handle-event (&optional (mode ""))
+  "Unbound all keywords from their corresponding handle event functions."
+  (setf *current-event-mode* nil)
+  (with-handle-event-symbol (mode)
+    (let ((keyword (handle-event->keyword symbol)))
+      (when (fboundp keyword)
+	#+:event-debug
+	(format t "~&Unassociating: ~S  ~S~%" symbol keyword)
+	(fmakunbound keyword)))))
+
+(defmacro define-handler (mode keyword args &body body)
+  "Like a defun but with a name expanded as handle-event-fun-'mode'-'keyword'
+For example (define-handler main-mode :key-press (args) ...)
+Expand in handle-event-fun-main-mode-key-press"
+  `(defun ,(keyword->handle-event mode keyword) (&rest event-slots &key #+:event-debug event-key ,@args &allow-other-keys)
+     (declare (ignorable event-slots))
+     #+:event-debug (print (list *current-event-mode* event-key))
+     ,@body))
+
+
+(defun handle-event (&rest event-slots &key event-key &allow-other-keys)
+  (with-xlib-protect
+      (if (fboundp event-key)
+	  (apply event-key event-slots)
+	  #+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal)))
+  t)
+
+
 
 
 
@@ -241,21 +318,6 @@ Window types are in +WINDOW-TYPES+.")
 ;;
 ;;(defsetf net-wm-state (window &key (mode :replace)) (states)
 ;;  `(set-atoms-property ,window ,states :_NET_WM_STATE :mode ,mode))
-;;
-;;
-;;
-;;(defun hide-window (window)
-;;  (when window
-;;    (with-xlib-protect
-;;      (let ((net-wm-state (net-wm-state window)))
-;;	(dbg net-wm-state)
-;;	(pushnew :_net_wm_state_hidden net-wm-state)
-;;	(setf (net-wm-state window) net-wm-state)
-;;	(dbg (net-wm-state window)))
-;;      (setf (window-state window) +iconic-state+
-;;	    (xlib:window-event-mask window) (remove :structure-notify *window-events*))
-;;      (xlib:unmap-window window)
-;;      (setf (xlib:window-event-mask window) *window-events*))))
 
 
 (defun hide-window (window)
@@ -429,32 +491,6 @@ Window types are in +WINDOW-TYPES+.")
 (defun ungrab-all-keys (window)
   (xlib:ungrab-key window :any :modifiers :any))
 
-;;(defun grab-all-keys (window)
-;;  (ungrab-all-keys window)
-;;  (dolist (modifiers '(:control :mod-1 :shift))
-;;    (xlib:grab-key window :any
-;;		   :modifiers (list modifiers)
-;;		   :owner-p nil
-;;		   :sync-pointer-p nil
-;;		   :sync-keyboard-p t)))
-
-;;(defun grab-all-keys (window)
-;;  (ungrab-all-keys window)
-;;  (xlib:grab-key window :any
-;;		 :modifiers :any
-;;		 :owner-p nil
-;;		 :sync-pointer-p nil
-;;		 :sync-keyboard-p t))
-
-
-
-
-;;(defun stop-keyboard-event ()
-;;  (xlib:allow-events *display* :sync-keyboard))
-;;
-;;(defun replay-keyboard-event ()
-;;  (xlib:allow-events *display* :replay-keyboard))
-
 
 (defun stop-button-event ()
   (xlib:allow-events *display* :sync-pointer))
@@ -468,114 +504,88 @@ Window types are in +WINDOW-TYPES+.")
 
 
 
+
+
 ;;; Mouse action on window
-(defun move-window (window orig-x orig-y &optional additional-fn additional-arg)
-  (raise-window window)
-  (let ((done nil)
-	(dx (- (xlib:drawable-x window) orig-x))
-	(dy (- (xlib:drawable-y window) orig-y))
-	(pointer-grabbed-p (xgrab-pointer-p)))
-    (labels ((motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
-	       (declare (ignore event-slots))
-	       (unless (compress-motion-notify)
-		 (setf (xlib:drawable-x window) (+ root-x dx)
-		       (xlib:drawable-y window) (+ root-y dy))
-		 (when additional-fn
-		   (apply additional-fn additional-arg))))
-	     (handle-event (&rest event-slots &key event-key &allow-other-keys)
-	       (case event-key
-		 (:motion-notify (apply #'motion-notify event-slots))
-		 (:button-release (setf done t))
-		 (:configure-request (call-hook *configure-request-hook* event-slots))
-		 (:configure-notify (call-hook *configure-notify-hook* event-slots))
-		 (:map-request (call-hook *map-request-hook* event-slots))
-		 (:unmap-notify (call-hook *unmap-notify-hook* event-slots))
-		 (:destroy-notify (call-hook *destroy-notify-hook* event-slots))
-		 (:mapping-notify (call-hook *mapping-notify-hook* event-slots))
-		 (:property-notify (call-hook *property-notify-hook* event-slots))
-		 (:create-notify (call-hook *create-notify-hook* event-slots)))
-	       t))
+(let (add-fn add-arg dx dy window)
+  (define-handler move-window-mode :motion-notify (root-x root-y)
+    (unless (compress-motion-notify)
+      (setf (xlib:drawable-x window) (+ root-x dx)
+	    (xlib:drawable-y window) (+ root-y dy))
+      (when add-fn
+	(apply add-fn add-arg))))
+
+  (define-handler move-window-mode :button-release ()
+    (throw 'exit-move-window-mode nil))
+
+  (defun move-window (orig-window orig-x orig-y &optional additional-fn additional-arg)
+    (setf window orig-window
+	  add-fn additional-fn
+	  add-arg additional-arg
+	  dx (- (xlib:drawable-x window) orig-x)
+	  dy (- (xlib:drawable-y window) orig-y))
+    (raise-window window)
+    (let ((pointer-grabbed-p (xgrab-pointer-p)))
       (unless pointer-grabbed-p
 	(xgrab-pointer *root* nil nil))
       (when additional-fn
 	(apply additional-fn additional-arg))
-      (loop until done
-	 do (with-xlib-protect
-	      (xlib:display-finish-output *display*)
-	      (xlib:process-event *display* :handler #'handle-event :timeout *loop-timeout*)))
+      (generic-mode 'move-window-mode 'exit-move-window-mode
+		    :original-mode '(main-mode))
       (unless pointer-grabbed-p
 	(xungrab-pointer)))))
 
 
-(defun resize-window (window orig-x orig-y &optional additional-fn additional-arg)
-  (raise-window window)
-  (let* ((done nil)
-	 (orig-width (xlib:drawable-width window))
-	 (orig-height (xlib:drawable-height window))
-	 (pointer-grabbed-p (xgrab-pointer-p))
-	 (hints (xlib:wm-normal-hints window))
-	 (min-width (or (and hints (xlib:wm-size-hints-min-width hints)) 0))
-	 (min-height (or (and hints (xlib:wm-size-hints-min-height hints)) 0))
-	 (max-width (or (and hints (xlib:wm-size-hints-max-width hints)) most-positive-fixnum))
-	 (max-height (or (and hints (xlib:wm-size-hints-max-height hints)) most-positive-fixnum)))
-    (labels ((motion-notify (&rest event-slots &key root-x root-y &allow-other-keys)
-	       (declare (ignore event-slots))
-	       (unless (compress-motion-notify)
-		 (setf (xlib:drawable-width window) (min (max (+ orig-width (- root-x orig-x)) 10 min-width) max-width)
-		       (xlib:drawable-height window) (min (max (+ orig-height (- root-y orig-y)) 10 min-height) max-height))
-		 (when additional-fn
-		   (apply additional-fn additional-arg))))
-	     (handle-event (&rest event-slots &key event-key &allow-other-keys)
-	       (case event-key
-		 (:motion-notify (apply #'motion-notify event-slots))
-		 (:button-release (setf done t))
-		 (:configure-request (call-hook *configure-request-hook* event-slots))
-		 (:configure-notify (call-hook *configure-notify-hook* event-slots))
-		 (:map-request (call-hook *map-request-hook* event-slots))
-		 (:unmap-notify (call-hook *unmap-notify-hook* event-slots))
-		 (:destroy-notify (call-hook *destroy-notify-hook* event-slots))
-		 (:mapping-notify (call-hook *mapping-notify-hook* event-slots))
-		 (:property-notify (call-hook *property-notify-hook* event-slots))
-		 (:create-notify (call-hook *create-notify-hook* event-slots)))
-	       t))
+(let (add-fn add-arg window
+	     o-x o-y
+	     orig-width orig-height
+	     min-width max-width
+	     min-height max-height)
+  (define-handler resize-window-mode :motion-notify (root-x root-y)
+    (unless (compress-motion-notify)
+      (setf (xlib:drawable-width window) (min (max (+ orig-width (- root-x o-x)) 10 min-width) max-width)
+	    (xlib:drawable-height window) (min (max (+ orig-height (- root-y o-y)) 10 min-height) max-height))
+      (when add-fn
+	(apply add-fn add-arg))))
+
+  (define-handler resize-window-mode :button-release ()
+    (throw 'exit-resize-window-mode nil))
+
+  (defun resize-window (orig-window orig-x orig-y &optional additional-fn additional-arg)
+    (let* ((pointer-grabbed-p (xgrab-pointer-p))
+	   (hints (xlib:wm-normal-hints orig-window)))
+      (setf window orig-window
+	    add-fn additional-fn
+	    add-arg additional-arg
+	    o-x orig-x
+	    o-y orig-y
+	    orig-width (xlib:drawable-width window)
+	    orig-height (xlib:drawable-height window)
+	    min-width (or (and hints (xlib:wm-size-hints-min-width hints)) 0)
+	    min-height (or (and hints (xlib:wm-size-hints-min-height hints)) 0)
+	    max-width (or (and hints (xlib:wm-size-hints-max-width hints)) most-positive-fixnum)
+	    max-height (or (and hints (xlib:wm-size-hints-max-height hints)) most-positive-fixnum))
+      (raise-window window)
       (unless pointer-grabbed-p
 	(xgrab-pointer *root* nil nil))
       (when additional-fn
 	(apply additional-fn additional-arg))
-      (loop until done
-	 do (with-xlib-protect
-	      (xlib:display-finish-output *display*)
-	      (xlib:process-event *display* :handler #'handle-event :timeout *loop-timeout*)))
+      (generic-mode 'resize-window-mode 'exit-resize-window-mode
+		    :original-mode '(main-mode))
       (unless pointer-grabbed-p
 	(xungrab-pointer)))))
 
 
-
-
+(define-handler wait-mouse-button-release-mode :button-release ()
+  (throw 'exit-wait-mouse-button-release-mode nil))
 
 (defun wait-mouse-button-release (&optional cursor-char cursor-mask-char)
-  (let ((done nil)
-	(pointer-grabbed-p (xgrab-pointer-p)))
-    (labels ((handle-event (&rest event-slots &key event-key &allow-other-keys)
-	       (case event-key
-		 (:button-release (setf done t))
-		 (:configure-request (call-hook *configure-request-hook* event-slots))
-		 (:configure-notify (call-hook *configure-notify-hook* event-slots))
-		 (:map-request (call-hook *map-request-hook* event-slots))
-		 (:unmap-notify (call-hook *unmap-notify-hook* event-slots))
-		 (:destroy-notify (call-hook *destroy-notify-hook* event-slots))
-		 (:mapping-notify (call-hook *mapping-notify-hook* event-slots))
-		 (:property-notify (call-hook *property-notify-hook* event-slots))
-		 (:create-notify (call-hook *create-notify-hook* event-slots)))
-	       t))
-      (unless pointer-grabbed-p
-	(xgrab-pointer *root* cursor-char cursor-mask-char))
-      (loop until done
-	 do (with-xlib-protect
-	      (xlib:display-finish-output *display*)
-	      (xlib:process-event *display* :handler #'handle-event :timeout *loop-timeout*)))
-      (unless pointer-grabbed-p
-	(xungrab-pointer)))))
+  (let ((pointer-grabbed-p (xgrab-pointer-p)))
+    (unless pointer-grabbed-p
+      (xgrab-pointer *root* cursor-char cursor-mask-char))
+    (generic-mode 'wait-mouse-button-release 'exit-wait-mouse-button-release-mode)
+    (unless pointer-grabbed-p
+      (xungrab-pointer))))
 
 
 

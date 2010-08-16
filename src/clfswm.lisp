@@ -26,38 +26,24 @@
 (in-package :clfswm)
 
 
-
-
-
-;;; Main mode hooks
-(defun handle-key-press (&rest event-slots &key root code state &allow-other-keys)
-  (declare (ignore event-slots root))
+(define-handler main-mode :key-press (code state)
   (funcall-key-from-code *main-keys* code state))
 
-
-(defun handle-button-press (&rest event-slots &key code state window root-x root-y &allow-other-keys)
-  (declare (ignore event-slots))
+(define-handler main-mode :button-press (code state window root-x root-y)
   (unless (funcall-button-from-code *main-mouse* code state window root-x root-y *fun-press*)
     (replay-button-event)))
 
-
-
-(defun handle-button-release (&rest event-slots &key code state window root-x root-y &allow-other-keys)
-  (declare (ignore event-slots))
+(define-handler main-mode :button-release (code state window root-x root-y)
   (unless (funcall-button-from-code *main-mouse* code state window root-x root-y *fun-release*)
     (replay-button-event)))
 
-(defun handle-motion-notify (&rest event-slots &key window root-x root-y &allow-other-keys)
-  (declare (ignore event-slots))
+(define-handler main-mode :motion-notify (window root-x root-y)
   (unless (compress-motion-notify)
     (funcall-button-from-code *main-mouse* 'motion
 			      (modifiers->state *default-modifiers*)
 			      window root-x root-y *fun-press*)))
 
-
-(defun handle-configure-request (&rest event-slots &key stack-mode #|parent|# window #|above-sibling|#
-				 x y width height border-width value-mask &allow-other-keys)
-  (declare (ignore event-slots))
+(define-handler main-mode :configure-request (stack-mode window x y width height border-width value-mask)
   (labels ((has-x (mask) (= 1 (logand mask 1)))
 	   (has-y (mask) (= 2 (logand mask 2)))
 	   (has-w (mask) (= 4 (logand mask 4)))
@@ -86,17 +72,7 @@
 	  (case stack-mode
 	    (:above (raise-window window))))))))
 
-
-
-
-(defun handle-configure-notify (&rest event-slots)
-  (declare (ignore event-slots)))
-
-
-
-
-(defun handle-map-request (&rest event-slots &key window send-event-p &allow-other-keys)
-  (declare (ignore event-slots))
+(define-handler main-mode :map-request (window send-event-p)
   (unless send-event-p
     (unhide-window window)
     (process-new-window window)
@@ -104,29 +80,21 @@
     (unless (null-size-window-p window)
       (show-all-children))))
 
-
-
-(defun handle-unmap-notify (&rest event-slots &key send-event-p event-window window &allow-other-keys)
-  (declare (ignore event-slots))
+(define-handler main-mode :unmap-notify (send-event-p event-window window)
   (unless (and (not send-event-p)
 	       (not (xlib:window-equal window event-window)))
     (when (find-child window *root-frame*)
       (delete-child-in-all-frames window)
       (show-all-children))))
 
-
-(defun handle-destroy-notify (&rest event-slots &key send-event-p event-window window &allow-other-keys)
-  (declare (ignore event-slots))
+(define-handler main-mode :destroy-notify (send-event-p event-window window)
   (unless (or send-event-p
 	      (xlib:window-equal window event-window))
     (when (find-child window *root-frame*)
       (delete-child-in-all-frames window)
       (show-all-children))))
 
-
-
-(defun handle-enter-notify  (&rest event-slots &key window root-x root-y &allow-other-keys)
-  (declare (ignore event-slots))
+(define-handler main-mode :enter-notify  (window root-x root-y)
   (unless (and (> root-x (- (xlib:screen-width *screen*) 3))
 	       (> root-y (- (xlib:screen-height *screen*) 3)))
     (case (if (frame-p *current-child*)
@@ -146,60 +114,9 @@
 			    (focus-all-children child parent)
 			    (show-all-children)))))))
 
-
-
-
-(defun handle-exposure   (&rest event-slots &key window &allow-other-keys)
-  (declare (ignore event-slots))
+(define-handler main-mode :exposure (window)
   (awhen (find-frame-window window *current-root*)
     (display-frame-info it)))
-
-
-(defun handle-create-notify (&rest event-slots)
-  (declare (ignore event-slots)))
-
-
-
-
-
-;;; CONFIG: Main mode hooks
-(setf *key-press-hook* 'handle-key-press
-      *configure-request-hook* 'handle-configure-request
-      *configure-notify-hook* 'handle-configure-notify
-      *destroy-notify-hook* 'handle-destroy-notify
-      *enter-notify-hook* 'handle-enter-notify
-      *exposure-hook* 'handle-exposure
-      *map-request-hook* 'handle-map-request
-      *unmap-notify-hook* 'handle-unmap-notify
-      *create-notify-hook* 'handle-create-notify
-      *button-press-hook* 'handle-button-press
-      *button-release-hook* 'handle-button-release
-      *motion-notify-hook* 'handle-motion-notify)
-
-
-
-
-(defun handle-event (&rest event-slots &key display event-key &allow-other-keys)
-  (declare (ignore display))
-  ;;(dbg  event-key)
-  (with-xlib-protect
-    (case event-key
-      (:button-press (call-hook *button-press-hook* event-slots))
-      (:button-release (call-hook *button-release-hook* event-slots))
-      (:motion-notify (call-hook *motion-notify-hook* event-slots))
-      (:key-press (call-hook *key-press-hook* event-slots))
-      (:configure-request (call-hook *configure-request-hook* event-slots))
-      (:configure-notify (call-hook *configure-notify-hook* event-slots))
-      (:map-request (call-hook *map-request-hook* event-slots))
-      (:unmap-notify (call-hook *unmap-notify-hook* event-slots))
-      (:destroy-notify (call-hook *destroy-notify-hook* event-slots))
-      (:mapping-notify (call-hook *mapping-notify-hook* event-slots))
-      (:property-notify (call-hook *property-notify-hook* event-slots))
-      (:create-notify (call-hook *create-notify-hook* event-slots))
-      (:enter-notify (call-hook *enter-notify-hook* event-slots))
-      (:exposure (call-hook *exposure-hook* event-slots))))
-  t)
-
 
 
 (defun main-loop ()
@@ -226,6 +143,7 @@
 
 
 (defun init-display ()
+  (assoc-keyword-handle-event 'main-mode)
   (setf *screen* (first (xlib:display-roots *display*))
 	*root* (xlib:screen-root *screen*)
 	*no-focus-window* (xlib:create-window :parent *root* :x 0 :y 0 :width 1 :height 1)
@@ -326,7 +244,9 @@
     (ungrab-main-keys)
     (xlib:destroy-window *no-focus-window*)
     (xlib:free-pixmap *pixmap-buffer*)
-    (xlib:close-display *display*)))
+    (xlib:close-display *display*)
+    #+:event-debug
+    (format t "~2&Unhandled events: ~A~%" *unhandled-events*)))
 
 
 (defun main (&key (display (or (getenv "DISPLAY") ":0")) protocol

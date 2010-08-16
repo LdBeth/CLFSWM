@@ -263,13 +263,10 @@
 
 
 
-
-(defun query-handle-key (&rest event-slots &key root code state &allow-other-keys)
-  (declare (ignore event-slots root))
+(define-handler query-mode :key-press (code state)
   (unless (funcall-key-from-code *query-keys* code state)
     (add-in-query-string code state))
   (query-print-string))
-
 
 
 
@@ -284,11 +281,11 @@
     (unless grab-keyboard-p
       (ungrab-main-keys)
       (xgrab-keyboard *root*))
-    (generic-mode 'exit-query-loop
+    (generic-mode 'query-mode 'exit-query-loop
 		  :enter-function #'query-enter-function
 		  :loop-function #'query-loop-function
 		  :leave-function #'query-leave-function
-		  :key-press-hook #'query-handle-key)
+		  :original-mode '(main-mode))
     (unless grab-keyboard-p
       (xungrab-keyboard)
       (grab-main-keys))
