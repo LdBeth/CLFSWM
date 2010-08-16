@@ -59,9 +59,9 @@
 
 #-BUILD
 (ignore-errors
-  (main :read-conf-file-p nil))
+  (main :read-conf-file-p t))
 
-(produce-all-docs)
+;;(produce-all-docs)
 
 
 ;;; For debuging: start another sever (for example: 'startx -- :1'), Xnest
