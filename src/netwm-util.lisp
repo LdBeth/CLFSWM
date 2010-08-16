@@ -6,7 +6,7 @@
 ;;;   http://freedesktop.org/wiki/Specifications_2fwm_2dspec
 ;;; --------------------------------------------------------------------------
 ;;;
-;;; (C) 2005 Philippe Brochard <hocwp@free.fr>
+;;; (C) 2010 Philippe Brochard <hocwp@free.fr>
 ;;;
 ;;; This program is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 (in-package :clfswm)
 
 
-;;; Client List functions 
+;;; Client List functions
 (defun netwm-set-client-list (id-list)
   (xlib:change-property *root* :_NET_CLIENT_LIST id-list :window 32))
 
@@ -43,7 +43,7 @@
   (netwm-set-client-list (remove (xlib:window-id window) (netwm-get-client-list))))
 
 
- 
+
 ;;; Desktop functions ;; +PHIL
 (defun netwm-update-desktop-property ()
   ;;  (xlib:change-property *root* :_NET_NUMBER_OF_DESKTOPS

@@ -10,7 +10,7 @@
 ;;; (you can do a 'grep CONFIG *.lisp' to see what you can configure)
 ;;; --------------------------------------------------------------------------
 ;;;
-;;; (C) 2005 Philippe Brochard <hocwp@free.fr>
+;;; (C) 2010 Philippe Brochard <hocwp@free.fr>
 ;;;
 ;;; This program is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by

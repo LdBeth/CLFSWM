@@ -5,7 +5,7 @@
 ;;; Documentation: Tile, pack and fill functions
 ;;; --------------------------------------------------------------------------
 ;;;
-;;; (C) 2005 Philippe Brochard <hocwp@free.fr>
+;;; (C) 2010 Philippe Brochard <hocwp@free.fr>
 ;;;
 ;;; This program is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@
 		 (<= (frame-x frame) (frame-x2 current-frame)))
 	(setf y-found (max y-found (frame-y2 frame)))))
     y-found))
-	     
+
 (defun find-edge-down (current-frame parent)
   (let ((y-found 1))
     (dolist (frame (frame-child parent))
@@ -56,7 +56,7 @@
 		 (<= (frame-x frame) (frame-x2 current-frame)))
 	(setf y-found (min y-found (frame-y frame)))))
     y-found))
-	     
+
 (defun find-edge-right (current-frame parent)
   (let ((x-found 1))
     (dolist (frame (frame-child parent))
@@ -67,7 +67,7 @@
 		 (<= (frame-y frame) (frame-y2 current-frame)))
 	(setf x-found (min x-found (frame-x frame)))))
     x-found))
-	     
+
 
 (defun find-edge-left (current-frame parent)
   (let ((x-found 0))
@@ -176,7 +176,7 @@
 	 (dx (- (frame-w frame) new-size)))
     (setf (frame-w frame) new-size)
     (incf (frame-x frame) (max dx 0))))
-  
+
 
 (defun resize-half-height-up (frame)
   (setf (frame-h frame) (/ (frame-h frame) 2)))
@@ -186,7 +186,7 @@
 	 (dy (- (frame-h frame) new-size)))
     (setf (frame-h frame) new-size)
     (incf (frame-y frame) (max dy 0))))
-  
+
 
 
 
