@@ -22,10 +22,10 @@ Main mode keys:
   Mod-1                Page_down       Raise the child in the current frame
   Mod-1                Home            Switch to the root frame
   Mod-1 Shift          Home            Switch and select the root frame
-                       Menu            Switch between two layouts
-  Mod-1                Menu            Show all frames info windows until a key is release
-  Shift                Menu            Show all frames info windows
-  Control              Menu            Show/Hide the root frame
+  Mod-1                F10             Switch between two layouts
+  Shift                F10             Show all frames info windows until a key is release
+  Mod-1 Shift          F10             Show all frames info windows
+  Control              F10             Show/Hide the root frame
   Mod-1                B               Move the pointer to the lower right corner of the screen
   Control              Escape          Close or kill the current window (ask before doing anything)
   Mod-1                T               Switch to editing mode
@@ -52,7 +52,7 @@ Or do actions on corners
 Or do actions on corners
   Mod-1                1               Move and focus the current child - Create a new frame on the root window
   Mod-1                3               Resize and focus the current child - Create a new frame on the root window
-  Mod-1 Control        1               Move the window under the mouse cursor to another frame
+  Mod-1 Control        1               Move the child under the mouse cursor to another frame
                        4               Select the next level in frame
                        5               Select the previous level in frame
   Mod-1                4               Enter in the selected frame - ie make it the root frame
@@ -78,6 +78,7 @@ Second mode keys:
                        Exclam          Run a program from the query input
                        Return          Leave second mode
                        Escape          Leave second mode
+  Control              G               Leave second mode
                        T               Tile the current frame
   Mod-1 Control Shift  Home            Exit clfswm
   Mod-1                Right           Select the next brother
@@ -94,7 +95,7 @@ Second mode keys:
   Mod-1                Page_down       Raise the child in the current frame
   Mod-1                Home            Switch to the root frame
   Mod-1 Shift          Home            Switch and select the root frame
-                       Menu            Show all frames info windows until a key is release
+                       Menu            Show/Hide the root frame
   Mod-1                B               Move the pointer to the lower right corner of the screen
                        O               Open the next window in a new frame in the parent frame
   Control              O               Open the next window in a new frame in the root frame
@@ -105,13 +106,16 @@ Second mode keys:
   Control              C               Copy the current child to the selection
   Control              V               Paste the selection in the current frame
   Control Shift        V               Paste the selection in the current frame - Do not clear the selection after paste
-                       Delete          Remove the current child from its parent frame
+  Control              Delete          Remove the current child from its parent frame
+                       Delete          Delete the current child and its children in all frames
                        C               start an xterm
                        E               start emacs
   Control              E               start an emacs for another user
                        H               start an xclock
-  Shift                Menu            Show all frames info windows
-  Control              Menu            Show/Hide the root frame
+  Mod-1                F10             Switch between two layouts
+  Shift                F10             Show all frames info windows until a key is release
+  Mod-1 Shift          F10             Show all frames info windows
+  Control              F10             Show/Hide the root frame
   Mod-1                1               Bind or jump to a slot (a frame or a window)
   Mod-1                2               Bind or jump to a slot (a frame or a window)
   Mod-1                3               Bind or jump to a slot (a frame or a window)
@@ -134,7 +138,7 @@ Or do corners actions
 Or do corners actions
   Mod-1                1               Move and focus the current child - Create a new frame on the root window
   Mod-1                3               Resize and focus the current child - Create a new frame on the root window
-  Mod-1 Control        1               Move the window under the mouse cursor to another frame
+  Mod-1 Control        1               Move the child under the mouse cursor to another frame
                        4               Select the next level in frame
                        5               Select the previous level in frame
   Mod-1                4               Enter in the selected frame - ie make it the root frame
@@ -145,8 +149,10 @@ Info mode keys:
 --------------
 
                        Q               Leave the info mode
-                       Return          Leave the info mode
+                       Return          Leave the info mode and valid the selected item
+                       Space           Leave the info mode and valid the selected item
                        Escape          Leave the info mode
+  Control              G               Leave the info mode
                        Twosuperior     Move the pointer to the lower right corner of the screen
                        Down            Move one line down
                        Up              Move one line up
@@ -161,11 +167,12 @@ Info mode keys:
 Mouse buttons actions in info mode:
 ----------------------------------
 
-                       1               Begin grab text
+                       1               NIL
                        2               Leave the info mode
+                       3               Leave the info mode
                        4               Move one line up
                        5               Move one line down
-                       Motion          Grab text
+                       Motion          NIL
 
 
 

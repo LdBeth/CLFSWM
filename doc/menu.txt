@@ -11,6 +11,7 @@ s: < Selection menu >
 n: < Action by name menu >
 u: < Action by number menu >
 y: < Utility menu >
+o: < Configuration menu >
 m: < CLFSWM menu >
 
 Help-Menu
@@ -25,313 +26,13 @@ m: Show current processes sorted by memory usage
 v: Show the current CLFSWM version
 
 Standard-Menu
-a: < WINDOW MANAGERS >
-b: < APPLICATIONS >
-c: < GAMES >
-d: < HELP >
-
-Window Managers
-a: X Window Snapshot
-b: X Window Snapshot
-
-Applications
-a: < SYSTEM >
-b: < OFFICE >
-c: < NETWORK >
-d: < VIDEO >
-e: < SCIENCE >
-f: < SOUND >
-g: < TERMINAL EMULATORS >
-h: < VIEWERS >
-i: < FILE MANAGEMENT >
-j: < TEXT >
-k: < GRAPHICS >
-l: < EDITORS >
-m: < DATA MANAGEMENT >
-n: < PROGRAMMING >
-o: < TOOLS >
-p: < SHELLS >
-q: < ACCESSIBILITY >
-
-System
-a: < HARDWARE >
-b: < ADMINISTRATION >
-c: < MONITORING >
-d: < PACKAGE MANAGEMENT >
-e: < SECURITY >
-f: < LANGUAGE ENVIRONMENT >
-g: X Window Snapshot
-h: X Window Snapshot
-
-Hardware
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-
-Administration
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
-e: X Window Snapshot
-f: X Window Snapshot
-g: X Window Snapshot
-h: X Window Snapshot
-i: X Window Snapshot
-j: X Window Snapshot
-k: X Window Snapshot
-l: X Window Snapshot
-m: X Window Snapshot
-n: X Window Snapshot
-o: X Window Snapshot
-p: X Window Snapshot
-q: X Window Snapshot
-r: X Window Snapshot
-s: X Window Snapshot
-t: X Window Snapshot
-u: X Window Snapshot
-v: X Window Snapshot
-w: X Window Snapshot
-x: X Window Snapshot
-y: X Window Snapshot
-
-Monitoring
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
-e: X Window Snapshot
-f: X Window Snapshot
-g: X Window Snapshot
-
-Package Management
-a: X Window Snapshot
-b: X Window Snapshot
-
-Security
-a: X Window Snapshot
-
-Language Environment
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
-e: X Window Snapshot
-f: X Window Snapshot
-g: X Window Snapshot
-h: X Window Snapshot
-i: X Window Snapshot
-j: X Window Snapshot
-k: X Window Snapshot
-l: X Window Snapshot
-m: X Window Snapshot
-n: X Window Snapshot
-o: X Window Snapshot
-p: X Window Snapshot
-q: X Window Snapshot
-r: X Window Snapshot
-s: X Window Snapshot
-
-Office
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
-e: X Window Snapshot
-
-Network
-a: < WEB BROWSING >
-b: < COMMUNICATION >
-c: < MONITORING >
-d: < FILE TRANSFER >
-e: < WEB NEWS >
-
-Web Browsing
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
-
-Communication
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
-e: X Window Snapshot
-f: X Window Snapshot
-g: X Window Snapshot
-
-Monitoring
-a: X Window Snapshot
-
-File Transfer
-a: X Window Snapshot
-b: X Window Snapshot
-
-Web News
-a: X Window Snapshot
-
-Video
-a: X Window Snapshot
-b: X Window Snapshot
-
-Science
-a: < MATHEMATICS >
-
-Mathematics
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
-e: X Window Snapshot
-
-Sound
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
-e: X Window Snapshot
-f: X Window Snapshot
-g: X Window Snapshot
-h: X Window Snapshot
-i: X Window Snapshot
-j: X Window Snapshot
-k: X Window Snapshot
-l: X Window Snapshot
-m: X Window Snapshot
-n: X Window Snapshot
-o: X Window Snapshot
-p: X Window Snapshot
-
-Terminal Emulators
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
-
-Viewers
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
-e: X Window Snapshot
-f: X Window Snapshot
-g: X Window Snapshot
-h: X Window Snapshot
-i: X Window Snapshot
-j: X Window Snapshot
-
-File Management
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
-e: X Window Snapshot
-f: X Window Snapshot
-
-Text
-a: X Window Snapshot
-b: X Window Snapshot
-
-Graphics
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
-e: X Window Snapshot
-f: X Window Snapshot
-
-Editors
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
-e: X Window Snapshot
-f: X Window Snapshot
-
-Data Management
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
-e: X Window Snapshot
-
-Programming
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
-
-Tools
-a: X Window Snapshot
-
-Shells
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-
-Accessibility
-a: X Window Snapshot
-
-Games
-a: < ACTION >
-b: < BOARD >
-c: < CARD >
-d: < PUZZLES >
-e: < BLOCKS >
-f: < TOYS >
-
-Action
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-
-Board
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
-e: X Window Snapshot
-f: X Window Snapshot
-g: X Window Snapshot
-
-Card
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-
-Puzzles
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
-e: X Window Snapshot
-f: X Window Snapshot
-
-Blocks
-a: X Window Snapshot
-b: X Window Snapshot
-
-Toys
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
-e: X Window Snapshot
-f: X Window Snapshot
-
-Help
-a: X Window Snapshot
-b: X Window Snapshot
-c: X Window Snapshot
-d: X Window Snapshot
 
 Child-Menu
 r: Rename the current child
 e: Ensure that all children names are unique
 n: Ensure that all children numbers are unique
-x: Remove the current child from the CLFSWM tree
-Delete: Remove the current child from its parent frame
+Delete: Delete the current child and its children in all frames
+X: Remove the current child from its parent frame
 h: Hide the current child
 u: Unhide a child in the current frame
 f: Unhide a child from all frames in the current frame
@@ -514,6 +215,130 @@ Utility-Menu
 i: Identify a key
 colon: Eval a lisp form from the query input
 exclam: Run a program from the query input
+o: < Other window manager menu >
+
+Other-Window-Manager-Menu
+x: Run xterm
+t: Run twm
+i: Run icewm
+g: Run Gnome
+k: Run KDE
+c: Run XFCE
+l: Run LXDE
+p: Prompt for an other window manager
+
+Configuration-Menu
+a: < Frame colors group >
+b: < Miscellaneous group >
+c: < Query string group >
+d: < Menu group >
+e: < Identify key group >
+f: < Main mode group >
+g: < Info mode group >
+h: < Corner group >
+i: < Hook group >
+j: < Placement group >
+k: < Circulate mode group >
+l: < Second mode group >
+F2: Save all configuration variables in clfswmrc
+
+Conf-Frame-Colors-Group
+a: Configure FRAME-FOREGROUND-ROOT
+b: Configure FRAME-FOREGROUND-HIDDEN
+c: Configure FRAME-FOREGROUND
+d: Configure FRAME-BACKGROUND
+
+Conf-Miscellaneous-Group
+a: Configure CREATE-FRAME-ON-ROOT
+b: Configure NEVER-MANAGED-WINDOW-LIST
+c: Configure DEFAULT-FONT-STRING
+d: Configure DEFAULT-MODIFIERS
+e: Configure DEFAULT-FOCUS-POLICY
+f: Configure DEFAULT-FRAME-DATA
+g: Configure LOOP-TIMEOUT
+h: Configure HAVE-TO-COMPRESS-NOTIFY
+i: Configure DEFAULT-WINDOW-WIDTH
+j: Configure DEFAULT-MANAGED-TYPE
+k: Configure DEFAULT-WINDOW-HEIGHT
+
+Conf-Query-String-Group
+a: Configure QUERY-BACKGROUND
+b: Configure QUERY-BORDER
+c: Configure QUERY-FONT-STRING
+d: Configure QUERY-FOREGROUND
+
+Conf-Menu-Group
+a: Configure MENU-COLOR-SUBMENU
+b: Configure MENU-COLOR-COMMENT
+c: Configure MENU-COLOR-MENU-KEY
+d: Configure MENU-COLOR-KEY
+
+Conf-Identify-Key-Group
+a: Configure IDENTIFY-FOREGROUND
+b: Configure IDENTIFY-BORDER
+c: Configure IDENTIFY-BACKGROUND
+d: Configure IDENTIFY-FONT-STRING
+
+Conf-Main-Mode-Group
+a: Configure COLOR-MAYBE-SELECTED
+b: Configure COLOR-SELECTED
+c: Configure COLOR-UNSELECTED
+
+Conf-Info-Mode-Group
+a: Configure INFO-BACKGROUND
+b: Configure INFO-FOREGROUND
+c: Configure INFO-BORDER
+d: Configure INFO-SELECTED-BACKGROUND
+e: Configure INFO-FONT-STRING
+f: Configure INFO-COLOR-UNDERLINE
+g: Configure INFO-COLOR-FIRST
+h: Configure INFO-LINE-CURSOR
+i: Configure INFO-COLOR-TITLE
+j: Configure INFO-CLICK-TO-SELECT
+k: Configure INFO-COLOR-SECOND
+
+Conf-Corner-Group
+a: Configure CORNER-SECOND-MODE-MIDDLE-BUTTON
+b: Configure CORNER-MAIN-MODE-LEFT-BUTTON
+c: Configure VIRTUAL-KEYBOARD-KILL-CMD
+d: Configure CLFSWM-TERMINAL-CMD
+e: Configure CORNER-MAIN-MODE-MIDDLE-BUTTON
+f: Configure VIRTUAL-KEYBOARD-CMD
+g: Configure CORNER-SECOND-MODE-LEFT-BUTTON
+h: Configure CORNER-SIZE
+i: Configure CORNER-MAIN-MODE-RIGHT-BUTTON
+j: Configure CLFSWM-TERMINAL-NAME
+k: Configure CORNER-SECOND-MODE-RIGHT-BUTTON
+
+Conf-Hook-Group
+a: Configure INIT-HOOK
+b: Configure LOOP-HOOK
+c: Configure BINDING-HOOK
+d: Configure DEFAULT-NW-HOOK
+
+Conf-Placement-Group
+a: Configure BANISH-POINTER-PLACEMENT
+b: Configure SECOND-MODE-PLACEMENT
+c: Configure QUERY-MODE-PLACEMENT
+d: Configure INFO-MODE-PLACEMENT
+e: Configure CIRCULATE-MODE-PLACEMENT
+
+Conf-Circulate-Mode-Group
+a: Configure CIRCULATE-WIDTH
+b: Configure CIRCULATE-HEIGHT
+c: Configure CIRCULATE-FONT-STRING
+d: Configure CIRCULATE-FOREGROUND
+e: Configure CIRCULATE-TEXT-LIMITE
+f: Configure CIRCULATE-BACKGROUND
+g: Configure CIRCULATE-BORDER
+
+Conf-Second-Mode-Group
+a: Configure SM-FONT-STRING
+b: Configure SM-BACKGROUND-COLOR
+c: Configure SM-FOREGROUND-COLOR
+d: Configure SM-HEIGHT
+e: Configure SM-BORDER-COLOR
+f: Configure SM-WIDTH
 
 Clfswm-Menu
 r: Reset clfswm
