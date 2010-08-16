@@ -7,8 +7,7 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-BUGS: - Unwanted flickering with unmanaged windows.
-      - Focus with multiple copy of the same window fall in the wrong frame.
+BUGS: - Focus with multiple copy of the same window fall in the wrong frame.
 
 ######Nothing here :)
 
