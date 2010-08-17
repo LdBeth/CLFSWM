@@ -70,7 +70,7 @@ Window types are in +WINDOW-TYPES+.")
 	 ,@body)
      ((or xlib:match-error xlib:window-error xlib:drawable-error) (c)
        (declare (ignore c)))))
-;;(dbg c ',body))))
+       ;;(dbg c ',body))))
 
 
 
@@ -757,8 +757,8 @@ Expand in handle-event-fun-main-mode-key-press"
 
 (defun compress-motion-notify ()
   (when *have-to-compress-notify*
-    (xlib:event-case (*display* :discard-p nil :peek-p t :timeout 0)
-      (:motion-notify () t))))
+    (loop while (xlib:event-cond (*display* :timeout 0)
+		  (:motion-notify () t)))))
 
 
 (defun display-all-cursors (&optional (display-time 1))

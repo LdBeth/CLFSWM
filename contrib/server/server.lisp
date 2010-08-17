@@ -48,6 +48,7 @@
 (defparameter *server-socket* nil)
 (defparameter *server-port* 33333)
 (defparameter *server-allowed-host* '("127.0.0.1"))
+(defparameter *server-wait-timeout* 0.001d0)
 
 (defparameter *server-connection* nil)
 
@@ -130,7 +131,7 @@
 
 (defun server-handle-new-connection ()
   (handler-case
-      (let ((stream (and *server-socket* (port:socket-accept *server-socket* :wait 0.01d0))))
+      (let ((stream (and *server-socket* (port:socket-accept *server-socket* :wait *server-wait-timeout*))))
 	(when stream
 	  (if (server-is-allowed-host stream)
 	      (multiple-value-bind (local-host local-port remote-host remote-port)

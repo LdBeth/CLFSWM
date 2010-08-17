@@ -29,16 +29,13 @@
 #+CMU
 (setf ext:*gc-verbose* nil)
 
-#+CMU
-(require :clx)
-
 #+SBCL
 (require :asdf)
 
 #+SBCL
 (require :sb-posix)
 
-#+(or SBCL ECL)
+#+(or CMU SBCL ECL)
 (require :clx)
 
 #-ASDF

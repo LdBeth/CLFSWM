@@ -1,5 +1,8 @@
 2010-08-17  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/xlib-util.lisp (compress-motion-notify): Use a loop instead
+	of an event-case.
+
 	* src/clfswm-internal.lisp (with-find-in-all-frames): New macro.
 	(find-parent-frame, find-frame-window, find-frame-by-name)
 	(find-frame-by-number): Use with-find-in-all-frames to search in
