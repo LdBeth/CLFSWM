@@ -12,6 +12,8 @@
 (defparameter *final-key-perms* "0400")
 
 
+
+
 (defun ushell-sh (formatter &rest args)
   (labels ((remove-plist (plist &rest keys)
 	     "Remove the keys from the plist.
@@ -43,8 +45,10 @@ Useful for re-using the &REST arg after removing some options."
 				opts)
 	     #+lucid (apply #'lcl:run-program prog :wait wait :arguments args opts)
 	     #+sbcl (apply #'sb-ext:run-program prog args :wait wait :output *standard-output* opts)
-	     #-(or allegro clisp cmu gcl liquid lispworks lucid sbcl)
-	     (error 'not-implemented :proc (list 'run-prog prog opts))))
+	     #+ecl (apply #'ext:run-program prog args opts)
+	     #+ccl (apply #'ccl:run-program prog args opts)
+	     #-(or allegro clisp cmu gcl liquid lispworks lucid sbcl ccl ecl)
+	     (error "Error: urun-prog not implemented")))
     (urun-prog "/bin/sh" :args (list "-c" (apply #'format nil formatter args)))))
 
 

@@ -1,5 +1,7 @@
 2010-08-17  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* contrib/server/key.lisp (ushell-sh): Add ccl and ecl support.
+
 	* src/xlib-util.lisp (compress-motion-notify): Use a loop instead
 	of an event-case.
 
