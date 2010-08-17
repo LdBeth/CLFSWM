@@ -316,7 +316,6 @@
 
 
 
-
 (defun find-child (to-find root)
   "Find to-find in root or in its children"
   (with-all-children (root child)
@@ -325,34 +324,37 @@
 
 
 
-(defun find-parent-frame (to-find &optional (root *root-frame*))
+(defmacro with-find-in-all-frames (test &optional return-value)
+  `(let (ret)
+     (block return-block
+       (with-all-frames (root frame)
+	 (when ,test
+	   (if first-foundp
+	       (return-from return-block (or ,return-value frame))
+	       (setf ret frame))))
+       (or ,return-value ret))))
+
+(defun find-parent-frame  (to-find &optional (root *root-frame*) first-foundp)
   "Return the parent frame of to-find"
-  (with-all-frames (root frame)
-    (when (member to-find (frame-child frame))
-      (return-from find-parent-frame frame))))
+  (with-find-in-all-frames
+      (member to-find (frame-child frame))))
 
-
-
-(defun find-frame-window (window &optional (root *root-frame*))
+(defun find-frame-window (window &optional (root *root-frame*) first-foundp)
   "Return the frame with the window window"
-  (with-all-frames (root frame)
-    (when (xlib:window-equal window (frame-window frame))
-      (return-from find-frame-window frame))))
+  (with-find-in-all-frames
+      (xlib:window-equal window (frame-window frame))))
 
-
-(defun find-frame-by-name (name)
+(defun find-frame-by-name (name &optional (root *root-frame*) first-foundp)
   "Find a frame from its name"
   (when name
-    (with-all-frames (*root-frame* frame)
-      (when (string-equal name (frame-name frame))
-	(return-from find-frame-by-name frame)))))
+    (with-find-in-all-frames
+	(string-equal name (frame-name frame)))))
 
-(defun find-frame-by-number (number)
+(defun find-frame-by-number (number &optional (root *root-frame*) first-foundp)
   "Find a frame from its number"
   (when (numberp number)
-    (with-all-frames (*root-frame* frame)
-      (when (= number (frame-number frame))
-	(return-from find-frame-by-number frame)))))
+    (with-find-in-all-frames
+	(= number (frame-number frame)))))
 
 
 (defun find-child-in-parent (child base)

@@ -1,5 +1,10 @@
 2010-08-17  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-internal.lisp (with-find-in-all-frames): New macro.
+	(find-parent-frame, find-frame-window, find-frame-by-name)
+	(find-frame-by-number): Use with-find-in-all-frames to search in
+	frames in the right order.
+
 	* src/clfswm-util.lisp (mouse-click-to-focus-generic): Fix an
 	unwanted flickering with unmanaged windows.
 

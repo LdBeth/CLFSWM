@@ -159,7 +159,7 @@
       win)))
 
 
-(defun find-child-under-mouse (x y)
+(defun find-child-under-mouse (x y &optional first-foundp)
   "Return the child under the mouse"
   (with-xlib-protect
     (let ((ret nil))
@@ -167,10 +167,14 @@
 	(when (and (or (managed-window-p child parent) (equal parent *current-child*))
 		   (<= (xlib:drawable-x child) x (+ (xlib:drawable-x child) (xlib:drawable-width child)))
 		   (<= (xlib:drawable-y child) y (+ (xlib:drawable-y child) (xlib:drawable-height child))))
-	  (setf ret child))
+	  (if first-foundp
+	      (return-from find-child-under-mouse child)
+	      (setf ret child)))
 	(when (and (<= (frame-rx child) x (+ (frame-rx child) (frame-rw child)))
 		   (<= (frame-ry child) y (+ (frame-ry child) (frame-rh child))))
-	  (setf ret child)))
+	  (if first-foundp
+	      (return-from find-child-under-mouse child)
+	      (setf ret child))))
       ret)))
 
 
