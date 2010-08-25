@@ -320,7 +320,8 @@
       (unwind-protect
 	   (loop until done do
 		(xlib:display-finish-output *display*)
-		(xlib:process-event *display* :handler #'handle-identify :timeout *loop-timeout*))
+		(when (xlib:event-listen *display* *loop-timeout*)
+		  (xlib:process-event *display* :handler #'handle-identify)))
 	(xlib:destroy-window window)
 	(xlib:close-font font)
 	(xgrab-pointer *root* 66 67)))))

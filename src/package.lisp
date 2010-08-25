@@ -27,7 +27,7 @@
 
 (defpackage clfswm
   (:use :common-lisp :my-html :tools :version)
-  ;;(:shadow :defun)
+;;  (:shadow :defun)
   (:export :main
 	   :reload-clfswm
 	   :reset-clfswm
@@ -214,7 +214,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 ;; For debug - redefine defun
 ;;(shadow :defun)
-;;
+
 ;;(defmacro defun (name args &body body)
 ;;  `(progn
 ;;    (format t "defun: ~A ~A~%" ',name ',args)
@@ -228,3 +228,5 @@ It is particulary useful with CLISP/MIT-CLX.")
 ;;	  (format t "Root tree=~A~%All windows=~A~%"
 ;;		  (xlib:query-tree *root*) (get-all-windows))
 ;;	  (force-output))))))
+
+

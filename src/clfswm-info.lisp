@@ -345,9 +345,9 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 		(xgrab-keyboard *root*))
 	      (wait-no-key-or-button-press)
 	      (generic-mode 'info-mode 'exit-info-loop
-				 :loop-function (lambda ()
-						  (raise-window (info-window info)))
-				 :original-mode '(main-mode))
+			    :loop-function (lambda ()
+					     (raise-window (info-window info)))
+			    :original-mode '(main-mode))
 	      (if pointer-grabbed-p
 		  (xgrab-pointer *root* 66 67)
 		  (xungrab-pointer))
@@ -356,6 +356,7 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 	      (xlib:free-gcontext gc)
 	      (xlib:destroy-window window)
 	      (xlib:close-font font)
+	      (xlib:display-finish-output *display*)
 	      (display-all-frame-info)
 	      (wait-no-key-or-button-press)
 	      *info-selected-item*)))))))

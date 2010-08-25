@@ -1,3 +1,14 @@
+2010-08-25  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-generic-mode.lisp (generic-mode): Use an
+	xlib:event-listen before processing event with
+	xlib:process-event. This prevent a bug with CLX threaded
+	implementation like sbcl.
+
+	* src/clfswm.lisp (main-loop): Use an xlib:event-listen before
+	processing event with xlib:process-event. This prevent a bug with
+	CLX threaded implementation like sbcl.
+
 2010-08-17  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/server/key.lisp (ushell-sh): Add ccl and ecl support.

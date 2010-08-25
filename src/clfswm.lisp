@@ -122,9 +122,10 @@
 (defun main-loop ()
   (loop
      (with-xlib-protect
-	 (call-hook *loop-hook*)
+       (call-hook *loop-hook*)
        (xlib:display-finish-output *display*)
-       (xlib:process-event *display* :handler #'handle-event :timeout *loop-timeout*))))
+       (when (xlib:event-listen *display* *loop-timeout*)
+	 (xlib:process-event *display* :handler #'handle-event)))))
 ;;(dbg "Main loop finish" c)))))
 
 
@@ -238,15 +239,15 @@
       (exit-clfswm)))
   (when error-msg
     (info-mode error-msg))
-  (unwind-protect
-       (catch 'exit-main-loop
-	 (main-loop))
-    (ungrab-main-keys)
-    (xlib:destroy-window *no-focus-window*)
-    (xlib:free-pixmap *pixmap-buffer*)
-    (xlib:close-display *display*)
-    #+:event-debug
-    (format t "~2&Unhandled events: ~A~%" *unhandled-events*)))
+  (catch 'exit-main-loop
+      (unwind-protect
+	   (main-loop)
+	(ungrab-main-keys)
+	(xlib:destroy-window *no-focus-window*)
+	(xlib:free-pixmap *pixmap-buffer*)
+	(xlib:close-display *display*)
+	#+:event-debug
+	(format t "~2&Unhandled events: ~A~%" *unhandled-events*))))
 
 
 (defun main (&key (display (or (getenv "DISPLAY") ":0")) protocol

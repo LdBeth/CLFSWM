@@ -40,6 +40,7 @@
 	   :remove-hook
 	   :dbg
 	   :dbgnl
+	   :dbgc
 	   :with-all-internal-symbols
 	   :export-all-functions :export-all-variables
 	   :export-all-functions-and-variables
@@ -209,7 +210,11 @@ Return the result of the last hook"
      ,@forms))
 
 
-
+(defun dbgc (obj &optional newline)
+  (princ obj)
+  (when newline
+    (terpri))
+  (force-output))
 
 
 

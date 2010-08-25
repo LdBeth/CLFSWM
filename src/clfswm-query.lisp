@@ -78,6 +78,7 @@
   (setf *query-return* return)
   (throw 'exit-query-loop nil))
 
+
 (defun leave-query-mode-valid ()
   (leave-query-mode :Return))
 
@@ -128,6 +129,7 @@
       (map-window *query-window*)
       (query-print-string)
       (wait-no-key-or-button-press))))
+
 
 
 (defun query-leave-function ()

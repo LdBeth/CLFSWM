@@ -69,7 +69,8 @@ Window types are in +WINDOW-TYPES+.")
        (progn
 	 ,@body)
      ((or xlib:match-error xlib:window-error xlib:drawable-error) (c)
-       (declare (ignore c)))))
+       (dbg c))))
+       ;;(declare (ignore c)))))
        ;;(dbg c ',body))))
 
 
@@ -117,7 +118,9 @@ For example: main-mode :key-press is bound to handle-event-fun-main-mode-key-pre
     (let ((keyword (handle-event->keyword symbol)))
       (when (fboundp symbol)
 	#+:event-debug
-	(format t "~&Associating: ~S with ~S~%" symbol keyword)
+	(progn
+	  (format t "~&Associating: ~S with ~S~%" symbol keyword)
+	  (force-output))
 	(setf (symbol-function keyword) (symbol-function symbol))))))
 
 (defun unassoc-keyword-handle-event (&optional (mode ""))
@@ -127,7 +130,9 @@ For example: main-mode :key-press is bound to handle-event-fun-main-mode-key-pre
     (let ((keyword (handle-event->keyword symbol)))
       (when (fboundp keyword)
 	#+:event-debug
-	(format t "~&Unassociating: ~S  ~S~%" symbol keyword)
+	(progn
+	  (format t "~&Unassociating: ~S  ~S~%" symbol keyword)
+	  (force-output))
 	(fmakunbound keyword)))))
 
 (defmacro define-handler (mode keyword args &body body)
@@ -431,7 +436,8 @@ Expand in handle-event-fun-main-mode-key-press"
 			  &optional (pointer-mask '(:enter-window :pointer-motion
 						    :button-press :button-release)) owner-p)
       "Grab the pointer and set the pointer shape."
-      (free-grab-pointer)
+      (when pointer-grabbed
+	(xungrab-pointer))
       (setf pointer-grabbed t)
       (let* ((white (xlib:make-color :red 1.0 :green 1.0 :blue 1.0))
 	     (black (xlib:make-color :red 0.0 :green 0.0 :blue 0.0)))
@@ -444,10 +450,10 @@ Expand in handle-event-fun-main-mode-key-press"
 						      :foreground black
 						      :background white))
 	       (xlib:grab-pointer root pointer-mask
-				  :owner-p owner-p  :sync-keyboard-p nil :sync-pointer-p nil :cursor cursor))
+				       :owner-p owner-p  :sync-keyboard-p nil :sync-pointer-p nil :cursor cursor))
 	      (t
 	       (xlib:grab-pointer root pointer-mask
-				  :owner-p owner-p  :sync-keyboard-p nil :sync-pointer-p nil)))))
+				       :owner-p owner-p  :sync-keyboard-p nil :sync-pointer-p nil)))))
 
     (defun xungrab-pointer ()
       "Remove the grab on the cursor and restore the cursor shape."
@@ -698,12 +704,14 @@ Expand in handle-event-fun-main-mode-key-press"
      (xgrab-pointer *root* ,cursor ,mask)
      (unless keyboard-grabbed
        (xgrab-keyboard *root*))
-     ,@body
-     (if pointer-grabbed
-	 (xgrab-pointer *root* ,old-cursor ,old-mask)
-	 (xungrab-pointer))
-     (unless keyboard-grabbed
-       (xungrab-keyboard))))
+     (unwind-protect
+	  (progn
+	    ,@body)
+       (if pointer-grabbed
+	   (xgrab-pointer *root* ,old-cursor ,old-mask)
+	   (xungrab-pointer))
+       (unless keyboard-grabbed
+	 (xungrab-keyboard)))))
 
 
 
@@ -727,7 +735,8 @@ Expand in handle-event-fun-main-mode-key-press"
     (loop
        (let ((key (loop for k across (xlib:query-keymap *display*)
 		     for code from 0
-		     when (and (plusp k) (not (modifier-p code))) return t))
+		     when (and (plusp k) (not (modifier-p code)))
+		     return t))
 	     (button (loop for b in (xlib:make-state-keys (nth-value 4 (xlib:query-pointer *root*)))
 			when (member b '(:button-1 :button-2 :button-3 :button-4 :button-5))
 			return t)))

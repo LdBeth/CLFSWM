@@ -36,14 +36,16 @@
 	(assoc-keyword-handle-event add-mode)))
     (assoc-keyword-handle-event mode)
     (nfuncall enter-function)
-    (unwind-protect
-	 (catch exit-tag
+    (catch exit-tag
+      (unwind-protect
 	   (loop
 	      (call-hook loop-hook)
 	      (nfuncall loop-function)
 	      (xlib:display-finish-output *display*)
-	      (xlib:process-event *display* :handler #'handle-event :timeout *loop-timeout*)
-	      (xlib:display-finish-output *display*)))
-      (nfuncall leave-function)
-      (unassoc-keyword-handle-event)
-      (assoc-keyword-handle-event last-mode))))
+	      (when (xlib:event-listen *display* *loop-timeout*)
+		(xlib:process-event *display* :handler #'handle-event))
+	      (xlib:display-finish-output *display*))
+	(nfuncall leave-function)
+	(unassoc-keyword-handle-event)
+	(assoc-keyword-handle-event last-mode)))))
+
