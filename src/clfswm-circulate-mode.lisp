@@ -33,8 +33,6 @@
 (defparameter *circulate-orig* nil)
 (defparameter *circulate-parent* nil)
 
-(defparameter *circulate-leave-key* nil)
-
 (defun draw-circulate-mode-window ()
   (raise-window *circulate-window*)
   (clear-pixmap-buffer *circulate-window* *circulate-gc*)
@@ -153,23 +151,6 @@
   (define-circulate-release-key ("Alt_L" :alt) 'leave-circulate-mode))
 
 
-(defun set-circulate-leave-key ()
-  (maphash #'(lambda (key value)
-	       (when (and (listp value) (member 'leave-circulate-mode value))
-		 (setf *circulate-leave-key* (typecase (first key)
-					       (character (list (char->keycode (first key))))
-					       (number (list (first key)))
-					       (string (multiple-value-list
-							(xlib:keysym->keycodes *display* (keysym-name->keysym (first key)))))))))
-	   *circulate-keys-release*))
-
-
-
-
-
-
-
-
 (defun circulate-leave-function ()
   (when *circulate-window*
     (xlib:destroy-window *circulate-window*))
@@ -180,15 +161,8 @@
 	*circulate-font* nil))
 
 (defun circulate-loop-function ()
-  ;;; Check if the key modifier is alway pressed
-  (let ((leave t))
-    (loop for k across (xlib:query-keymap *display*)
-       for i from 0
-       do (when (and (plusp k) (member i *circulate-leave-key*))
-	    (setf leave nil)
-	    (return)))
-    (when leave
-      (leave-circulate-mode))))
+  (unless (is-a-key-pressed-p)
+    (leave-circulate-mode)))
 
 (define-handler circulate-mode :key-press (code state)
   (unless (funcall-key-from-code *circulate-keys* code state)
@@ -205,7 +179,6 @@
 
 (defun circulate-mode (&key child-direction brother-direction)
   (setf *circulate-hit* 0)
-  (set-circulate-leave-key)
   (with-placement (*circulate-mode-placement* x y *circulate-width* *circulate-height*)
     (setf *circulate-font* (xlib:open-font *display* *circulate-font-string*)
 	  *circulate-window* (xlib:create-window :parent *root*

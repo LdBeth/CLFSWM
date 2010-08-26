@@ -732,7 +732,7 @@ Expand in handle-event-fun-main-mode-key-press"
 		    "Alt_L" "Alt_R" "Meta_L" "Meta_R" "Hyper_L" "Hyper_R"
 		    "Mode_switch" "script_switch" "ISO_Level3_Shift"
 		    "Caps_Lock" "Scroll_Lock" "Num_Lock"))
-      (awhen (xlib:keysym->keycodes *display* (keysym-name->keysym name))
+      (awhen (xlib:keysym->keycodes *display* (keysym-name->keysym name))  ;; PHIL: todo here
 	(push it modifier-list))))
 
   (defun modifier-p (code)
@@ -801,3 +801,10 @@ Expand in handle-event-fun-main-mode-key-press"
   (xlib:copy-area *pixmap-buffer* gc
 		  0 0 (xlib:drawable-width window) (xlib:drawable-height window)
 		  window 0 0))
+
+
+(defun is-a-key-pressed-p ()
+  (loop for k across (xlib:query-keymap *display*)
+     when (plusp k)
+     return t))
+
