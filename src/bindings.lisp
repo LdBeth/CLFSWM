@@ -68,10 +68,6 @@
   ;; Second mode
   (define-main-key (#\t :mod-1) 'second-key-mode)
   (define-main-key ("less" :control) 'second-key-mode)
-  (define-main-key ("Z" :control) 'second-key-mode)
-  ;;(define-main-key (#\< :control) 'second-key-mode)
-  ;;(define-main-key (#x003c :control) 'second-key-mode)
-  ;;(define-main-key (94 :control) 'second-key-mode)
   ;; Bind or jump functions
   (define-main-key ("1" :mod-1) 'bind-or-jump 1)
   (define-main-key ("2" :mod-1) 'bind-or-jump 2)

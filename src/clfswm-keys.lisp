@@ -155,7 +155,6 @@
 						      (unless found
 							(setf modifiers (add-in-state modifiers :shift))))
 						    ret-keycode)))))
-			  (dbg key modifiers keycode)
 			  (if keycode
 			      (if (consp keycode)
 				  (dolist (kc (remove-duplicates keycode))
