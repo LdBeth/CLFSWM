@@ -198,7 +198,7 @@
       (unless (member ch managed-children)
 	(setf managed-children (append managed-children (list child)))))
     (setf managed-children (remove-if-not (lambda (x)
-					    (member x managed-in-parent :test #'equal))
+					    (member x managed-in-parent :test #'child-equal-p))
 					  managed-children))
     (setf (frame-data-slot parent :layout-managed-children) managed-children)
     managed-children))

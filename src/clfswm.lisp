@@ -87,6 +87,7 @@
       (delete-child-in-all-frames window)
       (show-all-children))))
 
+
 (define-handler main-mode :destroy-notify (send-event-p event-window window)
   (unless (or send-event-p
 	      (xlib:window-equal window event-window))
@@ -106,7 +107,7 @@
 			(focus-window window)))
       (:sloppy-select (let* ((child (find-child-under-mouse root-x root-y))
 			     (parent (find-parent-frame child)))
-			(unless (or (equal child *current-root*)
+			(unless (or (child-equal-p child *current-root*)
 				    (equal (typecase child
 				    	     (xlib:window parent)
 					     (t child))

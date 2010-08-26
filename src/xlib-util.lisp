@@ -69,9 +69,17 @@ Window types are in +WINDOW-TYPES+.")
        (progn
 	 ,@body)
      ((or xlib:match-error xlib:window-error xlib:drawable-error) (c)
-       (dbg c))))
+       ;;(dbg c))))
        ;;(declare (ignore c)))))
+       (format t "~&Xlib-error: ~A~%Body:~%~A~%" c ',body)
+      (force-output))))
        ;;(dbg c ',body))))
+
+;;(defmacro with-xlib-protect (&body body)
+;;  "Prevent Xlib errors"
+;;  `(progn
+;;     ,@body))
+
 
 
 
@@ -147,9 +155,9 @@ Expand in handle-event-fun-main-mode-key-press"
 
 (defun handle-event (&rest event-slots &key event-key &allow-other-keys)
   (with-xlib-protect
-      (if (fboundp event-key)
-	  (apply event-key event-slots)
-	  #+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal)))
+    (if (fboundp event-key)
+	(apply event-key event-slots)
+	#+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal)))
   t)
 
 
@@ -787,7 +795,7 @@ Expand in handle-event-fun-main-mode-key-press"
   (xlib:draw-rectangle *pixmap-buffer* gc
 		       0 0 (xlib:drawable-width window) (xlib:drawable-height window)
 		       t)
-    (rotatef (xlib:gcontext-foreground gc) (xlib:gcontext-background gc)))
+  (rotatef (xlib:gcontext-foreground gc) (xlib:gcontext-background gc)))
 
 (defun copy-pixmap-buffer (window gc)
   (xlib:copy-area *pixmap-buffer* gc

@@ -85,8 +85,8 @@
 
 (defun reorder-brother (direction)
   (no-focus)
-  (let ((frame-is-root? (and (equal *current-root* *current-child*)
-			     (not (equal *current-root* *root-frame*)))))
+  (let ((frame-is-root? (and (child-equal-p *current-root* *current-child*)
+			     (not (child-equal-p *current-root* *root-frame*)))))
     (if frame-is-root?
 	(hide-all *current-root*)
 	(select-current-frame nil))

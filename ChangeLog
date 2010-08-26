@@ -1,3 +1,11 @@
+2010-08-26  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/*.lisp: Use the new child-equal-p to compare children. This
+	prevent a bug with sbcl/cmucl when the standard equal function
+	does not work with xlib:window.
+
+	* src/clfswm-internal.lisp (child-equal-p): New predicate.
+
 2010-08-25  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-generic-mode.lisp (generic-mode): Use an

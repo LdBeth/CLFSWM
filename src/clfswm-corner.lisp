@@ -128,7 +128,7 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
     (dolist (win (xlib:query-tree *root*))
       (when (string-equal (xlib:wm-name win) *clfswm-terminal-name*)
 	(setf found t)
-	(unless (equal *clfswm-terminal* win)
+	(unless (child-equal-p *clfswm-terminal* win)
 	  (setf *clfswm-terminal* win)
 	  (hide-window *clfswm-terminal*))))
     (unless found

@@ -108,7 +108,7 @@
 (defun delete-focus-window-generic (close-fun)
   (let ((window (xlib:input-focus *display*)))
     (when (and window (not (xlib:window-equal window *no-focus-window*)))
-      (when (equal window *current-child*)
+      (when (child-equal-p window *current-child*)
 	(setf *current-child* *current-root*))
       (hide-child window)
       (delete-child-and-children-in-all-frames window close-fun)
@@ -149,7 +149,7 @@
   (with-xlib-protect
     (let ((win *root*))
       (with-all-windows-frames-and-parent (*current-root* child parent)
-	(when (and (or (managed-window-p child parent) (equal parent *current-child*))
+	(when (and (or (managed-window-p child parent) (child-equal-p parent *current-child*))
 		   (<= (xlib:drawable-x child) x (+ (xlib:drawable-x child) (xlib:drawable-width child)))
 		   (<= (xlib:drawable-y child) y (+ (xlib:drawable-y child) (xlib:drawable-height child))))
 	  (setf win child))
@@ -164,7 +164,7 @@
   (with-xlib-protect
     (let ((ret nil))
       (with-all-windows-frames-and-parent (*current-root* child parent)
-	(when (and (or (managed-window-p child parent) (equal parent *current-child*))
+	(when (and (or (managed-window-p child parent) (child-equal-p parent *current-child*))
 		   (<= (xlib:drawable-x child) x (+ (xlib:drawable-x child) (xlib:drawable-width child)))
 		   (<= (xlib:drawable-y child) y (+ (xlib:drawable-y child) (xlib:drawable-height child))))
 	  (if first-foundp
@@ -433,10 +433,10 @@
 ;;; Delete by functions
 (defun delete-frame-by (frame)
   (hide-all *current-root*)
-  (unless (equal frame *root-frame*)
-    (when (equal frame *current-root*)
+  (unless (child-equal-p frame *root-frame*)
+    (when (child-equal-p frame *current-root*)
       (setf *current-root* *root-frame*))
-    (when (equal frame *current-child*)
+    (when (child-equal-p frame *current-child*)
       (setf *current-child* *current-root*))
     (remove-child-in-frame frame (find-parent-frame frame)))
   (show-all-children *current-root*))
@@ -556,9 +556,9 @@ mouse-fun is #'move-frame or #'resize-frame"
   (let* ((to-replay t)
 	 (child (find-child-under-mouse root-x root-y))
 	 (parent (find-parent-frame child))
-	 (root-p (or (equal window *root*)
+	 (root-p (or (child-equal-p window *root*)
 		     (and (frame-p *current-root*)
-			  (equal child (frame-window *current-root*))))))
+			  (child-equal-p child (frame-window *current-root*))))))
     (labels ((add-new-frame ()
 	       (setf child (create-frame)
 		     parent *current-root*
@@ -612,7 +612,7 @@ Focus child and its parents -
 For window: set current child to window or its parent according to window-parent"
   (let* ((child (find-child-under-mouse root-x root-y))
 	 (parent (find-parent-frame child)))
-    (when (and (equal child *current-root*)
+    (when (and (child-equal-p child *current-root*)
 	       (frame-p *current-root*))
       (setf child (create-frame)
 	    parent *current-root*
@@ -993,7 +993,7 @@ For window: set current child to window or its parent according to window-parent
   "Move the child under the mouse cursor to another frame"
   (declare (ignore window))
   (let ((child (find-child-under-mouse root-x root-y)))
-    (unless (equal child *current-root*)
+    (unless (child-equal-p child *current-root*)
       (hide-all child)
       (remove-child-in-frame child (find-parent-frame child))
       (wait-mouse-button-release 50 51)
@@ -1002,7 +1002,7 @@ For window: set current child to window or its parent according to window-parent
 	(let ((dest (find-child-under-mouse x y)))
 	  (when (xlib:window-p dest)
 	    (setf dest (find-parent-frame dest)))
-	  (unless (equal child dest)
+	  (unless (child-equal-p child dest)
 	    (move-child-to child dest)
 	    (show-all-children *current-root*))))))
   (stop-button-event))
@@ -1190,7 +1190,7 @@ For window: set current child to window or its parent according to window-parent
       (when name1
 	(let ((acc nil))
 	  (with-all-children (*root-frame* c)
-	    (unless (equal child c))
+	    (unless (child-equal-p child c))
 	    (multiple-value-bind (num2 name2)
 		(extract-number-from-name (child-name c))
 	      (when (string-equal name1 name2)
