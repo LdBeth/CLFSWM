@@ -1,5 +1,8 @@
 2010-08-26  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-keys.lisp (define-ungrab/grab): Use all values
+	returned by xlib:keysym->keycodes.
+
 	* src/*.lisp: Use the new child-equal-p to compare children. This
 	prevent a bug with sbcl/cmucl when the standard equal function
 	does not work with xlib:window.
