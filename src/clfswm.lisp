@@ -70,7 +70,13 @@
 				   (xlib:drawable-border-width window))
 	(when (has-stackmode value-mask)
 	  (case stack-mode
-	    (:above (raise-window window))))))))
+	    (:above
+	     (when (or (child-equal-p window *current-child*)
+		       (is-in-current-child-p window))
+	       (raise-window window)
+	       (focus-window window)
+	       (focus-all-children window (find-parent-frame window *current-root*))))))))))
+
 
 (define-handler main-mode :map-request (window send-event-p)
   (unless send-event-p
@@ -103,7 +109,7 @@
 	      *default-focus-policy*)
       (:sloppy (focus-window window))
       (:sloppy-strict (when (and (frame-p *current-child*)
-				 (member window (frame-child *current-child*)))
+				 (member window (frame-child *current-child*) :test #'child-equal-p))
 			(focus-window window)))
       (:sloppy-select (let* ((child (find-child-under-mouse root-x root-y))
 			     (parent (find-parent-frame child)))

@@ -110,11 +110,11 @@
   (if (frame-p frame)
       (with-slots ((managed forced-managed-window)
 		   (unmanaged forced-unmanaged-window)) frame
-	(and (not (member window unmanaged))
+	(and (not (member window unmanaged :test #'child-equal-p))
 	     (not (member (xlib:wm-name window) unmanaged :test #'string-equal-p))
 	     (or (member :all (frame-managed-type frame))
 		 (member (window-type window) (frame-managed-type frame))
-		 (member window managed)
+		 (member window managed :test #'child-equal-p)
 		 (member (xlib:wm-name window) managed :test #'string-equal-p))))
       t))
 
@@ -198,6 +198,11 @@
 
 (defmethod rename-child (child name)
   (declare (ignore child name)))
+
+
+(defun is-in-current-child-p (child)
+  (and (frame-p *current-child*)
+       (member child (frame-child *current-child*) :test #'child-equal-p)))
 
 
 
@@ -350,7 +355,7 @@
 (defun find-parent-frame  (to-find &optional (root *root-frame*) first-foundp)
   "Return the parent frame of to-find"
   (with-find-in-all-frames
-      (member to-find (frame-child frame))))
+      (member to-find (frame-child frame) :test #'child-equal-p)))
 
 (defun find-frame-window (window &optional (root *root-frame*) first-foundp)
   "Return the frame with the window window"
@@ -688,10 +693,10 @@ only for display-child and its children"
 (defun focus-child (child parent)
   "Focus child - Return true if something has change"
   (when (and (frame-p parent)
-	     (member child (frame-child parent)))
+	     (member child (frame-child parent) :test #'child-equal-p))
     (when (not (child-equal-p child (frame-selected-child parent)))
       (with-slots ((parent-child child) selected-pos) parent
-	(setf parent-child (nth-insert selected-pos child (remove child parent-child))))
+	(setf parent-child (nth-insert selected-pos child (remove child parent-child :test #'child-equal-p))))
       t)))
 
 (defun focus-child-rec (child parent)
@@ -949,7 +954,7 @@ managed."
   (let ((id-list nil)
 	(all-windows (get-all-windows)))
     (dolist (win (xlib:query-tree (xlib:screen-root screen)))
-      (unless (member win all-windows)
+      (unless (member win all-windows :test #'child-equal-p)
 	(let ((map-state (xlib:window-map-state win))
 	      (wm-state (window-state win)))
 	  (unless (or (eql (xlib:window-override-redirect win) :on)

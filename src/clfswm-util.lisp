@@ -970,7 +970,7 @@ For window: set current child to window or its parent according to window-parent
     (let ((parent (find-parent-frame window)))
       (with-slots ((managed forced-managed-window)
 		   (unmanaged forced-unmanaged-window)) parent
-	(setf unmanaged (remove window unmanaged)
+	(setf unmanaged (remove window unmanaged :test #'child-equal-p)
 	      unmanaged (remove (xlib:wm-name window) unmanaged :test #'string-equal-p))
 	(pushnew window managed))))
   (leave-second-mode))
@@ -981,7 +981,7 @@ For window: set current child to window or its parent according to window-parent
     (let ((parent (find-parent-frame window)))
       (with-slots ((managed forced-managed-window)
 		   (unmanaged forced-unmanaged-window)) parent
-	(setf managed (remove window managed)
+	(setf managed (remove window managed :test #'child-equal-p)
 	      managed (remove (xlib:wm-name window) managed :test #'string-equal-p))
 	(pushnew window unmanaged))))
   (leave-second-mode))
@@ -1036,7 +1036,7 @@ For window: set current child to window or its parent according to window-parent
     (when (frame-p parent)
       (with-slots (child hidden-children) parent
 	(hide-all *current-child*)
-	(setf child (remove *current-child* child))
+	(setf child (remove *current-child* child :test #'child-equal-p))
 	(pushnew *current-child* hidden-children)
 	(setf *current-child* parent))
       (show-all-children)))
@@ -1046,7 +1046,7 @@ For window: set current child to window or its parent according to window-parent
 (defun frame-unhide-child (hidden frame-src frame-dest)
   "Unhide a hidden child from frame-src in frame-dest"
   (with-slots (hidden-children) frame-src
-    (setf hidden-children (remove hidden hidden-children)))
+    (setf hidden-children (remove hidden hidden-children :test #'child-equal-p)))
   (with-slots (child) frame-dest
     (pushnew hidden child)))
 

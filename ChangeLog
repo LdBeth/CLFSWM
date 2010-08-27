@@ -1,3 +1,12 @@
+2010-08-28  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (is-in-current-child-p): New function.
+
+2010-08-27  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm.lisp (main-mode:configure-request): Raise the window
+	only when present on the current child and focus it accordingly.
+
 2010-08-26  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-circulate-mode.lisp (circulate-loop-function):

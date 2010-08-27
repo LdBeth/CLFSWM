@@ -195,7 +195,7 @@
   (let ((managed-children (frame-data-slot parent :layout-managed-children))
 	(managed-in-parent (get-managed-child parent)))
     (dolist (ch managed-in-parent)
-      (unless (member ch managed-children)
+      (unless (member ch managed-children :test #'child-equal-p)
 	(setf managed-children (append managed-children (list child)))))
     (setf managed-children (remove-if-not (lambda (x)
 					    (member x managed-in-parent :test #'child-equal-p))
@@ -515,7 +515,7 @@
 	   (size (or (frame-data-slot parent :tile-size) 0.8)))
       (if (zerop len)
 	  (no-layout child parent)
-	  (if (member child main-windows)
+	  (if (member child main-windows :test #'child-equal-p)
 	      (let* ((dy (/ rh len))
 		     (pos (position child main-windows)))
 		(values (1+ (round (+ rx (* rw (- 1 size)))))
@@ -543,7 +543,7 @@
 	   (size (or (frame-data-slot parent :tile-size) 0.8)))
       (if (zerop len)
 	  (no-layout child parent)
-	  (if (member child main-windows)
+	  (if (member child main-windows :test #'child-equal-p)
 	      (let* ((dy (/ rh len))
 		     (pos (position child main-windows)))
 		(values (1+ rx)
@@ -570,7 +570,7 @@
 	   (size (or (frame-data-slot parent :tile-size) 0.8)))
       (if (zerop len)
 	  (no-layout child parent)
-	  (if (member child main-windows)
+	  (if (member child main-windows :test #'child-equal-p)
 	      (let* ((dx (/ rw len))
 		     (pos (position child main-windows)))
 		(values (1+ (round (+ rx (* dx pos))))
@@ -597,7 +597,7 @@
 	   (size (or (frame-data-slot parent :tile-size) 0.8)))
       (if (zerop len)
 	  (no-layout child parent)
-	  (if (member child main-windows)
+	  (if (member child main-windows :test #'child-equal-p)
 	      (let* ((dx (/ rw len))
 		     (pos (position child main-windows)))
 		(values (1+ (round (+ rx (* dx pos))))
@@ -622,7 +622,7 @@
   "Add the current window in the main window list"
   (when (frame-p *current-child*)
     (with-current-window
-      (when (member window (get-managed-child *current-child*))
+      (when (member window (get-managed-child *current-child*) :test #'child-equal-p)
 	(pushnew window (frame-data-slot *current-child* :main-window-list)))))
   (leave-second-mode))
 
@@ -631,9 +631,9 @@
   "Remove the current window from the main window list"
   (when (frame-p *current-child*)
     (with-current-window
-      (when (member window (get-managed-child *current-child*))
+      (when (member window (get-managed-child *current-child*) :test #'child-equal-p)
 	(setf (frame-data-slot *current-child* :main-window-list)
-	      (remove window (frame-data-slot *current-child* :main-window-list))))))
+	      (remove window (frame-data-slot *current-child* :main-window-list) :test #'child-equal-p)))))
   (leave-second-mode))
 
 (defun clear-main-window-list ()
@@ -667,7 +667,7 @@
 	(labels ((rec ()
 		   (setf child (funcall fun-rotate child))
 		   (when (and to-skip?
-			      (member (frame-selected-child *current-child*) main-windows))
+			      (member (frame-selected-child *current-child*) main-windows :test #'child-equal-p))
 		     (rec))))
 	  (unselect-all-frames)
 	  (rec)
@@ -688,7 +688,7 @@
 Or do actions on corners - Skip windows in main window list"
   (unless (do-corner-action root-x root-y *corner-main-mode-left-button*)
     (if (and (frame-p *current-child*)
-	     (member window (frame-data-slot *current-child* :main-window-list)))
+	     (member window (frame-data-slot *current-child* :main-window-list) :test #'child-equal-p))
 	(replay-button-event)
 	(mouse-click-to-focus-generic window root-x root-y #'move-frame))))
 
