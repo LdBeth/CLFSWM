@@ -71,11 +71,12 @@
 	(when (has-stackmode value-mask)
 	  (case stack-mode
 	    (:above
-	     (when (or (child-equal-p window *current-child*)
-		       (is-in-current-child-p window))
-	       (raise-window window)
-	       (focus-window window)
-	       (focus-all-children window (find-parent-frame window *current-root*))))))))))
+	     (unless (null-size-window-p window)
+	       (when (or (child-equal-p window *current-child*)
+			 (is-in-current-child-p window))
+		 (raise-window window)
+		 (focus-window window)
+		 (focus-all-children window (find-parent-frame window *current-root*)))))))))))
 
 
 (define-handler main-mode :map-request (window send-event-p)
@@ -91,7 +92,8 @@
 	       (not (xlib:window-equal window event-window)))
     (when (find-child window *root-frame*)
       (delete-child-in-all-frames window)
-      (show-all-children))))
+      (unless (null-size-window-p window)
+	(show-all-children)))))
 
 
 (define-handler main-mode :destroy-notify (send-event-p event-window window)
@@ -99,7 +101,8 @@
 	      (xlib:window-equal window event-window))
     (when (find-child window *root-frame*)
       (delete-child-in-all-frames window)
-      (show-all-children))))
+      (unless (null-size-window-p window)
+	(show-all-children)))))
 
 (define-handler main-mode :enter-notify  (window root-x root-y)
   (unless (and (> root-x (- (xlib:screen-width *screen*) 3))
