@@ -219,7 +219,6 @@ Expand in handle-event-fun-main-mode-key-press"
   (when window
     (with-xlib-protect
 	(when (window-hidden-p window)
-	  (xlib:map-subwindows window)
 	  (xlib:map-window window)
 	  (setf (window-state window) +normal-state+
 		(xlib:window-event-mask window) *window-events*))))
@@ -229,7 +228,6 @@ Expand in handle-event-fun-main-mode-key-press"
 (defun map-window (window)
   (when window
     (with-xlib-protect
-      (xlib:map-subwindows window)
       (xlib:map-window window)
       (xlib:display-finish-output *display*))))
 
@@ -732,7 +730,7 @@ Expand in handle-event-fun-main-mode-key-press"
 		    "Alt_L" "Alt_R" "Meta_L" "Meta_R" "Hyper_L" "Hyper_R"
 		    "Mode_switch" "script_switch" "ISO_Level3_Shift"
 		    "Caps_Lock" "Scroll_Lock" "Num_Lock"))
-      (awhen (xlib:keysym->keycodes *display* (keysym-name->keysym name))  ;; PHIL: todo here
+      (awhen (xlib:keysym->keycodes *display* (keysym-name->keysym name))
 	(push it modifier-list))))
 
   (defun modifier-p (code)

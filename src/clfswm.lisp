@@ -132,7 +132,8 @@
        (call-hook *loop-hook*)
        (xlib:display-finish-output *display*)
        (when (xlib:event-listen *display* *loop-timeout*)
-	 (xlib:process-event *display* :handler #'handle-event)))))
+	 (xlib:process-event *display* :handler #'handle-event))
+       (xlib:display-finish-output *display*))))
 ;;(dbg "Main loop finish" c)))))
 
 

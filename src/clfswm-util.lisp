@@ -321,7 +321,8 @@
 	   (loop until done do
 		(xlib:display-finish-output *display*)
 		(when (xlib:event-listen *display* *loop-timeout*)
-		  (xlib:process-event *display* :handler #'handle-identify)))
+		  (xlib:process-event *display* :handler #'handle-identify))
+		(xlib:display-finish-output *display*))
 	(xlib:destroy-window window)
 	(xlib:close-font font)
 	(xgrab-pointer *root* 66 67)))))

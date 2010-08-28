@@ -1,5 +1,8 @@
 2010-08-28  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm.lisp (main-loop): Ensure that all events have been
+	processed after a process-event.
+
 	* src/clfswm-internal.lisp (is-in-current-child-p): New function.
 
 2010-08-27  Philippe Brochard  <pbrochard@common-lisp.net>
