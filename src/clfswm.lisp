@@ -92,8 +92,7 @@
 	       (not (xlib:window-equal window event-window)))
     (when (find-child window *root-frame*)
       (delete-child-in-all-frames window)
-      (unless (null-size-window-p window)
-	(show-all-children)))))
+      (show-all-children))))
 
 
 (define-handler main-mode :destroy-notify (send-event-p event-window window)
@@ -101,8 +100,7 @@
 	      (xlib:window-equal window event-window))
     (when (find-child window *root-frame*)
       (delete-child-in-all-frames window)
-      (unless (null-size-window-p window)
-	(show-all-children)))))
+      (show-all-children))))
 
 (define-handler main-mode :enter-notify  (window root-x root-y)
   (unless (and (> root-x (- (xlib:screen-width *screen*) 3))
@@ -112,7 +110,7 @@
 	      *default-focus-policy*)
       (:sloppy (focus-window window))
       (:sloppy-strict (when (and (frame-p *current-child*)
-				 (member window (frame-child *current-child*) :test #'child-equal-p))
+				 (child-member window (frame-child *current-child*)))
 			(focus-window window)))
       (:sloppy-select (let* ((child (find-child-under-mouse root-x root-y))
 			     (parent (find-parent-frame child)))

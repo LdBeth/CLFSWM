@@ -1,3 +1,11 @@
+2010-08-29  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (child-member): New predicate.
+	(child-remove): New function.
+
+	* src/*.lisp: Use child-member and child-remove everywhere it's
+	needed.
+
 2010-08-28  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm.lisp (main-loop): Ensure that all events have been

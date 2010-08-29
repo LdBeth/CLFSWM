@@ -88,6 +88,31 @@
 
 
 
+
+(defgeneric child-equal-p (child-1 child-2))
+
+(defmethod child-equal-p ((child-1 xlib:window) (child-2 xlib:window))
+  (xlib:window-equal child-1 child-2))
+
+(defmethod child-equal-p ((child-1 frame) (child-2 frame))
+  (equal child-1 child-2))
+
+(defmethod child-equal-p (child-1 child-2)
+  (declare (ignore child-1 child-2))
+  nil)
+
+
+(declaim (inline child-member child-remove))
+
+(defun child-member (child list)
+  (member child list :test #'child-equal-p))
+
+(defun child-remove (child list)
+  (remove child list :test #'child-equal-p))
+
+
+
+
 ;;; Frame data manipulation functions
 (defun frame-data-slot (frame slot)
   "Return the value associated to data slot"
@@ -110,11 +135,11 @@
   (if (frame-p frame)
       (with-slots ((managed forced-managed-window)
 		   (unmanaged forced-unmanaged-window)) frame
-	(and (not (member window unmanaged :test #'child-equal-p))
+	(and (not (child-member window unmanaged))
 	     (not (member (xlib:wm-name window) unmanaged :test #'string-equal-p))
 	     (or (member :all (frame-managed-type frame))
 		 (member (window-type window) (frame-managed-type frame))
-		 (member window managed :test #'child-equal-p)
+		 (child-member window managed)
 		 (member (xlib:wm-name window) managed :test #'string-equal-p))))
       t))
 
@@ -123,21 +148,6 @@
   (dolist (type *never-managed-window-list*)
     (when (string-equal (funcall (first type) window) (second type))
       (return t))))
-
-
-
-
-(defgeneric child-equal-p (child-1 child-2))
-
-(defmethod child-equal-p ((child-1 xlib:window) (child-2 xlib:window))
-  (xlib:window-equal child-1 child-2))
-
-(defmethod child-equal-p ((child-1 frame) (child-2 frame))
-  (equal child-1 child-2))
-
-(defmethod child-equal-p (child-1 child-2)
-  (declare (ignore child-1 child-2))
-  nil)
 
 
 
@@ -202,7 +212,7 @@
 
 (defun is-in-current-child-p (child)
   (and (frame-p *current-child*)
-       (member child (frame-child *current-child*) :test #'child-equal-p)))
+       (child-member child (frame-child *current-child*))))
 
 
 
@@ -355,7 +365,7 @@
 (defun find-parent-frame  (to-find &optional (root *root-frame*) first-foundp)
   "Return the parent frame of to-find"
   (with-find-in-all-frames
-      (member to-find (frame-child frame) :test #'child-equal-p)))
+      (child-member to-find (frame-child frame))))
 
 (defun find-frame-window (window &optional (root *root-frame*) first-foundp)
   "Return the frame with the window window"
@@ -693,10 +703,10 @@ only for display-child and its children"
 (defun focus-child (child parent)
   "Focus child - Return true if something has change"
   (when (and (frame-p parent)
-	     (member child (frame-child parent) :test #'child-equal-p))
+	     (child-member child (frame-child parent)))
     (when (not (child-equal-p child (frame-selected-child parent)))
       (with-slots ((parent-child child) selected-pos) parent
-	(setf parent-child (nth-insert selected-pos child (remove child parent-child :test #'child-equal-p))))
+	(setf parent-child (nth-insert selected-pos child (child-remove child parent-child))))
       t)))
 
 (defun focus-child-rec (child parent)
@@ -835,7 +845,7 @@ For window: set current child to window or its parent according to window-parent
 (defun remove-child-in-frame (child frame)
   "Remove the child in frame"
   (when (frame-p frame)
-    (setf (frame-child frame) (remove child (frame-child frame) :test #'child-equal-p))))
+    (setf (frame-child frame) (child-remove child (frame-child frame)))))
 
 (defun remove-child-in-frames (child root)
   "Remove child in the frame root and in all its children"
@@ -954,7 +964,7 @@ managed."
   (let ((id-list nil)
 	(all-windows (get-all-windows)))
     (dolist (win (xlib:query-tree (xlib:screen-root screen)))
-      (unless (member win all-windows :test #'child-equal-p)
+      (unless (child-member win all-windows)
 	(let ((map-state (xlib:window-map-state win))
 	      (wm-state (window-state win)))
 	  (unless (or (eql (xlib:window-override-redirect win) :on)
