@@ -1,5 +1,11 @@
 2010-08-29  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-util.lisp (run-other-window-manager): Update for
+	clisp compatibility.
+
+	* src/tools.lisp (do-execute): New parameter io to change the
+	input/output method.
+
 	* src/clfswm-util.lisp (hide-current-child): Prevent from removing
 	the current root.
 

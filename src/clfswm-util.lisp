@@ -1282,9 +1282,8 @@ For window: set current child to window or its parent according to window-parent
 
 ;;; Other window manager functions
 (defun get-proc-list ()
-  (let ((proc (do-shell "ps x -o pid=" nil nil))
+  (let ((proc (do-shell "ps x -o pid=" nil t))
 	(proc-list nil))
-    (sleep 0.5)
     (loop for line = (read-line proc nil nil)
        while line
        do (push line proc-list))
@@ -1293,17 +1292,14 @@ For window: set current child to window or its parent according to window-parent
 
 (defun run-other-window-manager ()
   (let ((proc-start (get-proc-list)))
-    (do-shell *other-window-manager* nil t)
+    (do-shell *other-window-manager* nil t :terminal)
     (let* ((proc-end (get-proc-list))
 	   (proc-diff (set-difference proc-end proc-start :test #'equal)))
-      (dbg proc-diff)
-      (dolist (proc proc-diff)
-	(dbg 'killing-sigterm proc)
-	(do-shell (format nil "kill ~A 2> /dev/null" proc) nil t))
-      (sleep 0.5)
-      (dolist (proc proc-diff)
-	(dbg 'killing-sigkill proc)
-	(do-shell (format nil "kill -9 ~A 2> /dev/null" proc) nil t)))
+      (dbg 'killing-sigterm proc-diff)
+      (do-shell (format nil "kill ~{ ~A ~}  2> /dev/null" proc-diff) nil t :terminal)
+      (dbg 'killing-sigkill proc-diff)
+      (do-shell (format nil "kill -9 ~{ ~A ~} 2> /dev/null" proc-diff) nil t :terminal)
+      (sleep 1))
     (setf *other-window-manager* nil)))
 
 
@@ -1326,7 +1322,11 @@ For window: set current child to window or its parent according to window-parent
 
 (defun run-lxde ()
   "Run LXDE"
-  (do-run-other-window-manager "lxsession; xterm -e \"echo '  /----------------------------------\\' ; echo '  |  CLFSWM Note:                    |' ; echo '  |    Close this window when done.  |' ; echo '  \\----------------------------------/'; echo; echo; $SHELL\""))
+  (do-run-other-window-manager "( lxsession & ); xterm -e \"echo '  /----------------------------------\\' ; echo '  |  CLFSWM Note:                    |' ; echo '  |    Close this window when done.  |' ; echo '  \\----------------------------------/'; echo; echo; $SHELL\""))
+
+(defun run-xfce4 ()
+  "Run LXDE (xterm)"
+  (do-run-other-window-manager "( xfce4-session &) ; xterm -e \"echo '  /----------------------------------\\' ; echo '  |  CLFSWM Note:                    |' ; echo '  |    Close this window when done.  |' ; echo '  \\----------------------------------/'; echo; echo; $SHELL\""))
 
 
 (defun run-prompt-wm ()

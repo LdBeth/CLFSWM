@@ -537,6 +537,7 @@ Function can be a function or a list (function color) for colored output"
 			  collect line)))))
 
 
+
 (defun show-cpu-proc ()
   "Show current processes sorted by CPU usage"
   (info-on-shell "Current processes sorted by CPU usage:"

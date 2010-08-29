@@ -434,37 +434,23 @@ Return the result of the last hook"
 
 
 ;;; Shell part (taken from ltk)
-(defun do-execute (program args &optional (wt nil))
+(defun do-execute (program args &optional (wt nil) (io :stream))
   "execute program with args a list containing the arguments passed to
 the program   if wt is non-nil, the function will wait for the execution
 of the program to return.
    returns a two way stream connected to stdin/stdout of the program"
+  #-CLISP (declare (ignore io))
   (let ((fullstring program))
     (dolist (a args)
       (setf fullstring (concatenate 'string fullstring " " a)))
-    #+:cmu (let ((proc (ext:run-program program args :input :stream
-							    :output :stream :wait wt)))
+    #+:cmu (let ((proc (ext:run-program program args :input :stream :output :stream :wait wt)))
              (unless proc
                (error "Cannot create process."))
              (make-two-way-stream
               (ext:process-output proc)
               (ext:process-input proc)))
-    ;;    #+:clisp (let ((proc (ext:run-program program :arguments args
-    ;;						  :input :stream :output :stream :wait (or wt t))))
-    ;;	       (unless proc
-    ;;		 (error "Cannot create process."))
-    ;;	       proc)
-    #+:clisp (if wt
-		 (ext:run-program program :arguments args
-				  :input :terminal :output :terminal :wait t)
-		 (let ((proc (ext:run-program program :arguments args
-					      :input :stream :output :stream :wait wt)))
-		   (unless proc
-		     (error "Cannot create process."))
-		   proc))
-    #+:sbcl (let ((proc (sb-ext:run-program program args :input
-							 :stream :output
-							 :stream :wait wt)))
+    #+:clisp (ext:run-program program :arguments args :input io :output io :wait wt)
+    #+:sbcl (let ((proc (sb-ext:run-program program args :input :stream :output :stream :wait wt)))
 	      (unless proc
 		(error "Cannot create process."))
 	      (make-two-way-stream
@@ -488,9 +474,8 @@ of the program to return.
 		  (ccl:external-process-output-stream proc)
 		  (ccl:external-process-input-stream proc)))))
 
-(defun do-shell (program &optional args (wt nil))
-  (do-execute "/bin/sh" `("-c" ,program ,@args) wt))
-
+(defun do-shell (program &optional args (wait nil) (io :stream))
+  (do-execute "/bin/sh" `("-c" ,program ,@args) wait io))
 
 
 
