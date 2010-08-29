@@ -1033,15 +1033,16 @@ For window: set current child to window or its parent according to window-parent
 ;;; Hide/Unhide current child
 (defun hide-current-child ()
   "Hide the current child"
-  (let ((parent (find-parent-frame *current-child*)))
-    (when (frame-p parent)
-      (with-slots (child hidden-children) parent
-	(hide-all *current-child*)
-	(setf child (child-remove *current-child* child))
-	(pushnew *current-child* hidden-children)
-	(setf *current-child* parent))
-      (show-all-children)))
-  (leave-second-mode))
+  (unless (child-equal-p *current-child* *current-root*)
+    (let ((parent (find-parent-frame *current-child*)))
+      (when (frame-p parent)
+	(with-slots (child hidden-children) parent
+	  (hide-all *current-child*)
+	  (setf child (child-remove *current-child* child))
+	  (pushnew *current-child* hidden-children)
+	  (setf *current-child* parent))
+	(show-all-children)))
+    (leave-second-mode)))
 
 
 (defun frame-unhide-child (hidden frame-src frame-dest)

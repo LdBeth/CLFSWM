@@ -1,5 +1,8 @@
 2010-08-29  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-util.lisp (hide-current-child): Prevent from removing
+	the current root.
+
 	* src/clfswm-internal.lisp (child-member): New predicate.
 	(child-remove): New function.
 
