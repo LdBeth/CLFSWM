@@ -128,6 +128,7 @@ You can tweak this to what you want"
 
 (defparameter *clfswm-terminal-name* "clfswm-terminal"
   "Config(Corner group): The clfswm terminal name")
+;;(defparameter *clfswm-terminal-cmd* (format nil "xterm -T ~A -e /bin/bash --noprofile --norc" *clfswm-terminal-name*)
 (defparameter *clfswm-terminal-cmd* (format nil "xterm -T ~A" *clfswm-terminal-name*)
   "Config(Corner group): The clfswm terminal command.
 This command must set the window title to *clfswm-terminal-name*")

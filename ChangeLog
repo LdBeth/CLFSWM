@@ -1,3 +1,8 @@
+2010-08-30  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-corner.lisp (present-clfswm-terminal): Make the
+	clfswm terminal working even on xterm title changes.
+
 2010-08-29  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (run-other-window-manager): Update for

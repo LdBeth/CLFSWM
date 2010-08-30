@@ -120,30 +120,25 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
   t)
 
 
-
 (defun present-clfswm-terminal ()
   "Hide/Unhide a terminal"
-  (stop-button-event)
-  (let ((found nil))
-    (dolist (win (xlib:query-tree *root*))
-      (when (string-equal (xlib:wm-name win) *clfswm-terminal-name*)
-	(setf found t)
-	(unless (child-equal-p *clfswm-terminal* win)
-	  (setf *clfswm-terminal* win)
-	  (hide-window *clfswm-terminal*))))
-    (unless found
+  (labels ((find-clfswm-terminal ()
+	     (dolist (win (xlib:query-tree *root*))
+	       (when (child-equal-p win *clfswm-terminal*)
+		 (return t)))))
+    (stop-button-event)
+    (unless (find-clfswm-terminal)
       (do-shell *clfswm-terminal-cmd*)
       (loop :with done = nil :until done
 	 :do (dolist (win (xlib:query-tree *root*))
 	       (when (string-equal (xlib:wm-name win) *clfswm-terminal-name*)
 		 (setf *clfswm-terminal* win
 		       done t))))
-      (hide-window *clfswm-terminal*)))
-  (cond ((window-hidden-p *clfswm-terminal*) (unhide-window *clfswm-terminal*)
-	 (focus-window *clfswm-terminal*)
-	 (raise-window *clfswm-terminal*))
-	(t (hide-window *clfswm-terminal*)
-	   (show-all-children nil)))
-  t)
-
+      (hide-window *clfswm-terminal*))
+    (cond ((window-hidden-p *clfswm-terminal*) (unhide-window *clfswm-terminal*)
+	   (focus-window *clfswm-terminal*)
+	   (raise-window *clfswm-terminal*))
+	  (t (hide-window *clfswm-terminal*)
+	     (show-all-children nil)))
+    t))
 
