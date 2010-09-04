@@ -32,10 +32,13 @@
 #+SBCL
 (require :asdf)
 
-#+SBCL
-(require :sb-posix)
+;;#+SBCL
+;;(require :sb-posix)
 
-#+(or CMU SBCL ECL)
+;;#+SBCL
+;; (require :clx)
+
+#+(or CMU ECL)
 (require :clx)
 
 #-ASDF

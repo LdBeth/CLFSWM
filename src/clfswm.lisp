@@ -129,10 +129,14 @@
 (defun main-loop ()
   (loop
      (call-hook *loop-hook*)
-     (xlib:display-finish-output *display*)
-     (when (xlib:event-listen *display* *loop-timeout*)
-       (xlib:process-event *display* :handler #'handle-event))
-     (xlib:display-finish-output *display*)))
+     (with-xlib-protect
+       (xlib:display-finish-output *display*))
+     (when (with-xlib-protect
+	     (xlib:event-listen *display* *loop-timeout*))
+       (with-xlib-protect
+	 (xlib:process-event *display* :handler #'handle-event)))
+     (with-xlib-protect
+       (xlib:display-finish-output *display*))))
 
 
 

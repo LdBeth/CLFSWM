@@ -1,5 +1,8 @@
 2010-09-04  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm.lisp (main-loop): Protect all xlib functions with an
+	with-xlib-protect.
+
 	* src/xlib-util.lisp (handle-event): use with-xlib-protect only in
 	handle-event. Add a with-simple-restart to prevent a
 	clisp/new-lisp infinite loop.
