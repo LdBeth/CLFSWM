@@ -1,3 +1,9 @@
+2010-09-04  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/xlib-util.lisp (handle-event): use with-xlib-protect only in
+	handle-event. Add a with-simple-restart to prevent a
+	clisp/new-lisp infinite loop.
+
 2010-08-30  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-corner.lisp (present-clfswm-terminal): Make the

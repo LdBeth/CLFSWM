@@ -55,28 +55,27 @@
 	     (when (has-y value-mask) (setf (xlib:drawable-y window) y))
 	     (when (has-h value-mask) (setf (xlib:drawable-height window) height))
 	     (when (has-w value-mask) (setf (xlib:drawable-width window) width))))
-    (with-xlib-protect
-      (xlib:with-state (window)
-	(when (has-bw value-mask)
-	  (setf (xlib:drawable-border-width window) border-width))
-	(if (find-child window *current-root*)
-	    (let ((parent (find-parent-frame window *current-root*)))
-	      (if (and parent (managed-window-p window parent))
-		  (adapt-child-to-parent window parent)
-		  (adjust-from-request)))
-	    (adjust-from-request))
-	(send-configuration-notify window (xlib:drawable-x window) (xlib:drawable-y window)
-				   (xlib:drawable-width window) (xlib:drawable-height window)
-				   (xlib:drawable-border-width window))
-	(when (has-stackmode value-mask)
-	  (case stack-mode
-	    (:above
-	     (unless (null-size-window-p window)
-	       (when (or (child-equal-p window *current-child*)
-			 (is-in-current-child-p window))
-		 (raise-window window)
-		 (focus-window window)
-		 (focus-all-children window (find-parent-frame window *current-root*)))))))))))
+    (xlib:with-state (window)
+      (when (has-bw value-mask)
+	(setf (xlib:drawable-border-width window) border-width))
+      (if (find-child window *current-root*)
+	  (let ((parent (find-parent-frame window *current-root*)))
+	    (if (and parent (managed-window-p window parent))
+		(adapt-child-to-parent window parent)
+		(adjust-from-request)))
+	  (adjust-from-request))
+      (send-configuration-notify window (xlib:drawable-x window) (xlib:drawable-y window)
+				 (xlib:drawable-width window) (xlib:drawable-height window)
+				 (xlib:drawable-border-width window))
+      (when (has-stackmode value-mask)
+	(case stack-mode
+	  (:above
+	   (unless (null-size-window-p window)
+	     (when (or (child-equal-p window *current-child*)
+		       (is-in-current-child-p window))
+	       (raise-window window)
+	       (focus-window window)
+	       (focus-all-children window (find-parent-frame window *current-root*))))))))))
 
 
 (define-handler main-mode :map-request (window send-event-p)
@@ -129,13 +128,12 @@
 
 (defun main-loop ()
   (loop
-     (with-xlib-protect
-       (call-hook *loop-hook*)
-       (xlib:display-finish-output *display*)
-       (when (xlib:event-listen *display* *loop-timeout*)
-	 (xlib:process-event *display* :handler #'handle-event))
-       (xlib:display-finish-output *display*))))
-;;(dbg "Main loop finish" c)))))
+     (call-hook *loop-hook*)
+     (xlib:display-finish-output *display*)
+     (when (xlib:event-listen *display* *loop-timeout*)
+       (xlib:process-event *display* :handler #'handle-event))
+     (xlib:display-finish-output *display*)))
+
 
 
 (defun open-display (display-str protocol)

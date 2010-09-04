@@ -63,22 +63,15 @@ Window types are in +WINDOW-TYPES+.")
   "Alist mapping NETWM window types to keywords.")
 
 
+
 (defmacro with-xlib-protect (&body body)
   "Prevent Xlib errors"
   `(handler-case
        (progn
 	 ,@body)
      ((or xlib:match-error xlib:window-error xlib:drawable-error) (c)
-       ;;(dbg c))))
-       ;;(declare (ignore c)))))
-       (format t "~&Xlib-error: ~A~%Body:~%~A~%" c ',body)
-      (force-output))))
-       ;;(dbg c ',body))))
+       (dbg 'Ignore-xlib-error c))))
 
-;;(defmacro with-xlib-protect (&body body)
-;;  "Prevent Xlib errors"
-;;  `(progn
-;;     ,@body))
 
 
 
@@ -153,10 +146,12 @@ Expand in handle-event-fun-main-mode-key-press"
      ,@body))
 
 
+
 (defun handle-event (&rest event-slots &key event-key &allow-other-keys)
   (with-xlib-protect
     (if (fboundp event-key)
-	(apply event-key event-slots)
+	(with-simple-restart (top-level "Return to clfswm's top level")
+	  (apply event-key event-slots))
 	#+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal)))
   t)
 
@@ -217,19 +212,17 @@ Expand in handle-event-fun-main-mode-key-press"
 
 (defun unhide-window (window)
   (when window
-    (with-xlib-protect
-	(when (window-hidden-p window)
-	  (xlib:map-window window)
-	  (setf (window-state window) +normal-state+
-		(xlib:window-event-mask window) *window-events*))))
+    (when (window-hidden-p window)
+      (xlib:map-window window)
+      (setf (window-state window) +normal-state+
+	    (xlib:window-event-mask window) *window-events*)))
   (xlib:display-finish-output *display*))
 
 
 (defun map-window (window)
   (when window
-    (with-xlib-protect
-      (xlib:map-window window)
-      (xlib:display-finish-output *display*))))
+    (xlib:map-window window)
+    (xlib:display-finish-output *display*)))
 
 (defun delete-window (window)
   (send-client-message window :WM_PROTOCOLS
@@ -333,11 +326,10 @@ Expand in handle-event-fun-main-mode-key-press"
 
 (defun hide-window (window)
   (when window
-    (with-xlib-protect
-      (setf (window-state window) +iconic-state+
-	    (xlib:window-event-mask window) (remove :structure-notify *window-events*))
-      (xlib:unmap-window window)
-      (setf (xlib:window-event-mask window) *window-events*)))
+    (setf (window-state window) +iconic-state+
+	  (xlib:window-event-mask window) (remove :structure-notify *window-events*))
+    (xlib:unmap-window window)
+    (setf (xlib:window-event-mask window) *window-events*))
   (xlib:display-finish-output *display*))
 
 
@@ -394,17 +386,15 @@ Expand in handle-event-fun-main-mode-key-press"
 (defun raise-window (window)
   "Map the window if needed and bring it to the top of the stack. Does not affect focus."
   (when window
-    (with-xlib-protect
-      (when (window-hidden-p window)
-	(unhide-window window))
-      (setf (xlib:window-priority window) :top-if)))
+    (when (window-hidden-p window)
+      (unhide-window window))
+    (setf (xlib:window-priority window) :top-if))
   (xlib:display-finish-output *display*))
 
 (defun focus-window (window)
   "Give the window focus."
   (when window
-    (with-xlib-protect
-      (xlib:set-input-focus *display* window :parent)))
+    (xlib:set-input-focus *display* window :parent))
   (xlib:display-finish-output *display*))
 
 
@@ -465,6 +455,7 @@ Expand in handle-event-fun-main-mode-key-press"
       "Remove the grab on the cursor and restore the cursor shape."
       (setf pointer-grabbed nil)
       (xlib:ungrab-pointer *display*)
+      (xlib:display-finish-output *display*)
       (free-grab-pointer)))
 
 

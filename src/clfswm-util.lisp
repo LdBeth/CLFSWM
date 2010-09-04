@@ -134,11 +134,10 @@
 
 (defun unhide-all-windows-in-current-child ()
   "Unhide all hidden windows into the current child"
-  (with-xlib-protect
-    (dolist (window (get-hidden-windows))
-      (unhide-window window)
-      (process-new-window window)
-      (map-window window)))
+  (dolist (window (get-hidden-windows))
+    (unhide-window window)
+    (process-new-window window)
+    (map-window window))
   (show-all-children))
 
 
@@ -146,36 +145,34 @@
 
 (defun find-window-under-mouse (x y)
   "Return the child window under the mouse"
-  (with-xlib-protect
-    (let ((win *root*))
-      (with-all-windows-frames-and-parent (*current-root* child parent)
-	(when (and (or (managed-window-p child parent) (child-equal-p parent *current-child*))
-		   (<= (xlib:drawable-x child) x (+ (xlib:drawable-x child) (xlib:drawable-width child)))
-		   (<= (xlib:drawable-y child) y (+ (xlib:drawable-y child) (xlib:drawable-height child))))
-	  (setf win child))
-	(when (and (<= (frame-rx child) x (+ (frame-rx child) (frame-rw child)))
-		   (<= (frame-ry child) y (+ (frame-ry child) (frame-rh child))))
-	  (setf win (frame-window child))))
-      win)))
+  (let ((win *root*))
+    (with-all-windows-frames-and-parent (*current-root* child parent)
+      (when (and (or (managed-window-p child parent) (child-equal-p parent *current-child*))
+		 (<= (xlib:drawable-x child) x (+ (xlib:drawable-x child) (xlib:drawable-width child)))
+		 (<= (xlib:drawable-y child) y (+ (xlib:drawable-y child) (xlib:drawable-height child))))
+	(setf win child))
+      (when (and (<= (frame-rx child) x (+ (frame-rx child) (frame-rw child)))
+		 (<= (frame-ry child) y (+ (frame-ry child) (frame-rh child))))
+	(setf win (frame-window child))))
+    win))
 
 
 (defun find-child-under-mouse (x y &optional first-foundp)
   "Return the child under the mouse"
-  (with-xlib-protect
-    (let ((ret nil))
-      (with-all-windows-frames-and-parent (*current-root* child parent)
-	(when (and (or (managed-window-p child parent) (child-equal-p parent *current-child*))
-		   (<= (xlib:drawable-x child) x (+ (xlib:drawable-x child) (xlib:drawable-width child)))
-		   (<= (xlib:drawable-y child) y (+ (xlib:drawable-y child) (xlib:drawable-height child))))
-	  (if first-foundp
-	      (return-from find-child-under-mouse child)
-	      (setf ret child)))
-	(when (and (<= (frame-rx child) x (+ (frame-rx child) (frame-rw child)))
-		   (<= (frame-ry child) y (+ (frame-ry child) (frame-rh child))))
-	  (if first-foundp
-	      (return-from find-child-under-mouse child)
-	      (setf ret child))))
-      ret)))
+  (let ((ret nil))
+    (with-all-windows-frames-and-parent (*current-root* child parent)
+      (when (and (or (managed-window-p child parent) (child-equal-p parent *current-child*))
+		 (<= (xlib:drawable-x child) x (+ (xlib:drawable-x child) (xlib:drawable-width child)))
+		 (<= (xlib:drawable-y child) y (+ (xlib:drawable-y child) (xlib:drawable-height child))))
+	(if first-foundp
+	    (return-from find-child-under-mouse child)
+	    (setf ret child)))
+      (when (and (<= (frame-rx child) x (+ (frame-rx child) (frame-rw child)))
+		 (<= (frame-ry child) y (+ (frame-ry child) (frame-rh child))))
+	(if first-foundp
+	    (return-from find-child-under-mouse child)
+	    (setf ret child))))
+    ret))
 
 
 
@@ -933,9 +930,8 @@ For window: set current child to window or its parent according to window-parent
   "Force the current window to move in the frame (Useful only for unmanaged windows)"
   (with-current-window
     (let ((parent (find-parent-frame window)))
-      (with-xlib-protect
-	(setf (xlib:drawable-x window) (frame-rx parent)
-	      (xlib:drawable-y window) (frame-ry parent)))))
+      (setf (xlib:drawable-x window) (frame-rx parent)
+	    (xlib:drawable-y window) (frame-ry parent))))
   (leave-second-mode))
 
 
@@ -943,13 +939,12 @@ For window: set current child to window or its parent according to window-parent
   "Force the current window to move in the center of the frame (Useful only for unmanaged windows)"
   (with-current-window
     (let ((parent (find-parent-frame window)))
-      (with-xlib-protect
-	(setf (xlib:drawable-x window) (truncate (+ (frame-rx parent)
-						    (/ (- (frame-rw parent)
-							  (xlib:drawable-width window)) 2)))
-	      (xlib:drawable-y window) (truncate (+ (frame-ry parent)
-						    (/ (- (frame-rh parent)
-							  (xlib:drawable-height window)) 2)))))))
+      (setf (xlib:drawable-x window) (truncate (+ (frame-rx parent)
+						  (/ (- (frame-rw parent)
+							(xlib:drawable-width window)) 2)))
+	    (xlib:drawable-y window) (truncate (+ (frame-ry parent)
+						  (/ (- (frame-rh parent)
+							(xlib:drawable-height window)) 2))))))
   (leave-second-mode))
 
 

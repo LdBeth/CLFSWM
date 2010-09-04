@@ -135,12 +135,14 @@
   (if (frame-p frame)
       (with-slots ((managed forced-managed-window)
 		   (unmanaged forced-unmanaged-window)) frame
-	(and (not (child-member window unmanaged))
-	     (not (member (xlib:wm-name window) unmanaged :test #'string-equal-p))
-	     (or (member :all (frame-managed-type frame))
-		 (member (window-type window) (frame-managed-type frame))
-		 (child-member window managed)
-		 (member (xlib:wm-name window) managed :test #'string-equal-p))))
+	(xlib:display-finish-output *display*)
+	(let ((ret (and (not (child-member window unmanaged))
+			(not (member (xlib:wm-name window) unmanaged :test #'string-equal-p))
+			(or (member :all (frame-managed-type frame))
+			    (member (window-type window) (frame-managed-type frame))
+			    (child-member window managed)
+			    (member (xlib:wm-name window) managed :test #'string-equal-p)))))
+	  ret))
       t))
 
 
@@ -486,41 +488,39 @@
 (defgeneric adapt-child-to-parent (child parent))
 
 (defmethod adapt-child-to-parent ((window xlib:window) parent)
-  (with-xlib-protect
-    (when (managed-window-p window parent)
-      (multiple-value-bind (nx ny nw nh)
-	  (get-parent-layout window parent)
-	(setf nw (max nw 1)  nh (max nh 1))
-	(let ((change (or (/= (xlib:drawable-x window) nx)
-			  (/= (xlib:drawable-y window) ny)
-			  (/= (xlib:drawable-width window) nw)
-			  (/= (xlib:drawable-height window) nh))))
-	  (setf (xlib:drawable-x window) nx
-		(xlib:drawable-y window) ny
-		(xlib:drawable-width window) nw
-		(xlib:drawable-height window) nh)
-	  (xlib:display-finish-output *display*)
-	  change)))))
+  (when (managed-window-p window parent)
+    (multiple-value-bind (nx ny nw nh)
+	(get-parent-layout window parent)
+      (setf nw (max nw 1)  nh (max nh 1))
+      (let ((change (or (/= (xlib:drawable-x window) nx)
+			(/= (xlib:drawable-y window) ny)
+			(/= (xlib:drawable-width window) nw)
+			(/= (xlib:drawable-height window) nh))))
+	(setf (xlib:drawable-x window) nx
+	      (xlib:drawable-y window) ny
+	      (xlib:drawable-width window) nw
+	      (xlib:drawable-height window) nh)
+	(xlib:display-finish-output *display*)
+	change))))
 
 
 (defmethod adapt-child-to-parent ((frame frame) parent)
-  (with-xlib-protect
-    (multiple-value-bind (nx ny nw nh)
-	(get-parent-layout frame parent)
-      (with-slots (rx ry rw rh window) frame
-	(setf rx nx  ry ny
-	      rw (max nw 1)
-	      rh (max nh 1))
-	(let ((change (or (/= (xlib:drawable-x window) rx)
-			  (/= (xlib:drawable-y window) ry)
-			  (/= (xlib:drawable-width window) rw)
-			  (/= (xlib:drawable-height window) rh))))
-	  (setf (xlib:drawable-x window) rx
-		(xlib:drawable-y window) ry
-		(xlib:drawable-width window) rw
-		(xlib:drawable-height window) rh)
-	  (xlib:display-finish-output *display*)
-	  change)))))
+  (multiple-value-bind (nx ny nw nh)
+      (get-parent-layout frame parent)
+    (with-slots (rx ry rw rh window) frame
+      (setf rx nx  ry ny
+	    rw (max nw 1)
+	    rh (max nh 1))
+      (let ((change (or (/= (xlib:drawable-x window) rx)
+			(/= (xlib:drawable-y window) ry)
+			(/= (xlib:drawable-width window) rw)
+			(/= (xlib:drawable-height window) rh))))
+	(setf (xlib:drawable-x window) rx
+	      (xlib:drawable-y window) ry
+	      (xlib:drawable-width window) rw
+	      (xlib:drawable-height window) rh)
+	(xlib:display-finish-output *display*)
+	change))))
 
 (defmethod adapt-child-to-parent (child parent)
   (declare (ignore child parent))
@@ -533,25 +533,23 @@
 
 (defmethod show-child ((frame frame) parent raise-p)
   (declare (ignore parent))
-  (with-xlib-protect
-    (with-slots (window show-window-p) frame
-      (if show-window-p
-	  (when (or *show-root-frame-p* (not (child-equal-p frame *current-root*)))
-	    (setf (xlib:window-background window) (get-color "Black"))
-	    (map-window window)
-	    (when raise-p (raise-window window)))
-	  (hide-window window)))
-    (display-frame-info frame)))
+  (with-slots (window show-window-p) frame
+    (if show-window-p
+	(when (or *show-root-frame-p* (not (child-equal-p frame *current-root*)))
+	  (setf (xlib:window-background window) (get-color "Black"))
+	  (map-window window)
+	  (when raise-p (raise-window window)))
+	(hide-window window)))
+  (display-frame-info frame))
 
 
 (defmethod show-child ((window xlib:window) parent raise-p)
-  (with-xlib-protect
-    (if (or (managed-window-p window parent)
-	    (child-equal-p parent *current-child*))
-	(progn
-	  (map-window window)
-	  (when raise-p (raise-window window)))
-	(hide-window window))))
+  (if (or (managed-window-p window parent)
+	  (child-equal-p parent *current-child*))
+      (progn
+	(map-window window)
+	(when raise-p (raise-window window)))
+      (hide-window window)))
 
 (defmethod show-child (child parent raise-p)
   (declare (ignore child parent raise-p))
@@ -561,9 +559,8 @@
 (defgeneric hide-child (child))
 
 (defmethod hide-child ((frame frame))
-  (with-xlib-protect
-    (with-slots (window) frame
-      (xlib:unmap-window window))))
+  (with-slots (window) frame
+    (xlib:unmap-window window)))
 
 (defmethod hide-child ((window xlib:window))
   (hide-window window))
@@ -598,19 +595,17 @@
 (defgeneric select-child (child selected))
 
 (defmethod select-child ((frame frame) selected)
-  (with-xlib-protect
-    (when (and (frame-p frame) (frame-window frame))
-      (setf (xlib:window-border (frame-window frame))
-	    (get-color (cond ((equal selected :maybe) *color-maybe-selected*)
-			     ((equal selected nil) *color-unselected*)
-			     (selected *color-selected*)))))))
-
-(defmethod select-child ((window xlib:window) selected)
-  (with-xlib-protect
-    (setf (xlib:window-border window)
+  (when (and (frame-p frame) (frame-window frame))
+    (setf (xlib:window-border (frame-window frame))
 	  (get-color (cond ((equal selected :maybe) *color-maybe-selected*)
 			   ((equal selected nil) *color-unselected*)
 			   (selected *color-selected*))))))
+
+(defmethod select-child ((window xlib:window) selected)
+  (setf (xlib:window-border window)
+	(get-color (cond ((equal selected :maybe) *color-maybe-selected*)
+			 ((equal selected nil) *color-unselected*)
+			 (selected *color-selected*)))))
 
 (defmethod select-child (child selected)
   (declare (ignore child selected))
@@ -905,20 +900,19 @@ Warning:frame window and gc are freeed."
 
 (defun place-window-from-hints (window)
   "Place a window from its hints"
-  (with-xlib-protect
-    (let* ((hints (xlib:wm-normal-hints window))
-	   (min-width (or (and hints (xlib:wm-size-hints-min-width hints)) 0))
-	   (min-height (or (and hints (xlib:wm-size-hints-min-height hints)) 0))
-	   (max-width (or (and hints (xlib:wm-size-hints-max-width hints)) (xlib:drawable-width *root*)))
-	   (max-height (or (and hints (xlib:wm-size-hints-max-height hints)) (xlib:drawable-height *root*)))
-	   (rwidth (or (and hints (or (xlib:wm-size-hints-width hints) (xlib:wm-size-hints-base-width hints)))
-		       (xlib:drawable-width window)))
-	   (rheight (or (and hints (or (xlib:wm-size-hints-height hints) (xlib:wm-size-hints-base-height hints)))
-			(xlib:drawable-height window))))
-      (setf (xlib:drawable-width window) (min (max min-width rwidth *default-window-width*) max-width)
-	    (xlib:drawable-height window) (min (max min-height rheight *default-window-height*) max-height))
-      (setf (xlib:drawable-x window) (truncate (/ (- (xlib:screen-width *screen*) (+ (xlib:drawable-width window) 2)) 2))
-	    (xlib:drawable-y window) (truncate (/ (- (xlib:screen-height *screen*) (+ (xlib:drawable-height window) 2)) 2))))))
+  (let* ((hints (xlib:wm-normal-hints window))
+	 (min-width (or (and hints (xlib:wm-size-hints-min-width hints)) 0))
+	 (min-height (or (and hints (xlib:wm-size-hints-min-height hints)) 0))
+	 (max-width (or (and hints (xlib:wm-size-hints-max-width hints)) (xlib:drawable-width *root*)))
+	 (max-height (or (and hints (xlib:wm-size-hints-max-height hints)) (xlib:drawable-height *root*)))
+	 (rwidth (or (and hints (or (xlib:wm-size-hints-width hints) (xlib:wm-size-hints-base-width hints)))
+		     (xlib:drawable-width window)))
+	 (rheight (or (and hints (or (xlib:wm-size-hints-height hints) (xlib:wm-size-hints-base-height hints)))
+		      (xlib:drawable-height window))))
+    (setf (xlib:drawable-width window) (min (max min-width rwidth *default-window-width*) max-width)
+	  (xlib:drawable-height window) (min (max min-height rheight *default-window-height*) max-height))
+    (setf (xlib:drawable-x window) (truncate (/ (- (xlib:screen-width *screen*) (+ (xlib:drawable-width window) 2)) 2))
+	  (xlib:drawable-y window) (truncate (/ (- (xlib:screen-height *screen*) (+ (xlib:drawable-height window) 2)) 2)))))
 
 
 
@@ -937,19 +931,18 @@ Warning:frame window and gc are freeed."
   "When a new window is created (or when we are scanning initial
 windows), this function dresses the window up and gets it ready to be
 managed."
-  (with-xlib-protect
-    (setf (xlib:window-event-mask window) *window-events*)
-    (set-window-state window +normal-state+)
-    (setf (xlib:drawable-border-width window) (case (window-type window)
-						(:normal 1)
-						(:maxsize 1)
-						(:transient 1)
-						(t 1)))
-    (grab-all-buttons window)
-    (unless (never-managed-window-p window)
-      (unless (do-all-frames-nw-hook window)
-	(call-hook *default-nw-hook* (list *root-frame* window))))
-    (netwm-add-in-client-list window)))
+  (setf (xlib:window-event-mask window) *window-events*)
+  (set-window-state window +normal-state+)
+  (setf (xlib:drawable-border-width window) (case (window-type window)
+					      (:normal 1)
+					      (:maxsize 1)
+					      (:transient 1)
+					      (t 1)))
+  (grab-all-buttons window)
+  (unless (never-managed-window-p window)
+    (unless (do-all-frames-nw-hook window)
+      (call-hook *default-nw-hook* (list *root-frame* window))))
+  (netwm-add-in-client-list window))
 
 
 
