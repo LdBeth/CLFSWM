@@ -67,7 +67,7 @@ Window types are in +WINDOW-TYPES+.")
 (defmacro with-xlib-protect (&body body)
   "Prevent Xlib errors"
   `(handler-case
-       (progn
+       (with-simple-restart (top-level "Return to clfswm's top level")
 	 ,@body)
      ((or xlib:match-error xlib:window-error xlib:drawable-error) (c)
        (dbg "Ignore Xlib Error" c ',body))))
@@ -150,8 +150,7 @@ Expand in handle-event-fun-main-mode-key-press"
 (defun handle-event (&rest event-slots &key event-key &allow-other-keys)
   (with-xlib-protect
     (if (fboundp event-key)
-	(with-simple-restart (top-level "Return to clfswm's top level")
-	  (apply event-key event-slots))
+	(apply event-key event-slots)
 	#+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal)))
   t)
 
