@@ -126,16 +126,29 @@
     (display-frame-info it)))
 
 
+(defun error-handler (display error-key &rest key-vals &key asynchronous &allow-other-keys)
+  "Handle X errors"
+  (cond
+    ;; ignore asynchronous window errors
+    ((and asynchronous
+          (find error-key '(xlib:window-error xlib:drawable-error xlib:match-error)))
+     (format t "Ignoring XLib asynchronous error: ~s~%" error-key))
+    ((eq error-key 'xlib:access-error)
+     (write-line "Another window manager is running.")
+     (throw :exit-clfswm nil))
+     ;; all other asynchronous errors are printed.
+     (asynchronous
+      (format t "Caught Asynchronous X Error: ~s ~s" error-key key-vals))
+     (t
+      (apply 'error error-key :display display :error-key error-key key-vals))))
+
+
 (defun main-loop ()
   (loop
      (call-hook *loop-hook*)
      (with-xlib-protect
-       (xlib:display-finish-output *display*))
-     (when (with-xlib-protect
-	     (xlib:event-listen *display* *loop-timeout*))
-       (with-xlib-protect
-	 (xlib:process-event *display* :handler #'handle-event)))
-     (with-xlib-protect
+       (when (xlib:event-listen *display* *loop-timeout*)
+	 (xlib:process-event *display* :handler #'handle-event))
        (xlib:display-finish-output *display*))))
 
 
@@ -143,6 +156,7 @@
 (defun open-display (display-str protocol)
   (multiple-value-bind (host display-num) (parse-display-string display-str)
     (setf *display* (xlib:open-display host :display display-num :protocol protocol)
+	  (xlib:display-error-handler *display*) 'error-handler
 	  (getenv "DISPLAY") display-str)))
 
 

@@ -135,14 +135,12 @@
   (if (frame-p frame)
       (with-slots ((managed forced-managed-window)
 		   (unmanaged forced-unmanaged-window)) frame
-	(xlib:display-finish-output *display*)
-	(let ((ret (and (not (child-member window unmanaged))
-			(not (member (xlib:wm-name window) unmanaged :test #'string-equal-p))
-			(or (member :all (frame-managed-type frame))
-			    (member (window-type window) (frame-managed-type frame))
-			    (child-member window managed)
-			    (member (xlib:wm-name window) managed :test #'string-equal-p)))))
-	  ret))
+	(and (not (child-member window unmanaged))
+	     (not (member (xlib:wm-name window) unmanaged :test #'string-equal-p))
+	     (or (member :all (frame-managed-type frame))
+		 (member (window-type window) (frame-managed-type frame))
+		 (child-member window managed)
+		 (member (xlib:wm-name window) managed :test #'string-equal-p))))
       t))
 
 
@@ -326,7 +324,8 @@
 	    x (x-px->fl prx parent)
 	    y (y-px->fl pry parent)
 	    w (w-px->fl prw parent)
-	    h (h-px->fl prh parent)))))
+	    h (h-px->fl prh parent))
+      (xlib:display-finish-output *display*))))
 
 (defun fixe-real-size (frame parent)
   "Fixe real (pixel) coordinates in float coordinates"
@@ -912,7 +911,8 @@ Warning:frame window and gc are freeed."
     (setf (xlib:drawable-width window) (min (max min-width rwidth *default-window-width*) max-width)
 	  (xlib:drawable-height window) (min (max min-height rheight *default-window-height*) max-height))
     (setf (xlib:drawable-x window) (truncate (/ (- (xlib:screen-width *screen*) (+ (xlib:drawable-width window) 2)) 2))
-	  (xlib:drawable-y window) (truncate (/ (- (xlib:screen-height *screen*) (+ (xlib:drawable-height window) 2)) 2)))))
+	  (xlib:drawable-y window) (truncate (/ (- (xlib:screen-height *screen*) (+ (xlib:drawable-height window) 2)) 2)))
+    (xlib:display-finish-output *display*)))
 
 
 

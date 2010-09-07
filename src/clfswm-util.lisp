@@ -316,7 +316,6 @@
       (force-output)
       (unwind-protect
 	   (loop until done do
-		(xlib:display-finish-output *display*)
 		(when (xlib:event-listen *display* *loop-timeout*)
 		  (xlib:process-event *display* :handler #'handle-identify))
 		(xlib:display-finish-output *display*))
@@ -931,7 +930,8 @@ For window: set current child to window or its parent according to window-parent
   (with-current-window
     (let ((parent (find-parent-frame window)))
       (setf (xlib:drawable-x window) (frame-rx parent)
-	    (xlib:drawable-y window) (frame-ry parent))))
+	    (xlib:drawable-y window) (frame-ry parent))
+      (xlib:display-finish-output *display*)))
   (leave-second-mode))
 
 
@@ -944,7 +944,8 @@ For window: set current child to window or its parent according to window-parent
 							(xlib:drawable-width window)) 2)))
 	    (xlib:drawable-y window) (truncate (+ (frame-ry parent)
 						  (/ (- (frame-rh parent)
-							(xlib:drawable-height window)) 2))))))
+							(xlib:drawable-height window)) 2))))
+      (xlib:display-finish-output *display*)))
   (leave-second-mode))
 
 

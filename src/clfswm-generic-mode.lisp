@@ -41,7 +41,6 @@
 	   (loop
 	      (call-hook loop-hook)
 	      (nfuncall loop-function)
-	      (xlib:display-finish-output *display*)
 	      (when (xlib:event-listen *display* *loop-timeout*)
 		(xlib:process-event *display* :handler #'handle-event))
 	      (xlib:display-finish-output *display*))

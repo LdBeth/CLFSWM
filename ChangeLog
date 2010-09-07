@@ -1,3 +1,9 @@
+2010-09-07  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm.lisp (error-handler): New function do handle
+	asynchronous errors and ignore them.
+	(open-display): Install the new error-handler on display.
+
 2010-09-05  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/xlib-util.lisp (with-xlib-protect): Add a

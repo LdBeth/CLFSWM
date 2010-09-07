@@ -63,7 +63,6 @@ Window types are in +WINDOW-TYPES+.")
   "Alist mapping NETWM window types to keywords.")
 
 
-
 (defmacro with-xlib-protect (&body body)
   "Prevent Xlib errors"
   `(handler-case
@@ -71,6 +70,8 @@ Window types are in +WINDOW-TYPES+.")
 	 ,@body)
      ((or xlib:match-error xlib:window-error xlib:drawable-error) (c)
        (dbg "Ignore Xlib Error" c ',body))))
+
+
 
 
 
@@ -151,7 +152,8 @@ Expand in handle-event-fun-main-mode-key-press"
   (with-xlib-protect
     (if (fboundp event-key)
 	(apply event-key event-slots)
-	#+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal)))
+	#+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal))
+    (xlib:display-finish-output *display*))
   t)
 
 
