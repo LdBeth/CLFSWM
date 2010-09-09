@@ -1,3 +1,8 @@
+2010-09-09  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (update-menus): Follow XDG specifications
+	instead of the non-portable Debian update-menu.
+
 2010-09-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm.lisp (error-handler): New function do handle

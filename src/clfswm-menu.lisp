@@ -53,6 +53,14 @@
 	       (equal name (menu-name item)))
       (return-from find-menu item))))
 
+(defun find-toplevel-menu (name &optional (root *menu*))
+  (when (menu-p root)
+    (dolist (item (menu-item root))
+      (when (and (menu-item-p item)
+		 (menu-p (menu-item-value item)))
+	(when (equal name (menu-name (menu-item-value item)))
+	  (return (menu-item-value item)))))))
+
 
 (defun find-item-by-key (key &optional (root *menu*))
   (with-all-menu (root item)
@@ -87,9 +95,13 @@
   (let ((menu (find-menu menu-name root)))
     (add-item (make-menu-item :key (find-next-menu-key key menu) :value value) (find-menu menu-name root))))
 
-(defun add-sub-menu (menu-name key sub-menu-name &optional (doc "Sub menu") (root *menu*))
-  (let ((menu (find-menu menu-name root)))
-    (add-item (make-menu-item :key (find-next-menu-key key menu) :value (make-menu :name sub-menu-name :doc doc)) menu)))
+(defun add-sub-menu (menu-or-name key sub-menu-name &optional (doc "Sub menu") (root *menu*))
+  (let ((menu (if (or (stringp menu-or-name) (symbolp menu-or-name))
+		  (find-menu menu-or-name root)
+		  menu-or-name))
+	(submenu (make-menu :name sub-menu-name :doc doc)))
+    (add-item (make-menu-item :key (find-next-menu-key key menu) :value submenu) menu)
+    submenu))
 
 
 

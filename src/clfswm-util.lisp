@@ -1209,53 +1209,69 @@ For window: set current child to window or its parent according to window-parent
 
 
 
-;;; Standard menu functions - Based on the 'update-menus' command
-(defun um-extract-value (name line)
-  (let* ((fullname (format nil "~A=\"" name))
-	 (pos (search fullname line)))
-    (when (numberp pos)
-      (let* ((start (+ pos (length fullname)))
-	     (end (position #\" line :start start)))
-	(when (numberp end)
-	  (subseq line start end))))))
+;;; Standard menu functions - Based on the XDG specifications
+(defparameter *xdg-section-list* (nconc '(TextEditor FileManager WebBrowser)
+					'(AudioVideo Audio Video Development Education Game Graphics Network Office Settings System Utility)
+					'(TerminalEmulator Archlinux))
+  "Config(Menu group): Standard menu sections")
 
 
-(defun um-create-section (menu section-list)
-  (if section-list
-      (let* ((sec (intern (string-upcase (first section-list)) :clfswm))
-	     (submenu (find-menu sec menu)))
-	(if submenu
-	    (um-create-section submenu (rest section-list))
-	    (progn
-	      (add-sub-menu (menu-name menu) :next sec (format nil "~A" sec) menu)
-	      (um-create-section (find-menu sec menu) (rest section-list)))))
-      menu))
+(defun um-create-xdg-section-list (menu)
+  (dolist (section *xdg-section-list*)
+    (add-sub-menu menu :next section (format nil "~A" section) menu)))
+
+(defun um-find-submenu (menu section-list)
+  (let ((acc nil))
+    (dolist (section section-list)
+      (awhen (find-toplevel-menu (intern (string-upcase section) :clfswm) menu)
+	(push it acc)))
+    (if acc
+	acc
+	(list (find-toplevel-menu 'Utility menu)))))
+
+
+(defun um-extract-value (line)
+  (second (split-string line #\=)))
+
+
+(defun um-add-desktop (desktop menu)
+  (let (name exec categories comment)
+    (when (probe-file desktop)
+      (with-open-file (stream desktop :direction :input)
+	(loop for line = (read-line stream nil nil)
+	   while line
+	   do
+	   (cond ((first-position "Name=" line) (setf name (um-extract-value line)))
+		 ((first-position "Exec=" line) (setf exec (um-extract-value line)))
+		 ((first-position "Categories=" line) (setf categories (um-extract-value line)))
+		 ((first-position "Comment=" line) (setf comment (um-extract-value line))))
+	   (when (and name exec categories)
+	     (let* ((sub-menu (um-find-submenu menu (split-string categories #\;)))
+		    (fun-name (intern name :clfswm)))
+	       (setf (symbol-function fun-name) (let ((do-exec exec))
+						  (lambda ()
+						    (do-shell do-exec)
+						    (leave-second-mode)))
+		     (documentation fun-name 'function) (format nil "~A~A" name (if comment
+										    (format nil " - ~A" comment)
+										    "")))
+	       (dolist (m sub-menu)
+		 (add-menu-key (menu-name m) :next fun-name m)))
+	     (setf name nil exec nil categories nil comment nil)))))))
 
 
 (defun update-menus (&optional (menu (make-menu :name 'main :doc "Main menu")))
-  (let ((output (do-shell "update-menus --stdout")))
-    (loop for line = (read-line output nil nil)
-	  while line
-	  do (let ((command (um-extract-value "command" line)))
-	       (when command
-		 (let* ((sub-menu (um-create-section menu (split-string (um-extract-value "section" line) #\/)))
-			(title (um-extract-value " title" line))
-			(doc (um-extract-value "description" line))
-			(name (intern title :clfswm)))
-		   (setf (symbol-function name) (lambda ()
-						  (do-shell command)
-						  (leave-second-mode))
-			 (documentation name 'function) (format nil "~A~A" title (if doc (format nil " - ~A" doc) "")))
-		   (add-menu-key (menu-name sub-menu) :next name sub-menu)))))
+  (um-create-xdg-section-list menu)
+  (let ((count 0)
+	(found (make-hash-table :test #'equal)))
+    (dolist (dir (remove-duplicates
+		  (split-string (getenv "XDG_DATA_DIRS") #\:) :test #'string-equal))
+      (dolist (desktop (directory (concatenate 'string dir "/applications/*.desktop")))
+	(unless (gethash (file-namestring desktop) found)
+	  (setf (gethash (file-namestring desktop) found) t)
+	  (um-add-desktop desktop menu)
+	  (incf count))))
     menu))
-
-
-(defun show-standard-menu ()
-  "< Standard menu >"
-  (let ((menu (update-menus)))
-    (if (menu-item menu)
-       (open-menu menu)
-       (info-mode '("Command 'update-menus' not found")))))
 
 
 

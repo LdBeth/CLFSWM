@@ -311,7 +311,9 @@ Return the result of the last hook"
   (intern (string-upcase (apply #'concatenate 'string names))))
 
 (defun number->char (number)
-  (code-char (+ (char-code #\a) number)))
+  (if (< number 26)
+      (code-char (+ (char-code #\a) number))
+      #\|))
 
 (defun simple-type-of (object)
   (let ((type (type-of object)))

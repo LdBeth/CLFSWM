@@ -7,12 +7,15 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-Nothing here :)
+- Use xdg menu spec instead of the Debian specific update-menu command.
+
+- Add a data slot to tell if a frame must hide or not its floating windows when its not selected.
+
 
 MAYBE
 =====
 
-- cd/pwd a la shell to navigate through frames. [Philippe]
+- cd/pwd a la shell to navigate through frames.
 
 - Zoom
 
