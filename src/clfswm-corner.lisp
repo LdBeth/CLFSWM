@@ -110,35 +110,50 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
   t)
 
 
-(defun present-virtual-keyboard ()
-  "Present a virtual keyboard"
-  (stop-button-event)
-  (do-shell (if *vt-keyboard-on*
-		*virtual-keyboard-kill-cmd*
-		*virtual-keyboard-cmd*))
-  (setf *vt-keyboard-on* (not *vt-keyboard-on*))
-  t)
+
+(defun find-window-in-query-tree (target-win)
+  (dolist (win (xlib:query-tree *root*))
+    (when (child-equal-p win target-win)
+      (return t))))
+
+(defun wait-window-in-query-tree (wait-test)
+  (loop
+     (dolist (win (xlib:query-tree *root*))
+       (when (funcall wait-test win)
+	 (return-from wait-window-in-query-tree win)))))
 
 
-(defun present-clfswm-terminal ()
-  "Hide/Unhide a terminal"
-  (labels ((find-clfswm-terminal ()
-	     (dolist (win (xlib:query-tree *root*))
-	       (when (child-equal-p win *clfswm-terminal*)
-		 (return t)))))
-    (stop-button-event)
-    (unless (find-clfswm-terminal)
-      (do-shell *clfswm-terminal-cmd*)
-      (loop :with done = nil :until done
-	 :do (dolist (win (xlib:query-tree *root*))
-	       (when (string-equal (xlib:wm-name win) *clfswm-terminal-name*)
-		 (setf *clfswm-terminal* win
-		       done t))))
-      (hide-window *clfswm-terminal*))
-    (cond ((window-hidden-p *clfswm-terminal*) (unhide-window *clfswm-terminal*)
-	   (focus-window *clfswm-terminal*)
-	   (raise-window *clfswm-terminal*))
-	  (t (hide-window *clfswm-terminal*)
-	     (show-all-children nil)))
-    t))
+(defmacro generate-present-body (cmd wait-test win &optional focus-p)
+  `(progn
+     (stop-button-event)
+     (unless (find-window-in-query-tree ,win)
+       (do-shell ,cmd)
+       (setf ,win (wait-window-in-query-tree ,wait-test))
+       (hide-window ,win))
+     (cond ((window-hidden-p ,win) (unhide-window ,win)
+	    (when ,focus-p
+	      (focus-window ,win))
+	    (raise-window ,win))
+	   (t (hide-window ,win)
+	      (show-all-children nil)))
+     t))
+
+
+(let (win)
+  (defun present-virtual-keyboard ()
+    "Present a virtual keyboard"
+    (generate-present-body *virtual-keyboard-cmd*
+			   (lambda (win)
+			     (string-equal (xlib:get-wm-class win) "xvkbd"))
+			   win)))
+
+
+(let (win)
+  (defun present-clfswm-terminal ()
+    "Hide/Unhide a terminal"
+    (generate-present-body *clfswm-terminal-cmd*
+			   (lambda (win)
+			     (string-equal (xlib:wm-name win) *clfswm-terminal-name*))
+			   win
+			   t)))
 

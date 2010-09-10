@@ -1,3 +1,9 @@
+2010-09-10  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-corner.lisp (generate-present-body): New macro.
+	(present-clfswm-terminal, present-virtual-keyboard): Use
+	generate-present-body.
+
 2010-09-09  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (update-menus): Follow XDG specifications

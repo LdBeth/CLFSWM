@@ -135,7 +135,7 @@
      (format t "Ignoring XLib asynchronous error: ~s~%" error-key))
     ((eq error-key 'xlib:access-error)
      (write-line "Another window manager is running.")
-     (throw :exit-clfswm nil))
+     (throw 'exit-clfswm nil))
      ;; all other asynchronous errors are printed.
      (asynchronous
       (format t "Caught Asynchronous X Error: ~s ~s" error-key key-vals))
@@ -179,7 +179,6 @@
 					    :depth (xlib:screen-root-depth *screen*)
 					    :drawable *root*)
 	*in-second-mode* nil
-	*clfswm-terminal* nil
 	*vt-keyboard-on* nil)
   (init-modifier-list)
   (xgrab-init-pointer)

@@ -185,8 +185,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defparameter *in-second-mode* nil)
 
 
-(defparameter *vt-keyboard-on* nil)
-(defparameter *clfswm-terminal* nil)
+;;(defparameter *vt-keyboard-on* nil)  PHIL here
 
 
 ;;; Placement variables. A list of two absolute coordinates
