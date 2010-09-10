@@ -185,9 +185,6 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defparameter *in-second-mode* nil)
 
 
-;;(defparameter *vt-keyboard-on* nil)  PHIL here
-
-
 ;;; Placement variables. A list of two absolute coordinates
 ;;; or a function: 'Y-X-placement' for absolute placement or
 ;;; 'Y-X-child-placement' for child relative placement.
