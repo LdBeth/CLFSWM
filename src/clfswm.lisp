@@ -178,8 +178,7 @@
 					    :height (xlib:screen-height *screen*)
 					    :depth (xlib:screen-root-depth *screen*)
 					    :drawable *root*)
-	*in-second-mode* nil
-	*vt-keyboard-on* nil)
+	*in-second-mode* nil)
   (init-modifier-list)
   (xgrab-init-pointer)
   (xgrab-init-keyboard)

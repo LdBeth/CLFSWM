@@ -123,37 +123,39 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
 	 (return-from wait-window-in-query-tree win)))))
 
 
-(defmacro generate-present-body (cmd wait-test win &optional focus-p)
-  `(progn
-     (stop-button-event)
-     (unless (find-window-in-query-tree ,win)
-       (do-shell ,cmd)
-       (setf ,win (wait-window-in-query-tree ,wait-test))
-       (hide-window ,win))
-     (cond ((window-hidden-p ,win) (unhide-window ,win)
-	    (when ,focus-p
-	      (focus-window ,win))
-	    (raise-window ,win))
-	   (t (hide-window ,win)
-	      (show-all-children nil)))
-     t))
+(defun generic-present-body (cmd wait-test win &optional focus-p)
+  (stop-button-event)
+  (unless (find-window-in-query-tree win)
+    (do-shell cmd)
+    (setf win (wait-window-in-query-tree wait-test))
+    (hide-window win))
+  (cond ((window-hidden-p win) (unhide-window win)
+	 (when focus-p
+	   (focus-window win))
+	 (raise-window win))
+	(t (hide-window win)
+	   (show-all-children nil)))
+  win)
+
 
 
 (let (win)
   (defun present-virtual-keyboard ()
     "Present a virtual keyboard"
-    (generate-present-body *virtual-keyboard-cmd*
-			   (lambda (win)
-			     (string-equal (xlib:get-wm-class win) "xvkbd"))
-			   win)))
+    (setf win (generic-present-body *virtual-keyboard-cmd*
+				    (lambda (win)
+				      (string-equal (xlib:get-wm-class win) "xvkbd"))
+				    win))
+    t))
 
 
 (let (win)
   (defun present-clfswm-terminal ()
     "Hide/Unhide a terminal"
-    (generate-present-body *clfswm-terminal-cmd*
-			   (lambda (win)
-			     (string-equal (xlib:wm-name win) *clfswm-terminal-name*))
-			   win
-			   t)))
+    (setf win (generic-present-body *clfswm-terminal-cmd*
+				    (lambda (win)
+				      (string-equal (xlib:wm-name win) *clfswm-terminal-name*))
+				    win
+				    t))
+    t))
 

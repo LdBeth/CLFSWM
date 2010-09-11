@@ -1266,7 +1266,7 @@ For window: set current child to window or its parent according to window-parent
 	(found (make-hash-table :test #'equal)))
     (dolist (dir (remove-duplicates
 		  (split-string (getenv "XDG_DATA_DIRS") #\:) :test #'string-equal))
-      (dolist (desktop (directory (concatenate 'string dir "/applications/*.desktop")))
+      (dolist (desktop (directory (concatenate 'string dir "/applications/**/*.desktop")))
 	(unless (gethash (file-namestring desktop) found)
 	  (setf (gethash (file-namestring desktop) found) t)
 	  (um-add-desktop desktop menu)

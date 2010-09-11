@@ -1,3 +1,12 @@
+2010-09-11  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-corner.lisp (present-clfswm-terminal)
+	(present-virtual-keyboard): Use a function (generic-present-body)
+	instead of a macro (generate-present-body).
+
+	* src/clfswm-util.lisp (update-menus): List all directories and
+	subdirectories in $XDG_DATA_DIRS/applications.
+
 2010-09-10  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-corner.lisp (generate-present-body): New macro.

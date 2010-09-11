@@ -7,8 +7,6 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- Use xdg menu spec instead of the Debian specific update-menu command.
-
 - Add a data slot to tell if a frame must hide or not its floating windows when its not selected.
 
 
@@ -17,7 +15,7 @@ MAYBE
 
 - cd/pwd a la shell to navigate through frames.
 
-- Zoom
+- Zoom:
 
 Concept:
   * zoom out: Behave as if the application window is bigger for the application but completely drawn in a small amount of space (miniature). The zoom factor is inferior to 100%

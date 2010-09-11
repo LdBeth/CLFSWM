@@ -123,8 +123,6 @@ You can tweak this to what you want"
     xvkbd.customization: -french
     xvkbd.keypad: false
   And make it always on top")
-(defparameter *virtual-keyboard-kill-cmd* "pkill xvkbd"
-  "Config(Corner group): The command to stop the virtual keyboard")
 
 (defparameter *clfswm-terminal-name* "clfswm-terminal"
   "Config(Corner group): The clfswm terminal name")
