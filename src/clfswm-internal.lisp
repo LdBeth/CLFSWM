@@ -542,8 +542,18 @@
   (display-frame-info frame))
 
 
+
+(defun hide-unmanager-window-p (parent)
+  (let ((action (frame-data-slot parent :unmanaged-window-action)))
+    (case action
+      (:hide t)
+      (:show nil)
+      (t *hide-unmanaged-window*))))
+
+
 (defmethod show-child ((window xlib:window) parent raise-p)
   (if (or (managed-window-p window parent)
+	  (not (hide-unmanager-window-p parent))
 	  (child-equal-p parent *current-child*))
       (progn
 	(map-window window)

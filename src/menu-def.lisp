@@ -95,6 +95,7 @@
 (add-sub-menu 'frame-menu "m" 'frame-movement-menu "Frame movement menu")
 (add-sub-menu 'frame-menu "f" 'frame-focus-policy "Frame focus policy menu")
 (add-sub-menu 'frame-menu "w" 'frame-managed-window-menu "Managed window type menu")
+(add-sub-menu 'frame-menu "u" 'frame-unmanaged-window-menu "Unmanaged window behaviour")
 (add-sub-menu 'frame-menu "s" 'frame-miscellaneous-menu "Frame miscallenous menu")
 (add-menu-key 'frame-menu "x" 'frame-toggle-maximize)
 
@@ -154,6 +155,10 @@
 (add-menu-key 'frame-managed-window-menu "a" 'current-frame-manage-all-window-type)
 (add-menu-key 'frame-managed-window-menu "n" 'current-frame-manage-only-normal-window-type)
 (add-menu-key 'frame-managed-window-menu "u" 'current-frame-manage-no-window-type)
+
+(add-menu-key 'frame-unmanaged-window-menu "s" 'set-show-unmanaged-window)
+(add-menu-key 'frame-unmanaged-window-menu "h" 'set-hide-unmanaged-window)
+(add-menu-key 'frame-unmanaged-window-menu "d" 'set-default-hide-unmanaged-window)
 
 
 (add-menu-key 'frame-miscellaneous-menu "s" 'show-all-frames-info)

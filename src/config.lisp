@@ -55,6 +55,9 @@ Example: :mod-2 for num_lock, :lock for Caps_lock...")
 A list of (predicate-function-on-window expected-string)")
 
 
+(defparameter *hide-unmanaged-window* t
+  "Config(): Hide or not unmanaged windows when a child is deselected.")
+
 ;;; CONFIG - Screen size
 (defun get-fullscreen-size ()
   "Return the size of root child (values rx ry rw rh)

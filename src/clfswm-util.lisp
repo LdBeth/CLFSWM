@@ -1347,3 +1347,23 @@ For window: set current child to window or its parent according to window-parent
     (do-run-other-window-manager wm)))
 
 
+;;; Hide or show unmanaged windows utility.
+(defun set-hide-unmanaged-window ()
+  "Hide unmanaged windows when frame is not selected"
+  (when (frame-p *current-child*)
+    (setf (frame-data-slot *current-child* :unmanaged-window-action) :hide)
+    (leave-second-mode)))
+
+(defun set-show-unmanaged-window ()
+  "Show unmanaged windows when frame is not selected"
+  (when (frame-p *current-child*)
+    (setf (frame-data-slot *current-child* :unmanaged-window-action) :show)
+    (leave-second-mode)))
+
+(defun set-default-hide-unmanaged-window ()
+  "Set default behaviour to hide or not unmanaged windows when frame is not selected"
+  (when (frame-p *current-child*)
+    (setf (frame-data-slot *current-child* :unmanaged-window-action) nil)
+    (leave-second-mode)))
+
+

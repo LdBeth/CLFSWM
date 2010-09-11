@@ -1,5 +1,14 @@
 2010-09-11  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-util.lisp (set-hide-unmanaged-window)
+	(set-show-unmanaged-window, set-default-hide-unmanaged-window):
+	New functions and menu entry.
+
+	* src/clfswm-internal.lisp (hide-unmanager-window-p): New
+	function.
+	(show-child): Add a data slot on frame to hide or not unmanaged
+	windows.
+
 	* src/clfswm-corner.lisp (present-clfswm-terminal)
 	(present-virtual-keyboard): Use a function (generic-present-body)
 	instead of a macro (generate-present-body).
