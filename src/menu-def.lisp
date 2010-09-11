@@ -159,6 +159,8 @@
 (add-menu-key 'frame-unmanaged-window-menu "s" 'set-show-unmanaged-window)
 (add-menu-key 'frame-unmanaged-window-menu "h" 'set-hide-unmanaged-window)
 (add-menu-key 'frame-unmanaged-window-menu "d" 'set-default-hide-unmanaged-window)
+(add-menu-key 'frame-unmanaged-window-menu "w" 'set-globally-show-unmanaged-window)
+(add-menu-key 'frame-unmanaged-window-menu "i" 'set-globally-hide-unmanaged-window)
 
 
 (add-menu-key 'frame-miscellaneous-menu "s" 'show-all-frames-info)

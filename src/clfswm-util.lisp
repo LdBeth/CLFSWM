@@ -1366,4 +1366,12 @@ For window: set current child to window or its parent according to window-parent
     (setf (frame-data-slot *current-child* :unmanaged-window-action) nil)
     (leave-second-mode)))
 
+(defun set-globally-hide-unmanaged-window ()
+  "Hide unmanaged windows by default. This is overriden by functions above"
+  (setf *hide-unmanaged-window* t)
+  (leave-second-mode))
 
+(defun set-globally-show-unmanaged-window ()
+  "Show unmanaged windows by default. This is overriden by functions above"
+  (setf *hide-unmanaged-window* nil)
+  (leave-second-mode))

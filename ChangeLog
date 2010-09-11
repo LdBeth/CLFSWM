@@ -3,6 +3,9 @@
 	* src/clfswm-util.lisp (set-hide-unmanaged-window)
 	(set-show-unmanaged-window, set-default-hide-unmanaged-window):
 	New functions and menu entry.
+	(set-globally-hide-unmanaged-window)
+	(set-globally-show-unmanaged-window): New functions and menu
+	entry.
 
 	* src/clfswm-internal.lisp (hide-unmanager-window-p): New
 	function.
