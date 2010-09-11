@@ -838,6 +838,8 @@ Frame-Unmanaged-Window-Menu
 s: Show unmanaged windows when frame is not selected
 h: Hide unmanaged windows when frame is not selected
 d: Set default behaviour to hide or not unmanaged windows when frame is not selected
+w: Show unmanaged windows by default. This is overriden by functions above
+i: Hide unmanaged windows by default. This is overriden by functions above
 
 Frame-Miscellaneous-Menu
 s: Show all frames info windows
@@ -896,118 +898,118 @@ l: Run LXDE
 p: Prompt for an other window manager
 
 Configuration-Menu
-a: < Frame colors group >
-b: < Miscellaneous group >
-c: < Query string group >
+a: < Hook group >
+b: < Main mode group >
+c: < Frame colors group >
 d: < Identify key group >
-e: < Main mode group >
-f: < Info mode group >
-g: < Menu group >
-h: < Corner group >
-i: < Hook group >
-j: < Placement group >
-k: < Circulate mode group >
-l: < Second mode group >
+e: < Second mode group >
+f: < Corner group >
+g: < Query string group >
+h: < Circulate mode group >
+i: < Placement group >
+j: < Miscellaneous group >
+k: < Info mode group >
+l: < Menu group >
 F2: Save all configuration variables in clfswmrc
+
+Conf-Hook-Group
+a: Configure INIT-HOOK
+b: Configure DEFAULT-NW-HOOK
+c: Configure LOOP-HOOK
+d: Configure BINDING-HOOK
+
+Conf-Main-Mode-Group
+a: Configure COLOR-UNSELECTED
+b: Configure COLOR-SELECTED
+c: Configure COLOR-MAYBE-SELECTED
 
 Conf-Frame-Colors-Group
 a: Configure FRAME-FOREGROUND-ROOT
 b: Configure FRAME-FOREGROUND
-c: Configure FRAME-BACKGROUND
-d: Configure FRAME-FOREGROUND-HIDDEN
-
-Conf-Miscellaneous-Group
-a: Configure NEVER-MANAGED-WINDOW-LIST
-b: Configure CREATE-FRAME-ON-ROOT
-c: Configure DEFAULT-FRAME-DATA
-d: Configure DEFAULT-FONT-STRING
-e: Configure HIDE-UNMANAGED-WINDOW
-f: Configure DEFAULT-MODIFIERS
-g: Configure DEFAULT-FOCUS-POLICY
-h: Configure LOOP-TIMEOUT
-i: Configure HAVE-TO-COMPRESS-NOTIFY
-j: Configure DEFAULT-WINDOW-WIDTH
-k: Configure DEFAULT-MANAGED-TYPE
-l: Configure DEFAULT-WINDOW-HEIGHT
-
-Conf-Query-String-Group
-a: Configure QUERY-BACKGROUND
-b: Configure QUERY-BORDER
-c: Configure QUERY-FONT-STRING
-d: Configure QUERY-FOREGROUND
+c: Configure FRAME-FOREGROUND-HIDDEN
+d: Configure FRAME-BACKGROUND
 
 Conf-Identify-Key-Group
 a: Configure IDENTIFY-FOREGROUND
-b: Configure IDENTIFY-BORDER
-c: Configure IDENTIFY-BACKGROUND
-d: Configure IDENTIFY-FONT-STRING
+b: Configure IDENTIFY-FONT-STRING
+c: Configure IDENTIFY-BORDER
+d: Configure IDENTIFY-BACKGROUND
 
-Conf-Main-Mode-Group
-a: Configure COLOR-MAYBE-SELECTED
-b: Configure COLOR-SELECTED
-c: Configure COLOR-UNSELECTED
-
-Conf-Info-Mode-Group
-a: Configure INFO-BACKGROUND
-b: Configure INFO-COLOR-FIRST
-c: Configure INFO-FOREGROUND
-d: Configure INFO-BORDER
-e: Configure INFO-SELECTED-BACKGROUND
-f: Configure INFO-FONT-STRING
-g: Configure INFO-COLOR-UNDERLINE
-h: Configure INFO-COLOR-TITLE
-i: Configure INFO-CLICK-TO-SELECT
-j: Configure INFO-LINE-CURSOR
-k: Configure INFO-COLOR-SECOND
-
-Conf-Menu-Group
-a: Configure MENU-COLOR-SUBMENU
-b: Configure MENU-COLOR-COMMENT
-c: Configure MENU-COLOR-MENU-KEY
-d: Configure MENU-COLOR-KEY
-e: Configure XDG-SECTION-LIST
+Conf-Second-Mode-Group
+a: Configure SM-BACKGROUND-COLOR
+b: Configure SM-HEIGHT
+c: Configure SM-WIDTH
+d: Configure SM-FOREGROUND-COLOR
+e: Configure SM-BORDER-COLOR
+f: Configure SM-FONT-STRING
 
 Conf-Corner-Group
-a: Configure CORNER-SECOND-MODE-MIDDLE-BUTTON
-b: Configure CORNER-MAIN-MODE-LEFT-BUTTON
-c: Configure CLFSWM-TERMINAL-CMD
-d: Configure CORNER-MAIN-MODE-MIDDLE-BUTTON
-e: Configure VIRTUAL-KEYBOARD-CMD
-f: Configure CORNER-SECOND-MODE-LEFT-BUTTON
-g: Configure CORNER-SIZE
-h: Configure CORNER-MAIN-MODE-RIGHT-BUTTON
-i: Configure CLFSWM-TERMINAL-NAME
-j: Configure CORNER-SECOND-MODE-RIGHT-BUTTON
+a: Configure CORNER-MAIN-MODE-LEFT-BUTTON
+b: Configure CORNER-SECOND-MODE-MIDDLE-BUTTON
+c: Configure CORNER-SECOND-MODE-LEFT-BUTTON
+d: Configure CORNER-SECOND-MODE-RIGHT-BUTTON
+e: Configure CORNER-SIZE
+f: Configure CLFSWM-TERMINAL-CMD
+g: Configure CORNER-MAIN-MODE-RIGHT-BUTTON
+h: Configure VIRTUAL-KEYBOARD-CMD
+i: Configure CORNER-MAIN-MODE-MIDDLE-BUTTON
+j: Configure CLFSWM-TERMINAL-NAME
 
-Conf-Hook-Group
-a: Configure INIT-HOOK
-b: Configure LOOP-HOOK
-c: Configure BINDING-HOOK
-d: Configure DEFAULT-NW-HOOK
-
-Conf-Placement-Group
-a: Configure BANISH-POINTER-PLACEMENT
-b: Configure SECOND-MODE-PLACEMENT
-c: Configure QUERY-MODE-PLACEMENT
-d: Configure INFO-MODE-PLACEMENT
-e: Configure CIRCULATE-MODE-PLACEMENT
+Conf-Query-String-Group
+a: Configure QUERY-FONT-STRING
+b: Configure QUERY-BACKGROUND
+c: Configure QUERY-BORDER
+d: Configure QUERY-FOREGROUND
 
 Conf-Circulate-Mode-Group
 a: Configure CIRCULATE-WIDTH
-b: Configure CIRCULATE-HEIGHT
-c: Configure CIRCULATE-FONT-STRING
-d: Configure CIRCULATE-FOREGROUND
-e: Configure CIRCULATE-TEXT-LIMITE
+b: Configure CIRCULATE-TEXT-LIMITE
+c: Configure CIRCULATE-BORDER
+d: Configure CIRCULATE-HEIGHT
+e: Configure CIRCULATE-FONT-STRING
 f: Configure CIRCULATE-BACKGROUND
-g: Configure CIRCULATE-BORDER
+g: Configure CIRCULATE-FOREGROUND
 
-Conf-Second-Mode-Group
-a: Configure SM-FONT-STRING
-b: Configure SM-BACKGROUND-COLOR
-c: Configure SM-FOREGROUND-COLOR
-d: Configure SM-HEIGHT
-e: Configure SM-BORDER-COLOR
-f: Configure SM-WIDTH
+Conf-Placement-Group
+a: Configure CIRCULATE-MODE-PLACEMENT
+b: Configure QUERY-MODE-PLACEMENT
+c: Configure BANISH-POINTER-PLACEMENT
+d: Configure INFO-MODE-PLACEMENT
+e: Configure SECOND-MODE-PLACEMENT
+
+Conf-Miscellaneous-Group
+a: Configure HAVE-TO-COMPRESS-NOTIFY
+b: Configure HIDE-UNMANAGED-WINDOW
+c: Configure DEFAULT-WINDOW-WIDTH
+d: Configure CREATE-FRAME-ON-ROOT
+e: Configure DEFAULT-FRAME-DATA
+f: Configure DEFAULT-MODIFIERS
+g: Configure NEVER-MANAGED-WINDOW-LIST
+h: Configure DEFAULT-MANAGED-TYPE
+i: Configure DEFAULT-WINDOW-HEIGHT
+j: Configure DEFAULT-FONT-STRING
+k: Configure DEFAULT-FOCUS-POLICY
+l: Configure LOOP-TIMEOUT
+
+Conf-Info-Mode-Group
+a: Configure INFO-FOREGROUND
+b: Configure INFO-COLOR-UNDERLINE
+c: Configure INFO-SELECTED-BACKGROUND
+d: Configure INFO-LINE-CURSOR
+e: Configure INFO-CLICK-TO-SELECT
+f: Configure INFO-BACKGROUND
+g: Configure INFO-COLOR-FIRST
+h: Configure INFO-BORDER
+i: Configure INFO-FONT-STRING
+j: Configure INFO-COLOR-TITLE
+k: Configure INFO-COLOR-SECOND
+
+Conf-Menu-Group
+a: Configure MENU-COLOR-COMMENT
+b: Configure MENU-COLOR-KEY
+c: Configure XDG-SECTION-LIST
+d: Configure MENU-COLOR-MENU-KEY
+e: Configure MENU-COLOR-SUBMENU
 
 Clfswm-Menu
 r: Reset clfswm

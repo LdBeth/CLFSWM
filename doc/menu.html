@@ -2449,6 +2449,12 @@
     <p>
       d: Set default behaviour to hide or not unmanaged windows when frame is not selected
     </p>
+    <p>
+      w: Show unmanaged windows by default. This is overriden by functions above
+    </p>
+    <p>
+      i: Hide unmanaged windows by default. This is overriden by functions above
+    </p>
     <hr>
     <h3>
       <a name="FRAME-MISCELLANEOUS-MENU"></a><a href="#FRAME-MENU">Frame-Miscellaneous-Menu</a>
@@ -2608,43 +2614,72 @@
       <a name="CONFIGURATION-MENU"></a><a href="#MAIN">Configuration-Menu</a>
     </h3>
     <p>
-      a: <a href="#CONF-FRAME-COLORS-GROUP">< Frame colors group ></a>
+      a: <a href="#CONF-HOOK-GROUP">< Hook group ></a>
     </p>
     <p>
-      b: <a href="#CONF-MISCELLANEOUS-GROUP">< Miscellaneous group ></a>
+      b: <a href="#CONF-MAIN-MODE-GROUP">< Main mode group ></a>
     </p>
     <p>
-      c: <a href="#CONF-QUERY-STRING-GROUP">< Query string group ></a>
+      c: <a href="#CONF-FRAME-COLORS-GROUP">< Frame colors group ></a>
     </p>
     <p>
       d: <a href="#CONF-IDENTIFY-KEY-GROUP">< Identify key group ></a>
     </p>
     <p>
-      e: <a href="#CONF-MAIN-MODE-GROUP">< Main mode group ></a>
+      e: <a href="#CONF-SECOND-MODE-GROUP">< Second mode group ></a>
     </p>
     <p>
-      f: <a href="#CONF-INFO-MODE-GROUP">< Info mode group ></a>
+      f: <a href="#CONF-CORNER-GROUP">< Corner group ></a>
     </p>
     <p>
-      g: <a href="#CONF-MENU-GROUP">< Menu group ></a>
+      g: <a href="#CONF-QUERY-STRING-GROUP">< Query string group ></a>
     </p>
     <p>
-      h: <a href="#CONF-CORNER-GROUP">< Corner group ></a>
+      h: <a href="#CONF-CIRCULATE-MODE-GROUP">< Circulate mode group ></a>
     </p>
     <p>
-      i: <a href="#CONF-HOOK-GROUP">< Hook group ></a>
+      i: <a href="#CONF-PLACEMENT-GROUP">< Placement group ></a>
     </p>
     <p>
-      j: <a href="#CONF-PLACEMENT-GROUP">< Placement group ></a>
+      j: <a href="#CONF-MISCELLANEOUS-GROUP">< Miscellaneous group ></a>
     </p>
     <p>
-      k: <a href="#CONF-CIRCULATE-MODE-GROUP">< Circulate mode group ></a>
+      k: <a href="#CONF-INFO-MODE-GROUP">< Info mode group ></a>
     </p>
     <p>
-      l: <a href="#CONF-SECOND-MODE-GROUP">< Second mode group ></a>
+      l: <a href="#CONF-MENU-GROUP">< Menu group ></a>
     </p>
     <p>
       F2: Save all configuration variables in clfswmrc
+    </p>
+    <hr>
+    <h3>
+      <a name="CONF-HOOK-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Hook-Group</a>
+    </h3>
+    <p>
+      a: Configure INIT-HOOK
+    </p>
+    <p>
+      b: Configure DEFAULT-NW-HOOK
+    </p>
+    <p>
+      c: Configure LOOP-HOOK
+    </p>
+    <p>
+      d: Configure BINDING-HOOK
+    </p>
+    <hr>
+    <h3>
+      <a name="CONF-MAIN-MODE-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Main-Mode-Group</a>
+    </h3>
+    <p>
+      a: Configure COLOR-UNSELECTED
+    </p>
+    <p>
+      b: Configure COLOR-SELECTED
+    </p>
+    <p>
+      c: Configure COLOR-MAYBE-SELECTED
     </p>
     <hr>
     <h3>
@@ -2657,66 +2692,10 @@
       b: Configure FRAME-FOREGROUND
     </p>
     <p>
-      c: Configure FRAME-BACKGROUND
+      c: Configure FRAME-FOREGROUND-HIDDEN
     </p>
     <p>
-      d: Configure FRAME-FOREGROUND-HIDDEN
-    </p>
-    <hr>
-    <h3>
-      <a name="CONF-MISCELLANEOUS-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Miscellaneous-Group</a>
-    </h3>
-    <p>
-      a: Configure NEVER-MANAGED-WINDOW-LIST
-    </p>
-    <p>
-      b: Configure CREATE-FRAME-ON-ROOT
-    </p>
-    <p>
-      c: Configure DEFAULT-FRAME-DATA
-    </p>
-    <p>
-      d: Configure DEFAULT-FONT-STRING
-    </p>
-    <p>
-      e: Configure HIDE-UNMANAGED-WINDOW
-    </p>
-    <p>
-      f: Configure DEFAULT-MODIFIERS
-    </p>
-    <p>
-      g: Configure DEFAULT-FOCUS-POLICY
-    </p>
-    <p>
-      h: Configure LOOP-TIMEOUT
-    </p>
-    <p>
-      i: Configure HAVE-TO-COMPRESS-NOTIFY
-    </p>
-    <p>
-      j: Configure DEFAULT-WINDOW-WIDTH
-    </p>
-    <p>
-      k: Configure DEFAULT-MANAGED-TYPE
-    </p>
-    <p>
-      l: Configure DEFAULT-WINDOW-HEIGHT
-    </p>
-    <hr>
-    <h3>
-      <a name="CONF-QUERY-STRING-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Query-String-Group</a>
-    </h3>
-    <p>
-      a: Configure QUERY-BACKGROUND
-    </p>
-    <p>
-      b: Configure QUERY-BORDER
-    </p>
-    <p>
-      c: Configure QUERY-FONT-STRING
-    </p>
-    <p>
-      d: Configure QUERY-FOREGROUND
+      d: Configure FRAME-BACKGROUND
     </p>
     <hr>
     <h3>
@@ -2726,151 +2705,85 @@
       a: Configure IDENTIFY-FOREGROUND
     </p>
     <p>
-      b: Configure IDENTIFY-BORDER
+      b: Configure IDENTIFY-FONT-STRING
     </p>
     <p>
-      c: Configure IDENTIFY-BACKGROUND
+      c: Configure IDENTIFY-BORDER
     </p>
     <p>
-      d: Configure IDENTIFY-FONT-STRING
-    </p>
-    <hr>
-    <h3>
-      <a name="CONF-MAIN-MODE-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Main-Mode-Group</a>
-    </h3>
-    <p>
-      a: Configure COLOR-MAYBE-SELECTED
-    </p>
-    <p>
-      b: Configure COLOR-SELECTED
-    </p>
-    <p>
-      c: Configure COLOR-UNSELECTED
+      d: Configure IDENTIFY-BACKGROUND
     </p>
     <hr>
     <h3>
-      <a name="CONF-INFO-MODE-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Info-Mode-Group</a>
+      <a name="CONF-SECOND-MODE-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Second-Mode-Group</a>
     </h3>
     <p>
-      a: Configure INFO-BACKGROUND
+      a: Configure SM-BACKGROUND-COLOR
     </p>
     <p>
-      b: Configure INFO-COLOR-FIRST
+      b: Configure SM-HEIGHT
     </p>
     <p>
-      c: Configure INFO-FOREGROUND
+      c: Configure SM-WIDTH
     </p>
     <p>
-      d: Configure INFO-BORDER
+      d: Configure SM-FOREGROUND-COLOR
     </p>
     <p>
-      e: Configure INFO-SELECTED-BACKGROUND
+      e: Configure SM-BORDER-COLOR
     </p>
     <p>
-      f: Configure INFO-FONT-STRING
-    </p>
-    <p>
-      g: Configure INFO-COLOR-UNDERLINE
-    </p>
-    <p>
-      h: Configure INFO-COLOR-TITLE
-    </p>
-    <p>
-      i: Configure INFO-CLICK-TO-SELECT
-    </p>
-    <p>
-      j: Configure INFO-LINE-CURSOR
-    </p>
-    <p>
-      k: Configure INFO-COLOR-SECOND
-    </p>
-    <hr>
-    <h3>
-      <a name="CONF-MENU-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Menu-Group</a>
-    </h3>
-    <p>
-      a: Configure MENU-COLOR-SUBMENU
-    </p>
-    <p>
-      b: Configure MENU-COLOR-COMMENT
-    </p>
-    <p>
-      c: Configure MENU-COLOR-MENU-KEY
-    </p>
-    <p>
-      d: Configure MENU-COLOR-KEY
-    </p>
-    <p>
-      e: Configure XDG-SECTION-LIST
+      f: Configure SM-FONT-STRING
     </p>
     <hr>
     <h3>
       <a name="CONF-CORNER-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Corner-Group</a>
     </h3>
     <p>
-      a: Configure CORNER-SECOND-MODE-MIDDLE-BUTTON
+      a: Configure CORNER-MAIN-MODE-LEFT-BUTTON
     </p>
     <p>
-      b: Configure CORNER-MAIN-MODE-LEFT-BUTTON
+      b: Configure CORNER-SECOND-MODE-MIDDLE-BUTTON
     </p>
     <p>
-      c: Configure CLFSWM-TERMINAL-CMD
+      c: Configure CORNER-SECOND-MODE-LEFT-BUTTON
     </p>
     <p>
-      d: Configure CORNER-MAIN-MODE-MIDDLE-BUTTON
+      d: Configure CORNER-SECOND-MODE-RIGHT-BUTTON
     </p>
     <p>
-      e: Configure VIRTUAL-KEYBOARD-CMD
+      e: Configure CORNER-SIZE
     </p>
     <p>
-      f: Configure CORNER-SECOND-MODE-LEFT-BUTTON
+      f: Configure CLFSWM-TERMINAL-CMD
     </p>
     <p>
-      g: Configure CORNER-SIZE
+      g: Configure CORNER-MAIN-MODE-RIGHT-BUTTON
     </p>
     <p>
-      h: Configure CORNER-MAIN-MODE-RIGHT-BUTTON
+      h: Configure VIRTUAL-KEYBOARD-CMD
     </p>
     <p>
-      i: Configure CLFSWM-TERMINAL-NAME
+      i: Configure CORNER-MAIN-MODE-MIDDLE-BUTTON
     </p>
     <p>
-      j: Configure CORNER-SECOND-MODE-RIGHT-BUTTON
-    </p>
-    <hr>
-    <h3>
-      <a name="CONF-HOOK-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Hook-Group</a>
-    </h3>
-    <p>
-      a: Configure INIT-HOOK
-    </p>
-    <p>
-      b: Configure LOOP-HOOK
-    </p>
-    <p>
-      c: Configure BINDING-HOOK
-    </p>
-    <p>
-      d: Configure DEFAULT-NW-HOOK
+      j: Configure CLFSWM-TERMINAL-NAME
     </p>
     <hr>
     <h3>
-      <a name="CONF-PLACEMENT-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Placement-Group</a>
+      <a name="CONF-QUERY-STRING-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Query-String-Group</a>
     </h3>
     <p>
-      a: Configure BANISH-POINTER-PLACEMENT
+      a: Configure QUERY-FONT-STRING
     </p>
     <p>
-      b: Configure SECOND-MODE-PLACEMENT
+      b: Configure QUERY-BACKGROUND
     </p>
     <p>
-      c: Configure QUERY-MODE-PLACEMENT
+      c: Configure QUERY-BORDER
     </p>
     <p>
-      d: Configure INFO-MODE-PLACEMENT
-    </p>
-    <p>
-      e: Configure CIRCULATE-MODE-PLACEMENT
+      d: Configure QUERY-FOREGROUND
     </p>
     <hr>
     <h3>
@@ -2880,44 +2793,137 @@
       a: Configure CIRCULATE-WIDTH
     </p>
     <p>
-      b: Configure CIRCULATE-HEIGHT
+      b: Configure CIRCULATE-TEXT-LIMITE
     </p>
     <p>
-      c: Configure CIRCULATE-FONT-STRING
+      c: Configure CIRCULATE-BORDER
     </p>
     <p>
-      d: Configure CIRCULATE-FOREGROUND
+      d: Configure CIRCULATE-HEIGHT
     </p>
     <p>
-      e: Configure CIRCULATE-TEXT-LIMITE
+      e: Configure CIRCULATE-FONT-STRING
     </p>
     <p>
       f: Configure CIRCULATE-BACKGROUND
     </p>
     <p>
-      g: Configure CIRCULATE-BORDER
+      g: Configure CIRCULATE-FOREGROUND
     </p>
     <hr>
     <h3>
-      <a name="CONF-SECOND-MODE-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Second-Mode-Group</a>
+      <a name="CONF-PLACEMENT-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Placement-Group</a>
     </h3>
     <p>
-      a: Configure SM-FONT-STRING
+      a: Configure CIRCULATE-MODE-PLACEMENT
     </p>
     <p>
-      b: Configure SM-BACKGROUND-COLOR
+      b: Configure QUERY-MODE-PLACEMENT
     </p>
     <p>
-      c: Configure SM-FOREGROUND-COLOR
+      c: Configure BANISH-POINTER-PLACEMENT
     </p>
     <p>
-      d: Configure SM-HEIGHT
+      d: Configure INFO-MODE-PLACEMENT
     </p>
     <p>
-      e: Configure SM-BORDER-COLOR
+      e: Configure SECOND-MODE-PLACEMENT
+    </p>
+    <hr>
+    <h3>
+      <a name="CONF-MISCELLANEOUS-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Miscellaneous-Group</a>
+    </h3>
+    <p>
+      a: Configure HAVE-TO-COMPRESS-NOTIFY
     </p>
     <p>
-      f: Configure SM-WIDTH
+      b: Configure HIDE-UNMANAGED-WINDOW
+    </p>
+    <p>
+      c: Configure DEFAULT-WINDOW-WIDTH
+    </p>
+    <p>
+      d: Configure CREATE-FRAME-ON-ROOT
+    </p>
+    <p>
+      e: Configure DEFAULT-FRAME-DATA
+    </p>
+    <p>
+      f: Configure DEFAULT-MODIFIERS
+    </p>
+    <p>
+      g: Configure NEVER-MANAGED-WINDOW-LIST
+    </p>
+    <p>
+      h: Configure DEFAULT-MANAGED-TYPE
+    </p>
+    <p>
+      i: Configure DEFAULT-WINDOW-HEIGHT
+    </p>
+    <p>
+      j: Configure DEFAULT-FONT-STRING
+    </p>
+    <p>
+      k: Configure DEFAULT-FOCUS-POLICY
+    </p>
+    <p>
+      l: Configure LOOP-TIMEOUT
+    </p>
+    <hr>
+    <h3>
+      <a name="CONF-INFO-MODE-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Info-Mode-Group</a>
+    </h3>
+    <p>
+      a: Configure INFO-FOREGROUND
+    </p>
+    <p>
+      b: Configure INFO-COLOR-UNDERLINE
+    </p>
+    <p>
+      c: Configure INFO-SELECTED-BACKGROUND
+    </p>
+    <p>
+      d: Configure INFO-LINE-CURSOR
+    </p>
+    <p>
+      e: Configure INFO-CLICK-TO-SELECT
+    </p>
+    <p>
+      f: Configure INFO-BACKGROUND
+    </p>
+    <p>
+      g: Configure INFO-COLOR-FIRST
+    </p>
+    <p>
+      h: Configure INFO-BORDER
+    </p>
+    <p>
+      i: Configure INFO-FONT-STRING
+    </p>
+    <p>
+      j: Configure INFO-COLOR-TITLE
+    </p>
+    <p>
+      k: Configure INFO-COLOR-SECOND
+    </p>
+    <hr>
+    <h3>
+      <a name="CONF-MENU-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Menu-Group</a>
+    </h3>
+    <p>
+      a: Configure MENU-COLOR-COMMENT
+    </p>
+    <p>
+      b: Configure MENU-COLOR-KEY
+    </p>
+    <p>
+      c: Configure XDG-SECTION-LIST
+    </p>
+    <p>
+      d: Configure MENU-COLOR-MENU-KEY
+    </p>
+    <p>
+      e: Configure MENU-COLOR-SUBMENU
     </p>
     <hr>
     <h3>
