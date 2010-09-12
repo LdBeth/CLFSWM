@@ -1,3 +1,7 @@
+2010-09-12  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/clfswm: Add support to cmucl, ccl and ecl.
+
 2010-09-11  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (set-hide-unmanaged-window)

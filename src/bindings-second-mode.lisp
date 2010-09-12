@@ -129,8 +129,8 @@
   (define-second-key ("v" :control :shift) 'paste-selection-no-clear)
   (define-second-key ("Delete" :control) 'remove-current-child)
   (define-second-key ("Delete") 'delete-current-child)
-  (define-shell (#\c) b-start-xterm "start an xterm" "exec xterm")
-  (define-shell (#\e) b-start-emacs "start emacs" "exec emacs")
+  (define-shell (#\c) b-start-xterm "start an xterm" "cd $HOME && exec xterm")
+  (define-shell (#\e) b-start-emacs "start emacs" "cd $HOME && exec emacs")
   (define-shell (#\e :control) b-start-emacsremote
     "start an emacs for another user"
     "exec xterm -e emacsremote")
