@@ -1,3 +1,9 @@
+2010-09-16  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/clfswm: Move clfswm sources to $tmp_dir if there is no
+	write permission on $clfswm_asd_path. So anybody can start clfswm
+	even if there is no write permission on the source directory.
+
 2010-09-12  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/clfswm: Add support to cmucl, ccl and ecl.

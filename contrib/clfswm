@@ -39,6 +39,8 @@ dump_path="$XDG_CACHE_HOME/clfswm/"
 asdf_path="$(pwd)/contrib"
 clfswm_asd_path="$(pwd)"
 
+tmp_dir=/tmp
+
 
 usage() {
 
@@ -48,10 +50,10 @@ n,no-start           don't start CLFSWM after image dump
 f,force              force image dump
 rebuild              same as -f,--force
 l,with-lisp          use <lisp> as the common lisp implementation [$lisp]
-o,lisp-opt           use <opt> as lisp option
+o,lisp-opt           use <opt> as lisp option [$lisp_opt]
 d,dump-path          path to the dump directory [\$XDG_CACHE_HOME=$XDG_CACHE_HOME]
-with-clfswm          path to clfswm.asd file
-with-asdf            path to the asdf.lisp file"
+with-clfswm          path to clfswm.asd file [$clfswm_asd_path]
+with-asdf            path to the asdf.lisp file [$asdf_path]"
 
     exit 0
 }
@@ -159,12 +161,24 @@ then
     test -e $clfswm_asd_path/clfswm.asd || die "can't find clfswm.asd in $clfswm_asd_path"
     test -e $asdf_path/asdf.lisp || die "can't find asdf.lisp in $asdf_path"
 
+    # Move clfswm sources to $tmp_dir if there is no write permission on $clfswm_asd_path
+    if test ! -w $clfswm_asd_path ; then
+	rm -rf $tmp_dir/clfswm-tmp
+	mkdir $tmp_dir/clfswm-tmp
+	cp -R $clfswm_asd_path/* $tmp_dir/clfswm-tmp
+	clfswm_asd_path=$tmp_dir/clfswm-tmp
+	asdf_path=$tmp_dir/clfswm-tmp/contrib
+	echo "* Note: No write access in sources, copying in $clfswm_asd_path"
+    fi
+
     mkdir -p "$dump_path"
     mkdir -p "$dump_path/contrib"
     eval build_$lisp
     rm -rf "$dump_path/contrib"
     cp -R "$clfswm_asd_path/contrib/" "$dump_path/"
     rm -rf $(find "$dump_path/" -name "*svn")
+
+    rm -rf $tmp_dir/clfswm-tmp
 fi
 
 # Run the resulting image
@@ -182,3 +196,4 @@ then
 else
     echo "As requested, we have just dumped the image."
 fi
+
