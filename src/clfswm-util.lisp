@@ -1378,14 +1378,14 @@ For window: set current child to window or its parent according to window-parent
 
 
 ;;; Speed mouse movement
-;;(let (minx miny maxx maxy history lx ly)
-;;  (labels ((middle (x1 x2)
-;;	     (round (/ (+ x1 x2) 2)))
-;;	   (reset-if-moved (x y)
-;;	     (when (or (/= x (or lx x)) (/= y (or ly y)))
-;;	       (speed-mouse-reset)))
-;;	   (add-in-history (x y)
-;;	     (push (list x y) history)))
+(let (minx miny maxx maxy history lx ly)
+  (labels ((middle (x1 x2)
+	     (round (/ (+ x1 x2) 2)))
+	   (reset-if-moved (x y)
+	     (when (or (/= x (or lx x)) (/= y (or ly y)))
+	       (speed-mouse-reset)))
+	   (add-in-history (x y)
+	     (push (list x y) history)))
     (defun speed-mouse-reset ()
       (setf minx nil miny nil maxx nil maxy nil history nil lx nil ly nil))
     (defun speed-mouse-left ()
