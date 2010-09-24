@@ -1,3 +1,10 @@
+2010-09-24  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (speed-mouse-reset, speed-mouse-left)
+	(speed-mouse-right, speed-mouse-up, speed-mouse-down)
+	(speed-mouse-undo, speed-mouse-first-history): New functions to
+	quickly move the mouse. Implemented for the second mode.
+
 2010-09-16  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/clfswm: Move clfswm sources to $tmp_dir if there is no

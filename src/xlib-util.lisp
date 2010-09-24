@@ -74,7 +74,11 @@ Window types are in +WINDOW-TYPES+.")
 
 
 
-
+(defmacro with-x-pointer (&body body)
+  "Bind (x y) to mouse pointer positions"
+  `(multiple-value-bind (x y)
+       (xlib:query-pointer *root*)
+     ,@body))
 
 
 

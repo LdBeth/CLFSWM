@@ -7,12 +7,6 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-Nothing here yet :)
-
-- contrib/clfswm: Test if source directory is writable to compile clfswm.
-if not copy clfswm source in $XDG_CACHE_HOME/clfswm/sources and set
-$clfswm_asd_path to it then compile from here.
-
 - configure: copy contrib/clfswm in . and set default values in it.
 
 MAYBE

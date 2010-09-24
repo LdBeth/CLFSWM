@@ -119,7 +119,8 @@
   (no-focus)
   (ungrab-main-keys)
   (xgrab-keyboard *root*)
-  (xgrab-pointer *root* 66 67))
+  (xgrab-pointer *root* 66 67)
+  (speed-mouse-reset))  ;; PHIL here
 
 (defun sm-loop-function ()
   (raise-window *sm-window*))
@@ -150,7 +151,7 @@
 (defun leave-second-mode ()
   "Leave second mode"
   (cond (*in-second-mode*
-	 (banish-pointer)
+	 ;; (banish-pointer)  ;; PHIL here
 	 (setf *in-second-mode* nil)
 	 (throw 'exit-second-loop nil))
 	(t (setf *in-second-mode* nil)

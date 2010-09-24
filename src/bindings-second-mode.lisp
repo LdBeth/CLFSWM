@@ -104,6 +104,15 @@
   (define-second-key ("Left" :mod-1) 'select-previous-brother)
   (define-second-key ("Down" :mod-1) 'select-previous-level)
   (define-second-key ("Up" :mod-1) 'select-next-level)
+
+  (define-second-key ("Right") 'speed-mouse-right)
+  (define-second-key ("Left") 'speed-mouse-left)
+  (define-second-key ("Down") 'speed-mouse-down)
+  (define-second-key ("Up") 'speed-mouse-up)
+  (define-second-key ("Left" :control) 'speed-mouse-undo)
+  (define-second-key ("Up" :control) 'speed-mouse-first-history)
+  (define-second-key ("Down" :control) 'speed-mouse-reset)
+
   (define-second-key ("Tab" :mod-1) 'select-next-child)
   (define-second-key ("Tab" :mod-1 :shift) 'select-previous-child)
   (define-second-key (#\Tab :shift) 'switch-to-last-child)

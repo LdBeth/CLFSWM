@@ -1375,3 +1375,60 @@ For window: set current child to window or its parent according to window-parent
   "Show unmanaged windows by default. This is overriden by functions above"
   (setf *hide-unmanaged-window* nil)
   (leave-second-mode))
+
+
+;;; Speed mouse movement
+;;(let (minx miny maxx maxy history lx ly)
+;;  (labels ((middle (x1 x2)
+;;	     (round (/ (+ x1 x2) 2)))
+;;	   (reset-if-moved (x y)
+;;	     (when (or (/= x (or lx x)) (/= y (or ly y)))
+;;	       (speed-mouse-reset)))
+;;	   (add-in-history (x y)
+;;	     (push (list x y) history)))
+    (defun speed-mouse-reset ()
+      (setf minx nil miny nil maxx nil maxy nil history nil lx nil ly nil))
+    (defun speed-mouse-left ()
+      (with-x-pointer
+	(reset-if-moved x y)
+	(setf maxx x)
+	(add-in-history x y)
+	(setf lx (middle (or minx 0) maxx))
+	(xlib:warp-pointer *root* lx y)))
+    (defun speed-mouse-right ()
+      (with-x-pointer
+	(reset-if-moved x y)
+	(setf minx x)
+	(add-in-history x y)
+	(setf lx (middle minx (or maxx 1280)))
+	(xlib:warp-pointer *root* lx y)))
+    (defun speed-mouse-up ()
+      (with-x-pointer
+	(reset-if-moved x y)
+	(setf maxy y)
+	(add-in-history x y)
+	(setf ly (middle (or miny 0) maxy))
+	(xlib:warp-pointer *root* x ly)))
+    (defun speed-mouse-down ()
+      (with-x-pointer
+	(reset-if-moved x y)
+	(setf miny y)
+	(add-in-history x y)
+	(setf ly (middle miny (or maxy 800)))
+	(xlib:warp-pointer *root* x ly)))
+    (defun speed-mouse-undo ()
+      (when history
+	(let ((h (pop history)))
+	  (when h
+	    (destructuring-bind (bx by) h
+	      (setf lx bx ly by
+		    minx nil  maxx nil
+		    miny nil  maxy nil)
+	      (xlib:warp-pointer *root* lx ly))))))
+    (defun speed-mouse-first-history ()
+      (when history
+	(let ((h (first (last history))))
+	  (when h
+	    (setf lx (first h)
+		  ly (second h))
+	    (xlib:warp-pointer *root* lx ly)))))))
