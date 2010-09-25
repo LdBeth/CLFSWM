@@ -1,3 +1,8 @@
+2010-09-25  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (speed-mouse-right, speed-mouse-down): Use
+	screen size instead of hardcoded test coordinates.
+
 2010-09-24  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (speed-mouse-reset, speed-mouse-left)

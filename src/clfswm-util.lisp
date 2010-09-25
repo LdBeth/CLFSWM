@@ -1400,7 +1400,7 @@ For window: set current child to window or its parent according to window-parent
 	(reset-if-moved x y)
 	(setf minx x)
 	(add-in-history x y)
-	(setf lx (middle minx (or maxx 1280)))
+	(setf lx (middle minx (or maxx (xlib:screen-width *screen*))))
 	(xlib:warp-pointer *root* lx y)))
     (defun speed-mouse-up ()
       (with-x-pointer
@@ -1414,7 +1414,7 @@ For window: set current child to window or its parent according to window-parent
 	(reset-if-moved x y)
 	(setf miny y)
 	(add-in-history x y)
-	(setf ly (middle miny (or maxy 800)))
+	(setf ly (middle miny (or maxy (xlib:screen-height *screen*))))
 	(xlib:warp-pointer *root* x ly)))
     (defun speed-mouse-undo ()
       (when history
