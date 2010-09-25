@@ -77,7 +77,7 @@ You can tweak this to what you want"
 (defparameter *corner-main-mode-left-button*
   '((:top-left open-menu)
     (:top-right present-virtual-keyboard)
-    (:bottom-right present-windows)
+    (:bottom-right expose-windows-mode)
     (:bottom-left nil))
   "Config(Corner group): Actions on corners in the main mode with the left mouse button")
 
@@ -91,14 +91,14 @@ You can tweak this to what you want"
 (defparameter *corner-main-mode-right-button*
   '((:top-left present-clfswm-terminal)
     (:top-right ask-close/kill-current-window)
-    (:bottom-right present-all-windows)
+    (:bottom-right expose-all-windows-mode)
     (:bottom-left nil))
   "Config(Corner group): Actions on corners in the main mode with the right mouse button")
 
 (defparameter *corner-second-mode-left-button*
   '((:top-left nil)
     (:top-right nil)
-    (:bottom-right present-windows)
+    (:bottom-right expose-windows-mode)
     (:bottom-left nil))
   "Config(Corner group): Actions on corners in the second mode with the left mouse button")
 
@@ -112,7 +112,7 @@ You can tweak this to what you want"
 (defparameter *corner-second-mode-right-button*
   '((:top-left nil)
     (:top-right nil)
-    (:bottom-right present-all-windows)
+    (:bottom-right expose-all-windows-mode)
     (:bottom-left nil))
   "Config(Corner group): Actions on corners in the second mode with the right mouse button")
 
