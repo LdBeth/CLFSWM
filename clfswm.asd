@@ -46,8 +46,10 @@
 			 (:file "clfswm-second-mode"
 				:depends-on ("package" "clfswm" "clfswm-internal" "clfswm-generic-mode"
 						       "clfswm-placement"))
+			 (:file "clfswm-expose-mode"
+				:depends-on ("package" "config" "clfswm-internal" "xlib-util" "tools"))
 			 (:file "clfswm-corner"
-				:depends-on ("package" "config" "clfswm-internal"))
+				:depends-on ("package" "config" "clfswm-internal" "clfswm-expose-mode" "xlib-util"))
 			 (:file "clfswm-info"
 				:depends-on ("package" "version" "xlib-util" "config" "clfswm-keys" "clfswm" "clfswm-internal"
 						       "clfswm-autodoc" "clfswm-corner"

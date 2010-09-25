@@ -1,5 +1,8 @@
 2010-09-25  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-expose-mode.lisp: Move and rename present*-windows in
+	a separate clfswm-expose-mode.lisp file.
+
 	* src/clfswm-util.lisp (speed-mouse-right, speed-mouse-down): Use
 	screen size instead of hardcoded test coordinates.
 

@@ -65,7 +65,8 @@
 (define-init-hash-table-key *circulate-keys* "Circulate mode keys")
 (define-init-hash-table-key *circulate-keys-release* "Circulate mode release keys")
 
-
+(define-init-hash-table-key *expose-keys* "Expose windows mode keys")
+(define-init-hash-table-key *expose-mouse* "Mouse buttons actions in expose windows mode")
 
 (defun unalias-modifiers (list)
   (dolist (mod *modifier-alias*)
@@ -122,9 +123,12 @@
 (define-define-key "circulate" *circulate-keys*)
 (define-define-key "circulate-release" *circulate-keys-release*)
 
+(define-define-key "expose" *expose-keys*)
+
 (define-define-mouse "main-mouse" *main-mouse*)
 (define-define-mouse "second-mouse" *second-mouse*)
 (define-define-mouse "info-mouse" *info-mouse*)
+(define-define-mouse "expose" *expose-mouse*)
 
 
 

@@ -73,44 +73,6 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
 ;;;***************************************;;;
 ;;; CONFIG - Corner actions definitions:  ;;;
 ;;;***************************************;;;
-
-(defmacro present-windows-generic ((first-restore-frame) &body body)
-  `(progn
-     (with-all-frames (,first-restore-frame frame)
-       (setf (frame-data-slot frame :old-layout) (frame-layout frame)
-	     (frame-layout frame) #'tile-space-layout))
-     (show-all-children *current-root*)
-     (wait-no-key-or-button-press)
-     (wait-a-key-or-button-press )
-     (wait-no-key-or-button-press)
-     (multiple-value-bind (x y) (xlib:query-pointer *root*)
-       (let* ((child (find-child-under-mouse x y))
-	      (parent (find-parent-frame child *root-frame*)))
-	 (when (and child parent)
-	   ,@body
-	   (focus-all-children child parent))))
-     (with-all-frames (,first-restore-frame frame)
-       (setf (frame-layout frame) (frame-data-slot frame :old-layout)
-	     (frame-data-slot frame :old-layout) nil))
-     (show-all-children *current-root*)))
-
-(defun present-windows ()
-  "Present all windows in the current frame (An expose like)"
-  (stop-button-event)
-  (present-windows-generic (*current-root*))
-  t)
-
-(defun present-all-windows ()
-  "Present all windows in all frames (An expose like)"
-  (stop-button-event)
-  (switch-to-root-frame :show-later t)
-  (present-windows-generic (*root-frame*)
-    (hide-all-children *root-frame*)
-    (setf *current-root* parent))
-  t)
-
-
-
 (defun find-window-in-query-tree (target-win)
   (dolist (win (xlib:query-tree *root*))
     (when (child-equal-p win target-win)

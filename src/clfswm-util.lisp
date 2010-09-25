@@ -1377,7 +1377,7 @@ For window: set current child to window or its parent according to window-parent
   (leave-second-mode))
 
 
-;;; Speed mouse movement
+;;; Speed mouse movement.
 (let (minx miny maxx maxy history lx ly)
   (labels ((middle (x1 x2)
 	     (round (/ (+ x1 x2) 2)))

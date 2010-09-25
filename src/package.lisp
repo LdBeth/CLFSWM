@@ -161,6 +161,8 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defparameter *query-keys* nil)
 (defparameter *circulate-keys* nil)
 (defparameter *circulate-keys-release* nil)
+(defparameter *expose-keys* nil)
+(defparameter *expose-mouse* nil)
 
 
 (defparameter *other-window-manager* nil)
