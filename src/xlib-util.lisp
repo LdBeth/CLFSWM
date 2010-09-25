@@ -101,11 +101,19 @@ Window types are in +WINDOW-TYPES+.")
 	  (values (intern (string-upcase (subseq name (+ pos-mod 5))) :keyword)
 		  (subseq name (length "handle-event-fun-") (1- pos-mod))))))))
 
+(defparameter *handle-event-fun-symbols* nil)
+
+(defun fill-handle-event-fun-symbols ()
+  (with-all-internal-symbols (symbol :clfswm)
+    (let ((pos (symbol-search "handle-event-fun-" symbol)))
+      (when (and pos (zerop pos))
+	(pushnew symbol *handle-event-fun-symbols*)))))
+
 
 (defmacro with-handle-event-symbol ((mode) &body body)
   "Bind symbol to all handle event functions available in mode"
   `(let ((pattern (format nil "handle-event-fun-~A" ,mode)))
-     (with-all-internal-symbols (symbol :clfswm)
+     (dolist (symbol *handle-event-fun-symbols*)
        (let ((pos (symbol-search pattern symbol)))
 	 (when (and pos (zerop pos))
 	   ,@body)))))

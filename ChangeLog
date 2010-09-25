@@ -1,5 +1,9 @@
 2010-09-25  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/xlib-util.lisp (with-handle-event-symbol): Use a filled list
+	with handle-event-fun symbols instead of inspecting clfswm
+	internals symbols on each mode change.
+
 	* src/clfswm-expose-mode.lisp: Move and rename present*-windows in
 	a separate clfswm-expose-mode.lisp file.
 

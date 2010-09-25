@@ -45,12 +45,12 @@
   (show-all-children *current-root*)
   t)
 
-(defun expose-windows ()
+(defun expose-windows-mode ()
   "Present all windows in the current frame (An expose like)"
   (stop-button-event)
   (expose-windows-generic *current-root* nil))
 
-(defun expose-all-windows ()
+(defun expose-all-windows-mode ()
   "Present all windows in all frames (An expose like)"
   (stop-button-event)
   (switch-to-root-frame :show-later t)

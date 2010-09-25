@@ -148,8 +148,8 @@
   (define-second-key ("F10" :shift) 'show-all-frames-info-key)
   (define-second-key ("F10" :shift :mod-1) 'show-all-frames-info)
   (define-second-key ("F10" :shift :control) 'toggle-show-root-frame)
-  (define-second-key ("F10") 'expose-windows)
-  (define-second-key ("F10" :control) 'expose-all-windows)
+  (define-second-key ("F10") 'expose-windows-mode)
+  (define-second-key ("F10" :control) 'expose-all-windows-mode)
   ;; Bind or jump functions
   (define-second-key ("1" :mod-1) 'bind-or-jump 1)
   (define-second-key ("2" :mod-1) 'bind-or-jump 2)

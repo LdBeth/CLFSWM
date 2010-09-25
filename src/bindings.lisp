@@ -62,8 +62,8 @@
   (define-main-key ("F10" :shift) 'show-all-frames-info-key)
   (define-main-key ("F10" :shift :mod-1) 'show-all-frames-info)
   (define-main-key ("F10" :shift :control) 'toggle-show-root-frame)
-  (define-main-key ("F10") 'expose-windows)
-  (define-main-key ("F10" :control) 'expose-all-windows)
+  (define-main-key ("F10") 'expose-windows-mode)
+  (define-main-key ("F10" :control) 'expose-all-windows-mode)
   (define-main-key (#\b :mod-1) 'banish-pointer)
   ;; Escape
   (define-main-key ("Escape" :control) 'ask-close/kill-current-window)
