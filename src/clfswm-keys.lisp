@@ -128,7 +128,7 @@
 (define-define-mouse "main-mouse" *main-mouse*)
 (define-define-mouse "second-mouse" *second-mouse*)
 (define-define-mouse "info-mouse" *info-mouse*)
-(define-define-mouse "expose" *expose-mouse*)
+(define-define-mouse "expose-mouse" *expose-mouse*)
 
 
 

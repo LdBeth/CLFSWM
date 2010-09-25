@@ -208,7 +208,7 @@
 
 (defmethod tile-layout (child parent)
   (let* ((managed-children (update-layout-managed-children child parent))
-	 (pos (position child managed-children))
+	 (pos (child-position child managed-children))
 	 (len (length managed-children))
 	 (n (ceiling (sqrt len)))
 	 (dx (/ (frame-rw parent) n))
@@ -231,7 +231,7 @@
 
 (defmethod tile-horizontal-layout (child parent)
   (let* ((managed-children (update-layout-managed-children child parent))
-	 (pos (position child managed-children))
+	 (pos (child-position child managed-children))
 	 (len (length managed-children))
 	 (n (ceiling (sqrt len)))
 	 (dx (/ (frame-rw parent) (ceiling (/ len n))))
@@ -254,7 +254,7 @@
 
 (defmethod one-column-layout (child parent)
   (let* ((managed-children (update-layout-managed-children child parent))
-	 (pos (position child managed-children))
+	 (pos (child-position child managed-children))
 	 (len (length managed-children))
 	 (dy (/ (frame-rh parent) len)))
     (values (round (+ (frame-rx parent) 1))
@@ -274,7 +274,7 @@
 
 (defmethod one-line-layout (child parent)
   (let* ((managed-children (update-layout-managed-children child parent))
-	 (pos (position child managed-children))
+	 (pos (child-position child managed-children))
 	 (len (length managed-children))
 	 (dx (/ (frame-rw parent) len)))
     (values (round (+ (frame-rx parent) (*  pos dx) 1))
@@ -296,13 +296,14 @@
   "Tile Space: tile child in its frame leaving spaces between them"
   (with-slots (rx ry rw rh) parent
     (let* ((managed-children (get-managed-child parent))
-	   (pos (position child managed-children))
+	   (pos (child-position child managed-children))
 	   (len (length managed-children))
 	   (n (ceiling (sqrt len)))
 	   (dx (/ rw n))
 	   (dy (/ rh (ceiling (/ len n))))
 	   (size (or (frame-data-slot parent :tile-space-size) 0.1)))
       (when (> size 0.5) (setf size 0.45))
+      (dbg pos len n dx dy size)  ;; PHIL here
       (values (round (+ rx (truncate (* (mod pos n) dx)) (* dx size) 1))
 	      (round (+ ry (truncate (* (truncate (/ pos n)) dy)) (* dy size) 1))
 	      (round (- dx (* dx size 2) 2))
@@ -332,7 +333,7 @@
   "Tile Left: main child on left and others on right"
   (with-slots (rx ry rw rh) parent
     (let* ((managed-children (get-managed-child parent))
-	   (pos (position child managed-children))
+	   (pos (child-position child managed-children))
 	   (len (max (1- (length managed-children)) 1))
 	   (dy (/ rh len))
 	   (size (or (frame-data-slot parent :tile-size) 0.8)))
@@ -361,7 +362,7 @@
   "Tile Right: main child on right and others on left"
   (with-slots (rx ry rw rh) parent
     (let* ((managed-children (get-managed-child parent))
-	   (pos (position child managed-children))
+	   (pos (child-position child managed-children))
 	   (len (max (1- (length managed-children)) 1))
 	   (dy (/ rh len))
 	   (size (or (frame-data-slot parent :tile-size) 0.8)))
@@ -393,7 +394,7 @@
   "Tile Top: main child on top and others on bottom"
   (with-slots (rx ry rw rh) parent
     (let* ((managed-children (get-managed-child parent))
-	   (pos (position child managed-children))
+	   (pos (child-position child managed-children))
 	   (len (max (1- (length managed-children)) 1))
 	   (dx (/ rw len))
 	   (size (or (frame-data-slot parent :tile-size) 0.8)))
@@ -423,7 +424,7 @@
   "Tile Bottom: main child on bottom and others on top"
   (with-slots (rx ry rw rh) parent
     (let* ((managed-children (get-managed-child parent))
-	   (pos (position child managed-children))
+	   (pos (child-position child managed-children))
 	   (len (max (1- (length managed-children)) 1))
 	   (dx (/ rw len))
 	   (size (or (frame-data-slot parent :tile-size) 0.8)))
@@ -469,7 +470,7 @@
   "Tile Left Space: main child on left and others on right. Leave some space on the left."
   (with-slots (rx ry rw rh) parent
     (let* ((managed-children (get-managed-child parent))
-	   (pos (position child managed-children))
+	   (pos (child-position child managed-children))
 	   (len (max (1- (length managed-children)) 1))
 	   (dy (/ rh len))
 	   (size (or (frame-data-slot parent :tile-size) 0.8))
@@ -517,7 +518,7 @@
 	  (no-layout child parent)
 	  (if (child-member child main-windows)
 	      (let* ((dy (/ rh len))
-		     (pos (position child main-windows)))
+		     (pos (child-position child main-windows)))
 		(values (1+ (round (+ rx (* rw (- 1 size)))))
 			(1+ (round (+ ry (* dy pos))))
 			(- (round (* rw size)) 2)
@@ -545,7 +546,7 @@
 	  (no-layout child parent)
 	  (if (child-member child main-windows)
 	      (let* ((dy (/ rh len))
-		     (pos (position child main-windows)))
+		     (pos (child-position child main-windows)))
 		(values (1+ rx)
 			(1+ (round (+ ry (* dy pos))))
 			(- (round (* rw size)) 2)
@@ -572,7 +573,7 @@
 	  (no-layout child parent)
 	  (if (child-member child main-windows)
 	      (let* ((dx (/ rw len))
-		     (pos (position child main-windows)))
+		     (pos (child-position child main-windows)))
 		(values (1+ (round (+ rx (* dx pos))))
 			(1+ ry)
 			(- (round dx) 2)
@@ -599,7 +600,7 @@
 	  (no-layout child parent)
 	  (if (child-member child main-windows)
 	      (let* ((dx (/ rw len))
-		     (pos (position child main-windows)))
+		     (pos (child-position child main-windows)))
 		(values (1+ (round (+ rx (* dx pos))))
 			(1+ (round (+ ry (* rh (- 1 size)))))
 			(- (round dx) 2)

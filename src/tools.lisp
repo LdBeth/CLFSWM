@@ -120,8 +120,9 @@
     (funcall function)))
 
 (defun pfuncall (function &rest args)
-  (when (or (functionp function)
-	    (and (symbolp function) (fboundp function)))
+  (when (and function
+	     (or (functionp function)
+		 (and (symbolp function) (fboundp function))))
     (apply function args)))
 
 

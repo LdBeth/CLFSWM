@@ -1387,8 +1387,10 @@ For window: set current child to window or its parent according to window-parent
 	   (add-in-history (x y)
 	     (push (list x y) history)))
     (defun speed-mouse-reset ()
+      "Reset speed mouse coordinates"
       (setf minx nil miny nil maxx nil maxy nil history nil lx nil ly nil))
     (defun speed-mouse-left ()
+      "Speed move mouse to left"
       (with-x-pointer
 	(reset-if-moved x y)
 	(setf maxx x)
@@ -1396,6 +1398,7 @@ For window: set current child to window or its parent according to window-parent
 	(setf lx (middle (or minx 0) maxx))
 	(xlib:warp-pointer *root* lx y)))
     (defun speed-mouse-right ()
+      "Speed move mouse to right"
       (with-x-pointer
 	(reset-if-moved x y)
 	(setf minx x)
@@ -1403,6 +1406,7 @@ For window: set current child to window or its parent according to window-parent
 	(setf lx (middle minx (or maxx (xlib:screen-width *screen*))))
 	(xlib:warp-pointer *root* lx y)))
     (defun speed-mouse-up ()
+      "Speed move mouse to up"
       (with-x-pointer
 	(reset-if-moved x y)
 	(setf maxy y)
@@ -1410,6 +1414,7 @@ For window: set current child to window or its parent according to window-parent
 	(setf ly (middle (or miny 0) maxy))
 	(xlib:warp-pointer *root* x ly)))
     (defun speed-mouse-down ()
+      "Speed move mouse to down"
       (with-x-pointer
 	(reset-if-moved x y)
 	(setf miny y)
@@ -1417,6 +1422,7 @@ For window: set current child to window or its parent according to window-parent
 	(setf ly (middle miny (or maxy (xlib:screen-height *screen*))))
 	(xlib:warp-pointer *root* x ly)))
     (defun speed-mouse-undo ()
+      "Undo last speed mouse move"
       (when history
 	(let ((h (pop history)))
 	  (when h
@@ -1426,6 +1432,7 @@ For window: set current child to window or its parent according to window-parent
 		    miny nil  maxy nil)
 	      (xlib:warp-pointer *root* lx ly))))))
     (defun speed-mouse-first-history ()
+      "Revert to the first speed move mouse"
       (when history
 	(let ((h (first (last history))))
 	  (when h

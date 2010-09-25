@@ -102,7 +102,7 @@
   nil)
 
 
-(declaim (inline child-member child-remove))
+(declaim (inline child-member child-remove child-position))
 
 (defun child-member (child list)
   (member child list :test #'child-equal-p))
@@ -110,6 +110,8 @@
 (defun child-remove (child list)
   (remove child list :test #'child-equal-p))
 
+(defun child-position (child list)
+  (position child list :test #'child-equal-p))
 
 
 

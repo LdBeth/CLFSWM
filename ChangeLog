@@ -1,5 +1,12 @@
 2010-09-25  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-layout.lisp (*-layout): Use child-position.
+
+	* src/clfswm-internal.lisp (child-position): New function.
+
+	* src/clfswm-expose-mode.lisp (expose-windows-mode)
+	(expose-all-windows-mode): Use a generic mode.
+
 	* src/xlib-util.lisp (with-handle-event-symbol): Use a filled list
 	with handle-event-fun symbols instead of inspecting clfswm
 	internals symbols on each mode change.
