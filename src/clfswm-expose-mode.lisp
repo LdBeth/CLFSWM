@@ -160,13 +160,14 @@
 	  (when (and child parent)
 	    (pfuncall body parent)
 	    (focus-all-children child parent)))))
-    (when *expose-font*
-      (xlib:close-font *expose-font*))
     (dolist (lwin *expose-windows-list*)
       (awhen (first lwin)
 	(xlib:destroy-window it))
       (awhen (second lwin)
-	(xlib:free-gcontext it)))
+	     (xlib:free-gcontext it)))
+    (when *expose-font*
+      (xlib:close-font *expose-font*))
+    (setf *expose-windows-list* nil)
     (with-all-frames (first-restore-frame frame)
       (setf (frame-layout frame) (frame-data-slot frame :old-layout)
 	    (frame-data-slot frame :old-layout) nil))

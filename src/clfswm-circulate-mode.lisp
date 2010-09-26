@@ -160,6 +160,7 @@
     (xlib:close-font *circulate-font*))
   (xlib:display-finish-output *display*)
   (setf *circulate-window* nil
+	*circulate-gc* nil
 	*circulate-font* nil))
 
 (defun circulate-loop-function ()
