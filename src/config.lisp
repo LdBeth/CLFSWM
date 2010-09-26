@@ -263,6 +263,19 @@ on the root window in the main mode with the mouse")
   "Config(Circulate mode group): Maximum text limite in the circulate window")
 
 
+;;; CONFIG - Expose string colors
+(defparameter *expose-font-string* *default-font-string*
+  "Config(Expose mode group): Expose string window font string")
+(defparameter *expose-background* "black"
+  "Config(Expose mode group): Expose string window background color")
+(defparameter *expose-foreground* "green"
+  "Config(Expose mode group): Expose string window foreground color")
+(defparameter *expose-border* "red"
+  "Config(Expose mode group): Expose string window border color")
+(defparameter *expose-valid-on-key* t
+  "Config(Expose mode group): Valid expose mode when an accel key is pressed")
+
+
 
 ;;; CONFIG - Show key binding colors
 (defparameter *info-color-title* "Magenta"

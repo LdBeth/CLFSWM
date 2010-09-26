@@ -197,6 +197,32 @@
   "???")
 
 
+(defgeneric child-x (child))
+(defmethod child-x ((child xlib:window))
+  (xlib:drawable-x child))
+(defmethod child-x ((child frame))
+  (frame-rx child))
+
+(defgeneric child-y (child))
+(defmethod child-y ((child xlib:window))
+  (xlib:drawable-y child))
+(defmethod child-y ((child frame))
+  (frame-ry child))
+
+(defgeneric child-width (child))
+(defmethod child-width ((child xlib:window))
+  (xlib:drawable-width child))
+(defmethod child-width ((child frame))
+  (frame-rw child))
+
+(defgeneric child-height (child))
+(defmethod child-height ((child xlib:window))
+  (xlib:drawable-height child))
+(defmethod child-height ((child frame))
+  (frame-rh child))
+
+
+
 
 
 (defgeneric rename-child (child name))
@@ -226,6 +252,18 @@
 		,@body
 		(when (frame-p ,child)
 		  (dolist (,sub-child (reverse (frame-child ,child)))
+		    (,rec ,sub-child)))))
+       (,rec ,root))))
+
+
+;; (with-all-children (*root-frame* child) (typecase child (xlib:window (print child)) (frame (print (frame-number child)))))
+(defmacro with-all-children-reversed ((root child) &body body)
+  (let ((rec (gensym))
+	(sub-child (gensym)))
+    `(labels ((,rec (,child)
+		,@body
+		(when (frame-p ,child)
+		  (dolist (,sub-child (frame-child ,child))
 		    (,rec ,sub-child)))))
        (,rec ,root))))
 
@@ -450,22 +488,23 @@
       (let ((pos dy))
 	(when (child-equal-p frame *current-root*)
 	  (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
-			    (format nil "~A hidden windows" (length (get-hidden-windows))))
+			    (format nil "  ~A hidden windows" (length (get-hidden-windows))))
 	  (when *child-selection*
 	    (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
 			      (with-output-to-string (str)
-				(format str "Selection: ")
+				(format str "  Selection: ")
 				(dolist (child *child-selection*)
 				  (typecase child
-				    (xlib:window (format str "~A " (xlib:wm-name child)))
-				    (frame (format str "frame:~A[~A] " (frame-number child)
+				    (xlib:window (format str "  ~A " (xlib:wm-name child)))
+				    (frame (format str "  frame:~A[~A] " (frame-number child)
 						   (aif (frame-name child) it "")))))))))
 	(dolist (ch child)
-	  (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy) (ensure-printable (child-fullname ch))))
+	  (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
+			    (format nil "  ~A" (ensure-printable (child-fullname ch)))))
 	(setf (xlib:gcontext-foreground gc) (get-color *frame-foreground-hidden*))
 	(dolist (ch hidden-children)
 	  (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
-			    (format nil "~A - hidden" (ensure-printable (child-fullname ch))))))
+			    (format nil "  ~A - hidden" (ensure-printable (child-fullname ch))))))
       (copy-pixmap-buffer window gc))))
 
 

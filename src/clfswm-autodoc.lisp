@@ -85,7 +85,7 @@ or<br> CLFSWM> (produce-all-docs)"))))
   (with-open-file (stream filename :direction :output
 			  :if-exists :supersede :if-does-not-exist :create)
     (produce-doc-html (list *main-keys* *main-mouse* *second-keys* *second-mouse*
-			    *info-keys* *info-mouse*)
+			    *info-keys* *info-mouse* *circulate-keys* *expose-keys* *expose-mouse*)
 		      stream))
   (format t " done~%"))
 
@@ -126,7 +126,7 @@ CLFSWM> (produce-all-docs)~2%"))
   (with-open-file (stream filename :direction :output
 			  :if-exists :supersede :if-does-not-exist :create)
     (produce-doc (list *main-keys* *main-mouse* *second-keys* *second-mouse*
-		       *info-keys* *info-mouse*)
+		       *info-keys* *info-mouse* *circulate-keys* *expose-keys* *expose-mouse*)
 		 stream))
   (format t " done~%"))
 

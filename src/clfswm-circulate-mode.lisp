@@ -152,6 +152,8 @@
 
 
 (defun circulate-leave-function ()
+  (when *circulate-gc*
+    (xlib:free-gcontext *circulate-gc*))
   (when *circulate-window*
     (xlib:destroy-window *circulate-window*))
   (when *circulate-font*

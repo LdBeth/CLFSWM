@@ -1,3 +1,12 @@
+2010-09-26  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-expose-mode.lisp (expose-mode-display-accel-windows):
+	New functions. Add a window on each child in the expose mode to
+	quickly select them.
+
+	* src/clfswm-internal.lisp (child-x, child-y, child-width)
+	(child-height): New methods to get real child coordinates.
+
 2010-09-25  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-layout.lisp (*-layout): Use child-position.

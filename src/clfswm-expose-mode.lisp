@@ -25,6 +25,9 @@
 
 (in-package :clfswm)
 
+(defparameter *expose-font* nil)
+(defparameter *expose-windows-list* nil)
+
 (defun leave-expose-mode ()
   "Leave the expose mode"
   (throw 'exit-expose-loop nil))
@@ -50,6 +53,8 @@
 (define-handler expose-mode :button-press (code state window root-x root-y)
   (funcall-button-from-code *expose-mouse* code state window root-x root-y *fun-press*))
 
+(define-handler expose-mode :exposure ()
+  (expose-draw-letter))
 
 
 (add-hook *binding-hook* 'set-default-expose-keys)
@@ -73,33 +78,95 @@
   (define-expose-mouse (2) 'mouse-leave-expose-mode)
   (define-expose-mouse (3) 'mouse-leave-expose-mode))
 
+(defmacro define-expose-letter-keys ()
+  (labels ((produce-name (n)
+	     (symb "%" "expose-fun-key-" n "%")))
+    `(progn
+       ,@(loop for n from 0 to 25
+	    collect `(progn
+		       (defun ,(produce-name n) ()
+			 ,(format nil "Select child '~A' (~A)" (number->char n) n)
+			 (let ((child (nth ,n *expose-windows-list*)))
+			   (when child
+			     (xlib:warp-pointer *root* (xlib:drawable-x (first child)) (xlib:drawable-y (first child)))
+			     (when *expose-valid-on-key*
+			       (valid-expose-mode)))))
+		       (define-expose-key (,(number->char n)) ',(produce-name n)))))))
 
+(define-expose-letter-keys)
+
+
+(defun expose-draw-letter ()
+  (loop for lwin in *expose-windows-list*
+       for n from 0 do
+       (xlib:draw-glyphs (first lwin) (second lwin)
+			 (xlib:max-char-width *expose-font*)
+			 (+ (xlib:font-ascent *expose-font*) (xlib:font-descent *expose-font*))
+			 (format nil "~A" (number->char n)))))
+
+(defun expose-create-window (child n)
+  (declare (ignore n))
+  (with-placement (*expose-mode-placement* x y (child-width child) (child-height child))
+    (let* ((window (xlib:create-window :parent *root*
+				       :x (+ (child-x child) x)
+				       :y (+ (child-y child) y)
+				       :width (* (xlib:max-char-width *expose-font*) 3)
+				       :height (* (xlib:font-ascent *expose-font*) 2)
+				       :background (get-color *expose-background*)
+				       :border-width 1
+				       :border (get-color *expose-border*)
+				       :colormap (xlib:screen-default-colormap *screen*)
+				       :event-mask '(:exposure :key-press)))
+	   (gc (xlib:create-gcontext :drawable window
+				     :foreground (get-color *expose-foreground*)
+				     :background (get-color *expose-background*)
+				     :font *expose-font*
+				     :line-style :solid)))
+      (map-window window)
+      (push (list window gc) *expose-windows-list*))))
+
+
+
+(defun expose-mode-display-accel-windows ()
+  (let ((n -1))
+    (with-all-children-reversed (*current-root* child)
+      (when (< n 25)
+	(expose-create-window child (incf n)))))
+  (setf *expose-windows-list* (nreverse *expose-windows-list*))
+  (expose-draw-letter))
 
 
 (defun expose-windows-generic (first-restore-frame body)
+  (setf *expose-font* (xlib:open-font *display* *expose-font-string*)
+	*expose-windows-list* nil)
   (xlib:warp-pointer *root* (truncate (/ (xlib:screen-width *screen*) 2))
 		     (truncate (/ (xlib:screen-height *screen*) 2)))
   (with-all-frames (first-restore-frame frame)
     (setf (frame-data-slot frame :old-layout) (frame-layout frame)
 	  (frame-layout frame) #'tile-space-layout))
   (show-all-children *current-root*)
-  (dbg 'ici)
+  (expose-mode-display-accel-windows)
   (let ((grab-keyboard-p (xgrab-keyboard-p))
 	(grab-pointer-p (xgrab-pointer-p)))
     (xgrab-pointer *root* 92 93)
     (unless grab-keyboard-p
       (ungrab-main-keys)
       (xgrab-keyboard *root*))
-    (dbg 'ici-2)
     (when (generic-mode 'expose-mode 'exit-expose-loop
 			:original-mode '(main-mode))
-      (dbg 'ici-3)
       (multiple-value-bind (x y) (xlib:query-pointer *root*)
 	(let* ((child (find-child-under-mouse x y))
 	       (parent (find-parent-frame child *root-frame*)))
 	  (when (and child parent)
 	    (pfuncall body parent)
 	    (focus-all-children child parent)))))
+    (when *expose-font*
+      (xlib:close-font *expose-font*))
+    (dolist (lwin *expose-windows-list*)
+      (awhen (first lwin)
+	(xlib:destroy-window it))
+      (awhen (second lwin)
+	(xlib:free-gcontext it)))
     (with-all-frames (first-restore-frame frame)
       (setf (frame-layout frame) (frame-data-slot frame :old-layout)
 	    (frame-data-slot frame :old-layout) nil))

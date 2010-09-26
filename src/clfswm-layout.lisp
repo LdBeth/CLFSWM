@@ -303,7 +303,6 @@
 	   (dy (/ rh (ceiling (/ len n))))
 	   (size (or (frame-data-slot parent :tile-space-size) 0.1)))
       (when (> size 0.5) (setf size 0.45))
-      (dbg pos len n dx dy size)  ;; PHIL here
       (values (round (+ rx (truncate (* (mod pos n) dx)) (* dx size) 1))
 	      (round (+ ry (truncate (* (truncate (/ pos n)) dy)) (* dy size) 1))
 	      (round (- dx (* dx size 2) 2))

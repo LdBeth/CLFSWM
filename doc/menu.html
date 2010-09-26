@@ -81,6 +81,105 @@
     <p>
       v: Show the current CLFSWM version
     </p>
+    <p>
+      F2: <a href="#MPD-MENU">< Music Player Daemon (MPD) menu ></a>
+    </p>
+    <p>
+      x: <a href="#XMMS-MENU">< XMMS menu ></a>
+    </p>
+    <p>
+      i: <a href="#CDPLAYER-MENU">< CDPLAYER menu ></a>
+    </p>
+    <hr>
+    <h3>
+      <a name="MPD-MENU"></a><a href="#HELP-MENU">Mpd-Menu</a>
+    </h3>
+    <p>
+      i: Show MPD informations
+    </p>
+    <p>
+      p: Play the previous song in the current playlist
+    </p>
+    <p>
+      n: Play the next song in the current playlist
+    </p>
+    <p>
+      t: Toggles Play/Pause, plays if stopped
+    </p>
+    <p>
+      y: Start playing
+    </p>
+    <p>
+      k: Stop the currently playing playlists
+    </p>
+    <p>
+      x: Seeks to +5%
+    </p>
+    <p>
+      w: Seeks to -5%
+    </p>
+    <p>
+      l: Show the current MPD playlist
+    </p>
+    <p>
+      s: Start sonata
+    </p>
+    <p>
+      g: Start gmpc
+    </p>
+    <hr>
+    <h3>
+      <a name="XMMS-MENU"></a><a href="#HELP-MENU">Xmms-Menu</a>
+    </h3>
+    <p>
+      r: Lanch XMMS
+    </p>
+    <p>
+      s: Show the current xmms status
+    </p>
+    <p>
+      l: Show the current xmms playlist
+    </p>
+    <p>
+      n: Play the next XMMS track
+    </p>
+    <p>
+      p: Play the previous XMMS track
+    </p>
+    <p>
+      e: open xmms "Load file(s)" dialog window.
+    </p>
+    <hr>
+    <h3>
+      <a name="CDPLAYER-MENU"></a><a href="#HELP-MENU">Cdplayer-Menu</a>
+    </h3>
+    <p>
+      y: Start playing CD
+    </p>
+    <p>
+      k: Stop playing CD
+    </p>
+    <p>
+      t: Toggle pause
+    </p>
+    <p>
+      s: Show the current CD status
+    </p>
+    <p>
+      l: Show the current CD playlist
+    </p>
+    <p>
+      n: Play the next CD track
+    </p>
+    <p>
+      p: Play the previous CD track
+    </p>
+    <p>
+      e: Eject CD
+    </p>
+    <p>
+      c: Close CD
+    </p>
     <hr>
     <h3>
       <a name="STANDARD-MENU"></a><a href="#MAIN">Standard-Menu</a>
@@ -650,6 +749,9 @@
       |: SolarWolf
     </p>
     <p>
+      |: Spring - An open source RTS with similar gameplay to TA
+    </p>
+    <p>
       |: SuperTux 2 - Play a classic 2D platform game
     </p>
     <p>
@@ -1168,6 +1270,9 @@
       |: Disk Utility - Manage Drives and Media
     </p>
     <p>
+      |: rxvt-unicode - An Unicode capable rxvt clone
+    </p>
+    <p>
       |: UNetbootin - Tool for creating Live USB drives
     </p>
     <p>
@@ -1337,6 +1442,9 @@
       |: Scilab - A scientific software package for numerical computations
     </p>
     <p>
+      |: Tilda
+    </p>
+    <p>
       |: About Xfce
     </p>
     <p>
@@ -1399,6 +1507,12 @@
     </p>
     <p>
       d: LXTerminal - Use the command line
+    </p>
+    <p>
+      e: rxvt-unicode - An Unicode capable rxvt clone
+    </p>
+    <p>
+      f: Tilda
     </p>
     <hr>
     <h3>
@@ -2626,16 +2740,16 @@
       d: <a href="#CONF-IDENTIFY-KEY-GROUP">< Identify key group ></a>
     </p>
     <p>
-      e: <a href="#CONF-SECOND-MODE-GROUP">< Second mode group ></a>
+      e: <a href="#CONF-CORNER-GROUP">< Corner group ></a>
     </p>
     <p>
-      f: <a href="#CONF-CORNER-GROUP">< Corner group ></a>
+      f: <a href="#CONF-QUERY-STRING-GROUP">< Query string group ></a>
     </p>
     <p>
-      g: <a href="#CONF-QUERY-STRING-GROUP">< Query string group ></a>
+      g: <a href="#CONF-CIRCULATE-MODE-GROUP">< Circulate mode group ></a>
     </p>
     <p>
-      h: <a href="#CONF-CIRCULATE-MODE-GROUP">< Circulate mode group ></a>
+      h: <a href="#CONF-SECOND-MODE-GROUP">< Second mode group ></a>
     </p>
     <p>
       i: <a href="#CONF-PLACEMENT-GROUP">< Placement group ></a>
@@ -2715,28 +2829,6 @@
     </p>
     <hr>
     <h3>
-      <a name="CONF-SECOND-MODE-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Second-Mode-Group</a>
-    </h3>
-    <p>
-      a: Configure SM-BACKGROUND-COLOR
-    </p>
-    <p>
-      b: Configure SM-HEIGHT
-    </p>
-    <p>
-      c: Configure SM-WIDTH
-    </p>
-    <p>
-      d: Configure SM-FOREGROUND-COLOR
-    </p>
-    <p>
-      e: Configure SM-BORDER-COLOR
-    </p>
-    <p>
-      f: Configure SM-FONT-STRING
-    </p>
-    <hr>
-    <h3>
       <a name="CONF-CORNER-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Corner-Group</a>
     </h3>
     <p>
@@ -2774,10 +2866,10 @@
       <a name="CONF-QUERY-STRING-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Query-String-Group</a>
     </h3>
     <p>
-      a: Configure QUERY-FONT-STRING
+      a: Configure QUERY-BACKGROUND
     </p>
     <p>
-      b: Configure QUERY-BACKGROUND
+      b: Configure QUERY-FONT-STRING
     </p>
     <p>
       c: Configure QUERY-BORDER
@@ -2790,16 +2882,16 @@
       <a name="CONF-CIRCULATE-MODE-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Circulate-Mode-Group</a>
     </h3>
     <p>
-      a: Configure CIRCULATE-WIDTH
+      a: Configure CIRCULATE-BORDER
     </p>
     <p>
-      b: Configure CIRCULATE-TEXT-LIMITE
+      b: Configure CIRCULATE-WIDTH
     </p>
     <p>
-      c: Configure CIRCULATE-BORDER
+      c: Configure CIRCULATE-HEIGHT
     </p>
     <p>
-      d: Configure CIRCULATE-HEIGHT
+      d: Configure CIRCULATE-TEXT-LIMITE
     </p>
     <p>
       e: Configure CIRCULATE-FONT-STRING
@@ -2809,6 +2901,28 @@
     </p>
     <p>
       g: Configure CIRCULATE-FOREGROUND
+    </p>
+    <hr>
+    <h3>
+      <a name="CONF-SECOND-MODE-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Second-Mode-Group</a>
+    </h3>
+    <p>
+      a: Configure SM-FOREGROUND-COLOR
+    </p>
+    <p>
+      b: Configure SM-BACKGROUND-COLOR
+    </p>
+    <p>
+      c: Configure SM-HEIGHT
+    </p>
+    <p>
+      d: Configure SM-WIDTH
+    </p>
+    <p>
+      e: Configure SM-BORDER-COLOR
+    </p>
+    <p>
+      f: Configure SM-FONT-STRING
     </p>
     <hr>
     <h3>
@@ -2937,6 +3051,28 @@
     </p>
     <p>
       x: Exit clfswm
+    </p>
+    <p>
+      Pause: <a href="#REBOOT-HALT-MENU">< Suspend/Reboot/Halt menu ></a>
+    </p>
+    <hr>
+    <h3>
+      <a name="REBOOT-HALT-MENU"></a><a href="#CLFSWM-MENU">Reboot-Halt-Menu</a>
+    </h3>
+    <p>
+      -: Do nothing
+    </p>
+    <p>
+      s: Suspend the computer to RAM
+    </p>
+    <p>
+      d: Suspend the computer to DISK
+    </p>
+    <p>
+      r: Reboot the computer
+    </p>
+    <p>
+      h: Halt the computer
     </p>
     <hr>
     <p>
