@@ -1,50 +1,45 @@
 # -*- makefile -*-
-PROJECT_NAME=+PROJECT_NAME+
 DESTDIR=+DESTDIR+
-
-LISP=+LISP+
-EVAL_OPT=+EVAL_OPT+
-LOAD_OPT=+LOAD_OPT+
-EXT=+EXT+
-CORE=+CORE+
-
-all: build
-	@echo "ALL"
+BUILD_PATH=+BUILD_PATH+
 
 build:
 	@echo "Building"
-	$(LISP) $(CORE) $(EVAL_OPT) '(progn (pushnew :BUILD *features*) (load "load.lisp") (quit))'
+	chmod a+x $(BUILD_PATH)/clfswm
 	@echo ""
-	@echo "Type 'make install' to install $(PROJECT_NAME) in '$(DESTDIR)/bin/$(PROJECT_NAME)'"
+	@echo "Type 'make install' to install clfswm in '$(DESTDIR)/bin/clfswm'"
 	@echo ""
 
 install:
-	@echo "1) Installing: Creating directories"
-	mkdir -p $(DESTDIR)/lib/$(PROJECT_NAME)/src
-	mkdir -p $(DESTDIR)/lib/$(PROJECT_NAME)/contrib
 	mkdir -p $(DESTDIR)/bin
-	@echo "2) Installing: Copying files"
-	cp -R `pwd`/load.lisp $(DESTDIR)/lib/$(PROJECT_NAME)/
-	cp -R `pwd`/clfswm.asd $(DESTDIR)/lib/$(PROJECT_NAME)/
-	cp -R `pwd`/src/*.lisp  $(DESTDIR)/lib/$(PROJECT_NAME)/src
-	cp -R `pwd`/contrib/*   $(DESTDIR)/lib/$(PROJECT_NAME)/contrib
-	@sleep 1
-	cp -R `pwd`/src/*.$(EXT)  $(DESTDIR)/lib/$(PROJECT_NAME)/src
-	@echo "3) Installing: Creating starter script"
-	echo "#!/bin/sh" > $(DESTDIR)/bin/$(PROJECT_NAME)
-	echo "$(LISP) $(CORE) $(LOAD_OPT) $(DESTDIR)/lib/$(PROJECT_NAME)/load.lisp" >> $(DESTDIR)/bin/$(PROJECT_NAME)
-	chmod a+x $(DESTDIR)/bin/$(PROJECT_NAME)
+	rm -rf $(DESTDIR)/lib/clfswm/
+	mkdir -p $(DESTDIR)/lib/clfswm/src
+	mkdir -p $(DESTDIR)/share/doc/clfswm
+	cp $(BUILD_PATH)/clfswm $(DESTDIR)/bin
+	cp $(BUILD_PATH)/clfswm.asd $(DESTDIR)/lib/clfswm/
+	cp -R $(BUILD_PATH)/src/*.lisp $(DESTDIR)/lib/clfswm/src
+	cp -R $(BUILD_PATH)/contrib $(DESTDIR)/lib/clfswm/
+	cp -R $(BUILD_PATH)/doc/* $(DESTDIR)/share/doc/clfswm/
+	cp -R $(BUILD_PATH)/AUTHORS $(DESTDIR)/share/doc/clfswm/
+	cp -R $(BUILD_PATH)/COPYING $(DESTDIR)/share/doc/clfswm/
+	cp -R $(BUILD_PATH)/README $(DESTDIR)/share/doc/clfswm/
+	cp -R $(BUILD_PATH)/TODO $(DESTDIR)/share/doc/clfswm/
+	cp -R $(BUILD_PATH)/ChangeLog $(DESTDIR)/share/doc/clfswm/
 	@echo ""
-	@echo "$(PROJECT_NAME) has been installed in '$(DESTDIR)/bin/$(PROJECT_NAME)'"
+	@echo "clfswm has been installed in '$(DESTDIR)/bin/clfswm'"
 	@echo ""
 
 
 uninstall:
-	rm -rf $(DESTDIR)/bin/$(PROJECT_NAME)
-	rm -rf $(DESTDIR)/lib/$(PROJECT_NAME)/
+	rm -rf $(DESTDIR)/bin/clfswm
+	rm -rf $(DESTDIR)/lib/clfswm
+	rm -rf $(DESTDIR)/share/doc/clfswm
 
 clean:
 	find . \( -name "*~" -o -name "*.fas" -o -name "*.fasl" -o -name "*.lib" -o -name "*.lx32fsl" -o -name "*.x86f" \) -print0 | xargs -0 rm -f
 
 dist: clean
-	cd .. && tar czvf $(PROJECT_NAME)-`date +%y%m%d`.tar.gz $(PROJECT_NAME)
+	cd .. && tar czvf clfswm-`date +%y%m%d`.tar.gz clfswm
+
+
+distclean: clean
+	rm -f clfswm Makefile

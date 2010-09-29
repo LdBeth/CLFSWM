@@ -33,11 +33,12 @@
 
 
 no_start=no
-lisp=clisp
-lisp_opt=''
-dump_path="$XDG_CACHE_HOME/clfswm/"
-asdf_path="$(pwd)/contrib"
-clfswm_asd_path="$(pwd)"
+
+lisp=clisp   # +config+
+lisp_opt=''   # +config+
+dump_path="$XDG_CACHE_HOME/clfswm/"   # +config+
+clfswm_asd_path="$(pwd)"   # +config+
+asdf_path="$(pwd)/contrib"   # +config+
 
 tmp_dir=/tmp
 
@@ -45,15 +46,14 @@ tmp_dir=/tmp
 usage() {
 
     echo "$0 [options]
---
-n,no-start           don't start CLFSWM after image dump
-f,force              force image dump
-rebuild              same as -f,--force
-l,with-lisp          use <lisp> as the common lisp implementation [$lisp]
-o,lisp-opt           use <opt> as lisp option [$lisp_opt]
-d,dump-path          path to the dump directory [\$XDG_CACHE_HOME=$XDG_CACHE_HOME]
-with-clfswm          path to clfswm.asd file [$clfswm_asd_path]
-with-asdf            path to the asdf.lisp file [$asdf_path]"
+  -n, --no-start           don't start CLFSWM after image dump
+  -f, --force              force image dump
+  --rebuild                same as -f, --force
+  -l, --with-lisp          use <lisp> as the common lisp implementation [$lisp]
+  -o, --lisp-opt           use <opt> as lisp option [$lisp_opt]
+  -d, --dump-path          path to the dump directory [$dump_path]
+  --with-clfswm            path to clfswm.asd file [$clfswm_asd_path]
+  --with-asdf              path to the asdf.lisp file [$asdf_path]"
 
     exit 0
 }
@@ -65,7 +65,7 @@ die() {
 
 build_clisp ()
 {
-    clisp $lisp_opt -m 8MB -E ISO-8859-1 -q -i $asdf_path/asdf.lisp -x "(load \"$clfswm_asd_path/clfswm.asd\")
+    clisp $lisp_opt -m 8MB -E ISO-8859-1 -q -i "$asdf_path"/asdf.lisp -x "(load \"$clfswm_asd_path/clfswm.asd\")
                 (asdf:oos 'asdf:load-op :clfswm) \
        		(EXT:SAVEINITMEM \"$dump_image\" :INIT-FUNCTION (lambda () (clfswm:main) (quit)) :EXECUTABLE t :norc t)"
 }
@@ -101,8 +101,8 @@ build_ecl()
 	-eval "(load \"$clfswm_asd_path/clfswm.asd\")" \
 	-eval "(asdf:make-build :clfswm :type :program :monolithic t :move-here \".\" :prologue-code '(progn (require :asdf) (require :clx)))" \
 	-eval "(ext:quit 0)"
-    mv ./clfswm-mono $dump_image
-    echo $dump_image
+    mv ./clfswm-mono "$dump_image"
+    echo "$dump_image"
 }
 
 
@@ -152,45 +152,54 @@ then
     rm -f "$dump_image"
 fi
 
-if test ! -e "$dump_image" ||
-    (   for i in "$(dirname $(readlink $clfswm_asd_path/clfswm.asd))"/*.lisp
-        do  test "$dump_image" -ot "$i" && exit 1
-        done )
+clfswm_asd="$clfswm_asd_path"/clfswm.asd
+if test -L "$clfswm_asd_path"; then
+    clfswm_asd=$(readlink "$clfswm_asd")
+fi
+
+older_image=0
+for i in "$(dirname $clfswm_asd)"/src/*.lisp; do
+    test "$dump_image" -ot "$i" && older_image=1
+done
+
+if test ! -e "$dump_image" || test $older_image -eq 1
 then
-    test -x $(type -p $lisp) || die "$lisp can't be found."
-    test -e $clfswm_asd_path/clfswm.asd || die "can't find clfswm.asd in $clfswm_asd_path"
-    test -e $asdf_path/asdf.lisp || die "can't find asdf.lisp in $asdf_path"
+    echo "Image is nonexistent or older than sources. Rebuilding clfswm."
+    test -x $(type -p "$lisp") || die "$lisp can't be found."
+    test -e "$clfswm_asd_path"/clfswm.asd || die "can't find clfswm.asd in $clfswm_asd_path"
+    test -e "$asdf_path"/asdf.lisp || die "can't find asdf.lisp in $asdf_path"
 
     # Move clfswm sources to $tmp_dir if there is no write permission on $clfswm_asd_path
-    if test ! -w $clfswm_asd_path ; then
-	rm -rf $tmp_dir/clfswm-tmp
-	mkdir $tmp_dir/clfswm-tmp
-	cp -R $clfswm_asd_path/* $tmp_dir/clfswm-tmp
-	clfswm_asd_path=$tmp_dir/clfswm-tmp
-	asdf_path=$tmp_dir/clfswm-tmp/contrib
-	echo "* Note: No write access in sources, copying in $clfswm_asd_path"
+    if test ! -w "$clfswm_asd_path" ; then
+	echo "* Note: No write access in sources ($clfswm_asd_path),
+ -> copying in a writable directory ($tmp_dir/clfswm-tmp)"
+	rm -rf "$tmp_dir"/clfswm-tmp
+	mkdir "$tmp_dir"/clfswm-tmp
+	cp -R "$clfswm_asd_path"/* "$tmp_dir"/clfswm-tmp
+	clfswm_asd_path="$tmp_dir"/clfswm-tmp
+	asdf_path="$tmp_dir"/clfswm-tmp/contrib
     fi
 
     mkdir -p "$dump_path"
     mkdir -p "$dump_path/contrib"
-    eval build_$lisp
+    eval build_"$lisp"
     rm -rf "$dump_path/contrib"
     cp -R "$clfswm_asd_path/contrib/" "$dump_path/"
     rm -rf $(find "$dump_path/" -name "*svn")
 
-    rm -rf $tmp_dir/clfswm-tmp
+    rm -rf "$tmp_dir"/clfswm-tmp
 fi
 
 # Run the resulting image
 if test no = "$no_start"
 then
-    cd $dump_path
+    cd "$dump_path"
     case $lisp in
-	clisp ) $dump_image ;;
+	clisp ) "$dump_image" ;;
 	sbcl ) exec sbcl --core "$dump_image" ;;
 	cmucl ) exec cmucl -core "$dump_image" ;;
 	ccl ) exec ccl -I "$dump_image" ;;
-	ecl ) $dump_image -eval "(progn (clfswm:main) (ext:quit 0))" ;;
+	ecl ) "$dump_image" -eval "(progn (clfswm:main) (ext:quit 0))" ;;
 	*) echo "..." ;;
     esac
 else
