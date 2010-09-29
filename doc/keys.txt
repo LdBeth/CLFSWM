@@ -32,24 +32,16 @@ Main mode keys:
   Control              Escape          Close or kill the current window (ask before doing anything)
   Mod-1                T               Switch to editing mode
   Control              Less            Switch to editing mode
-  Mod-1                Ccedilla        Bind or jump to a slot (a frame or a window)
-  Mod-1                Underscore      Bind or jump to a slot (a frame or a window)
-  Mod-1                Egrave          Bind or jump to a slot (a frame or a window)
-  Mod-1                Minus           Bind or jump to a slot (a frame or a window)
-  Mod-1                Parenleft       Bind or jump to a slot (a frame or a window)
-  Mod-1                Quoteright      Bind or jump to a slot (a frame or a window)
-  Mod-1                Quotedbl        Bind or jump to a slot (a frame or a window)
-  Mod-1                Eacute          Bind or jump to a slot (a frame or a window)
-  Mod-1                Ampersand       Bind or jump to a slot (a frame or a window)
-                       Twosuperior     Move the pointer to the lower right corner of the screen
-  Mod-1                F2              Open the Music Player Daemon (MPD) menu
-  Mod-1                Agrave          Bind or jump to a slot (a frame or a window)
-                       Pause           Open the Reboot/Halt menu
-                       Control_r       Move the pointer to the lower right corner of the screen
-                       176             Raise the volume
-                       174             Lower the volume
-  Control              66              Present all windows in the current frame (An expose like)
-  Control Shift        66              Present all windows in all frames (An expose like)
+  Mod-1                1               Bind or jump to a slot (a frame or a window)
+  Mod-1                2               Bind or jump to a slot (a frame or a window)
+  Mod-1                3               Bind or jump to a slot (a frame or a window)
+  Mod-1                4               Bind or jump to a slot (a frame or a window)
+  Mod-1                5               Bind or jump to a slot (a frame or a window)
+  Mod-1                6               Bind or jump to a slot (a frame or a window)
+  Mod-1                7               Bind or jump to a slot (a frame or a window)
+  Mod-1                8               Bind or jump to a slot (a frame or a window)
+  Mod-1                9               Bind or jump to a slot (a frame or a window)
+  Mod-1                0               Bind or jump to a slot (a frame or a window)
 
 
 Mouse buttons actions in main mode:
@@ -135,19 +127,16 @@ Second mode keys:
   Control Shift        F10             Show/Hide the root frame
                        F10             Present all windows in the current frame (An expose like)
   Control              F10             Present all windows in all frames (An expose like)
-  Mod-1                Ccedilla        Bind or jump to a slot (a frame or a window)
-  Mod-1                Underscore      Bind or jump to a slot (a frame or a window)
-  Mod-1                Egrave          Bind or jump to a slot (a frame or a window)
-  Mod-1                Minus           Bind or jump to a slot (a frame or a window)
-  Mod-1                Parenleft       Bind or jump to a slot (a frame or a window)
-  Mod-1                Quoteright      Bind or jump to a slot (a frame or a window)
-  Mod-1                Quotedbl        Bind or jump to a slot (a frame or a window)
-  Mod-1                Eacute          Bind or jump to a slot (a frame or a window)
-  Mod-1                Ampersand       Bind or jump to a slot (a frame or a window)
-                       Twosuperior     Move the pointer to the lower right corner of the screen
-  Mod-1                Agrave          Bind or jump to a slot (a frame or a window)
-                       Space           start the file manager
-                       Z               start the web browser
+  Mod-1                1               Bind or jump to a slot (a frame or a window)
+  Mod-1                2               Bind or jump to a slot (a frame or a window)
+  Mod-1                3               Bind or jump to a slot (a frame or a window)
+  Mod-1                4               Bind or jump to a slot (a frame or a window)
+  Mod-1                5               Bind or jump to a slot (a frame or a window)
+  Mod-1                6               Bind or jump to a slot (a frame or a window)
+  Mod-1                7               Bind or jump to a slot (a frame or a window)
+  Mod-1                8               Bind or jump to a slot (a frame or a window)
+  Mod-1                9               Bind or jump to a slot (a frame or a window)
+  Mod-1                0               Bind or jump to a slot (a frame or a window)
 
 
 Mouse buttons actions in second mode:
@@ -214,6 +203,32 @@ Circulate mode keys:
 Expose windows mode keys:
 ------------------------
 
+                       A               Select child 'a' (0)
+                       B               Select child 'b' (1)
+                       C               Select child 'c' (2)
+                       D               Select child 'd' (3)
+                       E               Select child 'e' (4)
+                       F               Select child 'f' (5)
+                       G               Select child 'g' (6)
+                       H               Select child 'h' (7)
+                       I               Select child 'i' (8)
+                       J               Select child 'j' (9)
+                       K               Select child 'k' (10)
+                       L               Select child 'l' (11)
+                       M               Select child 'm' (12)
+                       N               Select child 'n' (13)
+                       O               Select child 'o' (14)
+                       P               Select child 'p' (15)
+                       Q               Select child 'q' (16)
+                       R               Select child 'r' (17)
+                       S               Select child 's' (18)
+                       T               Select child 't' (19)
+                       U               Select child 'u' (20)
+                       V               Select child 'v' (21)
+                       W               Select child 'w' (22)
+                       X               Select child 'x' (23)
+                       Y               Select child 'y' (24)
+                       Z               Select child 'z' (25)
                        Escape          Leave the expose mode
   Control              G               Leave the expose mode
   Mod-1                Escape          Leave the expose mode
@@ -228,7 +243,6 @@ Expose windows mode keys:
   Control              Left            Undo last speed mouse move
   Control              Up              Revert to the first speed move mouse
   Control              Down            Reset speed mouse coordinates
-                       A               Leave the expose mode
 
 
 Mouse buttons actions in expose windows mode:

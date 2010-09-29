@@ -81,105 +81,6 @@
     <p>
       v: Show the current CLFSWM version
     </p>
-    <p>
-      F2: <a href="#MPD-MENU">< Music Player Daemon (MPD) menu ></a>
-    </p>
-    <p>
-      x: <a href="#XMMS-MENU">< XMMS menu ></a>
-    </p>
-    <p>
-      i: <a href="#CDPLAYER-MENU">< CDPLAYER menu ></a>
-    </p>
-    <hr>
-    <h3>
-      <a name="MPD-MENU"></a><a href="#HELP-MENU">Mpd-Menu</a>
-    </h3>
-    <p>
-      i: Show MPD informations
-    </p>
-    <p>
-      p: Play the previous song in the current playlist
-    </p>
-    <p>
-      n: Play the next song in the current playlist
-    </p>
-    <p>
-      t: Toggles Play/Pause, plays if stopped
-    </p>
-    <p>
-      y: Start playing
-    </p>
-    <p>
-      k: Stop the currently playing playlists
-    </p>
-    <p>
-      x: Seeks to +5%
-    </p>
-    <p>
-      w: Seeks to -5%
-    </p>
-    <p>
-      l: Show the current MPD playlist
-    </p>
-    <p>
-      s: Start sonata
-    </p>
-    <p>
-      g: Start gmpc
-    </p>
-    <hr>
-    <h3>
-      <a name="XMMS-MENU"></a><a href="#HELP-MENU">Xmms-Menu</a>
-    </h3>
-    <p>
-      r: Lanch XMMS
-    </p>
-    <p>
-      s: Show the current xmms status
-    </p>
-    <p>
-      l: Show the current xmms playlist
-    </p>
-    <p>
-      n: Play the next XMMS track
-    </p>
-    <p>
-      p: Play the previous XMMS track
-    </p>
-    <p>
-      e: open xmms "Load file(s)" dialog window.
-    </p>
-    <hr>
-    <h3>
-      <a name="CDPLAYER-MENU"></a><a href="#HELP-MENU">Cdplayer-Menu</a>
-    </h3>
-    <p>
-      y: Start playing CD
-    </p>
-    <p>
-      k: Stop playing CD
-    </p>
-    <p>
-      t: Toggle pause
-    </p>
-    <p>
-      s: Show the current CD status
-    </p>
-    <p>
-      l: Show the current CD playlist
-    </p>
-    <p>
-      n: Play the next CD track
-    </p>
-    <p>
-      p: Play the previous CD track
-    </p>
-    <p>
-      e: Eject CD
-    </p>
-    <p>
-      c: Close CD
-    </p>
     <hr>
     <h3>
       <a name="STANDARD-MENU"></a><a href="#MAIN">Standard-Menu</a>
@@ -2728,43 +2629,65 @@
       <a name="CONFIGURATION-MENU"></a><a href="#MAIN">Configuration-Menu</a>
     </h3>
     <p>
-      a: <a href="#CONF-HOOK-GROUP">< Hook group ></a>
+      a: <a href="#CONF-EXPOSE-MODE-GROUP">< Expose mode group ></a>
     </p>
     <p>
-      b: <a href="#CONF-MAIN-MODE-GROUP">< Main mode group ></a>
+      b: <a href="#CONF-HOOK-GROUP">< Hook group ></a>
     </p>
     <p>
-      c: <a href="#CONF-FRAME-COLORS-GROUP">< Frame colors group ></a>
+      c: <a href="#CONF-MAIN-MODE-GROUP">< Main mode group ></a>
     </p>
     <p>
-      d: <a href="#CONF-IDENTIFY-KEY-GROUP">< Identify key group ></a>
+      d: <a href="#CONF-FRAME-COLORS-GROUP">< Frame colors group ></a>
     </p>
     <p>
-      e: <a href="#CONF-CORNER-GROUP">< Corner group ></a>
+      e: <a href="#CONF-IDENTIFY-KEY-GROUP">< Identify key group ></a>
     </p>
     <p>
-      f: <a href="#CONF-QUERY-STRING-GROUP">< Query string group ></a>
+      f: <a href="#CONF-SECOND-MODE-GROUP">< Second mode group ></a>
     </p>
     <p>
-      g: <a href="#CONF-CIRCULATE-MODE-GROUP">< Circulate mode group ></a>
+      g: <a href="#CONF-CORNER-GROUP">< Corner group ></a>
     </p>
     <p>
-      h: <a href="#CONF-SECOND-MODE-GROUP">< Second mode group ></a>
+      h: <a href="#CONF-QUERY-STRING-GROUP">< Query string group ></a>
     </p>
     <p>
-      i: <a href="#CONF-PLACEMENT-GROUP">< Placement group ></a>
+      i: <a href="#CONF-CIRCULATE-MODE-GROUP">< Circulate mode group ></a>
     </p>
     <p>
-      j: <a href="#CONF-MISCELLANEOUS-GROUP">< Miscellaneous group ></a>
+      j: <a href="#CONF-PLACEMENT-GROUP">< Placement group ></a>
     </p>
     <p>
-      k: <a href="#CONF-INFO-MODE-GROUP">< Info mode group ></a>
+      k: <a href="#CONF-MISCELLANEOUS-GROUP">< Miscellaneous group ></a>
     </p>
     <p>
-      l: <a href="#CONF-MENU-GROUP">< Menu group ></a>
+      l: <a href="#CONF-INFO-MODE-GROUP">< Info mode group ></a>
+    </p>
+    <p>
+      m: <a href="#CONF-MENU-GROUP">< Menu group ></a>
     </p>
     <p>
       F2: Save all configuration variables in clfswmrc
+    </p>
+    <hr>
+    <h3>
+      <a name="CONF-EXPOSE-MODE-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Expose-Mode-Group</a>
+    </h3>
+    <p>
+      a: Configure EXPOSE-FOREGROUND
+    </p>
+    <p>
+      b: Configure EXPOSE-VALID-ON-KEY
+    </p>
+    <p>
+      c: Configure EXPOSE-BORDER
+    </p>
+    <p>
+      d: Configure EXPOSE-FONT-STRING
+    </p>
+    <p>
+      e: Configure EXPOSE-BACKGROUND
     </p>
     <hr>
     <h3>
@@ -2829,6 +2752,28 @@
     </p>
     <hr>
     <h3>
+      <a name="CONF-SECOND-MODE-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Second-Mode-Group</a>
+    </h3>
+    <p>
+      a: Configure SM-FOREGROUND-COLOR
+    </p>
+    <p>
+      b: Configure SM-BACKGROUND-COLOR
+    </p>
+    <p>
+      c: Configure SM-HEIGHT
+    </p>
+    <p>
+      d: Configure SM-WIDTH
+    </p>
+    <p>
+      e: Configure SM-BORDER-COLOR
+    </p>
+    <p>
+      f: Configure SM-FONT-STRING
+    </p>
+    <hr>
+    <h3>
       <a name="CONF-CORNER-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Corner-Group</a>
     </h3>
     <p>
@@ -2841,16 +2786,16 @@
       c: Configure CORNER-SECOND-MODE-LEFT-BUTTON
     </p>
     <p>
-      d: Configure CORNER-SECOND-MODE-RIGHT-BUTTON
+      d: Configure CORNER-MAIN-MODE-RIGHT-BUTTON
     </p>
     <p>
-      e: Configure CORNER-SIZE
+      e: Configure CORNER-SECOND-MODE-RIGHT-BUTTON
     </p>
     <p>
-      f: Configure CLFSWM-TERMINAL-CMD
+      f: Configure CORNER-SIZE
     </p>
     <p>
-      g: Configure CORNER-MAIN-MODE-RIGHT-BUTTON
+      g: Configure CLFSWM-TERMINAL-CMD
     </p>
     <p>
       h: Configure VIRTUAL-KEYBOARD-CMD
@@ -2882,10 +2827,10 @@
       <a name="CONF-CIRCULATE-MODE-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Circulate-Mode-Group</a>
     </h3>
     <p>
-      a: Configure CIRCULATE-BORDER
+      a: Configure CIRCULATE-WIDTH
     </p>
     <p>
-      b: Configure CIRCULATE-WIDTH
+      b: Configure CIRCULATE-BORDER
     </p>
     <p>
       c: Configure CIRCULATE-HEIGHT
@@ -2904,28 +2849,6 @@
     </p>
     <hr>
     <h3>
-      <a name="CONF-SECOND-MODE-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Second-Mode-Group</a>
-    </h3>
-    <p>
-      a: Configure SM-FOREGROUND-COLOR
-    </p>
-    <p>
-      b: Configure SM-BACKGROUND-COLOR
-    </p>
-    <p>
-      c: Configure SM-HEIGHT
-    </p>
-    <p>
-      d: Configure SM-WIDTH
-    </p>
-    <p>
-      e: Configure SM-BORDER-COLOR
-    </p>
-    <p>
-      f: Configure SM-FONT-STRING
-    </p>
-    <hr>
-    <h3>
       <a name="CONF-PLACEMENT-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Placement-Group</a>
     </h3>
     <p>
@@ -2938,10 +2861,13 @@
       c: Configure BANISH-POINTER-PLACEMENT
     </p>
     <p>
-      d: Configure INFO-MODE-PLACEMENT
+      d: Configure EXPOSE-MODE-PLACEMENT
     </p>
     <p>
-      e: Configure SECOND-MODE-PLACEMENT
+      e: Configure INFO-MODE-PLACEMENT
+    </p>
+    <p>
+      f: Configure SECOND-MODE-PLACEMENT
     </p>
     <hr>
     <h3>
@@ -3051,28 +2977,6 @@
     </p>
     <p>
       x: Exit clfswm
-    </p>
-    <p>
-      Pause: <a href="#REBOOT-HALT-MENU">< Suspend/Reboot/Halt menu ></a>
-    </p>
-    <hr>
-    <h3>
-      <a name="REBOOT-HALT-MENU"></a><a href="#CLFSWM-MENU">Reboot-Halt-Menu</a>
-    </h3>
-    <p>
-      -: Do nothing
-    </p>
-    <p>
-      s: Suspend the computer to RAM
-    </p>
-    <p>
-      d: Suspend the computer to DISK
-    </p>
-    <p>
-      r: Reboot the computer
-    </p>
-    <p>
-      h: Halt the computer
     </p>
     <hr>
     <p>

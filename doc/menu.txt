@@ -24,41 +24,6 @@ d: Show the current time and date
 p: Show current processes sorted by CPU usage
 m: Show current processes sorted by memory usage
 v: Show the current CLFSWM version
-F2: < Music Player Daemon (MPD) menu >
-x: < XMMS menu >
-i: < CDPLAYER menu >
-
-Mpd-Menu
-i: Show MPD informations
-p: Play the previous song in the current playlist
-n: Play the next song in the current playlist
-t: Toggles Play/Pause, plays if stopped
-y: Start playing
-k: Stop the currently playing playlists
-x: Seeks to +5%
-w: Seeks to -5%
-l: Show the current MPD playlist
-s: Start sonata
-g: Start gmpc
-
-Xmms-Menu
-r: Lanch XMMS
-s: Show the current xmms status
-l: Show the current xmms playlist
-n: Play the next XMMS track
-p: Play the previous XMMS track
-e: open xmms "Load file(s)" dialog window.
-
-Cdplayer-Menu
-y: Start playing CD
-k: Stop playing CD
-t: Toggle pause
-s: Show the current CD status
-l: Show the current CD playlist
-n: Play the next CD track
-p: Play the previous CD track
-e: Eject CD
-c: Close CD
 
 Standard-Menu
 a: < TEXTEDITOR >
@@ -938,19 +903,27 @@ l: Run LXDE
 p: Prompt for an other window manager
 
 Configuration-Menu
-a: < Hook group >
-b: < Main mode group >
-c: < Frame colors group >
-d: < Identify key group >
-e: < Corner group >
-f: < Query string group >
-g: < Circulate mode group >
-h: < Second mode group >
-i: < Placement group >
-j: < Miscellaneous group >
-k: < Info mode group >
-l: < Menu group >
+a: < Expose mode group >
+b: < Hook group >
+c: < Main mode group >
+d: < Frame colors group >
+e: < Identify key group >
+f: < Second mode group >
+g: < Corner group >
+h: < Query string group >
+i: < Circulate mode group >
+j: < Placement group >
+k: < Miscellaneous group >
+l: < Info mode group >
+m: < Menu group >
 F2: Save all configuration variables in clfswmrc
+
+Conf-Expose-Mode-Group
+a: Configure EXPOSE-FOREGROUND
+b: Configure EXPOSE-VALID-ON-KEY
+c: Configure EXPOSE-BORDER
+d: Configure EXPOSE-FONT-STRING
+e: Configure EXPOSE-BACKGROUND
 
 Conf-Hook-Group
 a: Configure INIT-HOOK
@@ -975,14 +948,22 @@ b: Configure IDENTIFY-FONT-STRING
 c: Configure IDENTIFY-BORDER
 d: Configure IDENTIFY-BACKGROUND
 
+Conf-Second-Mode-Group
+a: Configure SM-FOREGROUND-COLOR
+b: Configure SM-BACKGROUND-COLOR
+c: Configure SM-HEIGHT
+d: Configure SM-WIDTH
+e: Configure SM-BORDER-COLOR
+f: Configure SM-FONT-STRING
+
 Conf-Corner-Group
 a: Configure CORNER-MAIN-MODE-LEFT-BUTTON
 b: Configure CORNER-SECOND-MODE-MIDDLE-BUTTON
 c: Configure CORNER-SECOND-MODE-LEFT-BUTTON
-d: Configure CORNER-SECOND-MODE-RIGHT-BUTTON
-e: Configure CORNER-SIZE
-f: Configure CLFSWM-TERMINAL-CMD
-g: Configure CORNER-MAIN-MODE-RIGHT-BUTTON
+d: Configure CORNER-MAIN-MODE-RIGHT-BUTTON
+e: Configure CORNER-SECOND-MODE-RIGHT-BUTTON
+f: Configure CORNER-SIZE
+g: Configure CLFSWM-TERMINAL-CMD
 h: Configure VIRTUAL-KEYBOARD-CMD
 i: Configure CORNER-MAIN-MODE-MIDDLE-BUTTON
 j: Configure CLFSWM-TERMINAL-NAME
@@ -994,28 +975,21 @@ c: Configure QUERY-BORDER
 d: Configure QUERY-FOREGROUND
 
 Conf-Circulate-Mode-Group
-a: Configure CIRCULATE-BORDER
-b: Configure CIRCULATE-WIDTH
+a: Configure CIRCULATE-WIDTH
+b: Configure CIRCULATE-BORDER
 c: Configure CIRCULATE-HEIGHT
 d: Configure CIRCULATE-TEXT-LIMITE
 e: Configure CIRCULATE-FONT-STRING
 f: Configure CIRCULATE-BACKGROUND
 g: Configure CIRCULATE-FOREGROUND
 
-Conf-Second-Mode-Group
-a: Configure SM-FOREGROUND-COLOR
-b: Configure SM-BACKGROUND-COLOR
-c: Configure SM-HEIGHT
-d: Configure SM-WIDTH
-e: Configure SM-BORDER-COLOR
-f: Configure SM-FONT-STRING
-
 Conf-Placement-Group
 a: Configure CIRCULATE-MODE-PLACEMENT
 b: Configure QUERY-MODE-PLACEMENT
 c: Configure BANISH-POINTER-PLACEMENT
-d: Configure INFO-MODE-PLACEMENT
-e: Configure SECOND-MODE-PLACEMENT
+d: Configure EXPOSE-MODE-PLACEMENT
+e: Configure INFO-MODE-PLACEMENT
+f: Configure SECOND-MODE-PLACEMENT
 
 Conf-Miscellaneous-Group
 a: Configure HAVE-TO-COMPRESS-NOTIFY
@@ -1055,14 +1029,6 @@ Clfswm-Menu
 r: Reset clfswm
 l: Reload clfswm
 x: Exit clfswm
-Pause: < Suspend/Reboot/Halt menu >
-
-Reboot-Halt-Menu
--: Do nothing
-s: Suspend the computer to RAM
-d: Suspend the computer to DISK
-r: Reboot the computer
-h: Halt the computer
 
 
 This documentation was produced with the CLFSWM auto-doc functions. To reproduce it, use the produce-menu-doc-in-file or

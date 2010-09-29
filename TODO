@@ -7,7 +7,7 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- configure: copy contrib/clfswm in . and set default values in it.
+- Add a binding/functions to circulate over children of the current child.
 
 MAYBE
 =====
@@ -27,6 +27,10 @@ Operation:
     * right
     * up
     * down
+
+Maybe this can be done with a compositing system on Lisp with clx that support xrender.
+  http://en.wikipedia.org/wiki/Compositing_window_manager
+  http://ktown.kde.org/~fredrik/composite_howto.html
 
 - Undo/redo
 

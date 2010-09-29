@@ -458,6 +458,14 @@ Function can be a function or a list (function color) for colored output"
   "Show the second mode key binding"
   (show-key-binding *second-keys* *second-mouse*))
 
+(defun show-circulate-mode-key-binding ()
+  "Show the circulate mode key binding"
+  (show-key-binding *circulate-keys*))
+
+(defun show-expose-window-mode-key-binding ()
+  "Show the expose window mode key binding"
+  (show-key-binding *expose-keys* *expose-mouse*))
+
 
 
 (defun corner-help-colorize-line (list)

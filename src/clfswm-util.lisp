@@ -1210,9 +1210,9 @@ For window: set current child to window or its parent according to window-parent
 
 
 ;;; Standard menu functions - Based on the XDG specifications
-(defparameter *xdg-section-list* (nconc '(TextEditor FileManager WebBrowser)
-					'(AudioVideo Audio Video Development Education Game Graphics Network Office Settings System Utility)
-					'(TerminalEmulator Archlinux Screensaver))
+(defparameter *xdg-section-list* (append '(TextEditor FileManager WebBrowser)
+					 '(AudioVideo Audio Video Development Education Game Graphics Network Office Settings System Utility)
+					 '(TerminalEmulator Archlinux Screensaver))
   "Config(Menu group): Standard menu sections")
 
 
