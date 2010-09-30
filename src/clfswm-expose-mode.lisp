@@ -97,33 +97,39 @@
 
 
 (defun expose-draw-letter ()
-  (loop for lwin in *expose-windows-list*
-       for n from 0 do
+  (loop for lwin in *expose-windows-list* do
        (xlib:draw-glyphs (first lwin) (second lwin)
 			 (xlib:max-char-width *expose-font*)
 			 (+ (xlib:font-ascent *expose-font*) (xlib:font-descent *expose-font*))
-			 (format nil "~A" (number->char n)))))
+			 (third lwin))))
 
 (defun expose-create-window (child n)
-  (declare (ignore n))
-  (with-placement (*expose-mode-placement* x y (child-width child) (child-height child))
-    (let* ((window (xlib:create-window :parent *root*
-				       :x (+ (child-x child) x)
-				       :y (+ (child-y child) y)
-				       :width (* (xlib:max-char-width *expose-font*) 3)
-				       :height (* (xlib:font-ascent *expose-font*) 2)
+  (let* ((*current-child* child)
+	 (string (format nil "~A~A" (number->char n)
+			 (if *expose-show-window-title*
+			     (format nil " - ~A" (child-fullname child))
+			     "")))
+	 (width (if *expose-show-window-title*
+		    (min (* (xlib:max-char-width *expose-font*) (+ (length string) 2))
+			 (- (child-width child) 4))
+		    (* (xlib:max-char-width *expose-font*) 3)))
+	 (height (* (xlib:font-ascent *expose-font*) 2)))
+    (with-placement (*expose-mode-placement* x y width height)
+      (let* ((window (xlib:create-window :parent *root*
+					 :x x   :y y
+					 :width width   :height height
+					 :background (get-color *expose-background*)
+					 :border-width 1
+					 :border (get-color *expose-border*)
+					 :colormap (xlib:screen-default-colormap *screen*)
+					 :event-mask '(:exposure :key-press)))
+	     (gc (xlib:create-gcontext :drawable window
+				       :foreground (get-color *expose-foreground*)
 				       :background (get-color *expose-background*)
-				       :border-width 1
-				       :border (get-color *expose-border*)
-				       :colormap (xlib:screen-default-colormap *screen*)
-				       :event-mask '(:exposure :key-press)))
-	   (gc (xlib:create-gcontext :drawable window
-				     :foreground (get-color *expose-foreground*)
-				     :background (get-color *expose-background*)
-				     :font *expose-font*
-				     :line-style :solid)))
-      (map-window window)
-      (push (list window gc) *expose-windows-list*))))
+				       :font *expose-font*
+				       :line-style :solid)))
+	(map-window window)
+	(push (list window gc string) *expose-windows-list*)))))
 
 
 

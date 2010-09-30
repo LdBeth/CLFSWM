@@ -274,6 +274,8 @@ on the root window in the main mode with the mouse")
   "Config(Expose mode group): Expose string window border color")
 (defparameter *expose-valid-on-key* t
   "Config(Expose mode group): Valid expose mode when an accel key is pressed")
+(defparameter *expose-show-window-title* t
+  "Config(Expose mode group): Show the window title on accel window")
 
 
 

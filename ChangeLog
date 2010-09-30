@@ -1,3 +1,8 @@
+2010-09-30  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-expose-mode.lisp (expose-create-window): Show window
+	title in accel window.
+
 2010-09-29  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* configure: Use the Xavier Maillard clfswm script in contrib to
