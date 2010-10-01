@@ -211,6 +211,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 
 
+(defparameter *in-process-existing-windows* nil)
 
 ;; For debug - redefine defun
 ;;(shadow :defun)

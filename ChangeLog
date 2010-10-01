@@ -1,3 +1,9 @@
+2010-10-01  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-nw-hooks.lisp (absorb-window-nw-hook): Absorb new
+	window hook: the frame absorb all new windows that match
+	nw-absorb-test frame data slot.
+
 2010-09-30  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-expose-mode.lisp (expose-create-window): Show window

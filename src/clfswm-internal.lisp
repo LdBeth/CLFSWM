@@ -969,12 +969,12 @@ Warning:frame window and gc are freeed."
 
 (defun do-all-frames-nw-hook (window)
   "Call nw-hook of each frame."
-  (let ((found nil))
-    (with-all-frames (*root-frame* frame)
-      (awhen (frame-nw-hook frame)
-	(call-hook it (list frame window))
-	(setf found t)))
-    found))
+  (catch 'nw-hook-loop
+    (let ((found nil))
+      (with-all-frames (*root-frame* frame)
+	(awhen (frame-nw-hook frame)
+	  (setf found (call-hook it (list frame window)))))
+      found)))
 
 
 
@@ -1005,6 +1005,7 @@ managed."
 
 (defun process-existing-windows (screen)
   "Windows present when clfswm starts up must be absorbed by clfswm."
+  (setf *in-process-existing-windows* t)
   (let ((id-list nil)
 	(all-windows (get-all-windows)))
     (dolist (win (xlib:query-tree (xlib:screen-root screen)))
@@ -1021,4 +1022,5 @@ managed."
 	      (map-window win)
 	      (raise-window win)
 	      (pushnew (xlib:window-id win) id-list))))))
-    (netwm-set-client-list id-list)))
+    (netwm-set-client-list id-list))
+  (setf *in-process-existing-windows* nil))

@@ -82,7 +82,8 @@
   (leave-if-not-frame *current-child*)
   (when (frame-p *current-child*)
     (pushnew window (frame-child *current-child*)))
-  (default-window-placement *current-child* window))
+  (default-window-placement *current-child* window)
+  t)
 
 (defun set-default-frame-nw-hook ()
   "Open the next window in the current frame"
@@ -98,7 +99,8 @@
   (leave-if-not-frame *current-root*)
   (pushnew window (frame-child *current-root*))
   (setf *current-child* (frame-selected-child *current-root*))
-  (default-window-placement *current-root* window))
+  (default-window-placement *current-root* window)
+  t)
 
 (defun set-open-in-current-root-nw-hook ()
   "Open the next window in the current root"
@@ -116,7 +118,8 @@
     (pushnew new-frame (frame-child *current-root*))
     (pushnew window (frame-child new-frame))
     (setf *current-child* new-frame)
-    (default-window-placement new-frame window)))
+    (default-window-placement new-frame window))
+  t)
 
 (defun set-open-in-new-frame-in-current-root-nw-hook ()
   "Open the next window in a new frame in the current root"
@@ -136,7 +139,8 @@
     (setf *current-child* *current-root*)
     (set-layout-once #'tile-space-layout)
     (setf *current-child* new-frame)
-    (default-window-placement new-frame window)))
+    (default-window-placement new-frame window))
+  t)
 
 (defun set-open-in-new-frame-in-root-frame-nw-hook ()
   "Open the next window in a new frame in the root frame"
@@ -160,7 +164,8 @@
       (set-layout-once #'tile-space-layout)
       (setf *current-child* new-frame)
       (default-window-placement new-frame window)
-      (show-all-children *current-root*))))
+      (show-all-children *current-root*)
+      t)))
 
 
 (defun set-open-in-new-frame-in-parent-frame-nw-hook ()
@@ -180,7 +185,8 @@
     (with-slots (child) *current-child*
       (pushnew window child)
       (setf child (rotate-list child))))
-  (default-window-placement *current-child* window))
+  (default-window-placement *current-child* window)
+  t)
 
 (defun set-leave-focus-frame-nw-hook ()
   "Open the next window in the current frame and leave the focus on the current child"
@@ -201,14 +207,16 @@
     (setf *current-child* frame)
     (focus-all-children window frame)
     (default-window-placement frame window)
-    (show-all-children *current-root*)))
+    (show-all-children *current-root*)
+    t))
 
 ;;; Open a new window in a named frame
 (defun named-frame-nw-hook (frame window)
   (clear-nw-hook frame)
   (let* ((frame-name (ask-frame-name "Open the next window in frame named:"))
 	 (new-frame (find-frame-by-name frame-name)))
-    (nw-hook-open-in-frame window new-frame)))
+    (nw-hook-open-in-frame window new-frame))
+  t)
 
 (defun set-named-frame-nw-hook ()
   "Open the next window in a named frame"
@@ -221,11 +229,44 @@
 (defun numbered-frame-nw-hook (frame window)
   (clear-nw-hook frame)
   (let ((new-frame (find-frame-by-number (query-number "Open a new frame in the group numbered:"))))
-    (nw-hook-open-in-frame window new-frame)))
+    (nw-hook-open-in-frame window new-frame))
+  t)
 
 (defun set-numbered-frame-nw-hook ()
   "Open the next window in a numbered frame"
   (set-nw-hook #'numbered-frame-nw-hook))
 
 (register-nw-hook 'set-numbered-frame-nw-hook)
+
+
+;;; Absorb window.
+;;; The frame absorb the new window if it match the absorb-nw-test
+;;; frame data slot.
+(defun absorb-window-nw-hook (frame window)
+  (let ((absorb-nw-test (frame-data-slot frame :nw-absorb-test)))
+    (when (and absorb-nw-test
+	       (funcall absorb-nw-test window))
+      (pushnew window (frame-child frame))
+      (unless *in-process-existing-windows*
+	(unless (find-child frame *current-root*)
+	  (hide-all *current-root*)
+	  (setf *current-root* frame))
+	(setf *current-child* frame)
+	(focus-all-children window frame)
+	(default-window-placement frame window)
+	(show-all-children *current-root*))
+      (throw 'nw-hook-loop t)))
+  nil)
+
+(defun set-absorb-window-nw-hook ()
+  "Open the window in this frame if it match absorb-nw-test"
+  (set-nw-hook #'absorb-window-nw-hook))
+
+(register-nw-hook 'set-absorb-window-nw-hook)
+
+
+(defun nw-absorb-test-class (class-string)
+  (lambda (c)
+    (and (xlib:window-p c)
+	 (string-equal (xlib:get-wm-class c) class-string))))
 
