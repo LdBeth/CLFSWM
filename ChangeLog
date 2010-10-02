@@ -1,3 +1,8 @@
+2010-10-02  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (bind-on-slot): Add an optional parameter
+	to bind the current child from the configuration file.
+
 2010-10-01  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-nw-hooks.lisp (absorb-window-nw-hook): Absorb new

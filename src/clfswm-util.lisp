@@ -693,9 +693,9 @@ For window: set current child to window or its parent according to window-parent
 ;;;  Bind or jump functions
 (let ((key-slots (make-array 10 :initial-element nil))
       (current-slot 1))
-  (defun bind-on-slot ()
+  (defun bind-on-slot (&optional (slot current-slot))
     "Bind current child to slot"
-    (setf (aref key-slots current-slot) *current-child*))
+    (setf (aref key-slots slot) *current-child*))
 
   (defun remove-binding-on-slot ()
     "Remove binding on slot"
