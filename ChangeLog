@@ -1,5 +1,12 @@
 2010-10-02  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-circulate-mode.lisp (select-next-subchild): Add the
+	possibility to circulate over subchild of the current child.
+
+	* src/clfswm-expose-mode.lisp (expose-all-windows-mode)
+	(expose-windows-generic): Add an escape-body function to return to
+	the original state on escape key.
+
 	* src/clfswm-util.lisp (bind-on-slot): Add an optional parameter
 	to bind the current child from the configuration file.
 

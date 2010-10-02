@@ -50,6 +50,7 @@
   (define-main-key ("Up" :mod-1) 'select-next-level)
   (define-main-key ("Tab" :mod-1) 'select-next-child)
   (define-main-key ("Tab" :mod-1 :shift) 'select-previous-child)
+  (define-main-key ("Tab" :mod-1 :control) 'select-next-subchild)
   (define-main-key ("Tab" :shift) 'switch-to-last-child)
   (define-main-key ("Return" :mod-1) 'enter-frame)
   (define-main-key ("Return" :mod-1 :shift) 'leave-frame)

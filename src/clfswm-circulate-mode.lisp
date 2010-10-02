@@ -103,6 +103,18 @@
 			   (find-parent-frame *current-child*)))
     (draw-circulate-mode-window)))
 
+(defun reorder-subchild (direction)
+  (declare (ignore direction))
+  (when (frame-p *current-child*)
+    (let ((selected-child (frame-selected-child *current-child*)))
+      (when (frame-p selected-child)
+	(no-focus)
+	(with-slots (child) selected-child
+	  (let ((elem (first (last child))))
+	    (setf child (nconc (list elem) (child-remove elem child)))
+	    (show-all-children)
+	    (draw-circulate-mode-window)))))))
+
 
 
 
@@ -134,6 +146,10 @@
     (reset-circulate-brother))
   (reorder-brother -1))
 
+(defun circulate-select-next-subchild ()
+  "Select the next subchild"
+  (reorder-subchild +1))
+
 
 
 (add-hook *binding-hook* 'set-default-circulate-keys)
@@ -144,11 +160,13 @@
   (define-circulate-key ("Escape" :alt) 'leave-circulate-mode)
   (define-circulate-key ("g" :control :alt) 'leave-circulate-mode)
   (define-circulate-key ("Tab" :mod-1) 'circulate-select-next-child)
+  (define-circulate-key ("Tab" :mod-1 :control) 'circulate-select-next-subchild)
   (define-circulate-key ("Tab" :mod-1 :shift) 'circulate-select-previous-child)
   (define-circulate-key ("Iso_Left_Tab" :mod-1 :shift) 'circulate-select-previous-child)
   (define-circulate-key ("Right" :mod-1) 'circulate-select-next-brother)
   (define-circulate-key ("Left" :mod-1) 'circulate-select-previous-brother)
-  (define-circulate-release-key ("Alt_L" :alt) 'leave-circulate-mode))
+  (define-circulate-release-key ("Alt_L" :alt) 'leave-circulate-mode)
+  (define-circulate-release-key ("Alt_L") 'leave-circulate-mode))
 
 
 (defun circulate-leave-function ()
@@ -180,7 +198,7 @@
 
 
 
-(defun circulate-mode (&key child-direction brother-direction)
+(defun circulate-mode (&key child-direction brother-direction subchild-direction)
   (setf *circulate-hit* 0)
   (with-placement (*circulate-mode-placement* x y *circulate-width* *circulate-height*)
     (setf *circulate-font* (xlib:open-font *display* *circulate-font-string*)
@@ -205,6 +223,8 @@
       (reorder-child child-direction))
     (when brother-direction
       (reorder-brother brother-direction))
+    (when subchild-direction
+      (reorder-subchild subchild-direction))
     (let ((grab-keyboard-p (xgrab-keyboard-p))
 	  (grab-pointer-p (xgrab-pointer-p)))
       (xgrab-pointer *root* 92 93)
@@ -253,3 +273,10 @@
     (setf *circulate-orig* (frame-child *circulate-parent*)))
   (circulate-mode :brother-direction -1))
 
+(defun select-next-subchild ()
+  "Select the next subchild"
+  (when (and (frame-p *current-child*)
+	     (frame-p (frame-selected-child *current-child*)))
+    (setf *circulate-orig* (frame-child *current-child*)
+	  *circulate-parent* nil)
+    (circulate-mode :subchild-direction +1)))

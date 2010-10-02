@@ -115,7 +115,8 @@
 
   (define-second-key ("Tab" :mod-1) 'select-next-child)
   (define-second-key ("Tab" :mod-1 :shift) 'select-previous-child)
-  (define-second-key (#\Tab :shift) 'switch-to-last-child)
+  (define-second-key ("Tab" :mod-1 :control) 'select-next-subchild)
+  (define-second-key ("Tab" :shift) 'switch-to-last-child)
   (define-second-key ("Return" :mod-1) 'enter-frame)
   (define-second-key ("Return" :mod-1 :shift) 'leave-frame)
   (define-second-key ("Return" :mod-5) 'frame-toggle-maximize)

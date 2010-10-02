@@ -142,7 +142,7 @@
   (expose-draw-letter))
 
 
-(defun expose-windows-generic (first-restore-frame body)
+(defun expose-windows-generic (first-restore-frame &optional body body-escape)
   (setf *expose-font* (xlib:open-font *display* *expose-font-string*)
 	*expose-windows-list* nil)
   (xlib:warp-pointer *root* (truncate (/ (xlib:screen-width *screen*) 2))
@@ -158,14 +158,15 @@
     (unless grab-keyboard-p
       (ungrab-main-keys)
       (xgrab-keyboard *root*))
-    (when (generic-mode 'expose-mode 'exit-expose-loop
-			:original-mode '(main-mode))
-      (multiple-value-bind (x y) (xlib:query-pointer *root*)
-	(let* ((child (find-child-under-mouse x y))
-	       (parent (find-parent-frame child *root-frame*)))
-	  (when (and child parent)
-	    (pfuncall body parent)
-	    (focus-all-children child parent)))))
+    (if (generic-mode 'expose-mode 'exit-expose-loop
+		      :original-mode '(main-mode))
+	(multiple-value-bind (x y) (xlib:query-pointer *root*)
+	  (let* ((child (find-child-under-mouse x y))
+		 (parent (find-parent-frame child *root-frame*)))
+	    (when (and child parent)
+	      (pfuncall body parent)
+	      (focus-all-children child parent))))
+	(pfuncall body-escape))
     (dolist (lwin *expose-windows-list*)
       (awhen (first lwin)
 	(xlib:destroy-window it))
@@ -190,13 +191,17 @@
 (defun expose-windows-mode ()
   "Present all windows in the current frame (An expose like)"
   (stop-button-event)
-  (expose-windows-generic *current-root* nil))
+  (expose-windows-generic *current-root*))
 
 (defun expose-all-windows-mode ()
   "Present all windows in all frames (An expose like)"
   (stop-button-event)
-  (switch-to-root-frame :show-later t)
-  (expose-windows-generic *root-frame*
-			  (lambda (parent)
-			    (hide-all-children *root-frame*)
-			    (setf *current-root* parent))))
+  (let ((orig-root *current-root*))
+    (switch-to-root-frame :show-later t)
+    (expose-windows-generic *root-frame*
+			    (lambda (parent)
+			      (hide-all-children *root-frame*)
+			      (setf *current-root* parent))
+			    (lambda ()
+			      (hide-all-children *current-root*)
+			      (setf *current-root* orig-root)))))
