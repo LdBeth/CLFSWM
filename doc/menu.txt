@@ -18,6 +18,8 @@ Help-Menu
 h: Show all key binding
 b: Show the main mode binding
 s: Show the second mode key binding
+r: Show the circulate mode key binding
+e: Show the expose window mode key binding
 c: Help on clfswm corner
 g: Show all configurable variables
 d: Show the current time and date
@@ -786,6 +788,7 @@ e: Open the next window in a new frame in the parent frame
 f: Open the next window in the current frame and leave the focus on the current child
 g: Open the next window in a named frame
 h: Open the next window in a numbered frame
+i: Open the window in this frame if it match absorb-nw-test
 
 Frame-Movement-Menu
 p: < Frame pack menu >
@@ -920,10 +923,11 @@ F2: Save all configuration variables in clfswmrc
 
 Conf-Expose-Mode-Group
 a: Configure EXPOSE-FOREGROUND
-b: Configure EXPOSE-VALID-ON-KEY
-c: Configure EXPOSE-BORDER
-d: Configure EXPOSE-FONT-STRING
-e: Configure EXPOSE-BACKGROUND
+b: Configure EXPOSE-SHOW-WINDOW-TITLE
+c: Configure EXPOSE-VALID-ON-KEY
+d: Configure EXPOSE-BORDER
+e: Configure EXPOSE-FONT-STRING
+f: Configure EXPOSE-BACKGROUND
 
 Conf-Hook-Group
 a: Configure INIT-HOOK

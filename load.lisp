@@ -57,13 +57,11 @@
 
 (in-package :clfswm)
 
-#-BUILD
 (ignore-errors
   (main :read-conf-file-p t))
 
 
 ;;;; Uncomment lines above to save the default documentation.
-;;#-BUILD
 ;;(ignore-errors
 ;;  (main :read-conf-file-p nil))
 ;;(produce-all-docs)

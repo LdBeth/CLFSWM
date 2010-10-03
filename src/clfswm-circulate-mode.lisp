@@ -252,7 +252,7 @@
     (circulate-mode :child-direction +1)))
 
 (defun select-previous-child ()
-  "Select the previouschild"
+  "Select the previous child"
   (when (frame-p *current-child*)
     (setf *circulate-orig* (frame-child *current-child*)
 	  *circulate-parent* nil)

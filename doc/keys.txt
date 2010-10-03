@@ -13,7 +13,8 @@ Main mode keys:
   Mod-1                Down            Select the previous level in frame
   Mod-1                Up              Select the next level in frame
   Mod-1                Tab             Select the next child
-  Mod-1 Shift          Tab             Select the previouschild
+  Mod-1 Shift          Tab             Select the previous child
+  Mod-1 Control        Tab             Select the next subchild
   Shift                Tab             Store the current child and switch to the previous one
   Mod-1                Return          Enter in the selected frame - ie make it the root frame
   Mod-1 Shift          Return          Leave the selected frame - ie make its parent the root frame
@@ -95,7 +96,8 @@ Second mode keys:
   Control              Up              Revert to the first speed move mouse
   Control              Down            Reset speed mouse coordinates
   Mod-1                Tab             Select the next child
-  Mod-1 Shift          Tab             Select the previouschild
+  Mod-1 Shift          Tab             Select the previous child
+  Mod-1 Control        Tab             Select the next subchild
   Shift                Tab             Store the current child and switch to the previous one
   Mod-1                Return          Enter in the selected frame - ie make it the root frame
   Mod-1 Shift          Return          Leave the selected frame - ie make its parent the root frame
@@ -194,6 +196,7 @@ Circulate mode keys:
   Mod-1                Escape          Leave the circulate mode
   Mod-1 Control        G               Leave the circulate mode
   Mod-1                Tab             Select the next child
+  Mod-1 Control        Tab             Select the next subchild
   Mod-1 Shift          Tab             Select the previous child
   Mod-1 Shift          Iso_left_tab    Select the previous child
   Mod-1                Right           Select the next brother
