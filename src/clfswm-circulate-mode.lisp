@@ -112,7 +112,7 @@
 	(with-slots (child) selected-child
 	  (let ((elem (first (last child))))
 	    (setf child (nconc (list elem) (child-remove elem child)))
-	    (show-all-children)
+	    (show-all-children selected-child)
 	    (draw-circulate-mode-window)))))))
 
 
