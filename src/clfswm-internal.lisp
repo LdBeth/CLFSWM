@@ -576,11 +576,10 @@
   (with-slots (window show-window-p) frame
     (if show-window-p
 	(when (or *show-root-frame-p* (not (child-equal-p frame *current-root*)))
-	  (setf (xlib:window-background window) (get-color "Black"))
 	  (map-window window)
-	  (when raise-p (raise-window window)))
-	(hide-window window)))
-  (display-frame-info frame))
+	  (when raise-p (raise-window window))
+	  (display-frame-info frame))
+	(hide-window window))))
 
 
 
@@ -721,8 +720,9 @@ only for display-child and its children"
 	       (when (frame-p root)
 		 (let ((reversed-children (reverse (frame-child root))))
 		   (loop for child in reversed-children
-		      for raise-p in (raise-p-list reversed-children)
-		      do (rec child root raise-p))))))
+		      for c-raise-p in (raise-p-list reversed-children)
+		      do (rec child root (and c-raise-p
+					      (or (null parent) raise-p))))))))
       (rec-geom *current-root* nil t t)
       (rec display-child nil nil)
       (set-focus-to-current-child)
