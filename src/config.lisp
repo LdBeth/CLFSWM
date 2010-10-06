@@ -221,8 +221,16 @@ on the root window in the main mode with the mouse")
   "Config(Query string group): Query string window font string")
 (defparameter *query-background* "black"
   "Config(Query string group): Query string window background color")
+(defparameter *query-message-color* "yellow"
+  "Config(Query string group): Query string window message color")
 (defparameter *query-foreground* "green"
   "Config(Query string group): Query string window foreground color")
+(defparameter *query-cursor-color* "white"
+  "Config(Query string group): Query string window foreground cursor color")
+(defparameter *query-parent-color* "blue"
+  "Config(Query string group): Query string window parenthesis color")
+(defparameter *query-parent-error-color* "red"
+  "Config(Query string group): Query string window parenthesis color when no match")
 (defparameter *query-border* "red"
   "Config(Query string group): Query string window border color")
 

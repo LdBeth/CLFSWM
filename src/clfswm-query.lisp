@@ -57,14 +57,23 @@
 		  :with level = 1   :for c = (aref string p)
 		  :do (when (char= c #\() (decf level))
 		  (when (char= c #\)) (incf level))
-		  (when (= level 0) (return p)))))
-      (when (have-to-find-right?)
-	(let ((p (pos-right)))
-	  (when p (setf (aref string p) #\]))))
-      (when (have-to-find-left?)
-	(let ((p (pos-left)))
-	  (when p (setf (aref string p) #\[))))
-      string)))
+		  (when (= level 0) (return p))))
+	     (draw-bloc (p &optional (color *query-parent-color*))
+	       (setf (xlib:gcontext-foreground *query-gc*) (get-color color))
+	       (xlib:draw-rectangle *pixmap-buffer* *query-gc*
+				    (+ 10 (* p (xlib:max-char-width *query-font*)))
+				    (+ (xlib:max-char-ascent *query-font*) (xlib:max-char-descent *query-font*) 7)
+				    (xlib:max-char-width *query-font*)
+				    (+ (xlib:max-char-ascent *query-font*) (xlib:max-char-descent *query-font*))
+				    t)))
+      (cond ((have-to-find-left?) (let ((p (pos-left)))
+				    (if p
+					(progn (draw-bloc p) (draw-bloc (1- pos)))
+					(draw-bloc (1- pos) *query-parent-error-color*))))
+	    ((have-to-find-right?) (let ((p (pos-right)))
+				     (if p
+					 (progn (draw-bloc p) (draw-bloc pos))
+					 (draw-bloc pos *query-parent-error-color*))))))))
 
 
 (defun clear-query-history ()
@@ -88,21 +97,26 @@
 (add-hook *binding-hook* 'init-*query-keys*)
 
 
-(defun query-add-cursor (string)
-  (concatenate 'string (subseq string 0 *query-pos*) "|" (subseq string *query-pos*)))
-
 (defun query-print-string ()
   (clear-pixmap-buffer *query-window* *query-gc*)
-  (setf (xlib:gcontext-foreground *query-gc*) (get-color *query-foreground*))
+  (setf (xlib:gcontext-foreground *query-gc*) (get-color *query-message-color*))
   (xlib:draw-glyphs *pixmap-buffer* *query-gc* 5 (+ (xlib:max-char-ascent *query-font*) 5) *query-message*)
   (when (< *query-pos* 0)
     (setf *query-pos* 0))
   (when (> *query-pos* (length *query-string*))
     (setf *query-pos* (length *query-string*)))
+  (query-show-paren *query-string* *query-pos*)
+  (setf (xlib:gcontext-foreground *query-gc*) (get-color *query-foreground*))
   (xlib:draw-glyphs *pixmap-buffer* *query-gc*
 		    10
 		    (+ (* 2 (+ (xlib:max-char-ascent *query-font*) (xlib:max-char-descent *query-font*))) 5)
-		    (query-add-cursor (query-show-paren *query-string* *query-pos*)))
+		    *query-string*)
+  (setf (xlib:gcontext-foreground *query-gc*) (get-color *query-cursor-color*))
+  (xlib:draw-line *pixmap-buffer* *query-gc*
+		  (+ 10 (* *query-pos* (xlib:max-char-width *query-font*)))
+		  (+ (* 2 (+ (xlib:max-char-ascent *query-font*) (xlib:max-char-descent *query-font*))) 6)
+		  (+ 10 (* *query-pos* (xlib:max-char-width *query-font*)))
+		  (+ (* 1 (+ (xlib:max-char-ascent *query-font*) (xlib:max-char-descent *query-font*))) 7))
   (copy-pixmap-buffer *query-window* *query-gc*))
 
 
