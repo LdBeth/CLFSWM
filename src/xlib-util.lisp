@@ -703,9 +703,9 @@ Expand in handle-event-fun-main-mode-key-press"
   (xlib:make-state-keys state))
 
 (defun keycode->keysym (code modifiers)
-  (xlib:keycode->keysym *display* code (cond  ((member :shift modifiers) 1)
-					      ((member :mod-5 modifiers) 2)
-					      (t 0))))
+  (xlib:keycode->keysym *display* code (cond ((member :shift modifiers) 1)
+					     ((member :mod-5 modifiers) 4)
+					     (t 0))))
 
 
 (defmacro with-grab-keyboard-and-pointer ((cursor mask old-cursor old-mask) &body body)

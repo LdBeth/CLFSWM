@@ -267,8 +267,8 @@
 (defun add-in-query-string (code state)
   (let* ((modifiers (state->modifiers state))
 	 (keysym (keycode->keysym code modifiers))
-	 (char (xlib:keysym->character *display* keysym)))
-    (when (and (characterp char) (standard-char-p char))
+	 (char (xlib:keysym->character *display* keysym state)))
+    (when (and char (characterp char))
       (setf *query-string* (concatenate 'string
 					(when (<= *query-pos* (length *query-string*))
 					  (subseq *query-string* 0 *query-pos*))

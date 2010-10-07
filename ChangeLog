@@ -1,3 +1,8 @@
+2010-10-07  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-query.lisp (add-in-query-string): Handle correctly
+	the mod-5 modifier.
+
 2010-10-06  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-query.lisp (query-print-string): Change cursor color
