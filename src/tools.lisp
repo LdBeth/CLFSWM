@@ -38,6 +38,11 @@
 	   :call-hook
 	   :add-hook
 	   :remove-hook
+	   :clear-timers
+	   :add-timer
+	   :with-timer
+	   :process-timers
+	   :timer-loop
 	   :dbg
 	   :dbgnl
 	   :dbgc
@@ -168,6 +173,49 @@ Return the result of the last hook"
     `(dolist (,i (list ,@value))
       (setf ,hook (remove ,i ,hook)))))
 
+
+;;;,-----
+;;;| Timers tools
+;;;`-----
+(defparameter *timer-list* nil)
+
+(declaim (inline realtime->s s->realtime))
+
+(defun realtime->s (rtime)
+  (float (/ rtime internal-time-units-per-second)))
+
+(defun s->realtime (second)
+  (round (* second internal-time-units-per-second)))
+
+
+(defun clear-timers ()
+  (setf *timer-list* nil))
+
+(defun add-timer (delay fun)
+  (push (let ((time (+ (get-internal-real-time) (s->realtime delay))))
+	  (lambda ()
+	    (when (>= (get-internal-real-time) time)
+	      (funcall fun)
+	      t)))
+	  *timer-list*))
+
+(defmacro with-timer ((delay) &body body)
+  `(add-timer ,delay
+	      (lambda ()
+		,@body)))
+
+
+(defun process-timers ()
+  (dolist (timer *timer-list*)
+    (when (funcall timer)
+      (setf *timer-list* (remove timer *timer-list* :test #'equal)))))
+
+
+(defun timer-test-loop ()
+  (loop
+     (princ ".") (force-output)
+     (process-timers)
+     (sleep 0.5)))
 
 
 ;;;,-----

@@ -1439,3 +1439,68 @@ For window: set current child to window or its parent according to window-parent
 	    (setf lx (first h)
 		  ly (second h))
 	    (xlib:warp-pointer *root* lx ly)))))))
+
+
+
+;;; Hello window functions
+(let ((font nil)
+      (window nil)
+      (gc nil)
+      (width 300) (height 50)
+      (current-child nil))
+  (defun open-hello-window ()
+    (with-placement (#'middle-middle-placement x y width height)
+      (setf font (xlib:open-font *display* *sm-font-string*)
+	    window (xlib:create-window :parent *root*
+				       :x x
+				       :y y
+				       :width width
+				       :height height
+				       :background (get-color *sm-background-color*)
+				       :border-width 1
+				       :border (get-color *sm-border-color*)
+				       :colormap (xlib:screen-default-colormap *screen*)
+				       :event-mask '(:exposure :key-press))
+	    gc (xlib:create-gcontext :drawable window
+				     :foreground (get-color *sm-foreground-color*)
+				     :background (get-color *sm-background-color*)
+				     :font font
+				     :line-style :solid))
+      (let ((text-height (- (xlib:font-ascent font) (xlib:font-descent font))))
+	(when (frame-p *current-child*)
+	  (setf current-child *current-child*)
+	  (push window (frame-forced-unmanaged-window *current-child*)))
+	(map-window window)
+	(raise-window window)
+	(let* ((text (format nil "Welcome to CLFSWM")))
+	  (xlib:draw-glyphs window gc
+			    (truncate (/ (- width (* (xlib:max-char-width font) (length text))) 2))
+			    (truncate (- (/ (+ height text-height) 2) text-height))
+			    text))
+	(let* ((text (format nil "Press Alt+F1 for help")))
+	  (xlib:draw-glyphs window gc
+			    (truncate (/ (- width (* (xlib:max-char-width font) (length text))) 2))
+			    (truncate (+ (/ (+ height text-height) 2) text-height))
+			    text))
+	(xlib:display-finish-output *display*))))
+
+  (defun close-hello-window ()
+    (setf (frame-forced-unmanaged-window current-child)
+	  (remove window (frame-forced-unmanaged-window current-child) :test #'xlib:window-equal))
+    (when gc
+      (xlib:free-gcontext gc))
+    (when window
+      (xlib:destroy-window window))
+    (when font
+      (xlib:close-font font))
+    (xlib:display-finish-output *display*)
+    (setf window nil
+	  gc nil
+	  font nil))
+
+
+  (defun display-hello-window ()
+    (sleep 5)
+    (open-hello-window)
+    (with-timer (10)
+      (close-hello-window))))

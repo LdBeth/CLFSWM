@@ -40,6 +40,7 @@
       (unwind-protect
 	   (loop
 	      (call-hook loop-hook)
+	      (process-timers)
 	      (nfuncall loop-function)
 	      (when (xlib:event-listen *display* *loop-timeout*)
 		(xlib:process-event *display* :handler #'handle-event))

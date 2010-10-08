@@ -37,6 +37,9 @@
 (setf *have-to-compress-notify* t)
 
 
+(defparameter *have-to-display-hello-window* t
+  "Config(): Display the hello window at startup")
+
 
 ;;; CONFIG - Default modifiers
 (defparameter *default-modifiers* '()

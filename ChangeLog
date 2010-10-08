@@ -1,3 +1,9 @@
+2010-10-08  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (): Add an Hello window at startup.
+
+	* src/tools.lisp (process-timers): Add a timer system.
+
 2010-10-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-query.lisp (add-in-query-string): Handle correctly

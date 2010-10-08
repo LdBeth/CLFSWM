@@ -146,6 +146,7 @@
 (defun main-loop ()
   (loop
      (call-hook *loop-hook*)
+     (process-timers)
      (with-xlib-protect
        (when (xlib:event-listen *display* *loop-timeout*)
 	 (xlib:process-event *display* :handler #'handle-event))
@@ -185,6 +186,7 @@
   (xgrab-init-keyboard)
   (init-last-child)
   (call-hook *binding-hook*)
+  (clear-timers)
   (map-window *no-focus-window*)
   (dbg *display*)
   (setf (xlib:window-event-mask *root*) (xlib:make-event-mask :substructure-redirect
@@ -205,7 +207,9 @@
   (process-existing-windows *screen*)
   (show-all-children *current-root*)
   (grab-main-keys)
-  (xlib:display-finish-output *display*))
+  (xlib:display-finish-output *display*)
+  (when *have-to-display-hello-window*
+    (display-hello-window)))
 
 
 
