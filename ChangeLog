@@ -1,3 +1,10 @@
+2010-10-09  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/tools.lisp (erase-timer): New function.
+
+	* src/clfswm-util.lisp (display-hello-window): Add a timer to hide
+	the hello window. Add Configuration variables.
+
 2010-10-08  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (): Add an Hello window at startup.

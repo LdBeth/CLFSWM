@@ -47,9 +47,9 @@ Example: :mod-2 for num_lock, :lock for Caps_lock...")
 
 ;;; CONFIG - Never managed window list
 (defparameter *never-managed-window-list*
-  '((xlib:get-wm-class "ROX-Pinboard")
-    (xlib:get-wm-class "xvkbd")
-    (xlib:wm-name "clfswm-terminal"))
+  '((string-equal xlib:get-wm-class "ROX-Pinboard")
+    (string-equal  xlib:get-wm-class "xvkbd")
+    (string-equal xlib:wm-name "clfswm-terminal"))
   "Config(): CLFSWM will never manage windows of this type.
 A list of (predicate-function-on-window expected-string)")
 
@@ -307,4 +307,22 @@ on the root window in the main mode with the mouse")
   "Config(Menu group): Key color in menu")
 (defparameter *menu-color-menu-key* (->color #xFF9AFF)
   "Config(Menu group): Menu key color in menu")
+
+
+;;; CONFIG - Hello window string colors
+(defparameter *hello-window-font-string* *default-font-string*
+  "Config(Hello Window mode group): Hello window font string")
+(defparameter *hello-window-background* "black"
+  "Config(Hello Window mode group): Hello Window background color")
+(defparameter *hello-window-foreground* "green"
+  "Config(Hello Window mode group): Hello Window foreground color")
+(defparameter *hello-window-border* "red"
+  "Config(Hello Window mode group): Hello Window border color")
+(defparameter *hello-window-width* 300
+  "Config(Hello Window mode group): Hello Window width")
+(defparameter *hello-window-height* 50
+  "Config(Hello Window mode group): Hello Window height")
+(defparameter *hello-window-delay* 10
+  "Config(Hello Window mode group): Hello Window display delay")
+
 

@@ -1446,47 +1446,57 @@ For window: set current child to window or its parent according to window-parent
 (let ((font nil)
       (window nil)
       (gc nil)
-      (width 300) (height 50)
+      width height
       (current-child nil))
+  (defun is-hello-window-p (win)
+    (xlib:window-equal win window))
+
   (defun open-hello-window ()
-    (with-placement (#'middle-middle-placement x y width height)
-      (setf font (xlib:open-font *display* *sm-font-string*)
+    (setf width *hello-window-width*
+	  height *hello-window-height*)
+    (with-placement (*hello-window-placement* x y width height)
+      (setf font (xlib:open-font *display* *hello-window-font-string*)
 	    window (xlib:create-window :parent *root*
 				       :x x
 				       :y y
 				       :width width
 				       :height height
-				       :background (get-color *sm-background-color*)
+				       :background (get-color *hello-window-background*)
 				       :border-width 1
-				       :border (get-color *sm-border-color*)
+				       :border (get-color *hello-window-border*)
 				       :colormap (xlib:screen-default-colormap *screen*)
 				       :event-mask '(:exposure :key-press))
 	    gc (xlib:create-gcontext :drawable window
-				     :foreground (get-color *sm-foreground-color*)
-				     :background (get-color *sm-background-color*)
+				     :foreground (get-color *hello-window-foreground*)
+				     :background (get-color *hello-window-background*)
 				     :font font
 				     :line-style :solid))
-      (let ((text-height (- (xlib:font-ascent font) (xlib:font-descent font))))
-	(when (frame-p *current-child*)
-	  (setf current-child *current-child*)
-	  (push window (frame-forced-unmanaged-window *current-child*)))
-	(map-window window)
-	(raise-window window)
-	(let* ((text (format nil "Welcome to CLFSWM")))
-	  (xlib:draw-glyphs window gc
-			    (truncate (/ (- width (* (xlib:max-char-width font) (length text))) 2))
-			    (truncate (- (/ (+ height text-height) 2) text-height))
-			    text))
-	(let* ((text (format nil "Press Alt+F1 for help")))
-	  (xlib:draw-glyphs window gc
-			    (truncate (/ (- width (* (xlib:max-char-width font) (length text))) 2))
-			    (truncate (+ (/ (+ height text-height) 2) text-height))
-			    text))
-	(xlib:display-finish-output *display*))))
+      (when (frame-p *current-child*)
+	(setf current-child *current-child*)
+	(push (list #'equal #'is-hello-window-p t) *never-managed-window-list*))
+      (map-window window)
+      (refresh-hello-window)
+      (xlib:display-finish-output *display*)))
+
+  (defun refresh-hello-window ()
+    (add-timer 0.1 #'refresh-hello-window)
+    (raise-window window)
+    (let ((text-height (- (xlib:font-ascent font) (xlib:font-descent font))))
+      (let* ((text (format nil "Welcome to CLFSWM")))
+	(xlib:draw-glyphs window gc
+			  (truncate (/ (- width (* (xlib:max-char-width font) (length text))) 2))
+			  (truncate (- (/ (+ height text-height) 2) text-height))
+			  text))
+      (let* ((text (format nil "Press Alt+F1 for help")))
+	(xlib:draw-glyphs window gc
+			  (truncate (/ (- width (* (xlib:max-char-width font) (length text))) 2))
+			  (truncate (+ (/ (+ height text-height) 2) text-height))
+			  text))))
 
   (defun close-hello-window ()
-    (setf (frame-forced-unmanaged-window current-child)
-	  (remove window (frame-forced-unmanaged-window current-child) :test #'xlib:window-equal))
+    (erase-timer #'refresh-hello-window)
+    (setf *never-managed-window-list*
+	  (remove (list #'equal #'is-hello-window-p t) *never-managed-window-list* :test #'equal))
     (when gc
       (xlib:free-gcontext gc))
     (when window
@@ -1498,8 +1508,6 @@ For window: set current child to window or its parent according to window-parent
 	  gc nil
 	  font nil))
 
-
   (defun display-hello-window ()
     (open-hello-window)
-    (with-timer (10)
-      (close-hello-window))))
+    (add-timer *hello-window-delay* #'close-hello-window)))

@@ -148,8 +148,11 @@
 
 (defun never-managed-window-p (window)
   (dolist (type *never-managed-window-list*)
-    (when (string-equal (funcall (first type) window) (second type))
-      (return t))))
+    (destructuring-bind (test predicate result) type
+      (when (funcall test (funcall predicate window) result)
+	(return t)))))
+    ;;(when (string-equal (funcall (first type) window) (second type))
+    ;;  (return t))))
 
 
 

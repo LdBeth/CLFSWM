@@ -208,6 +208,8 @@ It is particulary useful with CLISP/MIT-CLX.")
   "Config(Placement group): Circulate mode window placement")
 (defparameter *expose-mode-placement* 'top-left-child-placement
   "Config(Placement group): Expose mode window placement (Selection keys position)")
+(defparameter *hello-window-placement* 'bottom-right-placement
+  "Config(Placement group): Hello window placement")
 
 
 
