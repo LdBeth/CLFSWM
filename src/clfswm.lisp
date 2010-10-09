@@ -207,9 +207,7 @@
   (process-existing-windows *screen*)
   (show-all-children *current-root*)
   (grab-main-keys)
-  (xlib:display-finish-output *display*)
-  (when *have-to-display-hello-window*
-    (display-hello-window)))
+  (xlib:display-finish-output *display*))
 
 
 

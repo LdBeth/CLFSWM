@@ -1500,7 +1500,6 @@ For window: set current child to window or its parent according to window-parent
 
 
   (defun display-hello-window ()
-    (sleep 5)
     (open-hello-window)
     (with-timer (10)
       (close-hello-window))))

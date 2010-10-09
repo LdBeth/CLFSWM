@@ -37,10 +37,6 @@
 (setf *have-to-compress-notify* t)
 
 
-(defparameter *have-to-display-hello-window* t
-  "Config(): Display the hello window at startup")
-
-
 ;;; CONFIG - Default modifiers
 (defparameter *default-modifiers* '()
   "Config(): Default modifiers list to append to explicit modifiers
@@ -150,7 +146,7 @@ This command must set the window title to *clfswm-terminal-name*")
 ;;;
 ;;; See clfswm.lisp for hooks examples.
 
-(defparameter *init-hook* 'default-init-hook
+(defparameter *init-hook* '(default-init-hook display-hello-window)
   "Config(Hook group): Init hook. This hook is run just after the first root frame is created")
 
 (defparameter *default-nw-hook* 'default-frame-nw-hook
