@@ -309,20 +309,16 @@ on the root window in the main mode with the mouse")
   "Config(Menu group): Menu key color in menu")
 
 
-;;; CONFIG - Hello window string colors
-(defparameter *hello-window-font-string* *default-font-string*
-  "Config(Hello Window mode group): Hello window font string")
-(defparameter *hello-window-background* "black"
-  "Config(Hello Window group): Hello Window background color")
-(defparameter *hello-window-foreground* "green"
-  "Config(Hello Window group): Hello Window foreground color")
-(defparameter *hello-window-border* "red"
-  "Config(Hello Window group): Hello Window border color")
-(defparameter *hello-window-width* 300
-  "Config(Hello Window group): Hello Window width")
-(defparameter *hello-window-height* 50
-  "Config(Hello Window group): Hello Window height")
-(defparameter *hello-window-delay* 10
-  "Config(Hello Window group): Hello Window display delay")
+;;; CONFIG - Notify window string colors
+(defparameter *notify-window-font-string* *default-font-string*
+  "Config(Notify Window mode group): Notify window font string")
+(defparameter *notify-window-background* "black"
+  "Config(Notify Window group): Notify Window background color")
+(defparameter *notify-window-foreground* "green"
+  "Config(Notify Window group): Notify Window foreground color")
+(defparameter *notify-window-border* "red"
+  "Config(Notify Window group): Notify Window border color")
+(defparameter *notify-window-delay* 10
+  "Config(Notify Window group): Notify Window display delay")
 
 

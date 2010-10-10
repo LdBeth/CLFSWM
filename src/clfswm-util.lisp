@@ -1442,72 +1442,84 @@ For window: set current child to window or its parent according to window-parent
 
 
 
-;;; Hello window functions
-(let ((font nil)
-      (window nil)
-      (gc nil)
+;;; Notify window functions
+(let (font
+      window
+      gc
       width height
-      (current-child nil))
-  (defun is-hello-window-p (win)
-    (xlib:window-equal win window))
+      text
+      current-child)
+  (labels ((text-string (tx)
+	     (typecase tx
+	       (cons (first tx))
+	       (t tx)))
+	   (text-color (tx)
+	     (get-color (typecase tx
+			  (cons (second tx))
+			  (t *notify-window-foreground*)))))
+    (defun is-notify-window-p (win)
+      (xlib:window-equal win window))
 
-  (defun refresh-hello-window ()
-    (add-timer 0.1 #'refresh-hello-window :refresh-hello-window)
-    (raise-window window)
-    (let ((text-height (- (xlib:font-ascent font) (xlib:font-descent font))))
-      (let* ((text (format nil "Welcome to CLFSWM")))
-	(xlib:draw-glyphs window gc
-			  (truncate (/ (- width (* (xlib:max-char-width font) (length text))) 2))
-			  (truncate (- (/ (+ height text-height) 2) text-height))
-			  text))
-      (let* ((text (format nil "Press Alt+F1 for help")))
-	(xlib:draw-glyphs window gc
-			  (truncate (/ (- width (* (xlib:max-char-width font) (length text))) 2))
-			  (truncate (+ (/ (+ height text-height) 2) text-height))
-			  text))))
+    (defun refresh-notify-window ()
+      (add-timer 0.1 #'refresh-notify-window :refresh-notify-window)
+      (raise-window window)
+      (let ((text-height (- (xlib:font-ascent font) (xlib:font-descent font))))
+	(loop for tx in text
+	   for i from 1 do
+	     (setf (xlib:gcontext-foreground gc) (text-color tx))
+	     (xlib:draw-glyphs window gc
+			       (truncate (/ (- width (* (xlib:max-char-width font) (length (text-string tx)))) 2))
+			       (* text-height i 2)
+			       (text-string tx)))))
 
-  (defun open-hello-window ()
-    (setf width *hello-window-width*
-	  height *hello-window-height*
-	  font (xlib:open-font *display* *hello-window-font-string*))
-    (with-placement (*hello-window-placement* x y width height)
-      (setf window (xlib:create-window :parent *root*
-				       :x x
-				       :y y
-				       :width width
-				       :height height
-				       :background (get-color *hello-window-background*)
-				       :border-width 1
-				       :border (get-color *hello-window-border*)
-				       :colormap (xlib:screen-default-colormap *screen*)
-				       :event-mask '(:exposure :key-press))
-	    gc (xlib:create-gcontext :drawable window
-				     :foreground (get-color *hello-window-foreground*)
-				     :background (get-color *hello-window-background*)
-				     :font font
-				     :line-style :solid))
-      (when (frame-p *current-child*)
-	(setf current-child *current-child*)
-	(push (list #'equal #'is-hello-window-p t) *never-managed-window-list*))
-      (map-window window)
-      (refresh-hello-window)
-      (xlib:display-finish-output *display*)))
+    (defun close-notify-window ()
+      (erase-timer :refresh-notify-window)
+      (setf *never-managed-window-list*
+	    (remove (list #'equal #'is-notify-window-p t) *never-managed-window-list* :test #'equal))
+      (when gc
+	(xlib:free-gcontext gc))
+      (when window
+	(xlib:destroy-window window))
+      (when font
+	(xlib:close-font font))
+      (xlib:display-finish-output *display*)
+      (setf window nil
+	    gc nil
+	    font nil))
 
-  (defun close-hello-window ()
-    (erase-timer :refresh-hello-window)
-    (setf *never-managed-window-list*
-	  (remove (list #'equal #'is-hello-window-p t) *never-managed-window-list* :test #'equal))
-    (when gc
-      (xlib:free-gcontext gc))
-    (when window
-      (xlib:destroy-window window))
-    (when font
-      (xlib:close-font font))
-    (xlib:display-finish-output *display*)
-    (setf window nil
-	  gc nil
-	  font nil))
+    (defun open-notify-window (text-list)
+      (close-notify-window)
+      (setf font (xlib:open-font *display* *notify-window-font-string*))
+      (let ((text-height (- (xlib:font-ascent font) (xlib:font-descent font))))
+	(setf text text-list)
+	(setf width (* (xlib:max-char-width font) (+ (loop for tx in text-list
+							maximize (length (text-string tx))) 2))
+	      height (+ (* text-height (length text-list) 2) text-height))
+	(with-placement (*notify-window-placement* x y width height)
+	  (setf window (xlib:create-window :parent *root*
+					   :x x
+					   :y y
+					   :width width
+					   :height height
+					   :background (get-color *notify-window-background*)
+					   :border-width 1
+					   :border (get-color *notify-window-border*)
+					   :colormap (xlib:screen-default-colormap *screen*)
+					   :event-mask '(:exposure :key-press))
+		gc (xlib:create-gcontext :drawable window
+					 :foreground (get-color *notify-window-foreground*)
+					 :background (get-color *notify-window-background*)
+					 :font font
+					 :line-style :solid))
+	  (when (frame-p *current-child*)
+	    (setf current-child *current-child*)
+	    (push (list #'equal #'is-notify-window-p t) *never-managed-window-list*))
+	  (map-window window)
+	  (refresh-notify-window)
+	  (xlib:display-finish-output *display*))))))
 
-  (defun display-hello-window ()
-    (open-hello-window)
-    (add-timer *hello-window-delay* #'close-hello-window)))
+
+(defun display-hello-window ()
+  (open-notify-window '(("Welcome to CLFSWM" "yellow")
+			"Press Alt+F1 for help"))
+  (add-timer *notify-window-delay* #'close-notify-window))
