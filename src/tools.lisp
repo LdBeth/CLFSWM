@@ -225,18 +225,18 @@ Return the result of the last hook"
      (process-timers)
      (sleep 0.5)))
 
-(defun plop ()
-  (princ 'plop)
-  (erase-timer :toto))
-
-(defun toto ()
-  (princ 'toto)
-  (add-timer 5 #'toto :toto))
-
-(add-timer 5 #'toto :toto)
-(add-timer 30 #'plop)
-
-(timer-test-loop)
+;;(defun plop ()
+;;  (princ 'plop)
+;;  (erase-timer :toto))
+;;
+;;(defun toto ()
+;;  (princ 'toto)
+;;  (add-timer 5 #'toto :toto))
+;;
+;;(add-timer 5 #'toto :toto)
+;;(add-timer 30 #'plop)
+;;
+;;(timer-test-loop)
 
 
 
