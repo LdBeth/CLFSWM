@@ -192,29 +192,31 @@ Return the result of the last hook"
 (defun clear-timers ()
   (setf *timer-list* nil))
 
-(defun add-timer (delay fun)
-  (push (list (let ((time (+ (get-internal-real-time) (s->realtime delay))))
+(defun add-timer (delay fun &optional (id (gensym)))
+  (push (list id
+	      (let ((time (+ (get-internal-real-time) (s->realtime delay))))
 		(lambda ()
 		  (when (>= (get-internal-real-time) time)
 		    (funcall fun)
-		    t)))
-	      fun)
-	  *timer-list*))
+		    t))))
+	*timer-list*)
+  id)
 
-(defmacro with-timer ((delay) &body body)
+(defmacro with-timer ((delay &optional (id (gensym))) &body body)
   `(add-timer ,delay
 	      (lambda ()
-		,@body)))
+		,@body)
+	      ,id))
 
 
 (defun process-timers ()
   (dolist (timer *timer-list*)
-    (when (funcall (first timer))
+    (when (funcall (second timer))
       (setf *timer-list* (remove timer *timer-list* :test #'equal)))))
 
-(defun erase-timer (fun)
+(defun erase-timer (id)
   (dolist (timer *timer-list*)
-    (when (equal fun (second timer))
+    (when (equal id (first timer))
       (setf *timer-list* (remove timer *timer-list* :test #'equal)))))
 
 (defun timer-test-loop ()
@@ -223,18 +225,18 @@ Return the result of the last hook"
      (process-timers)
      (sleep 0.5)))
 
-;;(defun plop ()
-;;  (princ 'plop)
-;;  (erase-timer #'toto))
-;;
-;;(defun toto ()
-;;  (princ 'toto)
-;;  (add-timer 5 #'toto))
-;;
-;;(add-timer 5 #'toto)
-;;(add-timer 30 #'plop)
-;;
-;;(timer-test-loop)
+(defun plop ()
+  (princ 'plop)
+  (erase-timer :toto))
+
+(defun toto ()
+  (princ 'toto)
+  (add-timer 5 #'toto :toto))
+
+(add-timer 5 #'toto :toto)
+(add-timer 30 #'plop)
+
+(timer-test-loop)
 
 
 

@@ -1,3 +1,7 @@
+2010-10-10  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/tools.lisp (add-timer): Add an id to identify the timer.
+
 2010-10-09  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/tools.lisp (erase-timer): New function.

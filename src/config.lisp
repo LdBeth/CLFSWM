@@ -313,16 +313,16 @@ on the root window in the main mode with the mouse")
 (defparameter *hello-window-font-string* *default-font-string*
   "Config(Hello Window mode group): Hello window font string")
 (defparameter *hello-window-background* "black"
-  "Config(Hello Window mode group): Hello Window background color")
+  "Config(Hello Window group): Hello Window background color")
 (defparameter *hello-window-foreground* "green"
-  "Config(Hello Window mode group): Hello Window foreground color")
+  "Config(Hello Window group): Hello Window foreground color")
 (defparameter *hello-window-border* "red"
-  "Config(Hello Window mode group): Hello Window border color")
+  "Config(Hello Window group): Hello Window border color")
 (defparameter *hello-window-width* 300
-  "Config(Hello Window mode group): Hello Window width")
+  "Config(Hello Window group): Hello Window width")
 (defparameter *hello-window-height* 50
-  "Config(Hello Window mode group): Hello Window height")
+  "Config(Hello Window group): Hello Window height")
 (defparameter *hello-window-delay* 10
-  "Config(Hello Window mode group): Hello Window display delay")
+  "Config(Hello Window group): Hello Window display delay")
 
 

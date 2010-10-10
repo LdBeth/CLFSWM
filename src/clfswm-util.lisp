@@ -1451,12 +1451,27 @@ For window: set current child to window or its parent according to window-parent
   (defun is-hello-window-p (win)
     (xlib:window-equal win window))
 
+  (defun refresh-hello-window ()
+    (add-timer 0.1 #'refresh-hello-window :refresh-hello-window)
+    (raise-window window)
+    (let ((text-height (- (xlib:font-ascent font) (xlib:font-descent font))))
+      (let* ((text (format nil "Welcome to CLFSWM")))
+	(xlib:draw-glyphs window gc
+			  (truncate (/ (- width (* (xlib:max-char-width font) (length text))) 2))
+			  (truncate (- (/ (+ height text-height) 2) text-height))
+			  text))
+      (let* ((text (format nil "Press Alt+F1 for help")))
+	(xlib:draw-glyphs window gc
+			  (truncate (/ (- width (* (xlib:max-char-width font) (length text))) 2))
+			  (truncate (+ (/ (+ height text-height) 2) text-height))
+			  text))))
+
   (defun open-hello-window ()
     (setf width *hello-window-width*
-	  height *hello-window-height*)
+	  height *hello-window-height*
+	  font (xlib:open-font *display* *hello-window-font-string*))
     (with-placement (*hello-window-placement* x y width height)
-      (setf font (xlib:open-font *display* *hello-window-font-string*)
-	    window (xlib:create-window :parent *root*
+      (setf window (xlib:create-window :parent *root*
 				       :x x
 				       :y y
 				       :width width
@@ -1478,23 +1493,8 @@ For window: set current child to window or its parent according to window-parent
       (refresh-hello-window)
       (xlib:display-finish-output *display*)))
 
-  (defun refresh-hello-window ()
-    (add-timer 0.1 #'refresh-hello-window)
-    (raise-window window)
-    (let ((text-height (- (xlib:font-ascent font) (xlib:font-descent font))))
-      (let* ((text (format nil "Welcome to CLFSWM")))
-	(xlib:draw-glyphs window gc
-			  (truncate (/ (- width (* (xlib:max-char-width font) (length text))) 2))
-			  (truncate (- (/ (+ height text-height) 2) text-height))
-			  text))
-      (let* ((text (format nil "Press Alt+F1 for help")))
-	(xlib:draw-glyphs window gc
-			  (truncate (/ (- width (* (xlib:max-char-width font) (length text))) 2))
-			  (truncate (+ (/ (+ height text-height) 2) text-height))
-			  text))))
-
   (defun close-hello-window ()
-    (erase-timer #'refresh-hello-window)
+    (erase-timer :refresh-hello-window)
     (setf *never-managed-window-list*
 	  (remove (list #'equal #'is-hello-window-p t) *never-managed-window-list* :test #'equal))
     (when gc
