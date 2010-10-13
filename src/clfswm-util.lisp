@@ -330,7 +330,7 @@
 
 (defun eval-from-query-string ()
   "Eval a lisp form from the query input"
-  (let ((form (query-string "Eval:"))
+  (let ((form (query-string (format nil "Eval Lisp - ~A" (package-name *package*))))
 	(result nil))
     (when (and form (not (equal form "")))
       (let ((printed-result

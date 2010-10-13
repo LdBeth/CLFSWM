@@ -141,7 +141,7 @@
   (setf *in-second-mode* nil))
 
 (defun second-key-mode ()
-  "Switch to editing mode"
+  "Switch to editing mode (second mode)"
   (generic-mode 'second-mode
 		'exit-second-loop
 		:enter-function #'sm-enter-function

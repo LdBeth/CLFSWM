@@ -31,6 +31,7 @@
   (:export :it
 	   :awhen
 	   :aif
+	   :find-in-hash
 	   :nfuncall
 	   :pfuncall
 	   :symbol-search
@@ -40,6 +41,7 @@
 	   :remove-hook
 	   :clear-timers
 	   :add-timer
+	   :at
 	   :with-timer
 	   :process-timers
 	   :erase-timer
@@ -121,6 +123,15 @@
 (defmacro aif (test then &optional else)
   `(let ((it ,test)) (if it ,then ,else)))
 
+
+(defun find-in-hash (val hashtable &optional (test #'equal))
+  "Return the key associated to val in the hashtable"
+  (maphash #'(lambda (k v)
+	       (when (and (consp v) (funcall test (first v) val))
+		 (return-from find-in-hash (values k v))))
+	   hashtable))
+
+
 (defun nfuncall (function)
   (when function
     (funcall function)))
@@ -193,6 +204,7 @@ Return the result of the last hook"
   (setf *timer-list* nil))
 
 (defun add-timer (delay fun &optional (id (gensym)))
+  "Start the function fun at delay seconds."
   (push (list id
 	      (let ((time (+ (get-internal-real-time) (s->realtime delay))))
 		(lambda ()
@@ -202,7 +214,12 @@ Return the result of the last hook"
 	*timer-list*)
   id)
 
+(defun at (delay fun &optional (id (gensym)))
+  "Start the function fun at delay seconds."
+  (funcall #'add-timer delay fun id))
+
 (defmacro with-timer ((delay &optional (id (gensym))) &body body)
+  "Same thing as add-timer but with syntaxic sugar"
   `(add-timer ,delay
 	      (lambda ()
 		,@body)
@@ -210,11 +227,13 @@ Return the result of the last hook"
 
 
 (defun process-timers ()
+  "Call each timers in *timer-list* if needed"
   (dolist (timer *timer-list*)
     (when (funcall (second timer))
       (setf *timer-list* (remove timer *timer-list* :test #'equal)))))
 
 (defun erase-timer (id)
+  "Erase the timer identified by its id"
   (dolist (timer *timer-list*)
     (when (equal id (first timer))
       (setf *timer-list* (remove timer *timer-list* :test #'equal)))))

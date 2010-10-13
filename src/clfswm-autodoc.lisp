@@ -91,7 +91,7 @@ or<br> CLFSWM> (produce-all-docs)"))))
 
 
 
-(defun produce-doc (hash-table-key-list &optional (stream t))
+(defun produce-doc (hash-table-key-list &optional (stream t) (display-producing-doc t))
   "Produce a text doc from a hash-table key"
   (format stream "    * CLFSWM Keys *~%")
   (format stream "      -----------~%")
@@ -109,7 +109,8 @@ or<br> CLFSWM> (produce-all-docs)"))))
 			   (documentation (or (first v) (third v)) 'function))))
 	     hk)
     (format stream "~2&"))
-  (format stream "~2%This documentation was produced with the CLFSWM auto-doc functions.
+  (when display-producing-doc
+    (format stream "~2%This documentation was produced with the CLFSWM auto-doc functions.
 To reproduce it, use the produce-doc-in-file or the produce-all-docs
 function from the Lisp REPL.
 
@@ -117,7 +118,7 @@ Something like this:
 LISP> (in-package :clfswm)
 CLFSWM> (produce-doc-in-file \"my-keys.txt\")
 or
-CLFSWM> (produce-all-docs)~2%"))
+CLFSWM> (produce-all-docs)~2%")))
 
 
 

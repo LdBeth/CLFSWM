@@ -436,12 +436,14 @@ Function can be a function or a list (function color) for colored output"
 
 
 (defun show-key-binding (&rest hash-table-key)
-  "Show the binding of each hash-table-key"
+  "Show the binding of each hash-table-key.
+Pass the :no-producing-doc symbol to remove the producing doc"
   (info-mode (key-binding-colorize-line
 	      (split-string (append-newline-space
 			     (with-output-to-string (stream)
-			       (produce-doc hash-table-key
-					    stream)))
+			       (produce-doc (remove :no-producing-doc hash-table-key)
+					    stream
+					    (not (member :no-producing-doc hash-table-key)))))
 			    #\Newline))))
 
 
@@ -466,6 +468,37 @@ Function can be a function or a list (function color) for colored output"
   "Show the expose window mode key binding"
   (show-key-binding *expose-keys* *expose-mouse*))
 
+
+(defun show-first-aid-kit ()
+  "Show the first aid kit key binding"
+  (labels ((add-key (hash symbol &optional (hashkey *main-keys*))
+	     (multiple-value-bind (k v)
+		 (find-in-hash symbol hashkey)
+	       (setf (gethash k hash) v))))
+    (let ((hash (make-hash-table :test #'equal))
+	  (hash-second (make-hash-table :test #'equal)))
+      (setf (gethash 'name hash) "First aid kit - Main mode key binding"
+	    (gethash 'name hash-second) "First aid kit - Second mode key binding")
+      (add-key hash 'select-next-child)
+      (add-key hash 'select-previous-child)
+      (add-key hash 'select-next-brother)
+      (add-key hash 'select-previous-brother)
+      (add-key hash 'select-previous-level)
+      (add-key hash 'select-next-level)
+      (add-key hash 'enter-frame)
+      (add-key hash 'leave-frame)
+      (add-key hash 'second-key-mode)
+      (add-key hash 'expose-windows-mode)
+      (add-key hash 'expose-all-windows-mode)
+      (add-key hash 'present-clfswm-terminal)
+      (add-key hash-second 'leave-second-mode *second-keys*)
+      (add-key hash-second 'open-menu *second-keys*)
+      (add-key hash-second 'run-program-from-query-string *second-keys*)
+      (add-key hash-second 'eval-from-query-string *second-keys*)
+      (add-key hash-second 'set-open-in-new-frame-in-parent-frame-nw-hook *second-keys*)
+      (add-key hash-second 'b-start-xterm *second-keys*)
+      (add-key hash-second 'b-start-emacs *second-keys*)
+      (show-key-binding hash hash-second :no-producing-doc))))
 
 
 (defun corner-help-colorize-line (list)

@@ -1,3 +1,8 @@
+2010-10-13  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-info.lisp (show-first-aid-kit): Display the essential
+	key binding in main and second mode.
+
 2010-10-10  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (open-notify-window): Convert hello-window

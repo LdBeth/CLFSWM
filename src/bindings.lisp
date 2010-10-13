@@ -65,6 +65,7 @@
   (define-main-key ("F10" :shift :control) 'toggle-show-root-frame)
   (define-main-key ("F10") 'expose-windows-mode)
   (define-main-key ("F10" :control) 'expose-all-windows-mode)
+  (define-main-key ("L2" :control) 'present-clfswm-terminal)
   (define-main-key (#\b :mod-1) 'banish-pointer)
   ;; Escape
   (define-main-key ("Escape" :control) 'ask-close/kill-current-window)
