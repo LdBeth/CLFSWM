@@ -15,6 +15,7 @@ o: < Configuration menu >
 m: < CLFSWM menu >
 
 Help-Menu
+a: Show the first aid kit key binding
 h: Show all key binding
 b: Show the main mode binding
 s: Show the second mode key binding
@@ -133,7 +134,7 @@ i: Cervisia
 j: KAppTemplate
 k: KBugBuster
 l: KCachegrind - Visualization of Performance Profiling Data
-m: KDE SVN Build
+m: KDE Source Builder - Builds the KDE Platform and associated software from its source code. A command-line only program.
 n: KImageMapEditor
 o: KLinkStatus
 p: Kompare
@@ -313,12 +314,19 @@ k: KTimeTracker
 l: KWord - Write text documents
 m: Lokalize
 n: Okular
-o: OpenOffice.org 3.2 Math
-p: OpenOffice.org 3.2 Printer Administration
-q: OpenOffice.org 3.2
-r: OpenOffice.org 3.2 Writer
-s: Orage - Desktop calendar
-t: Xpdf - Views Adobe PDF (acrobat) files
+o: LibreOffice 3.3 Math
+p: LibreOffice 3.3 Printer Administration
+q: LibreOffice 3.3 
+r: LibreOffice 3.3 Writer
+s: OOo4Kids 1.0 Calc
+t: OOo4Kids 1.0 Draw
+u: OOo4Kids 1.0 Impress
+v: OOo4Kids 1.0 Math
+w: OOo4Kids 1.0
+x: OOo4Kids 1.0 Printer Administration
+y: OOo4Kids 1.0 Writer
+z: Orage - Desktop calendar
+|: Xpdf - Views Adobe PDF (acrobat) files
 
 Settings
 a: Assistive Technologies - Choose which accessibility features to enable when you log in
@@ -450,6 +458,7 @@ z: KFontView
 |: SuperKaramba - An engine for cool desktop eyecandy.
 |: Sweeper
 |: LXTerminal - Use the command line
+|: XMaxima - A sophisticated computer algebra system
 |: Mousepad - Simple text editor
 |: File Browser - Browse the file system with the file manager
 |: Computer - Browse all local and remote disks and folders accessible from this computer
@@ -906,20 +915,31 @@ l: Run LXDE
 p: Prompt for an other window manager
 
 Configuration-Menu
-a: < Expose mode group >
-b: < Hook group >
-c: < Main mode group >
-d: < Frame colors group >
-e: < Identify key group >
-f: < Second mode group >
-g: < Corner group >
-h: < Query string group >
+a: < Notify Window group >
+b: < Notify Window mode group >
+c: < Expose mode group >
+d: < Hook group >
+e: < Main mode group >
+f: < Frame colors group >
+g: < Identify key group >
+h: < Corner group >
 i: < Circulate mode group >
-j: < Placement group >
-k: < Miscellaneous group >
-l: < Info mode group >
-m: < Menu group >
+j: < Query string group >
+k: < Second mode group >
+l: < Placement group >
+m: < Miscellaneous group >
+n: < Info mode group >
+o: < Menu group >
 F2: Save all configuration variables in clfswmrc
+
+Conf-Notify-Window-Group
+a: Configure NOTIFY-WINDOW-DELAY
+b: Configure NOTIFY-WINDOW-BORDER
+c: Configure NOTIFY-WINDOW-FOREGROUND
+d: Configure NOTIFY-WINDOW-BACKGROUND
+
+Conf-Notify-Window-Mode-Group
+a: Configure NOTIFY-WINDOW-FONT-STRING
 
 Conf-Expose-Mode-Group
 a: Configure EXPOSE-FOREGROUND
@@ -952,14 +972,6 @@ b: Configure IDENTIFY-FONT-STRING
 c: Configure IDENTIFY-BORDER
 d: Configure IDENTIFY-BACKGROUND
 
-Conf-Second-Mode-Group
-a: Configure SM-FOREGROUND-COLOR
-b: Configure SM-BACKGROUND-COLOR
-c: Configure SM-HEIGHT
-d: Configure SM-WIDTH
-e: Configure SM-BORDER-COLOR
-f: Configure SM-FONT-STRING
-
 Conf-Corner-Group
 a: Configure CORNER-MAIN-MODE-LEFT-BUTTON
 b: Configure CORNER-SECOND-MODE-MIDDLE-BUTTON
@@ -972,12 +984,6 @@ h: Configure VIRTUAL-KEYBOARD-CMD
 i: Configure CORNER-MAIN-MODE-MIDDLE-BUTTON
 j: Configure CLFSWM-TERMINAL-NAME
 
-Conf-Query-String-Group
-a: Configure QUERY-BACKGROUND
-b: Configure QUERY-FONT-STRING
-c: Configure QUERY-BORDER
-d: Configure QUERY-FOREGROUND
-
 Conf-Circulate-Mode-Group
 a: Configure CIRCULATE-WIDTH
 b: Configure CIRCULATE-BORDER
@@ -987,19 +993,38 @@ e: Configure CIRCULATE-FONT-STRING
 f: Configure CIRCULATE-BACKGROUND
 g: Configure CIRCULATE-FOREGROUND
 
+Conf-Query-String-Group
+a: Configure QUERY-BACKGROUND
+b: Configure QUERY-FONT-STRING
+c: Configure QUERY-PARENT-COLOR
+d: Configure QUERY-BORDER
+e: Configure QUERY-MESSAGE-COLOR
+f: Configure QUERY-PARENT-ERROR-COLOR
+g: Configure QUERY-FOREGROUND
+h: Configure QUERY-CURSOR-COLOR
+
+Conf-Second-Mode-Group
+a: Configure SM-FOREGROUND-COLOR
+b: Configure SM-BACKGROUND-COLOR
+c: Configure SM-HEIGHT
+d: Configure SM-WIDTH
+e: Configure SM-BORDER-COLOR
+f: Configure SM-FONT-STRING
+
 Conf-Placement-Group
 a: Configure CIRCULATE-MODE-PLACEMENT
-b: Configure QUERY-MODE-PLACEMENT
-c: Configure BANISH-POINTER-PLACEMENT
-d: Configure EXPOSE-MODE-PLACEMENT
-e: Configure INFO-MODE-PLACEMENT
-f: Configure SECOND-MODE-PLACEMENT
+b: Configure NOTIFY-WINDOW-PLACEMENT
+c: Configure QUERY-MODE-PLACEMENT
+d: Configure BANISH-POINTER-PLACEMENT
+e: Configure EXPOSE-MODE-PLACEMENT
+f: Configure INFO-MODE-PLACEMENT
+g: Configure SECOND-MODE-PLACEMENT
 
 Conf-Miscellaneous-Group
 a: Configure HAVE-TO-COMPRESS-NOTIFY
-b: Configure HIDE-UNMANAGED-WINDOW
-c: Configure DEFAULT-WINDOW-WIDTH
-d: Configure CREATE-FRAME-ON-ROOT
+b: Configure DEFAULT-WINDOW-WIDTH
+c: Configure CREATE-FRAME-ON-ROOT
+d: Configure HIDE-UNMANAGED-WINDOW
 e: Configure DEFAULT-FRAME-DATA
 f: Configure DEFAULT-MODIFIERS
 g: Configure NEVER-MANAGED-WINDOW-LIST

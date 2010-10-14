@@ -55,6 +55,9 @@
       <a name="HELP-MENU"></a><a href="#MAIN">Help-Menu</a>
     </h3>
     <p>
+      a: Show the first aid kit key binding
+    </p>
+    <p>
       h: Show all key binding
     </p>
     <p>
@@ -393,7 +396,7 @@
       l: KCachegrind - Visualization of Performance Profiling Data
     </p>
     <p>
-      m: KDE SVN Build
+      m: KDE Source Builder - Builds the KDE Platform and associated software from its source code. A command-line only program.
     </p>
     <p>
       n: KImageMapEditor
@@ -923,22 +926,43 @@
       n: Okular
     </p>
     <p>
-      o: OpenOffice.org 3.2 Math
+      o: LibreOffice 3.3 Math
     </p>
     <p>
-      p: OpenOffice.org 3.2 Printer Administration
+      p: LibreOffice 3.3 Printer Administration
     </p>
     <p>
-      q: OpenOffice.org 3.2
+      q: LibreOffice 3.3 
     </p>
     <p>
-      r: OpenOffice.org 3.2 Writer
+      r: LibreOffice 3.3 Writer
     </p>
     <p>
-      s: Orage - Desktop calendar
+      s: OOo4Kids 1.0 Calc
     </p>
     <p>
-      t: Xpdf - Views Adobe PDF (acrobat) files
+      t: OOo4Kids 1.0 Draw
+    </p>
+    <p>
+      u: OOo4Kids 1.0 Impress
+    </p>
+    <p>
+      v: OOo4Kids 1.0 Math
+    </p>
+    <p>
+      w: OOo4Kids 1.0
+    </p>
+    <p>
+      x: OOo4Kids 1.0 Printer Administration
+    </p>
+    <p>
+      y: OOo4Kids 1.0 Writer
+    </p>
+    <p>
+      z: Orage - Desktop calendar
+    </p>
+    <p>
+      |: Xpdf - Views Adobe PDF (acrobat) files
     </p>
     <hr>
     <h3>
@@ -1326,6 +1350,9 @@
     </p>
     <p>
       |: LXTerminal - Use the command line
+    </p>
+    <p>
+      |: XMaxima - A sophisticated computer algebra system
     </p>
     <p>
       |: Mousepad - Simple text editor
@@ -2638,46 +2665,75 @@
       <a name="CONFIGURATION-MENU"></a><a href="#MAIN">Configuration-Menu</a>
     </h3>
     <p>
-      a: <a href="#CONF-EXPOSE-MODE-GROUP">< Expose mode group ></a>
+      a: <a href="#CONF-NOTIFY-WINDOW-GROUP">< Notify Window group ></a>
     </p>
     <p>
-      b: <a href="#CONF-HOOK-GROUP">< Hook group ></a>
+      b: <a href="#CONF-NOTIFY-WINDOW-MODE-GROUP">< Notify Window mode group ></a>
     </p>
     <p>
-      c: <a href="#CONF-MAIN-MODE-GROUP">< Main mode group ></a>
+      c: <a href="#CONF-EXPOSE-MODE-GROUP">< Expose mode group ></a>
     </p>
     <p>
-      d: <a href="#CONF-FRAME-COLORS-GROUP">< Frame colors group ></a>
+      d: <a href="#CONF-HOOK-GROUP">< Hook group ></a>
     </p>
     <p>
-      e: <a href="#CONF-IDENTIFY-KEY-GROUP">< Identify key group ></a>
+      e: <a href="#CONF-MAIN-MODE-GROUP">< Main mode group ></a>
     </p>
     <p>
-      f: <a href="#CONF-SECOND-MODE-GROUP">< Second mode group ></a>
+      f: <a href="#CONF-FRAME-COLORS-GROUP">< Frame colors group ></a>
     </p>
     <p>
-      g: <a href="#CONF-CORNER-GROUP">< Corner group ></a>
+      g: <a href="#CONF-IDENTIFY-KEY-GROUP">< Identify key group ></a>
     </p>
     <p>
-      h: <a href="#CONF-QUERY-STRING-GROUP">< Query string group ></a>
+      h: <a href="#CONF-CORNER-GROUP">< Corner group ></a>
     </p>
     <p>
       i: <a href="#CONF-CIRCULATE-MODE-GROUP">< Circulate mode group ></a>
     </p>
     <p>
-      j: <a href="#CONF-PLACEMENT-GROUP">< Placement group ></a>
+      j: <a href="#CONF-QUERY-STRING-GROUP">< Query string group ></a>
     </p>
     <p>
-      k: <a href="#CONF-MISCELLANEOUS-GROUP">< Miscellaneous group ></a>
+      k: <a href="#CONF-SECOND-MODE-GROUP">< Second mode group ></a>
     </p>
     <p>
-      l: <a href="#CONF-INFO-MODE-GROUP">< Info mode group ></a>
+      l: <a href="#CONF-PLACEMENT-GROUP">< Placement group ></a>
     </p>
     <p>
-      m: <a href="#CONF-MENU-GROUP">< Menu group ></a>
+      m: <a href="#CONF-MISCELLANEOUS-GROUP">< Miscellaneous group ></a>
+    </p>
+    <p>
+      n: <a href="#CONF-INFO-MODE-GROUP">< Info mode group ></a>
+    </p>
+    <p>
+      o: <a href="#CONF-MENU-GROUP">< Menu group ></a>
     </p>
     <p>
       F2: Save all configuration variables in clfswmrc
+    </p>
+    <hr>
+    <h3>
+      <a name="CONF-NOTIFY-WINDOW-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Notify-Window-Group</a>
+    </h3>
+    <p>
+      a: Configure NOTIFY-WINDOW-DELAY
+    </p>
+    <p>
+      b: Configure NOTIFY-WINDOW-BORDER
+    </p>
+    <p>
+      c: Configure NOTIFY-WINDOW-FOREGROUND
+    </p>
+    <p>
+      d: Configure NOTIFY-WINDOW-BACKGROUND
+    </p>
+    <hr>
+    <h3>
+      <a name="CONF-NOTIFY-WINDOW-MODE-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Notify-Window-Mode-Group</a>
+    </h3>
+    <p>
+      a: Configure NOTIFY-WINDOW-FONT-STRING
     </p>
     <hr>
     <h3>
@@ -2764,28 +2820,6 @@
     </p>
     <hr>
     <h3>
-      <a name="CONF-SECOND-MODE-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Second-Mode-Group</a>
-    </h3>
-    <p>
-      a: Configure SM-FOREGROUND-COLOR
-    </p>
-    <p>
-      b: Configure SM-BACKGROUND-COLOR
-    </p>
-    <p>
-      c: Configure SM-HEIGHT
-    </p>
-    <p>
-      d: Configure SM-WIDTH
-    </p>
-    <p>
-      e: Configure SM-BORDER-COLOR
-    </p>
-    <p>
-      f: Configure SM-FONT-STRING
-    </p>
-    <hr>
-    <h3>
       <a name="CONF-CORNER-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Corner-Group</a>
     </h3>
     <p>
@@ -2820,22 +2854,6 @@
     </p>
     <hr>
     <h3>
-      <a name="CONF-QUERY-STRING-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Query-String-Group</a>
-    </h3>
-    <p>
-      a: Configure QUERY-BACKGROUND
-    </p>
-    <p>
-      b: Configure QUERY-FONT-STRING
-    </p>
-    <p>
-      c: Configure QUERY-BORDER
-    </p>
-    <p>
-      d: Configure QUERY-FOREGROUND
-    </p>
-    <hr>
-    <h3>
       <a name="CONF-CIRCULATE-MODE-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Circulate-Mode-Group</a>
     </h3>
     <p>
@@ -2861,25 +2879,78 @@
     </p>
     <hr>
     <h3>
+      <a name="CONF-QUERY-STRING-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Query-String-Group</a>
+    </h3>
+    <p>
+      a: Configure QUERY-BACKGROUND
+    </p>
+    <p>
+      b: Configure QUERY-FONT-STRING
+    </p>
+    <p>
+      c: Configure QUERY-PARENT-COLOR
+    </p>
+    <p>
+      d: Configure QUERY-BORDER
+    </p>
+    <p>
+      e: Configure QUERY-MESSAGE-COLOR
+    </p>
+    <p>
+      f: Configure QUERY-PARENT-ERROR-COLOR
+    </p>
+    <p>
+      g: Configure QUERY-FOREGROUND
+    </p>
+    <p>
+      h: Configure QUERY-CURSOR-COLOR
+    </p>
+    <hr>
+    <h3>
+      <a name="CONF-SECOND-MODE-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Second-Mode-Group</a>
+    </h3>
+    <p>
+      a: Configure SM-FOREGROUND-COLOR
+    </p>
+    <p>
+      b: Configure SM-BACKGROUND-COLOR
+    </p>
+    <p>
+      c: Configure SM-HEIGHT
+    </p>
+    <p>
+      d: Configure SM-WIDTH
+    </p>
+    <p>
+      e: Configure SM-BORDER-COLOR
+    </p>
+    <p>
+      f: Configure SM-FONT-STRING
+    </p>
+    <hr>
+    <h3>
       <a name="CONF-PLACEMENT-GROUP"></a><a href="#CONFIGURATION-MENU">Conf-Placement-Group</a>
     </h3>
     <p>
       a: Configure CIRCULATE-MODE-PLACEMENT
     </p>
     <p>
-      b: Configure QUERY-MODE-PLACEMENT
+      b: Configure NOTIFY-WINDOW-PLACEMENT
     </p>
     <p>
-      c: Configure BANISH-POINTER-PLACEMENT
+      c: Configure QUERY-MODE-PLACEMENT
     </p>
     <p>
-      d: Configure EXPOSE-MODE-PLACEMENT
+      d: Configure BANISH-POINTER-PLACEMENT
     </p>
     <p>
-      e: Configure INFO-MODE-PLACEMENT
+      e: Configure EXPOSE-MODE-PLACEMENT
     </p>
     <p>
-      f: Configure SECOND-MODE-PLACEMENT
+      f: Configure INFO-MODE-PLACEMENT
+    </p>
+    <p>
+      g: Configure SECOND-MODE-PLACEMENT
     </p>
     <hr>
     <h3>
@@ -2889,13 +2960,13 @@
       a: Configure HAVE-TO-COMPRESS-NOTIFY
     </p>
     <p>
-      b: Configure HIDE-UNMANAGED-WINDOW
+      b: Configure DEFAULT-WINDOW-WIDTH
     </p>
     <p>
-      c: Configure DEFAULT-WINDOW-WIDTH
+      c: Configure CREATE-FRAME-ON-ROOT
     </p>
     <p>
-      d: Configure CREATE-FRAME-ON-ROOT
+      d: Configure HIDE-UNMANAGED-WINDOW
     </p>
     <p>
       e: Configure DEFAULT-FRAME-DATA
