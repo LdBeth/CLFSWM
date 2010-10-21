@@ -125,38 +125,43 @@
   (setf *menu* (make-menu :name 'main :doc "Main menu")))
 
 
-
 ;;; Display menu functions
+(defun open-menu-do-action (action menu parent)
+  (typecase action
+    (menu (open-menu action (cons menu parent)))
+    (null (awhen (first parent)
+	    (open-menu it (rest parent))))
+    (t (when (fboundp action)
+	 (funcall action)))))
+
+
 (defun open-menu (&optional (menu *menu*) (parent nil))
   "Open the main menu"
-  (let ((info-list nil)
-	(action nil))
-    (dolist (item (menu-item menu))
-      (let ((value (menu-item-value item)))
-	(push (typecase value
-		(menu (list (list (format nil "~A" (menu-item-key item)) *menu-color-menu-key*)
-			    (list (format nil ": < ~A >" (menu-doc value)) *menu-color-submenu*)))
-		(string (list (list (format nil "~A" (menu-item-value item)) *menu-color-comment*)))
-		(t (list (list (format nil "~A" (menu-item-key item)) *menu-color-key*)
-			 (format nil ": ~A" (documentation value 'function)))))
-	      info-list)
-	(when (menu-item-key item)
-	  (define-info-key-fun (list (menu-item-key item))
-	      (lambda (&optional args)
-		(declare (ignore args))
-		(setf action value)
-		(leave-info-mode nil))))))
-    (let ((selected-item (info-mode (nreverse info-list))))
-      (dolist (item (menu-item menu))
-	(undefine-info-key-fun (list (menu-item-key item))))
-      (when selected-item
-	(awhen (nth selected-item (menu-item menu))
-	  (setf action (menu-item-value it))))
-      (typecase action
-	(menu (open-menu action (cons menu parent)))
-	(null (awhen (first parent)
-		(open-menu it (rest parent))))
-	(t (when (fboundp action)
-	     (funcall action)))))))
+  (let ((action nil))
+    (labels ((populate-menu ()
+	       (let ((info-list nil))
+		 (dolist (item (menu-item menu))
+		   (let ((value (menu-item-value item)))
+		     (push (typecase value
+			     (menu (list (list (format nil "~A" (menu-item-key item)) *menu-color-menu-key*)
+					 (list (format nil ": < ~A >" (menu-doc value)) *menu-color-submenu*)))
+			     (string (list (list (format nil "~A" (menu-item-value item)) *menu-color-comment*)))
+			     (t (list (list (format nil "~A" (menu-item-key item)) *menu-color-key*)
+				      (format nil ": ~A" (documentation value 'function)))))
+			   info-list)
+		     (when (menu-item-key item)
+		       (define-info-key-fun (list (menu-item-key item))
+			   (lambda (&optional args)
+			     (declare (ignore args))
+			     (setf action value)
+			     (leave-info-mode nil))))))
+		 (nreverse info-list))))
+      (let ((selected-item (info-mode (populate-menu))))
+	(dolist (item (menu-item menu))
+	  (undefine-info-key-fun (list (menu-item-key item))))
+	(when selected-item
+	  (awhen (nth selected-item (menu-item menu))
+	    (setf action (menu-item-value it)))))
+      (open-menu-do-action action menu parent))))
 
 
