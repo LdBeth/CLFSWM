@@ -2,7 +2,7 @@
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
 ;;; --------------------------------------------------------------------------
-;;; Documentation: Music Player Daemon (MPD) interface
+;;; Documentation: Define some keybindings for an azerty french keyboard
 ;;; --------------------------------------------------------------------------
 ;;;
 ;;; (C) 2009 Philippe Brochard <hocwp@free.fr>

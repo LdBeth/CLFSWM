@@ -56,7 +56,6 @@ You can tweak this to what you want"
 
 
 ;;; Display menu functions
-
 (defun open-menu-do-action (action menu parent)
   (typecase action
     (menu (open-menu action (cons menu parent)))

@@ -232,3 +232,19 @@
 
 
 
+(defun binding-substitute-modifier (to from &optional (hashtables (list *main-keys* *main-mouse*
+									*second-keys* *second-mouse*
+									*info-keys* *info-mouse*
+									*query-keys*
+									*circulate-keys* *circulate-keys-release*
+									*expose-keys* *expose-mouse*)))
+  "Utility to change modifiers after binding definition"
+  (labels ((change (&optional (hashtable *main-keys*) to from)
+	     (maphash (lambda (k v)
+			(when (consp k)
+			  (let ((state (modifiers->state (substitute to from (state->modifiers (second k))))))
+			    (remhash k hashtable)
+			    (setf (gethash (list (first k) state) hashtable) v))))
+		      hashtable)))
+    (dolist (h hashtables)
+      (change h to from))))
