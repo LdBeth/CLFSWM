@@ -228,27 +228,20 @@ Expand in handle-event-fun-main-mode-key-press"
     (when (window-hidden-p window)
       (xlib:map-window window)
       (setf (window-state window) +normal-state+
-	    (xlib:window-event-mask window) *window-events*)))
-  (xlib:display-finish-output *display*))
-
+	    (xlib:window-event-mask window) *window-events*))))
 
 
 (defun map-window (window)
   (when window
-    (xlib:map-window window)
-    (xlib:display-finish-output *display*)))
+    (xlib:map-window window)))
+
 
 (defun delete-window (window)
   (send-client-message window :WM_PROTOCOLS
-		       (xlib:intern-atom *display* "WM_DELETE_WINDOW"))
-  (xlib:display-finish-output *display*))
+		       (xlib:intern-atom *display* "WM_DELETE_WINDOW")))
 
 (defun destroy-window (window)
-  (xlib:kill-client *display* (xlib:window-id window))
-  (xlib:display-finish-output *display*))
-
-
-
+  (xlib:kill-client *display* (xlib:window-id window)))
 
 
 
@@ -343,8 +336,7 @@ Expand in handle-event-fun-main-mode-key-press"
     (setf (window-state window) +iconic-state+
 	  (xlib:window-event-mask window) (remove :structure-notify *window-events*))
     (xlib:unmap-window window)
-    (setf (xlib:window-event-mask window) *window-events*))
-  (xlib:display-finish-output *display*))
+    (setf (xlib:window-event-mask window) *window-events*)))
 
 
 
@@ -402,25 +394,17 @@ Expand in handle-event-fun-main-mode-key-press"
   (when window
     (when (window-hidden-p window)
       (unhide-window window))
-    (setf (xlib:window-priority window) :top-if))
-  (xlib:display-finish-output *display*))
+    (setf (xlib:window-priority window) :top-if)))
 
 (defun focus-window (window)
   "Give the window focus."
   (when window
-    (xlib:set-input-focus *display* window :parent))
-  (xlib:display-finish-output *display*))
-
-
-
-
-
+    (xlib:set-input-focus *display* window :parent)))
 
 
 (defun no-focus ()
   "don't focus any window but still read keyboard events."
-  (xlib:set-input-focus *display* *no-focus-window* :pointer-root)
-  (xlib:display-finish-output *display*))
+  (xlib:set-input-focus *display* *no-focus-window* :pointer-root))
 
 
 

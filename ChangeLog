@@ -1,5 +1,7 @@
 2010-10-23  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/xlib-util.lisp: Remove unnecessary xlib:display-finish-output.
+
 	* src/clfswm-internal.lisp (show-child): Show window only if not
 	hidden.
 

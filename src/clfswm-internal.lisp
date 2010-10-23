@@ -581,8 +581,8 @@
 	(when (or *show-root-frame-p* (not (child-equal-p frame *current-root*)))
 	  (map-window window)
 	  (when raise-p
-	    (raise-window window)
-	    (display-frame-info frame)))
+	    (raise-window window))
+	  (display-frame-info frame))
 	(hide-window window))))
 
 
@@ -596,13 +596,13 @@
 
 
 (defmethod show-child ((window xlib:window) parent raise-p)
-  (if (and raise-p
-	   (or (managed-window-p window parent)
-	       (not (hide-unmanager-window-p parent))
-	       (child-equal-p parent *current-child*)))
+  (if (or (managed-window-p window parent)
+	  (not (hide-unmanager-window-p parent))
+	  (child-equal-p parent *current-child*))
       (progn
 	(map-window window)
-	(raise-window window))
+	(when raise-p
+	  (raise-window window)))
       (hide-window window)))
 
 (defmethod show-child (child parent raise-p)
