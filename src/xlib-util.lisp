@@ -232,6 +232,7 @@ Expand in handle-event-fun-main-mode-key-press"
   (xlib:display-finish-output *display*))
 
 
+
 (defun map-window (window)
   (when window
     (xlib:map-window window)
