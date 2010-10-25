@@ -7,7 +7,10 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- nothing here :)
+- remove uneeded files in contrib/server
+- handle cursor with too long lines in info mode
+- info mode: complet on [tab] without living the info mode.
+
 
 MAYBE
 =====
