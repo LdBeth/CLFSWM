@@ -717,9 +717,17 @@ Useful for re-using the &REST arg after removing some options."
 
 
 (defun get-command-line-words ()
-  #+CLISP ext:*args*
-  #+CMU (nthcdr 3 extensions:*command-line-strings*)
-  #+SBCL sb-ext:*posix-argv*)
+  #+sbcl (cdr sb-ext:*posix-argv*)
+  #+(or clozure ccl) (cddddr (ccl::command-line-arguments))
+  #+gcl (cdr si:*command-args*)
+  #+ecl (loop for i from 1 below (si:argc) collect (si:argv i))
+  #+cmu (cdddr extensions:*command-line-strings*)
+  #+allegro (cdr (sys:command-line-arguments))
+  #+lispworks (cdr sys:*line-arguments-list*)
+  #+clisp ext:*args*
+  #-(or sbcl clozure gcl ecl cmu allegro lispworks clisp)
+  (error "get-command-line-arguments not supported for your implementation"))
+
 
 
 

@@ -183,6 +183,10 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defparameter *loop-hook* nil
   "Config(Hook group): Hook executed on each event loop")
 
+(defparameter *main-entrance-hook* nil
+  "Config(Hook group): Hook executed on the main function entrance after
+loading configuration file and before opening the display.")
+
 
 (defparameter *in-second-mode* nil)
 

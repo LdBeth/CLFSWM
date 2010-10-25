@@ -7,14 +7,12 @@
 (defsystem clfswm-client
   :description ""
   :licence "GNU Lesser General Public License (LGPL)"
-  :components ((:file "clfswm-client"))
-  :depends-on (util-server))
-
-
-
-
-
-
-
+  :components ((:file "md5")
+	       (:file "net")
+	       (:file "crypt")
+	       (:file "key"
+		      :depends-on ("crypt"))
+	       (:file "clfswm-client"
+		      :depends-on ("md5" "net" "crypt" "key"))))
 
 

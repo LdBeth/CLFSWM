@@ -1,3 +1,12 @@
+2010-10-25  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/server/server.lisp: Load clfswm client code in the main
+	program and let the user start it with a --client command line
+	option.
+
+	* src/package.lisp (*main-entrance-hook*): New hook executed after
+	loading configuration file and before opening the display.
+
 2010-10-23  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/xlib-util.lisp: Remove unnecessary xlib:display-finish-output.

@@ -248,6 +248,7 @@
   (conf-file-name alternate-conf)
   (when read-conf-file-p
     (read-conf-file))
+  (call-hook *main-entrance-hook*)
   (handler-case
       (open-display display protocol)
     (xlib:access-error (c)
@@ -274,6 +275,7 @@
 	(xlib:close-display *display*)
 	#+:event-debug
 	(format t "~2&Unhandled events: ~A~%" *unhandled-events*))))
+
 
 
 (defun main (&key (display (or (getenv "DISPLAY") ":0")) protocol

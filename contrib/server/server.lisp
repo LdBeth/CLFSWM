@@ -37,7 +37,7 @@
 
 (dbg asdf:*central-registry*)
 
-(asdf:oos 'asdf:load-op :util-server)
+(asdf:oos 'asdf:load-op :clfswm-client)
 
 (in-package :clfswm)
 
@@ -234,13 +234,13 @@
 
 
 (defun start-server (&optional port)
-  (save-new-key)
   (when port
     (setf *server-port* port))
   (setf *server-socket* (port:open-socket-server *server-port*))
   (add-hook *loop-hook* 'handle-server)
   (format t "*** Server is started on port ~A and is accepting connection only from [~{~A~^, ~}].~2%"
-	  *server-port* *server-allowed-host*))
+	  *server-port* *server-allowed-host*)
+  (save-new-key))
 
 
 
@@ -248,11 +248,17 @@
 (format t "done.
 
 You can now start a clfswm server with the command (start-server &optional port).
-Only [~{~A~^, ~}] ~A allowed to login on the server~%"
+Only [~{~A~^, ~}] ~A allowed to login on the server.
+You can start the client with the '--client' command line option.~%"
 	*server-allowed-host*
 	(if (or (null *server-allowed-host*) (= (length *server-allowed-host*) 1))
 	    "is" "are"))
 
+(defun server-parse-cmdline ()
+  (let ((args (get-command-line-words)))
+    (when (member "--client" args :test #'string-equal)
+      (clfswm-client:start-client (remove "--client" args :test #'string-equal))
+      (uquit))))
 
-
+(add-hook *main-entrance-hook* 'server-parse-cmdline)
 

@@ -1,21 +1,10 @@
 (in-package :common-lisp-user)
 
 (defpackage :clfswm-client
-  (:use :common-lisp :crypt))
+  (:use :common-lisp :crypt)
+  (:export :start-client))
 
 (in-package :clfswm-client)
-
-(defun args ()
-  #+sbcl (cdr sb-ext:*posix-argv*)
-  #+(or clozure ccl) (cddddr (ccl::command-line-arguments))
-  #+gcl (cdr si:*command-args*)
-  #+ecl (loop for i from 1 below (si:argc) collect (si:argv i))
-  #+cmu (cdddr extensions:*command-line-strings*)
-  #+allegro (cdr (sys:command-line-arguments))
-  #+lispworks (cdr sys:*line-arguments-list*)
-  #+clisp ext:*args*
-  #-(or sbcl clozure gcl ecl cmu allegro lispworks clisp)
-  (error "get-command-line-arguments not supported for your implementation"))
 
 (defun uquit ()
   #+(or clisp cmu) (ext:quit)
@@ -25,7 +14,6 @@
   #+lispworks (lw:quit)
   #+(or allegro-cl allegro-cl-trial) (excl:exit)
   #+ccl (ccl:quit))
-
 
 
 (defparameter *server-port* 33333)
@@ -61,7 +49,7 @@
 	(parse-args sock (subseq args pos))))))
 
 
-(defun start-client (&optional (url "127.0.0.1") (port *server-port*))
+(defun start-client (args &optional (url "127.0.0.1") (port *server-port*))
   (load-new-key)
   (let* ((sock (port:open-socket url port))
 	 (key (string-trim '(#\Newline #\Space) (decrypt (read-line sock nil nil) *key*))))
@@ -69,7 +57,7 @@
     (write-line (crypt (format nil "~A~A" *key* (md5:md5 *key*)) *key*) sock)
     (force-output sock)
     (print-output sock t)
-    (dolist (a (args))
+    (dolist (a args)
       (parse-args sock a))
     (loop
        (print-output sock)
@@ -77,5 +65,6 @@
 	 (let ((line (read-line)))
 	   (write-line (crypt line *key*) sock)
 	   (force-output sock)
-	   (quit-on-command line sock))))))
+	   (quit-on-command line sock)))
+       (sleep 0.01))))
 

@@ -137,8 +137,10 @@ do
 	--)
 	    shift
 	    break ;;
-	*)
+	-h|--help)
 	    usage ;;
+	*)
+	    ARGS="$ARGS $1" ;;
     esac
     shift
 done
@@ -188,18 +190,21 @@ then
     rm -rf $(find "$dump_path/" -name "*svn")
 
     rm -rf "$tmp_dir"/clfswm-tmp
+
+    echo "CLFSWM image is: $dump_image"
 fi
 
 # Run the resulting image
 if test no = "$no_start"
 then
     cd "$dump_path"
+    echo "Arguments: $* and $ARGS"
     case $lisp in
-	clisp ) "$dump_image" ;;
-	sbcl ) exec sbcl --core "$dump_image" ;;
-	cmucl ) exec cmucl -core "$dump_image" ;;
-	ccl ) exec ccl -I "$dump_image" ;;
-	ecl ) "$dump_image" -eval "(progn (clfswm:main) (ext:quit 0))" ;;
+	clisp ) "$dump_image" -- $ARGS ;;
+	sbcl ) exec sbcl --core "$dump_image" $ARGS ;;
+	cmucl ) exec cmucl -core "$dump_image" $ARGS ;;
+	ccl ) exec ccl -I "$dump_image" -- $ARGS ;;
+	ecl ) "$dump_image" -eval "(progn (clfswm:main) (ext:quit 0))" $ARGS ;;
 	*) echo "..." ;;
     esac
 else
