@@ -54,6 +54,5 @@
 (in-package :clfswm-client)
 
 
-#-BUILD
-(start-client)
+(start-client nil)
 
