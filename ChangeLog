@@ -1,3 +1,8 @@
+2010-10-27  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-expose-mode.lisp (expose-create-window): Ensure that
+	all characters are printable.
+
 2010-10-25  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/server/server.lisp: Load clfswm client code in the main

@@ -107,7 +107,7 @@
   (let* ((*current-child* child)
 	 (string (format nil "~A~A" (number->char n)
 			 (if *expose-show-window-title*
-			     (format nil " - ~A" (child-fullname child))
+			     (format nil " - ~A" (ensure-printable (child-fullname child)))
 			     "")))
 	 (width (if *expose-show-window-title*
 		    (min (* (xlib:max-char-width *expose-font*) (+ (length string) 2))
