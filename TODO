@@ -16,23 +16,26 @@ MAYBE
 
 - cd/pwd a la shell to navigate through frames.
 
+- Switch to a reparenting window manager to prevent remaining flickering.
+
 - Zoom:
+    Concept:
+      * zoom out: Behave as if the application window is bigger for the application but
+        completely drawn in a small amount of space (miniature). The zoom factor is inferior to 100%
+      * zoom in: Behave as a magnifying glass. The zoom factor is superior to 100%.
+        The part of the application window shown (viewport) can be moved.
 
-Concept:
-  * zoom out: Behave as if the application window is bigger for the application but completely drawn in a small amount of space (miniature). The zoom factor is inferior to 100%
-  * zoom in: Behave as a magnifying glass. The zoom factor is superior to 100%. The part of the application window shown (viewport) can be moved.
+    Operation:
+      * set-zoom-factor (frame, factor)
+      * move-viewport (frame &optional (increment 1))
+        * left
+        * right
+        * up
+        * down
 
-Operation:
-  * set-zoom-factor (frame, factor)
-  * move-viewport (frame &optional (increment 1))
-    * left
-    * right
-    * up
-    * down
-
-Maybe this can be done with a compositing system on Lisp with clx that support xrender.
-  http://en.wikipedia.org/wiki/Compositing_window_manager
-  http://ktown.kde.org/~fredrik/composite_howto.html
+    Maybe this can be done with a compositing system:
+      http://en.wikipedia.org/wiki/Compositing_window_manager
+      http://ktown.kde.org/~fredrik/composite_howto.html
 
 - Undo/redo
 

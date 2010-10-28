@@ -1,4 +1,4 @@
-;;;; -*- Mode: Lisp -*-
+ ;;;; -*- Mode: Lisp -*-
 ;;;; Author: Philippe Brochard <hocwp@free.fr>
 ;;;; ASDF System Definition
 ;;;
@@ -76,7 +76,8 @@
 				:depends-on ("clfswm" "clfswm-internal" "clfswm-util" "clfswm-menu"))
 			 (:file "bindings-second-mode"
 				:depends-on ("clfswm" "clfswm-util" "clfswm-query" "bindings" "clfswm-pack" "clfswm-menu" "menu-def"
-						      "clfswm-layout"))))))
+						      "clfswm-layout")))))
+  #-:CLX :depends-on #-:CLX (:clx))
 
 
 
