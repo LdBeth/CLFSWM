@@ -77,7 +77,7 @@
 			 (:file "bindings-second-mode"
 				:depends-on ("clfswm" "clfswm-util" "clfswm-query" "bindings" "clfswm-pack" "clfswm-menu" "menu-def"
 						      "clfswm-layout")))))
-  #-:CLX :depends-on #-:CLX (:clx))
+  :depends-on ( #-:CLX :clx ))
 
 
 
