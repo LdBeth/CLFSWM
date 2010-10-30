@@ -364,27 +364,10 @@
 ;;; Frame name actions
 (defun ask-frame-name (msg)
   "Ask a frame name"
-  (let ((all-frame-name nil)
-	(name ""))
+  (let ((all-frame-name nil))
     (with-all-frames (*root-frame* frame)
       (awhen (frame-name frame) (push it all-frame-name)))
-    (labels ((selected-names ()
-	       (loop :for str :in all-frame-name
-		  :when (zerop (or (search name str :test #'string-equal) -1))
-		  :collect str))
-	     (complet-alone (req sel)
-	       (if (= 1 (length sel)) (first sel) req))
-	     (ask ()
-	       (let* ((selected (selected-names))
-		      (default (complet-alone name selected)))
-		 (multiple-value-bind (str done)
-		     (query-string (format nil "~A: ~{~A~^, ~}" msg selected) default)
-		   (setf name str)
-		   (when (or (not (string-equal name default)) (eql done :complet))
-		     (ask))))))
-      (ask))
-    name))
-
+    (query-string msg "" all-frame-name)))
 
 
 ;;; Focus by functions
@@ -399,7 +382,7 @@
 
 (defun focus-frame-by-name ()
   "Focus a frame by name"
-  (focus-frame-by (find-frame-by-name (ask-frame-name "Focus frame")))
+  (focus-frame-by (find-frame-by-name (ask-frame-name "Focus frame:")))
   (leave-second-mode))
 
 (defun focus-frame-by-number ()
@@ -418,7 +401,7 @@
 
 (defun open-frame-by-name ()
   "Open a new frame in a named frame"
-  (open-frame-by (find-frame-by-name (ask-frame-name "Open a new frame in")))
+  (open-frame-by (find-frame-by-name (ask-frame-name "Open a new frame in: ")))
   (leave-second-mode))
 
 (defun open-frame-by-number ()
@@ -441,7 +424,7 @@
 
 (defun delete-frame-by-name ()
   "Delete a frame by name"
-  (delete-frame-by (find-frame-by-name (ask-frame-name "Delete frame")))
+  (delete-frame-by (find-frame-by-name (ask-frame-name "Delete frame: ")))
   (leave-second-mode))
 
 (defun delete-frame-by-number ()
@@ -463,7 +446,7 @@
   "Move current child in a named frame"
   (move-child-to *current-child*
 		 (find-frame-by-name
-		  (ask-frame-name (format nil "Move '~A' to frame" (child-name *current-child*)))))
+		  (ask-frame-name (format nil "Move '~A' to frame: " (child-name *current-child*)))))
   (leave-second-mode))
 
 (defun move-current-child-by-number ()
@@ -486,7 +469,7 @@
   "Copy current child in a named frame"
   (copy-child-to *current-child*
 		 (find-frame-by-name
-		  (ask-frame-name (format nil "Copy '~A' to frame" (child-name *current-child*)))))
+		  (ask-frame-name (format nil "Copy '~A' to frame: " (child-name *current-child*)))))
   (leave-second-mode))
 
 (defun copy-current-child-by-number ()

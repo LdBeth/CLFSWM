@@ -31,6 +31,7 @@
 (defparameter *query-gc* nil)
 
 (defparameter *query-history* nil)
+(defparameter *query-complet-list* nil)
 
 (defparameter *query-message* nil)
 (defparameter *query-string* nil)
@@ -91,10 +92,13 @@
 (defun leave-query-mode-valid ()
   (leave-query-mode :Return))
 
-(defun leave-query-mode-complet ()
-  (leave-query-mode :Complet))
-
 (add-hook *binding-hook* 'init-*query-keys*)
+
+
+(defun query-find-complet-list ()
+  (remove-if-not (lambda (x)
+		   (zerop (or (search *query-string* x :test #'string-equal) -1)))
+		 *query-complet-list*))
 
 
 (defun query-print-string ()
@@ -102,7 +106,9 @@
 		       (+ 10 (* *query-pos* (xlib:max-char-width *query-font*)))))))
     (clear-pixmap-buffer *query-window* *query-gc*)
     (setf (xlib:gcontext-foreground *query-gc*) (get-color *query-message-color*))
-    (xlib:draw-glyphs *pixmap-buffer* *query-gc* 5 (+ (xlib:max-char-ascent *query-font*) 5) *query-message*)
+    (xlib:draw-glyphs *pixmap-buffer* *query-gc* 5 (+ (xlib:max-char-ascent *query-font*) 5)
+		      (format nil "~A ~{~A~^, ~}" *query-message*
+			      (query-find-complet-list)))
     (when (< *query-pos* 0)
       (setf *query-pos* 0))
     (when (> *query-pos* (length *query-string*))
@@ -243,13 +249,22 @@
   (setf *query-string* (subseq *query-string* 0 *query-pos*)))
 
 
+(defun query-mode-complet ()
+  (setf *query-string* (find-common-string *query-string* (query-find-complet-list)))
+  (let ((complet (query-find-complet-list)))
+    (when (= (length complet) 1)
+      (setf *query-string* (first complet))))
+  (query-end))
+
+
+
 (add-hook *binding-hook* 'set-default-query-keys)
 
 (defun set-default-query-keys ()
   (define-query-key ("Return") 'leave-query-mode-valid)
   (define-query-key ("Escape") 'leave-query-mode)
   (define-query-key ("g" :control) 'leave-query-mode)
-  (define-query-key ("Tab") 'leave-query-mode-complet)
+  (define-query-key ("Tab") 'query-mode-complet)
   (define-query-key ("BackSpace") 'query-backspace)
   (define-query-key ("BackSpace" :control) 'query-backspace-word)
   (define-query-key ("Delete") 'query-delete)
@@ -288,13 +303,14 @@
 
 
 
-(defun  query-string (message &optional (default ""))
+(defun  query-string (message &optional (default "") complet-list)
   "Query a string from the keyboard. Display msg as prompt"
   (let ((grab-keyboard-p (xgrab-keyboard-p))
 	(grab-pointer-p (xgrab-pointer-p)))
     (setf *query-message* message
 	  *query-string* default
-	  *query-pos* (length default))
+	  *query-pos* (length default)
+	  *query-complet-list* complet-list)
     (xgrab-pointer *root* 92 93)
     (unless grab-keyboard-p
       (ungrab-main-keys)
@@ -310,7 +326,7 @@
     (if grab-pointer-p
 	(xgrab-pointer *root* 66 67)
 	(xungrab-pointer)))
-  (when (member *query-return* '(:Return :Complet))
+  (when (equal *query-return* :Return)
     (pushnew default *query-history* :test #'equal)
     (push *query-string* *query-history*))
   (values *query-string*

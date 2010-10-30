@@ -54,6 +54,7 @@
 	   :export-all-functions-and-variables
 	   :ensure-function
 	   :empty-string-p
+	   :find-common-string
 	   :is-config-p :config-documentation :config-group
 	   :setf/=
 	   :create-symbol
@@ -353,6 +354,20 @@ Return the result of the last hook"
 
 (defun empty-string-p (string)
   (string= string ""))
+
+
+(defun find-common-string (string list &optional orig)
+  "Return the string in common in all string in list"
+  (if list
+      (let ((result (remove-if-not (lambda (x)
+				     (zerop (or (search string x :test #'string-equal) -1)))
+				   list)))
+	(if (= (length result) (length list))
+	    (if (> (length (first list)) (length string))
+		(find-common-string (subseq (first list) 0 (1+ (length string))) list string)
+		string)
+	    orig))
+      string))
 
 
 

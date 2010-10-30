@@ -141,7 +141,7 @@
 	 (query-string (format nil "Configure ~A" string) original)
        (let ((result-val (ignore-errors (eval (read-from-string result))))
 	     (original-val (ignore-errors (eval (read-from-string original)))))
-	 (if (member return '(:Return :Complet))
+	 (if (equal return :Return)
 	     (warn-wrong-type result-val original-val)
 	     original-val)))))
 
