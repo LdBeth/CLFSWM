@@ -1,3 +1,8 @@
+2010-10-30  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-query.lisp (query-print-string): Handle long lines
+	correctly.
+
 2010-10-27  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-expose-mode.lisp (expose-create-window): Ensure that

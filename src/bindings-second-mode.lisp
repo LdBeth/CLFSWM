@@ -78,7 +78,6 @@
 	 (leave-second-mode))))
 
 
-
 (defun set-default-second-keys ()
   (define-second-key ("F1" :mod-1) 'help-on-clfswm)
   (define-second-key ("m") 'open-menu)

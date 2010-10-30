@@ -39,7 +39,7 @@
 
 
 
-(defun query-show-paren (orig-string pos)
+(defun query-show-paren (orig-string pos dec)
   "Replace matching parentheses with brackets"
   (let ((string (copy-seq orig-string)))
     (labels ((have-to-find-right? ()
@@ -61,7 +61,7 @@
 	     (draw-bloc (p &optional (color *query-parent-color*))
 	       (setf (xlib:gcontext-foreground *query-gc*) (get-color color))
 	       (xlib:draw-rectangle *pixmap-buffer* *query-gc*
-				    (+ 10 (* p (xlib:max-char-width *query-font*)))
+				    (+ 10 (* p (xlib:max-char-width *query-font*)) dec)
 				    (+ (xlib:max-char-ascent *query-font*) (xlib:max-char-descent *query-font*) 7)
 				    (xlib:max-char-width *query-font*)
 				    (+ (xlib:max-char-ascent *query-font*) (xlib:max-char-descent *query-font*))
@@ -98,26 +98,28 @@
 
 
 (defun query-print-string ()
-  (clear-pixmap-buffer *query-window* *query-gc*)
-  (setf (xlib:gcontext-foreground *query-gc*) (get-color *query-message-color*))
-  (xlib:draw-glyphs *pixmap-buffer* *query-gc* 5 (+ (xlib:max-char-ascent *query-font*) 5) *query-message*)
-  (when (< *query-pos* 0)
-    (setf *query-pos* 0))
-  (when (> *query-pos* (length *query-string*))
-    (setf *query-pos* (length *query-string*)))
-  (query-show-paren *query-string* *query-pos*)
-  (setf (xlib:gcontext-foreground *query-gc*) (get-color *query-foreground*))
-  (xlib:draw-glyphs *pixmap-buffer* *query-gc*
-		    10
-		    (+ (* 2 (+ (xlib:max-char-ascent *query-font*) (xlib:max-char-descent *query-font*))) 5)
-		    *query-string*)
-  (setf (xlib:gcontext-foreground *query-gc*) (get-color *query-cursor-color*))
-  (xlib:draw-line *pixmap-buffer* *query-gc*
-		  (+ 10 (* *query-pos* (xlib:max-char-width *query-font*)))
-		  (+ (* 2 (+ (xlib:max-char-ascent *query-font*) (xlib:max-char-descent *query-font*))) 6)
-		  (+ 10 (* *query-pos* (xlib:max-char-width *query-font*)))
-		  (+ (* 1 (+ (xlib:max-char-ascent *query-font*) (xlib:max-char-descent *query-font*))) 7))
-  (copy-pixmap-buffer *query-window* *query-gc*))
+  (let ((dec (min 0 (- (- (xlib:drawable-width *query-window*) 10)
+		       (+ 10 (* *query-pos* (xlib:max-char-width *query-font*)))))))
+    (clear-pixmap-buffer *query-window* *query-gc*)
+    (setf (xlib:gcontext-foreground *query-gc*) (get-color *query-message-color*))
+    (xlib:draw-glyphs *pixmap-buffer* *query-gc* 5 (+ (xlib:max-char-ascent *query-font*) 5) *query-message*)
+    (when (< *query-pos* 0)
+      (setf *query-pos* 0))
+    (when (> *query-pos* (length *query-string*))
+      (setf *query-pos* (length *query-string*)))
+    (query-show-paren *query-string* *query-pos* dec)
+    (setf (xlib:gcontext-foreground *query-gc*) (get-color *query-foreground*))
+    (xlib:draw-glyphs *pixmap-buffer* *query-gc*
+		      (+ 10 dec)
+		      (+ (* 2 (+ (xlib:max-char-ascent *query-font*) (xlib:max-char-descent *query-font*))) 5)
+		      *query-string*)
+    (setf (xlib:gcontext-foreground *query-gc*) (get-color *query-cursor-color*))
+    (xlib:draw-line *pixmap-buffer* *query-gc*
+		    (+ 10 (* *query-pos* (xlib:max-char-width *query-font*)) dec)
+		    (+ (* 2 (+ (xlib:max-char-ascent *query-font*) (xlib:max-char-descent *query-font*))) 6)
+		    (+ 10 (* *query-pos* (xlib:max-char-width *query-font*)) dec)
+		    (+ (* 1 (+ (xlib:max-char-ascent *query-font*) (xlib:max-char-descent *query-font*))) 7))
+    (copy-pixmap-buffer *query-window* *query-gc*)))
 
 
 

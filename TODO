@@ -10,6 +10,7 @@ Should handle these soon.
 - handle cursor with too long lines in info mode
 - info mode: complet on [tab] without living the info mode.
 
+- Make frame/window border size variable.
 
 MAYBE
 =====
