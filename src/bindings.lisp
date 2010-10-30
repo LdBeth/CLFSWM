@@ -35,10 +35,6 @@
 (add-hook *binding-hook* 'init-*main-keys* 'init-*main-mouse*)
 
 
-(defun test-hello ()
-  (info-mode '("Hello" "World")))
-
-
 (defun help-on-clfswm ()
   "Open the help and info window"
   (open-menu (find-menu 'help-menu)))

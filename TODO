@@ -7,17 +7,21 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
-- handle cursor with too long lines in info mode
 - info mode: complet on [tab] without living the info mode.
 
+
+FOR THE NEXT RELEASE
+====================
+
 - Make frame/window border size variable.
+
+- Switch to a reparenting window manager to prevent remaining flickering.
+
 
 MAYBE
 =====
 
 - cd/pwd a la shell to navigate through frames.
-
-- Switch to a reparenting window manager to prevent remaining flickering.
 
 - Zoom:
     Concept:
