@@ -869,6 +869,25 @@ For window: set current child to window or its parent according to window-parent
     (show-all-children)))
 
 
+(defun frame-select-next-child ()
+  "Select the next child in the current frame"
+  (when (frame-p *current-child*)
+    (with-slots (child selected-pos) *current-child*
+      (unless (>= selected-pos (length child))
+	(incf selected-pos)))
+    (show-all-children)))
+
+
+(defun frame-select-previous-child ()
+  "Select the previous child in the current frame"
+  (when (frame-p *current-child*)
+    (with-slots (child selected-pos) *current-child*
+      (unless (< selected-pos 1)
+	(decf selected-pos)))
+    (show-all-children)))
+
+
+
 (defun switch-to-root-frame (&key (show-later nil))
   "Switch to the root frame"
   (hide-all *current-root*)

@@ -1,3 +1,9 @@
+2010-11-05  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (frame-select-next-child)
+	(frame-select-previous-child): New functions and bindings. Select
+	the next/previous child in the current frame.
+
 2010-10-31  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-query.lisp (query-mode-complet): New function: Handle
