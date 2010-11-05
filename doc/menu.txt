@@ -64,7 +64,8 @@ c: Dolphin
 d: Krusader
 e: File Manager
 f: ROX Filer - ROX Filer
-g: Xfe - A lightweight file manager for X Window
+g: Worker - File manager for X.
+h: Xfe - A lightweight file manager for X Window
 
 Webbrowser
 a: Arora - Browse the World Wide Web
@@ -145,54 +146,56 @@ t: Qt Linguist
 u: OpenJDK Policy Tool - Manage OpenJDK policy files
 
 Education
-a: Blinken - A memory enhancement game
-b: Cantor
-c: KAlgebra - Math Expression Solver and Plotter
-d: Kalzium - KDE Periodic Table of Elements
-e: Kanagram - KDE Letter Order Game
-f: KBruch - Practice exercises with fractions
-g: KGeography - A Geography Learning Program
-h: KHangMan - KDE Hangman Game
-i: Kig - Explore Geometric Constructions
-j: Kiten - Japanese Reference and Study Tool
-k: KLettres - a KDE program to learn the alphabet
-l: KmPlot - Function Plotter
-m: KStars - Desktop Planetarium
-n: KTouch
-o: KTurtle
-p: KWordQuiz - A flashcard and vocabulary learning program
-q: Marble
-r: Parley
-s: Rocs - Graph Theory Tool for Professors and Students.
-t: Step - Simulate physics experiments
+a: Avogadro - Advanced molecular editor
+b: Blinken - A memory enhancement game
+c: Cantor
+d: KAlgebra - Math Expression Solver and Plotter
+e: Kalzium - KDE Periodic Table of Elements
+f: Kanagram - KDE Letter Order Game
+g: KBruch - Practice exercises with fractions
+h: KGeography - A Geography Learning Program
+i: KHangMan - KDE Hangman Game
+j: Kig - Explore Geometric Constructions
+k: Kiten - Japanese Reference and Study Tool
+l: KLettres - a KDE program to learn the alphabet
+m: KmPlot - Function Plotter
+n: KStars - Desktop Planetarium
+o: KTouch
+p: KTurtle
+q: KWordQuiz - A flashcard and vocabulary learning program
+r: Marble
+s: Parley
+t: Rocs - Graph Theory Tool for Professors and Students.
+u: Step - Simulate physics experiments
 
 Game
 a: 0 A.D. Editor
 b: 0 A.D.
 c: AssaultCube
 d: DROD - Simple puzzle game.
-e: Foobillard - A 3D billiards game using OpenGL
-f: Frasse - Frasse and the Peas of Kejick adventure game
-g: Frogatto - Old-school 2D platformer
-h: GGoban - Play go and review game records
-i: KGoldrunner - A game of action and puzzle-solving
-j: AMOR
-k: Blinken - A memory enhancement game
-l: Bomber
-m: Bovo
-n: Granatier
-o: Kanagram - KDE Letter Order Game
-p: Kapman - Eat pills escaping ghosts
-q: KAtomic
-r: KBattleship
-s: KBlackBox
-t: KBlocks
-u: KBounce
-v: KBreakOut
-w: KSnake
-x: KDiamond
-y: KFourInLine
-z: KHangMan - KDE Hangman Game
+e: Flobopuyo - A remake of the famous PuyoPuyo
+f: Foobillard - A 3D billiards game using OpenGL
+g: Frasse - Frasse and the Peas of Kejick adventure game
+h: Frogatto - Old-school 2D platformer
+i: GGoban - Play go and review game records
+j: KGoldrunner - A game of action and puzzle-solving
+k: AMOR
+l: Blinken - A memory enhancement game
+m: Bomber
+n: Bovo
+o: Granatier
+p: Kanagram - KDE Letter Order Game
+q: Kapman - Eat pills escaping ghosts
+r: KAtomic
+s: KBattleship
+t: KBlackBox
+u: KBlocks
+v: KBounce
+w: KBreakOut
+x: KSnake
+y: KDiamond
+z: KFourInLine
+|: KHangMan - KDE Hangman Game
 |: Kigo
 |: Killbots
 |: Kiriki
@@ -260,6 +263,7 @@ y: Okular
 z: Okular
 |: Okular
 |: Xfig
+|: XSane - Scanning - Acquire images from a scanner
 
 Network
 a: Arora - Browse the World Wide Web
@@ -297,7 +301,6 @@ z: Krfb
 |: Transmission - Download and share files over BitTorrent
 |: Tucan Manager - Download and upload manager for hosting sites.
 |: Wicd - Manage Wired/Wireless Networks
-|: wireshark - Network protocol analyzer
 
 Office
 a: AbiWord
@@ -351,7 +354,7 @@ s: System Settings
 t: Keyboard Shortcuts - Assign shortcut keys to commands
 u: Keyboard - Edit keyboard settings and application shortcuts
 v: Preferred Applications
-w: Appearance - Customize the look of your desktop
+w: Customize Look and Feel - Customizes look and feel of your desktop and applications
 x: Monitor Settings - Change screen resolution and configure external monitors
 y: File Management - Change the behaviour and appearance of file manager windows
 z: Pop-Up Notifications - Set your pop-up notification preferences
@@ -410,6 +413,7 @@ z: KwikDisk
 |: rxvt-unicode - An Unicode capable rxvt clone
 |: UNetbootin - Tool for creating Live USB drives
 |: Oracle VM VirtualBox
+|: Wireshark - Network traffic analyzer
 |: Xfe - A lightweight file manager for X Window
 |: XNC - Graphical File manager, X Northern Captain
 
@@ -426,20 +430,21 @@ i: Theme Installer - Installs themes packages for various parts of the desktop
 j: Image Viewer
 k: Character Map - Insert special characters into documents
 l: gVim - GTK2 enhanced vim text editor
-m: Help - Get help with GNOME
-n: Home
-o: KCharSelect
-p: KFloppy
-q: KJots
-r: Akonaditray
-s: Ark
-t: KDE Groupware Wizard
-u: KAlarm
-v: Kate
-w: KCalc
-x: KFileReplace
-y: Find Files/Folders
-z: KFontView
+m: HP Device Manager - View device status, ink levels and perform maintenance.
+n: Help - Get help with GNOME
+o: Home
+p: KCharSelect
+q: KFloppy
+r: KJots
+s: Akonaditray
+t: Ark
+u: KDE Groupware Wizard
+v: KAlarm
+w: Kate
+x: KCalc
+y: KFileReplace
+z: Find Files/Folders
+|: KFontView
 |: KGpg - A GnuPG frontend
 |: Kleopatra
 |: Kleopatra
@@ -467,6 +472,7 @@ z: KFontView
 |: File Manager
 |: Scilab - A scientific software package for numerical computations
 |: Tilda
+|: Worker - File manager for X.
 |: About Xfce
 |: Application Finder - Find and launch applications installed on your system
 |: File Manager
@@ -917,15 +923,15 @@ p: Prompt for an other window manager
 Configuration-Menu
 a: < Notify Window group >
 b: < Notify Window mode group >
-c: < Expose mode group >
-d: < Hook group >
-e: < Main mode group >
-f: < Frame colors group >
-g: < Identify key group >
-h: < Corner group >
-i: < Circulate mode group >
-j: < Query string group >
-k: < Second mode group >
+c: < Identify key group >
+d: < Expose mode group >
+e: < Hook group >
+f: < Main mode group >
+g: < Frame colors group >
+h: < Second mode group >
+i: < Corner group >
+j: < Circulate mode group >
+k: < Query string group >
 l: < Placement group >
 m: < Miscellaneous group >
 n: < Info mode group >
@@ -941,6 +947,12 @@ d: Configure NOTIFY-WINDOW-BACKGROUND
 Conf-Notify-Window-Mode-Group
 a: Configure NOTIFY-WINDOW-FONT-STRING
 
+Conf-Identify-Key-Group
+a: Configure IDENTIFY-FOREGROUND
+b: Configure IDENTIFY-BACKGROUND
+c: Configure IDENTIFY-FONT-STRING
+d: Configure IDENTIFY-BORDER
+
 Conf-Expose-Mode-Group
 a: Configure EXPOSE-FOREGROUND
 b: Configure EXPOSE-SHOW-WINDOW-TITLE
@@ -952,8 +964,9 @@ f: Configure EXPOSE-BACKGROUND
 Conf-Hook-Group
 a: Configure INIT-HOOK
 b: Configure DEFAULT-NW-HOOK
-c: Configure LOOP-HOOK
-d: Configure BINDING-HOOK
+c: Configure MAIN-ENTRANCE-HOOK
+d: Configure LOOP-HOOK
+e: Configure BINDING-HOOK
 
 Conf-Main-Mode-Group
 a: Configure COLOR-UNSELECTED
@@ -966,30 +979,32 @@ b: Configure FRAME-FOREGROUND
 c: Configure FRAME-FOREGROUND-HIDDEN
 d: Configure FRAME-BACKGROUND
 
-Conf-Identify-Key-Group
-a: Configure IDENTIFY-FOREGROUND
-b: Configure IDENTIFY-FONT-STRING
-c: Configure IDENTIFY-BORDER
-d: Configure IDENTIFY-BACKGROUND
+Conf-Second-Mode-Group
+a: Configure SM-FOREGROUND-COLOR
+b: Configure SM-BACKGROUND-COLOR
+c: Configure SM-HEIGHT
+d: Configure SM-WIDTH
+e: Configure SM-BORDER-COLOR
+f: Configure SM-FONT-STRING
 
 Conf-Corner-Group
 a: Configure CORNER-MAIN-MODE-LEFT-BUTTON
 b: Configure CORNER-SECOND-MODE-MIDDLE-BUTTON
 c: Configure CORNER-SECOND-MODE-LEFT-BUTTON
-d: Configure CORNER-MAIN-MODE-RIGHT-BUTTON
-e: Configure CORNER-SECOND-MODE-RIGHT-BUTTON
-f: Configure CORNER-SIZE
-g: Configure CLFSWM-TERMINAL-CMD
-h: Configure VIRTUAL-KEYBOARD-CMD
+d: Configure CORNER-SECOND-MODE-RIGHT-BUTTON
+e: Configure CORNER-SIZE
+f: Configure CORNER-MAIN-MODE-RIGHT-BUTTON
+g: Configure VIRTUAL-KEYBOARD-CMD
+h: Configure CLFSWM-TERMINAL-CMD
 i: Configure CORNER-MAIN-MODE-MIDDLE-BUTTON
 j: Configure CLFSWM-TERMINAL-NAME
 
 Conf-Circulate-Mode-Group
-a: Configure CIRCULATE-WIDTH
-b: Configure CIRCULATE-BORDER
-c: Configure CIRCULATE-HEIGHT
-d: Configure CIRCULATE-TEXT-LIMITE
-e: Configure CIRCULATE-FONT-STRING
+a: Configure CIRCULATE-BORDER
+b: Configure CIRCULATE-HEIGHT
+c: Configure CIRCULATE-TEXT-LIMITE
+d: Configure CIRCULATE-FONT-STRING
+e: Configure CIRCULATE-WIDTH
 f: Configure CIRCULATE-BACKGROUND
 g: Configure CIRCULATE-FOREGROUND
 
@@ -1003,14 +1018,6 @@ f: Configure QUERY-PARENT-ERROR-COLOR
 g: Configure QUERY-FOREGROUND
 h: Configure QUERY-CURSOR-COLOR
 
-Conf-Second-Mode-Group
-a: Configure SM-FOREGROUND-COLOR
-b: Configure SM-BACKGROUND-COLOR
-c: Configure SM-HEIGHT
-d: Configure SM-WIDTH
-e: Configure SM-BORDER-COLOR
-f: Configure SM-FONT-STRING
-
 Conf-Placement-Group
 a: Configure CIRCULATE-MODE-PLACEMENT
 b: Configure NOTIFY-WINDOW-PLACEMENT
@@ -1021,14 +1028,14 @@ f: Configure INFO-MODE-PLACEMENT
 g: Configure SECOND-MODE-PLACEMENT
 
 Conf-Miscellaneous-Group
-a: Configure HAVE-TO-COMPRESS-NOTIFY
-b: Configure DEFAULT-WINDOW-WIDTH
-c: Configure CREATE-FRAME-ON-ROOT
-d: Configure HIDE-UNMANAGED-WINDOW
-e: Configure DEFAULT-FRAME-DATA
-f: Configure DEFAULT-MODIFIERS
-g: Configure NEVER-MANAGED-WINDOW-LIST
-h: Configure DEFAULT-MANAGED-TYPE
+a: Configure CREATE-FRAME-ON-ROOT
+b: Configure HAVE-TO-COMPRESS-NOTIFY
+c: Configure DEFAULT-WINDOW-WIDTH
+d: Configure NEVER-MANAGED-WINDOW-LIST
+e: Configure DEFAULT-MANAGED-TYPE
+f: Configure HIDE-UNMANAGED-WINDOW
+g: Configure DEFAULT-FRAME-DATA
+h: Configure DEFAULT-MODIFIERS
 i: Configure DEFAULT-WINDOW-HEIGHT
 j: Configure DEFAULT-FONT-STRING
 k: Configure DEFAULT-FOCUS-POLICY

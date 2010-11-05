@@ -57,7 +57,7 @@
 
 (in-package :clfswm)
 
-;;(ignore-errors
+(ignore-errors
   (main :read-conf-file-p t);)
 
 
