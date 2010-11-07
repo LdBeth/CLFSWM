@@ -186,12 +186,23 @@
 
 
 ;;; Tile layout
+(defun tile-layout-ask-keep-position ()
+  (when (frame-p *current-child*)
+    (let ((keep-position (query-string "Keep child positions?" "" '("yes" "no"))))
+      (if (or (string= keep-position "")
+	      (char= (char keep-position 0) #\y)
+	      (char= (char keep-position 0) #\Y))
+	  (setf (frame-data-slot *current-child* :tile-layout-keep-positiion) :yes)
+	  (remove-frame-data-slot *current-child* :tile-layout-keep-positiion)))))
+
+
 (defun set-layout-managed-children ()
   (when (frame-p *current-child*)
     (setf (frame-data-slot *current-child* :layout-managed-children)
-	  (copy-list (get-managed-child *current-child*)))))
+	  (copy-list (get-managed-child *current-child*)))
+    (tile-layout-ask-keep-position)))
 
-(defun update-layout-managed-children (child parent)
+(defun update-layout-managed-children-keep-position (child parent)
   (let ((managed-children (frame-data-slot parent :layout-managed-children))
 	(managed-in-parent (get-managed-child parent)))
     (dolist (ch managed-in-parent)
@@ -202,6 +213,13 @@
 					  managed-children))
     (setf (frame-data-slot parent :layout-managed-children) managed-children)
     managed-children))
+
+(defun update-layout-managed-children (child parent)
+  (if (eql (frame-data-slot *current-child* :tile-layout-keep-positiion) :yes)
+      (update-layout-managed-children-keep-position child parent)
+      (get-managed-child parent)))
+
+
 
 (defgeneric tile-layout (child parent)
   (:documentation "Tile child in its frame (vertical)"))
@@ -295,7 +313,7 @@
 (defun tile-space-layout (child parent)
   "Tile Space: tile child in its frame leaving spaces between them"
   (with-slots (rx ry rw rh) parent
-    (let* ((managed-children (get-managed-child parent))
+    (let* ((managed-children (update-layout-managed-children child parent))
 	   (pos (child-position child managed-children))
 	   (len (length managed-children))
 	   (n (ceiling (sqrt len)))
@@ -314,6 +332,7 @@
 (defun set-tile-space-layout ()
   "Tile Space: tile child in its frame leaving spaces between them"
   (layout-ask-size "Space size in percent (%)" :tile-space-size 0.01)
+  (set-layout-managed-children)
   (set-layout #'tile-space-layout))
 
 

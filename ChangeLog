@@ -1,3 +1,12 @@
+2010-11-07  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-layout.lisp (tile-layout-ask-keep-position): New
+	function to let the user choose to keep child position with
+	tile layout.
+
+	* src/clfswm-internal.lisp (remove-frame-data-slot): New
+	function.
+
 2010-11-05  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp (frame-select-next-child)

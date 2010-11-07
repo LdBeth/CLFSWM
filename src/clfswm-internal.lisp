@@ -132,6 +132,14 @@
 (defsetf frame-data-slot set-frame-data-slot)
 
 
+(defun remove-frame-data-slot (frame slot)
+  "Remove a slot in frame data slots"
+  (when (frame-p frame)
+    (with-slots (data) frame
+      (setf data (remove (assoc slot data) data)))))
+
+
+
 (defun managed-window-p (window frame)
   "Return t only if window is managed by frame"
   (if (frame-p frame)
