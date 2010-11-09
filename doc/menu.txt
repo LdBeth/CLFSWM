@@ -926,18 +926,18 @@ p: Prompt for an other window manager
 Configuration-Menu
 a: < Notify Window group >
 b: < Notify Window mode group >
-c: < Identify key group >
-d: < Expose mode group >
-e: < Hook group >
-f: < Main mode group >
-g: < Frame colors group >
-h: < Second mode group >
-i: < Corner group >
-j: < Circulate mode group >
-k: < Query string group >
-l: < Placement group >
-m: < Miscellaneous group >
-n: < Info mode group >
+c: < Expose mode group >
+d: < Hook group >
+e: < Main mode group >
+f: < Frame colors group >
+g: < Identify key group >
+h: < Corner group >
+i: < Circulate mode group >
+j: < Query string group >
+k: < Placement group >
+l: < Miscellaneous group >
+m: < Info mode group >
+n: < Second mode group >
 o: < Menu group >
 F2: Save all configuration variables in clfswmrc
 
@@ -949,12 +949,6 @@ d: Configure NOTIFY-WINDOW-BACKGROUND
 
 Conf-Notify-Window-Mode-Group
 a: Configure NOTIFY-WINDOW-FONT-STRING
-
-Conf-Identify-Key-Group
-a: Configure IDENTIFY-FOREGROUND
-b: Configure IDENTIFY-BACKGROUND
-c: Configure IDENTIFY-FONT-STRING
-d: Configure IDENTIFY-BORDER
 
 Conf-Expose-Mode-Group
 a: Configure EXPOSE-FOREGROUND
@@ -982,13 +976,11 @@ b: Configure FRAME-FOREGROUND
 c: Configure FRAME-FOREGROUND-HIDDEN
 d: Configure FRAME-BACKGROUND
 
-Conf-Second-Mode-Group
-a: Configure SM-FOREGROUND-COLOR
-b: Configure SM-BACKGROUND-COLOR
-c: Configure SM-HEIGHT
-d: Configure SM-WIDTH
-e: Configure SM-BORDER-COLOR
-f: Configure SM-FONT-STRING
+Conf-Identify-Key-Group
+a: Configure IDENTIFY-FOREGROUND
+b: Configure IDENTIFY-FONT-STRING
+c: Configure IDENTIFY-BORDER
+d: Configure IDENTIFY-BACKGROUND
 
 Conf-Corner-Group
 a: Configure CORNER-MAIN-MODE-LEFT-BUTTON
@@ -1003,11 +995,11 @@ i: Configure CORNER-MAIN-MODE-MIDDLE-BUTTON
 j: Configure CLFSWM-TERMINAL-NAME
 
 Conf-Circulate-Mode-Group
-a: Configure CIRCULATE-BORDER
-b: Configure CIRCULATE-HEIGHT
-c: Configure CIRCULATE-TEXT-LIMITE
-d: Configure CIRCULATE-FONT-STRING
-e: Configure CIRCULATE-WIDTH
+a: Configure CIRCULATE-TEXT-LIMITE
+b: Configure CIRCULATE-BORDER
+c: Configure CIRCULATE-WIDTH
+d: Configure CIRCULATE-HEIGHT
+e: Configure CIRCULATE-FONT-STRING
 f: Configure CIRCULATE-BACKGROUND
 g: Configure CIRCULATE-FOREGROUND
 
@@ -1031,14 +1023,14 @@ f: Configure INFO-MODE-PLACEMENT
 g: Configure SECOND-MODE-PLACEMENT
 
 Conf-Miscellaneous-Group
-a: Configure CREATE-FRAME-ON-ROOT
-b: Configure HAVE-TO-COMPRESS-NOTIFY
+a: Configure HAVE-TO-COMPRESS-NOTIFY
+b: Configure HIDE-UNMANAGED-WINDOW
 c: Configure DEFAULT-WINDOW-WIDTH
-d: Configure NEVER-MANAGED-WINDOW-LIST
+d: Configure CREATE-FRAME-ON-ROOT
 e: Configure DEFAULT-MANAGED-TYPE
-f: Configure HIDE-UNMANAGED-WINDOW
-g: Configure DEFAULT-FRAME-DATA
-h: Configure DEFAULT-MODIFIERS
+f: Configure DEFAULT-FRAME-DATA
+g: Configure DEFAULT-MODIFIERS
+h: Configure NEVER-MANAGED-WINDOW-LIST
 i: Configure DEFAULT-WINDOW-HEIGHT
 j: Configure DEFAULT-FONT-STRING
 k: Configure DEFAULT-FOCUS-POLICY
@@ -1056,6 +1048,14 @@ h: Configure INFO-BORDER
 i: Configure INFO-FONT-STRING
 j: Configure INFO-COLOR-TITLE
 k: Configure INFO-COLOR-SECOND
+
+Conf-Second-Mode-Group
+a: Configure SM-FOREGROUND-COLOR
+b: Configure SM-BACKGROUND-COLOR
+c: Configure SM-HEIGHT
+d: Configure SM-WIDTH
+e: Configure SM-BORDER-COLOR
+f: Configure SM-FONT-STRING
 
 Conf-Menu-Group
 a: Configure MENU-COLOR-COMMENT

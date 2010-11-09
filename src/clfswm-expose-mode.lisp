@@ -184,7 +184,8 @@
       (grab-main-keys))
     (if grab-pointer-p
 	(xgrab-pointer *root* 66 67)
-	(xungrab-pointer)))
+	(xungrab-pointer))
+    (wait-no-key-or-button-press))
   t)
 
 
@@ -211,11 +212,13 @@
   (stop-button-event)
   (when (frame-p *current-child*)
     (let ((orig-root *current-root*))
-      (hide-all *current-root*)
-      (setf *current-root* *current-child*)
+      (unless (child-equal-p *current-child* *current-root*)
+	(hide-all *current-root*)
+	(setf *current-root* *current-child*))
       (expose-windows-generic *current-root*)
-      (hide-all *current-root*)
-      (setf *current-root* orig-root)
+      (unless (child-equal-p *current-child* orig-root)
+	(hide-all *current-root*)
+	(setf *current-root* orig-root))
       (show-all-children *current-root*))))
 
 

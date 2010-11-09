@@ -26,12 +26,12 @@ Main mode keys:
   Mod-1                Home            Switch to the root frame
   Mod-1 Shift          Home            Switch and select the root frame
   Mod-1                F10             Switch between two layouts
-  Shift                F10             Show all frames info windows until a key is release
-  Mod-1 Shift          F10             Show all frames info windows
-  Control Shift        F10             Show/Hide the root frame
-                       F10             Present all windows in the current frame (An expose like)
-  Control              F10             Present all windows in all frames (An expose like)
+  Control Shift        F10             Present all windows in all frames (An expose like)
+                       F10             Present all windows in the current child (An expose like)
+  Control              F10             Present all windows in the current frame (An expose like)
   Control              L2              Hide/Unhide a terminal
+  Shift                L2              Show all frames info windows until a key is release
+  Mod-1 Shift          L2              Show all frames info windows
   Mod-1                B               Move the pointer to the lower right corner of the screen
   Control              Escape          Close or kill the current window (ask before doing anything)
   Mod-1                T               Switch to editing mode (second mode)
@@ -127,11 +127,11 @@ Second mode keys:
   Control              E               start an emacs for another user
                        H               start an xclock
   Mod-1                F10             Switch between two layouts
-  Shift                F10             Show all frames info windows until a key is release
-  Mod-1 Shift          F10             Show all frames info windows
-  Control Shift        F10             Show/Hide the root frame
-                       F10             Present all windows in the current frame (An expose like)
-  Control              F10             Present all windows in all frames (An expose like)
+  Control Shift        F10             Present all windows in all frames (An expose like)
+                       F10             Present all windows in the current child (An expose like)
+  Control              F10             Present all windows in the current frame (An expose like)
+  Shift                L2              Show all frames info windows until a key is release
+  Mod-1 Shift          L2              Show all frames info windows
   Mod-1                1               Bind or jump to a slot (a frame or a window)
   Mod-1                2               Bind or jump to a slot (a frame or a window)
   Mod-1                3               Bind or jump to a slot (a frame or a window)
