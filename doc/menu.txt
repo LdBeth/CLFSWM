@@ -178,23 +178,24 @@ f: Foobillard - A 3D billiards game using OpenGL
 g: Frasse - Frasse and the Peas of Kejick adventure game
 h: Frogatto - Old-school 2D platformer
 i: GGoban - Play go and review game records
-j: KGoldrunner - A game of action and puzzle-solving
-k: AMOR
-l: Blinken - A memory enhancement game
-m: Bomber
-n: Bovo
-o: Granatier
-p: Kanagram - KDE Letter Order Game
-q: Kapman - Eat pills escaping ghosts
-r: KAtomic
-s: KBattleship
-t: KBlackBox
-u: KBlocks
-v: KBounce
-w: KBreakOut
-x: KSnake
-y: KDiamond
-z: KFourInLine
+j: Hedgewars - Worms style game
+k: KGoldrunner - A game of action and puzzle-solving
+l: AMOR
+m: Blinken - A memory enhancement game
+n: Bomber
+o: Bovo
+p: Granatier
+q: Kanagram - KDE Letter Order Game
+r: Kapman - Eat pills escaping ghosts
+s: KAtomic
+t: KBattleship
+u: KBlackBox
+v: KBlocks
+w: KBounce
+x: KBreakOut
+y: KSnake
+z: KDiamond
+|: KFourInLine
 |: KHangMan - KDE Hangman Game
 |: Kigo
 |: Killbots
@@ -301,6 +302,8 @@ z: Krfb
 |: Transmission - Download and share files over BitTorrent
 |: Tucan Manager - Download and upload manager for hosting sites.
 |: Wicd - Manage Wired/Wireless Networks
+|: Zenmap (as root)
+|: Zenmap
 
 Office
 a: AbiWord
@@ -991,11 +994,11 @@ Conf-Corner-Group
 a: Configure CORNER-MAIN-MODE-LEFT-BUTTON
 b: Configure CORNER-SECOND-MODE-MIDDLE-BUTTON
 c: Configure CORNER-SECOND-MODE-LEFT-BUTTON
-d: Configure CORNER-SECOND-MODE-RIGHT-BUTTON
-e: Configure CORNER-SIZE
-f: Configure CORNER-MAIN-MODE-RIGHT-BUTTON
-g: Configure VIRTUAL-KEYBOARD-CMD
-h: Configure CLFSWM-TERMINAL-CMD
+d: Configure CORNER-MAIN-MODE-RIGHT-BUTTON
+e: Configure CORNER-SECOND-MODE-RIGHT-BUTTON
+f: Configure CORNER-SIZE
+g: Configure CLFSWM-TERMINAL-CMD
+h: Configure VIRTUAL-KEYBOARD-CMD
 i: Configure CORNER-MAIN-MODE-MIDDLE-BUTTON
 j: Configure CLFSWM-TERMINAL-NAME
 

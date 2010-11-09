@@ -33,4 +33,4 @@
 
 (in-package :version)
 
-(defparameter *version* #.(concatenate 'string "Version: 10.10   built " (date-string)))
+(defparameter *version* #.(concatenate 'string "Version: 11.10   built " (date-string)))

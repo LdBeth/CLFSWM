@@ -1,3 +1,8 @@
+2010-11-09  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-layout.lisp (tile-layout, set-tile-layout): Fill
+	blanks if needed.
+
 2010-11-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-layout.lisp (tile-layout-ask-keep-position): New

@@ -13,7 +13,7 @@
 ;;(with-capslock)
 ;;(with-numlock)
 ;;(without-capslock)
-;;(without-cnumlock)
+;;(without-numlock)
 
 ;;;; Uncomment the line above if you want to enable the notify event compression.
 ;;;; This variable may be useful to speed up some slow version of CLX
@@ -22,49 +22,10 @@
 
 
 
-;;; -- Azerty configuration --
-;;; For the main mode
-;;(defun my-binding ()
-;;  (define-main-key ("twosuperior") 'banish-pointer)
-;;  (undefine-main-multi-keys (#\t :mod-1) (#\b :mod-1) (#\b :mod-1 :control))
-;;  (undefine-main-multi-keys ("1" :mod-1) ("2" :mod-1) ("3" :mod-1)
-;;			    ("4" :mod-1) ("5" :mod-1) ("6" :mod-1)
-;;			    ("7" :mod-1) ("8" :mod-1) ("9" :mod-1) ("0" :mod-1))
-;;  (define-main-key ("ampersand" :mod-1) 'bind-or-jump 1)
-;;  (define-main-key ("eacute" :mod-1) 'bind-or-jump 2)
-;;  (define-main-key ("quotedbl" :mod-1) 'bind-or-jump 3)
-;;  (define-main-key ("quoteright" :mod-1) 'bind-or-jump 4)
-;;  (define-main-key ("parenleft" :mod-1) 'bind-or-jump 5)
-;;  (define-main-key ("minus" :mod-1) 'bind-or-jump 6)
-;;  (define-main-key ("egrave" :mod-1) 'bind-or-jump 7)
-;;  (define-main-key ("underscore" :mod-1) 'bind-or-jump 8)
-;;  (define-main-key ("ccedilla" :mod-1) 'bind-or-jump 9)
-;;  (define-main-key ("agrave" :mod-1) 'bind-or-jump 10)
-;;  ;; For the second mode
-;;  (undefine-second-multi-keys ("1" :mod-1) ("2" :mod-1) ("3" :mod-1)
-;;			      ("4" :mod-1) ("5" :mod-1) ("6" :mod-1)
-;;			      ("7" :mod-1) ("8" :mod-1) ("9" :mod-1) ("0" :mod-1))
-;;  (define-second-key ("ampersand" :mod-1) 'bind-or-jump 1)
-;;  (define-second-key ("eacute" :mod-1) 'bind-or-jump 2)
-;;  (define-second-key ("quotedbl" :mod-1) 'bind-or-jump 3)
-;;  (define-second-key ("quoteright" :mod-1) 'bind-or-jump 4)
-;;  (define-second-key ("parenleft" :mod-1) 'bind-or-jump 5)
-;;  (define-second-key ("minus" :mod-1) 'bind-or-jump 6)
-;;  (define-second-key ("egrave" :mod-1) 'bind-or-jump 7)
-;;  (define-second-key ("underscore" :mod-1) 'bind-or-jump 8)
-;;  (define-second-key ("ccedilla" :mod-1) 'bind-or-jump 9)
-;;  (define-second-key ("agrave" :mod-1) 'bind-or-jump 10))
-;;
-;;(add-hook *binding-hook* 'my-binding)
-;;
-;;(dbg *binding-hook*)
-;;;;; -- Azerty configuration end --
-
-
 
 ;;; Color configuration example
 ;;;
-;;; See in package.lisp for all variables
+;;; See in package.lisp or config.lisp for all variables
 ;;(setf *color-unselected* "Blue")
 
 
@@ -79,6 +40,12 @@
 ;;; See in the clfswm/contrib directory to find some contributed code
 ;;; and se load-contrib to load them. For example:
 ;;(load-contrib "contrib-example.lisp")
+
+;;(load-contrib "mpd.lisp")
+;;(load-contrib "keyb_fr.lisp")
+;;(load-contrib "xmms.lisp")
+;;(load-contrib "cd-player.lisp")
+;;(load-contrib "reboot-halt.lisp")
 
 
 
@@ -101,102 +68,41 @@
 ;;(add-hook *binding-hook* 'binding-example)
 
 
-
-;;; Hook example
+;;; Set up an UZBL frame where all uzbl windows will be absorbed.
 ;;;
-;;; See in package.lisp and clfswm.lisp, clfswm-second-mode.lisp
-;;; for hook examples
-;;(setf *key-press-hook* (list (lambda (&rest args) ; function 1
-;;			       (format t "Keyp press (before): ~A~%" args)
-;;			       (force-output))
-;;			     #'handle-key-press	; function 2 (default)
-;;			     (lambda (&rest args) ; function 3
-;;			       (declare (ignore args))
-;;			       (format t "Keyp press (after)~%")
-;;			       (force-output))))
-
-
+;;(defun set-uzbl-frame-nw-hook (&optional (frame *current-child*))
+;;  "Open the window in the UZBL frame if it match uzbl absorb-nw-test"
+;;  (when (frame-p frame)
+;;    (setf (frame-nw-hook frame) 'absorb-window-nw-hook
+;;	  (frame-data-slot frame :nw-absorb-test)  (nw-absorb-test-class "uzbl-core"))))
+;;
+;;#-:uzbl-menu-added
+;;(add-menu-key 'frame-nw-hook-menu "z" 'set-uzbl-frame-nw-hook)
+;;
+;;(pushnew :uzbl-menu-added *features*)
+;;
+;;
+;;(defun init-uzbl-frame ()
+;;  (let ((frame (first (frame-child *root-frame*))))
+;;    (setf (frame-data-slot frame :tile-size) 0.7)
+;;    (setf *current-root* frame
+;;	  *current-child* frame)
+;;    (bind-on-slot 0)
+;;    (let ((uzbl-frame (create-frame :name "Uzbl" :x 0.01 :y 0.01 :w 0.98 :h 0.98)))
+;;      (add-frame uzbl-frame frame)
+;;      (set-uzbl-frame-nw-hook uzbl-frame))))
+;;
+;;(unless (member 'init-uzbl-frame *init-hook*)
+;;  (add-hook *init-hook* 'init-uzbl-frame))
+;;; End UZBL setup.
 
 
 ;;; A more complex example I use to record my desktop and show
 ;;; documentation associated to each key press.
-;;(defun display-osd (formatter &rest args)
-;;  (do-shell "pkill osd_cat")
-;;  (do-shell (format nil "echo ~A | osd_cat -d 3 -p bottom -o -60 -f -*-fixed-*-*-*-*-16-*-*-*-*-*-*-1"
-;;		    (apply #'format nil formatter args)))
-;;  (force-output))
-;;
-;;(defun documentation-key-from-code (hash-key code state)
-;;  (documentation (first (find-key-from-code hash-key code state)) 'function))
-;;
-;;
-;;(defun key-string (hash-key code state)
-;;  (let* ((modifiers (xlib:make-state-keys state))
-;;	 (keysym (keysym->keysym-name (xlib:keycode->keysym *display* code 0)))
-;;	 (doc (documentation-key-from-code hash-key code state)))
-;;    (values (format nil "~:(~{~A+~}~A~) : ~S" modifiers keysym doc)
-;;	    doc)))
-;;
-;;(defun display-doc (hash-key code state)
-;;  (multiple-value-bind (str doc)
-;;      (key-string hash-key code state)
-;;    (when doc
-;;      (display-osd "~A" str))))
-;;
-;;(defun display-key-osd-main (&rest event-slots &key code state &allow-other-keys)
-;;  (declare (ignore event-slots))
-;;  (display-doc *main-keys* code state))
-;;
-;;(defun display-key-osd-second (&rest event-slots &key code state &allow-other-keys)
-;;  (declare (ignore event-slots))
-;;  (display-doc *second-keys* code state))
-;;
-;;;; Define new hook or add to precedent one
-;;(if (consp *key-press-hook*)
-;;    (push #'display-key-osd-main *key-press-hook*)
-;;    (setf *key-press-hook* (list #'display-key-osd-main #'handle-key-press)))
-;;(setf *sm-key-press-hook* (list #'display-key-osd-second #'sm-handle-key-press))
-;;
-;;
-;;;;; Display menu functions
-;;(defun open-menu (&optional (menu *menu*))
-;;  "Open the main menu"
-;;  (let ((info-list nil)
-;;	(action nil))
-;;    (dolist (item (menu-item menu))
-;;      (let ((value (menu-item-value item)))
-;;	(push (typecase value
-;;		(menu (list (list (format nil "~A" (menu-item-key item)) *menu-color-menu-key*)
-;;			    (list (format nil ": < ~A >" (menu-doc value)) *menu-color-submenu*)))
-;;		(string (list (list (format nil "~A" (menu-item-value item)) *menu-color-comment*)))
-;;		(t (list (list (format nil "~A" (menu-item-key item)) *menu-color-key*)
-;;			 (format nil ": ~A" (documentation value 'function)))))
-;;	      info-list)
-;;	(when (menu-item-key item)
-;;	  (define-info-key-fun (list (menu-item-key item) 0)
-;;	      (lambda (&optional args)
-;;		(declare (ignore args))
-;;		(setf action value)
-;;		(throw 'exit-info-loop nil))))))
-;;    (info-mode (nreverse info-list))
-;;    (dolist (item (menu-item menu))
-;;      (undefine-info-key-fun (list (menu-item-key item) 0)))
-;;    (typecase action
-;;      (menu
-;;       (display-osd "Open Menu: ~A" (menu-doc action)) ;; <- Display here
-;;       (open-menu action))
-;;      (t (when (fboundp action)
-;;	   (display-osd "~A" (documentation action 'function)) ;; <- Display here
-;;	   (funcall action))))))
-;;
-;;
-;;
-;;(defun get-fullscreen-size ()
-;;  "Return the size of root child (values rx ry rw rh)
-;;You can tweak this to what you want"
-;;  (values -2 -2 (+ (xlib:screen-width *screen*) 2) (- (xlib:screen-height *screen*) 20)))
-;;
+;;;See contrib/osd.lisp
+;;(load-contrib "osd.lisp")
 ;;;;; -- Doc example end --
+
 
 
 ;;;;; Init hook examples:
@@ -258,6 +164,8 @@
 ;;
 ;;
 ;;
-;;(setf *init-hook* #'my-init-hook-4)  ;; <- choose one in 1 to 4
+;;(setf *init-hook* '(my-init-hook-4))  ;; <- choose one in 1 to 4,
+;;;;                                             my-init-hook-ms-windows-style
+;;;;                                             my-init-hook-rox-filer
 ;;;;(setf *init-hook* nil)
 ;;;;; Init hook end

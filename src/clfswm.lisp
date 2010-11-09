@@ -200,7 +200,7 @@
   (netwm-set-properties)
   (xlib:display-force-output *display*)
   (setf *child-selection* nil)
-  (setf *root-frame* (create-frame :name "Root" :number 0) ;; :layout #'tile-space-layout)
+  (setf *root-frame* (create-frame :name "Root" :number 0)
 	*current-root* *root-frame*
 	*current-child* *current-root*)
   (call-hook *init-hook*)
