@@ -1,5 +1,8 @@
 2010-11-09  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-expose-mode.lisp (expose-windows-current-child-mode):
+	New function an bindings.
+
 	* src/clfswm-layout.lisp (tile-layout, set-tile-layout): Fill
 	blanks if needed.
 

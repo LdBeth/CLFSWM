@@ -205,3 +205,17 @@
 			    (lambda ()
 			      (hide-all-children *current-root*)
 			      (setf *current-root* orig-root)))))
+
+(defun expose-windows-current-child-mode ()
+  "Present all windows in the current child (An expose like)"
+  (stop-button-event)
+  (when (frame-p *current-child*)
+    (let ((orig-root *current-root*))
+      (hide-all *current-root*)
+      (setf *current-root* *current-child*)
+      (expose-windows-generic *current-root*)
+      (hide-all *current-root*)
+      (setf *current-root* orig-root)
+      (show-all-children *current-root*))))
+
+
