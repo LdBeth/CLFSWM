@@ -1,3 +1,11 @@
+2010-11-11  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (set-current-root): Handle
+	window-parent in set-current-root.
+
+	* src/clfswm-util.lisp (mouse-click-to-focus-generic): Do not
+	focus the parent child when the current root is a window.
+
 2010-11-09  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-expose-mode.lisp (expose-windows-current-child-mode):

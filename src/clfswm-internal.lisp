@@ -798,9 +798,9 @@ only for display-child and its children"
   ())
 
 
-(defun set-current-root (parent)
+(defun set-current-root (parent window-parent)
   "Set current root if parent is not in current root"
-  (unless (find-child parent *current-root*)
+  (when (and window-parent (not (find-child parent *current-root*)))
     (setf *current-root* parent)))
 
 
@@ -809,9 +809,7 @@ only for display-child and its children"
 For window: set current child to window or its parent according to window-parent"
   (let ((new-focus (focus-child-rec child parent))
 	(new-current-child (set-current-child child parent window-parent))
-	(new-root (if window-parent
-		      (set-current-root parent)
-		      child)))
+	(new-root (set-current-root parent window-parent)))
     (or new-focus new-current-child new-root)))
 
 
