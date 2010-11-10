@@ -556,7 +556,9 @@ mouse-fun is #'move-frame or #'resize-frame"
 		(setf parent (find-parent-frame child)))))
 	(when (equal (type-of child) 'frame)
 	  (funcall mouse-fn child parent root-x root-y))
-	(when (and child parent (focus-all-children child parent))
+	(when (and child parent (focus-all-children child parent
+						    (not (and (child-equal-p *current-child* *current-root*)
+							      (xlib:window-p *current-root*)))))
 	  (when (show-all-children *current-root*)
 	    (setf to-replay nil))))
       (if to-replay

@@ -809,7 +809,9 @@ only for display-child and its children"
 For window: set current child to window or its parent according to window-parent"
   (let ((new-focus (focus-child-rec child parent))
 	(new-current-child (set-current-child child parent window-parent))
-	(new-root (set-current-root parent)))
+	(new-root (if window-parent
+		      (set-current-root parent)
+		      child)))
     (or new-focus new-current-child new-root)))
 
 
