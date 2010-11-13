@@ -1,3 +1,8 @@
+2010-11-13  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-expose-mode.lisp (expose-mode-display-accel-windows):
+	Do not display the accel window for unmanaged windows.
+
 2010-11-11  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp (set-current-root): Handle

@@ -145,7 +145,8 @@
   (if (frame-p frame)
       (with-slots ((managed forced-managed-window)
 		   (unmanaged forced-unmanaged-window)) frame
-	(and (not (child-member window unmanaged))
+	(and (xlib:window-p window)
+	     (not (child-member window unmanaged))
 	     (not (member (xlib:wm-name window) unmanaged :test #'string-equal-p))
 	     (or (member :all (frame-managed-type frame))
 		 (member (window-type window) (frame-managed-type frame))

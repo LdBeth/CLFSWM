@@ -27,6 +27,7 @@
 
 (defparameter *expose-font* nil)
 (defparameter *expose-windows-list* nil)
+(defparameter *expose-selected-child* nil)
 
 (defun leave-expose-mode ()
   "Leave the expose mode"
@@ -89,6 +90,7 @@
 			 (let ((child (nth ,n *expose-windows-list*)))
 			   (when child
 			     (xlib:warp-pointer *root* (xlib:drawable-x (first child)) (xlib:drawable-y (first child)))
+			     (setf *expose-selected-child* (fourth child))
 			     (when *expose-valid-on-key*
 			       (valid-expose-mode)))))
 		       (define-expose-key (,(number->char n)) ',(produce-name n)))))))
@@ -129,22 +131,26 @@
 				       :font *expose-font*
 				       :line-style :solid)))
 	(map-window window)
-	(push (list window gc string) *expose-windows-list*)))))
+	(push (list window gc string child) *expose-windows-list*)))))
 
 
 
 (defun expose-mode-display-accel-windows ()
   (let ((n -1))
     (with-all-children-reversed (*current-root* child)
-      (when (< n 25)
-	(expose-create-window child (incf n)))))
+      (if (or (frame-p child)
+	      (managed-window-p child (find-parent-frame child *root-frame*)))
+	  (when (< n 25)
+	    (expose-create-window child (incf n)))
+	  (hide-child child))))
   (setf *expose-windows-list* (nreverse *expose-windows-list*))
   (expose-draw-letter))
 
 
 (defun expose-windows-generic (first-restore-frame &optional body body-escape)
   (setf *expose-font* (xlib:open-font *display* *expose-font-string*)
-	*expose-windows-list* nil)
+	*expose-windows-list* nil
+	*expose-selected-child* nil)
   (xlib:warp-pointer *root* (truncate (/ (xlib:screen-width *screen*) 2))
 		     (truncate (/ (xlib:screen-height *screen*) 2)))
   (with-all-frames (first-restore-frame frame)
@@ -161,7 +167,8 @@
     (if (generic-mode 'expose-mode 'exit-expose-loop
 		      :original-mode '(main-mode))
 	(multiple-value-bind (x y) (xlib:query-pointer *root*)
-	  (let* ((child (find-child-under-mouse x y))
+	  (dbg *expose-selected-child* (child-fullname *expose-selected-child*))
+	  (let* ((child (or *expose-selected-child* (find-child-under-mouse x y)))
 		 (parent (find-parent-frame child *root-frame*)))
 	    (when (and child parent)
 	      (pfuncall body parent)
