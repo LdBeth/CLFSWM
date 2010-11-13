@@ -32,20 +32,19 @@
   (let* ((modifiers (state->modifiers state))
 	 (keysym (keysym->keysym-name (xlib:keycode->keysym *display* code 0))))
     (do-shell "pkill osd_cat")
-    (do-shell (format nil "echo '~A~A' | osd_cat -d 3 -p bottom -c white -o -50 -f -*-fixed-*-*-*-*-14-*-*-*-*-*-*-1"
+    (do-shell (format nil "( echo '~A~A' | osd_cat -d 3 -p bottom -c white -o -50 -f -*-fixed-*-*-*-*-14-*-*-*-*-*-*-1 ) &"
 		      (if keysym
 			  (format nil "~:(~{~A+~}~A~)" modifiers keysym)
 			  "Menu")
 		      (aif (documentation (first function) 'function)
-			   (format nil ": ~A" it) "")))
-    (force-output)))
+			   (format nil ": ~A" it) "")))))
 
 
 (defun funcall-key-from-code (hash-table-key code state &rest args)
   (let ((function (find-key-from-code hash-table-key code state)))
     (when function
-      (display-doc function code state)
       (apply (first function) (append args (second function)))
+      (display-doc function code state)
       t)))
 
 ;;; CONFIG - Screen size
