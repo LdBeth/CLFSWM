@@ -186,6 +186,7 @@
       (setf (frame-layout frame) (frame-data-slot frame :old-layout)
 	    (frame-data-slot frame :old-layout) nil))
     (show-all-children *current-root*)
+    (banish-pointer)
     (unless grab-keyboard-p
       (xungrab-keyboard)
       (grab-main-keys))
