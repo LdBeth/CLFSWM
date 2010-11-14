@@ -2,7 +2,9 @@
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
 ;;; --------------------------------------------------------------------------
-;;; Documentation: Utility
+;;; Documentation: Client/server connection.
+;;; The connection is crypted and you can only connect to the server with the
+;;; same clfswm binary.
 ;;; --------------------------------------------------------------------------
 ;;;
 ;;; (C) 2005 Philippe Brochard <hocwp@free.fr>
@@ -23,11 +25,11 @@
 ;;;
 ;;; --------------------------------------------------------------------------
 ;;; Server protocole:
-;;;  Server -> Client:  orig_key=a generated key crypted with *key*
-;;;  Client          :  build its new_key with orig_key+*key*
-;;;  Client -> Server:  new_key+(md5 new_key) crypted with new_key
-;;;  Server -> Client:  check if the keys match and then authenticate the client.
-;;;
+;;;  Server ->  Client:  orig_key=a generated key crypted with *key*
+;;;  Client           :  build its new_key with orig_key+*key*
+;;;  Client ->  Server:  new_key+(md5 new_key) crypted with new_key
+;;;  Server ->  Client:  check if the keys match and then authenticate the client.
+;;;  Server <-> Client:  All connections are crypted with new_key
 ;;; --------------------------------------------------------------------------
 
 
@@ -248,7 +250,7 @@
 (format t "done.
 
 You can now start a clfswm server with the command (start-server &optional port).
-Only [~{~A~^, ~}] ~A allowed to login on the server.
+Only [~{~A~^, ~}] ~A allowed to login on the server. The connection is crypted.
 You can start the client with the '--client' command line option.~%"
 	*server-allowed-host*
 	(if (or (null *server-allowed-host*) (= (length *server-allowed-host*) 1))
@@ -259,6 +261,9 @@ You can start the client with the '--client' command line option.~%"
     (when (member "--client" args :test #'string-equal)
       (clfswm-client:start-client (remove "--client" args :test #'string-equal))
       (uquit))))
+
+(defun is-started-as-client-p ()
+  (member "--client" (get-command-line-words) :test #'string-equal))
 
 (add-hook *main-entrance-hook* 'server-parse-cmdline)
 

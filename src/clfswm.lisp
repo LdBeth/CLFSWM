@@ -217,7 +217,7 @@
     (if conf
 	(handler-case (load conf)
 	  (error (c)
-	    (format t "~2%*** Error loading configurtion file: ~A ***~&~A~%" conf c)
+	    (format t "~2%*** Error loading configuration file: ~A ***~&~A~%" conf c)
 	    (values nil (format nil "~s" c) conf))
 	  (:no-error (&rest args)
 	    (declare (ignore args))

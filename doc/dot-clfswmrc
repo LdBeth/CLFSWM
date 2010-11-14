@@ -21,8 +21,6 @@
 ;; (setf *have-to-compress-notify* t)
 
 
-
-
 ;;; Color configuration example
 ;;;
 ;;; See in package.lisp or config.lisp for all variables
@@ -46,6 +44,13 @@
 ;;(load-contrib "xmms.lisp")
 ;;(load-contrib "cd-player.lisp")
 ;;(load-contrib "reboot-halt.lisp")
+
+
+;;;; Client/server connection - the connection is crypted and you can only
+;;;; connect to the server with the same clfswm binary.
+;;(load-contrib "server/server.lisp")
+;;(unless (is-started-as-client-p)
+;;  (start-server))
 
 
 
