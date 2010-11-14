@@ -161,7 +161,8 @@
   "Return the child under the mouse"
   (let ((ret nil))
     (with-all-windows-frames-and-parent (*current-root* child parent)
-      (when (and (or (managed-window-p child parent) (child-equal-p parent *current-child*))
+      (when (and (not (window-hidden-p child))
+		 (or (managed-window-p child parent) (child-equal-p parent *current-child*))
 		 (<= (xlib:drawable-x child) x (+ (xlib:drawable-x child) (xlib:drawable-width child)))
 		 (<= (xlib:drawable-y child) y (+ (xlib:drawable-y child) (xlib:drawable-height child))))
 	(if first-foundp
