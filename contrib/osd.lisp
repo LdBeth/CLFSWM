@@ -43,8 +43,8 @@
 (defun funcall-key-from-code (hash-table-key code state &rest args)
   (let ((function (find-key-from-code hash-table-key code state)))
     (when function
-      (apply (first function) (append args (second function)))
       (display-doc function code state)
+      (apply (first function) (append args (second function)))
       t)))
 
 ;;; CONFIG - Screen size
