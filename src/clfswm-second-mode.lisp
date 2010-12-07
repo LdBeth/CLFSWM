@@ -32,6 +32,9 @@
 (defparameter *second-mode-program* nil
   "Execute the program string if not nil")
 
+(defparameter *second-mode-leave-function* nil
+  "Execute the function if not nil")
+
 
 (defun draw-second-mode-window ()
   (raise-window *sm-window*)
@@ -138,6 +141,9 @@
   (when *second-mode-program*
     (do-shell *second-mode-program*)
     (setf *second-mode-program* nil))
+  (when *second-mode-leave-function*
+    (funcall *second-mode-leave-function*)
+    (setf *second-mode-leave-function* nil))
   (setf *in-second-mode* nil))
 
 (defun second-key-mode ()

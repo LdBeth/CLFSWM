@@ -1,3 +1,9 @@
+2010-12-07  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-second-mode.lisp (*second-mode-leave-function*): New
+	variable bound to a function executed (when not null) on second
+	mode leaving.
+
 2010-11-14  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (find-child-under-mouse): Do not find
