@@ -1,3 +1,8 @@
+2010-12-08  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-second-mode.lisp (sm-leave-function): Do not use
+	*second-mode-program* anymore.
+
 2010-12-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-second-mode.lisp (*second-mode-leave-function*): New

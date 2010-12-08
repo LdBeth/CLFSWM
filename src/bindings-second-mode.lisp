@@ -74,7 +74,9 @@
   `(define-second-key ,key
        (defun ,name ()
 	 ,docstring
-	 (setf *second-mode-program* ,cmd)
+	 (setf *second-mode-leave-function* (let ((cmd ,cmd))
+					      (lambda ()
+						(do-shell cmd))))
 	 (leave-second-mode))))
 
 

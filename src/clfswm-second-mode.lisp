@@ -29,9 +29,6 @@
 (defparameter *sm-font* nil)
 (defparameter *sm-gc* nil)
 
-(defparameter *second-mode-program* nil
-  "Execute the program string if not nil")
-
 (defparameter *second-mode-leave-function* nil
   "Execute the function if not nil")
 
@@ -138,9 +135,6 @@
   (show-all-children)
   (display-all-frame-info)
   (wait-no-key-or-button-press)
-  (when *second-mode-program*
-    (do-shell *second-mode-program*)
-    (setf *second-mode-program* nil))
   (when *second-mode-leave-function*
     (funcall *second-mode-leave-function*)
     (setf *second-mode-leave-function* nil))

@@ -356,7 +356,9 @@
   (multiple-value-bind (program return)
       (query-string "Run:")
     (when (and (equal return :return) program (not (equal program "")))
-      (setf *second-mode-program* (concatenate 'string "cd $HOME && " program))
+      (setf *second-mode-leave-function* (let ((cmd (concatenate 'string "cd $HOME && " program)))
+					   (lambda ()
+					     (do-shell cmd))))
       (leave-second-mode))))
 
 
