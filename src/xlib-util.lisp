@@ -72,8 +72,6 @@ Window types are in +WINDOW-TYPES+.")
        (dbg "Ignore Xlib Error" c ',body))))
 
 
-
-
 (defmacro with-x-pointer (&body body)
   "Bind (x y) to mouse pointer positions"
   `(multiple-value-bind (x y)

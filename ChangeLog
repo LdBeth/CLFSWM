@@ -1,3 +1,8 @@
+2010-12-25  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-second-mode.lisp (second-key-mode): Call the second
+	mode leave function only when the generic mode was ended.
+
 2010-12-08  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-second-mode.lisp (sm-leave-function): Do not use

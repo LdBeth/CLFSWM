@@ -135,9 +135,6 @@
   (show-all-children)
   (display-all-frame-info)
   (wait-no-key-or-button-press)
-  (when *second-mode-leave-function*
-    (funcall *second-mode-leave-function*)
-    (setf *second-mode-leave-function* nil))
   (setf *in-second-mode* nil))
 
 (defun second-key-mode ()
@@ -146,7 +143,10 @@
 		'exit-second-loop
 		:enter-function #'sm-enter-function
 		:loop-function #'sm-loop-function
-		:leave-function #'sm-leave-function))
+		:leave-function #'sm-leave-function)
+  (when *second-mode-leave-function*
+    (funcall *second-mode-leave-function*)
+    (setf *second-mode-leave-function* nil)))
 
 (defun leave-second-mode ()
   "Leave second mode"
