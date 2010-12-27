@@ -1,3 +1,8 @@
+2010-12-27  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/xlib-util.lisp (with-xlib-protect): Force to revert to the
+	main mode state.
+
 2010-12-25  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-second-mode.lisp (second-key-mode): Call the second

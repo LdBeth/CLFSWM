@@ -69,7 +69,11 @@ Window types are in +WINDOW-TYPES+.")
        (with-simple-restart (top-level "Return to clfswm's top level")
 	 ,@body)
      ((or xlib:match-error xlib:window-error xlib:drawable-error) (c)
-       (dbg "Ignore Xlib Error" c ',body))))
+       (progn
+	 (dbg "Ignore Xlib Error" c ',body)
+	 (unassoc-keyword-handle-event)
+	 (assoc-keyword-handle-event 'main-mode)
+	 (setf *in-second-mode* nil)))))
 
 
 (defmacro with-x-pointer (&body body)
