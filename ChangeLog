@@ -1,3 +1,8 @@
+2010-12-29  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/osd.lisp (display-doc): Add another method where a
+	CLFSWM native window is used to display the key documentation.
+
 2010-12-27  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/xlib-util.lisp (with-xlib-protect): Force to revert to the

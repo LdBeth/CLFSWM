@@ -25,9 +25,20 @@
 
 (in-package :clfswm)
 
+;; Uncomment the line above if you want to use the old OSD method
+;;(pushnew :DISPLAY-OSD *features*)
+
+#-DISPLAY-OSD
+(progn
+  (defparameter *osd-window* nil)
+  (defparameter *osd-gc* nil)
+  (defparameter *osd-font* nil)
+  (defparameter *osd-font-string* "-*-fixed-*-*-*-*-14-*-*-*-*-*-*-1"))
+
 
 ;;; A more complex example I use to record my desktop and show
 ;;; documentation associated to each key press.
+#+DISPLAY-OSD
 (defun display-doc (function code state)
   (let* ((modifiers (state->modifiers state))
 	 (keysym (keysym->keysym-name (xlib:keycode->keysym *display* code 0))))
@@ -38,6 +49,47 @@
 			  "Menu")
 		      (aif (documentation (first function) 'function)
 			   (format nil ": ~A" it) "")))))
+
+#-DISPLAY-OSD
+(defun is-osd-window-p (win)
+  (xlib:window-equal win *osd-window*))
+
+#-DISPLAY-OSD
+(defun display-doc (function code state)
+  (unless *osd-window*
+    (setf *osd-window* (xlib:create-window :parent *root*
+					   :x 0 :y (- (xlib:drawable-height *root*) 25)
+					   :width (xlib:drawable-width *root*) :height 25
+					   :background (get-color "black")
+					   :border-width 1
+					   :border (get-color "black")
+					   :colormap (xlib:screen-default-colormap *screen*)
+					   :event-mask '(:exposure))
+	  *osd-font* (xlib:open-font *display* *osd-font-string*)
+	  *osd-gc* (xlib:create-gcontext :drawable *osd-window*
+					 :foreground (get-color "white")
+					 :background (get-color "black")
+					 :font *osd-font*
+					 :line-style :solid))
+    (map-window *osd-window*))
+  (let* ((modifiers (state->modifiers state))
+	 (keysym (keysym->keysym-name (xlib:keycode->keysym *display* code 0))))
+    (when (frame-p *current-child*)
+      (push (list #'equal #'is-osd-window-p t) *never-managed-window-list*))
+    (raise-window *osd-window*)
+    (rotatef (xlib:gcontext-foreground *osd-gc*) (xlib:gcontext-background *osd-gc*))
+    (xlib:draw-rectangle *osd-window* *osd-gc*
+			 0 0 (xlib:drawable-width *osd-window*) (xlib:drawable-height *osd-window*)
+			 t)
+    (rotatef (xlib:gcontext-foreground *osd-gc*) (xlib:gcontext-background *osd-gc*))
+    (xlib:draw-glyphs *osd-window* *osd-gc* 20 15
+		      (format nil "~A~A"
+			      (if keysym
+				  (format nil "~:(~{~A+~}~A~)" modifiers keysym)
+				  "Menu")
+			      (aif (documentation (first function) 'function)
+				   (format nil ": ~A" it) "")))
+    (xlib:display-finish-output *display*)))
 
 
 (defun funcall-key-from-code (hash-table-key code state &rest args)
