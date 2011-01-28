@@ -1,3 +1,8 @@
+2011-01-28  Desmond O. Chang <dochang@gmail.com>
+
+	* src/clfswm-util.lisp (xdg-config-home): XDG_CONFIG_HOME should
+	be $HOME/.config by default.
+
 2010-12-29  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/osd.lisp (display-doc): Add another method where a

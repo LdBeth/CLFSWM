@@ -28,9 +28,10 @@
 
 ;;; Configuration file
 (defun xdg-config-home ()
-  (pathname-directory (concatenate 'string (or (getenv "XDG_CONFIG_HOME")
-					       (getenv "HOME"))
-				   "/")))
+  (aif (getenv "XDG_CONFIG_HOME")
+       (pathname-directory (concatenate 'string it "/"))
+       (append (pathname-directory (user-homedir-pathname)) '(".config"))))
+
 
 (let ((saved-conf-name nil))
   (defun conf-file-name (&optional alternate-name)

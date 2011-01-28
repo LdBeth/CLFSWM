@@ -68,7 +68,7 @@
 	  *osd-font* (xlib:open-font *display* *osd-font-string*)
 	  *osd-gc* (xlib:create-gcontext :drawable *osd-window*
 					 :foreground (get-color "white")
-					 :background (get-color "black")
+					 :background (get-color "gray10")
 					 :font *osd-font*
 					 :line-style :solid))
     (map-window *osd-window*))
