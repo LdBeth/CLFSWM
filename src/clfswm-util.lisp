@@ -1512,3 +1512,22 @@ For window: set current child to window or its parent according to window-parent
   (open-notify-window '(("Welcome to CLFSWM" "yellow")
 			"Press Alt+F1 for help"))
   (add-timer *notify-window-delay* #'close-notify-window))
+
+
+;;; Run or raise functions
+(defun run-or-raise (raisep run-fn &key (maximized nil))
+  (let ((window (with-all-windows (*root-frame* win)
+		  (when (funcall raisep win)
+		    (return win)))))
+    (if window
+        (let ((parent (find-parent-frame window)))
+          (hide-all-children *current-root*)
+          (setf *current-child* parent)
+	  (put-child-on-top window parent)
+          (when maximized
+            (setf *current-root* parent))
+	  (focus-all-children window parent)
+          (show-all-children *current-root*))
+        (funcall run-fn))))
+
+

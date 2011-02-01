@@ -57,11 +57,31 @@
 ;;; Binding example: Undefine Control-F1 and define  Control-F5 as a
 ;;; new binding in main mode
 ;;;
-;;; See bindings.lisp, bindings-second-mode.lisp and bindings-pager.lisp
-;;; for all default bindings definitions.
+;;; See bindings.lisp, bindings-second-mode.lisp for all default bindings definitions.
+;;
+;;(defun $start-emacs ()
+;;  "Run or raise emacs"
+;;  (setf *second-mode-leave-function*
+;;        (lambda ()
+;;          (run-or-raise (lambda (win) (string-equal "emacs"
+;;						    (xlib:get-wm-class win)))
+;;                        (lambda () (do-shell "cd $HOME && exec emacsclient -c")))))
+;;  (leave-second-mode))
+;;
+;;(defun $start-conkeror ()
+;;  "Run or raise conkeror"
+;;  (setf *second-mode-leave-function*
+;;        (lambda ()
+;;          (run-or-raise (lambda (win) (string-equal "Navigator"
+;;						    (xlib:get-wm-class win)))
+;;                        (lambda () (do-shell "cd $HOME && exec conkeror")))))
+;;  (leave-second-mode))
+;;
 ;;(defun binding-example ()
 ;;  (undefine-main-key ("F1" :mod-1))
 ;;  (define-main-key ("F5" :mod-1) 'help-on-clfswm)
+;;  (define-second-key ("e") '$start-emacs)
+;;  (define-second-key ("c") '$start-conkeror)
 ;;  ;; Binding example for apwal
 ;;  (define-second-key (#\Space)
 ;;      (defun tpm-apwal ()

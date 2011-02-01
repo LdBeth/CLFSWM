@@ -1,3 +1,10 @@
+2011-02-01  Desmond O. Chang <dochang@gmail.com>
+
+	* src/clfswm-util.lisp (run-or-raise): New function (thanks to
+	Desmond O. Chang).
+
+	* src/clfswm-internal.lisp (with-all-*): add a nil block.
+
 2011-01-28  Desmond O. Chang <dochang@gmail.com>
 
 	* src/clfswm-util.lisp (xdg-config-home): XDG_CONFIG_HOME should

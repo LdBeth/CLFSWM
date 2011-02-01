@@ -260,49 +260,53 @@
 (defmacro with-all-children ((root child) &body body)
   (let ((rec (gensym))
 	(sub-child (gensym)))
-    `(labels ((,rec (,child)
-		,@body
-		(when (frame-p ,child)
-		  (dolist (,sub-child (reverse (frame-child ,child)))
-		    (,rec ,sub-child)))))
-       (,rec ,root))))
+    `(block nil
+       (labels ((,rec (,child)
+		  ,@body
+		  (when (frame-p ,child)
+		    (dolist (,sub-child (reverse (frame-child ,child)))
+		      (,rec ,sub-child)))))
+	 (,rec ,root)))))
 
 
 ;; (with-all-children (*root-frame* child) (typecase child (xlib:window (print child)) (frame (print (frame-number child)))))
 (defmacro with-all-children-reversed ((root child) &body body)
   (let ((rec (gensym))
 	(sub-child (gensym)))
-    `(labels ((,rec (,child)
-		,@body
-		(when (frame-p ,child)
-		  (dolist (,sub-child (frame-child ,child))
-		    (,rec ,sub-child)))))
-       (,rec ,root))))
+    `(block nil
+       (labels ((,rec (,child)
+		  ,@body
+		  (when (frame-p ,child)
+		    (dolist (,sub-child (frame-child ,child))
+		      (,rec ,sub-child)))))
+	 (,rec ,root)))))
 
 
 ;; (with-all-frames (*root-frame* frame) (print (frame-number frame)))
 (defmacro with-all-frames ((root frame) &body body)
   (let ((rec (gensym))
 	(child (gensym)))
-    `(labels ((,rec (,frame)
-		(when (frame-p ,frame)
-		  ,@body
-		  (dolist (,child (reverse (frame-child ,frame)))
-		    (,rec ,child)))))
-       (,rec ,root))))
+    `(block nil
+       (labels ((,rec (,frame)
+		  (when (frame-p ,frame)
+		    ,@body
+		    (dolist (,child (reverse (frame-child ,frame)))
+		      (,rec ,child)))))
+	 (,rec ,root)))))
 
 
 ;; (with-all-windows (*root-frame* window) (print window))
 (defmacro with-all-windows ((root window) &body body)
   (let ((rec (gensym))
 	(child (gensym)))
-    `(labels ((,rec (,window)
-		(when (xlib:window-p ,window)
-		  ,@body)
-		(when (frame-p ,window)
-		  (dolist (,child (reverse (frame-child ,window)))
-		    (,rec ,child)))))
-       (,rec ,root))))
+    `(block nil
+       (labels ((,rec (,window)
+		  (when (xlib:window-p ,window)
+		    ,@body)
+		  (when (frame-p ,window)
+		    (dolist (,child (reverse (frame-child ,window)))
+		      (,rec ,child)))))
+	 (,rec ,root)))))
 
 
 
@@ -310,24 +314,26 @@
 (defmacro with-all-windows-frames ((root child) body-window body-frame)
   (let ((rec (gensym))
 	(sub-child (gensym)))
-    `(labels ((,rec (,child)
-		(typecase ,child
-		  (xlib:window ,body-window)
-		  (frame ,body-frame
-			 (dolist (,sub-child (reverse (frame-child ,child)))
-			   (,rec ,sub-child))))))
-       (,rec ,root))))
+    `(block nil
+       (labels ((,rec (,child)
+		  (typecase ,child
+		    (xlib:window ,body-window)
+		    (frame ,body-frame
+			   (dolist (,sub-child (reverse (frame-child ,child)))
+			     (,rec ,sub-child))))))
+	 (,rec ,root)))))
 
 (defmacro with-all-windows-frames-and-parent ((root child parent) body-window body-frame)
   (let ((rec (gensym))
 	(sub-child (gensym)))
-    `(labels ((,rec (,child ,parent)
-		(typecase ,child
-		  (xlib:window ,body-window)
-		  (frame ,body-frame
-			 (dolist (,sub-child (reverse (frame-child ,child)))
-			   (,rec ,sub-child ,child))))))
-       (,rec ,root nil))))
+    `(block nil
+       (labels ((,rec (,child ,parent)
+		  (typecase ,child
+		    (xlib:window ,body-window)
+		    (frame ,body-frame
+			   (dolist (,sub-child (reverse (frame-child ,child)))
+			     (,rec ,sub-child ,child))))))
+	 (,rec ,root nil)))))
 
 
 
@@ -1057,3 +1063,19 @@ managed."
 	      (pushnew (xlib:window-id win) id-list))))))
     (netwm-set-client-list id-list))
   (setf *in-process-existing-windows* nil))
+
+
+;;; Child order manipulation functions
+(defun put-child-on-top (child parent)
+  "Put the child on top of its parent children"
+  (when (frame-p parent)
+    (setf (frame-child parent) (cons child (child-remove child (frame-child parent)))
+	  (frame-selected-pos parent) 0)))
+
+(defun put-child-on-bottom (child parent)
+  "Put the child at the bottom of its parent children"
+  (when (frame-p parent)
+    (setf (frame-child parent) (append (child-remove child (frame-child parent)) (list child))
+	  (frame-selected-pos parent) 0)))
+
+
