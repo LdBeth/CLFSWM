@@ -1,3 +1,7 @@
+2011-02-05  Desmond O. Chang <dochang@gmail.com>
+
+	* src/keysyms.lisp: Add extended keysyms from stumpwm.
+
 2011-02-01  Desmond O. Chang <dochang@gmail.com>
 
 	* src/clfswm-util.lisp (run-or-raise): New function (thanks to
