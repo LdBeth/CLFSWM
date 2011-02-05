@@ -57,14 +57,14 @@
 
 (in-package :clfswm)
 
-(ignore-errors
- (main :read-conf-file-p t))
+;;(ignore-errors
+;; (main :read-conf-file-p t))
 
 
 ;;;; Uncomment lines above to save the default documentation.
-;;(ignore-errors
-;;  (main :read-conf-file-p nil))
-;;(produce-all-docs)
+(ignore-errors
+  (main :read-conf-file-p nil))
+(produce-all-docs)
 
 
 ;;; For debuging: start another sever (for example: 'startx -- :1'), Xnest
