@@ -14,19 +14,19 @@
  frames are created/deleted on the fly. A window can be in more than
  one frame, so it can have multiple views of the same windows.
 
- Using CLFSWM is like walking throw a tree of frames and windows.
+ Using CLFSWM is like walking through a tree of frames and windows.
  Enter in a child to make it the current root and make it fullscreen
  maximized. Leave it to make its parent the current root.
 
- Here is the default key binding to navigate throw this tree:
+ Here is the default key binding to navigate through this tree:
 
-  * Alt-Tab: circulate throw children of the current child.
+  * Alt-Tab: circulate through children of the current child.
   * Alt-Left/Right: circulate through brother children (ie: this is like
       workspaces for a more conventional window manager)
   * Alt-Up: select the first child of the current frame.
   * Alt-Down: select the parent of the current child.
   * Alt-Enter: Make the current selected child the current root (ie
-      maximize it) 
+      maximize it)
   * Alt+Shift-Enter: Make the parent of the current root the current
       root (ie unmaximize the current root).
 
@@ -36,7 +36,7 @@
  A main mode with minimal keys and mouse grabbing to avoid conflicts
  with others applications.
  And a second mode with more keys and mouse actions.
- For details of its usage, have a look at the files doc/keys.txt or 
+ For details of its usage, have a look at the files doc/keys.txt or
  doc/keys.html
  A lot of functions to manage CLFSWM can be found in the second mode
  menu. See the file menu-def.lisp for an overview.

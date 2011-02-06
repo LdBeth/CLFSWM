@@ -1,3 +1,7 @@
+2011-02-05  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* *: **** Release 1102 ****
+
 2011-02-05  Desmond O. Chang <dochang@gmail.com>
 
 	* src/keysyms.lisp: Add extended keysyms from stumpwm.
@@ -497,6 +501,8 @@
 
 2009-06-29  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* *: **** Release 0906 ****
+
 	* contrib/cd-player.lisp: New file to handle the CD player.
 
 	* contrib/xmms.lisp: New file to handle the xmms player.
@@ -754,6 +760,7 @@
 	deleted child.
 
 2008-09-23  Philippe Brochard  <pbrochard@common-lisp.net>
+
 	* *: **** Release 0809 ****
 
 2008-09-23  Philippe Brochard  <pbrochard@common-lisp.net>
