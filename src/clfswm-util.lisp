@@ -1464,7 +1464,7 @@ For window: set current child to window or its parent according to window-parent
     (defun close-notify-window ()
       (erase-timer :refresh-notify-window)
       (setf *never-managed-window-list*
-	    (remove (list #'equal #'is-notify-window-p t) *never-managed-window-list* :test #'equal))
+	    (remove (list #'equal #'is-notify-window-p t t) *never-managed-window-list* :test #'equal))
       (when gc
 	(xlib:free-gcontext gc))
       (when window
@@ -1502,7 +1502,7 @@ For window: set current child to window or its parent according to window-parent
 					 :line-style :solid))
 	  (when (frame-p *current-child*)
 	    (setf current-child *current-child*)
-	    (push (list #'equal #'is-notify-window-p t) *never-managed-window-list*))
+	    (push (list #'equal #'is-notify-window-p t t) *never-managed-window-list*))
 	  (map-window window)
 	  (refresh-notify-window)
 	  (xlib:display-finish-output *display*))))))

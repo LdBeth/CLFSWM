@@ -84,7 +84,11 @@
     (process-new-window window)
     (map-window window)
     (unless (null-size-window-p window)
-      (show-all-children))))
+      (multiple-value-bind (never-managed raise)
+	  (never-managed-window-p window)
+	(unless (and never-managed raise)
+	  (show-all-children))))))
+
 
 (define-handler main-mode :unmap-notify (send-event-p event-window window)
   (unless (and (not send-event-p)

@@ -157,12 +157,9 @@
 
 (defun never-managed-window-p (window)
   (dolist (type *never-managed-window-list*)
-    (destructuring-bind (test predicate result) type
+    (destructuring-bind (test predicate result raise) type
       (when (funcall test (funcall predicate window) result)
-	(return t)))))
-    ;;(when (string-equal (funcall (first type) window) (second type))
-    ;;  (return t))))
-
+	(return (values t raise))))))
 
 
 (defgeneric child-name (child))

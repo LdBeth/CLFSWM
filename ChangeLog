@@ -1,3 +1,8 @@
+2011-02-08  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm.lisp (main-mode): Raise or not unmanaged windows
+	following request in *never-managed-window-list*.
+
 2011-02-05  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* *: **** Release 1102 ****

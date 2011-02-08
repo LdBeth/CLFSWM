@@ -47,11 +47,11 @@ Example: :mod-2 for num_lock, :lock for Caps_lock...")
 
 ;;; CONFIG - Never managed window list
 (defparameter *never-managed-window-list*
-  '((string-equal xlib:get-wm-class "ROX-Pinboard")
-    (string-equal  xlib:get-wm-class "xvkbd")
-    (string-equal xlib:wm-name "clfswm-terminal"))
+  '((string-equal xlib:get-wm-class "ROX-Pinboard" nil)
+    (string-equal  xlib:get-wm-class "xvkbd" t)
+    (string-equal xlib:wm-name "clfswm-terminal" t))
   "Config(): CLFSWM will never manage windows of this type.
-A list of (predicate-function-on-window expected-string)")
+A list of (predicate-function-on-window expected-string raise-p)")
 
 
 (defparameter *hide-unmanaged-window* t

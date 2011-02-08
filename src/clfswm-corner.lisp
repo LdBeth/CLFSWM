@@ -91,7 +91,8 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
     (do-shell cmd)
     (setf win (wait-window-in-query-tree wait-test))
     (hide-window win))
-  (cond ((window-hidden-p win) (unhide-window win)
+  (cond ((window-hidden-p win)
+	 (unhide-window win)
 	 (when focus-p
 	   (focus-window win))
 	 (raise-window win))
