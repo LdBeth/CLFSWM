@@ -64,7 +64,6 @@
 
 
 
-
 (defgeneric frame-p (frame))
 (defmethod frame-p ((frame frame))
   (declare (ignore frame))
@@ -73,6 +72,28 @@
   (declare (ignore frame))
   nil)
 
+
+
+;;; in-*: Find if point (x,y) is in frame, window or child
+(defun in-frame (frame x y)
+  (and (frame-p frame)
+       (<= (frame-rx frame) x (+ (frame-rx frame) (frame-rw frame)))
+       (<= (frame-ry frame) y (+ (frame-ry frame) (frame-rh frame)))))
+
+(defun in-window (window x y)
+  (and (xlib:window-p window)
+       (<= (xlib:drawable-x window) x (+ (xlib:drawable-x window) (xlib:drawable-width window)))
+       (<= (xlib:drawable-y window) y (+ (xlib:drawable-y window) (xlib:drawable-height window)))))
+
+(defgeneric in-child (child x y))
+
+(defmethod in-child ((child frame) x y)
+  (in-frame child x y))
+(defmethod in-child ((child xlib:window) x y)
+  (in-window child x y))
+(defmethod in-child (child x y)
+  (declare (ignore child x y))
+  nil)
 
 
 
@@ -156,10 +177,11 @@
 
 
 (defun never-managed-window-p (window)
-  (dolist (type *never-managed-window-list*)
-    (destructuring-bind (test predicate result raise) type
-      (when (funcall test (funcall predicate window) result)
-	(return (values t raise))))))
+  (when (xlib:window-p window)
+    (dolist (type *never-managed-window-list*)
+      (destructuring-bind (test predicate result raise) type
+	(when (funcall test (funcall predicate window) result)
+	  (return (values t raise)))))))
 
 
 (defgeneric child-name (child))

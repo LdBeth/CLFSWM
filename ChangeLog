@@ -1,3 +1,12 @@
+2011-02-09  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (mouse-focus-move/resize-generic): Take
+	care of never managed windows to move or resize them if the raise
+	parameter is true.
+
+	* src/clfswm-internal.lisp (in-frame, in-window, in-child): New
+	functions.
+
 2011-02-08  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm.lisp (main-mode): Raise or not unmanaged windows

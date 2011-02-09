@@ -48,7 +48,7 @@ Example: :mod-2 for num_lock, :lock for Caps_lock...")
 ;;; CONFIG - Never managed window list
 (defparameter *never-managed-window-list*
   '((string-equal xlib:get-wm-class "ROX-Pinboard" nil)
-    (string-equal  xlib:get-wm-class "xvkbd" t)
+    (string-equal xlib:get-wm-class "xvkbd" t)
     (string-equal xlib:wm-name "clfswm-terminal" t))
   "Config(): CLFSWM will never manage windows of this type.
 A list of (predicate-function-on-window expected-string raise-p)")
@@ -129,6 +129,7 @@ You can tweak this to what you want"
 (defparameter *clfswm-terminal-name* "clfswm-terminal"
   "Config(Corner group): The clfswm terminal name")
 ;;(defparameter *clfswm-terminal-cmd* (format nil "xterm -T ~A -e /bin/bash --noprofile --norc" *clfswm-terminal-name*)
+;;(defparameter *clfswm-terminal-cmd* (format nil "urxvt -name ~A" *clfswm-terminal-name*)
 (defparameter *clfswm-terminal-cmd* (format nil "xterm -T ~A" *clfswm-terminal-name*)
   "Config(Corner group): The clfswm terminal command.
 This command must set the window title to *clfswm-terminal-name*")

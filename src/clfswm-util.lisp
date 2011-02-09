@@ -149,33 +149,47 @@
   (let ((win *root*))
     (with-all-windows-frames-and-parent (*current-root* child parent)
       (when (and (or (managed-window-p child parent) (child-equal-p parent *current-child*))
-		 (<= (xlib:drawable-x child) x (+ (xlib:drawable-x child) (xlib:drawable-width child)))
-		 (<= (xlib:drawable-y child) y (+ (xlib:drawable-y child) (xlib:drawable-height child))))
+		 (in-window child x y))
 	(setf win child))
-      (when (and (<= (frame-rx child) x (+ (frame-rx child) (frame-rw child)))
-		 (<= (frame-ry child) y (+ (frame-ry child) (frame-rh child))))
+      (when (in-frame child x y)
 	(setf win (frame-window child))))
     win))
 
 
-(defun find-child-under-mouse (x y &optional first-foundp)
+
+
+(defun find-child-under-mouse-in-never-managed-windows (x y)
+  "Return the child under mouse from never managed windows"
+  (dolist (win (xlib:query-tree *root*))
+    (unless (window-hidden-p win)
+      (multiple-value-bind (managed raise)
+	  (never-managed-window-p win)
+	(when (and managed raise (in-window win x y))
+	  (return-from find-child-under-mouse-in-never-managed-windows win))))))
+
+
+(defun find-child-under-mouse-in-child-tree (x y &optional first-foundp)
   "Return the child under the mouse"
   (let ((ret nil))
     (with-all-windows-frames-and-parent (*current-root* child parent)
       (when (and (not (window-hidden-p child))
 		 (or (managed-window-p child parent) (child-equal-p parent *current-child*))
-		 (<= (xlib:drawable-x child) x (+ (xlib:drawable-x child) (xlib:drawable-width child)))
-		 (<= (xlib:drawable-y child) y (+ (xlib:drawable-y child) (xlib:drawable-height child))))
+		 (in-window child x y))
 	(if first-foundp
-	    (return-from find-child-under-mouse child)
+	    (return-from find-child-under-mouse-in-child-tree child)
 	    (setf ret child)))
-      (when (and (<= (frame-rx child) x (+ (frame-rx child) (frame-rw child)))
-		 (<= (frame-ry child) y (+ (frame-ry child) (frame-rh child))))
+      (when (in-frame child x y)
 	(if first-foundp
-	    (return-from find-child-under-mouse child)
+	    (return-from find-child-under-mouse-in-child-tree child)
 	    (setf ret child))))
     ret))
 
+
+(defun find-child-under-mouse (x y &optional first-foundp also-never-managed)
+  "Return the child under the mouse"
+  (or (and also-never-managed
+	   (find-child-under-mouse-in-never-managed-windows x y))
+      (find-child-under-mouse-in-child-tree x y first-foundp)))
 
 
 
@@ -596,26 +610,39 @@ Or do actions on corners"
 mouse-fun is #'move-frame or #'resize-frame.
 Focus child and its parents -
 For window: set current child to window or its parent according to window-parent"
-  (let* ((child (find-child-under-mouse root-x root-y))
-	 (parent (find-parent-frame child)))
-    (when (and (child-equal-p child *current-root*)
-	       (frame-p *current-root*))
-      (setf child (create-frame)
-	    parent *current-root*
-	    mouse-fn #'resize-frame)
-      (place-frame child parent root-x root-y 10 10)
-      (map-window (frame-window child))
-      (pushnew child (frame-child *current-root*)))
-    (typecase child
-      (xlib:window
-       (if (managed-window-p child parent)
-	   (funcall mouse-fn parent (find-parent-frame parent) root-x root-y)
-	   (funcall(cond ((eql mouse-fn #'move-frame) #'move-window)
-			 ((eql mouse-fn #'resize-frame) #'resize-window))
-		   child root-x root-y)))
-      (frame (funcall mouse-fn child parent root-x root-y)))
-    (focus-all-children child parent window-parent)
-    (show-all-children *current-root*)))
+  (labels ((move/resize-managed (child)
+	     (let ((parent (find-parent-frame child)))
+	       (when (and (child-equal-p child *current-root*)
+			  (frame-p *current-root*))
+		 (setf child (create-frame)
+		       parent *current-root*
+		       mouse-fn #'resize-frame)
+		 (place-frame child parent root-x root-y 10 10)
+		 (map-window (frame-window child))
+		 (pushnew child (frame-child *current-root*)))
+	       (typecase child
+		 (xlib:window
+		  (if (managed-window-p child parent)
+		      (funcall mouse-fn parent (find-parent-frame parent) root-x root-y)
+		      (funcall (cond ((eql mouse-fn #'move-frame) #'move-window)
+				     ((eql mouse-fn #'resize-frame) #'resize-window))
+			       child root-x root-y)))
+		 (frame (funcall mouse-fn child parent root-x root-y)))
+	       (focus-all-children child parent window-parent)
+	       (show-all-children *current-root*)))
+	   (move/resize-never-managed (child)
+	     (raise-window child)
+	     (funcall (cond ((eql mouse-fn #'move-frame) #'move-window)
+			    ((eql mouse-fn #'resize-frame) #'resize-window))
+		      child root-x root-y)
+	     (focus-window child)))
+    (let ((child (find-child-under-mouse root-x root-y nil t)))
+      (multiple-value-bind (never-managed raise)
+	  (never-managed-window-p child)
+	(if (and (xlib:window-p child) never-managed raise)
+	    (move/resize-never-managed child)
+	    (move/resize-managed child))))))
+
 
 
 
