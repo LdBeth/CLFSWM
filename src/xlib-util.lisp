@@ -393,14 +393,14 @@ Expand in handle-event-fun-main-mode-key-press"
 
 (defun raise-window (window)
   "Map the window if needed and bring it to the top of the stack. Does not affect focus."
-  (when window
+  (when (xlib:window-p window)
     (when (window-hidden-p window)
       (unhide-window window))
     (setf (xlib:window-priority window) :top-if)))
 
 (defun focus-window (window)
   "Give the window focus."
-  (when window
+  (when (xlib:window-p window)
     (xlib:set-input-focus *display* window :parent)))
 
 
@@ -796,4 +796,24 @@ Expand in handle-event-fun-main-mode-key-press"
   (loop for k across (xlib:query-keymap *display*)
      when (plusp k)
      return t))
+
+;;; Windows wm class and name tests
+(defun equal-wm-class-fun (class)
+  (lambda (win)
+    (when (xlib:window-p win)
+      (string-equal (xlib:get-wm-class win) class))))
+
+(defun equal-wm-name-fun (name)
+  (lambda (win)
+    (when (xlib:window-p win)
+      (string-equal (xlib:wm-name win) name))))
+
+(defun raise-window-fun ()
+  (lambda (win)
+    (raise-window win)))
+
+(defun raise-and-focus-window-fun ()
+  (lambda (win)
+    (raise-window win)
+    (focus-window win)))
 

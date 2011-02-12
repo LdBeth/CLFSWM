@@ -1,3 +1,14 @@
+2011-02-12  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/xlib-util.lisp (equal-wm-class-fun, equal-wm-name-fun)
+	(raise-window-fun, raise-and-focus-window-fun): New functions.
+
+	* src/config.lisp (*clfswm-terminal-cmd*): Switch from xterm to
+	urxvt.
+	(*never-managed-window-list*): Structure change to be more
+	flexible. Let the choice to focus, raise and do nothing on never
+	managed windows.
+
 2011-02-09  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (mouse-focus-move/resize-generic): Take

@@ -160,12 +160,14 @@
 
 (defun find-child-under-mouse-in-never-managed-windows (x y)
   "Return the child under mouse from never managed windows"
-  (dolist (win (xlib:query-tree *root*))
-    (unless (window-hidden-p win)
-      (multiple-value-bind (managed raise)
-	  (never-managed-window-p win)
-	(when (and managed raise (in-window win x y))
-	  (return-from find-child-under-mouse-in-never-managed-windows win))))))
+  (let ((ret nil))
+    (dolist (win (xlib:query-tree *root*))
+      (unless (window-hidden-p win)
+	(multiple-value-bind (never-managed raise)
+	    (never-managed-window-p win)
+	  (when (and never-managed raise (in-window win x y))
+	    (setf ret win)))))
+    ret))
 
 
 (defun find-child-under-mouse-in-child-tree (x y &optional first-foundp)
@@ -630,16 +632,16 @@ For window: set current child to window or its parent according to window-parent
 		 (frame (funcall mouse-fn child parent root-x root-y)))
 	       (focus-all-children child parent window-parent)
 	       (show-all-children *current-root*)))
-	   (move/resize-never-managed (child)
-	     (raise-window child)
+	   (move/resize-never-managed (child raise-fun)
+	     (funcall raise-fun child)
 	     (funcall (cond ((eql mouse-fn #'move-frame) #'move-window)
 			    ((eql mouse-fn #'resize-frame) #'resize-window))
 		      child root-x root-y)))
     (let ((child (find-child-under-mouse root-x root-y nil t)))
-      (multiple-value-bind (never-managed raise)
+      (multiple-value-bind (never-managed raise-fun)
 	  (never-managed-window-p child)
-	(if (and (xlib:window-p child) never-managed raise)
-	    (move/resize-never-managed child)
+	(if (and (xlib:window-p child) never-managed raise-fun)
+	    (move/resize-never-managed child raise-fun)
 	    (move/resize-managed child))))))
 
 
@@ -1473,7 +1475,8 @@ For window: set current child to window or its parent according to window-parent
 			  (cons (second tx))
 			  (t *notify-window-foreground*)))))
     (defun is-notify-window-p (win)
-      (xlib:window-equal win window))
+      (when (and (xlib:window-p win) (xlib:window-p window))
+	(xlib:window-equal win window)))
 
     (defun refresh-notify-window ()
       (add-timer 0.1 #'refresh-notify-window :refresh-notify-window)
@@ -1490,7 +1493,8 @@ For window: set current child to window or its parent according to window-parent
     (defun close-notify-window ()
       (erase-timer :refresh-notify-window)
       (setf *never-managed-window-list*
-	    (remove (list #'equal #'is-notify-window-p t t) *never-managed-window-list* :test #'equal))
+	    (remove (list #'is-notify-window-p (raise-window-fun))
+		    *never-managed-window-list* :test #'equal))
       (when gc
 	(xlib:free-gcontext gc))
       (when window
@@ -1528,7 +1532,7 @@ For window: set current child to window or its parent according to window-parent
 					 :line-style :solid))
 	  (when (frame-p *current-child*)
 	    (setf current-child *current-child*)
-	    (push (list #'equal #'is-notify-window-p t t) *never-managed-window-list*))
+	    (push (list #'is-notify-window-p (raise-window-fun)) *never-managed-window-list*))
 	  (map-window window)
 	  (refresh-notify-window)
 	  (xlib:display-finish-output *display*))))))

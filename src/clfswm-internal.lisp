@@ -179,9 +179,9 @@
 (defun never-managed-window-p (window)
   (when (xlib:window-p window)
     (dolist (type *never-managed-window-list*)
-      (destructuring-bind (test predicate result raise) type
-	(when (funcall test (funcall predicate window) result)
-	  (return (values t raise)))))))
+      (when (funcall (first type) window)
+	(return (values t (second type)))))))
+
 
 
 (defgeneric child-name (child))
