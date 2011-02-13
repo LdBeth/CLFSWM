@@ -90,6 +90,7 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
   (unless (find-window-in-query-tree win)
     (do-shell cmd)
     (setf win (wait-window-in-query-tree wait-test))
+    (grab-all-buttons win)
     (hide-window win))
   (cond ((window-hidden-p win)
 	 (unhide-window win)
@@ -113,6 +114,9 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
 
 
 (let (win)
+  (defun equal-clfswm-terminal-id (window)
+    (when win
+      (equal (xlib:window-id window) (xlib:window-id win))))
   (defun present-clfswm-terminal ()
     "Hide/Unhide a terminal"
     (setf win (generic-present-body *clfswm-terminal-cmd*

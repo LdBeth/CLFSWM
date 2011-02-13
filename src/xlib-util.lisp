@@ -396,7 +396,7 @@ Expand in handle-event-fun-main-mode-key-press"
   (when (xlib:window-p window)
     (when (window-hidden-p window)
       (unhide-window window))
-    (setf (xlib:window-priority window) :top-if)))
+    (setf (xlib:window-priority window) :above)))
 
 (defun focus-window (window)
   "Give the window focus."
