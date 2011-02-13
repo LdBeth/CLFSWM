@@ -403,6 +403,10 @@ Expand in handle-event-fun-main-mode-key-press"
   (when (xlib:window-p window)
     (xlib:set-input-focus *display* window :parent)))
 
+(defun raise-and-focus-window (window)
+  "Raise and focus."
+  (raise-window window)
+  (focus-window window))
 
 (defun no-focus ()
   "don't focus any window but still read keyboard events."
@@ -807,13 +811,3 @@ Expand in handle-event-fun-main-mode-key-press"
   (lambda (win)
     (when (xlib:window-p win)
       (string-equal (xlib:wm-name win) name))))
-
-(defun raise-window-fun ()
-  (lambda (win)
-    (raise-window win)))
-
-(defun raise-and-focus-window-fun ()
-  (lambda (win)
-    (raise-window win)
-    (focus-window win)))
-
