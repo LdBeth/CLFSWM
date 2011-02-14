@@ -1,3 +1,9 @@
+2011-02-15  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm.lisp (main-unprotected): Destroy the notify window
+	before closing the display. This fix a bug when resetting/reloading
+	clfswm.
+
 2011-02-12  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/xlib-util.lisp (equal-wm-class-fun, equal-wm-name-fun)

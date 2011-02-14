@@ -72,7 +72,8 @@ build_clisp ()
 
 build_sbcl()
 {
-   sbcl $lisp_opt --disable-debugger  --eval "(require :asdf)" \
+   sbcl $lisp_opt --disable-debugger --eval "(require :asdf)" \
+       --eval "(require :sb-posix)" \
        --eval "(load \"$clfswm_asd_path/clfswm.asd\")" \
        --eval "(require :clfswm)" \
        --eval "(save-lisp-and-die \"$dump_image\" :toplevel 'clfswm:main)"
