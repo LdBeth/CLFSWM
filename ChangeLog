@@ -1,3 +1,9 @@
+2011-02-16  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm.lisp (main-unprotected): Add a close hook. And close
+	the notify window, the virtual keyboard and the clfswm terminal by
+	default.
+
 2011-02-15  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm.lisp (main-unprotected): Destroy the notify window

@@ -151,6 +151,9 @@ This command must set the window title to *clfswm-terminal-name*")
 (defparameter *init-hook* '(default-init-hook display-hello-window)
   "Config(Hook group): Init hook. This hook is run just after the first root frame is created")
 
+(defparameter *close-hook* '(close-notify-window close-clfswm-terminal close-virtual-keyboard)
+  "Config(Hook group): Close hook. This hook is run just before closing the display")
+
 (defparameter *default-nw-hook* 'default-frame-nw-hook
   "Config(Hook group): Default action to do on newly created windows")
 

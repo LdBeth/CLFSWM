@@ -275,7 +275,7 @@
 	(ungrab-main-keys)
 	(xlib:destroy-window *no-focus-window*)
 	(xlib:free-pixmap *pixmap-buffer*)
-	(close-notify-window)
+	(call-hook *close-hook*)
 	(xlib:close-display *display*)
 	#+:event-debug
 	(format t "~2&Unhandled events: ~A~%" *unhandled-events*))))

@@ -104,6 +104,11 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
 
 
 (let (win)
+  (defun close-virtual-keyboard ()
+    (when win
+      (xlib:destroy-window win)
+      (xlib:display-finish-output *display*)
+      (setf win nil)))
   (defun present-virtual-keyboard ()
     "Present a virtual keyboard"
     (setf win (generic-present-body *virtual-keyboard-cmd*
@@ -117,6 +122,11 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
   (defun equal-clfswm-terminal-id (window)
     (when win
       (equal (xlib:window-id window) (xlib:window-id win))))
+  (defun close-clfswm-terminal ()
+    (when win
+      (xlib:destroy-window win)
+      (xlib:display-finish-output *display*)
+      (setf win nil)))
   (defun present-clfswm-terminal ()
     "Hide/Unhide a terminal"
     (setf win (generic-present-body *clfswm-terminal-cmd*
