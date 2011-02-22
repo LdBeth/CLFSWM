@@ -244,10 +244,10 @@
 
 
 (defun main-unprotected (&key (display (or (getenv "DISPLAY") ":0")) protocol
-			 (base-dir (directory-namestring (or *load-truename* "")))
+			 (base-dir (asdf:system-source-directory :clfswm))
 			 (read-conf-file-p t) (alternate-conf nil)
 			 error-msg)
-  (setf *contrib-dir* base-dir)
+  (setf *contrib-dir* (merge-pathnames "contrib/" base-dir))
   (conf-file-name alternate-conf)
   (when read-conf-file-p
     (read-conf-file))
@@ -283,7 +283,7 @@
 
 
 (defun main (&key (display (or (getenv "DISPLAY") ":0")) protocol
-	     (base-dir (directory-namestring (or *load-truename* "")))
+	     (base-dir (asdf:system-source-directory :clfswm))
 	     (read-conf-file-p t)
 	     (alternate-conf nil))
   (let (error-msg)

@@ -50,7 +50,7 @@
 
 (defun load-contrib (file)
   "Load a file in the contrib directory"
-  (let ((truename (concatenate 'string *contrib-dir* "contrib/" file)))
+  (let ((truename (merge-pathnames file *contrib-dir*)))
     (format t "Loading contribution file: ~A~%" truename)
     (when (probe-file truename)
       (load truename :verbose nil))))

@@ -35,7 +35,7 @@
 
 (format t "Loading the clfswm server code... ")
 
-(pushnew (truename (concatenate 'string *contrib-dir* "contrib/" "server/")) asdf:*central-registry*)
+(pushnew (truename (merge-pathnames "server/" *contrib-dir*)) asdf:*central-registry*)
 
 (dbg asdf:*central-registry*)
 
