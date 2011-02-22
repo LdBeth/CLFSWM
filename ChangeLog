@@ -1,3 +1,11 @@
+2011-02-22  Desmond O. Chang <dochang@gmail.com>
+
+	* contrib/amixer.lisp: Add a volume mode inspired by the emms
+	volume package. Alsa mixer interface.
+
+	* contrib/volume-mode.lisp: Add a volume mode inspired by the emms
+	volume package.
+
 2011-02-22 Desmond O. Chang <dochang@gmail.com>
 
 	* src/clfswm.lisp (main): Use ASDF:SYSTEM-SOURCE-DIRECTORY instead

@@ -156,8 +156,10 @@
     symbol))
 
 
-(defun create-configuration-menu ()
+(defun create-configuration-menu (&key clear)
   "Configuration menu"
+  (when clear
+    (clear-sub-menu 'main 'configuration-menu))
   (multiple-value-bind (all-groups all-variables)
       (find-configuration-variables)
     (loop for group in all-groups

@@ -114,6 +114,8 @@
 (defun del-sub-menu (menu-name sub-menu-name &optional (root *menu*))
   (del-item-by-value (find-menu sub-menu-name) (find-menu menu-name root)))
 
+(defun clear-sub-menu (menu-name sub-menu-name &optional (root *menu*))
+  (setf (menu-item (find-menu sub-menu-name (find-menu menu-name root))) nil))
 
 
 (defun add-menu-comment (menu-name &optional (comment "---") (root *menu*))

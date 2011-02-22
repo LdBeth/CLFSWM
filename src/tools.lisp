@@ -60,6 +60,7 @@
 	   :create-symbol
 	   :number->char
 	   :simple-type-of
+	   :repeat-chars
 	   :nth-insert
 	   :split-string
 	   :append-newline-space
@@ -425,6 +426,11 @@ Return the result of the last hook"
     (typecase type
       (cons (first type))
       (t type))))
+
+
+(defun repeat-chars (n char)
+  "Return a string containing N CHARs."
+  (make-string n :initial-element char))
 
 
 
