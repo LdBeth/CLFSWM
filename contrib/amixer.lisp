@@ -60,6 +60,8 @@
 
 (in-package :clfswm)
 
+(format t "Loading amixer code... ")
+
 (defvar *amixer-scontrol* "Master"
   "Default control for amixer commands.")
 
@@ -101,3 +103,5 @@
   (define-second-key ("greater") 'amixer-raise-1%))
 
 (add-hook *binding-hook* 'amixer-volume-bind)
+
+(format t "done~%")

@@ -251,6 +251,7 @@
   (conf-file-name alternate-conf)
   (when read-conf-file-p
     (read-conf-file))
+  (create-configuration-menu :clear t)
   (call-hook *main-entrance-hook*)
   (handler-case
       (open-display display protocol)

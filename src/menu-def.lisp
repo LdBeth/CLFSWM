@@ -62,8 +62,6 @@
 
 (update-menus (find-menu 'standard-menu))
 
-(create-configuration-menu)
-
 (add-menu-key 'help-menu "a" 'show-first-aid-kit)
 (add-menu-key 'help-menu "h" 'show-global-key-binding)
 (add-menu-key 'help-menu "b" 'show-main-mode-key-binding)

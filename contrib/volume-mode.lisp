@@ -60,6 +60,7 @@
 
 (in-package :clfswm)
 
+(format t "Loading Volume mode code... ")
 
 (defparameter *volume-keys* nil)
 (defparameter *volume-mode-placement* 'bottom-middle-placement
@@ -99,8 +100,6 @@
   "Config(Volume mode group): Maximum text limit in the volume window")
 (defparameter *volume-external-mixer-cmd* "/usr/bin/gnome-alsamixer"
   "Config(Volume mode group): Command to start an external mixer program")
-
-(create-configuration-menu :clear t)
 
 (define-init-hash-table-key *volume-keys* "Volume mode keys")
 (define-define-key "volume" *volume-keys*)
@@ -258,3 +257,5 @@
 (defun run-external-volume-mixer ()
   "Start an external volume mixer"
   (do-shell *volume-external-mixer-cmd*))
+
+(format t "done~%")
