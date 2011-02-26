@@ -252,6 +252,7 @@
   (when read-conf-file-p
     (read-conf-file))
   (create-configuration-menu :clear t)
+  (add-all-configuration-default-value)
   (call-hook *main-entrance-hook*)
   (handler-case
       (open-display display protocol)

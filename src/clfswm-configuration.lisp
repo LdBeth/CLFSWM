@@ -51,6 +51,12 @@
 	   (format nil "(->color #x~X)" (color->rgb value)))
 	  (t (format nil "~S" value)))))
 
+(defun remove-config-group (documentation)
+  (let ((pos (position #\: documentation)))
+    (if pos
+	(string-trim " " (subseq documentation (1+ pos)))
+	documentation)))
+
 
 
 ;;; Configuration variables save
@@ -125,7 +131,7 @@
 	   (format nil "conf-~A" (substitute #\- #\Space group)))
 	  :clfswm))
 
-(defun query-conf-value (string original)
+(defun query-conf-value (var string original)
   (labels ((warn-wrong-type (result original)
 	     (if (equal (simple-type-of result) (simple-type-of original))
 		 result
@@ -138,7 +144,9 @@
 		     result
 		     original))))
      (multiple-value-bind (result return)
-	 (query-string (format nil "Configure ~A" string) original)
+	 (query-string (format nil "Configure ~A - ~A" string
+			       (remove-config-group (documentation var 'variable)))
+		       original)
        (let ((result-val (ignore-errors (eval (read-from-string result))))
 	     (original-val (ignore-errors (eval (read-from-string original)))))
 	 (if (equal return :Return)
@@ -150,7 +158,7 @@
   (let* ((string (remove #\* (format nil "~A" var)))
 	 (symbol (intern (format nil "CONFIGURE-~A" string) :clfswm)))
     (setf (symbol-function symbol) (lambda ()
-				     (setf (symbol-value var) (query-conf-value string (escape-conf-value var)))
+				     (setf (symbol-value var) (query-conf-value var string (escape-conf-value var)))
 				     (open-menu (find-menu 'configuration-menu)))
 	  (documentation symbol 'function) (format nil "Configure ~A" string))
     symbol))
@@ -174,6 +182,27 @@
   (add-menu-key 'configuration-menu "F2" 'save-configuration-variables))
 
 
+
+;;; Default documentation string utility
+(defun remove-configuration-default-value (symbol)
+  (let* ((doc (documentation symbol 'variable))
+	 (length (length doc)))
+    (when (and (plusp length) (char= (char doc (1- length)) #\)))
+      (let ((pos (position #\( doc :from-end t)))
+	(when pos
+	  (setf (documentation symbol 'variable)
+		(string-trim " " (subseq doc 0 pos))))))))
+
+(defun change-configuration-default-value (symbol)
+  (remove-configuration-default-value symbol)
+  (setf (documentation symbol 'variable)
+	(format nil "~A (~A)" (documentation symbol 'variable)
+		(escape-conf-value symbol))))
+
+(defun add-all-configuration-default-value ()
+  (with-all-internal-symbols (symbol :clfswm)
+    (when (is-config-p symbol)
+      (change-configuration-default-value symbol))))
 
 
 
