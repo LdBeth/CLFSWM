@@ -188,12 +188,9 @@
 ;;; Tile layout
 (defun tile-layout-ask-keep-position ()
   (when (frame-p *current-child*)
-    (let ((keep-position (query-string "Keep frame children positions?" "" '("yes" "no"))))
-      (if (or (string= keep-position "")
-	      (char= (char keep-position 0) #\y)
-	      (char= (char keep-position 0) #\Y))
-	  (setf (frame-data-slot *current-child* :tile-layout-keep-positiion) :yes)
-	  (remove-frame-data-slot *current-child* :tile-layout-keep-positiion)))))
+    (if (query-yes-or-no "Keep frame children positions?")
+	(setf (frame-data-slot *current-child* :tile-layout-keep-positiion) :yes)
+	(remove-frame-data-slot *current-child* :tile-layout-keep-positiion))))
 
 
 (defun set-layout-managed-children ()

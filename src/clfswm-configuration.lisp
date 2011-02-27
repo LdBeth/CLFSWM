@@ -137,20 +137,13 @@
   (labels ((warn-wrong-type (result original)
 	     (if (equal (simple-type-of result) (simple-type-of original))
 		 result
-		 (if (string-equal
-		      (query-string
-		       (format nil "~S and ~S are not of the same type (~A and ~A). Do you really want to use this value?"
-			       result original (type-of result) (type-of original))
-		       "" '("yes" "no"))
-		      "yes")
+		 (if (query-yes-or-no "~S and ~S are not of the same type (~A and ~A). Do you really want to use this value?"
+				      result original (type-of result) (type-of original))
 		     result
 		     original)))
 	   (ask-set-default-value (original-val)
 	     (let ((default (extract-config-default-value var)))
-	       (if (string-equal
-		    (query-string (format nil "Reset ~A from ~A to ~A?" var original default)
-				  "" '("yes" "no"))
-		    "yes")
+	       (if (query-yes-or-no "Reset ~A from ~A to ~A?" var original default)
 		   (get-config-value default)
 		   original-val))))
     (multiple-value-bind (result return)
@@ -239,11 +232,7 @@
 
 (defun reset-all-config-variables ()
   "Reset all configuration variables to there default values"
-  (when (string-equal
-	 (query-string
-	  "Do you really want to reset all values to there default?"
-	  "" '("yes" "no"))
-	 "yes")
+  (when (query-yes-or-no "Do you really want to reset all values to there default?")
     (with-all-internal-symbols (symbol :clfswm)
       (when (is-config-p symbol)
 	(reset-config-to-default-value symbol))))

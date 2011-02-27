@@ -64,6 +64,14 @@
 
 
 
+(defun query-yes-or-no (formatter &rest args)
+  (let ((rep (query-string (apply #'format nil formatter args) "" '("yes" "no"))))
+    (or (string= rep "")
+	(char= (char rep 0) #\y)
+	(char= (char rep 0) #\Y))))
+
+
+
 
 (defun rename-current-child ()
   "Rename the current child"

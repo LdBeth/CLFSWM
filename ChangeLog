@@ -1,5 +1,7 @@
 2011-02-27  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-util.lisp (query-yes-or-no): New function.
+
 	* src/clfswm-configuration.lisp (reset-all-config-variables): New
 	function and menu entry.
 	(query-conf-value): Add the ability to leave the field blank to
