@@ -2,6 +2,8 @@
 
 	* src/clfswm-configuration.lisp (reset-all-config-variables): New
 	function and menu entry.
+	(query-conf-value): Add the ability to leave the field blank to
+	reset the variable to its default value.
 
 2011-02-26  Philippe Brochard  <pbrochard@common-lisp.net>
 

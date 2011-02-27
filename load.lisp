@@ -32,8 +32,8 @@
 #+SBCL
 (require :asdf)
 
-;;#+SBCL
-;;(require :sb-posix)
+#+SBCL
+(require :sb-posix)
 
 ;;#+SBCL
 ;; (require :clx)

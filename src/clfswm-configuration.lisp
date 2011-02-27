@@ -144,16 +144,26 @@
 		       "" '("yes" "no"))
 		      "yes")
 		     result
-		     original))))
-     (multiple-value-bind (result return)
-	 (query-string (format nil "Configure ~A - ~A" string
-			       (remove-config-group (documentation var 'variable)))
-		       original)
-       (let ((result-val (get-config-value result))
-	     (original-val (get-config-value original)))
-	 (if (equal return :Return)
-	     (warn-wrong-type result-val original-val)
-	     original-val)))))
+		     original)))
+	   (ask-set-default-value (original-val)
+	     (let ((default (extract-config-default-value var)))
+	       (if (string-equal
+		    (query-string (format nil "Reset ~A from ~A to ~A?" var original default)
+				  "" '("yes" "no"))
+		    "yes")
+		   (get-config-value default)
+		   original-val))))
+    (multiple-value-bind (result return)
+	(query-string (format nil "Configure ~A - ~A" string
+			      (remove-config-group (documentation var 'variable)))
+		      original)
+      (let ((original-val (get-config-value original)))
+	(if (equal return :Return)
+	    (if (string= result "")
+		(ask-set-default-value original-val)
+		(let ((result-val (get-config-value result)))
+		  (warn-wrong-type result-val original-val)))
+	    original-val)))))
 
 
 (defun create-conf-function (var)
@@ -187,13 +197,15 @@
 
 
 ;;; Default documentation string utility
+(defparameter *config-default-string* "(blank=Default: ")
+
 (defmacro with-config-default-value-position ((symbol doc pos1 pos2) &body body)
   `(let* ((,doc (documentation ,symbol 'variable))
 	  (length (length ,doc))
 	  (,pos2 (and (plusp length) (1- length))))
      (when (and ,pos2 (char= (char ,doc ,pos2) #\)))
-       (let ((,pos1 (awhen (search "(Default: " ,doc :from-end t)
-		      (+ it (length "(Default: ")))))
+       (let ((,pos1 (awhen (search *config-default-string* ,doc :from-end t)
+		      (+ it (length *config-default-string*)))))
 	 (when ,pos1
 	   ,@body)))))
 
@@ -210,7 +222,8 @@
 (defun change-config-default-value (symbol)
   (remove-config-default-value symbol)
   (setf (documentation symbol 'variable)
-	(format nil "~A (Default: ~A)" (documentation symbol 'variable)
+	(format nil "~A ~A~A)" (documentation symbol 'variable)
+		*config-default-string*
 		(escape-conf-value symbol))))
 
 (defun reset-config-to-default-value (symbol)
@@ -228,7 +241,7 @@
   "Reset all configuration variables to there default values"
   (when (string-equal
 	 (query-string
-	  (format nil "Do you really want to reset all values to there default?")
+	  "Do you really want to reset all values to there default?"
 	  "" '("yes" "no"))
 	 "yes")
     (with-all-internal-symbols (symbol :clfswm)
