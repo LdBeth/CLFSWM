@@ -1,3 +1,8 @@
+2011-02-27  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-configuration.lisp (reset-all-config-variables): New
+	function and menu entry.
+
 2011-02-26  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-configuration.lisp
