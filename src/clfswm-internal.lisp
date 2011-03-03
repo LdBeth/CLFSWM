@@ -604,24 +604,36 @@
   nil)
 
 
+(defgeneric set-child-stack-order (window child)
+  (:documentation "Raise window if child is NIL else put window just below child"))
+
+(defmethod set-child-stack-order (window (child xlib:window))
+  (lower-window window child))
+
+(defmethod set-child-stack-order (window (child frame))
+  (lower-window window (frame-window child)))
+
+(defmethod set-child-stack-order (window child)
+  (declare (ignore child))
+  (raise-window window))
 
 
-(defgeneric show-child (child parent raise-p))
 
-(defmethod show-child ((frame frame) parent raise-p)
+(defgeneric show-child (child parent previous))
+
+(defmethod show-child ((frame frame) parent previous)
   (declare (ignore parent))
   (with-slots (window show-window-p) frame
     (if show-window-p
 	(when (or *show-root-frame-p* (not (child-equal-p frame *current-root*)))
 	  (map-window window)
-	  (when raise-p
-	    (raise-window window))
+	  (set-child-stack-order window previous)
 	  (display-frame-info frame))
 	(hide-window window))))
 
 
 
-(defun hide-unmanager-window-p (parent)
+(defun hide-unmanaged-window-p (parent)
   (let ((action (frame-data-slot parent :unmanaged-window-action)))
     (case action
       (:hide t)
@@ -629,14 +641,13 @@
       (t *hide-unmanaged-window*))))
 
 
-(defmethod show-child ((window xlib:window) parent raise-p)
+(defmethod show-child ((window xlib:window) parent previous)
   (if (or (managed-window-p window parent)
-	  (not (hide-unmanager-window-p parent))
+	  (not (hide-unmanaged-window-p parent))
 	  (child-equal-p parent *current-child*))
       (progn
 	(map-window window)
-	(when raise-p
-	  (raise-window window)))
+	(set-child-stack-order window previous))
       (hide-window window)))
 
 (defmethod show-child (child parent raise-p)
@@ -718,32 +729,11 @@
 
 
 
-
-(defun raise-p-list (children)
-  (let ((acc nil))
-    (labels ((rec (list)
-	       (when list
-		 (multiple-value-bind (xo1 yo1 xo2 yo2)
-		     (child-coordinates (first list))
-		   (push (dolist (c (rest list) t)
-			   (multiple-value-bind (x1 y1 x2 y2)
-			       (child-coordinates c)
-			     (when (and (<= x1 xo1)
-					(>= x2 xo2)
-					(<= y1 yo1)
-					(>= y2 yo2))
-			       (return nil))))
-			 acc))
-		 (rec (rest list)))))
-      (rec children)
-      (nreverse acc))))
-
-
-
 (defun show-all-children (&optional (display-child *current-child*))
   "Show all children from *current-root*. Start the effective display
 only for display-child and its children"
-  (let ((geometry-change nil))
+  (let ((geometry-change nil)
+	(previous nil))
     (labels ((rec-geom (root parent selected-p selected-parent-p)
 	       (when (adapt-child-to-parent root parent)
 		 (setf geometry-change t))
@@ -754,19 +744,16 @@ only for display-child and its children"
 		 (let ((selected-child (frame-selected-child root)))
 		   (dolist (child (reverse (frame-child root)))
 		     (rec-geom child root (child-equal-p child selected-child) (and selected-p selected-parent-p))))))
-	     (rec (root parent raise-p)
-	       (show-child root parent raise-p)
-	       (when (frame-p root)
-		 (let ((reversed-children (reverse (frame-child root))))
-		   (loop for child in reversed-children
-		      for c-raise-p in (raise-p-list reversed-children)
-		      do (rec child root (and c-raise-p
-					      (or (null parent) raise-p))))))))
+	     (rec (child parent n)
+	       (when (frame-p child)
+		 (dolist (sub-child (frame-child child))
+		   (rec sub-child child (1+ n))))
+	       (show-child child parent previous)
+	       (setf previous child)))
       (rec-geom *current-root* nil t t)
-      (rec display-child nil nil)
+      (rec display-child nil 0)
       (set-focus-to-current-child)
       geometry-change)))
-
 
 
 (defun hide-all-children (root)

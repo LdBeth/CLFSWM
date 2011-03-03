@@ -1,3 +1,8 @@
+2011-03-03  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (show-all-children): Rethink of display
+	child order to prevent very annoying flickering.
+
 2011-02-27  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (query-yes-or-no): New function.

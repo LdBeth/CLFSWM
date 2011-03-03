@@ -413,6 +413,14 @@ Expand in handle-event-fun-main-mode-key-press"
   (xlib:set-input-focus *display* *no-focus-window* :pointer-root))
 
 
+(defun lower-window (window sibling)
+  "Map the window if needed and bring it just above sibling. Does not affect focus."
+  (when (xlib:window-p window)
+    (when (window-hidden-p window)
+      (unhide-window window))
+    (setf (xlib:window-priority window sibling) :below)))
+
+
 
 
 (let ((cursor-font nil)
