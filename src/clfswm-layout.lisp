@@ -56,7 +56,7 @@
 
 (defun set-layout-once (layout-name)
   (set-layout-dont-leave layout-name)
-  (show-all-children *current-root*)
+  (show-all-children)
   (fixe-real-size-current-child)
   (set-layout-dont-leave #'no-layout))
 

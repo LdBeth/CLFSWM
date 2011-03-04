@@ -98,7 +98,7 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
 	   (focus-window win))
 	 (raise-window win))
 	(t (hide-window win)
-	   (show-all-children nil)))
+	   (show-all-children)))
   win)
 
 

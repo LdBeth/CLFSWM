@@ -164,7 +164,7 @@
       (set-layout-once #'tile-space-layout)
       (setf *current-child* new-frame)
       (default-window-placement new-frame window)
-      (show-all-children *current-root*)
+      (show-all-children)
       t)))
 
 
@@ -207,7 +207,7 @@
     (setf *current-child* frame)
     (focus-all-children window frame)
     (default-window-placement frame window)
-    (show-all-children *current-root*)
+    (show-all-children)
     t))
 
 ;;; Open a new window in a named frame
@@ -254,7 +254,7 @@
 	(setf *current-child* frame)
 	(focus-all-children window frame)
 	(default-window-placement frame window)
-	(show-all-children *current-root*))
+	(show-all-children))
       (throw 'nw-hook-loop t)))
   nil)
 

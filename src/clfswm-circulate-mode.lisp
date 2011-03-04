@@ -98,9 +98,7 @@
 		  *current-child* (frame-selected-child *circulate-parent*))))
 	(when frame-is-root?
 	  (setf *current-root* *current-child*))))
-    (show-all-children (if frame-is-root?
-			   *current-child*
-			   (find-parent-frame *current-child*)))
+    (show-all-children)
     (draw-circulate-mode-window)))
 
 (defun reorder-subchild (direction)
@@ -112,7 +110,7 @@
 	(with-slots (child) selected-child
 	  (let ((elem (first (last child))))
 	    (setf child (cons elem (child-remove elem child)))
-	    (show-all-children selected-child)
+	    (show-all-children)
 	    (draw-circulate-mode-window)))))))
 
 

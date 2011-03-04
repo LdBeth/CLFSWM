@@ -156,7 +156,7 @@
   (with-all-frames (first-restore-frame frame)
     (setf (frame-data-slot frame :old-layout) (frame-layout frame)
 	  (frame-layout frame) #'tile-space-layout))
-  (show-all-children *current-root*)
+  (show-all-children)
   (expose-mode-display-accel-windows)
   (let ((grab-keyboard-p (xgrab-keyboard-p))
 	(grab-pointer-p (xgrab-pointer-p)))
@@ -185,7 +185,7 @@
     (with-all-frames (first-restore-frame frame)
       (setf (frame-layout frame) (frame-data-slot frame :old-layout)
 	    (frame-data-slot frame :old-layout) nil))
-    (show-all-children *current-root*)
+    (show-all-children)
     (banish-pointer)
     (unless grab-keyboard-p
       (xungrab-keyboard)
@@ -227,6 +227,6 @@
       (unless (child-equal-p *current-child* orig-root)
 	(hide-all *current-root*)
 	(setf *current-root* orig-root))
-      (show-all-children *current-root*))))
+      (show-all-children))))
 
 

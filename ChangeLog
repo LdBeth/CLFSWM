@@ -1,3 +1,9 @@
+2011-03-04  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (show-all-children): Perform only one
+	recusion on the clfswm tree: calculate geometry and place child in
+	one pass.
+
 2011-03-03  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp (show-all-children): Rethink of display

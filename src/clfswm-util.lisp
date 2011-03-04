@@ -273,7 +273,7 @@
 	    (setf (frame-data-slot *current-child* :unmaximized-coords)
 		  (list x y w h)
 		  x 0 y 0 w 1 h 1))))
-    (show-all-children (find-parent-frame *current-child*))
+    (show-all-children)
     (leave-second-mode)))
 
 
@@ -405,7 +405,7 @@
     (focus-all-children frame (or (find-parent-frame frame *current-root*)
 				  (find-parent-frame frame)
 				  *root-frame*))
-    (show-all-children *current-root*)))
+    (show-all-children)))
 
 
 (defun focus-frame-by-name ()
@@ -423,7 +423,7 @@
 (defun open-frame-by (frame)
   (when (frame-p frame)
     (push (create-frame :name (query-string "Frame name")) (frame-child frame))
-    (show-all-children *current-root*)))
+    (show-all-children)))
 
 
 
@@ -447,7 +447,7 @@
     (when (child-equal-p frame *current-child*)
       (setf *current-child* *current-root*))
     (remove-child-in-frame frame (find-parent-frame frame)))
-  (show-all-children *current-root*))
+  (show-all-children))
 
 
 (defun delete-frame-by-name ()
@@ -468,7 +468,7 @@
     (remove-child-in-frame child (find-parent-frame child))
     (pushnew child (frame-child frame-dest))
     (focus-all-children child frame-dest)
-    (show-all-children *current-root*)))
+    (show-all-children)))
 
 (defun move-current-child-by-name ()
   "Move current child in a named frame"
@@ -491,7 +491,7 @@
     (hide-all *current-root*)
     (pushnew child (frame-child frame-dest))
     (focus-all-children child frame-dest)
-    (show-all-children *current-root*)))
+    (show-all-children)))
 
 (defun copy-current-child-by-name ()
   "Copy current child in a named frame"
@@ -544,7 +544,7 @@
       (move-window window orig-x orig-y #'display-frame-info (list frame))
       (setf (frame-x frame) (x-px->fl (xlib:drawable-x window) parent)
 	    (frame-y frame) (y-px->fl (xlib:drawable-y window) parent)))
-    (show-all-children frame)))
+    (show-all-children)))
 
 
 (defun resize-frame (frame parent orig-x orig-y)
@@ -554,7 +554,7 @@
       (resize-window window orig-x orig-y #'display-frame-info (list frame))
       (setf (frame-w frame) (w-px->fl (xlib:drawable-width window) parent)
 	    (frame-h frame) (h-px->fl (xlib:drawable-height window) parent)))
-    (show-all-children frame)))
+    (show-all-children)))
 
 
 
@@ -582,13 +582,15 @@ mouse-fun is #'move-frame or #'resize-frame"
 		(unless (equal (type-of child) 'frame)
 		  (setf child (find-frame-window child *current-root*)))
 		(setf parent (find-parent-frame child)))))
+	(when (and child parent
+		   (focus-all-children child parent
+				       (not (and (child-equal-p *current-child* *current-root*)
+						 (xlib:window-p *current-root*)))))
+	  (when (show-all-children)
+	    (setf to-replay nil)))
 	(when (equal (type-of child) 'frame)
 	  (funcall mouse-fn child parent root-x root-y))
-	(when (and child parent (focus-all-children child parent
-						    (not (and (child-equal-p *current-child* *current-root*)
-							      (xlib:window-p *current-root*)))))
-	  (when (show-all-children *current-root*)
-	    (setf to-replay nil))))
+	(show-all-children))
       (if to-replay
 	  (replay-button-event)
 	  (stop-button-event)))))
@@ -630,6 +632,8 @@ For window: set current child to window or its parent according to window-parent
 		 (place-frame child parent root-x root-y 10 10)
 		 (map-window (frame-window child))
 		 (pushnew child (frame-child *current-root*)))
+	       (focus-all-children child parent window-parent)
+	       (show-all-children)
 	       (typecase child
 		 (xlib:window
 		  (if (managed-window-p child parent)
@@ -638,8 +642,7 @@ For window: set current child to window or its parent according to window-parent
 				     ((eql mouse-fn #'resize-frame) #'resize-window))
 			       child root-x root-y)))
 		 (frame (funcall mouse-fn child parent root-x root-y)))
-	       (focus-all-children child parent window-parent)
-	       (show-all-children *current-root*)))
+	       (show-all-children)))
 	   (move/resize-never-managed (child raise-fun)
 	     (funcall raise-fun child)
 	     (funcall (cond ((eql mouse-fn #'move-frame) #'move-window)
@@ -734,7 +737,7 @@ For window: set current child to window or its parent according to window-parent
 	(setf *current-root* jump-child
 	      *current-child* *current-root*)
 	(focus-all-children *current-child* *current-child*)
-	(show-all-children *current-root*))))
+	(show-all-children))))
 
   (defun bind-or-jump (n)
     "Bind or jump to a slot (a frame or a window)"
@@ -1026,7 +1029,7 @@ For window: set current child to window or its parent according to window-parent
 	    (setf dest (find-parent-frame dest)))
 	  (unless (child-equal-p child dest)
 	    (move-child-to child dest)
-	    (show-all-children *current-root*))))))
+	    (show-all-children))))))
   (stop-button-event))
 
 
@@ -1037,7 +1040,7 @@ For window: set current child to window or its parent according to window-parent
   "Hide/show the frame window"
   (when (frame-p frame)
     (setf (frame-show-window-p *current-child*) value)
-    (show-all-children *current-root*))
+    (show-all-children))
   (leave-second-mode))
 
 
@@ -1135,7 +1138,7 @@ For window: set current child to window or its parent according to window-parent
 	(setf *current-root* last-child
 	      *current-child* *current-root*)
 	(focus-all-children *current-child* *current-child*)
-	(show-all-children *current-root*))
+	(show-all-children))
       (setf last-child current-child))))
 
 
@@ -1565,7 +1568,7 @@ For window: set current child to window or its parent according to window-parent
           (when maximized
             (setf *current-root* parent))
 	  (focus-all-children window parent)
-          (show-all-children *current-root*))
+          (show-all-children))
         (funcall run-fn))))
 
 

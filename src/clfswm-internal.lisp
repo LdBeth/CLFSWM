@@ -615,7 +615,8 @@
 
 (defmethod set-child-stack-order (window child)
   (declare (ignore child))
-  (raise-window window))
+  (raise-window window)
+  (xlib:display-finish-output *display*))
 
 
 
@@ -729,31 +730,29 @@
 
 
 
-(defun show-all-children (&optional (display-child *current-child*))
-  "Show all children from *current-root*. Start the effective display
-only for display-child and its children"
+(defun show-all-children ()
+  "Show all children from *current-root*."
   (let ((geometry-change nil)
 	(previous nil))
-    (labels ((rec-geom (root parent selected-p selected-parent-p)
-	       (when (adapt-child-to-parent root parent)
+    (labels ((rec (child parent selected-p selected-parent-p)
+	       (when (adapt-child-to-parent child parent)
 		 (setf geometry-change t))
-	       (select-child root (cond ((child-equal-p root *current-child*) t)
-					((and selected-p selected-parent-p) :maybe)
-					(t nil)))
-	       (when (frame-p root)
-		 (let ((selected-child (frame-selected-child root)))
-		   (dolist (child (reverse (frame-child root)))
-		     (rec-geom child root (child-equal-p child selected-child) (and selected-p selected-parent-p))))))
-	     (rec (child parent n)
+	       (select-child child (cond ((child-equal-p child *current-child*) t)
+					 ((and selected-p selected-parent-p) :maybe)
+					 (t nil)))
 	       (when (frame-p child)
-		 (dolist (sub-child (frame-child child))
-		   (rec sub-child child (1+ n))))
+		 (let ((selected-child (frame-selected-child child)))
+		   (dolist (sub-child (frame-child child))
+		     (rec sub-child child (child-equal-p sub-child selected-child) (and selected-p selected-parent-p)))))
 	       (show-child child parent previous)
 	       (setf previous child)))
-      (rec-geom *current-root* nil t t)
-      (rec display-child nil 0)
+      (rec *current-root* nil t t)
       (set-focus-to-current-child)
       geometry-change)))
+
+
+
+
 
 
 (defun hide-all-children (root)
@@ -850,7 +849,7 @@ For window: set current child to window or its parent according to window-parent
   "Enter in the selected frame - ie make it the root frame"
   (hide-all *current-root*)
   (setf *current-root* *current-child*)
-  (show-all-children *current-root*))
+  (show-all-children))
 
 (defun leave-frame ()
   "Leave the selected frame - ie make its parent the root frame"
@@ -858,7 +857,7 @@ For window: set current child to window or its parent according to window-parent
   (awhen (find-parent-frame *current-root*)
     (when (frame-p it)
       (setf *current-root* it)))
-  (show-all-children *current-root*))
+  (show-all-children))
 
 
 ;;; Other actions (select-next-child, select-next-brother...) are in
@@ -914,7 +913,7 @@ For window: set current child to window or its parent according to window-parent
   (hide-all *current-root*)
   (setf *current-root* *root-frame*)
   (unless show-later
-    (show-all-children *current-root*)))
+    (show-all-children)))
 
 (defun switch-and-select-root-frame (&key (show-later nil))
   "Switch and select the root frame"
@@ -922,14 +921,14 @@ For window: set current child to window or its parent according to window-parent
   (setf *current-root* *root-frame*)
   (setf *current-child* *current-root*)
   (unless show-later
-    (show-all-children *current-root*)))
+    (show-all-children)))
 
 
 (defun toggle-show-root-frame ()
   "Show/Hide the root frame"
   (hide-all *current-root*)
   (setf *show-root-frame-p* (not *show-root-frame-p*))
-  (show-all-children *current-root*))
+  (show-all-children))
 
 
 (defun remove-child-in-frame (child frame)
