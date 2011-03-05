@@ -538,7 +538,8 @@ Expand in handle-event-fun-main-mode-key-press"
 	  add-fn additional-fn
 	  add-arg additional-arg
 	  dx (- (xlib:drawable-x window) orig-x)
-	  dy (- (xlib:drawable-y window) orig-y))
+	  dy (- (xlib:drawable-y window) orig-y)
+	  (xlib:window-border window) (get-color *color-move-window*))
     (raise-window window)
     (let ((pointer-grabbed-p (xgrab-pointer-p)))
       (unless pointer-grabbed-p
@@ -579,7 +580,8 @@ Expand in handle-event-fun-main-mode-key-press"
 	    min-width (or (and hints (xlib:wm-size-hints-min-width hints)) 0)
 	    min-height (or (and hints (xlib:wm-size-hints-min-height hints)) 0)
 	    max-width (or (and hints (xlib:wm-size-hints-max-width hints)) most-positive-fixnum)
-	    max-height (or (and hints (xlib:wm-size-hints-max-height hints)) most-positive-fixnum))
+	    max-height (or (and hints (xlib:wm-size-hints-max-height hints)) most-positive-fixnum)
+	    (xlib:window-border window) (get-color *color-move-window*))
       (raise-window window)
       (unless pointer-grabbed-p
 	(xgrab-pointer *root* nil nil))

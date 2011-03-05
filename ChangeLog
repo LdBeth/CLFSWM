@@ -1,3 +1,8 @@
+2011-03-06  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/xlib-util.lisp (move-window,resize-window): Add a
+	*color-move-window* border when moving or resizing a window.
+
 2011-03-04  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp (show-all-children): Perform only one

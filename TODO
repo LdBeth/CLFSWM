@@ -13,20 +13,17 @@ FOR THE NEXT RELEASE
 
 - Make frame/window border size variable.
 
-- Make a green border for the window to move and remove the
-  focus-all-children/show-all-children.
-
 - In show-all-children: add the ability to display all child from
   *root-frame* and hide all those who are not in *current-root*.
   -> remove hide-all-children when needed.
 
-- in show-all-children: simplify the selected -> remove the parent one.
+- in show-all-children: simplify the selected method -> remove the parent one.
 
-- estimate the time to raise/lower a child in show-all-children and
+- Estimate the time to raise/lower a child in show-all-children and
   see if there is a need for a rectangular optimization
 
 - Change the config system with a more lispy one and a less string
-  base one: (defconfig name group doc)
+  base one: (defconfig name value group doc)
 
 
 MAYBE
