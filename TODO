@@ -17,8 +17,6 @@ FOR THE NEXT RELEASE
   *root-frame* and hide all those who are not in *current-root*.
   -> remove hide-all-children when needed.
 
-- in show-all-children: simplify the selected method -> remove the parent one.
-
 - Estimate the time to raise/lower a child in show-all-children and
   see if there is a need for a rectangular optimization
 
