@@ -167,7 +167,6 @@
     (if (generic-mode 'expose-mode 'exit-expose-loop
 		      :original-mode '(main-mode))
 	(multiple-value-bind (x y) (xlib:query-pointer *root*)
-	  (dbg *expose-selected-child* (child-fullname *expose-selected-child*))
 	  (let* ((child (or *expose-selected-child* (find-child-under-mouse x y)))
 		 (parent (find-parent-frame child *root-frame*)))
 	    (when (and child parent)

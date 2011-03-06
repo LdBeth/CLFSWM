@@ -85,9 +85,7 @@
   (no-focus)
   (let ((frame-is-root? (and (child-equal-p *current-root* *current-child*)
 			     (not (child-equal-p *current-root* *root-frame*)))))
-    (if frame-is-root?
-	(hide-all *current-root*)
-	(select-current-frame nil))
+    (select-current-frame nil)
     (unless (and *circulate-orig* *circulate-parent*)
       (reset-circulate-brother))
     (let ((len (length *circulate-orig*)))
@@ -98,7 +96,7 @@
 		  *current-child* (frame-selected-child *circulate-parent*))))
 	(when frame-is-root?
 	  (setf *current-root* *current-child*))))
-    (show-all-children)
+    (show-all-children t)
     (draw-circulate-mode-window)))
 
 (defun reorder-subchild (direction)

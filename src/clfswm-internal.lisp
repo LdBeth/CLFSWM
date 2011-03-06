@@ -644,6 +644,7 @@
 
 (defmethod show-child ((window xlib:window) parent previous)
   (if (or (managed-window-p window parent)
+	  (child-equal-p window *current-child*)
 	  (not (hide-unmanaged-window-p parent))
 	  (child-equal-p parent *current-child*))
       (progn
@@ -730,23 +731,31 @@
 
 
 
-(defun show-all-children ()
-  "Show all children from *current-root*."
+(defun show-all-children (&optional (from-root-from nil))
+  "Show all children from *current-root*. When from-root-from is true
+Display all children from root frame and hide those not in *current-root*"
   (let ((geometry-change nil)
 	(previous nil))
-    (labels ((rec (child parent selected-p)
-	       (when (adapt-child-to-parent child parent)
-		 (setf geometry-change t))
-	       (select-child child (cond ((child-equal-p child *current-child*) t)
-					 (selected-p :maybe)
-					 (t nil)))
-	       (when (frame-p child)
-		 (let ((selected-child (frame-selected-child child)))
-		   (dolist (sub-child (frame-child child))
-		     (rec sub-child child (and selected-p (child-equal-p sub-child selected-child))))))
-	       (show-child child parent previous)
-	       (setf previous child)))
-      (rec *current-root* nil t)
+    (labels ((rec (child parent selected-p in-current-root)
+	       (let ((child-current-root-p (child-equal-p child *current-root*)))
+		 (when (or in-current-root child-current-root-p)
+		   (when (adapt-child-to-parent child (if child-current-root-p nil parent))
+		     (setf geometry-change t))
+		   (select-child child (cond ((child-equal-p child *current-child*) t)
+					     (selected-p :maybe)
+					     (t nil))))
+		 (when (frame-p child)
+		   (let ((selected-child (frame-selected-child child)))
+		     (dolist (sub-child (frame-child child))
+		       (rec sub-child child
+			    (and selected-p (child-equal-p sub-child selected-child))
+			    (or in-current-root child-current-root-p)))))
+		 (if (or in-current-root child-current-root-p)
+		     (show-child child parent previous)
+		     (hide-child child))
+		 (setf previous child))))
+      (rec (if from-root-from *root-frame* *current-root*)
+	   nil t (child-equal-p *current-root* *root-frame*))
       (set-focus-to-current-child)
       geometry-change)))
 
@@ -926,7 +935,6 @@ For window: set current child to window or its parent according to window-parent
 
 (defun toggle-show-root-frame ()
   "Show/Hide the root frame"
-  (hide-all *current-root*)
   (setf *show-root-frame-p* (not *show-root-frame-p*))
   (show-all-children))
 

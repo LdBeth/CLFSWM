@@ -71,7 +71,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defparameter *default-font-string* "fixed"
   "Config(): The default font used in clfswm")
 
-(defparameter *color-move-window* "Green"
+(defparameter *color-move-window* "DeepPink"
   "Config(Main mode group): Color when moving or resizing a windows")
 
 (defparameter *child-selection* nil)

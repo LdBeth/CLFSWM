@@ -2,6 +2,11 @@
 
 	* src/clfswm-internal.lisp (show-all-children): Simplify the
 	selection method.
+	(show-child): Display an unmanaged window whe  it's the current
+	child.
+	(show-all-children): add the ability to display all child from
+	*root-frame* and hide all those who are not in *current-root*.
+	-> remove hide-all-children when needed.
 
 	* src/xlib-util.lisp (move-window,resize-window): Add a
 	*color-move-window* border when moving or resizing a window.
