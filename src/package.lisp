@@ -37,12 +37,11 @@
 
 (in-package :clfswm)
 
-
-
-;;; Compress motion notify ?
-;;; Note: this variable is overwriten in config.lisp
-(defparameter *have-to-compress-notify* t
-  "Config(): Compress event notify?
+;;; CONFIG - Compress motion notify ?
+;; This variable may be useful to speed up some slow version of CLX.
+;; It is particulary useful with CLISP/MIT-CLX (and others).
+(defconfig *have-to-compress-notify* t nil
+           "Compress event notify?
 This variable may be useful to speed up some slow version of CLX.
 It is particulary useful with CLISP/MIT-CLX.")
 
@@ -59,8 +58,8 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defparameter *root* nil)
 (defparameter *no-focus-window* nil)
 
-(defparameter *loop-timeout* 0.1
-  "Config(): Maximum time (in seconds) to wait before calling *loop-hook*")
+(defconfig *loop-timeout* 0.1 nil
+           "Maximum time (in seconds) to wait before calling *loop-hook*")
 
 (defparameter *pixmap-buffer* nil)
 
@@ -68,26 +67,27 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 (defparameter *default-font* nil)
 ;;(defparameter *default-font-string* "9x15")
-(defparameter *default-font-string* "fixed"
-  "Config(): The default font used in clfswm")
+(defconfig *default-font-string* "fixed" nil
+           "The default font used in clfswm")
 
-(defparameter *color-move-window* "DeepPink"
-  "Config(Main mode group): Color when moving or resizing a windows")
+(defconfig *color-move-window* "DeepPink" 'Main-mode
+           "Color when moving or resizing a windows")
 
 (defparameter *child-selection* nil)
 
 ;;; CONFIG - Default frame datas
-(defparameter *default-frame-data*
+(defconfig *default-frame-data*
   (list '(:tile-size 0.8) '(:tile-space-size 0.1)
 	'(:fast-layout (tile-left-layout tile-layout))
 	'(:main-layout-windows nil))
-  "Config(): Default slots set in frame date")
+  nil
+  "Default slots set in frame date")
 
 
 ;;; CONFIG - Default managed window type for a frame
 ;;; type can be  :all, :normal, :transient, :maxsize, :desktop, :dock, :toolbar, :menu, :utility, :splash, :dialog
-(defparameter *default-managed-type* '(:normal)
-  "Config(): Default managed window types")
+(defconfig *default-managed-type* '(:normal) nil
+  "Default managed window types")
 ;;(defparameter *default-managed-type* '(:normal :maxsize :transient))
 ;;(defparameter *default-managed-type* '(:normal :transient :maxsize :desktop :dock :toolbar :menu :utility :splash :dialog))
 ;;(defparameter *default-managed-type* '())
@@ -95,8 +95,8 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 
 ;;; CONFIG - Default focus policy
-(defparameter *default-focus-policy* :click
-  "Config(): Default mouse focus policy. One of :click, :sloppy, :sloppy-strict or :sloppy-select.")
+(defconfig *default-focus-policy* :click nil
+           "Default mouse focus policy. One of :click, :sloppy, :sloppy-strict or :sloppy-select.")
 
 
 (defclass frame ()
@@ -179,14 +179,14 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 
 
-(defparameter *binding-hook* nil
-  "Config(Hook group): Hook executed when keys/buttons are bounds")
+(defconfig *binding-hook* nil 'Hook
+           "Hook executed when keys/buttons are bounds")
 
-(defparameter *loop-hook* nil
-  "Config(Hook group): Hook executed on each event loop")
+(defconfig *loop-hook* nil 'Hook
+           "Hook executed on each event loop")
 
-(defparameter *main-entrance-hook* nil
-  "Config(Hook group): Hook executed on the main function entrance after
+(defconfig *main-entrance-hook* nil 'Hook
+           "Hook executed on the main function entrance after
 loading configuration file and before opening the display.")
 
 
@@ -202,20 +202,20 @@ loading configuration file and before opening the display.")
 ;;; middle-left  middle-middle  middle-right
 ;;; bottom-left  bottom-middle  bottom-right
 ;;;
-(defparameter *banish-pointer-placement* 'bottom-right-placement
-  "Config(Placement group): Pointer banishment placement")
-(defparameter *second-mode-placement* 'top-middle-placement
-  "Config(Placement group): Second mode window placement")
-(defparameter *info-mode-placement* 'top-left-placement
-  "Config(Placement group): Info mode window placement")
-(defparameter *query-mode-placement* 'top-left-placement
-  "Config(Placement group): Query mode window placement")
-(defparameter *circulate-mode-placement* 'bottom-middle-placement
-  "Config(Placement group): Circulate mode window placement")
-(defparameter *expose-mode-placement* 'top-left-child-placement
-  "Config(Placement group): Expose mode window placement (Selection keys position)")
-(defparameter *notify-window-placement* 'bottom-right-placement
-  "Config(Placement group): Notify window placement")
+(defconfig *banish-pointer-placement* 'bottom-right-placement
+  'Placement "Pointer banishment placement")
+(defconfig *second-mode-placement* 'top-middle-placement
+  'Placement "Second mode window placement")
+(defconfig *info-mode-placement* 'top-left-placement
+  'Placement "Info mode window placement")
+(defconfig *query-mode-placement* 'top-left-placement
+  'Placement "Query mode window placement")
+(defconfig *circulate-mode-placement* 'bottom-middle-placement
+  'Placement "Circulate mode window placement")
+(defconfig *expose-mode-placement* 'top-left-child-placement
+  'Placement "Expose mode window placement (Selection keys position)")
+(defconfig *notify-window-placement* 'bottom-right-placement
+  'Placement "Notify window placement")
 
 
 

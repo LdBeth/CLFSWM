@@ -26,48 +26,46 @@
 
 (in-package :clfswm)
 
-
 (defun find-configuration-variables ()
   (let ((all-groups nil)
 	(all-variables nil))
-    (with-all-internal-symbols (symbol :clfswm)
-      (when (is-config-p symbol)
-	(pushnew (config-group symbol) all-groups :test #'string-equal)
-	(push (list symbol (config-group symbol)) all-variables)))
+    (maphash (lambda (key val)
+               (pushnew  (configvar-group val) all-groups :test #'string-equal)
+               (push (list key (configvar-group val)) all-variables))
+             *config-var-table*)
     (values all-groups all-variables)))
 
-
-(defun escape-conf-value (value)
-  (let ((value (symbol-value value)))
-    (cond ((or (equal value t) (equal value nil))
-	   (format nil "~S" value))
-	  ((consp value)
-	   (format nil "(quote ~S)" value))
-	  ((symbolp value)
-	   (format nil "'~S" value))
-	  ((functionp value)
-	   (format nil "'~S" (find-symbol-function value)))
-	  ((xlib:color-p value)
-	   (format nil "(->color #x~X)" (color->rgb value)))
-	  (t (format nil "~S" value)))))
-
-(defun remove-config-group (documentation)
-  (let ((pos (position #\: documentation)))
-    (if pos
-	(string-trim " " (subseq documentation (1+ pos)))
-	documentation)))
-
-(defun get-config-value (value)
-  (ignore-errors (eval (read-from-string value))))
-
-
-;;; Configuration variables save
 
 (defun find-symbol-function (function)
   (with-all-internal-symbols (symbol :clfswm)
     (when (and (fboundp symbol) (equal (symbol-function symbol) function))
       (return-from find-symbol-function symbol))))
 
+(defun escape-conf-value (value)
+  (cond ((or (equal value t) (equal value nil))
+         (format nil "~S" value))
+        ((consp value)
+         (format nil "(quote ~S)" value))
+        ((symbolp value)
+         (format nil "'~S" value))
+        ((functionp value)
+         (format nil "'~S" (find-symbol-function value)))
+        ((xlib:color-p value)
+         (format nil "(->color #x~X)" (color->rgb value)))
+        (t (format nil "~S" value))))
+
+(defun escape-conf-symbol-value (symbol)
+  (let ((value (symbol-value symbol)))
+    (escape-conf-value value)))
+
+(defun get-config-value (value)
+  (ignore-errors (eval (read-from-string value))))
+
+(defun reset-config-to-default-value (symbol)
+  (setf (symbol-value symbol) (config-default-value symbol)))
+
+
+;;; Save configuration variables part
 (defun temp-conf-file-name ()
   (let ((name (conf-file-name)))
     (make-pathname :directory (pathname-directory name)
@@ -104,7 +102,7 @@
       (dolist (var all-variables)
 	(when (string-equal (second var) group)
 	  (format stream "  ~A ~A~%" (first var)
-		  (escape-conf-value (first var)))))
+		  (escape-conf-symbol-value (first var)))))
       (format stream "~%"))
     (format stream ")~%")
     (format stream ";;; ### End of internal variables definitions ### ;;;~%")))
@@ -129,26 +127,29 @@
 ;;; Configuration menu definition
 
 (defun group->menu (group)
-  (intern (string-upcase
-	   (format nil "conf-~A" (substitute #\- #\Space group)))
-	  :clfswm))
+  (intern (string-upcase (format nil "conf-~A" group)) :clfswm))
+
+(defun group-name (group)
+  (format nil "~:(~A~) Group" (substitute #\Space #\- (string group))))
 
 (defun query-conf-value (var string original)
   (labels ((warn-wrong-type (result original)
 	     (if (equal (simple-type-of result) (simple-type-of original))
 		 result
-		 (if (query-yes-or-no "~S and ~S are not of the same type (~A and ~A). Do you really want to use this value?"
-				      result original (type-of result) (type-of original))
+		 (if (query-yes-or-no "~A and ~A are not of the same type (~A and ~A). Do you really want to use this value?"
+				      (escape-conf-value result) (escape-conf-value original)
+                                      (type-of result) (type-of original))
 		     result
 		     original)))
 	   (ask-set-default-value (original-val)
-	     (let ((default (extract-config-default-value var)))
-	       (if (query-yes-or-no "Reset ~A from ~A to ~A?" var original default)
-		   (get-config-value default)
+	     (let ((default (config-default-value var)))
+	       (if (query-yes-or-no "Reset ~A from ~A to ~A?" var original (escape-conf-value default))
+		   default
 		   original-val))))
     (multiple-value-bind (result return)
-	(query-string (format nil "Configure ~A - ~A" string
-			      (remove-config-group (documentation var 'variable)))
+	(query-string (format nil "Configure ~A - ~A (blank=Default: ~A)" string
+			      (documentation var 'variable)
+                              (escape-conf-value (config-default-value var)))
 		      original)
       (let ((original-val (get-config-value original)))
 	(if (equal return :Return)
@@ -163,7 +164,7 @@
   (let* ((string (remove #\* (format nil "~A" var)))
 	 (symbol (intern (format nil "CONFIGURE-~A" string) :clfswm)))
     (setf (symbol-function symbol) (lambda ()
-				     (setf (symbol-value var) (query-conf-value var string (escape-conf-value var)))
+				     (setf (symbol-value var) (query-conf-value var string (escape-conf-symbol-value var)))
 				     (open-menu (find-menu 'configuration-menu)))
 	  (documentation symbol 'function) (format nil "Configure ~A" string))
     symbol))
@@ -178,7 +179,7 @@
     (loop for group in all-groups
        for i from 0
        do (let ((menu (group->menu group)))
-	    (add-sub-menu 'configuration-menu (number->char i) menu group)
+	    (add-sub-menu 'configuration-menu (number->char i) menu (group-name group))
 	    (loop for var in all-variables
 	       with j = -1
 	       do (when (equal (second var) group)
@@ -189,52 +190,12 @@
 
 
 
-;;; Default documentation string utility
-(defparameter *config-default-string* "(blank=Default: ")
-
-(defmacro with-config-default-value-position ((symbol doc pos1 pos2) &body body)
-  `(let* ((,doc (documentation ,symbol 'variable))
-	  (length (length ,doc))
-	  (,pos2 (and (plusp length) (1- length))))
-     (when (and ,pos2 (char= (char ,doc ,pos2) #\)))
-       (let ((,pos1 (awhen (search *config-default-string* ,doc :from-end t)
-		      (+ it (length *config-default-string*)))))
-	 (when ,pos1
-	   ,@body)))))
-
-(defun remove-config-default-value (symbol)
-  (with-config-default-value-position (symbol doc pos1 pos2)
-    (setf (documentation symbol 'variable)
-	  (string-trim " " (subseq doc 0 pos1)))))
-
-(defun extract-config-default-value (symbol)
-  (with-config-default-value-position (symbol doc pos1 pos2)
-    (string-trim " " (subseq doc pos1 pos2))))
-
-
-(defun change-config-default-value (symbol)
-  (remove-config-default-value symbol)
-  (setf (documentation symbol 'variable)
-	(format nil "~A ~A~A)" (documentation symbol 'variable)
-		*config-default-string*
-		(escape-conf-value symbol))))
-
-(defun reset-config-to-default-value (symbol)
-  (let ((default (extract-config-default-value symbol)))
-    (setf (symbol-value symbol) (get-config-value default))))
-
-
-(defun add-all-config-default-value ()
-  (with-all-internal-symbols (symbol :clfswm)
-    (when (is-config-p symbol)
-      (change-config-default-value symbol))))
-
-
 (defun reset-all-config-variables ()
   "Reset all configuration variables to there default values"
   (when (query-yes-or-no "Do you really want to reset all values to there default?")
-    (with-all-internal-symbols (symbol :clfswm)
-      (when (is-config-p symbol)
-	(reset-config-to-default-value symbol))))
+    (maphash (lambda (key val)
+               (declare (ignore val))
+               (reset-config-to-default-value key))
+             *config-var-table*))
   (open-menu (find-menu 'configuration-menu)))
 

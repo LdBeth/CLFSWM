@@ -31,6 +31,7 @@
   (:export :it
 	   :awhen
 	   :aif
+           :defconfig :*config-var-table* :configvar-value :configvar-group :config-default-value
 	   :find-in-hash
 	   :nfuncall
 	   :pfuncall
@@ -55,7 +56,6 @@
 	   :ensure-function
 	   :empty-string-p
 	   :find-common-string
-	   :is-config-p :config-documentation :config-group
 	   :setf/=
 	   :create-symbol
 	   :number->char
@@ -124,6 +124,26 @@
 
 (defmacro aif (test then &optional else)
   `(let ((it ,test)) (if it ,then ,else)))
+
+
+;;; Configuration variables
+(defstruct configvar value group doc)
+
+(defparameter *config-var-table* (make-hash-table :test #'equal))
+
+(defmacro defconfig (name value group doc)
+  `(progn
+     (setf (gethash ',name *config-var-table*)
+           (make-configvar :value ,value
+                           :group (or ,group 'Miscellaneous)))
+     (defparameter ,name ,value ,doc)))
+
+(defun config-default-value (var)
+  (let ((config (gethash var *config-var-table*)))
+    (when config
+      (configvar-value config))))
+
+
 
 
 (defun find-in-hash (val hashtable &optional (test #'equal))
@@ -369,35 +389,6 @@ Return the result of the last hook"
 		string)
 	    orig))
       string))
-
-
-
-;;; Auto configuration tools
-;;;   Syntaxe: (defparameter symbol value "Config(config group): documentation string")
-(let* ((start-string "Config(")
-       (start-len (length start-string))
-       (stop-string "):")
-       (stop-len (length stop-string)))
-  (defun is-config-p (symbol)
-    (when (boundp symbol)
-      (let ((doc (documentation symbol 'variable)))
-	(and doc
-	     (= (or (search start-string doc :test #'string-equal) -1) 0)
-	     (search stop-string doc)
-	     t))))
-
-  (defun config-documentation (symbol)
-    (when (is-config-p symbol)
-      (let ((doc (documentation symbol 'variable)))
-	(string-trim " " (subseq doc (+ (search stop-string doc) stop-len))))))
-
-  (defun config-group (symbol)
-    (when (is-config-p symbol)
-      (let* ((doc (documentation symbol 'variable))
-	     (group (string-trim " " (subseq doc (+ (search start-string doc) start-len)
-					     (search stop-string doc)))))
-	(if (empty-string-p group) "Miscellaneous group" group)))))
-
 
 
 

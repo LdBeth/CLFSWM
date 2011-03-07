@@ -31,32 +31,26 @@
 (in-package :clfswm)
 
 
-;;; CONFIG - Compress motion notify ?
-;; This variable may be useful to speed up some slow version of CLX.
-;; It is particulary useful with CLISP/MIT-CLX.
-(setf *have-to-compress-notify* t)
-
-
 ;;; CONFIG - Default modifiers
-(defparameter *default-modifiers* '()
-  "Config(): Default modifiers list to append to explicit modifiers
+(defconfig *default-modifiers* '() nil
+           "Default modifiers list to append to explicit modifiers
 Example: :mod-2 for num_lock, :lock for Caps_lock...")
 
 
 
 
 ;;; CONFIG - Never managed window list
-(defparameter *never-managed-window-list*
-  (list (list (equal-wm-class-fun "ROX-Pinboard") nil)
-	(list (equal-wm-class-fun "xvkbd") 'raise-window)
-	(list 'equal-clfswm-terminal-id 'raise-and-focus-window))
-  "Config(): CLFSWM will never manage windows of this type.
+(defconfig *never-managed-window-list*
+    (list (list (equal-wm-class-fun "ROX-Pinboard") nil)
+          (list (equal-wm-class-fun "xvkbd") 'raise-window)
+          (list 'equal-clfswm-terminal-id 'raise-and-focus-window))
+  nil "CLFSWM will never manage windows of this type.
 A list of (list match-function handle-function)")
 
 
 
-(defparameter *hide-unmanaged-window* t
-  "Config(): Hide or not unmanaged windows when a child is deselected.")
+(defconfig *hide-unmanaged-window* t nil
+           "Hide or not unmanaged windows when a child is deselected.")
 
 ;;; CONFIG - Screen size
 (defun get-fullscreen-size ()
@@ -68,57 +62,57 @@ You can tweak this to what you want"
 ;;  (values 100 100 800 600))
 
 
-(defparameter  *corner-size* 3
-  "Config(Corner group): The size of the corner square")
+(defconfig  *corner-size* 3 'Corner
+            "The size of the corner square")
 
 
 ;;; CONFIG: Corner actions - See in clfswm-corner.lisp for
 ;;;   allowed functions
-(defparameter *corner-main-mode-left-button*
-  '((:top-left open-menu)
-    (:top-right present-virtual-keyboard)
-    (:bottom-right expose-windows-mode)
-    (:bottom-left nil))
-  "Config(Corner group): Actions on corners in the main mode with the left mouse button")
+(defconfig *corner-main-mode-left-button*
+    '((:top-left open-menu)
+      (:top-right present-virtual-keyboard)
+      (:bottom-right expose-windows-mode)
+      (:bottom-left nil))
+  'Corner "Actions on corners in the main mode with the left mouse button")
 
-(defparameter *corner-main-mode-middle-button*
-  '((:top-left help-on-clfswm)
-    (:top-right ask-close/kill-current-window)
-    (:bottom-right nil)
-    (:bottom-left nil))
-  "Config(Corner group): Actions on corners in the main mode with the middle mouse button")
+(defconfig *corner-main-mode-middle-button*
+    '((:top-left help-on-clfswm)
+      (:top-right ask-close/kill-current-window)
+      (:bottom-right nil)
+      (:bottom-left nil))
+  'Corner "Actions on corners in the main mode with the middle mouse button")
 
-(defparameter *corner-main-mode-right-button*
-  '((:top-left present-clfswm-terminal)
-    (:top-right ask-close/kill-current-window)
-    (:bottom-right expose-all-windows-mode)
-    (:bottom-left nil))
-  "Config(Corner group): Actions on corners in the main mode with the right mouse button")
+(defconfig *corner-main-mode-right-button*
+    '((:top-left present-clfswm-terminal)
+      (:top-right ask-close/kill-current-window)
+      (:bottom-right expose-all-windows-mode)
+      (:bottom-left nil))
+  'Corner "Actions on corners in the main mode with the right mouse button")
 
-(defparameter *corner-second-mode-left-button*
-  '((:top-left nil)
-    (:top-right nil)
-    (:bottom-right expose-windows-mode)
-    (:bottom-left nil))
-  "Config(Corner group): Actions on corners in the second mode with the left mouse button")
+(defconfig *corner-second-mode-left-button*
+    '((:top-left nil)
+      (:top-right nil)
+      (:bottom-right expose-windows-mode)
+      (:bottom-left nil))
+  'Corner "Actions on corners in the second mode with the left mouse button")
 
-(defparameter *corner-second-mode-middle-button*
-  '((:top-left help-on-clfswm)
-    (:top-right nil)
-    (:bottom-right nil)
-    (:bottom-left nil))
-  "Config(Corner group): Actions on corners in the second mode with the middle mouse button")
+(defconfig *corner-second-mode-middle-button*
+    '((:top-left help-on-clfswm)
+      (:top-right nil)
+      (:bottom-right nil)
+      (:bottom-left nil))
+  'Corner "Actions on corners in the second mode with the middle mouse button")
 
-(defparameter *corner-second-mode-right-button*
-  '((:top-left nil)
-    (:top-right nil)
-    (:bottom-right expose-all-windows-mode)
-    (:bottom-left nil))
-  "Config(Corner group): Actions on corners in the second mode with the right mouse button")
+(defconfig *corner-second-mode-right-button*
+    '((:top-left nil)
+      (:top-right nil)
+      (:bottom-right expose-all-windows-mode)
+      (:bottom-left nil))
+  'Corner "Actions on corners in the second mode with the right mouse button")
 
 
-(defparameter *virtual-keyboard-cmd* "xvkbd"
-  "Config(Corner group): The command to display the virtual keybaord
+(defconfig *virtual-keyboard-cmd* "xvkbd"
+  'Corner "The command to display the virtual keybaord
   Here is an ~/.Xresources example for xvkbd:
     xvkbd.windowGeometry: 300x100-0-0
     xvkbd*Font: 6x12
@@ -127,12 +121,12 @@ You can tweak this to what you want"
     xvkbd.keypad: false
   And make it always on top")
 
-(defparameter *clfswm-terminal-name* "clfswm-terminal"
-  "Config(Corner group): The clfswm terminal name")
+(defconfig *clfswm-terminal-name* "clfswm-terminal"
+  'Corner "The clfswm terminal name")
 ;;(defparameter *clfswm-terminal-cmd* (format nil "xterm -T ~A -e /bin/bash --noprofile --norc" *clfswm-terminal-name*)
 ;;(defparameter *clfswm-terminal-cmd* (format nil "urxvt -name ~A" *clfswm-terminal-name*)
-(defparameter *clfswm-terminal-cmd* (format nil "xterm -T ~A" *clfswm-terminal-name*)
-  "Config(Corner group): The clfswm terminal command.
+(defconfig *clfswm-terminal-cmd* (format nil "xterm -T ~A" *clfswm-terminal-name*)
+  'Corner "The clfswm terminal command.
 This command must set the window title to *clfswm-terminal-name*")
 
 
@@ -148,182 +142,182 @@ This command must set the window title to *clfswm-terminal-name*")
 ;;;
 ;;; See clfswm.lisp for hooks examples.
 
-(defparameter *init-hook* '(default-init-hook display-hello-window)
-  "Config(Hook group): Init hook. This hook is run just after the first root frame is created")
+(defconfig *init-hook* '(default-init-hook display-hello-window)
+  'Hook "Init hook. This hook is run just after the first root frame is created")
 
-(defparameter *close-hook* '(close-notify-window close-clfswm-terminal close-virtual-keyboard)
-  "Config(Hook group): Close hook. This hook is run just before closing the display")
+(defconfig *close-hook* '(close-notify-window close-clfswm-terminal close-virtual-keyboard)
+  'Hook "Close hook. This hook is run just before closing the display")
 
-(defparameter *default-nw-hook* 'default-frame-nw-hook
-  "Config(Hook group): Default action to do on newly created windows")
+(defconfig *default-nw-hook* 'default-frame-nw-hook
+  'Hook "Default action to do on newly created windows")
 
 
 
 
 ;;; CONFIG
-(defparameter *create-frame-on-root* nil
-  "Config(): Create frame on root.
+(defconfig *create-frame-on-root* nil
+  nil "Create frame on root.
 Set this variable to true if you want to allow to create a new frame
 on the root window in the main mode with the mouse")
 
 
 ;;; CONFIG: Main mode colors
-(defparameter *color-selected* "Red"
-  "Config(Main mode group): Color of selected window")
-(defparameter *color-unselected* "Blue"
-  "Config(Main mode group): Color of unselected color")
-(defparameter *color-maybe-selected* "Yellow"
-  "Config(Main mode group): Color of maybe selected windows")
+(defconfig *color-selected* "Red"
+  'Main-mode "Color of selected window")
+(defconfig *color-unselected* "Blue"
+  'Main-mode "Color of unselected color")
+(defconfig *color-maybe-selected* "Yellow"
+  'Main-mode "Color of maybe selected windows")
 
 
 ;;; CONFIG: Frame colors
-(defparameter *frame-background* "Black"
-  "Config(Frame colors group): Frame background")
-(defparameter *frame-foreground* "Green"
-  "Config(Frame colors group): Frame foreground")
-(defparameter *frame-foreground-root* "Red"
-  "Config(Frame colors group): Frame foreground when the frame is the root frame")
-(defparameter *frame-foreground-hidden* "Darkgreen"
-  "Config(Frame colors group): Frame foreground for hidden windows")
+(defconfig *frame-background* "Black"
+  'Frame-colors "Frame background")
+(defconfig *frame-foreground* "Green"
+  'Frame-colors "Frame foreground")
+(defconfig *frame-foreground-root* "Red"
+  'Frame-colors "Frame foreground when the frame is the root frame")
+(defconfig *frame-foreground-hidden* "Darkgreen"
+  'Frame-colors "Frame foreground for hidden windows")
 
 ;;; CONFIG: Default window size
-(defparameter *default-window-width* 400
-  "Config(): Default window width")
-(defparameter *default-window-height* 300
-  "Config(): Default window height")
+(defconfig *default-window-width* 400
+  nil "Default window width")
+(defconfig *default-window-height* 300
+  nil "Default window height")
 
 ;;; CONFIG: Second mode colors and fonts
-(defparameter *sm-border-color* "Green"
-  "Config(Second mode group): Second mode window border color")
-(defparameter *sm-background-color* "Black"
-  "Config(Second mode group): Second mode window background color")
-(defparameter *sm-foreground-color* "Red"
-  "Config(Second mode group): Second mode window foreground color")
-(defparameter *sm-font-string* *default-font-string*
-  "Config(Second mode group): Second mode window font string")
-(defparameter *sm-width* 300
-  "Config(Second mode group): Second mode window width")
-(defparameter *sm-height* 25
-  "Config(Second mode group): Second mode window height")
+(defconfig *sm-border-color* "Green"
+  'Second-mode "Second mode window border color")
+(defconfig *sm-background-color* "Black"
+  'Second-mode "Second mode window background color")
+(defconfig *sm-foreground-color* "Red"
+  'Second-mode "Second mode window foreground color")
+(defconfig *sm-font-string* *default-font-string*
+  'Second-mode "Second mode window font string")
+(defconfig *sm-width* 300
+  'Second-mode "Second mode window width")
+(defconfig *sm-height* 25
+  'Second-mode "Second mode window height")
 
 
 
 
 
 ;;; CONFIG - Identify key colors
-(defparameter *identify-font-string* *default-font-string*
-  "Config(Identify key group): Identify window font string")
-(defparameter *identify-background* "black"
-  "Config(Identify key group): Identify window background color")
-(defparameter *identify-foreground* "green"
-  "Config(Identify key group): Identify window foreground color")
-(defparameter *identify-border* "red"
-  "Config(Identify key group): Identify window border color")
+(defconfig *identify-font-string* *default-font-string*
+  'Identify-key "Identify window font string")
+(defconfig *identify-background* "black"
+  'Identify-key "Identify window background color")
+(defconfig *identify-foreground* "green"
+  'Identify-key "Identify window foreground color")
+(defconfig *identify-border* "red"
+  'Identify-key "Identify window border color")
 
 ;;; CONFIG - Query string colors
-(defparameter *query-font-string* *default-font-string*
-  "Config(Query string group): Query string window font string")
-(defparameter *query-background* "black"
-  "Config(Query string group): Query string window background color")
-(defparameter *query-message-color* "yellow"
-  "Config(Query string group): Query string window message color")
-(defparameter *query-foreground* "green"
-  "Config(Query string group): Query string window foreground color")
-(defparameter *query-cursor-color* "white"
-  "Config(Query string group): Query string window foreground cursor color")
-(defparameter *query-parent-color* "blue"
-  "Config(Query string group): Query string window parenthesis color")
-(defparameter *query-parent-error-color* "red"
-  "Config(Query string group): Query string window parenthesis color when no match")
-(defparameter *query-border* "red"
-  "Config(Query string group): Query string window border color")
+(defconfig *query-font-string* *default-font-string*
+  'Query-string "Query string window font string")
+(defconfig *query-background* "black"
+  'Query-string "Query string window background color")
+(defconfig *query-message-color* "yellow"
+  'Query-string "Query string window message color")
+(defconfig *query-foreground* "green"
+  'Query-string "Query string window foreground color")
+(defconfig *query-cursor-color* "white"
+  'Query-string "Query string window foreground cursor color")
+(defconfig *query-parent-color* "blue"
+  'Query-string "Query string window parenthesis color")
+(defconfig *query-parent-error-color* "red"
+  'Query-string "Query string window parenthesis color when no match")
+(defconfig *query-border* "red"
+  'Query-string "Query string window border color")
 
 
 ;;; CONFIG - Info mode
-(defparameter *info-background* "black"
-  "Config(Info mode group): Info window background color")
-(defparameter *info-foreground* "green"
-  "Config(Info mode group): Info window foreground color")
-(defparameter *info-border* "red"
-  "Config(Info mode group): Info window border color")
-(defparameter *info-line-cursor* "white"
-  "Config(Info mode group): Info window line cursor color color")
-(defparameter *info-selected-background* "blue"
-  "Config(Info mode group): Info selected item background color")
-(defparameter *info-font-string* *default-font-string*
-  "Config(Info mode group): Info window font string")
+(defconfig *info-background* "black"
+  'Info-mode "Info window background color")
+(defconfig *info-foreground* "green"
+  'Info-mode "Info window foreground color")
+(defconfig *info-border* "red"
+  'Info-mode "Info window border color")
+(defconfig *info-line-cursor* "white"
+  'Info-mode "Info window line cursor color color")
+(defconfig *info-selected-background* "blue"
+  'Info-mode "Info selected item background color")
+(defconfig *info-font-string* *default-font-string*
+  'Info-mode "Info window font string")
 
-(defparameter *info-click-to-select* t
-  "Config(Info mode group): If true, click on info window select item. Otherwise, click to drag the menu")
+(defconfig *info-click-to-select* t
+  'Info-mode "If true, click on info window select item. Otherwise, click to drag the menu")
 
 ;;; CONFIG - Circulate string colors
-(defparameter *circulate-font-string* *default-font-string*
-  "Config(Circulate mode group): Circulate string window font string")
-(defparameter *circulate-background* "black"
-  "Config(Circulate mode group): Circulate string window background color")
-(defparameter *circulate-foreground* "green"
-  "Config(Circulate mode group): Circulate string window foreground color")
-(defparameter *circulate-border* "red"
-  "Config(Circulate mode group): Circulate string window border color")
-(defparameter *circulate-width* 400
-  "Config(Circulate mode group): Circulate mode window width")
-(defparameter *circulate-height* 15
-  "Config(Circulate mode group): Circulate mode window height")
+(defconfig *circulate-font-string* *default-font-string*
+  'Circulate-mode "Circulate string window font string")
+(defconfig *circulate-background* "black"
+  'Circulate-mode "Circulate string window background color")
+(defconfig *circulate-foreground* "green"
+  'Circulate-mode "Circulate string window foreground color")
+(defconfig *circulate-border* "red"
+  'Circulate-mode "Circulate string window border color")
+(defconfig *circulate-width* 400
+  'Circulate-mode "Circulate mode window width")
+(defconfig *circulate-height* 15
+  'Circulate-mode "Circulate mode window height")
 
 
-(defparameter *circulate-text-limite* 30
-  "Config(Circulate mode group): Maximum text limite in the circulate window")
+(defconfig *circulate-text-limite* 30
+  'Circulate-mode "Maximum text limite in the circulate window")
 
 
 ;;; CONFIG - Expose string colors
-(defparameter *expose-font-string* *default-font-string*
-  "Config(Expose mode group): Expose string window font string")
-(defparameter *expose-background* "black"
-  "Config(Expose mode group): Expose string window background color")
-(defparameter *expose-foreground* "green"
-  "Config(Expose mode group): Expose string window foreground color")
-(defparameter *expose-border* "red"
-  "Config(Expose mode group): Expose string window border color")
-(defparameter *expose-valid-on-key* t
-  "Config(Expose mode group): Valid expose mode when an accel key is pressed")
-(defparameter *expose-show-window-title* t
-  "Config(Expose mode group): Show the window title on accel window")
+(defconfig *expose-font-string* *default-font-string*
+  'Expose-mode "Expose string window font string")
+(defconfig *expose-background* "black"
+  'Expose-mode "Expose string window background color")
+(defconfig *expose-foreground* "green"
+  'Expose-mode "Expose string window foreground color")
+(defconfig *expose-border* "red"
+  'Expose-mode "Expose string window border color")
+(defconfig *expose-valid-on-key* t
+  'Expose-mode "Valid expose mode when an accel key is pressed")
+(defconfig *expose-show-window-title* t
+  'Expose-mode "Show the window title on accel window")
 
 
 
 ;;; CONFIG - Show key binding colors
-(defparameter *info-color-title* "Magenta"
-  "Config(Info mode group): Colored info title color")
-(defparameter *info-color-underline* "Yellow"
-  "Config(Info mode group): Colored info underline color")
-(defparameter *info-color-first* "Cyan"
-  "Config(Info mode group): Colored info first color")
-(defparameter *info-color-second* "lightblue"
-  "Config(Info mode group): Colored info second color")
+(defconfig *info-color-title* "Magenta"
+  'Info-mode "Colored info title color")
+(defconfig *info-color-underline* "Yellow"
+  'Info-mode "Colored info underline color")
+(defconfig *info-color-first* "Cyan"
+  'Info-mode "Colored info first color")
+(defconfig *info-color-second* "lightblue"
+  'Info-mode "Colored info second color")
 
 
 ;;; CONFIG - Menu colors
 ;;; Set *info-foreground* to change the default menu foreground
-(defparameter *menu-color-submenu* "Cyan"
-  "Config(Menu group): Submenu color in menu")
-(defparameter *menu-color-comment* "Yellow"
-  "Config(Menu group): Comment color in menu")
-(defparameter *menu-color-key* "Magenta"
-  "Config(Menu group): Key color in menu")
-(defparameter *menu-color-menu-key* (->color #xFF9AFF)
-  "Config(Menu group): Menu key color in menu")
+(defconfig *menu-color-submenu* "Cyan"
+  'Menu "Submenu color in menu")
+(defconfig *menu-color-comment* "Yellow"
+  'Menu "Comment color in menu")
+(defconfig *menu-color-key* "Magenta"
+  'Menu "Key color in menu")
+(defconfig *menu-color-menu-key* (->color #xFF9AFF)
+  'Menu "Menu key color in menu")
 
 
 ;;; CONFIG - Notify window string colors
-(defparameter *notify-window-font-string* *default-font-string*
-  "Config(Notify Window mode group): Notify window font string")
-(defparameter *notify-window-background* "black"
-  "Config(Notify Window group): Notify Window background color")
-(defparameter *notify-window-foreground* "green"
-  "Config(Notify Window group): Notify Window foreground color")
-(defparameter *notify-window-border* "red"
-  "Config(Notify Window group): Notify Window border color")
-(defparameter *notify-window-delay* 10
-  "Config(Notify Window group): Notify Window display delay")
+(defconfig *notify-window-font-string* *default-font-string*
+  'Notify-Window "Notify window font string")
+(defconfig *notify-window-background* "black"
+  'Notify-Window "Notify Window background color")
+(defconfig *notify-window-foreground* "green"
+  'Notify-Window "Notify Window foreground color")
+(defconfig *notify-window-border* "red"
+  'Notify-Window "Notify Window border color")
+(defconfig *notify-window-delay* 10
+  'Notify-Window "Notify Window display delay")
 
 

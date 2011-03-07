@@ -63,8 +63,8 @@
 (format t "Loading Volume mode code... ")
 
 (defparameter *volume-keys* nil)
-(defparameter *volume-mode-placement* 'bottom-middle-placement
-  "Config(Placement group): Volume mode window placement")
+(defconfig *volume-mode-placement* 'bottom-middle-placement
+  'Placement "Volume mode window placement")
 
 
 (defvar *volume-window* nil)
@@ -84,22 +84,22 @@
 
 
 ;;; CONFIG - Volume mode
-(defparameter *volume-font-string* *default-font-string*
-  "Config(Volume mode group): Volume string window font string")
-(defparameter *volume-background* "black"
-  "Config(Volume mode group): Volume string window background color")
-(defparameter *volume-foreground* "green"
-  "Config(Volume mode group): Volume string window foreground color")
-(defparameter *volume-border* "red"
-  "Config(Volume mode group): Volume string window border color")
-(defparameter *volume-width* 400
-  "Config(Volume mode group): Volume mode window width")
-(defparameter *volume-height* 15
-  "Config(Volume mode group): Volume mode window height")
-(defparameter *volume-text-limit* 30
-  "Config(Volume mode group): Maximum text limit in the volume window")
-(defparameter *volume-external-mixer-cmd* "/usr/bin/gnome-alsamixer"
-  "Config(Volume mode group): Command to start an external mixer program")
+(defconfig *volume-font-string* *default-font-string*
+  'Volume-mode "Volume string window font string")
+(defconfig *volume-background* "black"
+  'Volume-mode "Volume string window background color")
+(defconfig *volume-foreground* "green"
+  'Volume-mode "Volume string window foreground color")
+(defconfig *volume-border* "red"
+  'Volume-mode "Volume string window border color")
+(defconfig *volume-width* 400
+  'Volume-mode "Volume mode window width")
+(defconfig *volume-height* 15
+  'Volume-mode "Volume mode window height")
+(defconfig *volume-text-limit* 30
+  'Volume-mode "Maximum text limit in the volume window")
+(defconfig *volume-external-mixer-cmd* "/usr/bin/gnome-alsamixer"
+  'Volume-mode "Command to start an external mixer program")
 
 (define-init-hash-table-key *volume-keys* "Volume mode keys")
 (define-define-key "volume" *volume-keys*)

@@ -627,8 +627,8 @@
   (with-slots (window show-window-p) frame
     (if show-window-p
 	(when (or *show-root-frame-p* (not (child-equal-p frame *current-root*)))
-	  (map-window window)
-	  (set-child-stack-order window previous)
+          (map-window window)
+          (set-child-stack-order window previous)
 	  (display-frame-info frame))
 	(hide-window window))))
 
