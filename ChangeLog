@@ -1,5 +1,11 @@
 2011-03-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-info.lisp (show-config-variable): Use the new
+	defconfig method.
+
+	* src/clfswm-autodoc.lisp (produce-configuration-variables): Use
+	the new defconfig method.
+
 	* src/clfswm-configuration.lisp (create-configuration-menu):
 	Change the config system with a more lispy one and a less string
 	based one: (defconfig name value group doc).

@@ -32,6 +32,7 @@
 	   :awhen
 	   :aif
            :defconfig :*config-var-table* :configvar-value :configvar-group :config-default-value
+           :config-group->string
 	   :find-in-hash
 	   :nfuncall
 	   :pfuncall
@@ -143,6 +144,8 @@
     (when config
       (configvar-value config))))
 
+(defun config-group->string (group)
+  (format nil "~:(~A group~)" (substitute #\Space #\- (string group))))
 
 
 

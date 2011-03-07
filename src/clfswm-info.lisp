@@ -537,9 +537,10 @@ Pass the :no-producing-doc symbol to remove the producing doc"
   "Show all configurable variables"
   (let ((all-groups nil)
 	(result nil))
-    (with-all-internal-symbols (symbol :clfswm)
-      (when (is-config-p symbol)
-	(pushnew (config-group symbol) all-groups :test #'string-equal)))
+    (maphash (lambda (key val)
+               (declare (ignore key))
+               (pushnew (configvar-group val) all-groups :test #'equal))
+             *config-var-table*)
     (labels ((rec ()
 	       (setf result nil)
 	       (info-mode-menu (loop :for group :in all-groups
@@ -548,7 +549,7 @@ Pass the :no-producing-doc symbol to remove the producing doc"
 						 (let ((group group))
 						   (lambda ()
 						     (setf result group)))
-						 group)))
+						 (config-group->string group))))
 	       (when result
 		 (info-mode (configuration-variable-colorize-line
 			     (split-string (append-newline-space

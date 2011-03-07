@@ -129,9 +129,6 @@
 (defun group->menu (group)
   (intern (string-upcase (format nil "conf-~A" group)) :clfswm))
 
-(defun group-name (group)
-  (format nil "~:(~A~) Group" (substitute #\Space #\- (string group))))
-
 (defun query-conf-value (var string original)
   (labels ((warn-wrong-type (result original)
 	     (if (equal (simple-type-of result) (simple-type-of original))
@@ -179,7 +176,7 @@
     (loop for group in all-groups
        for i from 0
        do (let ((menu (group->menu group)))
-	    (add-sub-menu 'configuration-menu (number->char i) menu (group-name group))
+	    (add-sub-menu 'configuration-menu (number->char i) menu (config-group->string group))
 	    (loop for var in all-variables
 	       with j = -1
 	       do (when (equal (second var) group)

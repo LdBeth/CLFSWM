@@ -304,18 +304,18 @@ or<br> CLFSWM> (produce-all-docs)"))))
   (format t " done~%"))
 
 
-;;; Configuration variables
 (defun produce-configuration-variables (stream &optional (group t))
   (format stream "    * CLFSWM Configuration variables *~%")
   (format stream "      ------------------------------~2%")
-  (format stream "  <= ~A =>~2%" (if (equal group t) "" group))
-  (with-all-internal-symbols (symbol :clfswm)
-    (when (and (is-config-p symbol)
-	       (or (equal group t)
-		   (string-equal group (config-group symbol))))
-      (format stream "~A = ~S~%~A~%" symbol (symbol-value symbol)
-	      (config-documentation symbol))))
-    (format stream "~2& Those variables can be changed in clfswm.
+  (format stream "  <= ~A =>~2%" (if (equal group t) ""
+                                     (config-group->string group)))
+  (maphash (lambda (key val)
+             (when (or (equal group t)
+                       (equal group (configvar-group val)))
+               (format stream "~A = ~S~%~A~%" key (symbol-value key)
+                       (documentation key 'variable))))
+           *config-var-table*)
+  (format stream "~2& Those variables can be changed in clfswm.
 Maybe you'll need to restart clfswm to take care of new values~2%"))
 
 
