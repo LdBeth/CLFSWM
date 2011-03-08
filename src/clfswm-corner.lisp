@@ -119,9 +119,9 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
 
 
 (let (win)
-  (defun equal-clfswm-terminal-id (window)
+  (defun equal-clfswm-terminal (window)
     (when win
-      (equal (xlib:window-id window) (xlib:window-id win))))
+      (xlib:window-equal window win)))
   (defun close-clfswm-terminal ()
     (when win
       (xlib:destroy-window win)

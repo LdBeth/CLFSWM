@@ -38,12 +38,14 @@ Example: :mod-2 for num_lock, :lock for Caps_lock...")
 
 
 
+(defun-equal-wm-class equal-wm-class-rox-pinboard "ROX-Pinboard")
+(defun-equal-wm-class equal-wm-class-xvkbd "xvkbd")
 
 ;;; CONFIG - Never managed window list
 (defconfig *never-managed-window-list*
-    (list (list (equal-wm-class-fun "ROX-Pinboard") nil)
-          (list (equal-wm-class-fun "xvkbd") 'raise-window)
-          (list 'equal-clfswm-terminal-id 'raise-and-focus-window))
+    (list (list 'equal-wm-class-rox-pinboard nil)
+          (list 'equal-wm-class-xvkbd 'raise-window)
+          (list 'equal-clfswm-terminal 'raise-and-focus-window))
   nil "CLFSWM will never manage windows of this type.
 A list of (list match-function handle-function)")
 

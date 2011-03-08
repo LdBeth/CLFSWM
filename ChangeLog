@@ -1,3 +1,9 @@
+2011-03-08  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-configuration.lisp (save-variables-in-conf-file):
+	Save only variables with a different value than there original
+	value.
+
 2011-03-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-info.lisp (show-config-variable): Use the new

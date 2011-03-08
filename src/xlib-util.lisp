@@ -812,12 +812,12 @@ Expand in handle-event-fun-main-mode-key-press"
      return t))
 
 ;;; Windows wm class and name tests
-(defun equal-wm-class-fun (class)
-  (lambda (win)
-    (when (xlib:window-p win)
-      (string-equal (xlib:get-wm-class win) class))))
+(defmacro defun-equal-wm-class (symbol class)
+  `(defun ,symbol (window)
+     (when (xlib:window-p window)
+       (string-equal (xlib:get-wm-class window) ,class))))
 
-(defun equal-wm-name-fun (name)
-  (lambda (win)
-    (when (xlib:window-p win)
-      (string-equal (xlib:wm-name win) name))))
+(defmacro defun-equal-wm-name (symbol name)
+  `(defun ,symbol (window)
+     (when (xlib:window-p window)
+       (string-equal (xlib:wm-name window) ,name))))
