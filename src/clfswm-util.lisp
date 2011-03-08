@@ -219,6 +219,7 @@
 
 (defun cut-current-child ()
   "Cut the current child to the selection"
+  (hide-all *current-child*)
   (copy-current-child)
   (remove-child-in-frame *current-child* (find-parent-frame *current-child* *current-root*))
   (setf *current-child* *current-root*)
@@ -226,6 +227,7 @@
 
 (defun remove-current-child ()
   "Remove the current child from its parent frame"
+  (hide-all *current-child*)
   (remove-child-in-frame *current-child* (find-parent-frame *current-child* *current-root*))
   (setf *current-child* *current-root*)
   (show-all-children t)
@@ -233,6 +235,7 @@
 
 (defun delete-current-child ()
   "Delete the current child and its children in all frames"
+  (hide-all *current-child*)
   (delete-child-and-children-in-all-frames *current-child*)
   (show-all-children t)
   (leave-second-mode))

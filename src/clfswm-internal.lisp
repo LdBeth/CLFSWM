@@ -865,7 +865,7 @@ For window: set current child to window or its parent according to window-parent
   (awhen (find-parent-frame *current-root*)
     (when (frame-p it)
       (setf *current-root* it)))
-  (show-all-children t))
+  (show-all-children))
 
 
 ;;; Other actions (select-next-child, select-next-brother...) are in

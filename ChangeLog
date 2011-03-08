@@ -1,5 +1,9 @@
 2011-03-08  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-util.lisp (cut-current-child, remove-current-child)
+	(delete-current-child): Hide the current child before doing the
+	action.
+
 	* src/clfswm-internal.lisp (show-all-children): Hide windows not
 	in the current root before displaying those in current root.
 	Remove all hide-all unnecessary calls.
