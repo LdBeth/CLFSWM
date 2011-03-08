@@ -738,6 +738,8 @@ Display all children from root frame and hide those not in *current-root*"
 	(previous nil))
     (labels ((rec (child parent selected-p in-current-root)
 	       (let ((child-current-root-p (child-equal-p child *current-root*)))
+                 (unless (or in-current-root child-current-root-p)
+                   (hide-child child))
 		 (when (or in-current-root child-current-root-p)
 		   (when (adapt-child-to-parent child (if child-current-root-p nil parent))
 		     (setf geometry-change t))
@@ -750,9 +752,8 @@ Display all children from root frame and hide those not in *current-root*"
 		       (rec sub-child child
 			    (and selected-p (child-equal-p sub-child selected-child))
 			    (or in-current-root child-current-root-p)))))
-		 (if (or in-current-root child-current-root-p)
-		     (show-child child parent previous)
-		     (hide-child child))
+                 (when (or in-current-root child-current-root-p)
+                   (show-child child parent previous))
 		 (setf previous child))))
       (rec (if from-root-from *root-frame* *current-root*)
 	   nil t (child-equal-p *current-root* *root-frame*))
@@ -856,17 +857,15 @@ For window: set current child to window or its parent according to window-parent
 
 (defun enter-frame ()
   "Enter in the selected frame - ie make it the root frame"
-  (hide-all *current-root*)
   (setf *current-root* *current-child*)
-  (show-all-children))
+  (show-all-children t))
 
 (defun leave-frame ()
   "Leave the selected frame - ie make its parent the root frame"
-  (hide-all *current-root*)
   (awhen (find-parent-frame *current-root*)
     (when (frame-p it)
       (setf *current-root* it)))
-  (show-all-children))
+  (show-all-children t))
 
 
 ;;; Other actions (select-next-child, select-next-brother...) are in
@@ -919,18 +918,16 @@ For window: set current child to window or its parent according to window-parent
 
 (defun switch-to-root-frame (&key (show-later nil))
   "Switch to the root frame"
-  (hide-all *current-root*)
   (setf *current-root* *root-frame*)
   (unless show-later
-    (show-all-children)))
+    (show-all-children t)))
 
 (defun switch-and-select-root-frame (&key (show-later nil))
   "Switch and select the root frame"
-  (hide-all *current-root*)
   (setf *current-root* *root-frame*)
   (setf *current-child* *current-root*)
   (unless show-later
-    (show-all-children)))
+    (show-all-children t)))
 
 
 (defun toggle-show-root-frame ()

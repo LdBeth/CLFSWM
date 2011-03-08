@@ -220,22 +220,21 @@
 (defun cut-current-child ()
   "Cut the current child to the selection"
   (copy-current-child)
-  (hide-all *current-child*)
   (remove-child-in-frame *current-child* (find-parent-frame *current-child* *current-root*))
   (setf *current-child* *current-root*)
-  (show-all-children))
+  (show-all-children t))
 
 (defun remove-current-child ()
   "Remove the current child from its parent frame"
-  (hide-all *current-child*)
   (remove-child-in-frame *current-child* (find-parent-frame *current-child* *current-root*))
   (setf *current-child* *current-root*)
+  (show-all-children t)
   (leave-second-mode))
 
 (defun delete-current-child ()
   "Delete the current child and its children in all frames"
-  (hide-all *current-child*)
   (delete-child-and-children-in-all-frames *current-child*)
+  (show-all-children t)
   (leave-second-mode))
 
 
@@ -401,11 +400,10 @@
 ;;; Focus by functions
 (defun focus-frame-by (frame)
   (when (frame-p frame)
-    (hide-all *current-root*)
     (focus-all-children frame (or (find-parent-frame frame *current-root*)
 				  (find-parent-frame frame)
 				  *root-frame*))
-    (show-all-children)))
+    (show-all-children t)))
 
 
 (defun focus-frame-by-name ()
@@ -440,14 +438,13 @@
 
 ;;; Delete by functions
 (defun delete-frame-by (frame)
-  (hide-all *current-root*)
   (unless (child-equal-p frame *root-frame*)
     (when (child-equal-p frame *current-root*)
       (setf *current-root* *root-frame*))
     (when (child-equal-p frame *current-child*)
       (setf *current-child* *current-root*))
     (remove-child-in-frame frame (find-parent-frame frame)))
-  (show-all-children))
+  (show-all-children t))
 
 
 (defun delete-frame-by-name ()
@@ -464,11 +461,10 @@
 ;;; Move by function
 (defun move-child-to (child frame-dest)
   (when (and child (frame-p frame-dest))
-    (hide-all *current-root*)
     (remove-child-in-frame child (find-parent-frame child))
     (pushnew child (frame-child frame-dest))
     (focus-all-children child frame-dest)
-    (show-all-children)))
+    (show-all-children t)))
 
 (defun move-current-child-by-name ()
   "Move current child in a named frame"
@@ -488,10 +484,9 @@
 ;;; Copy by function
 (defun copy-child-to (child frame-dest)
   (when (and child (frame-p frame-dest))
-    (hide-all *current-root*)
     (pushnew child (frame-child frame-dest))
     (focus-all-children child frame-dest)
-    (show-all-children)))
+    (show-all-children t)))
 
 (defun copy-current-child-by-name ()
   "Copy current child in a named frame"
@@ -732,11 +727,10 @@ For window: set current child to window or its parent according to window-parent
     "Jump to slot"
     (let ((jump-child (aref key-slots current-slot)))
       (when (find-child jump-child *root-frame*)
-	(hide-all *current-root*)
 	(setf *current-root* jump-child
 	      *current-child* *current-root*)
 	(focus-all-children *current-child* *current-child*)
-	(show-all-children))))
+	(show-all-children t))))
 
   (defun bind-or-jump (n)
     "Bind or jump to a slot (a frame or a window)"
@@ -1133,11 +1127,10 @@ For window: set current child to window or its parent according to window-parent
     "Store the current child and switch to the previous one"
     (let ((current-child *current-child*))
       (when last-child
-	(hide-all *current-root*)
 	(setf *current-root* last-child
 	      *current-child* *current-root*)
 	(focus-all-children *current-child* *current-child*)
-	(show-all-children))
+	(show-all-children t))
       (setf last-child current-child))))
 
 
@@ -1561,13 +1554,12 @@ For window: set current child to window or its parent according to window-parent
 		    (return win)))))
     (if window
         (let ((parent (find-parent-frame window)))
-          (hide-all-children *current-root*)
           (setf *current-child* parent)
 	  (put-child-on-top window parent)
           (when maximized
             (setf *current-root* parent))
 	  (focus-all-children window parent)
-          (show-all-children))
+          (show-all-children t))
         (funcall run-fn))))
 
 

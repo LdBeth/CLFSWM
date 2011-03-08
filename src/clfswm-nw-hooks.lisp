@@ -158,13 +158,12 @@
     (when parent
       (pushnew new-frame (frame-child parent))
       (pushnew window (frame-child new-frame))
-      (hide-all *current-root*)
       (setf *current-root* parent
 	    *current-child* parent)
       (set-layout-once #'tile-space-layout)
       (setf *current-child* new-frame)
       (default-window-placement new-frame window)
-      (show-all-children)
+      (show-all-children t)
       t)))
 
 
@@ -202,12 +201,11 @@
   (when (frame-p frame)
     (pushnew window (frame-child frame))
     (unless (find-child frame *current-root*)
-      (hide-all *current-root*)
       (setf *current-root* frame))
     (setf *current-child* frame)
     (focus-all-children window frame)
     (default-window-placement frame window)
-    (show-all-children)
+    (show-all-children t)
     t))
 
 ;;; Open a new window in a named frame
@@ -249,12 +247,11 @@
       (pushnew window (frame-child frame))
       (unless *in-process-existing-windows*
 	(unless (find-child frame *current-root*)
-	  (hide-all *current-root*)
 	  (setf *current-root* frame))
 	(setf *current-child* frame)
 	(focus-all-children window frame)
 	(default-window-placement frame window)
-	(show-all-children))
+	(show-all-children t))
       (throw 'nw-hook-loop t)))
   nil)
 
