@@ -106,8 +106,8 @@
     (let ((name (query-string "Frame name"))
 	  (x (/ (query-number "Frame x in percent (%)") 100))
 	  (y (/ (query-number "Frame y in percent (%)") 100))
-	  (w (/ (query-number "Frame width in percent (%)") 100))
-	  (h (/ (query-number "Frame height in percent (%)") 100)))
+	  (w (/ (query-number "Frame width in percent (%)" 100) 100))
+	  (h (/ (query-number "Frame height in percent (%)" 100) 100)))
       (push (create-frame :name name :x x :y y :w w :h h)
 	    (frame-child *current-child*))))
   (leave-second-mode))
@@ -293,10 +293,10 @@
 	 (font (xlib:open-font *display* *identify-font-string*))
 	 (window (xlib:create-window :parent *root*
 				     :x 0 :y 0
-				     :width (- (xlib:screen-width *screen*) 2)
+				     :width (- (xlib:screen-width *screen*) (* *border-size* 2))
 				     :height (* 5 (+ (xlib:max-char-ascent font) (xlib:max-char-descent font)))
 				     :background (get-color *identify-background*)
-				     :border-width 1
+				     :border-width *border-size*
 				     :border (get-color *identify-border*)
 				     :colormap (xlib:screen-default-colormap *screen*)
 				     :event-mask '(:exposure)))
@@ -1527,7 +1527,7 @@ For window: set current child to window or its parent according to window-parent
 					   :width width
 					   :height height
 					   :background (get-color *notify-window-background*)
-					   :border-width 1
+					   :border-width *border-size*
 					   :border (get-color *notify-window-border*)
 					   :colormap (xlib:screen-default-colormap *screen*)
 					   :event-mask '(:exposure :key-press))

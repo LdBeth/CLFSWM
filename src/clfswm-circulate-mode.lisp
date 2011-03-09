@@ -204,7 +204,7 @@
 						 :width *circulate-width*
 						 :height *circulate-height*
 						 :background (get-color *circulate-background*)
-						 :border-width 1
+						 :border-width *border-size*
 						 :border (get-color *circulate-border*)
 						 :colormap (xlib:screen-default-colormap *screen*)
 						 :event-mask '(:exposure :key-press))

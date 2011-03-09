@@ -139,7 +139,7 @@
 					       :width width
 					       :height height
 					       :background (get-color *query-background*)
-					       :border-width 1
+					       :border-width *border-size*
 					       :border (get-color *query-border*)
 					       :colormap (xlib:screen-default-colormap *screen*)
 					       :event-mask '(:exposure :key-press))

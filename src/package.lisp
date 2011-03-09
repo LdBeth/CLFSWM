@@ -45,6 +45,12 @@
 This variable may be useful to speed up some slow version of CLX.
 It is particulary useful with CLISP/MIT-CLX.")
 
+
+(defconfig *border-size* 1 nil
+           "Windows and frames border size")
+
+
+
 (defparameter *modifier-alias* '((:alt :mod-1)     (:alt-l :mod-1)
 				 (:numlock :mod-2)
 				 (:super_l :mod-4)

@@ -17,6 +17,10 @@ FOR THE NEXT RELEASE
   see if there is a need for a rectangular optimization:
   Result: map-window: 1.2E-5 sec.  change stack order: 3.14E-4 sec.
   => It maybe useful to optimize this part.
+  + Do not redisplay a child already displayed
+  Implementation note: build a list with all displayed children and there sizes
+    -> display a child only if it is not already displayed and it's not behind
+    a child already displayed (-> search in child list and return as soon as one is found)
 
 
 MAYBE

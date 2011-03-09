@@ -1,3 +1,11 @@
+2011-03-09  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/volume-mode.lisp (set-default-volume-keys): Add more
+	keybindings (up/down, right/left) to raise/lower the volume.
+
+	* src/clfswm-layout.lisp: Add a variable border size for frames
+	and windows.
+
 2011-03-08  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (cut-current-child, remove-current-child)

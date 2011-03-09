@@ -326,7 +326,7 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 					       :height height
 					       :background (get-color *info-background*)
 					       :colormap (xlib:screen-default-colormap *screen*)
-					       :border-width 1
+					       :border-width *border-size*
 					       :border (get-color *info-border*)
 					       :event-mask '(:exposure)))
 		   (gc (xlib:create-gcontext :drawable window

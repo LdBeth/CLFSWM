@@ -37,7 +37,6 @@
 Example: :mod-2 for num_lock, :lock for Caps_lock...")
 
 
-
 (defun-equal-wm-class equal-wm-class-rox-pinboard "ROX-Pinboard")
 (defun-equal-wm-class equal-wm-class-xvkbd "xvkbd")
 
@@ -58,7 +57,9 @@ A list of (list match-function handle-function)")
 (defun get-fullscreen-size ()
   "Return the size of root child (values rx ry rw rh)
 You can tweak this to what you want"
-  (values -2 -2 (+ (xlib:screen-width *screen*) 2) (+ (xlib:screen-height *screen*) 2)))
+  (values (- *border-size*) (- *border-size*)
+          (xlib:screen-width *screen*)
+          (xlib:screen-height *screen*)))
   ;;(values -1 -1 (xlib:screen-width *screen*) (xlib:screen-height *screen*)))
 ;; (values -1 -1 1024 768))
 ;;  (values 100 100 800 600))

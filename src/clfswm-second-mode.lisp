@@ -104,7 +104,7 @@
 					  :x x :y y
 					  :width *sm-width* :height *sm-height*
 					  :background (get-color *sm-background-color*)
-					  :border-width 1
+					  :border-width *border-size*
 					  :border (get-color *sm-border-color*)
 					  :colormap (xlib:screen-default-colormap *screen*)
 					  :event-mask '(:exposure))

@@ -69,7 +69,7 @@
 
 (defun top-right-placement (&optional (width 0) (height 0))
   (declare (ignore height))
-  (values (- (xlib:screen-width *screen*) width 1)
+  (values (- (xlib:screen-width *screen*) width (* *border-size* 2))
 	  0))
 
 
@@ -84,22 +84,22 @@
 	  (truncate (/ (- (xlib:screen-height *screen*) height) 2))))
 
 (defun middle-right-placement (&optional (width 0) (height 0))
-  (values (- (xlib:screen-width *screen*) width 1)
+  (values (- (xlib:screen-width *screen*) width (* *border-size* 2))
 	  (truncate (/ (- (xlib:screen-height *screen*) height) 2))))
 
 
 (defun bottom-left-placement (&optional (width 0) (height 0))
   (declare (ignore width))
   (values 0
-	  (- (xlib:screen-height *screen*) height 1)))
+	  (- (xlib:screen-height *screen*) height (* *border-size* 2))))
 
 (defun bottom-middle-placement (&optional (width 0) (height 0))
   (values (truncate (/ (- (xlib:screen-width *screen*) width) 2))
-	  (- (xlib:screen-height *screen*) height 1)))
+	  (- (xlib:screen-height *screen*) height (* *border-size* 2))))
 
 (defun bottom-right-placement (&optional (width 0) (height 0))
-  (values (- (xlib:screen-width *screen*) width 1)
-	  (- (xlib:screen-height *screen*) height 1)))
+  (values (- (xlib:screen-width *screen*) width (* *border-size* 2))
+	  (- (xlib:screen-height *screen*) height (* *border-size* 2))))
 
 
 ;;;

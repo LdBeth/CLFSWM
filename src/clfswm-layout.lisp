@@ -30,9 +30,9 @@
 ;;;
 ;;; To add a new layout:
 ;;;   1- define your own layout: a method returning the real size of the
-;;;      child in screen size (integer) as 5 values (rx, ry, rw, rh).
+;;;      child in screen size (integer) as 4 values (rx, ry, rw, rh).
 ;;;      This method can use the float size of the child (x, y ,w , h).
-;;;      It can be specialised for xlib:window or frame
+;;;      It can be specialized for xlib:window or frame
 ;;;   2- Define a setter function for your layout
 ;;;   3- Register your new layout with register-layout or create
 ;;;      a sub menu for it with register-layout-sub-menu.
@@ -126,6 +126,21 @@
 			  '(("s" fast-layout-switch)
 			    ("p" push-in-fast-layout-list)))
 
+(declaim (inline adj-border-xy adj-border-wh))
+(defgeneric adj-border-xy (value child))
+(defgeneric adj-border-wh (value child))
+
+(defmethod adj-border-xy (v (child xlib:window))
+  (+ v (xlib:drawable-border-width child)))
+
+(defmethod adj-border-xy (v (child frame))
+  (+ v (xlib:drawable-border-width (frame-window child))))
+
+(defmethod adj-border-wh (v (child xlib:window))
+  (- v (* (xlib:drawable-border-width child) 2)))
+
+(defmethod adj-border-wh (v (child frame))
+  (- v (* (xlib:drawable-border-width (frame-window child)) 2)))
 
 
 ;;; No layout
@@ -134,16 +149,16 @@
 
 (defmethod no-layout ((child xlib:window) parent)
   (with-slots (rx ry rw rh) parent
-    (values (1+ rx)
-	    (1+ ry)
-	    (- rw 2)
-	    (- rh 2))))
+    (values (adj-border-xy rx child)
+	    (adj-border-xy ry child)
+	    (adj-border-wh rw child)
+	    (adj-border-wh rh child))))
 
 (defmethod no-layout ((child frame) parent)
-  (values (x-fl->px (frame-x child) parent)
-	  (y-fl->px (frame-y child) parent)
-	  (w-fl->px (frame-w child) parent)
-	  (h-fl->px (frame-h child) parent)))
+  (values (adj-border-xy (x-fl->px (frame-x child) parent) child)
+	  (adj-border-xy (y-fl->px (frame-y child) parent) child)
+	  (adj-border-wh (w-fl->px (frame-w child) parent) child)
+          (adj-border-wh (h-fl->px (frame-h child) parent) child)))
 
 
 
@@ -168,12 +183,11 @@
   (:documentation "Maximize layout: Maximize windows and frames in there parent frame"))
 
 (defmethod maximize-layout (child parent)
-  (declare (ignore child))
   (with-slots (rx ry rw rh) parent
-    (values (1+ rx)
-	    (1+ ry)
-	    (- rw 2)
-	    (- rh 2))))
+    (values (adj-border-xy rx child)
+	    (adj-border-xy ry child)
+	    (adj-border-wh rw child)
+	    (adj-border-wh rh child))))
 
 
 (defun set-maximize-layout ()
@@ -235,10 +249,10 @@
       (if (zerop pos)
 	  (setf width (* dx (1+ dpos)))
 	  (incf pos dpos)))
-    (values (round (+ (frame-rx parent) (truncate (* (mod pos nx) dx)) 1))
-	    (round (+ (frame-ry parent) (truncate (* (truncate (/ pos nx)) dy)) 1))
-	    (round (- width 2))
-	    (round (- dy 2)))))
+    (values (round (adj-border-xy (+ (frame-rx parent) (truncate (* (mod pos nx) dx))) child))
+	    (round (adj-border-xy (+ (frame-ry parent) (truncate (* (truncate (/ pos nx)) dy))) child))
+	    (round (adj-border-wh width child))
+	    (round (adj-border-wh dy child)))))
 
 (defun set-tile-layout ()
   "Tile child in its frame (vertical)"
@@ -265,10 +279,10 @@
       (if (zerop pos)
 	  (setf height (* dy (1+ dpos)))
 	  (incf pos dpos)))
-    (values (round (+ (frame-rx parent) (truncate (* (truncate (/ pos ny)) dx)) 1))
-	    (round (+ (frame-ry parent) (truncate (* (mod pos ny) dy)) 1))
-	    (round (- dx 2))
-	    (round (- height 2)))))
+    (values (round (adj-border-xy (+ (frame-rx parent) (truncate (* (truncate (/ pos ny)) dx))) child))
+	    (round (adj-border-xy (+ (frame-ry parent) (truncate (* (mod pos ny) dy))) child))
+	    (round (adj-border-wh dx child))
+	    (round (adj-border-wh height child)))))
 
 (defun set-tile-horizontal-layout ()
   "Tile child in its frame (horizontal)"
@@ -286,10 +300,10 @@
 	 (pos (child-position child managed-children))
 	 (len (length managed-children))
 	 (dy (/ (frame-rh parent) len)))
-    (values (round (+ (frame-rx parent) 1))
-	    (round (+ (frame-ry parent) (*  pos dy) 1))
-	    (round (- (frame-rw parent) 2))
-	    (round (- dy 2)))))
+    (values (round (adj-border-xy (frame-rx parent) child))
+	    (round (adj-border-xy (+ (frame-ry parent) (*  pos dy)) child))
+	    (round (adj-border-wh (frame-rw parent) child))
+	    (round (adj-border-wh dy child)))))
 
 (defun set-one-column-layout ()
   "One column layout"
@@ -306,10 +320,10 @@
 	 (pos (child-position child managed-children))
 	 (len (length managed-children))
 	 (dx (/ (frame-rw parent) len)))
-    (values (round (+ (frame-rx parent) (*  pos dx) 1))
-	    (round (+ (frame-ry parent) 1))
-	    (round (- dx 2))
-	    (round (- (frame-rh parent) 2)))))
+    (values (round (adj-border-xy (+ (frame-rx parent) (*  pos dx)) child))
+	    (round (adj-border-xy (frame-ry parent) child))
+	    (round (adj-border-wh dx child))
+	    (round (adj-border-wh (frame-rh parent) child)))))
 
 (defun set-one-line-layout ()
   "One line layout"
@@ -332,10 +346,10 @@
 	   (dy (/ rh (ceiling (/ len n))))
 	   (size (or (frame-data-slot parent :tile-space-size) 0.1)))
       (when (> size 0.5) (setf size 0.45))
-      (values (round (+ rx (truncate (* (mod pos n) dx)) (* dx size) 1))
-	      (round (+ ry (truncate (* (truncate (/ pos n)) dy)) (* dy size) 1))
-	      (round (- dx (* dx size 2) 2))
-	      (round (- dy (* dy size 2) 2))))))
+      (values (round (adj-border-xy (+ rx (truncate (* (mod pos n) dx)) (* dx size)) child))
+	      (round (adj-border-xy (+ ry (truncate (* (truncate (/ pos n)) dy)) (* dy size)) child))
+	      (round (adj-border-wh (- dx (* dx size 2)) child))
+	      (round (adj-border-wh (- dy (* dy size 2)) child))))))
 
 
 
@@ -368,14 +382,14 @@
 	   (size (or (frame-data-slot parent :tile-size) 0.8)))
       (if (> (length managed-children) 1)
 	  (if (= pos 0)
-	      (values (1+ rx)
-		      (1+ ry)
-		      (- (round (* rw size)) 2)
-		      (- rh 2))
-	      (values (1+ (round (+ rx (* rw size))))
-		      (1+ (round (+ ry (* dy (1- pos)))))
-		      (- (round (* rw (- 1 size))) 2)
-		      (- (round dy) 2)))
+	      (values (adj-border-xy rx child)
+		      (adj-border-xy ry child)
+		      (adj-border-wh (round (* rw size)) child)
+		      (adj-border-wh rh child))
+	      (values (adj-border-xy (round (+ rx (* rw size))) child)
+		      (adj-border-xy (round (+ ry (* dy (1- pos)))) child)
+		      (adj-border-wh (round (* rw (- 1 size))) child)
+		      (adj-border-wh (round dy) child)))
 	  (no-layout child parent)))))
 
 
@@ -397,14 +411,14 @@
 	   (size (or (frame-data-slot parent :tile-size) 0.8)))
       (if (> (length managed-children) 1)
 	  (if (= pos 0)
-	      (values (1+ (round (+ rx (* rw (- 1 size)))))
-		      (1+ ry)
-		      (- (round (* rw size)) 2)
-		      (- rh 2))
-	      (values (1+ rx)
-		      (1+ (round (+ ry (* dy (1- pos)))))
-		      (- (round (* rw (- 1 size))) 2)
-		      (- (round dy) 2)))
+	      (values (adj-border-xy (round (+ rx (* rw (- 1 size)))) child)
+		      (adj-border-xy ry child)
+		      (adj-border-wh (round (* rw size)) child)
+		      (adj-border-wh rh child))
+	      (values (adj-border-xy rx child)
+		      (adj-border-xy (round (+ ry (* dy (1- pos)))) child)
+		      (adj-border-wh (round (* rw (- 1 size))) child)
+		      (adj-border-wh (round dy) child)))
 	  (no-layout child parent)))))
 
 
@@ -429,14 +443,14 @@
 	   (size (or (frame-data-slot parent :tile-size) 0.8)))
       (if (> (length managed-children) 1)
 	  (if (= pos 0)
-	      (values (1+ rx)
-		      (1+ ry)
-		      (- rw 2)
-		      (- (round (* rh size)) 2))
-	      (values (1+ (round (+ rx (* dx (1- pos)))))
-		      (1+ (round (+ ry (* rh size))))
-		      (- (round dx) 2)
-		      (- (round (* rh (- 1 size))) 2)))
+	      (values (adj-border-xy rx child)
+		      (adj-border-xy ry child)
+		      (adj-border-wh rw child)
+		      (adj-border-wh (round (* rh size)) child))
+	      (values (adj-border-xy (round (+ rx (* dx (1- pos)))) child)
+		      (adj-border-xy (round (+ ry (* rh size))) child)
+		      (adj-border-wh (round dx) child)
+		      (adj-border-wh (round (* rh (- 1 size))) child)))
 	  (no-layout child parent)))))
 
 
@@ -459,14 +473,14 @@
 	   (size (or (frame-data-slot parent :tile-size) 0.8)))
       (if (> (length managed-children) 1)
 	  (if (= pos 0)
-	      (values (1+ rx)
-		      (1+ (round (+ ry (* rh (- 1 size)))))
-		      (- rw 2)
-		      (- (round (* rh size)) 2))
-	      (values (1+ (round (+ rx (* dx (1- pos)))))
-		      (1+ ry)
-		      (- (round dx) 2)
-		      (- (round (* rh (- 1 size))) 2)))
+	      (values (adj-border-xy rx child)
+		      (adj-border-xy (round (+ ry (* rh (- 1 size)))) child)
+		      (adj-border-wh rw child)
+		      (adj-border-wh (round (* rh size)) child))
+	      (values (adj-border-xy (round (+ rx (* dx (1- pos)))) child)
+		      (adj-border-xy ry child)
+		      (adj-border-wh (round dx) child)
+		      (adj-border-wh (round (* rh (- 1 size))) child)))
 	  (no-layout child parent)))))
 
 
@@ -496,7 +510,7 @@
 
 
 (defun tile-left-space-layout (child parent)
-  "Tile Left Space: main child on left and others on right. Leave some space on the left."
+  "Tile Left Space: main child on left and others on right. Leave some space (in pixels) on the left."
   (with-slots (rx ry rw rh) parent
     (let* ((managed-children (get-managed-child parent))
 	   (pos (child-position child managed-children))
@@ -506,14 +520,14 @@
 	   (space (or (frame-data-slot parent :tile-left-space) 100)))
       (if (> (length managed-children) 1)
 	  (if (= pos 0)
-	      (values (+ rx space 1)
-		      (1+ ry)
-		      (- (round (* rw size)) 2 space)
-		      (- rh 2))
-	      (values (1+ (round (+ rx (* rw size))))
-		      (1+ (round (+ ry (* dy (1- pos)))))
-		      (- (round (* rw (- 1 size))) 2)
-		      (- (round dy) 2)))
+	      (values (adj-border-xy (+ rx space) child)
+		      (adj-border-xy ry child)
+		      (adj-border-wh (- (round (* rw size)) space) child)
+		      (adj-border-wh rh child))
+	      (values (adj-border-xy (round (+ rx (* rw size))) child)
+		      (adj-border-xy (round (+ ry (* dy (1- pos)))) child)
+		      (adj-border-wh (round (* rw (- 1 size))) child)
+		      (adj-border-wh (round dy) child)))
 	  (multiple-value-bind (rnx rny rnw rnh)
 	      (no-layout child parent)
 	    (values (+ rnx space)
@@ -525,7 +539,7 @@
 (defun set-tile-left-space-layout ()
   "Tile Left Space: main child on left and others on right. Leave some space on the left."
   (layout-ask-size "Tile size in percent (%)" :tile-size)
-  (layout-ask-space "Tile space" :tile-left-space)
+  (layout-ask-space "Tile space (in pixels)" :tile-left-space)
   (set-layout #'tile-left-space-layout))
 
 (register-layout-sub-menu 'frame-tile-space-layout-menu "Tile with some space on one side menu"
@@ -548,14 +562,14 @@
 	  (if (child-member child main-windows)
 	      (let* ((dy (/ rh len))
 		     (pos (child-position child main-windows)))
-		(values (1+ (round (+ rx (* rw (- 1 size)))))
-			(1+ (round (+ ry (* dy pos))))
-			(- (round (* rw size)) 2)
-			(- (round dy) 2)))
-	      (values (1+ rx)
-		      (1+ ry)
-		      (- (round (* rw (- 1 size))) 2)
-		      (- rh 2)))))))
+		(values (adj-border-xy (round (+ rx (* rw (- 1 size)))) child)
+			(adj-border-xy (round (+ ry (* dy pos))) child)
+			(adj-border-wh (round (* rw size)) child)
+			(adj-border-wh (round dy) child)))
+	      (values (adj-border-xy rx child)
+		      (adj-border-xy ry child)
+		      (adj-border-wh (round (* rw (- 1 size))) child)
+		      (adj-border-wh rh child)))))))
 
 (defun set-main-window-right-layout ()
   "Main window right: Main windows on the right. Others on the left."
@@ -576,14 +590,14 @@
 	  (if (child-member child main-windows)
 	      (let* ((dy (/ rh len))
 		     (pos (child-position child main-windows)))
-		(values (1+ rx)
-			(1+ (round (+ ry (* dy pos))))
-			(- (round (* rw size)) 2)
-			(- (round dy) 2)))
-	      (values (1+ (round (+ rx (* rw size))))
-		      (1+ ry)
-		      (- (round (* rw (- 1 size))) 2)
-		      (- rh 2)))))))
+		(values (adj-border-xy rx child)
+			(adj-border-xy (round (+ ry (* dy pos))) child)
+			(adj-border-wh (round (* rw size)) child)
+			(adj-border-wh (round dy) child)))
+	      (values (adj-border-xy (round (+ rx (* rw size))) child)
+		      (adj-border-xy ry child)
+		      (adj-border-wh (round (* rw (- 1 size))) child)
+		      (adj-border-wh rh child)))))))
 
 (defun set-main-window-left-layout ()
   "Main window left: Main windows on the left. Others on the right."
@@ -603,14 +617,14 @@
 	  (if (child-member child main-windows)
 	      (let* ((dx (/ rw len))
 		     (pos (child-position child main-windows)))
-		(values (1+ (round (+ rx (* dx pos))))
-			(1+ ry)
-			(- (round dx) 2)
-			(- (round (* rh size)) 2)))
-	      (values (1+ rx)
-		      (1+ (round (+ ry (* rh size))))
-		      (- rw 2)
-		      (- (round (* rh (- 1 size))) 2)))))))
+		(values (adj-border-xy (round (+ rx (* dx pos))) child)
+			(adj-border-xy ry child)
+			(adj-border-wh (round dx) child)
+			(adj-border-wh (round (* rh size)) child)))
+	      (values (adj-border-xy rx child)
+		      (adj-border-xy (round (+ ry (* rh size))) child)
+		      (adj-border-wh rw child)
+		      (adj-border-wh (round (* rh (- 1 size))) child)))))))
 
 (defun set-main-window-top-layout ()
   "Main window top: Main windows on the top. Others on the bottom."
@@ -630,14 +644,14 @@
 	  (if (child-member child main-windows)
 	      (let* ((dx (/ rw len))
 		     (pos (child-position child main-windows)))
-		(values (1+ (round (+ rx (* dx pos))))
-			(1+ (round (+ ry (* rh (- 1 size)))))
-			(- (round dx) 2)
-			(- (round (* rh size)) 2)))
-	      (values (1+ rx)
-		      (1+ ry)
-		      (- rw 2)
-		      (- (round (* rh (- 1 size))) 2)))))))
+		(values (adj-border-xy (round (+ rx (* dx pos))) child)
+			(adj-border-xy (round (+ ry (* rh (- 1 size)))) child)
+			(adj-border-wh (round dx) child)
+			(adj-border-wh (round (* rh size)) child)))
+	      (values (adj-border-xy rx child)
+		      (adj-border-xy ry child)
+		      (adj-border-wh rw child)
+		      (adj-border-wh (round (* rh (- 1 size))) child)))))))
 
 (defun set-main-window-bottom-layout ()
   "Main window bottom: Main windows on the bottom. Others on the top."

@@ -371,7 +371,7 @@
 				     :height 200
 				     :background (get-color *frame-background*)
 				     :colormap (xlib:screen-default-colormap *screen*)
-				     :border-width 1
+				     :border-width *border-size*
 				     :border (get-color *color-selected*)
 				     :event-mask '(:exposure :button-press :button-release :pointer-motion :enter-window)))
 	 (gc (xlib:create-gcontext :drawable window
@@ -1034,10 +1034,10 @@ managed."
   (setf (xlib:window-event-mask window) *window-events*)
   (set-window-state window +normal-state+)
   (setf (xlib:drawable-border-width window) (case (window-type window)
-					      (:normal 1)
-					      (:maxsize 1)
-					      (:transient 1)
-					      (t 1)))
+					      (:normal *border-size*)
+					      (:maxsize *border-size*)
+					      (:transient *border-size*)
+					      (t *border-size*)))
   (grab-all-buttons window)
   (unless (never-managed-window-p window)
     (unless (do-all-frames-nw-hook window)
