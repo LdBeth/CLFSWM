@@ -573,11 +573,12 @@
 			(/= (xlib:drawable-y window) ny)
 			(/= (xlib:drawable-width window) nw)
 			(/= (xlib:drawable-height window) nh))))
-	(setf (xlib:drawable-x window) nx
-	      (xlib:drawable-y window) ny
-	      (xlib:drawable-width window) nw
-	      (xlib:drawable-height window) nh)
-	(xlib:display-finish-output *display*)
+        (when change
+          (setf (xlib:drawable-x window) nx
+                (xlib:drawable-y window) ny
+                (xlib:drawable-width window) nw
+                (xlib:drawable-height window) nh)
+          (xlib:display-finish-output *display*))
 	change))))
 
 
@@ -592,11 +593,12 @@
 			(/= (xlib:drawable-y window) ry)
 			(/= (xlib:drawable-width window) rw)
 			(/= (xlib:drawable-height window) rh))))
-	(setf (xlib:drawable-x window) rx
-	      (xlib:drawable-y window) ry
-	      (xlib:drawable-width window) rw
-	      (xlib:drawable-height window) rh)
-	(xlib:display-finish-output *display*)
+        (when change
+          (setf (xlib:drawable-x window) rx
+                (xlib:drawable-y window) ry
+                (xlib:drawable-width window) rw
+                (xlib:drawable-height window) rh)
+          (xlib:display-finish-output *display*))
 	change))))
 
 (defmethod adapt-child-to-parent (child parent)
@@ -695,22 +697,22 @@
 
 (defgeneric select-child (child selected))
 
-(defmethod select-child ((frame frame) selected)
-  (when (and (frame-p frame) (frame-window frame))
-    (setf (xlib:window-border (frame-window frame))
-	  (get-color (cond ((equal selected :maybe) *color-maybe-selected*)
-			   ((equal selected nil) *color-unselected*)
-			   (selected *color-selected*))))))
+(labels ((get-selected-color (child selected-p)
+           (get-color (cond ((child-equal-p child *current-child*) *color-selected*)
+                            (selected-p *color-maybe-selected*)
+                            (t *color-unselected*)))))
+  (defmethod select-child ((frame frame) selected-p)
+    (when (and (frame-p frame) (frame-window frame))
+      (setf (xlib:window-border (frame-window frame))
+            (get-selected-color frame selected-p))))
 
-(defmethod select-child ((window xlib:window) selected)
-  (setf (xlib:window-border window)
-	(get-color (cond ((equal selected :maybe) *color-maybe-selected*)
-			 ((equal selected nil) *color-unselected*)
-			 (selected *color-selected*)))))
+  (defmethod select-child ((window xlib:window) selected-p)
+    (setf (xlib:window-border window)
+          (get-selected-color window selected-p)))
 
-(defmethod select-child (child selected)
-  (declare (ignore child selected))
-  ())
+  (defmethod select-child (child selected)
+    (declare (ignore child selected))
+    ()))
 
 (defun select-current-frame (selected)
   (select-child *current-child* selected))
@@ -735,26 +737,40 @@
   "Show all children from *current-root*. When from-root-from is true
 Display all children from root frame and hide those not in *current-root*"
   (let ((geometry-change nil)
-	(previous nil))
-    (labels ((rec (child parent selected-p in-current-root)
-	       (let ((child-current-root-p (child-equal-p child *current-root*)))
-                 (unless (or in-current-root child-current-root-p)
-                   (hide-child child))
-		 (when (or in-current-root child-current-root-p)
-		   (when (adapt-child-to-parent child (if child-current-root-p nil parent))
-		     (setf geometry-change t))
-		   (select-child child (cond ((child-equal-p child *current-child*) t)
-					     (selected-p :maybe)
-					     (t nil))))
-		 (when (frame-p child)
-		   (let ((selected-child (frame-selected-child child)))
-		     (dolist (sub-child (frame-child child))
-		       (rec sub-child child
-			    (and selected-p (child-equal-p sub-child selected-child))
-			    (or in-current-root child-current-root-p)))))
-                 (when (or in-current-root child-current-root-p)
-                   (show-child child parent previous))
-		 (setf previous child))))
+	(previous nil)
+        (displayed-child nil))
+    (labels ((in-displayed-list (child)
+               (member child displayed-child :test #'child-equal-p))
+
+             (set-geometry (child parent in-current-root child-current-root-p)
+               (if (or in-current-root child-current-root-p)
+                   (when (adapt-child-to-parent child (if child-current-root-p nil parent))
+                     (setf geometry-change t))
+                   (hide-child child)))
+
+             (recurse-on-frame-child (child in-current-root child-current-root-p selected-p)
+               (let ((selected-child (frame-selected-child child)))
+                 (dolist (sub-child (frame-child child))
+                   (rec sub-child child
+                        (and selected-p (child-equal-p sub-child selected-child))
+                        (or in-current-root child-current-root-p)))))
+
+             (select-and-display (child parent selected-p)
+               (push child displayed-child)
+               (select-child child selected-p)
+               (show-child child parent previous)
+               (setf previous child))
+
+             (rec (child parent selected-p in-current-root)
+               (let ((child-current-root-p (child-equal-p child *current-root*)))
+                 (unless (in-displayed-list child)
+                   (set-geometry child parent in-current-root child-current-root-p))
+                 (when (frame-p child)
+                   (recurse-on-frame-child child in-current-root child-current-root-p selected-p))
+                 (when (and (or in-current-root child-current-root-p)
+                            (not (in-displayed-list child)))
+                   (select-and-display child parent selected-p)))))
+
       (rec (if from-root-from *root-frame* *current-root*)
 	   nil t (child-equal-p *current-root* *root-frame*))
       (set-focus-to-current-child)
@@ -862,6 +878,7 @@ For window: set current child to window or its parent according to window-parent
 
 (defun leave-frame ()
   "Leave the selected frame - ie make its parent the root frame"
+  (hide-all *current-root*)
   (awhen (find-parent-frame *current-root*)
     (when (frame-p it)
       (setf *current-root* it)))

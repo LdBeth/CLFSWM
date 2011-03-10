@@ -1,3 +1,8 @@
+2011-03-10  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (show-all-children): Handle properly
+	duplicated child in multipe frames.
+
 2011-03-09  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/volume-mode.lisp (set-default-volume-keys): Add more
