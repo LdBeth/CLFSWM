@@ -13,6 +13,8 @@
   :components ((:module src
 			:components
 			((:file "tools")
+                         (:file "version"
+				:depends-on ("tools"))
 			 (:file "my-html"
 				:depends-on ("tools"))
 			 (:file "package"
@@ -41,8 +43,6 @@
 			 (:file "clfswm"
 				:depends-on ("xlib-util" "netwm-util" "clfswm-keys" "config"
 							 "clfswm-internal" "clfswm-circulate-mode" "tools"))
-			 (:file "version"
-				:depends-on ("tools"))
 			 (:file "clfswm-second-mode"
 				:depends-on ("package" "clfswm" "clfswm-internal" "clfswm-generic-mode"
 						       "clfswm-placement"))
@@ -60,18 +60,19 @@
 				:depends-on ("package" "config" "xlib-util" "clfswm-keys"
 						       "clfswm-generic-mode" "clfswm-placement"))
 			 (:file "clfswm-util"
-				:depends-on ("clfswm" "keysyms" "clfswm-info" "clfswm-second-mode" "clfswm-query" "clfswm-menu" "clfswm-autodoc" "clfswm-corner"))
+				:depends-on ("clfswm" "keysyms" "clfswm-info" "clfswm-second-mode" "clfswm-query"
+                                                      "clfswm-menu" "clfswm-autodoc" "clfswm-corner"))
+                         (:file "clfswm-configuration"
+				:depends-on ("package" "config" "clfswm-internal" "clfswm-util" "clfswm-query"
+						       "clfswm-menu"))
+                         (:file "menu-def"
+				:depends-on ("clfswm-menu" "clfswm-configuration" "clfswm" "clfswm-util" "clfswm-info"))
 			 (:file "clfswm-layout"
 				:depends-on ("package" "clfswm-internal" "clfswm-util" "clfswm-info" "menu-def"))
 			 (:file "clfswm-pack"
 				:depends-on ("clfswm" "clfswm-util" "clfswm-second-mode"))
 			 (:file "clfswm-nw-hooks"
 				:depends-on ("package" "clfswm-util" "clfswm-info" "clfswm-layout" "menu-def"))
-			 (:file "clfswm-configuration"
-				:depends-on ("package" "config" "clfswm-internal" "clfswm-util" "clfswm-query"
-						       "clfswm-menu"))
-			 (:file "menu-def"
-				:depends-on ("clfswm-menu" "clfswm-configuration" "clfswm" "clfswm-util" "clfswm-info"))
 			 (:file "bindings"
 				:depends-on ("clfswm" "clfswm-internal" "clfswm-util" "clfswm-menu"))
 			 (:file "bindings-second-mode"

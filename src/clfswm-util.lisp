@@ -532,11 +532,8 @@
 
 
 
-
-
-
 (defun move-frame (frame parent orig-x orig-y)
-  (when (and frame parent)
+  (when (and frame parent (not (child-equal-p frame *current-root*)))
     (hide-all-children frame)
     (with-slots (window) frame
       (move-window window orig-x orig-y #'display-frame-info (list frame))
@@ -546,7 +543,7 @@
 
 
 (defun resize-frame (frame parent orig-x orig-y)
-  (when (and frame parent)
+  (when (and frame parent (not (child-equal-p frame *current-root*)))
     (hide-all-children frame)
     (with-slots (window) frame
       (resize-window window orig-x orig-y #'display-frame-info (list frame))
@@ -580,7 +577,7 @@ mouse-fun is #'move-frame or #'resize-frame"
 		(unless (equal (type-of child) 'frame)
 		  (setf child (find-frame-window child *current-root*)))
 		(setf parent (find-parent-frame child)))))
-	(when (equal (type-of child) 'frame)
+	(when (and (frame-p child) (not (child-equal-p child *current-root*)))
 	  (funcall mouse-fn child parent root-x root-y))
 	(when (and child parent
 		   (focus-all-children child parent

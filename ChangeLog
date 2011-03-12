@@ -1,3 +1,16 @@
+2011-03-12  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* clfswm.asd: Change compilation order to prevent undefined
+	variables.
+
+	* src/clfswm-internal.lisp (show-child(frame)): Handle properly
+	the show-root-frame-p parameter.
+
+2011-03-11  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (move-frame, resize-frame): Do not move or
+	resize a frame when it's the current root.
+
 2011-03-10  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp (show-all-children): Handle properly

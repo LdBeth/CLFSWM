@@ -46,6 +46,10 @@ This variable may be useful to speed up some slow version of CLX.
 It is particulary useful with CLISP/MIT-CLX.")
 
 
+(defconfig *show-root-frame-p* nil nil
+           "Show the root frame information or not")
+
+
 (defconfig *border-size* 1 nil
            "Windows and frames border size")
 
@@ -156,8 +160,6 @@ It is particulary useful with CLISP/MIT-CLX.")
   "The current fullscreen maximized child")
 (defparameter *current-child* nil
   "The current child with the focus")
-
-(defparameter *show-root-frame-p* nil)
 
 
 (defparameter *main-keys* nil)

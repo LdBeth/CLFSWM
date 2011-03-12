@@ -627,8 +627,9 @@
 (defmethod show-child ((frame frame) parent previous)
   (declare (ignore parent))
   (with-slots (window show-window-p) frame
-    (if show-window-p
-	(when (or *show-root-frame-p* (not (child-equal-p frame *current-root*)))
+    (if (and show-window-p
+             (or *show-root-frame-p* (not (child-equal-p frame *current-root*))))
+        (progn
           (map-window window)
           (set-child-stack-order window previous)
 	  (display-frame-info frame))
