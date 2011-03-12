@@ -63,7 +63,7 @@ a: Open Folder with Thunar - Open the specified folders in Thunar
 b: Thunar File Manager - Browse the filesystem with the file manager
 c: Dolphin
 d: Krusader
-e: File Manager
+e: File Manager - Configure the Thunar file manager
 f: ROX Filer - ROX Filer
 g: Worker - File manager for X.
 h: Xfe - A lightweight file manager for X Window
@@ -75,10 +75,12 @@ c: Conkeror - Conkeror is a Mozilla-based web browser whose design is inspired b
 d: Epiphany - Browse the web
 e: Firefox - Safe Mode
 f: Firefox
-g: Konqueror
-h: rekonq
-i: Midori - Lightweight web browser
-j: Opera - A fast and secure web browser and Internet suite
+g: IcedTea Web Start - IcedTea Application Launcher
+h: Konqueror
+i: rekonq
+j: Links
+k: Midori - Lightweight web browser
+l: Opera - A fast and secure web browser and Internet suite
 
 Audiovideo
 a: AcidRip DVD Ripper - DVD Ripper
@@ -114,6 +116,7 @@ z: Mixxx - A digital DJ interface
 |: qt-recordMyDesktop - Frontend for recordMyDesktop
 |: Sonata - An elegant GTK+ MPD client
 |: Audio CD Extractor - Copy music from your CDs
+|: Movie Player - Play movies and songs
 |: VLC media player - Read, capture, broadcast your multimedia streams
 |: Mixer - Audio mixer for the Xfce Desktop Environment
 |: XMMS - X Multimedia System
@@ -135,6 +138,7 @@ Video
 a: Ardour - Multitrack hard disk recorder
 b: MPlayer Media Player - Play movies and songs
 c: OpenShot Video Editor - Create and edit videos and movies
+d: Movie Player - Play movies and songs
 
 Development
 a: CMake - Cross-platform buildsystem
@@ -148,20 +152,22 @@ h: Emacs Text Editor - Edit text
 i: Factor - Factor is a general purpose, dynamically typed, stack-based programming language
 j: Java Monitoring and Management Console
 k: Java VisualVM
-l: Akonadi Console - Akonadi Management and Debugging Console
-m: Cervisia
-n: KAppTemplate
-o: KBugBuster
-p: KCachegrind - Visualization of Performance Profiling Data
-q: KDE Source Builder - Builds the KDE Platform and associated software from its source code. A command-line only program.
-r: KImageMapEditor
-s: KLinkStatus
-t: Kompare
-u: KUIViewer
-v: Lokalize
-w: Umbrello
-x: KiCad - Design a printed circuit board.
-y: Qt Linguist - Add translations to Qt applications
+l: OpenJDK Monitoring & Management Console - Monitor and manage OpenJDK applications
+m: Akonadi Console - Akonadi Management and Debugging Console
+n: Cervisia
+o: KAppTemplate
+p: KBugBuster
+q: KCachegrind - Visualization of Performance Profiling Data
+r: KDE Source Builder - Builds the KDE Platform and associated software from its source code. A command-line only program.
+s: KImageMapEditor
+t: KLinkStatus
+u: Kompare
+v: KUIViewer
+w: Lokalize
+x: Umbrello
+y: KiCad - Design a printed circuit board.
+z: Qt Linguist - Add translations to Qt applications
+|: OpenJDK Policy Tool - Manage OpenJDK policy files
 
 Education
 a: Avogadro - Advanced molecular editor
@@ -173,25 +179,25 @@ f: geometria
 g: Blinken - A memory enhancement game
 h: Cantor
 i: KAlgebra - Math Expression Solver and Plotter
-j: Kalzium - KDE Periodic Table of Elements
-k: Kanagram - KDE Letter Order Game
-l: KBruch - Practice exercises with fractions
-m: KGeography - A Geography Learning Program
-n: KHangMan - KDE Hangman Game
-o: Kig - Explore Geometric Constructions
-p: Kiten - Japanese Reference and Study Tool
-q: KLettres - a KDE program to learn the alphabet
-r: KmPlot - Function Plotter
-s: KStars - Desktop Planetarium
-t: KTouch
-u: KTurtle
-v: KWordQuiz - A flashcard and vocabulary learning program
-w: Marble
-x: Parley
-y: Rocs - Graph Theory Tool for Professors and Students.
-z: Step - Simulate physics experiments
+j: KAlgebra Mobile - Pocket Math Expression Solver and Plotter
+k: Kalzium - KDE Periodic Table of Elements
+l: Kanagram - KDE Letter Order Game
+m: KBruch - Practice exercises with fractions
+n: KGeography - A Geography Learning Program
+o: KHangMan - KDE Hangman Game
+p: Kig - Explore Geometric Constructions
+q: Kiten - Japanese Reference and Study Tool
+r: KLettres - a KDE program to learn the alphabet
+s: KmPlot - Function Plotter
+t: KStars - Desktop Planetarium
+u: KTouch
+v: KTurtle
+w: KWordQuiz - A flashcard and vocabulary learning program
+x: Marble
+y: Parley
+z: Rocs - Graph Theory Tool for Professors and Students.
+|: Step - Simulate physics experiments
 |: Oregano electrical engineering tool - Schematic capture and simulation of electronic circuits
-|: Pyromaths - Générateur d'exercices de maths
 |: QtOctave - GUI for GNU Octave
 |: wxMaxima - Perform symbolic and numeric calculations using Maxima
 
@@ -199,29 +205,32 @@ Game
 a: 0 A.D. Editor
 b: 0 A.D.
 c: AssaultCube
-d: DreamChess
-e: DROD - Simple puzzle game.
-f: eBoard
-g: Einstein - Einstein puzzle
-h: Flobopuyo - A remake of the famous PuyoPuyo
-i: Foobillard - A 3D billiards game using OpenGL
-j: Frasse - Frasse and the Peas of Kejick adventure game
-k: Frogatto - Old-school 2D platformer
-l: GGoban - Play go and review game records
-m: glChess
-n: Hedgewars - Worms style game
-o: KGoldrunner - A game of action and puzzle-solving
-p: AMOR
-q: Blinken - A memory enhancement game
-r: Bomber
-s: Bovo
-t: Granatier
-u: Kanagram - KDE Letter Order Game
-v: Kapman - Eat pills escaping ghosts
-w: KAtomic
-x: KBattleship
-y: KBlackBox
-z: KBlocks
+d: BomberClone - Atomic Bomberman clone
+e: Chromium B.S.U. - Scrolling space shooter
+f: DreamChess
+g: DROD - Simple puzzle game.
+h: eBoard
+i: Einstein - Einstein puzzle
+j: Flobopuyo - A remake of the famous PuyoPuyo
+k: Foobillard - A 3D billiards game using OpenGL
+l: Frasse - Frasse and the Peas of Kejick adventure game
+m: Frogatto - Old-school 2D platformer
+n: gbrainy - Play games that challenge your logic, verbal, calculation and memory abilities
+o: GGoban - Play go and review game records
+p: glChess
+q: Hedgewars - Worms style game
+r: KGoldrunner - A game of action and puzzle-solving
+s: AMOR
+t: Blinken - A memory enhancement game
+u: Bomber
+v: Bovo
+w: Granatier
+x: Kanagram - KDE Letter Order Game
+y: Kapman - Eat pills escaping ghosts
+z: KAtomic
+|: Naval Battle
+|: KBlackBox
+|: KBlocks
 |: KBounce
 |: KBreakOut
 |: KSnake
@@ -232,6 +241,7 @@ z: KBlocks
 |: Killbots
 |: Kiriki
 |: KJumpingCube
+|: Klickety
 |: Kolor Lines
 |: KMahjongg
 |: KMines
@@ -249,14 +259,13 @@ z: KBlocks
 |: KSpaceDuel
 |: KSquares
 |: KSudoku - KSudoku, Sudoku game & more for KDE
-|: KTeaTime
-|: KTron
+|: KSnakeDuel
 |: Potato Guy
 |: Kubrick
 |: LSkat
 |: Palapeli
 |: KoboDeluxe - An excellent 2D Shootem-up game.
-|: ManiaDrive - An arcade car game on acrobatic tracks, with a quick and nervous gameplay
+|: Maniadrive - An arcade car game on acrobatic tracks, with a quick and nervous gameplay
 |: mechtower(failsafe)
 |: mechtower
 |: Neverball - A 3D arcade game with a ball
@@ -280,22 +289,22 @@ Graphics
 a: LibreOffice Draw
 b: Image Viewer
 c: Document Viewer - View multi-page documents
-d: Geeqie - View and manage images
-e: PostScript Viewer - View PostScript files
-f: GNU Image Manipulation Program - Create images and edit photographs
-g: Image Viewer
-h: GQview - View and manage images
-i: gThumb - View and organize your images
+d: Gcolor2 - Choose colours from palette or screen
+e: Geeqie - View and manage images
+f: PostScript Viewer - View PostScript files
+g: GNU Image Manipulation Program - Create images and edit photographs
+h: Image Viewer
+i: GQview - View and manage images
 j: gThumb - View and organize your images
-k: GV
-l: Inkscape - Create and edit Scalable Vector Graphics images
-m: digiKam
-n: Gwenview - A simple image viewer
-o: KColorChooser
-p: KolourPaint
-q: KRuler
-r: KSnapshot
-s: Okular
+k: gThumb - View and organize your images
+l: GV
+m: Inkscape - Create and edit Scalable Vector Graphics images
+n: digiKam
+o: Gwenview - A simple image viewer
+p: KColorChooser
+q: KolourPaint
+r: KRuler
+s: KSnapshot
 t: Okular
 u: Okular
 v: Okular
@@ -303,6 +312,7 @@ w: Okular
 x: Okular
 y: Okular
 z: Okular
+|: Okular
 |: Okular
 |: Okular
 |: Okular
@@ -327,28 +337,31 @@ e: Chromium - Access the Internet
 f: Conkeror - Conkeror is a Mozilla-based web browser whose design is inspired by GNU Emacs
 g: Ekiga Softphone - Talk to people over the Internet
 h: Epiphany - Browse the web
-i: Minefield - Safe Mode
-j: Minefield
-k: Firefox - Safe Mode
-l: Firefox
-m: Gnaughty - Porn downloader
-n: Gwget Download Manager - Download files from the Internet
-o: Iron Web Browser - Browse the World Wide Web
-p: JAP - JAP makes it possible to surf the internet anonymously and unobservably.
-q: Java Web Start
-r: KMail
-s: KNode
-t: KPPP
-u: Akregator - A Feed Reader for KDE
-v: Blogilo
-w: KGet
-x: KNetAttach
-y: Konqueror
-z: Kopete - Instant Messenger
+i: Mail Reader
+j: Web Browser
+k: Minefield - Safe Mode
+l: Minefield
+m: Firefox - Safe Mode
+n: Firefox
+o: Gnaughty - Porn downloader
+p: Gwget Download Manager - Download files from the Internet
+q: JAP - JAP makes it possible to surf the internet anonymously and unobservably.
+r: Java Web Start
+s: IcedTea Web Start - IcedTea Application Launcher
+t: KMail
+u: KNode
+v: KPPP
+w: Akregator - A Feed Reader for KDE
+x: Blogilo
+y: KGet
+z: KNetAttach
+|: Konqueror
+|: Kopete - Instant Messenger
 |: KPPPLogview
 |: KRDC
 |: Krfb
 |: rekonq
+|: Links
 |: Midori - Lightweight web browser
 |: MLDonkey GUI - multi-protocol P2P program
 |: MultiGet
@@ -370,33 +383,36 @@ b: LibreOffice Base
 c: LibreOffice Calc
 d: ePDFViewer - Lightweight PDF document viewer
 e: Evolution - Manage your email, contacts and schedule
-f: Gnumeric - Calculation, Analysis, and Visualization of Information
-g: GV
-h: LibreOffice Impress
-i: Kontact
-j: KAddressBook
-k: KOrganizer - Calendar and Scheduling Program
-l: KTimeTracker
-m: KWord - Write text documents
-n: Lokalize
-o: Okular
-p: LibreOffice 3.3 Math
-q: LibreOffice 3.3 Printer Administration
-r: LibreOffice 3.3 
-s: LibreOffice 3.3 Writer
-t: Lyx - Latex WYSIWYM Editor
-u: LibreOffice Extension Manager
-v: OOo4Kids 1.1 Calc
-w: OOo4Kids 1.1 Draw
-x: OOo4Kids 1.1 Impress
-y: OOo4Kids 1.1 Math
-z: OOo4Kids 1.1
+f: FreeMind
+g: Orage Globaltime - Show clocks from different countries
+h: Gnumeric - Calculation, Analysis, and Visualization of Information
+i: GV
+j: LibreOffice Impress
+k: Kontact
+l: KAddressBook
+m: KOrganizer - Calendar and Scheduling Program
+n: KTimeTracker
+o: KWord - Write text documents
+p: Lokalize
+q: Okular
+r: LibreOffice 3.3 Math
+s: LibreOffice 3.3 Printer Administration
+t: LibreOffice 3.3 
+u: LibreOffice 3.3 Writer
+v: Lyx - Latex WYSIWYM Editor
+w: LibreOffice Extension Manager
+x: OOo4Kids 1.1 Calc
+y: OOo4Kids 1.1 Draw
+z: OOo4Kids 1.1 Impress
+|: OOo4Kids 1.1 Math
+|: OOo4Kids 1.1
 |: OOo4Kids 1.1 Printer Administration
 |: OOo4Kids 1.1 Writer
 |: LibreOffice Quickstarter
 |: LibreOffice
-|: Orage - Desktop calendar
+|: Orage Calendar - Desktop calendar
 |: Xpdf - Views Adobe PDF (acrobat) files
+|: Zathura - A minimalistic PDF viewer
 
 Settings
 a: Assistive Technologies - Choose which accessibility features to enable when you log in
@@ -429,9 +445,10 @@ z: Customize Look and Feel - Customizes look and feel of your desktop and applic
 |: File Management - Change the behaviour and appearance of file manager windows
 |: Pop-Up Notifications - Set your pop-up notification preferences
 |: Opera Widget Manager
+|: Panel
 |: Qt Config  - Configure Qt behavior, styles, fonts
 |: Startup Applications - Choose what applications to start when you log in
-|: File Manager
+|: File Manager - Configure the Thunar file manager
 |: Startup Disk Creator - Create a startup disk using a CD or disc image
 |: Windows - Set your window properties
 |: Desktop  - Set desktop background and menu and icon behaviour
@@ -439,45 +456,49 @@ z: Customize Look and Feel - Customizes look and feel of your desktop and applic
 |: Keyboard - Edit keyboard settings and application shortcuts
 |: Mouse - Configure pointer device behavior and appearance
 |: Session and Startup - Customize desktop startup and splash screen
-|: Xfce 4 Settings Manager - Graphical Settings Manager for Xfce 4
+|: Settings Manager - Graphical Settings Manager for Xfce 4
 |: Appearance - Customize the look of your desktop
 |: Window Manager - Configure window behavior and shortcuts
 |: Window Manager Tweaks - Fine-tune window behaviour and effects
 |: Workspaces - Set number and names of workspaces
-|: Xfce 4 Calendar Settings - Settings for the Xfce 4 Calendar Application
+|: Orage preferences - Settings for the Xfce 4 Calendar Application (Orage)
 |: Accessibility - Improve keyboard and mouse accessibility
-|: Panel - Customize the panel settings
 |: Settings Editor - Graphical settings editor for Xfconf
 |: Xfce 4 Printing System Settings - Allow you to select the printing system backend that xfprint will use
 |: Screensaver - Change screensaver properties
 
 System
-a: Terminal
+a: Terminal - Terminal Emulator
 b: Bulk Rename - Rename Multiple Files
 c: Open Folder with Thunar - Open the specified folders in Thunar
 d: Thunar File Manager - Browse the filesystem with the file manager
 e: Avahi Zeroconf Browser - Browse for Zeroconf services available on your network
 f: CD/DVD Creator - Create CDs and DVDs
-g: Manage Printing
-h: System Monitor
-i: GParted - Create, reorganize, and delete partitions
-j: Dolphin
-k: KDiskFree
-l: Konqueror
-m: Konqueror
-n: Konqueror
-o: Konqueror
-p: KInfoCenter
-q: File Manager - Super User Mode
-r: Konsole
-s: KRandRTray - A panel applet for resizing and reorientating X screens.
-t: Krfb
-u: Krusader - root-mode
-v: System Monitor
-w: KSystemLog
-x: KUser
-y: KWalletManager
-z: KwikDisk
+g: Cairo-Dock (no OpenGL) - A light and eye-candy dock and desklets for your desktop.
+h: GLX-Dock (Cairo-Dock with OpenGL) - Cairo-Dock with OpenGL (hardware acceleration)
+i: Manage Printing
+j: Configuration Editor - Directly edit your entire configuration database
+k: System Monitor
+l: GParted - Create, reorganize, and delete partitions
+m: Dolphin
+n: K3b - Disk writing program
+o: KDiskFree
+p: Konqueror
+q: Konqueror
+r: Konqueror
+s: Konqueror
+t: KInfoCenter
+u: File Manager - Super User Mode
+v: Konsole
+w: KRandRTray - A panel applet for resizing and reorientating X screens.
+x: Krfb
+y: Krusader - root-mode
+z: System Monitor
+|: KSystemLog
+|: KUser
+|: KWalletManager
+|: KwikDisk
+|: Nepomuk Backup
 |: Yakuake
 |: Task Manager - Manage running processes
 |: File Browser - Browse the file system with the file manager
@@ -488,36 +509,42 @@ z: KwikDisk
 |: Startup Disk Creator - Create a startup disk using a CD or disc image
 |: Oracle VM VirtualBox
 |: Wireshark - Network traffic analyzer
+|: Log Out
 |: Xfe - A lightweight file manager for X Window
 |: XNC - Graphical File manager, X Northern Captain
 
 Utility
-a: Terminal
+a: Terminal - Terminal Emulator
 b: Bulk Rename - Rename Multiple Files
 c: Open Folder with Thunar - Open the specified folders in Thunar
 d: Thunar File Manager - Browse the filesystem with the file manager
 e: Circle and Ruler - Geometry program
 f: dosbox Emulator - An emulator to run old DOS games
-g: Root Terminal - Opens a terminal as the root user, using gksu to ask for the password
-h: About GNOME - Learn more about GNOME
-i: Panel - Customize the panel settings
-j: Theme Installer - Installs themes packages for various parts of the desktop
-k: Image Viewer
-l: GSpiceUI - A GUI to various freely available Spice electronic circuit simulators
-m: Character Map - Insert special characters into documents
-n: gVim - GTK2 enhanced vim text editor
-o: HP Device Manager - View device status, ink levels and perform maintenance.
-p: K3DSurf - Visualize and manipulate Mathematical models in three, four, five, and six dimensions
-q: Help - Get help with GNOME
-r: Home
-s: KCharSelect
-t: KFloppy
-u: KJots
-v: Akonaditray
-w: Ark
-x: KDE Groupware Wizard
-y: KAlarm
-z: Kate
+g: File Manager - Configure the Thunar file manager
+h: Terminal Emulator
+i: gEDA Attribute Editor - Manipulate component attributes with gattrib
+j: gEDA Schematic Editor - Create and edit electrical schematics and symbols with gschem
+k: Root Terminal - Opens a terminal as the root user, using gksu to ask for the password
+l: Orage Globaltime - Show clocks from different countries
+m: About GNOME - Learn more about GNOME
+n: Panel
+o: Theme Installer - Installs themes packages for various parts of the desktop
+p: Image Viewer
+q: GSpiceUI - A GUI to various freely available Spice electronic circuit simulators
+r: Character Map - Insert special characters into documents
+s: gVim - GTK2 enhanced vim text editor
+t: HP Device Manager - View device status, ink levels and perform maintenance.
+u: K3DSurf - Visualize and manipulate Mathematical models in three, four, five, and six dimensions
+v: Help - Get help with GNOME
+w: Home
+x: KCharSelect
+y: KFloppy
+z: KJots
+|: Akonaditray
+|: Ark
+|: KDE Groupware Wizard
+|: KAlarm
+|: Kate
 |: KCalc
 |: KFileReplace
 |: Find Files/Folders
@@ -532,6 +559,7 @@ z: Kate
 |: KNotes
 |: KonsoleKalendar
 |: Krusader
+|: KTeaTime
 |: Snippets datafile editor
 |: KTimer
 |: KTimeTracker
@@ -546,7 +574,7 @@ z: Kate
 |: Computer - Browse all local and remote disks and folders accessible from this computer
 |: Home Folder - Open your personal folder
 |: Network - Browse bookmarked and local network locations
-|: File Manager
+|: File Manager - Configure the Thunar file manager
 |: PDF Editor
 |: PlayOnLinux - PlayOnLinux
 |: Scilab - A scientific software package for numerical computations
@@ -554,24 +582,21 @@ z: Kate
 |: Worker - File manager for X.
 |: About Xfce
 |: Application Finder - Find and launch applications installed on your system
-|: File Manager
 |: Help - Get help with GNOME
-|: Log Out
-|: Run Program...
-|: Terminal
-|: Web Browser
 |: Xfi - A simple image viewer for Xfe
 |: Xfp - A simple package manager for Xfe
 |: Xfce 4 Print Manager - Show the printer list and allow you to manage their jobs
 |: Xfce 4 Print Dialog - Print a file and allow you to set up its layout
+|: Run Program...
 |: Xfv - A simple text viewer for Xfe
 |: Xfw - A simple text editor for Xfe
 |: XNC - Graphical File manager, X Northern Captain
 |: Help - Get help with GNOME
+|: Zhu3D - With Zhu3D, you can view, animate, and solve up to three functions in 3D-space in an interactive manner
 |: KDE Resources - Configure KDE Resources
 
 Terminalemulator
-a: Terminal
+a: Terminal - Terminal Emulator
 b: Root Terminal - Opens a terminal as the root user, using gksu to ask for the password
 c: Konsole
 d: Yakuake
@@ -889,36 +914,36 @@ i: Open the window in this frame if it match absorb-nw-test
 Frame-Movement-Menu
 p: < Frame pack menu >
 f: < Frame fill menu >
-r: < Frame resize menu >
+z: < Frame resize menu >
 c: Center the current frame
-Right: Select the next brother frame
-Left: Select the previous brother frame
-Up: Select the next level
-Down: Select the previous levelframe
-Tab: Select the next child
+r: Select the next brother frame
+l: Select the previous brother frame
+u: Select the next level
+d: Select the previous levelframe
+t: Select the next child
 
 Frame-Pack-Menu
-Up: Pack the current frame up
-Down: Pack the current frame down
-Left: Pack the current frame left
-Right: Pack the current frame right
+u: Pack the current frame up
+d: Pack the current frame down
+l: Pack the current frame left
+r: Pack the current frame right
 
 Frame-Fill-Menu
-Up: Fill the current frame up
-Down: Fill the current frame down
-Left: Fill the current frame left
-Right: Fill the current frame right
+u: Fill the current frame up
+d: Fill the current frame down
+l: Fill the current frame left
+r: Fill the current frame right
 a: Fill the current frame in all directions
 v: Fill the current frame vertically
 h: Fill the current frame horizontally
 
 Frame-Resize-Menu
-Up: Resize the current frame up to its half height
-Down: Resize the current frame down to its half height
-Left: Resize the current frame left to its half width
-Right: Resize the current frame right to its half width
-d: Resize down the current frame
-a: Resize down the current frame to its minimal size
+u: Resize the current frame up to its half height
+d: Resize the current frame down to its half height
+l: Resize the current frame left to its half width
+r: Resize the current frame right to its half width
+a: Resize down the current frame
+m: Resize down the current frame to its minimal size
 
 Frame-Focus-Policy
 -=- For the current frame -=-
@@ -1002,145 +1027,147 @@ l: Run LXDE
 p: Prompt for an other window manager
 
 Configuration-Menu
-a: < Notify Window group >
-b: < Notify Window mode group >
-c: < Expose mode group >
-d: < Hook group >
-e: < Main mode group >
-f: < Frame colors group >
-g: < Identify key group >
-h: < Corner group >
-i: < Circulate mode group >
-j: < Query string group >
-k: < Placement group >
-l: < Miscellaneous group >
-m: < Info mode group >
-n: < Second mode group >
-o: < Menu group >
+a: < Notify Window Group >
+b: < Menu Group >
+c: < Expose Mode Group >
+d: < Circulate Mode Group >
+e: < Info Mode Group >
+f: < Query String Group >
+g: < Identify Key Group >
+h: < Second Mode Group >
+i: < Frame Colors Group >
+j: < Corner Group >
+k: < Placement Group >
+l: < Hook Group >
+m: < Main Mode Group >
+n: < Miscellaneous Group >
 F2: Save all configuration variables in clfswmrc
+F3: Reset all configuration variables to there default values
 
-Conf-Notify-Window-Group
+Conf-Notify-Window
 a: Configure NOTIFY-WINDOW-DELAY
 b: Configure NOTIFY-WINDOW-BORDER
 c: Configure NOTIFY-WINDOW-FOREGROUND
 d: Configure NOTIFY-WINDOW-BACKGROUND
+e: Configure NOTIFY-WINDOW-FONT-STRING
 
-Conf-Notify-Window-Mode-Group
-a: Configure NOTIFY-WINDOW-FONT-STRING
+Conf-Menu
+a: Configure XDG-SECTION-LIST
+b: Configure MENU-COLOR-MENU-KEY
+c: Configure MENU-COLOR-KEY
+d: Configure MENU-COLOR-COMMENT
+e: Configure MENU-COLOR-SUBMENU
 
-Conf-Expose-Mode-Group
-a: Configure EXPOSE-FOREGROUND
-b: Configure EXPOSE-SHOW-WINDOW-TITLE
-c: Configure EXPOSE-VALID-ON-KEY
-d: Configure EXPOSE-BORDER
-e: Configure EXPOSE-FONT-STRING
-f: Configure EXPOSE-BACKGROUND
+Conf-Expose-Mode
+a: Configure EXPOSE-SHOW-WINDOW-TITLE
+b: Configure EXPOSE-VALID-ON-KEY
+c: Configure EXPOSE-BORDER
+d: Configure EXPOSE-FOREGROUND
+e: Configure EXPOSE-BACKGROUND
+f: Configure EXPOSE-FONT-STRING
 
-Conf-Hook-Group
-a: Configure INIT-HOOK
-b: Configure DEFAULT-NW-HOOK
-c: Configure MAIN-ENTRANCE-HOOK
-d: Configure LOOP-HOOK
-e: Configure BINDING-HOOK
+Conf-Circulate-Mode
+a: Configure CIRCULATE-TEXT-LIMITE
+b: Configure CIRCULATE-HEIGHT
+c: Configure CIRCULATE-WIDTH
+d: Configure CIRCULATE-BORDER
+e: Configure CIRCULATE-FOREGROUND
+f: Configure CIRCULATE-BACKGROUND
+g: Configure CIRCULATE-FONT-STRING
 
-Conf-Main-Mode-Group
-a: Configure COLOR-UNSELECTED
-b: Configure COLOR-SELECTED
-c: Configure COLOR-MAYBE-SELECTED
+Conf-Info-Mode
+a: Configure INFO-COLOR-SECOND
+b: Configure INFO-COLOR-FIRST
+c: Configure INFO-COLOR-UNDERLINE
+d: Configure INFO-COLOR-TITLE
+e: Configure INFO-CLICK-TO-SELECT
+f: Configure INFO-FONT-STRING
+g: Configure INFO-SELECTED-BACKGROUND
+h: Configure INFO-LINE-CURSOR
+i: Configure INFO-BORDER
+j: Configure INFO-FOREGROUND
+k: Configure INFO-BACKGROUND
 
-Conf-Frame-Colors-Group
-a: Configure FRAME-FOREGROUND-ROOT
-b: Configure FRAME-FOREGROUND
-c: Configure FRAME-FOREGROUND-HIDDEN
+Conf-Query-String
+a: Configure QUERY-BORDER
+b: Configure QUERY-PARENT-ERROR-COLOR
+c: Configure QUERY-PARENT-COLOR
+d: Configure QUERY-CURSOR-COLOR
+e: Configure QUERY-FOREGROUND
+f: Configure QUERY-MESSAGE-COLOR
+g: Configure QUERY-BACKGROUND
+h: Configure QUERY-FONT-STRING
+
+Conf-Identify-Key
+a: Configure IDENTIFY-BORDER
+b: Configure IDENTIFY-FOREGROUND
+c: Configure IDENTIFY-BACKGROUND
+d: Configure IDENTIFY-FONT-STRING
+
+Conf-Second-Mode
+a: Configure SM-HEIGHT
+b: Configure SM-WIDTH
+c: Configure SM-FONT-STRING
+d: Configure SM-FOREGROUND-COLOR
+e: Configure SM-BACKGROUND-COLOR
+f: Configure SM-BORDER-COLOR
+
+Conf-Frame-Colors
+a: Configure FRAME-FOREGROUND-HIDDEN
+b: Configure FRAME-FOREGROUND-ROOT
+c: Configure FRAME-FOREGROUND
 d: Configure FRAME-BACKGROUND
 
-Conf-Identify-Key-Group
-a: Configure IDENTIFY-FOREGROUND
-b: Configure IDENTIFY-FONT-STRING
-c: Configure IDENTIFY-BORDER
-d: Configure IDENTIFY-BACKGROUND
+Conf-Corner
+a: Configure CLFSWM-TERMINAL-CMD
+b: Configure CLFSWM-TERMINAL-NAME
+c: Configure VIRTUAL-KEYBOARD-CMD
+d: Configure CORNER-SECOND-MODE-RIGHT-BUTTON
+e: Configure CORNER-SECOND-MODE-MIDDLE-BUTTON
+f: Configure CORNER-SECOND-MODE-LEFT-BUTTON
+g: Configure CORNER-MAIN-MODE-RIGHT-BUTTON
+h: Configure CORNER-MAIN-MODE-MIDDLE-BUTTON
+i: Configure CORNER-MAIN-MODE-LEFT-BUTTON
+j: Configure CORNER-SIZE
 
-Conf-Corner-Group
-a: Configure CORNER-MAIN-MODE-LEFT-BUTTON
-b: Configure CORNER-SECOND-MODE-MIDDLE-BUTTON
-c: Configure CORNER-SECOND-MODE-LEFT-BUTTON
-d: Configure CORNER-MAIN-MODE-RIGHT-BUTTON
-e: Configure CORNER-SECOND-MODE-RIGHT-BUTTON
-f: Configure CORNER-SIZE
-g: Configure CLFSWM-TERMINAL-CMD
-h: Configure VIRTUAL-KEYBOARD-CMD
-i: Configure CORNER-MAIN-MODE-MIDDLE-BUTTON
-j: Configure CLFSWM-TERMINAL-NAME
+Conf-Placement
+a: Configure NOTIFY-WINDOW-PLACEMENT
+b: Configure EXPOSE-MODE-PLACEMENT
+c: Configure CIRCULATE-MODE-PLACEMENT
+d: Configure QUERY-MODE-PLACEMENT
+e: Configure INFO-MODE-PLACEMENT
+f: Configure SECOND-MODE-PLACEMENT
+g: Configure BANISH-POINTER-PLACEMENT
 
-Conf-Circulate-Mode-Group
-a: Configure CIRCULATE-BORDER
-b: Configure CIRCULATE-WIDTH
-c: Configure CIRCULATE-HEIGHT
-d: Configure CIRCULATE-TEXT-LIMITE
-e: Configure CIRCULATE-FONT-STRING
-f: Configure CIRCULATE-BACKGROUND
-g: Configure CIRCULATE-FOREGROUND
+Conf-Hook
+a: Configure DEFAULT-NW-HOOK
+b: Configure CLOSE-HOOK
+c: Configure INIT-HOOK
+d: Configure MAIN-ENTRANCE-HOOK
+e: Configure LOOP-HOOK
+f: Configure BINDING-HOOK
 
-Conf-Query-String-Group
-a: Configure QUERY-BACKGROUND
-b: Configure QUERY-FONT-STRING
-c: Configure QUERY-PARENT-COLOR
-d: Configure QUERY-BORDER
-e: Configure QUERY-MESSAGE-COLOR
-f: Configure QUERY-PARENT-ERROR-COLOR
-g: Configure QUERY-FOREGROUND
-h: Configure QUERY-CURSOR-COLOR
+Conf-Main-Mode
+a: Configure COLOR-MAYBE-SELECTED
+b: Configure COLOR-UNSELECTED
+c: Configure COLOR-SELECTED
+d: Configure COLOR-MOVE-WINDOW
 
-Conf-Placement-Group
-a: Configure CIRCULATE-MODE-PLACEMENT
-b: Configure NOTIFY-WINDOW-PLACEMENT
-c: Configure QUERY-MODE-PLACEMENT
-d: Configure BANISH-POINTER-PLACEMENT
-e: Configure EXPOSE-MODE-PLACEMENT
-f: Configure INFO-MODE-PLACEMENT
-g: Configure SECOND-MODE-PLACEMENT
-
-Conf-Miscellaneous-Group
-a: Configure HAVE-TO-COMPRESS-NOTIFY
-b: Configure HIDE-UNMANAGED-WINDOW
-c: Configure DEFAULT-WINDOW-WIDTH
-d: Configure CREATE-FRAME-ON-ROOT
-e: Configure DEFAULT-MANAGED-TYPE
-f: Configure DEFAULT-FRAME-DATA
-g: Configure DEFAULT-MODIFIERS
-h: Configure NEVER-MANAGED-WINDOW-LIST
-i: Configure DEFAULT-WINDOW-HEIGHT
+Conf-Miscellaneous
+a: Configure DEFAULT-WINDOW-HEIGHT
+b: Configure DEFAULT-WINDOW-WIDTH
+c: Configure CREATE-FRAME-ON-ROOT
+d: Configure HIDE-UNMANAGED-WINDOW
+e: Configure NEVER-MANAGED-WINDOW-LIST
+f: Configure DEFAULT-MODIFIERS
+g: Configure DEFAULT-FOCUS-POLICY
+h: Configure DEFAULT-MANAGED-TYPE
+i: Configure DEFAULT-FRAME-DATA
 j: Configure DEFAULT-FONT-STRING
-k: Configure DEFAULT-FOCUS-POLICY
-l: Configure LOOP-TIMEOUT
-
-Conf-Info-Mode-Group
-a: Configure INFO-FOREGROUND
-b: Configure INFO-COLOR-UNDERLINE
-c: Configure INFO-SELECTED-BACKGROUND
-d: Configure INFO-LINE-CURSOR
-e: Configure INFO-CLICK-TO-SELECT
-f: Configure INFO-BACKGROUND
-g: Configure INFO-COLOR-FIRST
-h: Configure INFO-BORDER
-i: Configure INFO-FONT-STRING
-j: Configure INFO-COLOR-TITLE
-k: Configure INFO-COLOR-SECOND
-
-Conf-Second-Mode-Group
-a: Configure SM-FOREGROUND-COLOR
-b: Configure SM-BACKGROUND-COLOR
-c: Configure SM-HEIGHT
-d: Configure SM-WIDTH
-e: Configure SM-BORDER-COLOR
-f: Configure SM-FONT-STRING
-
-Conf-Menu-Group
-a: Configure MENU-COLOR-COMMENT
-b: Configure MENU-COLOR-KEY
-c: Configure XDG-SECTION-LIST
-d: Configure MENU-COLOR-MENU-KEY
-e: Configure MENU-COLOR-SUBMENU
+k: Configure LOOP-TIMEOUT
+l: Configure BORDER-SIZE
+m: Configure SHOW-ROOT-FRAME-P
+n: Configure HAVE-TO-COMPRESS-NOTIFY
 
 Clfswm-Menu
 r: Reset clfswm
