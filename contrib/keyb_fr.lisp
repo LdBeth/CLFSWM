@@ -5,7 +5,7 @@
 ;;; Documentation: Define some keybindings for an azerty french keyboard
 ;;; --------------------------------------------------------------------------
 ;;;
-;;; (C) 2009 Philippe Brochard <hocwp@free.fr>
+;;; (C) 2011 Philippe Brochard <hocwp@free.fr>
 ;;;
 ;;; This program is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by

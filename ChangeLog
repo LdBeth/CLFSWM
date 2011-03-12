@@ -1,5 +1,7 @@
 2011-03-12  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/menu-def.lisp: Menu update to prevent cursor keys clash.
+
 	* clfswm.asd: Change compilation order to prevent undefined
 	variables.
 

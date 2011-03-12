@@ -1,3 +1,37 @@
+;;; --------------------------------------------------------------------------
+;;; CLFSWM - FullScreen Window Manager
+;;;
+;;; --------------------------------------------------------------------------
+;;; Documentation: Client/server connection.
+;;; The connection is crypted and you can only connect to the server with the
+;;; same clfswm binary.
+;;; --------------------------------------------------------------------------
+;;;
+;;; (C) 2011 Philippe Brochard <hocwp@free.fr>
+;;;
+;;; This program is free software; you can redistribute it and/or modify
+;;; it under the terms of the GNU General Public License as published by
+;;; the Free Software Foundation; either version 3 of the License, or
+;;; (at your option) any later version.
+;;;
+;;; This program is distributed in the hope that it will be useful,
+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU General Public License
+;;; along with this program; if not, write to the Free Software
+;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+;;;
+;;; --------------------------------------------------------------------------
+;;; Server protocole:
+;;;  Server ->  Client:  orig_key=a generated key crypted with *key*
+;;;  Client           :  build its new_key with orig_key+*key*
+;;;  Client ->  Server:  new_key+(md5 new_key) crypted with new_key
+;;;  Server ->  Client:  check if the keys match and then authenticate the client.
+;;;  Server <-> Client:  All connections are crypted with new_key
+;;; --------------------------------------------------------------------------
+
 (in-package :common-lisp-user)
 
 (defpackage :crypt
