@@ -243,7 +243,7 @@ or<br> CLFSWM> (produce-all-docs)"))))
 		      *corner-second-mode-left-button* *corner-second-mode-middle-button* *corner-second-mode-right-button*))
       (print-doc corner))
     (format stream "~2%This documentation was produced with the CLFSWM auto-doc functions.
-To reproduce it, use the produce-menu-doc-in-file or
+To reproduce it, use the produce-corner-doc-in-file or
 the produce-all-docs function from the Lisp REPL.
 
 Something like this:
@@ -304,19 +304,46 @@ or<br> CLFSWM> (produce-all-docs)"))))
   (format t " done~%"))
 
 
-(defun produce-configuration-variables (stream &optional (group t))
-  (format stream "    * CLFSWM Configuration variables *~%")
-  (format stream "      ------------------------------~2%")
+
+;;; Configuration variables autodoc functions
+(defun produce-configuration-variables-doc (stream &optional (group t) (title t) (footnote t))
+  (when title
+    (format stream "    * CLFSWM Configuration variables *~%")
+    (format stream "      ------------------------------~2%"))
   (format stream "  <= ~A =>~2%" (if (equal group t) ""
                                      (config-group->string group)))
   (maphash (lambda (key val)
              (when (or (equal group t)
                        (equal group (configvar-group val)))
-               (format stream "~A = ~S~%~A~%" key (symbol-value key)
+               (format stream "~A = ~S~%  ~A~%" key (symbol-value key)
                        (documentation key 'variable))))
            *config-var-table*)
-  (format stream "~2& Those variables can be changed in clfswm.
-Maybe you'll need to restart clfswm to take care of new values~2%"))
+  (when footnote
+    (format stream "~2& Those variables can be changed in clfswm.
+Maybe you'll need to restart clfswm to take care of new values")
+    (format stream "~2%This documentation was produced with the CLFSWM auto-doc functions.
+To reproduce it, use the produce-configuration-variables-doc-in-file or
+the produce-all-docs function from the Lisp REPL.
+
+Something like this:
+LISP> (in-package :clfswm)
+CLFSWM> (produce-configuration-variables-doc-in-file \"my-variables.txt\")
+or
+CLFSWM> (produce-all-docs)~2%"))
+  (format stream "~2%"))
+
+(defun produce-configuration-variables-doc-in-file (filename)
+  (format t "Producing text config variables documentation in ~S " filename)
+  (with-open-file (stream filename :direction :output
+			  :if-exists :supersede :if-does-not-exist :create)
+    (let* ((title t)
+           (all-groups (config-all-groups))
+           (last-group (first (last all-groups))))
+      (dolist (group all-groups)
+        (produce-configuration-variables-doc stream group title
+                                             (equal group last-group))
+        (setf title nil))))
+  (format t " done~%"))
 
 
 
@@ -331,7 +358,8 @@ Maybe you'll need to restart clfswm to take care of new values~2%"))
   (produce-menu-doc-in-file "doc/menu.txt")
   (produce-menu-doc-html-in-file "doc/menu.html")
   (produce-corner-doc-in-file "doc/corner.txt")
-  (produce-corner-doc-html-in-file "doc/corner.html"))
+  (produce-corner-doc-html-in-file "doc/corner.html")
+  (produce-configuration-variables-doc-in-file "doc/variables.txt"))
 
 
 

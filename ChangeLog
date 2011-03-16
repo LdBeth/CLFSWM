@@ -1,5 +1,8 @@
 2011-03-16  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-autodoc.lisp (produce-all-docs): Produce a
+	documentation for all configurable variables in CLFSWM.
+
 	* src/clfswm-layout.lisp (set-gimp-layout): Display a notify
 	window with the help on the GIMP layout.
 

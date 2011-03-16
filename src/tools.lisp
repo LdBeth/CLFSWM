@@ -32,6 +32,7 @@
 	   :awhen
 	   :aif
            :defconfig :*config-var-table* :configvar-value :configvar-group :config-default-value
+           :config-all-groups
            :config-group->string
 	   :find-in-hash
 	   :nfuncall
@@ -146,6 +147,17 @@
 
 (defun config-group->string (group)
   (format nil "~:(~A group~)" (substitute #\Space #\- (string group))))
+
+
+;;; Configuration variables
+(defun config-all-groups ()
+  (let (all-groups)
+    (maphash (lambda (key val)
+               (declare (ignore key))
+               (pushnew (configvar-group val) all-groups :test #'equal))
+             *config-var-table*)
+    all-groups))
+
 
 
 

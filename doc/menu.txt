@@ -27,6 +27,41 @@ d: Show the current time and date
 p: Show current processes sorted by CPU usage
 m: Show current processes sorted by memory usage
 v: Show the current CLFSWM version
+F2: < Music Player Daemon (MPD) menu >
+x: < XMMS menu >
+i: < CDPLAYER menu >
+
+Mpd-Menu
+i: Show MPD informations
+p: Play the previous song in the current playlist
+n: Play the next song in the current playlist
+t: Toggles Play/Pause, plays if stopped
+y: Start playing
+k: Stop the currently playing playlists
+x: Seeks to +5%
+w: Seeks to -5%
+l: Show the current MPD playlist
+s: Start sonata
+g: Start gmpc
+
+Xmms-Menu
+r: Lanch XMMS
+s: Show the current xmms status
+l: Show the current xmms playlist
+n: Play the next XMMS track
+p: Play the previous XMMS track
+e: open xmms "Load file(s)" dialog window.
+
+Cdplayer-Menu
+y: Start playing CD
+k: Stop playing CD
+t: Toggle pause
+s: Show the current CD status
+l: Show the current CD playlist
+n: Play the next CD track
+p: Play the previous CD track
+e: Eject CD
+c: Close CD
 
 Standard-Menu
 a: < TEXTEDITOR >
@@ -218,16 +253,18 @@ m: Frogatto - Old-school 2D platformer
 n: gbrainy - Play games that challenge your logic, verbal, calculation and memory abilities
 o: GGoban - Play go and review game records
 p: glChess
-q: Hedgewars - Worms style game
-r: KGoldrunner - A game of action and puzzle-solving
-s: AMOR
-t: Blinken - A memory enhancement game
-u: Bomber
-v: Bovo
-w: Granatier
-x: Kanagram - KDE Letter Order Game
-y: Kapman - Eat pills escaping ghosts
-z: KAtomic
+q: GLTron - Lightcycle game with a nice 3D perspective.
+r: Hedgewars - Worms style game
+s: Hex-a-Hop - Hexagonal Tile-based Puzzle Game
+t: KGoldrunner - A game of action and puzzle-solving
+u: AMOR
+v: Blinken - A memory enhancement game
+w: Bomber
+x: Bovo
+y: Granatier
+z: Kanagram - KDE Letter Order Game
+|: Kapman - Eat pills escaping ghosts
+|: KAtomic
 |: Naval Battle
 |: KBlackBox
 |: KBlocks
@@ -275,6 +312,8 @@ z: KAtomic
 |: OpenTTD
 |: Pacdefence - Tower defence game.
 |: pouetChess - Play a game of chess, either against another player or against the AI
+|: Racer - Choose your car and race
+|: Racer - Choose your car and race
 |: SolarWolf
 |: Spring - An open source RTS with similar gameplay to TA
 |: SuperTux 2 - Play a classic 2D platform game
@@ -286,25 +325,25 @@ z: KAtomic
 |: XSpaceWarp - Live long and prosper!
 
 Graphics
-a: LibreOffice Draw
-b: Image Viewer
-c: Document Viewer - View multi-page documents
-d: Gcolor2 - Choose colours from palette or screen
-e: Geeqie - View and manage images
-f: PostScript Viewer - View PostScript files
-g: GNU Image Manipulation Program - Create images and edit photographs
-h: Image Viewer
-i: GQview - View and manage images
+a: Image Viewer
+b: Document Viewer - View multi-page documents
+c: Gcolor2 - Choose colours from palette or screen
+d: Geeqie - View and manage images
+e: PostScript Viewer - View PostScript files
+f: GNU Image Manipulation Program - Create images and edit photographs
+g: Image Viewer
+h: GQview - View and manage images
+i: gThumb - View and organize your images
 j: gThumb - View and organize your images
-k: gThumb - View and organize your images
-l: GV
-m: Inkscape - Create and edit Scalable Vector Graphics images
-n: digiKam
-o: Gwenview - A simple image viewer
-p: KColorChooser
-q: KolourPaint
-r: KRuler
-s: KSnapshot
+k: GV
+l: Inkscape - Create and edit Scalable Vector Graphics images
+m: digiKam
+n: Gwenview - A simple image viewer
+o: KColorChooser
+p: KolourPaint
+q: KRuler
+r: KSnapshot
+s: Okular
 t: Okular
 u: Okular
 v: Okular
@@ -312,7 +351,6 @@ w: Okular
 x: Okular
 y: Okular
 z: Okular
-|: Okular
 |: Okular
 |: Okular
 |: Okular
@@ -378,36 +416,37 @@ z: KNetAttach
 |: Zenmap
 
 Office
-a: AbiWord
-b: LibreOffice Base
-c: LibreOffice Calc
-d: ePDFViewer - Lightweight PDF document viewer
-e: Evolution - Manage your email, contacts and schedule
-f: FreeMind
-g: Orage Globaltime - Show clocks from different countries
-h: Gnumeric - Calculation, Analysis, and Visualization of Information
-i: GV
-j: LibreOffice Impress
-k: Kontact
-l: KAddressBook
-m: KOrganizer - Calendar and Scheduling Program
-n: KTimeTracker
-o: KWord - Write text documents
-p: Lokalize
-q: Okular
-r: LibreOffice 3.3 Math
-s: LibreOffice 3.3 Printer Administration
-t: LibreOffice 3.3 
-u: LibreOffice 3.3 Writer
-v: Lyx - Latex WYSIWYM Editor
-w: LibreOffice Extension Manager
-x: OOo4Kids 1.1 Calc
-y: OOo4Kids 1.1 Draw
-z: OOo4Kids 1.1 Impress
-|: OOo4Kids 1.1 Math
-|: OOo4Kids 1.1
-|: OOo4Kids 1.1 Printer Administration
-|: OOo4Kids 1.1 Writer
+a: LibreOffice 3.3 Base
+b: LibreOffice 3.3 Calc
+c: LibreOffice 3.3 Draw
+d: LibreOffice 3.3 Impress
+e: LibreOffice 3.3 Math
+f: LibreOffice 3.3 Printer Administration
+g: LibreOffice 3.3 
+h: LibreOffice 3.3 Writer
+i: AbiWord
+j: ePDFViewer - Lightweight PDF document viewer
+k: Evolution - Manage your email, contacts and schedule
+l: FreeMind
+m: Orage Globaltime - Show clocks from different countries
+n: Gnumeric - Calculation, Analysis, and Visualization of Information
+o: GV
+p: Kontact
+q: KAddressBook
+r: KOrganizer - Calendar and Scheduling Program
+s: KTimeTracker
+t: KWord - Write text documents
+u: Lokalize
+v: Okular
+w: Lyx - Latex WYSIWYM Editor
+x: LibreOffice Extension Manager
+y: OOo4Kids 1.2 Calc
+z: OOo4Kids 1.2 Draw
+|: OOo4Kids 1.2 Impress
+|: OOo4Kids 1.2 Math
+|: OOo4Kids 1.2
+|: OOo4Kids 1.2 Printer Administration
+|: OOo4Kids 1.2 Writer
 |: LibreOffice Quickstarter
 |: LibreOffice
 |: Orage Calendar - Desktop calendar
@@ -910,6 +949,8 @@ f: Open the next window in the current frame and leave the focus on the current 
 g: Open the next window in a named frame
 h: Open the next window in a numbered frame
 i: Open the window in this frame if it match absorb-nw-test
+z: Open the window in the UZBL frame if it match uzbl absorb-nw-test
+s: Open the window in the Surf frame if it match surf absorb-nw-test
 
 Frame-Movement-Menu
 p: < Frame pack menu >
@@ -1027,22 +1068,37 @@ l: Run LXDE
 p: Prompt for an other window manager
 
 Configuration-Menu
-a: < Notify Window Group >
-b: < Menu Group >
-c: < Expose Mode Group >
-d: < Circulate Mode Group >
-e: < Info Mode Group >
-f: < Query String Group >
-g: < Identify Key Group >
-h: < Second Mode Group >
-i: < Frame Colors Group >
-j: < Corner Group >
-k: < Placement Group >
-l: < Hook Group >
-m: < Main Mode Group >
-n: < Miscellaneous Group >
+a: < Volume Mode Group >
+b: < Gimp Layout Group >
+c: < Notify Window Group >
+d: < Menu Group >
+e: < Expose Mode Group >
+f: < Circulate Mode Group >
+g: < Info Mode Group >
+h: < Query String Group >
+i: < Identify Key Group >
+j: < Second Mode Group >
+k: < Frame Colors Group >
+l: < Corner Group >
+m: < Placement Group >
+n: < Hook Group >
+o: < Main Mode Group >
+p: < Miscellaneous Group >
 F2: Save all configuration variables in clfswmrc
 F3: Reset all configuration variables to there default values
+
+Conf-Volume-Mode
+a: Configure VOLUME-EXTERNAL-MIXER-CMD
+b: Configure VOLUME-TEXT-LIMIT
+c: Configure VOLUME-HEIGHT
+d: Configure VOLUME-WIDTH
+e: Configure VOLUME-BORDER
+f: Configure VOLUME-FOREGROUND
+g: Configure VOLUME-BACKGROUND
+h: Configure VOLUME-FONT-STRING
+
+Conf-Gimp-Layout
+a: Configure GIMP-LAYOUT-NOTIFY-WINDOW-DELAY
 
 Conf-Notify-Window
 a: Configure NOTIFY-WINDOW-DELAY
@@ -1131,13 +1187,14 @@ i: Configure CORNER-MAIN-MODE-LEFT-BUTTON
 j: Configure CORNER-SIZE
 
 Conf-Placement
-a: Configure NOTIFY-WINDOW-PLACEMENT
-b: Configure EXPOSE-MODE-PLACEMENT
-c: Configure CIRCULATE-MODE-PLACEMENT
-d: Configure QUERY-MODE-PLACEMENT
-e: Configure INFO-MODE-PLACEMENT
-f: Configure SECOND-MODE-PLACEMENT
-g: Configure BANISH-POINTER-PLACEMENT
+a: Configure VOLUME-MODE-PLACEMENT
+b: Configure NOTIFY-WINDOW-PLACEMENT
+c: Configure EXPOSE-MODE-PLACEMENT
+d: Configure CIRCULATE-MODE-PLACEMENT
+e: Configure QUERY-MODE-PLACEMENT
+f: Configure INFO-MODE-PLACEMENT
+g: Configure SECOND-MODE-PLACEMENT
+h: Configure BANISH-POINTER-PLACEMENT
 
 Conf-Hook
 a: Configure DEFAULT-NW-HOOK
@@ -1173,6 +1230,14 @@ Clfswm-Menu
 r: Reset clfswm
 l: Reload clfswm
 x: Exit clfswm
+Pause: < Suspend/Reboot/Halt menu >
+
+Reboot-Halt-Menu
+-: Do nothing
+s: Suspend the computer to RAM
+d: Suspend the computer to DISK
+r: Reboot the computer
+h: Halt the computer
 
 
 This documentation was produced with the CLFSWM auto-doc functions. To reproduce it, use the produce-menu-doc-in-file or

@@ -535,15 +535,10 @@ Pass the :no-producing-doc symbol to remove the producing doc"
 
 (defun show-config-variable ()
   "Show all configurable variables"
-  (let ((all-groups nil)
-	(result nil))
-    (maphash (lambda (key val)
-               (declare (ignore key))
-               (pushnew (configvar-group val) all-groups :test #'equal))
-             *config-var-table*)
+  (let ((result nil))
     (labels ((rec ()
 	       (setf result nil)
-	       (info-mode-menu (loop :for group :in all-groups
+	       (info-mode-menu (loop :for group :in (config-all-groups)
 				  :for i :from 0
 				  :collect (list (number->char i)
 						 (let ((group group))
@@ -554,7 +549,7 @@ Pass the :no-producing-doc symbol to remove the producing doc"
 		 (info-mode (configuration-variable-colorize-line
 			     (split-string (append-newline-space
 					    (with-output-to-string (stream)
-					      (produce-configuration-variables stream result)))
+					      (produce-configuration-variables-doc stream result t nil)))
 					   #\Newline)))
 		 (rec))))
       (rec))))
