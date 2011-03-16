@@ -1,3 +1,8 @@
+2011-03-16  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-layout.lisp (set-gimp-layout): Display a notify
+	window with the help on the GIMP layout.
+
 2011-03-12  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/menu-def.lisp: Menu update to prevent cursor keys clash.

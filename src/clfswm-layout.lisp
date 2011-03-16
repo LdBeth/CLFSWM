@@ -700,6 +700,11 @@
 			    ("c" clear-main-window-list)))
 
 
+;;; GIMP layout specifics functions
+;;;
+(defconfig *gimp-layout-notify-window-delay* 30 'gimp-layout
+           "Time to display the GIMP layout notify window help")
+
 
 (defun select-next/previous-child-no-main-window (fun-rotate)
   "Select the next/previous child - Skip windows in main window list"
@@ -738,24 +743,43 @@ Or do actions on corners - Skip windows in main window list"
 
 
 
-(defun set-gimp-layout ()
-  "The GIMP Layout"
-  (when (frame-p *current-child*)
-    ;; Note: There is no need to ungrab/grab keys because this
-    ;; is done when leaving the second mode.
-    (define-main-key ("F8" :mod-1) 'add-in-main-window-list)
-    (define-main-key ("F9" :mod-1) 'remove-in-main-window-list)
-    (define-main-key ("F10" :mod-1) 'clear-main-window-list)
-    (define-main-key ("Tab" :mod-1) 'select-next-child-no-main-window)
-    (define-main-key ("Tab" :mod-1 :shift) 'select-previous-child-no-main-window)
-    (define-main-mouse (1) 'mouse-click-to-focus-and-move-no-main-window)
-    (setf (frame-data-slot *current-child* :focus-policy-save)
-	  (frame-focus-policy *current-child*))
-    (setf (frame-focus-policy *current-child*) :sloppy)
-    (setf (frame-data-slot *current-child* :layout-save)
-	  (frame-layout *current-child*))
-    ;; Set the default layout and leave the second mode.
-    (set-main-window-right-layout)))
+(let ((help-text-list `(("-=- Help on The GIMP layout -=-" ,*info-color-title*)
+                        ""
+                        "The GIMP layout is a main-window-layout with a sloppy focus policy."
+                        "You can change the main windows direction with the layout menu."
+                        ""
+                        "Press Alt+F8 to add a window to the main windows list."
+                        "Press Alt+F9 to remove a window from the main windows list."
+                        "Press Alt+F10 to clear the main windows list."
+                        ""
+                        "You can select a main window with the right mouse button."
+                        ""
+                        "Use the layout menu to restore the previous layout and keybinding.")))
+  (defun help-on-gimp-layout ()
+    "Help on the GIMP layout"
+    (info-mode help-text-list)
+    (leave-second-mode))
+
+  (defun set-gimp-layout ()
+    "The GIMP Layout"
+    (when (frame-p *current-child*)
+      ;; Note: There is no need to ungrab/grab keys because this
+      ;; is done when leaving the second mode.
+      (define-main-key ("F8" :mod-1) 'add-in-main-window-list)
+      (define-main-key ("F9" :mod-1) 'remove-in-main-window-list)
+      (define-main-key ("F10" :mod-1) 'clear-main-window-list)
+      (define-main-key ("Tab" :mod-1) 'select-next-child-no-main-window)
+      (define-main-key ("Tab" :mod-1 :shift) 'select-previous-child-no-main-window)
+      (define-main-mouse (1) 'mouse-click-to-focus-and-move-no-main-window)
+      (setf (frame-data-slot *current-child* :focus-policy-save)
+            (frame-focus-policy *current-child*))
+      (setf (frame-focus-policy *current-child*) :sloppy)
+      (setf (frame-data-slot *current-child* :layout-save)
+            (frame-layout *current-child*))
+      (open-notify-window help-text-list)
+      (add-timer *gimp-layout-notify-window-delay* #'close-notify-window)
+      ;; Set the default layout and leave the second mode.
+      (set-main-window-right-layout))))
 
 
 (defun set-previous-layout ()
@@ -773,21 +797,6 @@ Or do actions on corners - Skip windows in main window list"
   (leave-second-mode))
 
 
-(defun help-on-gimp-layout ()
-  "Help on the GIMP layout"
-  (info-mode `(("-=- Help on The GIMP layout -=-" ,*info-color-title*)
-	       ""
-	       "The GIMP layout is a main-window-layout with a sloppy focus policy."
-	       "You can change the main windows direction with the layout menu."
-	       ""
-	       "Press Alt+F8 to add a window to the main windows list."
-	       "Press Alt+F9 to remove a window from the main windows list."
-	       "Press Alt+F10 to clear the main windows list."
-	       ""
-	       "You can select a main window with the right mouse button."
-	       ""
-	       "Use the layout menu to restore the previous layout and keybinding."))
-  (leave-second-mode))
 
 
 (register-layout-sub-menu 'frame-gimp-layout-menu "The GIMP layout menu"
