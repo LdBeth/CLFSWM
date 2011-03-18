@@ -306,33 +306,33 @@ or<br> CLFSWM> (produce-all-docs)"))))
 
 
 ;;; Configuration variables autodoc functions
-(defun produce-configuration-variables-doc (stream &optional (group t) (title t) (footnote t))
+(defun produce-conf-var-doc (stream &optional (group t) (title t) (footnote t))
   (when title
     (format stream "    * CLFSWM Configuration variables *~%")
     (format stream "      ------------------------------~2%"))
-  (format stream "  <= ~A =>~2%" (if (equal group t) ""
+  (format stream "<= ~A =>~2%" (if (equal group t) ""
                                      (config-group->string group)))
   (maphash (lambda (key val)
              (when (or (equal group t)
                        (equal group (configvar-group val)))
-               (format stream "~A = ~S~%  ~A~%" key (symbol-value key)
+               (format stream "  ~A = ~S~%    ~A~%" key (symbol-value key)
                        (documentation key 'variable))))
            *config-var-table*)
   (when footnote
     (format stream "~2& Those variables can be changed in clfswm.
 Maybe you'll need to restart clfswm to take care of new values")
     (format stream "~2%This documentation was produced with the CLFSWM auto-doc functions.
-To reproduce it, use the produce-configuration-variables-doc-in-file or
+To reproduce it, use the produce-conf-var-doc-in-file or
 the produce-all-docs function from the Lisp REPL.
 
 Something like this:
 LISP> (in-package :clfswm)
-CLFSWM> (produce-configuration-variables-doc-in-file \"my-variables.txt\")
+CLFSWM> (produce-conf-var-doc-in-file \"my-variables.txt\")
 or
 CLFSWM> (produce-all-docs)~2%"))
   (format stream "~2%"))
 
-(defun produce-configuration-variables-doc-in-file (filename)
+(defun produce-conf-var-doc-in-file (filename)
   (format t "Producing text config variables documentation in ~S " filename)
   (with-open-file (stream filename :direction :output
 			  :if-exists :supersede :if-does-not-exist :create)
@@ -340,10 +340,65 @@ CLFSWM> (produce-all-docs)~2%"))
            (all-groups (config-all-groups))
            (last-group (first (last all-groups))))
       (dolist (group all-groups)
-        (produce-configuration-variables-doc stream group title
+        (produce-conf-var-doc stream group title
                                              (equal group last-group))
         (setf title nil))))
   (format t " done~%"))
+
+
+(defun produce-conf-var-doc-html (&optional (stream t))
+  (let ((all-groups (config-all-groups)))
+    (labels ((conf-var-group ()
+               `((h3 ("a name='TOP'" "Configuration variables groups:"))
+                 (ul ,@(loop for group in all-groups
+                          collect `(li (,(format nil "a href='#~A'" group) ,(config-group->string group)))))))
+             (colorize-line (group list)
+               (let ((acc nil))
+                 (dolist (line list)
+                   (cond ((search "* =" line)
+                          (let ((pos (position #\= line)))
+                            (push `("font color='#FF0000'" ,(format nil "&nbsp;&nbsp;~(~A~)" (subseq line 0 (1- pos)))) acc)
+                            (push `("font color='#0000FF'" ,(format nil "~A<br>" (subseq line (1- pos)))) acc)))
+                         ((search "<=" line)
+                          (push `(p (,(format nil "a name='~A' href='#TOP'" group) ,(escape-html line))) acc))
+                         ((not (string= line " "))
+                          (push (format nil "&nbsp; &nbsp; &nbsp; &nbsp; ~A<br>~%" line) acc))))
+                 (nreverse acc)))
+             (conf-var (group)
+               (colorize-line group
+                              (split-string (append-newline-space
+                                             (with-output-to-string (stream)
+                                               (produce-conf-var-doc stream group nil nil)))
+                                            #\Newline)))
+             (all-conf-var ()
+               (let ((acc nil))
+                 (dolist (group all-groups)
+                   (setf acc (nconc acc (conf-var group))))
+                 acc)))
+      (produce-html `(html
+                      (head
+                       (title "CLFSWM - Configuration variables"))
+                      (body
+                       (h1 ("a name='Top'" "CLFSWM - Configuration variables"))
+                       (p "Here are the variables you can configure in CLFSWM with the configuration file or the configuration menu:")
+                       ,@(conf-var-group)
+                       ,@(all-conf-var)
+                       (p (small "This documentation was produced with the CLFSWM auto-doc functions. To reproduce it, use the produce-conf-var-doc-html-in-file or
+the produce-all-docs function from the Lisp REPL."))
+                       (p (small "Something like this:<br>
+LISP> (in-package :clfswm)<br>
+CLFSWM> (produce-conf-var-doc-html-in-file \"my-variables.html\")<br>
+or<br> CLFSWM> (produce-all-docs)"))))
+                    0 stream))))
+
+
+(defun produce-conf-var-doc-html-in-file (filename)
+  (format t "Producing html configuration variables documentation in ~S " filename)
+  (with-open-file (stream filename :direction :output
+			  :if-exists :supersede :if-does-not-exist :create)
+    (produce-conf-var-doc-html stream))
+  (format t " done~%"))
+
 
 
 
@@ -359,7 +414,8 @@ CLFSWM> (produce-all-docs)~2%"))
   (produce-menu-doc-html-in-file "doc/menu.html")
   (produce-corner-doc-in-file "doc/corner.txt")
   (produce-corner-doc-html-in-file "doc/corner.html")
-  (produce-configuration-variables-doc-in-file "doc/variables.txt"))
+  (produce-conf-var-doc-in-file "doc/variables.txt")
+  (produce-conf-var-doc-html-in-file "doc/variables.html"))
 
 
 

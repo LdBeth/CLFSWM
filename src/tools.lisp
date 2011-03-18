@@ -156,7 +156,8 @@
                (declare (ignore key))
                (pushnew (configvar-group val) all-groups :test #'equal))
              *config-var-table*)
-    all-groups))
+    (sort all-groups (lambda (x y)
+                       (string< (string x) (string y))))))
 
 
 

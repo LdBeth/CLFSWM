@@ -30,6 +30,7 @@
 (defpackage :my-html
   (:use :common-lisp :tools)
   (:export :insert-html-doctype
+           :escape-html
 	   :produce-html
 	   :with-html
 	   :produce-html-string))
@@ -40,6 +41,18 @@
 (defun insert-html-doctype ()
   "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"
      \"http://www.w3.org/TR/html4/transitional.dtd\">")
+
+
+(defun escape-html (string &optional (replace '((">" "&gt;") ("<" "&lt;"))))
+  (if replace
+      (aif (search (caar replace) string)
+           (escape-html (concatenate 'string (subseq string 0 it)
+                                     (cadar replace)
+                                     (subseq string (+ it (length (caar replace)))))
+                replace)
+           (escape-html string (cdr replace)))
+      string))
+
 
 
 

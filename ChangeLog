@@ -1,3 +1,12 @@
+2011-03-18  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-autodoc.lisp (produce-conf-var-doc-html): Produce a
+	documentation for all configurable variables in CLFSWM -
+	HTML version.
+
+	* src/clfswm-internal.lisp (leave-frame): Hide all children except
+	the current window.
+
 2011-03-16  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-autodoc.lisp (produce-all-docs): Produce a

@@ -505,6 +505,11 @@
       (when (xlib:window-p window)
 	,@body)))
 
+(defun get-first-window ()
+  (typecase *current-child*
+    (xlib:window  *current-child*)
+    (frame (first (frame-child *current-child*)))))
+
 
 
 
@@ -782,16 +787,17 @@ Display all children from root frame and hide those not in *current-root*"
 
 
 
-(defun hide-all-children (root)
+(defun hide-all-children (root &optional except)
   "Hide all root children"
-  (when (frame-p root)
+  (when (and (frame-p root) (not (child-equal-p root except)))
     (dolist (child (frame-child root))
-      (hide-all child))))
+      (hide-all child except))))
 
-(defun hide-all (root)
+(defun hide-all (root &optional except)
   "Hide root and all its children"
-  (hide-child root)
-  (hide-all-children root))
+  (unless (child-equal-p root except)
+    (hide-child root))
+  (hide-all-children root except))
 
 
 
@@ -879,11 +885,12 @@ For window: set current child to window or its parent according to window-parent
 
 (defun leave-frame ()
   "Leave the selected frame - ie make its parent the root frame"
-  (hide-all *current-root*)
-  (awhen (find-parent-frame *current-root*)
-    (when (frame-p it)
-      (setf *current-root* it)))
-  (show-all-children))
+  (unless (child-equal-p *current-root* *root-frame*)
+    (hide-all *current-root* (get-first-window))
+    (awhen (find-parent-frame *current-root*)
+           (when (frame-p it)
+             (setf *current-root* it)))
+    (show-all-children)))
 
 
 ;;; Other actions (select-next-child, select-next-brother...) are in
