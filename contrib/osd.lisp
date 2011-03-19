@@ -75,7 +75,7 @@
   (let* ((modifiers (state->modifiers state))
 	 (keysym (keysym->keysym-name (xlib:keycode->keysym *display* code 0))))
     (when (frame-p *current-child*)
-      (push (list #'equal #'is-osd-window-p t) *never-managed-window-list*))
+      (push (list #'is-osd-window-p nil) *never-managed-window-list*))
     (raise-window *osd-window*)
     (rotatef (xlib:gcontext-foreground *osd-gc*) (xlib:gcontext-background *osd-gc*))
     (xlib:draw-rectangle *osd-window* *osd-gc*

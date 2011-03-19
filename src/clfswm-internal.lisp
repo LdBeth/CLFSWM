@@ -508,7 +508,8 @@
 (defun get-first-window ()
   (typecase *current-child*
     (xlib:window  *current-child*)
-    (frame (first (frame-child *current-child*)))))
+    (frame (or (first (frame-child *current-child*))
+               *current-child*))))
 
 
 
