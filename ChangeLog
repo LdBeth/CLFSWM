@@ -1,3 +1,8 @@
+2011-03-20  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-info.lisp (show-config-variable): call
+	produce-conf-var-doc.
+
 2011-03-18  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-autodoc.lisp (produce-conf-var-doc-html): Produce a

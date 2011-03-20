@@ -549,7 +549,7 @@ Pass the :no-producing-doc symbol to remove the producing doc"
 		 (info-mode (configuration-variable-colorize-line
 			     (split-string (append-newline-space
 					    (with-output-to-string (stream)
-					      (produce-configuration-variables-doc stream result t nil)))
+					      (produce-conf-var-doc stream result t nil)))
 					   #\Newline)))
 		 (rec))))
       (rec))))
