@@ -48,11 +48,11 @@
 ;;; Pixel -> Float conversion
 (defun x-px->fl (x parent)
   "Convert pixel X coordinate to float"
-  (/ (- x (frame-rx parent)) (frame-rw parent)))
+  (/ (- x (frame-rx parent) *border-size*) (frame-rw parent)))
 
 (defun y-px->fl (y parent)
   "Convert pixel Y coordinate to float"
-  (/ (- y (frame-ry parent)) (frame-rh parent)))
+  (/ (- y (frame-ry parent) *border-size*) (frame-rh parent)))
 
 (defun w-px->fl (w parent)
   "Convert pixel Width coordinate to float"

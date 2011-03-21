@@ -1,3 +1,8 @@
+2011-03-21  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (x-px->fl, y-px->fl): Takes care of
+	border size.
+
 2011-03-20  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-info.lisp (show-config-variable): call
