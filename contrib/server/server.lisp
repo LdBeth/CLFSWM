@@ -32,6 +32,9 @@
 ;;;  Server <-> Client:  All connections are crypted with new_key
 ;;; --------------------------------------------------------------------------
 
+(in-package :clfswm)
+
+(defparameter *server-port* 33333)
 
 (format t "Loading the clfswm server code... ")
 
@@ -46,9 +49,8 @@
 (use-package :crypt)
 
 (defstruct server-socket stream auth form key)
-
 (defparameter *server-socket* nil)
-(defparameter *server-port* 33333)
+
 (defparameter *server-allowed-host* '("127.0.0.1"))
 (defparameter *server-wait-timeout* 0.001d0)
 
@@ -59,6 +61,12 @@
 
 
 
+(defun server-show-prompt (sock)
+  ;;(send-to-client sock nil (format nil "~A> " (package-name *package*))))
+  (format (server-socket-stream sock) "~A~%"
+          (crypt (format nil"~A> " (package-name *package*)) (server-socket-key sock)))
+  (force-output (server-socket-stream sock)))
+
 
 (defun send-to-client (sock show-prompt-p &rest msg)
   (dolist (m (if (consp (car msg)) (car msg) msg))
@@ -67,9 +75,9 @@
   (when show-prompt-p
     (server-show-prompt sock)))
 
+;;(defun server-show-prompt (sock)
+;;  (send-to-client sock nil (format nil "~A> " (package-name *package*))))
 
-(defun server-show-prompt (sock)
-  (send-to-client sock nil (format nil "~A> " (package-name *package*))))
 
 
 (defun read-from-client (sock)

@@ -50,7 +50,7 @@
   #+ccl (ccl:quit))
 
 
-(defparameter *server-port* 33333)
+;;(defparameter *server-port* 33333)
 
 (defun print-output (sock &optional wait)
   (when (or wait (ignore-errors (listen sock)))
@@ -83,7 +83,7 @@
 	(parse-args sock (subseq args pos))))))
 
 
-(defun start-client (args &optional (url "127.0.0.1") (port *server-port*))
+(defun start-client (args &optional (url "127.0.0.1") (port clfswm::*server-port*))
   (load-new-key)
   (let* ((sock (port:open-socket url port))
 	 (key (string-trim '(#\Newline #\Space) (decrypt (read-line sock nil nil) *key*))))
