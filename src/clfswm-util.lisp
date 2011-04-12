@@ -1131,7 +1131,8 @@ For window: set current child to window or its parent according to window-parent
 	      *current-child* *current-root*)
 	(focus-all-children *current-child* *current-child*)
 	(show-all-children t))
-      (setf last-child current-child))))
+      (setf last-child current-child))
+    (leave-second-mode)))
 
 
 
