@@ -344,7 +344,6 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 	      (unless keyboard-grabbed-p
 		(xgrab-keyboard *root*))
 	      (wait-no-key-or-button-press)
-              (set-default-info-keys)
 	      (generic-mode 'info-mode 'exit-info-loop
 			    :loop-function (lambda ()
 					     (raise-window (info-window info)))
@@ -372,7 +371,8 @@ key is a character, a keycode or a keysym
 Separator is a string or a symbol (all but a list)
 Function can be a function or a list (function color) for colored output"
   (let ((info-list nil)
-	(action nil))
+	(action nil)
+        (old-info-keys (copy-hash-table *info-keys*)))
     (labels ((define-key (key function)
 	       (define-info-key-fun (list key)
 		   (lambda (&optional args)
@@ -394,10 +394,7 @@ Function can be a function or a list (function color) for colored output"
 		       (define-key key function)))))
 	  (t (push (list (format nil "-=- ~A -=-" item) *menu-color-comment*) info-list))))
       (let ((selected-item (info-mode (nreverse info-list) :width width :height height)))
-	(dolist (item item-list)
-	  (when (consp item)
-	    (let ((key (first item)))
-	      (undefine-info-key-fun (list key)))))
+        (setf *info-keys* old-info-keys)
 	(when selected-item
 	  (awhen (nth selected-item item-list)
 	    (when (consp it)

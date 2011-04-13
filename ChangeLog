@@ -1,3 +1,8 @@
+2011-04-14  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-menu.lisp (open-menu): Save info hash table keys
+	instead of deleting newly created keys.
+
 2011-03-21  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp (x-px->fl, y-px->fl): Takes care of

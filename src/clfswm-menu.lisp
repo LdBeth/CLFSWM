@@ -139,7 +139,8 @@
 
 (defun open-menu (&optional (menu *menu*) (parent nil))
   "Open the main menu"
-  (let ((action nil))
+  (let ((action nil)
+        (old-info-keys (copy-hash-table *info-keys*)))
     (labels ((populate-menu ()
 	       (let ((info-list nil))
 		 (dolist (item (menu-item menu))
@@ -159,8 +160,7 @@
 			     (leave-info-mode nil))))))
 		 (nreverse info-list))))
       (let ((selected-item (info-mode (populate-menu))))
-	(dolist (item (menu-item menu))
-	  (undefine-info-key-fun (list (menu-item-key item))))
+        (setf *info-keys* old-info-keys)
 	(when selected-item
 	  (awhen (nth selected-item (menu-item menu))
 	    (setf action (menu-item-value it)))))

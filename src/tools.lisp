@@ -35,6 +35,8 @@
            :config-all-groups
            :config-group->string
 	   :find-in-hash
+           :view-hash-table
+           :copy-hash-table
 	   :nfuncall
 	   :pfuncall
 	   :symbol-search
@@ -168,6 +170,19 @@
 	       (when (and (consp v) (funcall test (first v) val))
 		 (return-from find-in-hash (values k v))))
 	   hashtable))
+
+
+(defun view-hash-table (title hashtable)
+  (maphash (lambda (k v)
+             (format t "[~A] ~A ~A~%" title k v))
+           hashtable))
+
+(defun copy-hash-table (hashtable)
+  (let ((rethash (make-hash-table :test (hash-table-test hashtable))))
+    (maphash (lambda (k v)
+               (setf (gethash k rethash) v))
+             hashtable)
+    rethash))
 
 
 (defun nfuncall (function)
