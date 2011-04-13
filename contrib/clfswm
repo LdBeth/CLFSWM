@@ -35,6 +35,7 @@
 no_start=no
 
 lisp=clisp   # +config+
+lisp_bin=''   # +config+
 lisp_opt=''   # +config+
 dump_path="$XDG_CACHE_HOME/clfswm/"   # +config+
 clfswm_asd_path="$(pwd)"   # +config+
@@ -50,6 +51,7 @@ usage() {
   -f, --force              force image dump
   --rebuild                same as -f, --force
   -l, --with-lisp          use <lisp> as the common lisp implementation [$lisp]
+  -b, --lisp-bin            use <bin> as the common lisp program [$lisp_bin] (default: same as with-lisp type)
   -o, --lisp-opt           use <opt> as lisp option [$lisp_opt]
   -d, --dump-path          path to the dump directory [$dump_path]
   --with-clfswm            path to clfswm.asd file [$clfswm_asd_path]
@@ -65,14 +67,14 @@ die() {
 
 build_clisp ()
 {
-    clisp $lisp_opt -m 8MB -E ISO-8859-1 -q -i "$asdf_path"/asdf.lisp -x "(load \"$clfswm_asd_path/clfswm.asd\")
+    $lisp_bin $lisp_opt -m 8MB -E ISO-8859-1 -q -i "$asdf_path"/asdf.lisp -x "(load \"$clfswm_asd_path/clfswm.asd\")
                 (asdf:oos 'asdf:load-op :clfswm) \
        		(EXT:SAVEINITMEM \"$dump_image\" :INIT-FUNCTION (lambda () (clfswm:main) (quit)) :EXECUTABLE t :norc t)"
 }
 
 build_sbcl()
 {
-   sbcl $lisp_opt --disable-debugger --eval "(require :asdf)" \
+   $lisp_bin $lisp_opt --disable-debugger --eval "(require :asdf)" \
        --eval "(require :sb-posix)" \
        --eval "(load \"$clfswm_asd_path/clfswm.asd\")" \
        --eval "(require :clfswm)" \
@@ -81,16 +83,16 @@ build_sbcl()
 
 build_cmucl()
 {
-   cmucl $lisp_opt -eval "(load \"$asdf_path/asdf.lisp\")" \
+   $lisp_bin $lisp_opt -eval "(require :clx)" \
+       -eval "(load \"$asdf_path/asdf.lisp\")" \
        -eval "(load \"$clfswm_asd_path/clfswm.asd\")" \
-       -eval "(require :clx)" \
        -eval "(asdf:oos 'asdf:load-op :clfswm)" \
        -eval "(save-lisp \"$dump_image\" :init-function (lambda () (clfswm:main) (quit)))"
 }
 
 build_ccl()
 {
-    ccl $lisp_opt --eval "(require :asdf)" \
+    $lisp_bin $lisp_opt --eval "(require :asdf)" \
 	--eval "(load \"$clfswm_asd_path/clfswm.asd\")" \
 	--eval "(asdf:oos 'asdf:load-op :clfswm)" \
 	--eval "(save-application \"$dump_image\" :toplevel-function (lambda () (clfswm:main) (quit)))"
@@ -98,7 +100,7 @@ build_ccl()
 
 build_ecl()
 {
-    ecl $lisp_opt -eval "(require :asdf)" \
+    $lisp_bin $lisp_opt -eval "(require :asdf)" \
 	-eval "(load \"$clfswm_asd_path/clfswm.asd\")" \
 	-eval "(asdf:make-build :clfswm :type :program :monolithic t :move-here \".\" :prologue-code '(progn (require :asdf) (require :clx)))" \
 	-eval "(ext:quit 0)"
@@ -132,6 +134,9 @@ do
 		    lisp="$1" ;;
 	    esac
 	    ;;
+        -b|--lisp-bin)
+            shift
+            lisp_bin="$1" ;;
 	-o|--lisp-opt)
 	    shift
 	    lisp_opt="$1" ;;
@@ -146,6 +151,9 @@ do
     shift
 done
 
+if [ "x$lisp_bin" == "x" ]; then
+    lisp_bin=$lisp
+fi
 
 dump_image="$dump_path/clfswm-$(cksum $(type -p $lisp) | cut -d ' ' -f 1).core"
 
@@ -202,9 +210,9 @@ then
     echo "Arguments: $* and $ARGS"
     case $lisp in
 	clisp ) "$dump_image" -- $ARGS ;;
-	sbcl ) exec sbcl --core "$dump_image" $ARGS ;;
-	cmucl ) exec cmucl -core "$dump_image" $ARGS ;;
-	ccl ) exec ccl -I "$dump_image" -- $ARGS ;;
+	sbcl ) exec $lisp_bin --core "$dump_image" $ARGS ;;
+	cmucl ) exec $lisp_bin -core "$dump_image" $ARGS ;;
+	ccl ) exec $lisp_bin -I "$dump_image" -- $ARGS ;;
 	ecl ) "$dump_image" -eval "(progn (clfswm:main) (ext:quit 0))" $ARGS ;;
 	*) echo "..." ;;
     esac

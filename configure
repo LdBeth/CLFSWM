@@ -5,6 +5,7 @@ CONFIGURE_VERSION=0.2
 PREFIX="/usr/local"
 lisp=clisp
 lisp_opt=''
+lisp_bin=''
 dump_path="\$XDG_CACHE_HOME/clfswm/"
 clfswm_asd_path="$PREFIX/lib/clfswm"
 asdf_path="$PREFIX/lib/clfswm/contrib"
@@ -20,7 +21,8 @@ Configuration:
   -h, --help                display this help and exit
   -V, --version             display version information and exit
   --prefix=PREFIX           install architecture-independent files in PREFIX [/usr/local]
-  -l, --with-lisp           use <lisp> as the common lisp implementation [$lisp]
+  -l, --with-lisp           use <lisp> as the common lisp implementation type [$lisp]
+  -b, --lisp-bin            use <bin> as the common lisp program [$lisp_bin] (default: same as with-lisp type)
   -o, --lisp-opt            use <opt> as lisp option [$lisp_opt]
   -d, --dump-path           path to the dump directory [$dump_path]
   --with-clfswm             path to clfswm.asd file [$clfswm_asd_path]
@@ -29,7 +31,7 @@ Configuration:
 By default, 'make install' will install all the files in
 '/usr/local/bin', '/usr/local/lib' etc.  You can specify
 an installation prefix other than '/usr/local' using '--prefix',
-for instance '--prefix=\$HOME/clfswm'."
+for instance '--prefix \$HOME/clfswm'."
     exit 0
 }
 
@@ -68,6 +70,9 @@ do
 		    lisp="$1" ;;
 	    esac
 	    ;;
+        -b|--lisp-bin)
+            shift
+            lisp_bin="$1" ;;
 	-o|--lisp-opt)
 	    shift
 	    lisp_opt="$1" ;;
@@ -94,6 +99,7 @@ fi
 
 echo "  prefix=$PREFIX
   with-lisp=$lisp
+  lisp-bin=$lisp_bin
   lisp-opt=$lisp_opt
   dump-path=$dump_path
   with-clfswm=$clfswm_asd_path
@@ -102,6 +108,7 @@ echo "  prefix=$PREFIX
 
 
 sed -e "s?^lisp=.*# +config+?lisp=\"$lisp\"   # +config+?g" \
+    -e "s?^lisp_bin=.*# +config+?lisp_bin=\"$lisp_bin\"   # +config+?g" \
     -e "s?^lisp_opt=.*# +config+?lisp_opt=\"$lisp_opt\"   # +config+?g" \
     -e "s?^dump_path=.*# +config+?dump_path=\"$dump_path\"   # +config+?g" \
     -e "s?^clfswm_asd_path=.*# +config+?clfswm_asd_path=\"$clfswm_asd_path\"   # +config+?g" \
