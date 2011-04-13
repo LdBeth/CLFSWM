@@ -315,6 +315,7 @@
     (unless grab-keyboard-p
       (ungrab-main-keys)
       (xgrab-keyboard *root*))
+    (set-default-query-keys)
     (generic-mode 'query-mode 'exit-query-loop
 		  :enter-function #'query-enter-function
 		  :loop-function #'query-loop-function

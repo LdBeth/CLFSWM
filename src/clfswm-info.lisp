@@ -344,6 +344,7 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 	      (unless keyboard-grabbed-p
 		(xgrab-keyboard *root*))
 	      (wait-no-key-or-button-press)
+              (set-default-info-keys)
 	      (generic-mode 'info-mode 'exit-info-loop
 			    :loop-function (lambda ()
 					     (raise-window (info-window info)))
