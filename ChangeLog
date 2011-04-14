@@ -1,5 +1,11 @@
 2011-04-14  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-util.lisp (with-movement-select-next-brother)
+	(with-movement-select-previous-brother)
+	(with-movement-select-next-child): Use a simple method (do not
+	enter in the circulate mode) to allow to circulate in all children
+	or brothers.
+
 	* src/clfswm-menu.lisp (open-menu): Save info hash table keys
 	instead of deleting newly created keys.
 

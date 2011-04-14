@@ -856,11 +856,11 @@ For window: set current child to window or its parent according to window-parent
 ;;; Children navigation
 (defun with-movement-select-next-brother ()
   "Select the next brother frame"
-  (with-movement (select-next-brother)))
+  (with-movement (select-next-brother-simple)))
 
 (defun with-movement-select-previous-brother ()
   "Select the previous brother frame"
-  (with-movement (select-previous-brother)))
+  (with-movement (select-previous-brother-simple)))
 
 (defun with-movement-select-next-level ()
   "Select the next level"
@@ -872,7 +872,7 @@ For window: set current child to window or its parent according to window-parent
 
 (defun with-movement-select-next-child ()
   "Select the next child"
-  (with-movement (select-next-child)))
+  (with-movement (select-next-child-simple)))
 
 
 

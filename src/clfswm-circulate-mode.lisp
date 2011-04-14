@@ -276,3 +276,33 @@
     (setf *circulate-orig* (frame-child *current-child*)
 	  *circulate-parent* nil)
     (circulate-mode :subchild-direction +1)))
+
+
+(defun select-next-child-simple ()
+  "Select the next child (do not enter in circulate mode)"
+  (when (frame-p *current-child*)
+    (with-slots (child) *current-child*
+      (setf child (rotate-list child)))
+    (show-all-children)))
+
+
+
+(defun reorder-brother-simple (reorder-fun)
+  (unless (child-equal-p *current-child* *current-root*)
+    (no-focus)
+    (select-current-frame nil)
+    (let ((parent-frame (find-parent-frame *current-child*)))
+      (when (frame-p parent-frame)
+        (with-slots (child) parent-frame
+          (setf child (funcall reorder-fun child)
+                *current-child* (frame-selected-child parent-frame))))
+      (show-all-children t))))
+
+
+(defun select-next-brother-simple ()
+  "Select the next brother frame (do not enter in circulate mode)"
+  (reorder-brother-simple #'rotate-list))
+
+(defun select-previous-brother-simple ()
+  "Select the previous brother frame (do not enter in circulate mode)"
+  (reorder-brother-simple #'anti-rotate-list))
