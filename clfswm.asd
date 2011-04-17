@@ -70,7 +70,7 @@
 			 (:file "clfswm-layout"
 				:depends-on ("package" "clfswm-internal" "clfswm-util" "clfswm-info" "menu-def"))
 			 (:file "clfswm-pack"
-				:depends-on ("clfswm" "clfswm-util" "clfswm-second-mode"))
+				:depends-on ("clfswm" "clfswm-util" "clfswm-second-mode" "clfswm-layout"))
 			 (:file "clfswm-nw-hooks"
 				:depends-on ("package" "clfswm-util" "clfswm-info" "clfswm-layout" "menu-def"))
 			 (:file "bindings"

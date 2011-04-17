@@ -53,6 +53,10 @@ A list of (list match-function handle-function)")
 (defconfig *hide-unmanaged-window* t nil
            "Hide or not unmanaged windows when a child is deselected.")
 
+(defconfig *snap-size* 0.02 nil
+           "Snap size when move or resize frame is constrained")
+
+
 ;;; CONFIG - Screen size
 (defun get-fullscreen-size ()
   "Return the size of root child (values rx ry rw rh)
@@ -67,7 +71,6 @@ You can tweak this to what you want"
 
 (defconfig  *corner-size* 3 'Corner
             "The size of the corner square")
-
 
 ;;; CONFIG: Corner actions - See in clfswm-corner.lisp for
 ;;;   allowed functions

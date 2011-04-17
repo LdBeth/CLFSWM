@@ -106,6 +106,20 @@
   (mouse-focus-move/resize-generic root-x root-y #'resize-frame t))
 
 
+(defun mouse-click-to-focus-and-move-window-constrained (window root-x root-y)
+  "Move (constrained by other frames) and focus the current child - Create a new frame on the root window"
+  (declare (ignore window))
+  (stop-button-event)
+  (mouse-focus-move/resize-generic root-x root-y #'move-frame-constrained t))
+
+
+(defun mouse-click-to-focus-and-resize-window-constrained (window root-x root-y)
+  "Resize and focus the current child - Create a new frame on the root window"
+  (declare (ignore window))
+  (stop-button-event)
+  (mouse-focus-move/resize-generic root-x root-y #'resize-frame-constrained t))
+
+
 
 (defun set-default-main-mouse ()
   (define-main-mouse (1) 'mouse-click-to-focus-and-move)
@@ -113,6 +127,8 @@
   (define-main-mouse (3) 'mouse-click-to-focus-and-resize)
   (define-main-mouse (1 :mod-1) 'mouse-click-to-focus-and-move-window)
   (define-main-mouse (3 :mod-1) 'mouse-click-to-focus-and-resize-window)
+  (define-main-mouse (1 :mod-1 :shift) 'mouse-click-to-focus-and-move-window-constrained)
+  (define-main-mouse (3 :mod-1 :shift) 'mouse-click-to-focus-and-resize-window-constrained)
   (define-main-mouse (1 :control :mod-1) 'mouse-move-child-over-frame)
   (define-main-mouse (4) 'mouse-select-next-level)
   (define-main-mouse (5) 'mouse-select-previous-level)

@@ -25,6 +25,7 @@
 
 (in-package :clfswm)
 
+
 ;;;,-----
 ;;;| Edges functions
 ;;;`-----
@@ -208,3 +209,87 @@
   "Create a new frame for each window in frame"
   (explode-frame *current-child*)
   (leave-second-mode))
+
+
+
+;;;;;,-----
+;;;;;| Constrained move/resize frames
+;;;;;`-----
+(defun move-frame-constrained (frame parent orig-x orig-y)
+  (when (and frame parent (not (child-equal-p frame *current-root*)))
+    (hide-all-children frame)
+    (with-slots (window) frame
+      (let ((lx orig-x)
+            (ly orig-y))
+        (move-window window orig-x orig-y
+                     (lambda ()
+                       (let ((move-x t)
+                             (move-y t))
+                         (multiple-value-bind (x y) (xlib:query-pointer *root*)
+                           (setf (frame-x frame) (x-px->fl (xlib:drawable-x window) parent)
+                                 (frame-y frame) (y-px->fl (xlib:drawable-y window) parent))
+                           (when (> x lx)
+                             (let ((x-found (find-edge-right frame parent)))
+                               (when (< (abs (-  x-found (frame-x2 frame))) *snap-size*)
+                                 (setf (frame-x frame) (- x-found (frame-w frame))
+                                       (xlib:drawable-x window) (adj-border-xy (x-fl->px (frame-x frame) parent) frame)
+                                       move-x nil))))
+                           (when (< x lx)
+                             (let ((x-found (find-edge-left frame parent)))
+                               (when (< (abs (- x-found (frame-x frame))) *snap-size*)
+                                 (setf (frame-x frame) x-found
+                                       (xlib:drawable-x window) (adj-border-xy (x-fl->px (frame-x frame) parent) frame)
+                                       move-x nil))))
+                           (when (> y ly)
+                             (let ((y-found (find-edge-down frame parent)))
+                               (when (< (abs (- y-found (frame-y2 frame))) *snap-size*)
+                                 (setf (frame-y frame) (- y-found (frame-h frame))
+                                       (xlib:drawable-y window) (adj-border-xy (y-fl->px (frame-y frame) parent) frame)
+                                       move-y nil))))
+                           (when (< y ly)
+                             (let ((y-found (find-edge-up frame parent)))
+                               (when (< (abs (- y-found (frame-y frame))) *snap-size*)
+                                 (setf (frame-y frame) y-found
+                                       (xlib:drawable-y window) (adj-border-xy (y-fl->px (frame-y frame) parent) frame)
+                                       move-y nil))))
+                           (display-frame-info frame)
+                           (when move-x (setf lx x))
+                           (when move-y (setf ly y))
+                           (values move-x move-y))))))
+      (setf (frame-x frame) (x-px->fl (xlib:drawable-x window) parent)
+	    (frame-y frame) (y-px->fl (xlib:drawable-y window) parent)))
+    (show-all-children)))
+
+
+(defun resize-frame-constrained (frame parent orig-x orig-y)
+  (when (and frame parent (not (child-equal-p frame *current-root*)))
+    (hide-all-children frame)
+    (with-slots (window) frame
+      (let ((lx orig-x)
+            (ly orig-y))
+        (resize-window window orig-x orig-y
+                       (lambda ()
+                         (let ((resize-w t)
+                               (resize-h t))
+                           (multiple-value-bind (x y) (xlib:query-pointer *root*)
+                             (setf (frame-w frame) (w-px->fl (xlib:drawable-width window) parent)
+                                   (frame-h frame) (h-px->fl (xlib:drawable-height window) parent))
+                             (when (> x lx)
+                               (let ((x-found (find-edge-right frame parent)))
+                                 (when (< (abs (- x-found (frame-x2 frame))) *snap-size*)
+                                   (setf (frame-w frame) (+ (frame-w frame) (- x-found (frame-x2 frame)))
+                                         (xlib:drawable-width window) (adj-border-wh (w-fl->px (frame-w frame) parent) frame)
+                                         resize-w nil))))
+                             (when (> y ly)
+                               (let ((y-found (find-edge-down frame parent)))
+                                 (when (< (abs (- y-found (frame-y2 frame))) *snap-size*)
+                                   (setf (frame-h frame) (+ (frame-h frame) (- y-found (frame-y2 frame)))
+                                         (xlib:drawable-height window) (adj-border-wh (h-fl->px (frame-h frame) parent) frame)
+                                         resize-h nil))))
+                             (display-frame-info frame)
+                             (when resize-w (setf lx x))
+                             (when resize-h (setf ly y))
+                             (values resize-w resize-h))))))
+      (setf (frame-w frame) (w-px->fl (xlib:drawable-width window) parent)
+	    (frame-h frame) (h-px->fl (xlib:drawable-height window) parent)))
+    (show-all-children)))

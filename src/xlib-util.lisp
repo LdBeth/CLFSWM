@@ -525,10 +525,18 @@ Expand in handle-event-fun-main-mode-key-press"
 (let (add-fn add-arg dx dy window)
   (define-handler move-window-mode :motion-notify (root-x root-y)
     (unless (compress-motion-notify)
-      (setf (xlib:drawable-x window) (+ root-x dx)
-	    (xlib:drawable-y window) (+ root-y dy))
-      (when add-fn
-	(apply add-fn add-arg))))
+      (if add-fn
+          (multiple-value-bind (move-x move-y)
+              (apply add-fn add-arg)
+            (when move-x
+              (setf (xlib:drawable-x window) (+ root-x dx)))
+            (when move-y
+              (setf (xlib:drawable-y window) (+ root-y dy))))
+          (setf (xlib:drawable-x window) (+ root-x dx)
+                (xlib:drawable-y window) (+ root-y dy)))))
+
+  (define-handler move-window-mode :key-release ()
+    (throw 'exit-move-window-mode nil))
 
   (define-handler move-window-mode :button-release ()
     (throw 'exit-move-window-mode nil))
@@ -559,10 +567,18 @@ Expand in handle-event-fun-main-mode-key-press"
 	     min-height max-height)
   (define-handler resize-window-mode :motion-notify (root-x root-y)
     (unless (compress-motion-notify)
-      (setf (xlib:drawable-width window) (min (max (+ orig-width (- root-x o-x)) 10 min-width) max-width)
-	    (xlib:drawable-height window) (min (max (+ orig-height (- root-y o-y)) 10 min-height) max-height))
-      (when add-fn
-	(apply add-fn add-arg))))
+      (if add-fn
+          (multiple-value-bind (resize-w resize-h)
+              (apply add-fn add-arg)
+            (when resize-w
+              (setf (xlib:drawable-width window) (min (max (+ orig-width (- root-x o-x)) 10 min-width) max-width)))
+            (when resize-h
+              (setf (xlib:drawable-height window) (min (max (+ orig-height (- root-y o-y)) 10 min-height) max-height))))
+          (setf (xlib:drawable-width window) (min (max (+ orig-width (- root-x o-x)) 10 min-width) max-width)
+                (xlib:drawable-height window) (min (max (+ orig-height (- root-y o-y)) 10 min-height) max-height)))))
+
+  (define-handler resize-window-mode :key-release ()
+    (throw 'exit-resize-window-mode nil))
 
   (define-handler resize-window-mode :button-release ()
     (throw 'exit-resize-window-mode nil))

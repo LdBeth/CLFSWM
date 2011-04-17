@@ -548,7 +548,8 @@
 	(dolist (ch hidden-children)
 	  (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
 			    (format nil "  ~A - hidden" (ensure-printable (child-fullname ch))))))
-      (copy-pixmap-buffer window gc))))
+      (copy-pixmap-buffer window gc)
+      (values t t))))
 
 
 (defun display-all-frame-info (&optional (root *current-root*))

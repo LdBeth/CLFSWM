@@ -1,3 +1,9 @@
+2011-04-17  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-pack.lisp (move-frame-constrained)
+	(resize-frame-constrained): New function. Move and resize frame
+	with the mouse constrained by other frame brothers.
+
 2011-04-14  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (with-movement-select-next-brother)

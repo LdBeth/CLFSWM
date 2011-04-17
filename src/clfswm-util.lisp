@@ -531,7 +531,6 @@
   (hide-all-frames-info))
 
 
-
 (defun move-frame (frame parent orig-x orig-y)
   (when (and frame parent (not (child-equal-p frame *current-root*)))
     (hide-all-children frame)
@@ -540,7 +539,6 @@
       (setf (frame-x frame) (x-px->fl (xlib:drawable-x window) parent)
 	    (frame-y frame) (y-px->fl (xlib:drawable-y window) parent)))
     (show-all-children)))
-
 
 (defun resize-frame (frame parent orig-x orig-y)
   (when (and frame parent (not (child-equal-p frame *current-root*)))
@@ -632,8 +630,12 @@ For window: set current child to window or its parent according to window-parent
 		 (xlib:window
 		  (if (managed-window-p child parent)
 		      (funcall mouse-fn parent (find-parent-frame parent) root-x root-y)
-		      (funcall (cond ((eql mouse-fn #'move-frame) #'move-window)
-				     ((eql mouse-fn #'resize-frame) #'resize-window))
+		      (funcall (cond ((or (eql mouse-fn #'move-frame)
+                                          (eql mouse-fn #'move-frame-constrained))
+                                      #'move-window)
+				     ((or (eql mouse-fn #'resize-frame)
+                                          (eql mouse-fn #'resize-frame-constrained))
+                                      #'resize-window))
 			       child root-x root-y)))
 		 (frame (funcall mouse-fn child parent root-x root-y)))
 	       (show-all-children)))
