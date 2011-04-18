@@ -290,6 +290,6 @@
                              (when resize-w (setf lx x))
                              (when resize-h (setf ly y))
                              (values resize-w resize-h))))))
-      (setf (frame-w frame) (w-px->fl (xlib:drawable-width window) parent)
-	    (frame-h frame) (h-px->fl (xlib:drawable-height window) parent)))
+      (setf (frame-w frame) (w-px->fl (anti-adj-border-wh (xlib:drawable-width window) frame) parent)
+	    (frame-h frame) (h-px->fl (anti-adj-border-wh (xlib:drawable-height window) frame) parent)))
     (show-all-children)))

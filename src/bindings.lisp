@@ -114,7 +114,7 @@
 
 
 (defun mouse-click-to-focus-and-resize-window-constrained (window root-x root-y)
-  "Resize and focus the current child - Create a new frame on the root window"
+  "Resize (constrained by other frames) and focus the current child - Create a new frame on the root window"
   (declare (ignore window))
   (stop-button-event)
   (mouse-focus-move/resize-generic root-x root-y #'resize-frame-constrained t))
