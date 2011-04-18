@@ -211,6 +211,22 @@
   (leave-second-mode))
 
 
+(defun implode-frame (frame)
+  "Absorb all frames subchildren in frame (explode frame opposite)"
+  (when (frame-p frame)
+    (dolist (child (frame-child frame))
+      (when (frame-p child)
+        (dolist (subchild (frame-child child))
+          (setf (frame-child frame) (append (frame-child frame) (list subchild))))
+        (remove-child-in-frame child frame)))))
+
+(defun implode-current-frame ()
+  "Absorb all frames subchildren in frame (explode frame opposite)"
+  (implode-frame *current-child*)
+  (leave-second-mode))
+
+
+
 
 ;;;;;,-----
 ;;;;;| Constrained move/resize frames

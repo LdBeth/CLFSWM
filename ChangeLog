@@ -2,6 +2,8 @@
 
 	* src/clfswm-pack.lisp (resize-frame-constrained): Takes care of
 	border size.
+	(implode-frame, implode-current-frame): New functions. Absorb all
+	frames subchildren in frame. Explode frame opposite.
 
 2011-04-17  Philippe Brochard  <pbrochard@common-lisp.net>
 

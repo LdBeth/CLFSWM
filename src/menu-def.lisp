@@ -165,11 +165,12 @@
 
 
 (add-menu-key 'frame-miscellaneous-menu "s" 'show-all-frames-info)
-(add-menu-key 'frame-miscellaneous-menu "i" 'hide-all-frames-info)
+(add-menu-key 'frame-miscellaneous-menu "a" 'hide-all-frames-info)
 (add-menu-key 'frame-miscellaneous-menu "h" 'hide-current-frame-window)
 (add-menu-key 'frame-miscellaneous-menu "w" 'show-current-frame-window)
 (add-menu-key 'frame-miscellaneous-menu "u" 'renumber-current-frame)
 (add-menu-key 'frame-miscellaneous-menu "x" 'explode-current-frame)
+(add-menu-key 'frame-miscellaneous-menu "i" 'implode-current-frame)
 
 
 
