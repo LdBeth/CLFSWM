@@ -218,6 +218,7 @@
       (when (frame-p child)
         (dolist (subchild (frame-child child))
           (setf (frame-child frame) (append (frame-child frame) (list subchild))))
+        (hide-child child)
         (remove-child-in-frame child frame)))))
 
 (defun implode-current-frame ()
