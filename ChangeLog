@@ -1,3 +1,9 @@
+2011-04-19  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-pack.lisp (move-frame-constrained)
+	(resize-frame-constrained): Use pixels instead of floating
+	measure.
+
 2011-04-18  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-pack.lisp (resize-frame-constrained): Takes care of

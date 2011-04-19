@@ -53,8 +53,8 @@ A list of (list match-function handle-function)")
 (defconfig *hide-unmanaged-window* t nil
            "Hide or not unmanaged windows when a child is deselected.")
 
-(defconfig *snap-size* 0.02 nil
-           "Snap size when move or resize frame is constrained")
+(defconfig *snap-size* 20 nil
+           "Snap size (in pixels) when move or resize frame is constrained")
 
 
 ;;; CONFIG - Screen size

@@ -84,6 +84,15 @@ Window types are in +WINDOW-TYPES+.")
 
 
 
+(declaim (inline window-x2 window-y2))
+(defun window-x2 (window)
+  (+ (xlib:drawable-x window) (xlib:drawable-width window)))
+
+(defun window-y2 (window)
+  (+ (xlib:drawable-y window) (xlib:drawable-height window)))
+
+
+
 ;;;
 ;;; Events management functions.
 ;;;
@@ -244,7 +253,6 @@ Expand in handle-event-fun-main-mode-key-press"
 
 (defun destroy-window (window)
   (xlib:kill-client *display* (xlib:window-id window)))
-
 
 
 ;;(defconstant +exwm-atoms+
