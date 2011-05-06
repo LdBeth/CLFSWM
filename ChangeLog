@@ -1,5 +1,8 @@
 2011-05-06  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-layout.lisp (update-layout-managed-children): Fix a
+	bug by using the parent frame instead of the current child.
+
 	* src/clfswm-circulate-mode.lisp
 	(select-brother-generic-spatial-move+right/left/up/down): New
 	function to select a brother from another in a spatial move.
