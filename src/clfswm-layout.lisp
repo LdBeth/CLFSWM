@@ -126,39 +126,6 @@
 			  '(("s" fast-layout-switch)
 			    ("p" push-in-fast-layout-list)))
 
-(declaim (inline adj-border-xy adj-border-wh))
-(defgeneric adj-border-xy (value child))
-(defgeneric adj-border-wh (value child))
-
-(defmethod adj-border-xy (v (child xlib:window))
-  (+ v (xlib:drawable-border-width child)))
-
-(defmethod adj-border-xy (v (child frame))
-  (+ v (xlib:drawable-border-width (frame-window child))))
-
-(defmethod adj-border-wh (v (child xlib:window))
-  (- v (* (xlib:drawable-border-width child) 2)))
-
-(defmethod adj-border-wh (v (child frame))
-  (- v (* (xlib:drawable-border-width (frame-window child)) 2)))
-
-
-(declaim (inline anti-adj-border-xy anti-adj-border-wh))
-(defgeneric anti-adj-border-xy (value child))
-(defgeneric anti-adj-border-wh (value child))
-
-(defmethod anti-adj-border-xy (v (child xlib:window))
-  (- v (xlib:drawable-border-width child)))
-
-(defmethod anti-adj-border-xy (v (child frame))
-  (- v (xlib:drawable-border-width (frame-window child))))
-
-(defmethod anti-adj-border-wh (v (child xlib:window))
-  (+ v (* (xlib:drawable-border-width child) 2)))
-
-(defmethod anti-adj-border-wh (v (child frame))
-  (+ v (* (xlib:drawable-border-width (frame-window child)) 2)))
-
 
 ;;; No layout
 (defgeneric no-layout (child parent)

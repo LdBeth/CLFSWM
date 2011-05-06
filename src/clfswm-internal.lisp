@@ -289,6 +289,39 @@
 (defun middle-child-y (child)
   (+ (child-y child) (/ (child-height child) 2)))
 
+(declaim (inline adj-border-xy adj-border-wh))
+(defgeneric adj-border-xy (value child))
+(defgeneric adj-border-wh (value child))
+
+(defmethod adj-border-xy (v (child xlib:window))
+  (+ v (xlib:drawable-border-width child)))
+
+(defmethod adj-border-xy (v (child frame))
+  (+ v (xlib:drawable-border-width (frame-window child))))
+
+(defmethod adj-border-wh (v (child xlib:window))
+  (- v (* (xlib:drawable-border-width child) 2)))
+
+(defmethod adj-border-wh (v (child frame))
+  (- v (* (xlib:drawable-border-width (frame-window child)) 2)))
+
+
+(declaim (inline anti-adj-border-xy anti-adj-border-wh))
+(defgeneric anti-adj-border-xy (value child))
+(defgeneric anti-adj-border-wh (value child))
+
+(defmethod anti-adj-border-xy (v (child xlib:window))
+  (- v (xlib:drawable-border-width child)))
+
+(defmethod anti-adj-border-xy (v (child frame))
+  (- v (xlib:drawable-border-width (frame-window child))))
+
+(defmethod anti-adj-border-wh (v (child xlib:window))
+  (+ v (* (xlib:drawable-border-width child) 2)))
+
+(defmethod anti-adj-border-wh (v (child frame))
+  (+ v (* (xlib:drawable-border-width (frame-window child)) 2)))
+
 
 
 
@@ -444,15 +477,14 @@
 	    h (h-px->fl prh parent))
       (xlib:display-finish-output *display*))))
 
-(warn "fixe-real-size: adjust border here")
 (defun fixe-real-size (frame parent)
   "Fixe real (pixel) coordinates in float coordinates"
   (when (frame-p frame)
     (with-slots (x y w h rx ry rw rh) frame
       (setf x (x-px->fl rx parent)
 	    y (y-px->fl ry parent)
-	    w (w-px->fl rw parent)
-	    h (h-px->fl rh parent)))))
+	    w (w-px->fl (anti-adj-border-wh rw parent) parent)
+	    h (h-px->fl (anti-adj-border-wh rh parent) parent)))))
 
 (defun fixe-real-size-current-child ()
   "Fixe real (pixel) coordinates in float coordinates for children in the current child"
