@@ -359,7 +359,7 @@
 (defun tile-left-layout (child parent)
   "Tile Left: main child on left and others on right"
   (with-slots (rx ry rw rh) parent
-    (let* ((managed-children (get-managed-child parent))
+    (let* ((managed-children (update-layout-managed-children child parent))
 	   (pos (child-position child managed-children))
 	   (len (max (1- (length managed-children)) 1))
 	   (dy (/ rh len))
@@ -380,6 +380,7 @@
 (defun set-tile-left-layout ()
   "Tile Left: main child on left and others on right"
   (layout-ask-size "Tile size in percent (%)" :tile-size)
+  (set-layout-managed-children)
   (set-layout #'tile-left-layout))
 
 
@@ -388,7 +389,7 @@
 (defun tile-right-layout (child parent)
   "Tile Right: main child on right and others on left"
   (with-slots (rx ry rw rh) parent
-    (let* ((managed-children (get-managed-child parent))
+    (let* ((managed-children (update-layout-managed-children child parent))
 	   (pos (child-position child managed-children))
 	   (len (max (1- (length managed-children)) 1))
 	   (dy (/ rh len))
@@ -409,6 +410,7 @@
 (defun set-tile-right-layout ()
   "Tile Right: main child on right and others on left"
   (layout-ask-size "Tile size in percent (%)" :tile-size)
+  (set-layout-managed-children)
   (set-layout #'tile-right-layout))
 
 
@@ -420,7 +422,7 @@
 (defun tile-top-layout (child parent)
   "Tile Top: main child on top and others on bottom"
   (with-slots (rx ry rw rh) parent
-    (let* ((managed-children (get-managed-child parent))
+    (let* ((managed-children (update-layout-managed-children child parent))
 	   (pos (child-position child managed-children))
 	   (len (max (1- (length managed-children)) 1))
 	   (dx (/ rw len))
@@ -441,6 +443,7 @@
 (defun set-tile-top-layout ()
   "Tile Top: main child on top and others on bottom"
   (layout-ask-size "Tile size in percent (%)" :tile-size)
+  (set-layout-managed-children)
   (set-layout #'tile-top-layout))
 
 
@@ -450,7 +453,7 @@
 (defun tile-bottom-layout (child parent)
   "Tile Bottom: main child on bottom and others on top"
   (with-slots (rx ry rw rh) parent
-    (let* ((managed-children (get-managed-child parent))
+    (let* ((managed-children (update-layout-managed-children child parent))
 	   (pos (child-position child managed-children))
 	   (len (max (1- (length managed-children)) 1))
 	   (dx (/ rw len))
@@ -472,6 +475,7 @@
 (defun set-tile-bottom-layout ()
   "Tile Bottom: main child on bottom and others on top"
   (layout-ask-size "Tile size in percent (%)" :tile-size)
+  (set-layout-managed-children)
   (set-layout #'tile-bottom-layout))
 
 
@@ -496,7 +500,7 @@
 (defun tile-left-space-layout (child parent)
   "Tile Left Space: main child on left and others on right. Leave some space (in pixels) on the left."
   (with-slots (rx ry rw rh) parent
-    (let* ((managed-children (get-managed-child parent))
+    (let* ((managed-children (update-layout-managed-children child parent))
 	   (pos (child-position child managed-children))
 	   (len (max (1- (length managed-children)) 1))
 	   (dy (/ rh len))
@@ -524,6 +528,7 @@
   "Tile Left Space: main child on left and others on right. Leave some space on the left."
   (layout-ask-size "Tile size in percent (%)" :tile-size)
   (layout-ask-space "Tile space (in pixels)" :tile-left-space)
+  (set-layout-managed-children)
   (set-layout #'tile-left-space-layout))
 
 (register-layout-sub-menu 'frame-tile-space-layout-menu "Tile with some space on one side menu"

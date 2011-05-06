@@ -1,5 +1,8 @@
 2011-05-06  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-layout.lisp (tile-left|right|top|bottom-layout): Ask
+	to keep children positions or not.
+
 	* src/clfswm-internal.lisp (fixe-real-size): Takes care of border
 	size.
 
