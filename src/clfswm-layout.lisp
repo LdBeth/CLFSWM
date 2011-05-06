@@ -220,8 +220,8 @@
 (defun tile-layout-ask-keep-position ()
   (when (frame-p *current-child*)
     (if (query-yes-or-no "Keep frame children positions?")
-	(setf (frame-data-slot *current-child* :tile-layout-keep-positiion) :yes)
-	(remove-frame-data-slot *current-child* :tile-layout-keep-positiion))))
+	(setf (frame-data-slot *current-child* :tile-layout-keep-position) :yes)
+	(remove-frame-data-slot *current-child* :tile-layout-keep-position))))
 
 
 (defun set-layout-managed-children ()
@@ -243,7 +243,7 @@
     managed-children))
 
 (defun update-layout-managed-children (child parent)
-  (if (eql (frame-data-slot *current-child* :tile-layout-keep-positiion) :yes)
+  (if (eql (frame-data-slot parent :tile-layout-keep-position) :yes)
       (update-layout-managed-children-keep-position child parent)
       (get-managed-child parent)))
 
