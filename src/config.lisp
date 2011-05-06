@@ -57,10 +57,10 @@ A list of (list match-function handle-function)")
            "Snap size (in pixels) when move or resize frame is constrained")
 
 (defconfig *spatial-move-delay-before* 0.2 nil
-           "Delay to wait before doing a spatial move")
+           "Delay to display the current child before doing a spatial move")
 
 (defconfig *spatial-move-delay-after* 0.5 nil
-           "Delay to wait after doing a spatial move")
+           "Delay to display the new child after doing a spatial move")
 
 
 ;;; CONFIG - Screen size

@@ -89,31 +89,34 @@ c: Audacity - Record and edit audio files
 d: Beep Media Player - Play music
 e: Brasero - Create and copy CDs and DVDs
 f: Cinelerra  - Video Editor
-g: Freevo - Home theatre
-h: Camelot - Gmerlin webcam application
-i: Gmerlin KBD - Configure the Gmerlin keyboard daemon
-j: Gmerlin player - Multiformat mediaplayer
-k: Gmerlin plugin configurator - Configure gmerlin plugins
-l: Gmerlin transcoder - Gmerlin multimedia transcoder
-m: Gmerlin visualizer - Run visualization plugins
-n: Gnome Music Player Client - A gnome frontend for the mpd daemon
-o: Sound Recorder - Record sound clips
-p: Volume Control - Change sound volume and sound events
-q: Grip - CD player/ripper
-r: gtk-recordMyDesktop - Frontend for recordMyDesktop
-s: Hydrogen Drum Machine - Create drum sequences
-t: Dragon Player
-u: JuK
-v: K3b - Disk writing program
-w: Kdenlive - Nonlinear video editor for KDE
-x: KMix
-y: KsCD
-z: Mixxx - A digital DJ interface
+g: dvd::rip - DVD Ripper and Encoder - Backup and compression utility for DVDs
+h: Freevo - Home theatre
+i: Camelot - Gmerlin webcam application
+j: Gmerlin KBD - Configure the Gmerlin keyboard daemon
+k: Gmerlin player - Multiformat mediaplayer
+l: Gmerlin recorder - Audio/video recorder
+m: Gmerlin transcoder - Gmerlin multimedia transcoder
+n: Gmerlin visualizer - Run visualization plugins
+o: Gnome Music Player Client - A gnome frontend for the mpd daemon
+p: Sound Recorder - Record sound clips
+q: Volume Control - Change sound volume and sound events
+r: Grip - CD player/ripper
+s: gtk-recordMyDesktop - Frontend for recordMyDesktop
+t: Hydrogen Drum Machine - Create drum sequences
+u: Dragon Player
+v: JuK
+w: K3b - Disk writing program
+x: Kdenlive - Nonlinear video editor for KDE
+y: KMix
+z: KsCD
+|: Mixxx - A digital DJ interface
 |: MPlayer Media Player - Play movies and songs
 |: Open Movie Editor - Video Editor
 |: OpenShot Video Editor - Create and edit videos and movies
 |: QjackCtl - QjackCtl is a JACK Audio Connection Kit Qt GUI Interface
 |: qt-recordMyDesktop - Frontend for recordMyDesktop
+|: SMPlayer - A great MPlayer front-end
+|: Enqueue in SMPlayer
 |: Sonata - An elegant GTK+ MPD client
 |: Audio CD Extractor - Copy music from your CDs
 |: Movie Player - Play movies and songs
@@ -125,20 +128,24 @@ z: Mixxx - A digital DJ interface
 Audio
 a: Ardour - Multitrack hard disk recorder
 b: Audacity - Record and edit audio files
-c: Sound Recorder - Record sound clips
-d: Hydrogen Drum Machine - Create drum sequences
-e: KMix
-f: Mixxx - A digital DJ interface
-g: MPlayer Media Player - Play movies and songs
-h: QjackCtl - QjackCtl is a JACK Audio Connection Kit Qt GUI Interface
-i: Audio CD Extractor - Copy music from your CDs
-j: Mixer - Audio mixer for the Xfce Desktop Environment
+c: Gmerlin plugin configurator - Configure gmerlin plugins
+d: Sound Recorder - Record sound clips
+e: Hydrogen Drum Machine - Create drum sequences
+f: KMix
+g: Mixxx - A digital DJ interface
+h: MPlayer Media Player - Play movies and songs
+i: QjackCtl - QjackCtl is a JACK Audio Connection Kit Qt GUI Interface
+j: Audio CD Extractor - Copy music from your CDs
+k: Mixer - Audio mixer for the Xfce Desktop Environment
 
 Video
 a: Ardour - Multitrack hard disk recorder
-b: MPlayer Media Player - Play movies and songs
-c: OpenShot Video Editor - Create and edit videos and movies
-d: Movie Player - Play movies and songs
+b: dvd::rip - DVD Ripper and Encoder - Backup and compression utility for DVDs
+c: MPlayer Media Player - Play movies and songs
+d: OpenShot Video Editor - Create and edit videos and movies
+e: SMPlayer - A great MPlayer front-end
+f: Enqueue in SMPlayer
+g: Movie Player - Play movies and songs
 
 Development
 a: CMake - Cross-platform buildsystem
@@ -200,6 +207,7 @@ z: Rocs - Graph Theory Tool for Professors and Students.
 |: Oregano electrical engineering tool - Schematic capture and simulation of electronic circuits
 |: QtOctave - GUI for GNU Octave
 |: wxMaxima - Perform symbolic and numeric calculations using Maxima
+|: Xcas Computer Algebra System - The swiss knife for mathematics
 
 Game
 a: 0 A.D. Editor
@@ -211,23 +219,24 @@ f: DreamChess
 g: DROD - Simple puzzle game.
 h: eBoard
 i: Einstein - Einstein puzzle
-j: Flobopuyo - A remake of the famous PuyoPuyo
-k: Foobillard - A 3D billiards game using OpenGL
-l: Frasse - Frasse and the Peas of Kejick adventure game
-m: Frogatto - Old-school 2D platformer
-n: gbrainy - Play games that challenge your logic, verbal, calculation and memory abilities
-o: GGoban - Play go and review game records
-p: glChess
-q: GLTron - Lightcycle game with a nice 3D perspective.
-r: Hedgewars - Worms style game
-s: Hex-a-Hop - Hexagonal Tile-based Puzzle Game
-t: KGoldrunner - A game of action and puzzle-solving
-u: AMOR
-v: Blinken - A memory enhancement game
-w: Bomber
-x: Bovo
-y: Granatier
-z: Kanagram - KDE Letter Order Game
+j: Extreme Tux Racer - Open source racing game featuring Tux the Linux Penguin. 
+k: Flobopuyo - A remake of the famous PuyoPuyo
+l: Foobillard - A 3D billiards game using OpenGL
+m: Frasse - Frasse and the Peas of Kejick adventure game
+n: Frogatto - Old-school 2D platformer
+o: gbrainy - Play games that challenge your logic, verbal, calculation and memory abilities
+p: GGoban - Play go and review game records
+q: glChess
+r: GLTron - Lightcycle game with a nice 3D perspective.
+s: Hedgewars - Worms style game
+t: Hex-a-Hop - Hexagonal Tile-based Puzzle Game
+u: KGoldrunner - A game of action and puzzle-solving
+v: AMOR
+w: Blinken - A memory enhancement game
+x: Bomber
+y: Bovo
+z: Granatier
+|: Kanagram - KDE Letter Order Game
 |: Kapman - Eat pills escaping ghosts
 |: KAtomic
 |: Naval Battle
@@ -282,6 +291,7 @@ z: Kanagram - KDE Letter Order Game
 |: SolarWolf
 |: Spring - An open source RTS with similar gameplay to TA
 |: SuperTux 2 - Play a classic 2D platform game
+|: Supertuxkart - A kart racing game
 |: Trackballs - Simple game similar to the classical game Marble Madness
 |: Battle for Wesnoth - A fantasy turn-based strategy game
 |: Battle for Wesnoth Map Editor - A map editor for Battle for Wesnoth maps
@@ -453,6 +463,7 @@ z: Customize Look and Feel - Customizes look and feel of your desktop and applic
 |: Qt Config  - Configure Qt behavior, styles, fonts
 |: Startup Applications - Choose what applications to start when you log in
 |: File Manager - Configure the Thunar file manager
+|: Panel tint2 - Customize the panel settings
 |: Startup Disk Creator - Create a startup disk using a CD or disc image
 |: Windows - Set your window properties
 |: Desktop  - Set desktop background and menu and icon behaviour
@@ -484,20 +495,21 @@ i: Manage Printing
 j: Configuration Editor - Directly edit your entire configuration database
 k: System Monitor
 l: GParted - Create, reorganize, and delete partitions
-m: Dolphin
-n: K3b - Disk writing program
-o: KDiskFree
-p: Konqueror
+m: Htop - Show System Processes
+n: Dolphin
+o: K3b - Disk writing program
+p: KDiskFree
 q: Konqueror
 r: Konqueror
 s: Konqueror
-t: KInfoCenter
-u: File Manager - Super User Mode
-v: Konsole
-w: KRandRTray - A panel applet for resizing and reorientating X screens.
-x: Krfb
-y: Krusader - root-mode
-z: System Monitor
+t: Konqueror
+u: KInfoCenter
+v: File Manager - Super User Mode
+w: Konsole
+x: KRandRTray - A panel applet for resizing and reorientating X screens.
+y: Krfb
+z: Krusader - root-mode
+|: System Monitor
 |: KSystemLog
 |: KUser
 |: KWalletManager
@@ -518,32 +530,33 @@ z: System Monitor
 |: XNC - Graphical File manager, X Northern Captain
 
 Utility
-a: Terminal - Terminal Emulator
-b: Bulk Rename - Rename Multiple Files
-c: Open Folder with Thunar - Open the specified folders in Thunar
-d: Thunar File Manager - Browse the filesystem with the file manager
-e: Circle and Ruler - Geometry program
-f: dosbox Emulator - An emulator to run old DOS games
-g: File Manager - Configure the Thunar file manager
-h: Terminal Emulator
-i: gEDA Attribute Editor - Manipulate component attributes with gattrib
-j: gEDA Schematic Editor - Create and edit electrical schematics and symbols with gschem
-k: Root Terminal - Opens a terminal as the root user, using gksu to ask for the password
-l: Orage Globaltime - Show clocks from different countries
-m: About GNOME - Learn more about GNOME
-n: Panel
-o: Theme Installer - Installs themes packages for various parts of the desktop
-p: Image Viewer
-q: GSpiceUI - A GUI to various freely available Spice electronic circuit simulators
-r: Character Map - Insert special characters into documents
-s: gVim - GTK2 enhanced vim text editor
-t: HP Device Manager - View device status, ink levels and perform maintenance.
-u: K3DSurf - Visualize and manipulate Mathematical models in three, four, five, and six dimensions
-v: Help - Get help with GNOME
-w: Home
-x: KCharSelect
-y: KFloppy
-z: KJots
+a: SAGE - SAGE NOTEBOOK
+b: Terminal - Terminal Emulator
+c: Bulk Rename - Rename Multiple Files
+d: Open Folder with Thunar - Open the specified folders in Thunar
+e: Thunar File Manager - Browse the filesystem with the file manager
+f: Circle and Ruler - Geometry program
+g: dosbox Emulator - An emulator to run old DOS games
+h: File Manager - Configure the Thunar file manager
+i: Terminal Emulator
+j: gEDA Attribute Editor - Manipulate component attributes with gattrib
+k: gEDA Schematic Editor - Create and edit electrical schematics and symbols with gschem
+l: Root Terminal - Opens a terminal as the root user, using gksu to ask for the password
+m: Orage Globaltime - Show clocks from different countries
+n: About GNOME - Learn more about GNOME
+o: Panel
+p: Theme Installer - Installs themes packages for various parts of the desktop
+q: Image Viewer
+r: GSpiceUI - A GUI to various freely available Spice electronic circuit simulators
+s: Character Map - Insert special characters into documents
+t: gVim - GTK2 enhanced vim text editor
+u: HP Device Manager - View device status, ink levels and perform maintenance.
+v: K3DSurf - Visualize and manipulate Mathematical models in three, four, five, and six dimensions
+w: Help - Get help with GNOME
+x: Home
+y: KCharSelect
+z: KFloppy
+|: KJots
 |: Akonaditray
 |: Ark
 |: KDE Groupware Wizard
@@ -918,34 +931,34 @@ i: Open the window in this frame if it match absorb-nw-test
 Frame-Movement-Menu
 p: < Frame pack menu >
 f: < Frame fill menu >
-z: < Frame resize menu >
+r: < Frame resize menu >
 c: Center the current frame
-r: Select the next brother frame
-l: Select the previous brother frame
-u: Select the next level
-d: Select the previous levelframe
-t: Select the next child
+Right: Select the next brother frame
+Left: Select the previous brother frame
+Up: Select the next level
+Down: Select the previous levelframe
+Tab: Select the next child
 
 Frame-Pack-Menu
-u: Pack the current frame up
-d: Pack the current frame down
-l: Pack the current frame left
-r: Pack the current frame right
+Up: Pack the current frame up
+Down: Pack the current frame down
+Left: Pack the current frame left
+Right: Pack the current frame right
 
 Frame-Fill-Menu
-u: Fill the current frame up
-d: Fill the current frame down
-l: Fill the current frame left
-r: Fill the current frame right
+Up: Fill the current frame up
+Down: Fill the current frame down
+Left: Fill the current frame left
+Right: Fill the current frame right
 a: Fill the current frame in all directions
 v: Fill the current frame vertically
 h: Fill the current frame horizontally
 
 Frame-Resize-Menu
-u: Resize the current frame up to its half height
-d: Resize the current frame down to its half height
-l: Resize the current frame left to its half width
-r: Resize the current frame right to its half width
+Up: Resize the current frame up to its half height
+Down: Resize the current frame down to its half height
+Left: Resize the current frame left to its half width
+Right: Resize the current frame right to its half width
 a: Resize down the current frame
 m: Resize down the current frame to its minimal size
 
@@ -976,11 +989,12 @@ i: Hide unmanaged windows by default. This is overriden by functions above
 
 Frame-Miscellaneous-Menu
 s: Show all frames info windows
-i: Hide all frames info windows
+a: Hide all frames info windows
 h: Hide the current frame window
 w: Show the current frame window
 u: Renumber the current frame
 x: Create a new frame for each window in frame
+i: Absorb all frames subchildren in frame (explode frame opposite)
 
 Window-Menu
 i: Display information on the current window
@@ -1165,17 +1179,20 @@ Conf-Miscellaneous
 a: Configure DEFAULT-WINDOW-HEIGHT
 b: Configure DEFAULT-WINDOW-WIDTH
 c: Configure CREATE-FRAME-ON-ROOT
-d: Configure HIDE-UNMANAGED-WINDOW
-e: Configure NEVER-MANAGED-WINDOW-LIST
-f: Configure DEFAULT-MODIFIERS
-g: Configure DEFAULT-FOCUS-POLICY
-h: Configure DEFAULT-MANAGED-TYPE
-i: Configure DEFAULT-FRAME-DATA
-j: Configure DEFAULT-FONT-STRING
-k: Configure LOOP-TIMEOUT
-l: Configure BORDER-SIZE
-m: Configure SHOW-ROOT-FRAME-P
-n: Configure HAVE-TO-COMPRESS-NOTIFY
+d: Configure SPATIAL-MOVE-DELAY-AFTER
+e: Configure SPATIAL-MOVE-DELAY-BEFORE
+f: Configure SNAP-SIZE
+g: Configure HIDE-UNMANAGED-WINDOW
+h: Configure NEVER-MANAGED-WINDOW-LIST
+i: Configure DEFAULT-MODIFIERS
+j: Configure DEFAULT-FOCUS-POLICY
+k: Configure DEFAULT-MANAGED-TYPE
+l: Configure DEFAULT-FRAME-DATA
+m: Configure DEFAULT-FONT-STRING
+n: Configure LOOP-TIMEOUT
+o: Configure BORDER-SIZE
+p: Configure SHOW-ROOT-FRAME-P
+q: Configure HAVE-TO-COMPRESS-NOTIFY
 
 Clfswm-Menu
 r: Reset clfswm

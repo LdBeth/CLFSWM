@@ -231,6 +231,12 @@ Example: :mod-2 for num_lock, :lock for Caps_lock...
 A list of (list match-function handle-function)
   *HIDE-UNMANAGED-WINDOW* = T
     Hide or not unmanaged windows when a child is deselected.
+  *SNAP-SIZE* = 20
+    Snap size (in pixels) when move or resize frame is constrained
+  *SPATIAL-MOVE-DELAY-BEFORE* = 0.2
+    Delay to display the current child before doing a spatial move
+  *SPATIAL-MOVE-DELAY-AFTER* = 0.5
+    Delay to display the new child after doing a spatial move
   *CREATE-FRAME-ON-ROOT* = NIL
     Create frame on root.
 Set this variable to true if you want to allow to create a new frame
