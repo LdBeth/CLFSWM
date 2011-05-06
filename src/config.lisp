@@ -56,6 +56,12 @@ A list of (list match-function handle-function)")
 (defconfig *snap-size* 20 nil
            "Snap size (in pixels) when move or resize frame is constrained")
 
+(defconfig *spatial-move-delay-before* 0.2 nil
+           "Delay to wait before doing a spatial move")
+
+(defconfig *spatial-move-delay-after* 0.5 nil
+           "Delay to wait after doing a spatial move")
+
 
 ;;; CONFIG - Screen size
 (defun get-fullscreen-size ()

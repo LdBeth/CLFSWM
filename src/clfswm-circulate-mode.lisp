@@ -62,7 +62,8 @@
 	*circulate-orig* (frame-child *current-child*)))
 
 (defun reset-circulate-brother ()
-  (setf *circulate-parent* (find-parent-frame *current-child*))
+  (setf *circulate-parent* (find-parent-frame *current-child*)
+        *circulate-hit* 0)
   (when (frame-p *circulate-parent*)
     (setf *circulate-orig* (frame-child *circulate-parent*))))
 
@@ -70,13 +71,14 @@
 
 (defun reorder-child (direction)
   (no-focus)
-  (with-slots (child) *current-child*
+  (with-slots (child selected-pos) *current-child*
     (unless *circulate-orig*
       (reset-circulate-child))
     (let ((len (length *circulate-orig*)))
       (when (plusp len)
 	(let ((elem (nth (mod (incf *circulate-hit* direction) len) *circulate-orig*)))
-	  (setf child (cons elem (child-remove elem *circulate-orig*)))))
+	  (setf child (cons elem (child-remove elem *circulate-orig*))
+                selected-pos 0)))
       (show-all-children)
       (draw-circulate-mode-window))))
 
@@ -93,6 +95,7 @@
 	(when (frame-p *circulate-parent*)
 	  (let ((elem (nth (mod  (incf *circulate-hit* direction) len) *circulate-orig*)))
 	    (setf (frame-child *circulate-parent*) (cons elem (child-remove elem *circulate-orig*))
+                  (frame-selected-pos *circulate-parent*) 0
 		  *current-child* (frame-selected-child *circulate-parent*))))
 	(when frame-is-root?
 	  (setf *current-root* *current-child*))))
@@ -105,10 +108,12 @@
     (let ((selected-child (frame-selected-child *current-child*)))
       (when (frame-p selected-child)
 	(no-focus)
-	(with-slots (child) selected-child
+	(with-slots (child selected-pos) selected-child
 	  (let ((elem (first (last child))))
-	    (setf child (cons elem (child-remove elem child)))
-	    (show-all-children)
+            (when elem
+              (setf child (cons elem (child-remove elem child))
+                    selected-pos 0))
+            (show-all-children)
 	    (draw-circulate-mode-window)))))))
 
 
@@ -306,3 +311,71 @@
 (defun select-previous-brother-simple ()
   "Select the previous brother frame (do not enter in circulate mode)"
   (reorder-brother-simple #'anti-rotate-list))
+
+
+
+;;; Spatial move functions
+(defun select-brother-generic-spatial-move (fun-found)
+  "Select the nearest brother of the current child based on the fun-found function"
+  (let ((is-root? (child-equal-p *current-child* *current-root*)))
+    (when is-root?
+      (leave-frame)
+      (sleep *spatial-move-delay-before*))
+    (no-focus)
+    (select-current-frame nil)
+    (let ((parent-frame (find-parent-frame *current-child*)))
+      (when (frame-p parent-frame)
+        (with-slots (child selected-pos) parent-frame
+          (let ((found nil)
+                (found-dist nil))
+            (dolist (c child)
+              (let ((dist (funcall fun-found *current-child* c)))
+                (when (and dist
+                           (not (child-equal-p *current-child* c))
+                           (or (not found)
+                               (and found-dist (< dist found-dist))))
+                  (setf found c
+                        found-dist dist))))
+            (when found
+              (setf *current-child* found
+                    selected-pos 0
+                    child (cons found (child-remove found child)))))))
+      (show-all-children t)
+      (when is-root?
+        (sleep *spatial-move-delay-after*)
+        (enter-frame)))))
+
+
+
+(defun select-brother-spatial-move-right ()
+  "Select spatially the nearest brother of the current child in the right direction"
+  (select-brother-generic-spatial-move #'(lambda (current child)
+                                           (when (> (child-x2 child) (child-x2 current))
+                                             (distance (child-x2 current) (middle-child-y current)
+                                                       (child-x child) (middle-child-y child))))))
+
+
+
+(defun select-brother-spatial-move-left ()
+  "Select spatially the nearest brother of the current child in the left direction"
+  (select-brother-generic-spatial-move #'(lambda (current child)
+                                           (when (< (child-x child) (child-x current))
+                                             (distance (child-x current) (middle-child-y current)
+                                                       (child-x2 child) (middle-child-y child))))))
+
+
+(defun select-brother-spatial-move-down ()
+  "Select spatially the nearest brother of the current child in the down direction"
+  (select-brother-generic-spatial-move #'(lambda (current child)
+                                           (when (> (child-y2 child) (child-y2 current))
+                                             (distance (middle-child-x current) (child-y2 current)
+                                                       (middle-child-x child) (child-y child))))))
+
+
+(defun select-brother-spatial-move-up ()
+  "Select spatially the nearest brother of the current child in the up direction"
+  (select-brother-generic-spatial-move #'(lambda (current child)
+                                           (when (< (child-y child) (child-y current))
+                                             (distance (middle-child-x current) (child-y current)
+                                                       (middle-child-x child) (child-y2 child))))))
+

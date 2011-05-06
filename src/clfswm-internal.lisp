@@ -252,6 +252,46 @@
 (defmethod child-height ((child frame))
   (frame-rh child))
 
+(defgeneric child-x2 (child))
+(defmethod child-x2 ((child xlib:window))
+  (+ (xlib:drawable-x child) (xlib:drawable-width child)))
+(defmethod child-x2 ((child frame))
+  (+ (frame-rx child) (frame-rw child)))
+
+(defgeneric child-y2 (child))
+(defmethod child-y2 ((child xlib:window))
+  (+ (xlib:drawable-y child) (xlib:drawable-height child)))
+(defmethod child-y2 ((child frame))
+  (+ (frame-ry child) (frame-rh child)))
+
+
+
+(defgeneric child-center (child))
+
+(defmethod child-center ((child xlib:window))
+  (values (+ (xlib:drawable-x child) (/ (xlib:drawable-width child) 2))
+          (+ (xlib:drawable-y child) (/ (xlib:drawable-height child) 2))))
+
+(defmethod child-center ((child frame))
+  (values (+ (frame-rx child) (/ (frame-rw child) 2))
+          (+ (frame-ry child) (/ (frame-rh child) 2))))
+
+(defun child-distance (child1 child2)
+  (multiple-value-bind (x1 y1) (child-center child1)
+    (multiple-value-bind (x2 y2) (child-center child2)
+      (values (+ (abs (- x2 x1)) (abs (- y2 y1)))
+              (- x2 x1)
+              (- y2 y1)))))
+
+(defun middle-child-x (child)
+  (+ (child-x child) (/ (child-width child) 2)))
+
+(defun middle-child-y (child)
+  (+ (child-y child) (/ (child-height child) 2)))
+
+
+
+
 
 
 
@@ -404,6 +444,7 @@
 	    h (h-px->fl prh parent))
       (xlib:display-finish-output *display*))))
 
+(warn "fixe-real-size: adjust border here")
 (defun fixe-real-size (frame parent)
   "Fixe real (pixel) coordinates in float coordinates"
   (when (frame-p frame)

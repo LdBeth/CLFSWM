@@ -1,3 +1,9 @@
+2011-05-06  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-circulate-mode.lisp
+	(select-brother-generic-spatial-move+right/left/up/down): New
+	function to select a brother from another in a spatial move.
+
 2011-04-19  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-pack.lisp (move-frame-constrained)

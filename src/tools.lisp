@@ -54,6 +54,7 @@
 	   :dbg
 	   :dbgnl
 	   :dbgc
+           :distance
 	   :with-all-internal-symbols
 	   :export-all-functions :export-all-variables
 	   :export-all-functions-and-variables
@@ -101,6 +102,7 @@
 	   :exchange-one-in-list
 	   :rotate-list
 	   :anti-rotate-list
+           :n-rotate-list
 	   :append-formated-list
 	   :shuffle-list
 	   :parse-integer-in-list
@@ -359,6 +361,9 @@ Return the result of the last hook"
     (terpri))
   (force-output))
 
+
+(defun distance (x1 y1 x2 y2)
+  (+ (abs (- x2 x1)) (abs (- y2 y1))))
 
 
 ;;; Symbols tools
@@ -860,6 +865,11 @@ Useful for re-using the &REST arg after removing some options."
 (defun anti-rotate-list (list)
   (when list
     (append (last list) (butlast list))))
+
+(defun n-rotate-list (list n)
+  (if (> n 0)
+      (n-rotate-list (rotate-list list) (1- n))
+      list))
 
 
 (defun append-formated-list (base-str
