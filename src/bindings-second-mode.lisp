@@ -105,6 +105,10 @@
   (define-second-key ("Left" :mod-1) 'select-previous-brother)
   (define-second-key ("Down" :mod-1) 'select-previous-level)
   (define-second-key ("Up" :mod-1) 'select-next-level)
+  (define-second-key ("Left" :control :mod-1) 'select-brother-spatial-move-left)
+  (define-second-key ("Right" :control :mod-1) 'select-brother-spatial-move-right)
+  (define-second-key ("Up" :control :mod-1) 'select-brother-spatial-move-up)
+  (define-second-key ("Down" :control :mod-1) 'select-brother-spatial-move-down)
 
   (define-second-key ("Right") 'speed-mouse-right)
   (define-second-key ("Left") 'speed-mouse-left)

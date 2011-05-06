@@ -1,5 +1,8 @@
 2011-05-06  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/bindings-second-mode.lisp (set-default-second-keys):
+	select-brother-spatial-move-* binding update.
+
 	* src/clfswm-layout.lisp (tile-left|right|top|bottom-layout): Ask
 	to keep children positions or not.
 
