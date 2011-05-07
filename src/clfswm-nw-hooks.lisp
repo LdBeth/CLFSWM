@@ -38,6 +38,7 @@
 
 
 (defparameter *nw-hook-current-key* (char-code #\a))
+(defparameter *permanent-nw-hook-frames* nil)
 
 
 (defun set-nw-hook (hook)
@@ -45,8 +46,9 @@
   (let ((frame (if (xlib:window-p *current-child*)
 		   (find-parent-frame *current-child*)
 		   *current-child*)))
-    (setf (frame-nw-hook frame) hook)
-    (leave-second-mode)))
+    (unless (child-member frame *permanent-nw-hook-frames*)
+      (setf (frame-nw-hook frame) hook)
+      (leave-second-mode))))
 
 (defun register-nw-hook (hook)
   (add-menu-key 'frame-nw-hook-menu (code-char *nw-hook-current-key*) hook)
@@ -60,19 +62,26 @@
 
 (defun leave-if-not-frame (child)
   "Leave the child if it's not a frame"
-  (when (xlib:window-p child)
+  (unless (frame-p child)
     (leave-frame)
     (select-previous-level)))
 
 (defun clear-nw-hook (frame)
   "Clear the frame new window hook"
-  (setf (frame-nw-hook frame) nil))
+  (unless (child-member frame *permanent-nw-hook-frames*)
+    (setf (frame-nw-hook frame) nil)))
+
 
 (defun clear-all-nw-hooks ()
   "Clear all new window hooks for all frames"
   (with-all-frames (*root-frame* frame)
     (clear-nw-hook frame)))
 
+
+(defun make-permanent-nw-hook-frame (frame)
+  "Prevent to add or delete a new window hook for this frame"
+  (when (frame-p frame)
+    (push frame *permanent-nw-hook-frames*)))
 
 
 ;;; Default frame new window hook
@@ -238,7 +247,7 @@
 
 
 ;;; Absorb window.
-;;; The frame absorb the new window if it match the absorb-nw-test
+;;; The frame absorb the new window if it match the nw-absorb-test
 ;;; frame data slot.
 (defun absorb-window-nw-hook (frame window)
   (let ((absorb-nw-test (frame-data-slot frame :nw-absorb-test)))
@@ -256,7 +265,7 @@
   nil)
 
 (defun set-absorb-window-nw-hook ()
-  "Open the window in this frame if it match absorb-nw-test"
+  "Open the window in this frame if it match nw-absorb-test"
   (set-nw-hook #'absorb-window-nw-hook))
 
 (register-nw-hook 'set-absorb-window-nw-hook)

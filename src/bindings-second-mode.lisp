@@ -68,6 +68,13 @@
   (set-layout-once #'tile-layout)
   (leave-second-mode))
 
+
+(defun stop-all-pending-actions ()
+  "Stop all pending actions"
+  (clear-all-nw-hooks)
+  (leave-second-mode))
+
+
 ;;; default shell programs
 (defmacro define-shell (key name docstring cmd)
   "Define a second key to start a shell command"
@@ -93,13 +100,12 @@
   (define-second-key ("l") 'open-frame-fill-menu)
   (define-second-key ("r") 'open-frame-resize-menu)
   (define-second-key ("x") 'update-layout-managed-children-position)
-  (define-second-key (#\g :control) 'stop-all-pending-actions)
+  (define-second-key ("g" :control) 'stop-all-pending-actions)
   (define-second-key ("i") 'identify-key)
   (define-second-key ("colon") 'eval-from-query-string)
   (define-second-key ("exclam") 'run-program-from-query-string)
   (define-second-key ("Return") 'leave-second-mode)
   (define-second-key ("Escape") 'leave-second-mode)
-  (define-second-key ("g" :control) 'leave-second-mode)
   (define-second-key ("t") 'tile-current-frame)
   (define-second-key ("Home" :mod-1 :control :shift) 'exit-clfswm)
   (define-second-key ("Right" :mod-1) 'select-next-brother)
@@ -131,10 +137,10 @@
   (define-second-key ("Home" :mod-1) 'switch-to-root-frame)
   (define-second-key ("Home" :mod-1 :shift) 'switch-and-select-root-frame)
   (define-second-key ("Menu") 'toggle-show-root-frame)
-  (define-second-key (#\b :mod-1) 'banish-pointer)
-  (define-second-key (#\o) 'set-open-in-new-frame-in-parent-frame-nw-hook)
-  (define-second-key (#\o :control) 'set-open-in-new-frame-in-root-frame-nw-hook)
-  (define-second-key (#\a) 'add-default-frame)
+  (define-second-key ("b" :mod-1) 'banish-pointer)
+  (define-second-key ("o") 'set-open-in-new-frame-in-parent-frame-nw-hook)
+  (define-second-key ("o" :control) 'set-open-in-new-frame-in-root-frame-nw-hook)
+  (define-second-key ("a") 'add-default-frame)
   ;; Escape
   (define-second-key ("Escape" :control) 'ask-close/kill-current-window)
   ;; Selection
@@ -145,12 +151,12 @@
   (define-second-key ("v" :control :shift) 'paste-selection-no-clear)
   (define-second-key ("Delete" :control) 'remove-current-child)
   (define-second-key ("Delete") 'delete-current-child)
-  (define-shell (#\c) b-start-xterm "start an xterm" "cd $HOME && exec xterm")
-  (define-shell (#\e) b-start-emacs "start emacs" "cd $HOME && exec emacs")
-  (define-shell (#\e :control) b-start-emacsremote
+  (define-shell ("c") b-start-xterm "start an xterm" "cd $HOME && exec xterm")
+  (define-shell ("e") b-start-emacs "start emacs" "cd $HOME && exec emacs")
+  (define-shell ("e" :control) b-start-emacsremote
     "start an emacs for another user"
     "exec xterm -e emacsremote")
-  (define-shell (#\h) b-start-xclock "start an xclock" "exec xclock -d")
+  (define-shell ("h") b-start-xclock "start an xclock" "exec xclock -d")
   (define-second-key ("F10" :mod-1) 'fast-layout-switch)
   (define-second-key ("F10" :shift :control) 'toggle-show-root-frame)
   (define-second-key ("F10") 'expose-windows-current-child-mode)

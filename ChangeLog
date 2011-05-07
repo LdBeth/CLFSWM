@@ -1,5 +1,9 @@
 2011-05-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-nw-hooks.lisp (make-permanent-nw-hook-frame): New
+	function. Prevent to add or delete a new window hook for this
+	frame.
+
 	* src/clfswm-layout.lisp (update-layout-managed-children-position):
 	New function.
 

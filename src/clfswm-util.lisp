@@ -71,13 +71,6 @@
 	(char= (char rep 0) #\Y))))
 
 
-;;(error "stop-all-pending-actions: TODO")
-(defun stop-all-pending-actions ()
-  "Stop all pending actions"
-  ())
-  ;;(error "TODO"))
-
-
 
 (defun rename-current-child ()
   "Rename the current child"
