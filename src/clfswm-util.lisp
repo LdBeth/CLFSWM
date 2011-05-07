@@ -71,10 +71,11 @@
 	(char= (char rep 0) #\Y))))
 
 
-(error "stop-all-pending-actions: TODO")
+;;(error "stop-all-pending-actions: TODO")
 (defun stop-all-pending-actions ()
   "Stop all pending actions"
-  (error "TODO"))
+  ())
+  ;;(error "TODO"))
 
 
 
