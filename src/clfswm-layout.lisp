@@ -191,11 +191,23 @@
 	(remove-frame-data-slot *current-child* :tile-layout-keep-position))))
 
 
-(defun set-layout-managed-children ()
-  (when (frame-p *current-child*)
-    (setf (frame-data-slot *current-child* :layout-managed-children)
-	  (copy-list (get-managed-child *current-child*)))
-    (tile-layout-ask-keep-position)))
+
+(labels ((set-managed ()
+           (setf (frame-data-slot *current-child* :layout-managed-children)
+                 (copy-list (get-managed-child *current-child*)))))
+  (defun set-layout-managed-children ()
+    (when (frame-p *current-child*)
+      (set-managed)
+      (tile-layout-ask-keep-position)))
+
+
+  (defun update-layout-managed-children-position ()
+    "Update layout managed children position"
+    (when (frame-p *current-child*)
+      (set-managed)
+      (leave-second-mode))))
+
+
 
 (defun update-layout-managed-children-keep-position (child parent)
   (let ((managed-children (frame-data-slot parent :layout-managed-children))

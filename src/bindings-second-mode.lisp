@@ -92,6 +92,7 @@
   (define-second-key ("p") 'open-frame-pack-menu)
   (define-second-key ("l") 'open-frame-fill-menu)
   (define-second-key ("r") 'open-frame-resize-menu)
+  (define-second-key ("x") 'update-layout-managed-children-position)
   ;;(define-second-key (#\g :control) 'stop-all-pending-actions)
   (define-second-key ("i") 'identify-key)
   (define-second-key ("colon") 'eval-from-query-string)
