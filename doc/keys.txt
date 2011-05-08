@@ -84,12 +84,13 @@ Second mode keys:
                        P               Open the frame pack menu
                        L               Open the frame fill menu
                        R               Open the frame resize menu
+                       X               Update layout managed children position
+  Control              G               Stop all pending actions
                        I               Identify a key
                        Colon           Eval a lisp form from the query input
                        Exclam          Run a program from the query input
                        Return          Leave second mode
                        Escape          Leave second mode
-  Control              G               Leave second mode
                        T               Tile the current frame
   Mod-1 Control Shift  Home            Exit clfswm
   Mod-1                Right           Select the next brother

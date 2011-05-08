@@ -926,7 +926,7 @@ e: Open the next window in a new frame in the parent frame
 f: Open the next window in the current frame and leave the focus on the current child
 g: Open the next window in a named frame
 h: Open the next window in a numbered frame
-i: Open the window in this frame if it match absorb-nw-test
+i: Open the window in this frame if it match nw-absorb-test
 
 Frame-Movement-Menu
 p: < Frame pack menu >
