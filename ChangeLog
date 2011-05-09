@@ -1,3 +1,8 @@
+2011-05-09  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/osd.lisp (funcall-button-from-code): Display osd
+	documention for buttons and fix some redefining warnings.
+
 2011-05-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-nw-hooks.lisp (make-permanent-nw-hook-frame): New

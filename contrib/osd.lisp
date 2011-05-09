@@ -54,8 +54,9 @@
 (defun is-osd-window-p (win)
   (xlib:window-equal win *osd-window*))
 
+
 #-DISPLAY-OSD
-(defun display-doc (function code state)
+(defun display-doc (function code state &optional button-p)
   (unless *osd-window*
     (setf *osd-window* (xlib:create-window :parent *root*
 					   :x 0 :y (- (xlib:drawable-height *root*) 25)
@@ -83,15 +84,16 @@
 			 t)
     (rotatef (xlib:gcontext-foreground *osd-gc*) (xlib:gcontext-background *osd-gc*))
     (xlib:draw-glyphs *osd-window* *osd-gc* 20 15
-		      (format nil "~A~A"
-			      (if keysym
-				  (format nil "~:(~{~A+~}~A~)" modifiers keysym)
-				  "Menu")
-			      (aif (documentation (first function) 'function)
-				   (format nil ": ~A" it) "")))
+                      (format nil "~A~A"
+                              (cond (button-p (format nil "~:(~{~A+~}Button-~A~)" modifiers code))
+                                    (keysym (format nil "~:(~{~A+~}~A~)" modifiers keysym))
+                                    (t "Menu"))
+                              (aif (documentation (first function) 'function)
+                                   (format nil ": ~A" (substitute #\Space #\Newline it)) "")))
     (xlib:display-finish-output *display*)))
 
 
+(fmakunbound 'funcall-key-from-code)
 (defun funcall-key-from-code (hash-table-key code state &rest args)
   (let ((function (find-key-from-code hash-table-key code state)))
     (when function
@@ -99,6 +101,24 @@
       (apply (first function) (append args (second function)))
       t)))
 
+
+(fmakunbound 'funcall-button-from-code)
+(defun funcall-button-from-code (hash-table-key code state window root-x root-y
+				 &optional (action *fun-press*) args)
+  (let ((state (modifiers->state (set-difference (state->modifiers state)
+						 '(:button-1 :button-2 :button-3 :button-4 :button-5)))))
+    (multiple-value-bind (function foundp)
+	(gethash (list code state) hash-table-key)
+      (if (and foundp (funcall action function))
+	  (progn
+            (unless (equal code 'motion)
+              (display-doc function code state t))
+	    (apply (funcall action function) `(,window ,root-x ,root-y ,@(append args (third function))))
+	    t)
+	  nil))))
+
+
+(fmakunbound 'get-fullscreen-size)
 ;;; CONFIG - Screen size
 (defun get-fullscreen-size ()
   "Return the size of root child (values rx ry rw rh)
@@ -106,6 +126,7 @@ You can tweak this to what you want"
   (values -2 -2 (+ (xlib:screen-width *screen*) 2) (- (xlib:screen-height *screen*) 25)))
 
 
+(fmakunbound 'open-menu-do-action)
 ;;; Display menu functions
 (defun open-menu-do-action (action menu parent)
   (typecase action
@@ -116,16 +137,18 @@ You can tweak this to what you want"
 	 (display-doc (list action) 0 0)
 	 (funcall action)))))
 
-
+(fmakunbound 'bottom-left-placement)
 (defun bottom-left-placement (&optional (width 0) (height 0))
   (declare (ignore width))
   (values 0
 	  (- (xlib:screen-height *screen*) height 26)))
 
+(fmakunbound 'bottom-middle-placement)
 (defun bottom-middle-placement (&optional (width 0) (height 0))
   (values (truncate (/ (- (xlib:screen-width *screen*) width) 2))
 	  (- (xlib:screen-height *screen*) height 26)))
 
+(fmakunbound 'bottom-right-placement)
 (defun bottom-right-placement (&optional (width 0) (height 0))
   (values (- (xlib:screen-width *screen*) width 1)
 	  (- (xlib:screen-height *screen*) height 26)))
