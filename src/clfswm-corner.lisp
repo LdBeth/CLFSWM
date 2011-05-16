@@ -64,7 +64,8 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
       (when corner
 	(let ((fun (second (assoc corner corner-list))))
 	  (when fun
-	    (funcall fun)))))))
+	    (funcall fun)
+            t))))))
 
 
 

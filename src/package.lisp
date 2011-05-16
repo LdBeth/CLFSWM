@@ -224,6 +224,8 @@ loading configuration file and before opening the display.")
   'Placement "Expose mode window placement (Selection keys position)")
 (defconfig *notify-window-placement* 'bottom-right-placement
   'Placement "Notify window placement")
+(defconfig *ask-close/kill-placement* 'top-right-placement
+  'Placement "Ask close/kill window placement")
 
 
 

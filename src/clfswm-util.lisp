@@ -1301,7 +1301,8 @@ For window: set current child to window or its parent according to window-parent
 
 (defun ask-close/kill-current-window ()
   "Close or kill the current window (ask before doing anything)"
-  (let ((window (xlib:input-focus *display*)))
+  (let ((window (xlib:input-focus *display*))
+        (*info-mode-placement* *ask-close/kill-placement*))
     (info-mode-menu
      (if (and window (not (xlib:window-equal window *no-focus-window*)))
 	 `(,(format nil "Focus window: ~A" (xlib:wm-name window))
