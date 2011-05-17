@@ -86,6 +86,12 @@
 						(do-shell cmd))))
 	 (leave-second-mode))))
 
+(defun sm-ask-close/kill-current-window ()
+  "Close or kill the current window (ask before doing anything)"
+  (setf *second-mode-leave-function* #'ask-close/kill-current-window)
+  (leave-second-mode))
+
+
 
 (defun set-default-second-keys ()
   (define-second-key ("F1" :mod-1) 'help-on-clfswm)
@@ -101,6 +107,8 @@
   (define-second-key ("r") 'open-frame-resize-menu)
   (define-second-key ("x") 'update-layout-managed-children-position)
   (define-second-key ("g" :control) 'stop-all-pending-actions)
+  (define-second-key ("q") 'sm-delete-focus-window)
+  (define-second-key ("k") 'sm-ask-close/kill-current-window)
   (define-second-key ("i") 'identify-key)
   (define-second-key ("colon") 'eval-from-query-string)
   (define-second-key ("exclam") 'run-program-from-query-string)

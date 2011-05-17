@@ -1,4 +1,4 @@
-;;; --------------------------------------------------------------------------
+;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
 ;;; --------------------------------------------------------------------------
@@ -325,8 +325,10 @@
 
 
 
-
-
+(defmacro with-focus-window ((window) &body body)
+  `(let ((,window (xlib:input-focus *display*)))
+     (when (and ,window (not (xlib:window-equal ,window *no-focus-window*)))
+       ,@body)))
 
 
 (defgeneric rename-child (child name))
@@ -589,40 +591,41 @@
 
 
 (defun display-frame-info (frame)
-  (let ((dy (+ (xlib:max-char-ascent *default-font*) (xlib:max-char-descent *default-font*))))
-    (with-slots (name number gc window child hidden-children) frame
-      (setf (xlib:gcontext-background gc) (get-color *frame-background*)
-	    (xlib:window-background window) (get-color *frame-background*))
-      (clear-pixmap-buffer window gc)
-      (setf (xlib:gcontext-foreground gc) (get-color (if (and (child-equal-p frame *current-root*)
-							      (child-equal-p frame *current-child*))
-							 *frame-foreground-root* *frame-foreground*)))
-      (xlib:draw-glyphs *pixmap-buffer* gc 5 dy
-			(format nil "Frame: ~A~A"
-				number
-				(if name  (format nil " - ~A" name) "")))
-      (let ((pos dy))
-	(when (child-equal-p frame *current-root*)
-	  (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
-			    (format nil "  ~A hidden windows" (length (get-hidden-windows))))
-	  (when *child-selection*
-	    (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
-			      (with-output-to-string (str)
-				(format str "  Selection: ")
-				(dolist (child *child-selection*)
-				  (typecase child
-				    (xlib:window (format str "  ~A " (xlib:wm-name child)))
-				    (frame (format str "  frame:~A[~A] " (frame-number child)
-						   (aif (frame-name child) it "")))))))))
-	(dolist (ch child)
-	  (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
-			    (format nil "  ~A" (ensure-printable (child-fullname ch)))))
-	(setf (xlib:gcontext-foreground gc) (get-color *frame-foreground-hidden*))
-	(dolist (ch hidden-children)
-	  (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
-			    (format nil "  ~A - hidden" (ensure-printable (child-fullname ch))))))
-      (copy-pixmap-buffer window gc)
-      (values t t))))
+  (when (frame-p frame)
+    (let ((dy (+ (xlib:max-char-ascent *default-font*) (xlib:max-char-descent *default-font*))))
+      (with-slots (name number gc window child hidden-children) frame
+        (setf (xlib:gcontext-background gc) (get-color *frame-background*)
+              (xlib:window-background window) (get-color *frame-background*))
+        (clear-pixmap-buffer window gc)
+        (setf (xlib:gcontext-foreground gc) (get-color (if (and (child-equal-p frame *current-root*)
+                                                                (child-equal-p frame *current-child*))
+                                                           *frame-foreground-root* *frame-foreground*)))
+        (xlib:draw-glyphs *pixmap-buffer* gc 5 dy
+                          (format nil "Frame: ~A~A"
+                                  number
+                                  (if name  (format nil " - ~A" name) "")))
+        (let ((pos dy))
+          (when (child-equal-p frame *current-root*)
+            (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
+                              (format nil "  ~A hidden windows" (length (get-hidden-windows))))
+            (when *child-selection*
+              (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
+                                (with-output-to-string (str)
+                                  (format str "  Selection: ")
+                                  (dolist (child *child-selection*)
+                                    (typecase child
+                                      (xlib:window (format str "  ~A " (xlib:wm-name child)))
+                                      (frame (format str "  frame:~A[~A] " (frame-number child)
+                                                     (aif (frame-name child) it "")))))))))
+          (dolist (ch child)
+            (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
+                              (format nil "  ~A" (ensure-printable (child-fullname ch)))))
+          (setf (xlib:gcontext-foreground gc) (get-color *frame-foreground-hidden*))
+          (dolist (ch hidden-children)
+            (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
+                              (format nil "  ~A - hidden" (ensure-printable (child-fullname ch))))))
+        (copy-pixmap-buffer window gc)
+        (values t t)))))
 
 
 (defun display-all-frame-info (&optional (root *current-root*))

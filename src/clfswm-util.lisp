@@ -114,13 +114,12 @@
 
 
 (defun delete-focus-window-generic (close-fun)
-  (let ((window (xlib:input-focus *display*)))
-    (when (and window (not (xlib:window-equal window *no-focus-window*)))
-      (when (child-equal-p window *current-child*)
-	(setf *current-child* *current-root*))
-      (hide-child window)
-      (delete-child-and-children-in-all-frames window close-fun)
-      (show-all-children))))
+  (with-focus-window (window)
+    (when (child-equal-p window *current-child*)
+      (setf *current-child* *current-root*))
+    (hide-child window)
+    (delete-child-and-children-in-all-frames window close-fun)
+    (show-all-children)))
 
 (defun delete-focus-window ()
   "Close focus window: Delete the focus window in all frames and workspaces"
@@ -132,12 +131,11 @@
 
 (defun remove-focus-window ()
   "Remove the focus window from the current frame"
-  (let ((window (xlib:input-focus *display*)))
-    (when (and window (not (xlib:window-equal window *no-focus-window*)))
-      (setf *current-child* *current-root*)
-      (hide-child window)
-      (remove-child-in-frame window (find-parent-frame window))
-      (show-all-children))))
+  (with-focus-window (window)
+    (setf *current-child* *current-root*)
+    (hide-child window)
+    (remove-child-in-frame window (find-parent-frame window))
+    (show-all-children)))
 
 
 (defun unhide-all-windows-in-current-child ()
@@ -218,19 +216,25 @@
 
 (defun cut-current-child ()
   "Cut the current child to the selection"
-  (hide-all *current-child*)
-  (copy-current-child)
-  (remove-child-in-frame *current-child* (find-parent-frame *current-child* *current-root*))
-  (setf *current-child* *current-root*)
-  (show-all-children t))
+  (unless (child-equal-p *current-child* *current-root*)
+    (let ((parent (find-parent-frame *current-child*)))
+      (hide-all *current-child*)
+      (copy-current-child)
+      (remove-child-in-frame *current-child* (find-parent-frame *current-child* *current-root*))
+      (when parent
+        (setf *current-child* parent))
+      (show-all-children t))))
 
 (defun remove-current-child ()
   "Remove the current child from its parent frame"
-  (hide-all *current-child*)
-  (remove-child-in-frame *current-child* (find-parent-frame *current-child* *current-root*))
-  (setf *current-child* *current-root*)
-  (show-all-children t)
-  (leave-second-mode))
+  (unless (child-equal-p *current-child* *current-root*)
+    (let ((parent (find-parent-frame *current-child*)))
+      (hide-all *current-child*)
+      (remove-child-in-frame *current-child* (find-parent-frame *current-child* *current-root*))
+      (when parent
+        (setf *current-child* parent))
+      (show-all-children t)
+      (leave-second-mode))))
 
 (defun delete-current-child ()
   "Delete the current child and its children in all frames"
@@ -242,20 +246,34 @@
 
 (defun paste-selection-no-clear ()
   "Paste the selection in the current frame - Do not clear the selection after paste"
-  (let ((frame-dest (typecase *current-child*
-		      (xlib:window (find-parent-frame *current-child* *current-root*))
-		      (frame *current-child*))))
-    (when frame-dest
-      (dolist (child *child-selection*)
-	(unless (find-child-in-parent child frame-dest)
-	  (pushnew child (frame-child frame-dest))))
-      (show-all-children))))
+  (when (frame-p *current-child*)
+    (dolist (child *child-selection*)
+      (unless (find-child-in-parent child *current-child*)
+        (pushnew child (frame-child *current-child*) :test #'child-equal-p)))
+    (show-all-children)))
 
 (defun paste-selection ()
   "Paste the selection in the current frame"
-  (paste-selection-no-clear)
-  (setf *child-selection* nil)
-  (display-frame-info *current-root*))
+  (when (frame-p *current-child*)
+    (paste-selection-no-clear)
+    (setf *child-selection* nil)
+    (display-frame-info *current-root*)))
+
+
+(defun copy-focus-window ()
+  "Copy the focus window to the selection"
+  (with-focus-window (window)
+    (let ((*current-child* window))
+      (copy-current-child))))
+
+
+(defun cut-focus-window ()
+  "Cut the focus window to the selection"
+  (with-focus-window (window)
+    (let ((*current-child* window))
+      (cut-current-child))))
+
+
 
 
 
@@ -1306,12 +1324,17 @@ For window: set current child to window or its parent according to window-parent
     (info-mode-menu
      (if (and window (not (xlib:window-equal window *no-focus-window*)))
 	 `(,(format nil "Focus window: ~A" (xlib:wm-name window))
-	    (#\c delete-focus-window "Close the focus window")
+	    (#\s delete-focus-window "Close the focus window")
 	    (#\k destroy-focus-window "Kill the focus window")
 	    (#\r remove-focus-window)
-	    (#\u unhide-all-windows-in-current-child))
+	    (#\u unhide-all-windows-in-current-child)
+            (#\x cut-focus-window)
+            (#\c copy-focus-window)
+            (#\v paste-selection))
 	 `(,(format nil "Focus window: None")
-	    (#\u unhide-all-windows-in-current-child))))))
+	    (#\u unhide-all-windows-in-current-child)
+            (#\v paste-selection))))
+    t))
 
 
 

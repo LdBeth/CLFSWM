@@ -1,3 +1,9 @@
+2011-05-17  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (copy-focus-window, cut-focus-window): New
+	functions and ask-close/kill-current-window menu and bindings
+	entry.
+
 2011-05-16  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (ask-close/kill-current-window): Add an

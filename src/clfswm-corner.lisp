@@ -59,13 +59,14 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
 
 
 (defun do-corner-action (x y corner-list)
+  "Do the action associated with corner. The corner function must return T to
+stop the button event"
   (when (frame-p *current-root*)
     (let ((corner (find-corner x y)))
       (when corner
 	(let ((fun (second (assoc corner corner-list))))
 	  (when fun
-	    (funcall fun)
-            t))))))
+	    (funcall fun)))))))
 
 
 
