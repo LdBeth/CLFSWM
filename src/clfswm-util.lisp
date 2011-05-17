@@ -214,7 +214,7 @@
   (display-frame-info *current-root*))
 
 
-(defun cut-current-child ()
+(defun cut-current-child (&optional (show-now t))
   "Cut the current child to the selection"
   (unless (child-equal-p *current-child* *current-root*)
     (let ((parent (find-parent-frame *current-child*)))
@@ -223,7 +223,9 @@
       (remove-child-in-frame *current-child* (find-parent-frame *current-child* *current-root*))
       (when parent
         (setf *current-child* parent))
-      (show-all-children t))))
+      (when show-now
+        (show-all-children t))
+      *current-child*)))
 
 (defun remove-current-child ()
   "Remove the current child from its parent frame"
@@ -270,8 +272,11 @@
 (defun cut-focus-window ()
   "Cut the focus window to the selection"
   (with-focus-window (window)
-    (let ((*current-child* window))
-      (cut-current-child))))
+    (let ((new-current-child nil))
+      (let ((*current-child* window))
+        (setf new-current-child (cut-current-child nil)))
+      (setf *current-child* new-current-child)
+      (show-all-children t))))
 
 
 
