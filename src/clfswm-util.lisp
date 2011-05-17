@@ -272,11 +272,9 @@
 (defun cut-focus-window ()
   "Cut the focus window to the selection"
   (with-focus-window (window)
-    (let ((new-current-child nil))
-      (let ((*current-child* window))
-        (setf new-current-child (cut-current-child nil)))
-      (setf *current-child* new-current-child)
-      (show-all-children t))))
+    (setf *current-child* (let ((*current-child* window))
+                            (cut-current-child nil)))
+    (show-all-children t)))
 
 
 

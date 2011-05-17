@@ -86,12 +86,6 @@
 						(do-shell cmd))))
 	 (leave-second-mode))))
 
-(defun sm-ask-close/kill-current-window ()
-  "Close or kill the current window (ask before doing anything)"
-  (setf *second-mode-leave-function* #'ask-close/kill-current-window)
-  (leave-second-mode))
-
-
 
 (defun set-default-second-keys ()
   (define-second-key ("F1" :mod-1) 'help-on-clfswm)

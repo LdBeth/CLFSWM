@@ -156,3 +156,13 @@
 	(t (setf *in-second-mode* nil)
 	   (show-all-children))))
 
+
+(defun sm-delete-focus-window ()
+  "Close focus window: Delete the focus window in all frames and workspaces"
+  (setf *second-mode-leave-function* 'delete-focus-window)
+  (leave-second-mode))
+
+(defun sm-ask-close/kill-current-window ()
+  "Close or kill the current window (ask before doing anything)"
+  (setf *second-mode-leave-function* #'ask-close/kill-current-window)
+  (leave-second-mode))

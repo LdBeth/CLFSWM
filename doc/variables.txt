@@ -277,6 +277,8 @@ on the root window in the main mode with the mouse
     Expose mode window placement (Selection keys position)
   *NOTIFY-WINDOW-PLACEMENT* = BOTTOM-RIGHT-PLACEMENT
     Notify window placement
+  *ASK-CLOSE/KILL-PLACEMENT* = TOP-RIGHT-PLACEMENT
+    Ask close/kill window placement
 
 
 <= Query String Group =>

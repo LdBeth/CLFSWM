@@ -86,6 +86,8 @@ Second mode keys:
                        R               Open the frame resize menu
                        X               Update layout managed children position
   Control              G               Stop all pending actions
+                       Q               Close focus window: Delete the focus window in all frames and workspaces
+                       K               Close or kill the current window (ask before doing anything)
                        I               Identify a key
                        Colon           Eval a lisp form from the query input
                        Exclam          Run a program from the query input
