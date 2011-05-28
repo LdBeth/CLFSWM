@@ -1,5 +1,8 @@
 2011-05-28  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-util.lisp (delete-focus-window-generic): Do not hide
+	child before removing, so prevent a flickering.
+
 	* src/clfswm-internal.lisp (show-all-children): Rectangular
 	optimization to display only needed children.
 	(show-all-children): Remove flickering on

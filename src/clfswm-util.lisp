@@ -117,7 +117,6 @@
   (with-focus-window (window)
     (when (child-equal-p window *current-child*)
       (setf *current-child* *current-root*))
-    (hide-child window)
     (delete-child-and-children-in-all-frames window close-fun)
     (show-all-children)))
 
