@@ -71,7 +71,7 @@
   (define-main-key ("L2" :control) 'present-clfswm-terminal)
   (define-main-key ("L2" :shift) 'show-all-frames-info-key)
   (define-main-key ("L2" :shift :mod-1) 'show-all-frames-info)
-  (define-main-key (#\b :mod-1) 'banish-pointer)
+  (define-main-key ("b" :mod-1) 'banish-pointer)
   ;; Escape
   (define-main-key ("Escape" :control) 'ask-close/kill-current-window)
   ;; Second mode

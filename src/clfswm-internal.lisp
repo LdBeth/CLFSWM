@@ -64,6 +64,15 @@
 
 
 
+(defun rect-hidden-p (rect1 rect2)
+  "Return T if child-rect1 hide child-rect2"
+  (and (<= (child-rect-x rect1) (child-rect-x rect2))
+       (<= (child-rect-y rect1) (child-rect-y rect2))
+       (>= (+ (child-rect-x rect1) (child-rect-w rect1)) (+ (child-rect-x rect2) (child-rect-w rect2)))
+       (>= (+ (child-rect-y rect1) (child-rect-h rect1)) (+ (child-rect-y rect2) (child-rect-h rect2)))))
+
+
+
 (defgeneric frame-p (frame))
 (defmethod frame-p ((frame frame))
   (declare (ignore frame))
@@ -661,17 +670,19 @@
                 (xlib:drawable-y window) ny
                 (xlib:drawable-width window) nw
                 (xlib:drawable-height window) nh)
-          (xlib:display-finish-output *display*))
+          ;;(xlib:display-finish-output *display*))
+          )
 	change))))
 
 
 (defmethod adapt-child-to-parent ((frame frame) parent)
-  (multiple-value-bind (nx ny nw nh)
-      (get-parent-layout frame parent)
+  (declare (ignore parent))
+;;  (multiple-value-bind (nx ny nw nh)
+;;      (get-parent-layout frame parent)
     (with-slots (rx ry rw rh window) frame
-      (setf rx nx  ry ny
-	    rw (max nw 1)
-	    rh (max nh 1))
+;;      (setf rx nx  ry ny
+;;	    rw (max nw 1)
+;;	    rh (max nh 1))
       (let ((change (or (/= (xlib:drawable-x window) rx)
 			(/= (xlib:drawable-y window) ry)
 			(/= (xlib:drawable-width window) rw)
@@ -681,8 +692,9 @@
                 (xlib:drawable-y window) ry
                 (xlib:drawable-width window) rw
                 (xlib:drawable-height window) rh)
-          (xlib:display-finish-output *display*))
-	change))))
+          ;;(xlib:display-finish-output *display*))
+          )
+	change)))
 
 (defmethod adapt-child-to-parent (child parent)
   (declare (ignore child parent))
@@ -700,8 +712,7 @@
 
 (defmethod set-child-stack-order (window child)
   (declare (ignore child))
-  (raise-window window)
-  (xlib:display-finish-output *display*))
+  (raise-window window))
 
 
 
@@ -757,28 +768,6 @@
   ())
 
 
-
-
-(defgeneric child-coordinates (child))
-
-(defmethod child-coordinates ((frame frame))
-  (values (frame-rx frame)
-	  (frame-ry frame)
-	  (+ (frame-rx frame) (frame-rw frame))
-	  (+ (frame-ry frame) (frame-rh frame))))
-
-(defmethod child-coordinates ((window xlib:window))
-  (values (xlib:drawable-x window)
-	  (xlib:drawable-y window)
-	  (+ (xlib:drawable-x window) (xlib:drawable-width window))
-	  (+ (xlib:drawable-y window) (xlib:drawable-height window))))
-
-(defmethod child-coordinates (child)
-  (declare (ignore child))
-  (values 0 0 1 1))
-
-
-
 (defgeneric select-child (child selected))
 
 (labels ((get-selected-color (child selected-p)
@@ -817,19 +806,50 @@
 
 
 
-(defun show-all-children (&optional (from-root-from nil))
-  "Show all children from *current-root*. When from-root-from is true
+
+(defun adapt-frame-to-parent (frame parent)
+  (multiple-value-bind (nx ny nw nh)
+      (get-parent-layout frame parent)
+    (with-slots (rx ry rw rh window) frame
+      (setf rx nx  ry ny
+	    rw (max nw 1)
+	    rh (max nh 1)))))
+
+
+(defun adapt-child-to-rect (rect)
+  (let ((window (typecase (child-rect-child rect)
+                  (xlib:window (when (managed-window-p (child-rect-child rect) (child-rect-parent rect))
+                                 (child-rect-child rect)))
+                  (frame (frame-window (child-rect-child rect))))))
+    (when window
+      (let ((change (or (/= (xlib:drawable-x window) (child-rect-x rect))
+			(/= (xlib:drawable-y window) (child-rect-y rect))
+			(/= (xlib:drawable-width window) (child-rect-w rect))
+			(/= (xlib:drawable-height window) (child-rect-h rect)))))
+        (when change
+          (setf (xlib:drawable-x window) (child-rect-x rect)
+                (xlib:drawable-y window) (child-rect-y rect)
+                (xlib:drawable-width window) (child-rect-w rect)
+                (xlib:drawable-height window) (child-rect-h rect)))
+	change))))
+
+
+
+
+(defun show-all-children (&optional (from-root-frame nil))
+  "Show all children from *current-root*. When from-root-frame is true
 Display all children from root frame and hide those not in *current-root*"
   (let ((geometry-change nil)
-	(previous nil)
-        (displayed-child nil))
+        (displayed-child nil)
+        (hidden-child nil))
     (labels ((in-displayed-list (child)
-               (member child displayed-child :test #'child-equal-p))
+               (member child displayed-child :test (lambda (c rect)
+                                                     (child-equal-p c (child-rect-child rect)))))
 
              (set-geometry (child parent in-current-root child-current-root-p)
                (if (or in-current-root child-current-root-p)
-                   (when (adapt-child-to-parent child (if child-current-root-p nil parent))
-                     (setf geometry-change t))
+                   (when (frame-p child)
+                     (adapt-frame-to-parent child (if child-current-root-p nil parent)))
                    (hide-child child)))
 
              (recurse-on-frame-child (child in-current-root child-current-root-p selected-p)
@@ -839,11 +859,31 @@ Display all children from root frame and hide those not in *current-root*"
                         (and selected-p (child-equal-p sub-child selected-child))
                         (or in-current-root child-current-root-p)))))
 
+             (hidden-child-p (rect)
+               (dolist (r displayed-child)
+                 (when (rect-hidden-p r rect)
+                   (return t))))
+
              (select-and-display (child parent selected-p)
-               (push child displayed-child)
-               (select-child child selected-p)
-               (show-child child parent previous)
-               (setf previous child))
+               (multiple-value-bind (nx ny nw nh)
+                   (get-parent-layout child parent)
+                 (let ((rect (make-child-rect :child child :parent parent
+                                              :selected-p selected-p
+                                              :x nx :y ny :w nw :h nh)))
+                   (if (hidden-child-p rect)
+                       (pushnew child hidden-child :test #'child-equal-p)
+                       (push rect displayed-child)))))
+
+             (display-displayed-child ()
+               (let ((previous nil))
+                 (dolist (rect (nreverse displayed-child))
+                   (when (adapt-child-to-rect rect)
+                     (setf geometry-change t))
+                   (select-child (child-rect-child rect) (child-rect-selected-p rect))
+                   (show-child (child-rect-child rect)
+                               (child-rect-parent rect)
+                               previous)
+                   (setf previous (child-rect-child rect)))))
 
              (rec (child parent selected-p in-current-root)
                (let ((child-current-root-p (child-equal-p child *current-root*)))
@@ -855,9 +895,13 @@ Display all children from root frame and hide those not in *current-root*"
                             (not (in-displayed-list child)))
                    (select-and-display child parent selected-p)))))
 
-      (rec (if from-root-from *root-frame* *current-root*)
-	   nil t (child-equal-p *current-root* *root-frame*))
+      (rec (if from-root-frame *root-frame* *current-root*)
+           nil t (child-equal-p *current-root* *root-frame*))
+      (display-displayed-child)
+      (dolist (child hidden-child)
+        (hide-child child))
       (set-focus-to-current-child)
+      (xlib:display-finish-output *display*)
       geometry-change)))
 
 

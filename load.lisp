@@ -23,6 +23,8 @@
 ;;;
 ;;; --------------------------------------------------------------------------
 
+;;(load (compile-file "metering.cl"))
+
 (defparameter *base-dir* (directory-namestring *load-truename*))
 (export '*base-dir*)
 
