@@ -646,11 +646,13 @@
 
 
 (defun get-parent-layout (child parent)
-  (if (frame-p parent)
-      (aif (frame-layout parent)
-	   (funcall it child parent)
-	   (no-layout child parent))
-      (get-fullscreen-size)))
+  (if (or (frame-p child) (managed-window-p child parent))
+      (if (frame-p parent)
+          (aif (frame-layout parent)
+               (funcall it child parent)
+               (no-layout child parent))
+          (get-fullscreen-size))
+      (values -1 -1 -1 -1)))
 
 
 
@@ -669,20 +671,13 @@
           (setf (xlib:drawable-x window) nx
                 (xlib:drawable-y window) ny
                 (xlib:drawable-width window) nw
-                (xlib:drawable-height window) nh)
-          ;;(xlib:display-finish-output *display*))
-          )
+                (xlib:drawable-height window) nh))
 	change))))
 
 
 (defmethod adapt-child-to-parent ((frame frame) parent)
   (declare (ignore parent))
-;;  (multiple-value-bind (nx ny nw nh)
-;;      (get-parent-layout frame parent)
     (with-slots (rx ry rw rh window) frame
-;;      (setf rx nx  ry ny
-;;	    rw (max nw 1)
-;;	    rh (max nh 1))
       (let ((change (or (/= (xlib:drawable-x window) rx)
 			(/= (xlib:drawable-y window) ry)
 			(/= (xlib:drawable-width window) rw)
@@ -691,9 +686,7 @@
           (setf (xlib:drawable-x window) rx
                 (xlib:drawable-y window) ry
                 (xlib:drawable-width window) rw
-                (xlib:drawable-height window) rh)
-          ;;(xlib:display-finish-output *display*))
-          )
+                (xlib:drawable-height window) rh))
 	change)))
 
 (defmethod adapt-child-to-parent (child parent)
