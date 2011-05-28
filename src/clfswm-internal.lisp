@@ -846,11 +846,15 @@ Display all children from root frame and hide those not in *current-root*"
                (member child displayed-child :test (lambda (c rect)
                                                      (child-equal-p c (child-rect-child rect)))))
 
+             (add-in-hidden-list (child)
+               (pushnew child hidden-child :test #'child-equal-p))
+
              (set-geometry (child parent in-current-root child-current-root-p)
                (if (or in-current-root child-current-root-p)
                    (when (frame-p child)
                      (adapt-frame-to-parent child (if child-current-root-p nil parent)))
-                   (hide-child child)))
+                   (add-in-hidden-list child)))
+
 
              (recurse-on-frame-child (child in-current-root child-current-root-p selected-p)
                (let ((selected-child (frame-selected-child child)))
@@ -871,7 +875,7 @@ Display all children from root frame and hide those not in *current-root*"
                                               :selected-p selected-p
                                               :x nx :y ny :w nw :h nh)))
                    (if (hidden-child-p rect)
-                       (pushnew child hidden-child :test #'child-equal-p)
+                       (add-in-hidden-list child)
                        (push rect displayed-child)))))
 
              (display-displayed-child ()

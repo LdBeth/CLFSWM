@@ -2,6 +2,8 @@
 
 	* src/clfswm-internal.lisp (show-all-children): Rectangular
 	optimization to display only needed children.
+	(show-all-children): Remove flickering on
+	select-next/previous-brother.
 
 2011-05-17  Philippe Brochard  <pbrochard@common-lisp.net>
 
