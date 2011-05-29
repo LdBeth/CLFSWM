@@ -3,6 +3,8 @@
 	* src/clfswm-internal.lisp
 	(delete-child-and-children-in-all-frames): Show all children
 	before deleting/destroying a windows, so prevent a flickering.
+	(get-parent-layout): Return the fullscreen size when the current
+	root is a window.
 
 2011-05-28  Philippe Brochard  <pbrochard@common-lisp.net>
 

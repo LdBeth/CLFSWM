@@ -646,13 +646,15 @@
 
 
 (defun get-parent-layout (child parent)
-  (if (or (frame-p child) (managed-window-p child parent))
-      (if (frame-p parent)
-          (aif (frame-layout parent)
-               (funcall it child parent)
-               (no-layout child parent))
-          (get-fullscreen-size))
-      (values -1 -1 -1 -1)))
+  (if (and (child-equal-p child *current-root*) (xlib:window-p *current-root*))
+      (get-fullscreen-size)
+      (if (or (frame-p child) (managed-window-p child parent))
+          (if (frame-p parent)
+              (aif (frame-layout parent)
+                   (funcall it child parent)
+                   (no-layout child parent))
+              (get-fullscreen-size))
+          (values -1 -1 -1 -1))))
 
 
 
