@@ -1121,15 +1121,13 @@ Warning:frame window and gc are freeed."
   (delete-child-in-frames child *root-frame*))
 
 
-(defun delete-child-and-children-in-frames (child root &optional (close-methode 'delete-window))
+(defun delete-child-and-children-in-frames (child root)
   "Delete child and its children in the frame root and in all its children
 Warning:frame window and gc are freeed."
   (when (and (frame-p child) (frame-child child))
     (dolist (ch (frame-child child))
-      (delete-child-and-children-in-frames ch root close-methode)))
-  (delete-child-in-frames child root)
-  (when (xlib:window-p child)
-    (funcall close-methode child)))
+      (delete-child-and-children-in-frames ch root)))
+  (delete-child-in-frames child root))
 
 (defun delete-child-and-children-in-all-frames (child &optional (close-methode 'delete-window))
   "Delete child and its children in all frames from *root-frame*"
@@ -1137,7 +1135,10 @@ Warning:frame window and gc are freeed."
     (setf *current-root* (find-parent-frame child)))
   (when (child-equal-p child *current-child*)
     (setf *current-child* *current-root*))
-  (delete-child-and-children-in-frames child *root-frame* close-methode))
+  (delete-child-and-children-in-frames child *root-frame*)
+  (show-all-children)
+  (when (xlib:window-p child)
+    (funcall close-methode child)))
 
 
 

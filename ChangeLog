@@ -1,3 +1,9 @@
+2011-05-29  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp
+	(delete-child-and-children-in-all-frames): Show all children
+	before deleting/destroying a windows, so prevent a flickering.
+
 2011-05-28  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp (get-parent-layout): Handle correctly

@@ -117,8 +117,7 @@
   (with-focus-window (window)
     (when (child-equal-p window *current-child*)
       (setf *current-child* *current-root*))
-    (delete-child-and-children-in-all-frames window close-fun)
-    (show-all-children)))
+    (delete-child-and-children-in-all-frames window close-fun)))
 
 (defun delete-focus-window ()
   "Close focus window: Delete the focus window in all frames and workspaces"
