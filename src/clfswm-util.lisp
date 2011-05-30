@@ -590,7 +590,7 @@ mouse-fun is #'move-frame or #'resize-frame"
 	  (if root-p
 	      (add-new-frame)
 	      (progn
-		(unless (equal (type-of child) 'frame)
+		(unless (frame-p child)
 		  (setf child (find-frame-window child *current-root*)))
 		(setf parent (find-parent-frame child)))))
 	(when (and (frame-p child) (not (child-equal-p child *current-root*)))

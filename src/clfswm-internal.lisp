@@ -646,7 +646,7 @@
 
 
 (defun get-parent-layout (child parent)
-  (if (and (child-equal-p child *current-root*) (xlib:window-p *current-root*))
+  (if (child-equal-p child *current-root*)
       (get-fullscreen-size)
       (if (or (frame-p child) (managed-window-p child parent))
           (if (frame-p parent)
@@ -654,7 +654,9 @@
                    (funcall it child parent)
                    (no-layout child parent))
               (get-fullscreen-size))
-          (values -1 -1 -1 -1))))
+          (values (xlib:drawable-x child) (xlib:drawable-y child)
+                  (xlib:drawable-width child) (xlib:drawable-height child)))))
+
 
 
 
@@ -849,7 +851,6 @@ Display all children from root frame and hide those not in *current-root*"
                    (when (frame-p child)
                      (adapt-frame-to-parent child (if child-current-root-p nil parent)))
                    (add-in-hidden-list child)))
-
 
              (recurse-on-frame-child (child in-current-root child-current-root-p selected-p)
                (let ((selected-child (frame-selected-child child)))

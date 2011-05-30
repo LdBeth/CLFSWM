@@ -169,7 +169,8 @@
 (defun default-init-hook ()
   (let ((frame (add-frame (create-frame :name "Default"
                                         :layout nil :x 0.05 :y 0.05
-                                        :w 0.9 :h 0.9) *root-frame*)))
+                                        :w 0.9 :h 0.9)
+                          *root-frame*)))
     (setf *current-child* frame)))
 
 

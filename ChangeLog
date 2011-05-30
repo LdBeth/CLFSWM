@@ -1,3 +1,8 @@
+2011-05-30  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (get-parent-layout): Minor fullscreen
+	size tweaking.
+
 2011-05-29  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp
