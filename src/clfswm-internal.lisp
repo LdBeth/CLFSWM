@@ -965,10 +965,13 @@ Display all children from root frame and hide those not in *current-root*"
   ())
 
 
-(defun set-current-root (parent window-parent)
+(defun set-current-root (child parent window-parent)
   "Set current root if parent is not in current root"
-  (when (and window-parent (not (find-child parent *current-root*)))
-    (setf *current-root* parent)))
+  (when (and window-parent
+             (not (child-equal-p child *current-root*))
+             (not (find-child parent *current-root*)))
+    (setf *current-root* parent)
+    t))
 
 
 (defun focus-all-children (child parent &optional (window-parent t))
@@ -976,7 +979,7 @@ Display all children from root frame and hide those not in *current-root*"
 For window: set current child to window or its parent according to window-parent"
   (let ((new-focus (focus-child-rec child parent))
 	(new-current-child (set-current-child child parent window-parent))
-	(new-root (set-current-root parent window-parent)))
+	(new-root (set-current-root child parent window-parent)))
     (or new-focus new-current-child new-root)))
 
 

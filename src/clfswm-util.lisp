@@ -569,33 +569,29 @@
 
 
 
-(defun mouse-click-to-focus-generic (window root-x root-y mouse-fn)
+(defun mouse-click-to-focus-generic (root-x root-y mouse-fn)
   "Focus the current frame or focus the current window parent
 mouse-fun is #'move-frame or #'resize-frame"
   (let* ((to-replay t)
 	 (child (find-child-under-mouse root-x root-y))
 	 (parent (find-parent-frame child))
-	 (root-p (or (child-equal-p window *root*)
-		     (and (frame-p *current-root*)
-			  (child-equal-p child (frame-window *current-root*))))))
+         (root-p (child-equal-p child *current-root*)))
     (labels ((add-new-frame ()
-	       (setf child (create-frame)
-		     parent *current-root*
-		     mouse-fn #'resize-frame)
-	       (place-frame child parent root-x root-y 10 10)
-	       (map-window (frame-window child))
-	       (pushnew child (frame-child *current-root*))))
+               (when (frame-p child)
+                 (setf child (create-frame)
+                       parent *current-root*
+                       mouse-fn #'resize-frame
+                       *current-child* child)
+                 (place-frame child parent root-x root-y 10 10)
+                 (map-window (frame-window child))
+                 (pushnew child (frame-child *current-root*)))))
       (when (or (not root-p) *create-frame-on-root*)
-	(unless parent
-	  (if root-p
-	      (add-new-frame)
-	      (progn
-		(unless (frame-p child)
-		  (setf child (find-frame-window child *current-root*)))
-		(setf parent (find-parent-frame child)))))
-	(when (and (frame-p child) (not (child-equal-p child *current-root*)))
+        (when root-p
+          (add-new-frame))
+        (when (and (frame-p child) (not (child-equal-p child *current-root*)))
 	  (funcall mouse-fn child parent root-x root-y))
 	(when (and child parent
+                   (not root-p)
 		   (focus-all-children child parent
 				       (not (and (child-equal-p *current-child* *current-root*)
 						 (xlib:window-p *current-root*)))))
@@ -609,14 +605,16 @@ mouse-fun is #'move-frame or #'resize-frame"
 (defun mouse-click-to-focus-and-move (window root-x root-y)
   "Move and focus the current frame or focus the current window parent.
 Or do actions on corners"
+  (declare (ignore window))
   (or (do-corner-action root-x root-y *corner-main-mode-left-button*)
-      (mouse-click-to-focus-generic window root-x root-y #'move-frame)))
+      (mouse-click-to-focus-generic root-x root-y #'move-frame)))
 
 (defun mouse-click-to-focus-and-resize (window root-x root-y)
   "Resize and focus the current frame or focus the current window parent.
 Or do actions on corners"
+  (declare (ignore window))
   (or (do-corner-action root-x root-y *corner-main-mode-right-button*)
-      (mouse-click-to-focus-generic window root-x root-y #'resize-frame)))
+      (mouse-click-to-focus-generic root-x root-y #'resize-frame)))
 
 (defun mouse-middle-click (window root-x root-y)
   "Do actions on corners"
