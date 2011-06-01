@@ -1325,13 +1325,10 @@ For window: set current child to window or its parent according to window-parent
 	 `(,(format nil "Focus window: ~A" (xlib:wm-name window))
 	    (#\s delete-focus-window "Close the focus window")
 	    (#\k destroy-focus-window "Kill the focus window")
-	    (#\r remove-focus-window)
-	    (#\u unhide-all-windows-in-current-child)
             (#\x cut-focus-window)
             (#\c copy-focus-window)
             (#\v paste-selection))
 	 `(,(format nil "Focus window: None")
-	    (#\u unhide-all-windows-in-current-child)
             (#\v paste-selection))))
     t))
 

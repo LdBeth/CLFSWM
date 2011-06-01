@@ -615,8 +615,6 @@
                                   (if name  (format nil " - ~A" name) "")))
         (let ((pos dy))
           (when (child-equal-p frame *current-root*)
-            (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
-                              (format nil "  ~A hidden windows" (length (get-hidden-windows))))
             (when *child-selection*
               (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
                                 (with-output-to-string (str)
@@ -629,10 +627,7 @@
           (dolist (ch child)
             (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
                               (format nil "  ~A" (ensure-printable (child-fullname ch)))))
-          (setf (xlib:gcontext-foreground gc) (get-color *frame-foreground-hidden*))
-          (dolist (ch hidden-children)
-            (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
-                              (format nil "  ~A - hidden" (ensure-printable (child-fullname ch))))))
+          (setf (xlib:gcontext-foreground gc) (get-color *frame-foreground-hidden*)))
         (copy-pixmap-buffer window gc)
         (values t t)))))
 
