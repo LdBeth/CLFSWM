@@ -83,17 +83,17 @@
   (labels ((produce-name (n)
 	     (symb "%" "expose-fun-key-" n "%")))
     `(progn
-       ,@(loop for n from 0 to 25
+       ,@(loop for n from 0 to 61
 	    collect `(progn
 		       (defun ,(produce-name n) ()
-			 ,(format nil "Select child '~A' (~A)" (number->char n) n)
+			 ,(format nil "Select child '~A' (~A)" (number->string n) n)
 			 (let ((child (nth ,n *expose-windows-list*)))
 			   (when child
 			     (xlib:warp-pointer *root* (xlib:drawable-x (first child)) (xlib:drawable-y (first child)))
 			     (setf *expose-selected-child* (fourth child))
 			     (when *expose-valid-on-key*
 			       (valid-expose-mode)))))
-		       (define-expose-key (,(number->char n)) ',(produce-name n)))))))
+		       (define-expose-key (,(number->string n)) ',(produce-name n)))))))
 
 (define-expose-letter-keys)
 
@@ -107,7 +107,7 @@
 
 (defun expose-create-window (child n)
   (let* ((*current-child* child)
-	 (string (format nil "~A~A" (number->char n)
+	 (string (format nil "~A~A" (number->string n)
 			 (if *expose-show-window-title*
 			     (format nil " - ~A" (ensure-printable (child-fullname child)))
 			     "")))
@@ -140,7 +140,7 @@
     (with-all-children-reversed (*current-root* child)
       (if (or (frame-p child)
 	      (managed-window-p child (find-parent-frame child *root-frame*)))
-	  (when (< n 25)
+	  (when (< n 61)
 	    (expose-create-window child (incf n)))
 	  (hide-child child))))
   (setf *expose-windows-list* (nreverse *expose-windows-list*))
@@ -219,9 +219,10 @@
     (let ((orig-root *current-root*))
       (unless (child-equal-p *current-child* *current-root*)
 	(setf *current-root* *current-child*))
-      (expose-windows-generic *current-root*)
-      (unless (child-equal-p *current-child* orig-root)
-	(setf *current-root* orig-root))
-      (show-all-children t))))
+      (expose-windows-generic *current-root*
+                              (lambda (parent)
+                                (setf *current-root* parent))
+                              (lambda ()
+                                (setf *current-root* orig-root))))))
 
 

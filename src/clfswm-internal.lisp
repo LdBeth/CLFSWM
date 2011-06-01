@@ -385,6 +385,9 @@
 	 (,rec ,root)))))
 
 
+
+
+
 ;; (with-all-frames (*root-frame* frame) (print (frame-number frame)))
 (defmacro with-all-frames ((root frame) &body body)
   (let ((rec (gensym))
@@ -626,8 +629,7 @@
                                                      (aif (frame-name child) it "")))))))))
           (dolist (ch child)
             (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
-                              (format nil "  ~A" (ensure-printable (child-fullname ch)))))
-          (setf (xlib:gcontext-foreground gc) (get-color *frame-foreground-hidden*)))
+                              (format nil "  ~A" (ensure-printable (child-fullname ch))))))
         (copy-pixmap-buffer window gc)
         (values t t)))))
 

@@ -1,5 +1,8 @@
 2011-06-01  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-expose-mode.lisp (define-expose-letter-keys): Add
+	0..1 and A..Z keys to select a child in exposé mode.
+
 	* src/clfswm-internal.lisp (display-frame-info): Remove hidden
 	infos in frames windows.
 

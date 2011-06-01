@@ -23,6 +23,10 @@
 ;;;
 ;;; --------------------------------------------------------------------------
 
+;;;;;; Uncomment lines above to save the default documentation.
+;;(pushnew :BUILD-DOC *features*)
+
+
 ;;(load (compile-file "metering.cl"))
 
 (defparameter *base-dir* (directory-namestring *load-truename*))
@@ -58,9 +62,6 @@
 (asdf:oos 'asdf:load-op :clfswm)
 
 (in-package :clfswm)
-
-;;;;;; Uncomment lines above to save the default documentation.
-;;(pushnew :BUILD-DOC *features*)
 
 #-:BUILD-DOC
 (ignore-errors

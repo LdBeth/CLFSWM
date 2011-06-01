@@ -64,6 +64,7 @@
 	   :setf/=
 	   :create-symbol
 	   :number->char
+           :number->string
 	   :simple-type-of
 	   :repeat-chars
 	   :nth-insert
@@ -443,10 +444,17 @@ Return the result of the last hook"
   "Return a new symbol from names"
   (intern (string-upcase (apply #'concatenate 'string names))))
 
+
 (defun number->char (number)
-  (if (< number 26)
-      (code-char (+ (char-code #\a) number))
-      #\|))
+  (cond ((<= number 25) (code-char (+ (char-code #\a) number)))
+        ((<= 26 number 35) (code-char (+ (char-code #\0) (- number 26))))
+        ((<= 36 number 61) (code-char (+ (char-code #\A) (- number 36))))
+        (t #\|)))
+
+(defun number->string (number)
+  (string (number->char number)))
+
+
 
 (defun simple-type-of (object)
   (let ((type (type-of object)))
