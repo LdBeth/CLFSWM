@@ -1,3 +1,9 @@
+2011-06-02  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-layout.lisp (inc-tile-layout-size)
+	(dec-tile-layout-size, inc-slow-tile-layout-size)
+	(dec-slow-tile-layout-size): New functions and bindings.
+
 2011-06-01  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-expose-mode.lisp (define-expose-letter-keys): Add

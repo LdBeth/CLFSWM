@@ -92,9 +92,32 @@
 (defun layout-ask-size (msg slot &optional (min 80))
   (when (frame-p *current-child*)
     (let ((new-size (/ (or (query-number msg (* (frame-data-slot *current-child* slot) 100)) min) 100)))
-      (when (<= 0 new-size 1)
-	(setf (frame-data-slot *current-child* slot) new-size)))))
+      (setf (frame-data-slot *current-child* slot) (max (min new-size 0.99) 0.01)))))
 
+(defun adjust-layout-size (slot inc)
+  (when (frame-p *current-child*)
+    (setf (frame-data-slot *current-child* slot)
+          (max (min (+ (frame-data-slot *current-child* slot) inc) 0.99) 0.01))))
+
+(defun inc-tile-layout-size ()
+  "Increase the tile layout size"
+  (adjust-layout-size :tile-size 0.05)
+  (show-all-children))
+
+(defun dec-tile-layout-size ()
+  "Decrease the tile layout size"
+  (adjust-layout-size :tile-size -0.05)
+  (show-all-children))
+
+(defun inc-slow-tile-layout-size ()
+  "Increase slowly the tile layout size"
+  (adjust-layout-size :tile-size 0.01)
+  (show-all-children))
+
+(defun dec-slow-tile-layout-size ()
+  "Decrease slowly the tile layout size"
+  (adjust-layout-size :tile-size -0.01)
+  (show-all-children))
 
 
 
