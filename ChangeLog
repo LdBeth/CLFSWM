@@ -1,3 +1,8 @@
+2011-06-04  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm.lisp (main-unprotected): Destroy all frames windows
+	before closing the display (not really needed).
+
 2011-06-02  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-layout.lisp (inc-tile-layout-size)

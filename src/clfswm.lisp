@@ -206,13 +206,14 @@
   (xlib:display-force-output *display*)
   (setf *child-selection* nil)
   (setf *root-frame* (create-frame :name "Root" :number 0)
-	*current-root* *root-frame*
+        *current-root* *root-frame*
 	*current-child* *current-root*)
   (call-hook *init-hook*)
   (process-existing-windows *screen*)
   (show-all-children)
   (grab-main-keys)
   (xlib:display-finish-output *display*))
+
 
 
 
@@ -277,6 +278,7 @@
 	(ungrab-main-keys)
 	(xlib:destroy-window *no-focus-window*)
 	(xlib:free-pixmap *pixmap-buffer*)
+        (destroy-all-frames-window)
 	(call-hook *close-hook*)
 	(xlib:close-display *display*)
 	#+:event-debug

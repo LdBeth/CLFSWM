@@ -443,6 +443,52 @@
 
 
 
+(defun create-frame-window ()
+  (xlib:create-window :parent *root*
+                      :x 0
+                      :y 0
+                      :width 200
+                      :height 200
+                      :background (get-color *frame-background*)
+                      :colormap (xlib:screen-default-colormap *screen*)
+                      :border-width *border-size*
+                      :border (get-color *color-selected*)
+                      :event-mask '(:exposure :button-press :button-release :pointer-motion :enter-window)))
+
+(defun create-frame-gc (window)
+  (xlib:create-gcontext :drawable window
+                        :foreground (get-color *frame-foreground*)
+                        :background (get-color *frame-background*)
+                        :font *default-font*
+                        :line-style :solid))
+
+
+(defun destroy-all-frames-window ()
+  (with-all-frames (*root-frame* frame)
+    (when (frame-gc frame)
+      (xlib:free-gcontext (frame-gc frame))
+      (setf (frame-gc frame) nil))
+    (when (frame-window frame)
+      (xlib:destroy-window (frame-window frame))
+      (setf (frame-window frame) nil))))
+
+(defun create-all-frames-window ()
+  (with-all-frames (*root-frame* frame)
+    (unless (frame-window frame)
+      (setf (frame-window frame) (create-frame-window)))
+    (unless (frame-gc frame)
+      (setf (frame-gc frame) (create-frame-gc (frame-window frame)))))
+  (with-all-frames (*root-frame* frame)
+    (dolist (child (frame-child frame))
+      (handler-case
+          (dbg (child-fullname child))
+        (error (c)
+          (setf (frame-child frame) (remove child (frame-child frame) :test #'child-equal-p))
+          (dbg c child))))))
+
+
+
+
 (defun frame-find-free-number ()
   (let ((all-numbers nil))
     (with-all-frames (*root-frame* frame)
@@ -451,21 +497,8 @@
 
 
 (defun create-frame (&rest args &key (number (frame-find-free-number)) &allow-other-keys)
-  (let* ((window (xlib:create-window :parent *root*
-				     :x 0
-				     :y 0
-				     :width 200
-				     :height 200
-				     :background (get-color *frame-background*)
-				     :colormap (xlib:screen-default-colormap *screen*)
-				     :border-width *border-size*
-				     :border (get-color *color-selected*)
-				     :event-mask '(:exposure :button-press :button-release :pointer-motion :enter-window)))
-	 (gc (xlib:create-gcontext :drawable window
-				   :foreground (get-color *frame-foreground*)
-				   :background (get-color *frame-background*)
-				   :font *default-font*
-				   :line-style :solid)))
+  (let* ((window (create-frame-window))
+	 (gc (create-frame-gc window)))
     (apply #'make-instance 'frame :number number :window window :gc gc args)))
 
 
