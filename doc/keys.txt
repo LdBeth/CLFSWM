@@ -126,6 +126,10 @@ Second mode keys:
                        O               Open the next window in a new frame in the parent frame
   Control              O               Open the next window in a new frame in the root frame
                        A               Add a default frame in the current frame
+                       Plus            Increase the tile layout size
+                       Minus           Decrease the tile layout size
+  Control              Plus            Increase slowly the tile layout size
+  Control              Minus           Decrease slowly the tile layout size
   Control              Escape          Close or kill the current window (ask before doing anything)
   Control              X               Cut the current child to the selection
   Mod-1 Control        X               Clear the current selection

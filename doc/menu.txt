@@ -84,57 +84,63 @@ k: Opera - A fast and secure web browser and Internet suite
 Audiovideo
 a: AcidRip DVD Ripper - DVD Ripper
 b: Ardour - Multitrack hard disk recorder
-c: Audacity - Record and edit audio files
-d: Beep Media Player - Play music
-e: Brasero - Create and copy CDs and DVDs
-f: Cinelerra  - Video Editor
-g: dvd::rip - DVD Ripper and Encoder - Backup and compression utility for DVDs
-h: Freevo - Home theatre
-i: Camelot - Gmerlin webcam application
-j: Gmerlin KBD - Configure the Gmerlin keyboard daemon
-k: Gmerlin player - Multiformat mediaplayer
-l: Gmerlin recorder - Audio/video recorder
-m: Gmerlin transcoder - Gmerlin multimedia transcoder
-n: Gmerlin visualizer - Run visualization plugins
-o: Gnome Music Player Client - A gnome frontend for the mpd daemon
-p: Sound Recorder - Record sound clips
-q: Grip - CD player/ripper
-r: gtk-recordMyDesktop - Frontend for recordMyDesktop
-s: Hydrogen Drum Machine - Create drum sequences
-t: Dragon Player
-u: JuK
-v: K3b - Disk writing program
-w: Kdenlive - Nonlinear video editor for KDE
-x: KMix
-y: KsCD
-z: Mixxx - A digital DJ interface
-0: MPlayer Media Player - Play movies and songs
-1: Open Movie Editor - Video Editor
-2: OpenShot Video Editor - Create and edit videos and movies
-3: QjackCtl - QjackCtl is a JACK Audio Connection Kit Qt GUI Interface
-4: qt-recordMyDesktop - Frontend for recordMyDesktop
-5: SMPlayer - A great MPlayer front-end
-6: Enqueue in SMPlayer
-7: Sonata - An elegant GTK+ MPD client
-8: Audio CD Extractor - Copy music from your CDs
-9: Movie Player - Play movies and songs
-A: VLC media player - Read, capture, broadcast your multimedia streams
-B: Mixer - Audio mixer for the Xfce Desktop Environment
-C: XMMS - X Multimedia System
-D: zynaddsubfx - An opensource software synthesizer
+c: Ario - Client application to mpd
+d: Audacity - Record and edit audio files
+e: Beep Media Player - Play music
+f: Brasero - Create and copy CDs and DVDs
+g: Cinelerra  - Video Editor
+h: dvd::rip - DVD Ripper and Encoder - Backup and compression utility for DVDs
+i: Freevo - Home theatre
+j: Camelot - Gmerlin webcam application
+k: Gmerlin KBD - Configure the Gmerlin keyboard daemon
+l: Gmerlin player - Multiformat mediaplayer
+m: Gmerlin recorder - Audio/video recorder
+n: Gmerlin transcoder - Gmerlin multimedia transcoder
+o: Gmerlin visualizer - Run visualization plugins
+p: Gnome Music Player Client - A gnome frontend for the mpd daemon
+q: Sound Recorder - Record sound clips
+r: Grip - CD player/ripper
+s: gtk-recordMyDesktop - Frontend for recordMyDesktop
+t: Hydrogen Drum Machine - Create drum sequences
+u: Dragon Player
+v: JuK
+w: K3b - Disk writing program
+x: Kdenlive - Nonlinear video editor for KDE
+y: KMix
+z: KsCD
+0: Mixxx - A digital DJ interface
+1: MPlayer Media Player - Play movies and songs
+2: Open Movie Editor - Video Editor
+3: OpenShot Video Editor - Create and edit videos and movies
+4: QjackCtl - QjackCtl is a JACK Audio Connection Kit Qt GUI Interface
+5: qt-recordMyDesktop - Frontend for recordMyDesktop
+6: QT V4L2 test Utility - Allow testing Video4Linux devices
+7: Rhythmbox - Play and organize your music collection
+8: Rhythmbox - Play and organize your music collection
+9: SMPlayer - A great MPlayer front-end
+A: Enqueue in SMPlayer
+B: Sonata - An elegant GTK+ MPD client
+C: Audio CD Extractor - Copy music from your CDs
+D: Movie Player - Play movies and songs
+E: VLC media player - Read, capture, broadcast your multimedia streams
+F: XBMC Media Center - Manage and view your media 
+G: Mixer - Audio mixer for the Xfce Desktop Environment
+H: XMMS - X Multimedia System
+I: zynaddsubfx - An opensource software synthesizer
 
 Audio
 a: Ardour - Multitrack hard disk recorder
-b: Audacity - Record and edit audio files
-c: Gmerlin plugin configurator - Configure gmerlin plugins
-d: Sound Recorder - Record sound clips
-e: Hydrogen Drum Machine - Create drum sequences
-f: KMix
-g: Mixxx - A digital DJ interface
-h: MPlayer Media Player - Play movies and songs
-i: QjackCtl - QjackCtl is a JACK Audio Connection Kit Qt GUI Interface
-j: Audio CD Extractor - Copy music from your CDs
-k: Mixer - Audio mixer for the Xfce Desktop Environment
+b: Ario - Client application to mpd
+c: Audacity - Record and edit audio files
+d: Gmerlin plugin configurator - Configure gmerlin plugins
+e: Sound Recorder - Record sound clips
+f: Hydrogen Drum Machine - Create drum sequences
+g: KMix
+h: Mixxx - A digital DJ interface
+i: MPlayer Media Player - Play movies and songs
+j: QjackCtl - QjackCtl is a JACK Audio Connection Kit Qt GUI Interface
+k: Audio CD Extractor - Copy music from your CDs
+l: Mixer - Audio mixer for the Xfce Desktop Environment
 
 Video
 a: Ardour - Multitrack hard disk recorder
@@ -144,6 +150,7 @@ d: OpenShot Video Editor - Create and edit videos and movies
 e: SMPlayer - A great MPlayer front-end
 f: Enqueue in SMPlayer
 g: Movie Player - Play movies and songs
+h: XBMC Media Center - Manage and view your media 
 
 Development
 a: CMake - Cross-platform buildsystem
@@ -214,63 +221,64 @@ b: 0 A.D.
 c: AssaultCube
 d: Astromenace - Space shooter
 e: Blobby Volley 2
-f: BomberClone - Atomic Bomberman clone
-g: Chromium B.S.U. - Scrolling space shooter
-h: DreamChess
-i: DROD - Simple puzzle game.
-j: eBoard
-k: Einstein - Einstein puzzle
-l: Extreme Tux Racer - Open source racing game featuring Tux the Linux Penguin. 
-m: Flobopuyo - A remake of the famous PuyoPuyo
-n: Foobillard - A 3D billiards game using OpenGL
-o: Frasse - Frasse and the Peas of Kejick adventure game
-p: Frogatto - Old-school 2D platformer
-q: gbrainy - Play games that challenge your logic, verbal, calculation and memory abilities
-r: GGoban - Play go and review game records
-s: glChess
-t: GLTron - Lightcycle game with a nice 3D perspective.
-u: Hedgewars - Worms style game
-v: Hex-a-Hop - Hexagonal Tile-based Puzzle Game
-w: KGoldrunner - A game of action and puzzle-solving
-x: AMOR
-y: Blinken - A memory enhancement game
-z: Bomber
-0: Bovo
-1: Granatier
-2: Kanagram - KDE Letter Order Game
-3: Kapman - Eat pills escaping ghosts
-4: KAtomic
-5: Naval Battle
-6: KBlackBox
-7: KBlocks
-8: KBounce
-9: KBreakOut
-A: KSnake
-B: KDiamond
-C: KFourInLine
-D: KHangMan - KDE Hangman Game
-E: Kigo
-F: Killbots
-G: Kiriki
-H: KJumpingCube
-I: Klickety
-J: Kolor Lines
-K: KMahjongg
-L: KMines
-M: KNetWalk
-N: Knights
-O: Kolf
-P: Kollision - A simple ball dodging game
-Q: Konquest
-R: KPatience
-S: KReversi
-T: SameGame
-U: Shisen-Sho
-V: KsirK
-W: KsirK Skin Editor
-X: KSpaceDuel
-Y: KSquares
-Z: KSudoku - KSudoku, Sudoku game & more for KDE
+f: Bloboats - A boat racing game reminiscent of Elasto Mania and X-Moto
+g: BomberClone - Atomic Bomberman clone
+h: Chromium B.S.U. - Scrolling space shooter
+i: DreamChess
+j: DROD - Simple puzzle game.
+k: eBoard
+l: Einstein - Einstein puzzle
+m: Extreme Tux Racer - Open source racing game featuring Tux the Linux Penguin. 
+n: Flobopuyo - A remake of the famous PuyoPuyo
+o: Foobillard - A 3D billiards game using OpenGL
+p: Frasse - Frasse and the Peas of Kejick adventure game
+q: Frogatto - Old-school 2D platformer
+r: gbrainy - Play games that challenge your logic, verbal, calculation and memory abilities
+s: GGoban - Play go and review game records
+t: glChess
+u: GLTron - Lightcycle game with a nice 3D perspective.
+v: Hedgewars - Worms style game
+w: Hex-a-Hop - Hexagonal Tile-based Puzzle Game
+x: KGoldrunner - A game of action and puzzle-solving
+y: AMOR
+z: Blinken - A memory enhancement game
+0: Bomber
+1: Bovo
+2: Granatier
+3: Kanagram - KDE Letter Order Game
+4: Kapman - Eat pills escaping ghosts
+5: KAtomic
+6: Naval Battle
+7: KBlackBox
+8: KBlocks
+9: KBounce
+A: KBreakOut
+B: KSnake
+C: KDiamond
+D: KFourInLine
+E: KHangMan - KDE Hangman Game
+F: Kigo
+G: Killbots
+H: Kiriki
+I: KJumpingCube
+J: Klickety
+K: Kolor Lines
+L: KMahjongg
+M: KMines
+N: KNetWalk
+O: Knights
+P: Kolf
+Q: Kollision - A simple ball dodging game
+R: Konquest
+S: KPatience
+T: KReversi
+U: SameGame
+V: Shisen-Sho
+W: KsirK
+X: KsirK Skin Editor
+Y: KSpaceDuel
+Z: KSquares
+|: KSudoku - KSudoku, Sudoku game & more for KDE
 |: KSnakeDuel
 |: Potato Guy
 |: Kubrick
@@ -280,25 +288,30 @@ Z: KSudoku - KSudoku, Sudoku game & more for KDE
 |: Maniadrive - An arcade car game on acrobatic tracks, with a quick and nervous gameplay
 |: mechtower(failsafe)
 |: mechtower
-|: Neverball - A 3D arcade game with a ball
-|: Neverputt - A 3D mini golf game
 |: Numpty Physics
 |: OpenArena - A Quake3-based FPS Game
 |: OpenTTD
 |: Pacdefence - Tower defence game.
+|: PainTown - Paintown is an open source fighting game in the same genre as Streets of Rage and Teenage Mutant Ninja Turtles.
 |: pouetChess - Play a game of chess, either against another player or against the AI
 |: Racer - Choose your car and race
 |: Racer - Choose your car and race
+|: Slime Volley - Unrealistic 2D volleyball simulation
 |: SolarWolf
 |: Spring - An open source RTS with similar gameplay to TA
+|: Stormbaan Coureur
 |: SuperTux 2 - Play a classic 2D platform game
 |: Supertuxkart - A kart racing game
 |: Trackballs - Simple game similar to the classical game Marble Madness
 |: Battle for Wesnoth - A fantasy turn-based strategy game
 |: Battle for Wesnoth Map Editor - A map editor for Battle for Wesnoth maps
+|: Wind and Water: Puzzle Battles - Arcade style puzzle game
 |: XBoard - An X Window System graphical chessboard
 |: Xmoto
 |: XSpaceWarp - Live long and prosper!
+|: Xut - Button football simulation
+|: Zelvici - Funny 2D platform game
+|: Zero Ballistics
 
 Graphics
 a: LibreOffice Draw
