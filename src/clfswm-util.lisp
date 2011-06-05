@@ -98,6 +98,20 @@
       (push (create-frame :name name) (frame-child *current-child*))))
   (leave-second-mode))
 
+(defun add-frame-in-parent-frame ()
+  "Add a frame in the parent frame (and reorganize parent frame)"
+  (let ((new-frame (create-frame))
+	(parent (find-parent-frame *current-child*)))
+    (when parent
+      (pushnew new-frame (frame-child parent))
+      (setf *current-root* parent
+	    *current-child* parent)
+      (set-layout-once #'tile-space-layout)
+      (setf *current-child* new-frame)
+      (leave-second-mode))))
+
+
+
 
 (defun add-placed-frame ()
   "Add a placed frame in the current frame"

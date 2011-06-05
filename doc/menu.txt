@@ -447,54 +447,39 @@ a: Email Settings - Configure email accounts
 b: Preferred Applications
 c: Keyboard Indicator plugins - Enable/disable installed plugins
 d: Privilege granting - Configure behavior of the privilege-granting tool
-e: Background - Change the background
-f: Date and Time - Date and Time preferences panel
-g: Displays - Change resolution and position of monitors and projectors
-h: System Info - System Information
-i: Keyboard - Edit keyboard settings and application shortcuts
-j: Removable Media - Configure media and autorun preferences
-k: Mouse and Touchpad - Set your mouse and touchpad preferences
-l: Network - Network settings
-m: Power - Power management settings
-n: Printers - Change printer settings
-o: Region and Language - Change your region and language settings
-p: Screen - Screen brightness and lock settings
-q: Sound - Change sound volume and sound events
-r: Universal Access - Universal Access Preferences
-s: User Accounts - Add or remove users
-t: Multimedia Systems Selector - Configure defaults for GStreamer applications
-u: Touchpad - Set your touchpad preferences
-v: Java Control Panel
-w: Java Policy Settings
-x: Menu Updating Tool
-y: Change Password
-z: Menu Editor
-0: System Settings
-1: Preferred Applications
-2: Customize Look and Feel - Customizes look and feel of your desktop and applications
-3: Monitor Settings - Change screen resolution and configure external monitors
-4: Opera Widget Manager
-5: Panel
-6: Qt Config  - Configure Qt behavior, styles, fonts
-7: Startup Applications - Choose what applications to start when you log in
-8: File Manager - Configure the Thunar file manager
-9: Panel tint2 - Customize the panel settings
-A: Startup Disk Creator - Create a startup disk using a CD or disc image
-B: Desktop  - Set desktop background and menu and icon behaviour
-C: Display - Configure screen settings and layout
-D: Keyboard - Edit keyboard settings and application shortcuts
-E: Mouse - Configure pointer device behavior and appearance
-F: Session and Startup - Customize desktop startup and splash screen
-G: Settings Manager - Graphical Settings Manager for Xfce 4
-H: Appearance - Customize the look of your desktop
-I: Window Manager - Configure window behavior and shortcuts
-J: Window Manager Tweaks - Fine-tune window behaviour and effects
-K: Workspaces - Set number and names of workspaces
-L: Orage preferences - Settings for the Xfce 4 Calendar Application (Orage)
-M: Accessibility - Improve keyboard and mouse accessibility
-N: Settings Editor - Graphical settings editor for Xfconf
-O: Xfce 4 Printing System Settings - Allow you to select the printing system backend that xfprint will use
-P: Screensaver - Change screensaver properties
+e: Multimedia Systems Selector - Configure defaults for GStreamer applications
+f: Touchpad - Set your touchpad preferences
+g: Java Control Panel
+h: Java Policy Settings
+i: Menu Updating Tool
+j: Change Password
+k: Menu Editor
+l: System Settings
+m: Preferred Applications
+n: Customize Look and Feel - Customizes look and feel of your desktop and applications
+o: Monitor Settings - Change screen resolution and configure external monitors
+p: Opera Widget Manager
+q: Panel
+r: Qt Config  - Configure Qt behavior, styles, fonts
+s: Startup Applications - Choose what applications to start when you log in
+t: File Manager - Configure the Thunar file manager
+u: Panel tint2 - Customize the panel settings
+v: Startup Disk Creator - Create a startup disk using a CD or disc image
+w: Desktop  - Set desktop background and menu and icon behaviour
+x: Display - Configure screen settings and layout
+y: Keyboard - Edit keyboard settings and application shortcuts
+z: Mouse - Configure pointer device behavior and appearance
+0: Session and Startup - Customize desktop startup and splash screen
+1: Settings Manager - Graphical Settings Manager for Xfce 4
+2: Appearance - Customize the look of your desktop
+3: Window Manager - Configure window behavior and shortcuts
+4: Window Manager Tweaks - Fine-tune window behaviour and effects
+5: Workspaces - Set number and names of workspaces
+6: Orage preferences - Settings for the Xfce 4 Calendar Application (Orage)
+7: Accessibility - Improve keyboard and mouse accessibility
+8: Settings Editor - Graphical settings editor for Xfconf
+9: Xfce 4 Printing System Settings - Allow you to select the printing system backend that xfprint will use
+A: Screensaver - Change screensaver properties
 
 System
 a: Terminal - Use the command line
@@ -509,42 +494,40 @@ i: Manage Printing
 j: dconf Editor - Directly edit your entire configuration database
 k: Configuration Editor - Directly edit your entire configuration database
 l: Keyboard Layout - Preview keyboard layouts
-m: System Settings
-n: Panel
-o: System Monitor
-p: User Accounts - Add or remove users
-q: GParted - Create, reorganize, and delete partitions
-r: Htop - Show System Processes
-s: Dolphin
-t: K3b - Disk writing program
-u: KDiskFree
+m: Panel
+n: System Monitor
+o: GParted - Create, reorganize, and delete partitions
+p: Htop - Show System Processes
+q: Dolphin
+r: K3b - Disk writing program
+s: KDiskFree
+t: Konqueror
+u: Konqueror
 v: Konqueror
 w: Konqueror
-x: Konqueror
-y: Konqueror
-z: KInfoCenter
-0: File Manager - Super User Mode
-1: Konsole
-2: KRandRTray - A panel applet for resizing and reorientating X screens.
-3: Krfb
-4: Krusader - root-mode
-5: System Monitor
-6: KSystemLog
-7: KUser
-8: KWalletManager
-9: KwikDisk
-A: Nepomuk Backup
-B: Yakuake
-C: Task Manager - Manage running processes
-D: rxvt-unicode - An Unicode capable rxvt clone
-E: UNetbootin - Tool for creating Live USB drives
-F: Startup Disk Creator - Create a startup disk using a CD or disc image
-G: Startup Disk Creator - Create a startup disk using a CD or disc image
-H: Oracle VM VirtualBox
-I: Wireshark - Network traffic analyzer
-J: Log Out
-K: Xfe - A lightweight file manager for X Window
-L: XNC - Graphical File manager, X Northern Captain
+x: KInfoCenter
+y: File Manager - Super User Mode
+z: Konsole
+0: KRandRTray - A panel applet for resizing and reorientating X screens.
+1: Krfb
+2: Krusader - root-mode
+3: System Monitor
+4: KSystemLog
+5: KUser
+6: KWalletManager
+7: KwikDisk
+8: Nepomuk Backup
+9: Yakuake
+A: Task Manager - Manage running processes
+B: rxvt-unicode - An Unicode capable rxvt clone
+C: UNetbootin - Tool for creating Live USB drives
+D: Startup Disk Creator - Create a startup disk using a CD or disc image
+E: Startup Disk Creator - Create a startup disk using a CD or disc image
+F: Oracle VM VirtualBox
+G: Wireshark - Network traffic analyzer
+H: Log Out
+I: Xfe - A lightweight file manager for X Window
+J: XNC - Graphical File manager, X Northern Captain
 
 Utility
 a: SAGE - SAGE NOTEBOOK

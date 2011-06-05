@@ -143,6 +143,7 @@
   (define-second-key ("o") 'set-open-in-new-frame-in-parent-frame-nw-hook)
   (define-second-key ("o" :control) 'set-open-in-new-frame-in-root-frame-nw-hook)
   (define-second-key ("a") 'add-default-frame)
+  (define-second-key ("a" :control) 'add-frame-in-parent-frame)
   (define-second-key ("plus") 'inc-tile-layout-size)
   (define-second-key ("minus") 'dec-tile-layout-size)
   (define-second-key ("plus" :control) 'inc-slow-tile-layout-size)

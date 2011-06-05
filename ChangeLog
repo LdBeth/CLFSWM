@@ -1,3 +1,8 @@
+2011-06-05  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (add-frame-in-parent-frame): New function
+	and binding.
+
 2011-06-04  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm.lisp (main-unprotected): Destroy all frames windows
