@@ -63,6 +63,9 @@
 
 (in-package :clfswm)
 
+(main-unprotected :read-conf-file-p t)
+(quit)
+
 #-:BUILD-DOC
 (ignore-errors
   (main :read-conf-file-p t))

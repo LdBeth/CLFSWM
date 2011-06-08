@@ -690,6 +690,7 @@
 
 
 
+
 (defgeneric adapt-child-to-parent (child parent))
 
 (defmethod adapt-child-to-parent ((window xlib:window) parent)
@@ -1156,7 +1157,6 @@ Warning:frame window and gc are freeed."
     (setf *current-child* *current-root*))
   (delete-child-in-frames child *root-frame*))
 
-
 (defun delete-child-and-children-in-frames (child root)
   "Delete child and its children in the frame root and in all its children
 Warning:frame window and gc are freeed."
@@ -1175,6 +1175,19 @@ Warning:frame window and gc are freeed."
   (when (xlib:window-p child)
     (funcall close-methode child))
   (show-all-children))
+
+
+(defun clean-windows-in-all-frames ()
+  "Remove all xlib:windows present in *root-frame* and not in the xlib tree"
+  (let ((x-tree (xlib:query-tree *root*)))
+    (with-all-frames (*root-frame* frame)
+      (dolist (child (frame-child frame))
+        (when (xlib:window-p child)
+          (unless (member child x-tree :test #'xlib:window-equal)
+            (setf (frame-child frame)
+                  (child-remove child (frame-child frame)))))))))
+
+
 
 
 
