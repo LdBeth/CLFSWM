@@ -1172,9 +1172,9 @@ Warning:frame window and gc are freeed."
   (when (child-equal-p child *current-child*)
     (setf *current-child* *current-root*))
   (delete-child-and-children-in-frames child *root-frame*)
-  (show-all-children)
   (when (xlib:window-p child)
-    (funcall close-methode child)))
+    (funcall close-methode child))
+  (show-all-children))
 
 
 

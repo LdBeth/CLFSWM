@@ -1,3 +1,9 @@
+2011-06-08  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp
+	(delete-child-and-children-in-all-frames): Delete or destroy
+	children before displaying all children.
+
 2011-06-05  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (add-frame-in-parent-frame): New function
