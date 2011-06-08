@@ -1,5 +1,9 @@
 2011-06-08  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* *: **** Release 1106 ****
+
+2011-06-08  Philippe Brochard  <pbrochard@common-lisp.net>
+
 	* src/clfswm-internal.lisp (clean-windows-in-all-frames): New
 	function to prevent xlib error when a window is deleted.
 
