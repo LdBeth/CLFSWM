@@ -1,3 +1,8 @@
+2011-06-12  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (process-existing-windows): Do not
+	process the notify window.
+
 2011-06-08  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* *: **** Release 1106 ****
