@@ -95,6 +95,7 @@
 	       (not (xlib:window-equal window event-window)))
     (when (find-child window *root-frame*)
       (clean-windows-in-all-frames)
+      (show-all-children)
       (delete-child-in-all-frames window)
       (show-all-children))))
 
@@ -104,6 +105,7 @@
 	      (xlib:window-equal window event-window))
     (when (find-child window *root-frame*)
       (clean-windows-in-all-frames)
+      (show-all-children)
       (delete-child-in-all-frames window)
       (show-all-children))))
 

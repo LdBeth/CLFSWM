@@ -1,5 +1,9 @@
 2011-06-12  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm.lisp (:unmap-notify, :destroy-notify): Show all
+	children just after the xlib tree cleanup -> reduce the
+	flickering when a window is deleted or destroyed.
+
 	* src/clfswm-internal.lisp (process-existing-windows): Do not
 	process the notify window.
 
