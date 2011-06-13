@@ -1,3 +1,8 @@
+2011-06-13  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/keysyms.lisp: Repeat Page_Down/Up keysym definitions at the
+	end of the file to change keysyms priority.
+
 2011-06-13  Sylvain HENRY <hsyl20@gmail.com>
 
 	*  *.*: Minor spelling fix.

@@ -2086,3 +2086,7 @@
 (cl-define-keysym #x100000AC "usldead_asciitilde")
 (cl-define-keysym #x1000FE2C "usldead_cedilla")
 (cl-define-keysym #x1000FEB0 "usldead_ring")
+
+;; For convenience
+(cl-define-keysym #xff55 "Page_Up")
+(cl-define-keysym #xff56 "Page_Down")
