@@ -190,8 +190,8 @@
 
 
 (defun reset-all-config-variables ()
-  "Reset all configuration variables to there default values"
-  (when (query-yes-or-no "Do you really want to reset all values to there default?")
+  "Reset all configuration variables to their default values"
+  (when (query-yes-or-no "Do you really want to reset all values to their default?")
     (maphash (lambda (key val)
                (declare (ignore val))
                (reset-config-to-default-value key))

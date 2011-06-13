@@ -663,9 +663,9 @@ p: Add a placed frame in the current frame
 
 Frame-Layout-Menu
 a: < Frame fast layout menu >
-b: No layout: Maximize windows in there frame - Leave frames to there original size
-c: No layout: Maximize windows in there frame - Leave frames to there actual size
-d: Maximize layout: Maximize windows and frames in there parent frame
+b: No layout: Maximize windows in their frame - Leave frames to their original size
+c: No layout: Maximize windows in their frame - Leave frames to their actual size
+d: Maximize layout: Maximize windows and frames in their parent frame
 e: < Frame tile layout menu >
 f: < Tile in one direction layout menu >
 g: < Tile with some space on one side menu >
@@ -860,7 +860,7 @@ m: < Hook Group >
 n: < Main Mode Group >
 o: < Miscellaneous Group >
 F2: Save all configuration variables in clfswmrc
-F3: Reset all configuration variables to there default values
+F3: Reset all configuration variables to their default values
 
 Conf-Gimp-Layout
 a: Configure GIMP-LAYOUT-NOTIFY-WINDOW-DELAY

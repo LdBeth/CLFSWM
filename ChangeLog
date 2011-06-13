@@ -1,3 +1,7 @@
+2011-06-13  Sylvain HENRY <hsyl20@gmail.com>
+
+	*  *.*: Minor spelling fix.
+
 2011-06-12  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm.lisp (:unmap-notify, :destroy-notify): Show all
@@ -214,7 +218,7 @@
 	Remove all hide-all unnecessary calls.
 
 	* src/clfswm-configuration.lisp (save-variables-in-conf-file):
-	Save only variables with a different value than there original
+	Save only variables with a different value than their original
 	value.
 
 2011-03-07  Philippe Brochard  <pbrochard@common-lisp.net>
@@ -838,7 +842,7 @@
 2009-06-28  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-layout.lisp (set-no-layout-remember-size): New layout:
-	Maximize windows in there frame - Leave frames to there	actual
+	Maximize windows in their frame - Leave frames to their	actual
 	size.
 
 	* src/bindings-second-mode.lisp (set-default-second-keys): Bind
@@ -944,7 +948,7 @@
 	Maximize/Unmaximize the current frame in its parent frame.
 
 	* src/clfswm-layout.lisp (maximize-layout): New layout: Maximize
-	windows and frames in there parent frame.
+	windows and frames in their parent frame.
 
 2009-05-05  Philippe Brochard  <pbrochard@common-lisp.net>
 
@@ -1410,7 +1414,7 @@
 	* src/config.lisp (*default-window-width/height*): New parameters.
 
 	* src/clfswm-internal.lisp (place-window-from-hints): Center
-	windows in the screen instead of in there frame.
+	windows in the screen instead of in their frame.
 
 	* src/bindings-second-mode.lisp (tile-space-current-frame): New
 	binding on C-t.
@@ -1861,7 +1865,7 @@
 
 	* clfswm.lisp (handle-exposure): Redisplay groups on exposure
 	event but do not clear the root window.
-	(handle-configure-request): Adjust unmanaged window from there
+	(handle-configure-request): Adjust unmanaged window from their
 	request.
 
 	* clfswm-internal.lisp (process-new-window): Adjust new window
