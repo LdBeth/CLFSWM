@@ -1117,6 +1117,15 @@ For window: set current child to window or its parent according to window-parent
   (show-all-children))
 
 
+
+(defun prevent-current-*-equal-child (child)
+  " Prevent current-root and current-child equal to child"
+  (when (child-equal-p child *current-root*)
+    (setf *current-root* (find-parent-frame child)))
+  (when (child-equal-p child *current-child*)
+    (setf *current-child* *current-root*)))
+
+
 (defun remove-child-in-frame (child frame)
   "Remove the child in frame"
   (when (frame-p frame)
@@ -1130,10 +1139,7 @@ For window: set current child to window or its parent according to window-parent
 
 (defun remove-child-in-all-frames (child)
   "Remove child in all frames from *root-frame*"
-  (when (child-equal-p child *current-root*)
-    (setf *current-root* (find-parent-frame child)))
-  (when (child-equal-p child *current-child*)
-    (setf *current-child* *current-root*))
+  (prevent-current-*-equal-child child)
   (remove-child-in-frames child *root-frame*))
 
 
@@ -1151,10 +1157,7 @@ Warning:frame window and gc are freeed."
 
 (defun delete-child-in-all-frames (child)
   "Delete child in all frames from *root-frame*"
-  (when (child-equal-p child *current-root*)
-    (setf *current-root* (find-parent-frame child)))
-  (when (child-equal-p child *current-child*)
-    (setf *current-child* *current-root*))
+  (prevent-current-*-equal-child child)
   (delete-child-in-frames child *root-frame*))
 
 (defun delete-child-and-children-in-frames (child root)
@@ -1167,10 +1170,7 @@ Warning:frame window and gc are freeed."
 
 (defun delete-child-and-children-in-all-frames (child &optional (close-methode 'delete-window))
   "Delete child and its children in all frames from *root-frame*"
-  (when (child-equal-p child *current-root*)
-    (setf *current-root* (find-parent-frame child)))
-  (when (child-equal-p child *current-child*)
-    (setf *current-child* *current-root*))
+  (prevent-current-*-equal-child child)
   (delete-child-and-children-in-frames child *root-frame*)
   (when (xlib:window-p child)
     (funcall close-methode child))
@@ -1184,6 +1184,7 @@ Warning:frame window and gc are freeed."
       (dolist (child (frame-child frame))
         (when (xlib:window-p child)
           (unless (member child x-tree :test #'xlib:window-equal)
+            (prevent-current-*-equal-child child)
             (setf (frame-child frame)
                   (child-remove child (frame-child frame)))))))))
 

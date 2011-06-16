@@ -1,3 +1,8 @@
+2011-06-16  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (clean-windows-in-all-frames): Prevent
+	current root and current child being equal to child.
+
 2011-06-13  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/keysyms.lisp: Repeat Page_Down/Up keysym definitions at the
