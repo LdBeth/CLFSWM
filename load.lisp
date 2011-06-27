@@ -38,12 +38,6 @@
 #+SBCL
 (require :asdf)
 
-#+SBCL
-(require :sb-posix)
-
-;;#+SBCL
-;; (require :clx)
-
 #+(or CMU ECL)
 (require :clx)
 
