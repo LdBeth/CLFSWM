@@ -228,7 +228,8 @@ loading configuration file and before opening the display.")
   'Placement "Notify window placement")
 (defconfig *ask-close/kill-placement* 'top-right-placement
   'Placement "Ask close/kill window placement")
-
+(defconfig *unmanaged-window-placement* 'middle-middle-child-placement
+  'PLACEMENT "Unmanager window placement")
 
 
 (defparameter *in-process-existing-windows* nil)

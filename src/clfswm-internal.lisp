@@ -1205,8 +1205,9 @@ Warning:frame window and gc are freeed."
 		      (xlib:drawable-height window))))
     (setf (xlib:drawable-width window) (min (max min-width rwidth *default-window-width*) max-width)
 	  (xlib:drawable-height window) (min (max min-height rheight *default-window-height*) max-height))
-    (setf (xlib:drawable-x window) (truncate (/ (- (xlib:screen-width *screen*) (+ (xlib:drawable-width window) 2)) 2))
-	  (xlib:drawable-y window) (truncate (/ (- (xlib:screen-height *screen*) (+ (xlib:drawable-height window) 2)) 2)))
+    (with-placement (*unmanaged-window-placement* x y (xlib:drawable-width window) (xlib:drawable-height window))
+      (setf (xlib:drawable-x window) x
+            (xlib:drawable-y window) y))
     (xlib:display-finish-output *display*)))
 
 

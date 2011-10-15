@@ -201,7 +201,7 @@ Expand in handle-event-fun-main-mode-key-press"
 
 
 (defun window-state (win)
-  "Get the state (iconic, normal, withdraw of a window."
+  "Get the state (iconic, normal, withdrawn) of a window."
   (first (xlib:get-property win :WM_STATE)))
 
 

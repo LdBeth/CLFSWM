@@ -1,3 +1,9 @@
+2011-10-15  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (place-window-from-hints): Use
+	with-placement macro to place unmanaged windows in an arbitrary
+	place.
+
 2011-06-16  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp (clean-windows-in-all-frames): Prevent
