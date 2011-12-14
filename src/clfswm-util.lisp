@@ -1263,15 +1263,11 @@ For window: set current child to window or its parent according to window-parent
 
 
 ;;; Standard menu functions - Based on the XDG specifications
-(defconfig *xdg-section-list* (append '(TextEditor FileManager WebBrowser)
-                                      '(AudioVideo Audio Video Development Education Game Graphics Network Office Settings System Utility)
-                                      '(TerminalEmulator Archlinux Screensaver))
-  'Menu "Standard menu sections")
-
-
 (defun um-create-xdg-section-list (menu)
   (dolist (section *xdg-section-list*)
-    (add-sub-menu menu :next section (format nil "~A" section) menu)))
+    (add-sub-menu menu :next section (format nil "~A" section) menu))
+  (unless (find-toplevel-menu 'Utility menu)
+    (add-sub-menu menu :next 'Utility (format nil "~A" 'Utility) menu)))
 
 (defun um-find-submenu (menu section-list)
   (let ((acc nil))

@@ -1,5 +1,10 @@
 2011-12-14  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-util.lisp (um-create-xdg-section-list): Add at least
+	the 'Utility menu entry.
+
+	* src/config.lisp (*xdg-section-list*): moved to config.lisp.
+
 	* src/clfswm-util.lisp (update-menus): Set a default value for
 	searching .desktop files when XDG_DATA_DIRS is not set.
 

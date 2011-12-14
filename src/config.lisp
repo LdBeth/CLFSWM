@@ -37,6 +37,16 @@
 Example: :mod-2 for num_lock, :lock for Caps_lock...")
 
 
+;;; Standard menu entry based on the XDG specifications
+(defconfig *xdg-section-list* (append
+                               '(TextEditor FileManager WebBrowser)
+                               '(AudioVideo Audio Video Development Education Game Graphics Network
+                                 Office Settings System Utility)
+                               '(TerminalEmulator Screensaver))
+  'Menu "Standard menu sections")
+
+
+
 (defun-equal-wm-class equal-wm-class-rox-pinboard "ROX-Pinboard")
 (defun-equal-wm-class equal-wm-class-xvkbd "xvkbd")
 
