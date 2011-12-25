@@ -30,7 +30,7 @@
 (defparameter *query-font* nil)
 (defparameter *query-gc* nil)
 
-(defparameter *query-history* nil)
+(defparameter *query-history* (list ""))
 (defparameter *query-complet-list* nil)
 
 (defparameter *query-message* nil)
@@ -79,7 +79,7 @@
 
 (defun clear-query-history ()
   "Clear the query-string history"
-  (setf *query-history* nil))
+  (setf *query-history* (list "")))
 
 
 

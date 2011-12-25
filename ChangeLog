@@ -1,3 +1,8 @@
+2011-12-26  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-query.lisp: Fill the history list with a non-nil
+	value.
+
 2011-12-25  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/package.lisp (make-x-drawable): Drawable wrapper to prevent
