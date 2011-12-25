@@ -107,10 +107,10 @@
 ;;;
 (defun current-child-coord ()
   (typecase *current-child*
-    (xlib:window (values (xlib:drawable-x *current-child*)
-			 (xlib:drawable-y *current-child*)
-			 (xlib:drawable-width *current-child*)
-			 (xlib:drawable-height *current-child*)))
+    (xlib:window (values (x-drawable-x *current-child*)
+			 (x-drawable-y *current-child*)
+			 (x-drawable-width *current-child*)
+			 (x-drawable-height *current-child*)))
     (frame (values (frame-rx *current-child*)
 		   (frame-ry *current-child*)
 		   (frame-rw *current-child*)

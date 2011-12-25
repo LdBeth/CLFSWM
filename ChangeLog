@@ -1,3 +1,9 @@
+2011-12-25  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/package.lisp (make-x-drawable): Drawable wrapper to prevent
+	type error in some CLX versions.
+	Replace xlib:drawable-* functions with x-drawable-* equivalents
+
 2011-12-14  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (um-create-xdg-section-list): Add at least

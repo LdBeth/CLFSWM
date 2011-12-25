@@ -89,7 +89,7 @@
 			 ,(format nil "Select child '~A' (~A)" (number->string n) n)
 			 (let ((child (nth ,n *expose-windows-list*)))
 			   (when child
-			     (xlib:warp-pointer *root* (xlib:drawable-x (first child)) (xlib:drawable-y (first child)))
+			     (xlib:warp-pointer *root* (x-drawable-x (first child)) (x-drawable-y (first child)))
 			     (setf *expose-selected-child* (fourth child))
 			     (when *expose-valid-on-key*
 			       (valid-expose-mode)))))

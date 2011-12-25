@@ -91,8 +91,8 @@
 
 (defun in-window (window x y)
   (and (xlib:window-p window)
-       (<= (xlib:drawable-x window) x (+ (xlib:drawable-x window) (xlib:drawable-width window)))
-       (<= (xlib:drawable-y window) y (+ (xlib:drawable-y window) (xlib:drawable-height window)))))
+       (<= (x-drawable-x window) x (+ (x-drawable-x window) (x-drawable-width window)))
+       (<= (x-drawable-y window) y (+ (x-drawable-y window) (x-drawable-height window)))))
 
 (defgeneric in-child (child x y))
 
@@ -239,37 +239,37 @@
 
 (defgeneric child-x (child))
 (defmethod child-x ((child xlib:window))
-  (xlib:drawable-x child))
+  (x-drawable-x child))
 (defmethod child-x ((child frame))
   (frame-rx child))
 
 (defgeneric child-y (child))
 (defmethod child-y ((child xlib:window))
-  (xlib:drawable-y child))
+  (x-drawable-y child))
 (defmethod child-y ((child frame))
   (frame-ry child))
 
 (defgeneric child-width (child))
 (defmethod child-width ((child xlib:window))
-  (xlib:drawable-width child))
+  (x-drawable-width child))
 (defmethod child-width ((child frame))
   (frame-rw child))
 
 (defgeneric child-height (child))
 (defmethod child-height ((child xlib:window))
-  (xlib:drawable-height child))
+  (x-drawable-height child))
 (defmethod child-height ((child frame))
   (frame-rh child))
 
 (defgeneric child-x2 (child))
 (defmethod child-x2 ((child xlib:window))
-  (+ (xlib:drawable-x child) (xlib:drawable-width child)))
+  (+ (x-drawable-x child) (x-drawable-width child)))
 (defmethod child-x2 ((child frame))
   (+ (frame-rx child) (frame-rw child)))
 
 (defgeneric child-y2 (child))
 (defmethod child-y2 ((child xlib:window))
-  (+ (xlib:drawable-y child) (xlib:drawable-height child)))
+  (+ (x-drawable-y child) (x-drawable-height child)))
 (defmethod child-y2 ((child frame))
   (+ (frame-ry child) (frame-rh child)))
 
@@ -278,8 +278,8 @@
 (defgeneric child-center (child))
 
 (defmethod child-center ((child xlib:window))
-  (values (+ (xlib:drawable-x child) (/ (xlib:drawable-width child) 2))
-          (+ (xlib:drawable-y child) (/ (xlib:drawable-height child) 2))))
+  (values (+ (x-drawable-x child) (/ (x-drawable-width child) 2))
+          (+ (x-drawable-y child) (/ (x-drawable-height child) 2))))
 
 (defmethod child-center ((child frame))
   (values (+ (frame-rx child) (/ (frame-rw child) 2))
@@ -303,16 +303,16 @@
 (defgeneric adj-border-wh (value child))
 
 (defmethod adj-border-xy (v (child xlib:window))
-  (+ v (xlib:drawable-border-width child)))
+  (+ v (x-drawable-border-width child)))
 
 (defmethod adj-border-xy (v (child frame))
-  (+ v (xlib:drawable-border-width (frame-window child))))
+  (+ v (x-drawable-border-width (frame-window child))))
 
 (defmethod adj-border-wh (v (child xlib:window))
-  (- v (* (xlib:drawable-border-width child) 2)))
+  (- v (* (x-drawable-border-width child) 2)))
 
 (defmethod adj-border-wh (v (child frame))
-  (- v (* (xlib:drawable-border-width (frame-window child)) 2)))
+  (- v (* (x-drawable-border-width (frame-window child)) 2)))
 
 
 (declaim (inline anti-adj-border-xy anti-adj-border-wh))
@@ -320,16 +320,16 @@
 (defgeneric anti-adj-border-wh (value child))
 
 (defmethod anti-adj-border-xy (v (child xlib:window))
-  (- v (xlib:drawable-border-width child)))
+  (- v (x-drawable-border-width child)))
 
 (defmethod anti-adj-border-xy (v (child frame))
-  (- v (xlib:drawable-border-width (frame-window child))))
+  (- v (x-drawable-border-width (frame-window child))))
 
 (defmethod anti-adj-border-wh (v (child xlib:window))
-  (+ v (* (xlib:drawable-border-width child) 2)))
+  (+ v (* (x-drawable-border-width child) 2)))
 
 (defmethod anti-adj-border-wh (v (child frame))
-  (+ v (* (xlib:drawable-border-width (frame-window child)) 2)))
+  (+ v (* (x-drawable-border-width (frame-window child)) 2)))
 
 
 
@@ -514,10 +514,10 @@
   "Place a frame from real (pixel) coordinates"
   (when (and (frame-p frame) (frame-p parent))
     (with-slots (window x y w h) frame
-      (setf (xlib:drawable-x window) prx
-	    (xlib:drawable-y window) pry
-	    (xlib:drawable-width window) prw
-	    (xlib:drawable-height window) prh
+      (setf (x-drawable-x window) prx
+	    (x-drawable-y window) pry
+	    (x-drawable-width window) prw
+	    (x-drawable-height window) prh
 	    x (x-px->fl prx parent)
 	    y (y-px->fl pry parent)
 	    w (w-px->fl prw parent)
@@ -684,8 +684,8 @@
                    (funcall it child parent)
                    (no-layout child parent))
               (get-fullscreen-size))
-          (values (xlib:drawable-x child) (xlib:drawable-y child)
-                  (xlib:drawable-width child) (xlib:drawable-height child)))))
+          (values (x-drawable-x child) (x-drawable-y child)
+                  (x-drawable-width child) (x-drawable-height child)))))
 
 
 
@@ -698,30 +698,30 @@
     (multiple-value-bind (nx ny nw nh)
 	(get-parent-layout window parent)
       (setf nw (max nw 1)  nh (max nh 1))
-      (let ((change (or (/= (xlib:drawable-x window) nx)
-			(/= (xlib:drawable-y window) ny)
-			(/= (xlib:drawable-width window) nw)
-			(/= (xlib:drawable-height window) nh))))
+      (let ((change (or (/= (x-drawable-x window) nx)
+			(/= (x-drawable-y window) ny)
+			(/= (x-drawable-width window) nw)
+			(/= (x-drawable-height window) nh))))
         (when change
-          (setf (xlib:drawable-x window) nx
-                (xlib:drawable-y window) ny
-                (xlib:drawable-width window) nw
-                (xlib:drawable-height window) nh))
+          (setf (x-drawable-x window) nx
+                (x-drawable-y window) ny
+                (x-drawable-width window) nw
+                (x-drawable-height window) nh))
 	change))))
 
 
 (defmethod adapt-child-to-parent ((frame frame) parent)
   (declare (ignore parent))
     (with-slots (rx ry rw rh window) frame
-      (let ((change (or (/= (xlib:drawable-x window) rx)
-			(/= (xlib:drawable-y window) ry)
-			(/= (xlib:drawable-width window) rw)
-			(/= (xlib:drawable-height window) rh))))
+      (let ((change (or (/= (x-drawable-x window) rx)
+			(/= (x-drawable-y window) ry)
+			(/= (x-drawable-width window) rw)
+			(/= (x-drawable-height window) rh))))
         (when change
-          (setf (xlib:drawable-x window) rx
-                (xlib:drawable-y window) ry
-                (xlib:drawable-width window) rw
-                (xlib:drawable-height window) rh))
+          (setf (x-drawable-x window) rx
+                (x-drawable-y window) ry
+                (x-drawable-width window) rw
+                (x-drawable-height window) rh))
 	change)))
 
 (defmethod adapt-child-to-parent (child parent)
@@ -850,15 +850,15 @@
                                  (child-rect-child rect)))
                   (frame (frame-window (child-rect-child rect))))))
     (when window
-      (let ((change (or (/= (xlib:drawable-x window) (child-rect-x rect))
-			(/= (xlib:drawable-y window) (child-rect-y rect))
-			(/= (xlib:drawable-width window) (child-rect-w rect))
-			(/= (xlib:drawable-height window) (child-rect-h rect)))))
+      (let ((change (or (/= (x-drawable-x window) (child-rect-x rect))
+			(/= (x-drawable-y window) (child-rect-y rect))
+			(/= (x-drawable-width window) (child-rect-w rect))
+			(/= (x-drawable-height window) (child-rect-h rect)))))
         (when change
-          (setf (xlib:drawable-x window) (child-rect-x rect)
-                (xlib:drawable-y window) (child-rect-y rect)
-                (xlib:drawable-width window) (child-rect-w rect)
-                (xlib:drawable-height window) (child-rect-h rect)))
+          (setf (x-drawable-x window) (child-rect-x rect)
+                (x-drawable-y window) (child-rect-y rect)
+                (x-drawable-width window) (child-rect-w rect)
+                (x-drawable-height window) (child-rect-h rect)))
 	change))))
 
 
@@ -1197,17 +1197,17 @@ Warning:frame window and gc are freeed."
   (let* ((hints (xlib:wm-normal-hints window))
 	 (min-width (or (and hints (xlib:wm-size-hints-min-width hints)) 0))
 	 (min-height (or (and hints (xlib:wm-size-hints-min-height hints)) 0))
-	 (max-width (or (and hints (xlib:wm-size-hints-max-width hints)) (xlib:drawable-width *root*)))
-	 (max-height (or (and hints (xlib:wm-size-hints-max-height hints)) (xlib:drawable-height *root*)))
+	 (max-width (or (and hints (xlib:wm-size-hints-max-width hints)) (x-drawable-width *root*)))
+	 (max-height (or (and hints (xlib:wm-size-hints-max-height hints)) (x-drawable-height *root*)))
 	 (rwidth (or (and hints (or (xlib:wm-size-hints-width hints) (xlib:wm-size-hints-base-width hints)))
-		     (xlib:drawable-width window)))
+		     (x-drawable-width window)))
 	 (rheight (or (and hints (or (xlib:wm-size-hints-height hints) (xlib:wm-size-hints-base-height hints)))
-		      (xlib:drawable-height window))))
-    (setf (xlib:drawable-width window) (min (max min-width rwidth *default-window-width*) max-width)
-	  (xlib:drawable-height window) (min (max min-height rheight *default-window-height*) max-height))
-    (with-placement (*unmanaged-window-placement* x y (xlib:drawable-width window) (xlib:drawable-height window))
-      (setf (xlib:drawable-x window) x
-            (xlib:drawable-y window) y))
+		      (x-drawable-height window))))
+    (setf (x-drawable-width window) (min (max min-width rwidth *default-window-width*) max-width)
+	  (x-drawable-height window) (min (max min-height rheight *default-window-height*) max-height))
+    (with-placement (*unmanaged-window-placement* x y (x-drawable-width window) (x-drawable-height window))
+      (setf (x-drawable-x window) x
+            (x-drawable-y window) y))
     (xlib:display-finish-output *display*)))
 
 
@@ -1229,7 +1229,7 @@ windows), this function dresses the window up and gets it ready to be
 managed."
   (setf (xlib:window-event-mask window) *window-events*)
   (set-window-state window +normal-state+)
-  (setf (xlib:drawable-border-width window) (case (window-type window)
+  (setf (x-drawable-border-width window) (case (window-type window)
 					      (:normal *border-size*)
 					      (:maxsize *border-size*)
 					      (:transient *border-size*)

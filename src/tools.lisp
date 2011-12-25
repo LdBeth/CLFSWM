@@ -40,7 +40,7 @@
 	   :nfuncall
 	   :pfuncall
 	   :symbol-search
-	   :symb
+	   :symb :symb-intern
 	   :call-hook
 	   :add-hook
 	   :remove-hook
@@ -210,7 +210,10 @@
 	(princ a s))))
 
   (defun symb (&rest args)
-    (values (intern (apply #'mkstr args)))))
+    (values (intern (apply #'mkstr args))))
+
+  (defun symb-intern (package &rest args)
+    (values (intern (apply #'mkstr args) package))))
 
 
 ;;;,-----

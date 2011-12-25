@@ -568,8 +568,8 @@
     (hide-all-children frame)
     (with-slots (window) frame
       (move-window window orig-x orig-y #'display-frame-info (list frame))
-      (setf (frame-x frame) (x-px->fl (xlib:drawable-x window) parent)
-	    (frame-y frame) (y-px->fl (xlib:drawable-y window) parent)))
+      (setf (frame-x frame) (x-px->fl (x-drawable-x window) parent)
+	    (frame-y frame) (y-px->fl (x-drawable-y window) parent)))
     (show-all-children)))
 
 (defun resize-frame (frame parent orig-x orig-y)
@@ -577,8 +577,8 @@
     (hide-all-children frame)
     (with-slots (window) frame
       (resize-window window orig-x orig-y #'display-frame-info (list frame))
-      (setf (frame-w frame) (w-px->fl (xlib:drawable-width window) parent)
-	    (frame-h frame) (h-px->fl (xlib:drawable-height window) parent)))
+      (setf (frame-w frame) (w-px->fl (x-drawable-width window) parent)
+	    (frame-h frame) (h-px->fl (x-drawable-height window) parent)))
     (show-all-children)))
 
 
@@ -982,8 +982,8 @@ For window: set current child to window or its parent according to window-parent
   "Force the current window to move in the frame (Useful only for unmanaged windows)"
   (with-current-window
     (let ((parent (find-parent-frame window)))
-      (setf (xlib:drawable-x window) (frame-rx parent)
-	    (xlib:drawable-y window) (frame-ry parent))
+      (setf (x-drawable-x window) (frame-rx parent)
+	    (x-drawable-y window) (frame-ry parent))
       (xlib:display-finish-output *display*)))
   (leave-second-mode))
 
@@ -992,12 +992,12 @@ For window: set current child to window or its parent according to window-parent
   "Force the current window to move in the center of the frame (Useful only for unmanaged windows)"
   (with-current-window
     (let ((parent (find-parent-frame window)))
-      (setf (xlib:drawable-x window) (truncate (+ (frame-rx parent)
+      (setf (x-drawable-x window) (truncate (+ (frame-rx parent)
 						  (/ (- (frame-rw parent)
-							(xlib:drawable-width window)) 2)))
-	    (xlib:drawable-y window) (truncate (+ (frame-ry parent)
+							(x-drawable-width window)) 2)))
+	    (x-drawable-y window) (truncate (+ (frame-ry parent)
 						  (/ (- (frame-rh parent)
-							(xlib:drawable-height window)) 2))))
+							(x-drawable-height window)) 2))))
       (xlib:display-finish-output *display*)))
   (leave-second-mode))
 

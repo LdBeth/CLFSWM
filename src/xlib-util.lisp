@@ -86,10 +86,10 @@ Window types are in +WINDOW-TYPES+.")
 
 (declaim (inline window-x2 window-y2))
 (defun window-x2 (window)
-  (+ (xlib:drawable-x window) (xlib:drawable-width window)))
+  (+ (x-drawable-x window) (x-drawable-width window)))
 
 (defun window-y2 (window)
-  (+ (xlib:drawable-y window) (xlib:drawable-height window)))
+  (+ (x-drawable-y window) (x-drawable-height window)))
 
 
 
@@ -537,11 +537,11 @@ Expand in handle-event-fun-main-mode-key-press"
           (multiple-value-bind (move-x move-y)
               (apply add-fn add-arg)
             (when move-x
-              (setf (xlib:drawable-x window) (+ root-x dx)))
+              (setf (x-drawable-x window) (+ root-x dx)))
             (when move-y
-              (setf (xlib:drawable-y window) (+ root-y dy))))
-          (setf (xlib:drawable-x window) (+ root-x dx)
-                (xlib:drawable-y window) (+ root-y dy)))))
+              (setf (x-drawable-y window) (+ root-y dy))))
+          (setf (x-drawable-x window) (+ root-x dx)
+                (x-drawable-y window) (+ root-y dy)))))
 
   (define-handler move-window-mode :key-release ()
     (throw 'exit-move-window-mode nil))
@@ -553,8 +553,8 @@ Expand in handle-event-fun-main-mode-key-press"
     (setf window orig-window
 	  add-fn additional-fn
 	  add-arg additional-arg
-	  dx (- (xlib:drawable-x window) orig-x)
-	  dy (- (xlib:drawable-y window) orig-y)
+	  dx (- (x-drawable-x window) orig-x)
+	  dy (- (x-drawable-y window) orig-y)
 	  (xlib:window-border window) (get-color *color-move-window*))
     (raise-window window)
     (let ((pointer-grabbed-p (xgrab-pointer-p)))
@@ -579,11 +579,11 @@ Expand in handle-event-fun-main-mode-key-press"
           (multiple-value-bind (resize-w resize-h)
               (apply add-fn add-arg)
             (when resize-w
-              (setf (xlib:drawable-width window) (min (max (+ orig-width (- root-x o-x)) 10 min-width) max-width)))
+              (setf (x-drawable-width window) (min (max (+ orig-width (- root-x o-x)) 10 min-width) max-width)))
             (when resize-h
-              (setf (xlib:drawable-height window) (min (max (+ orig-height (- root-y o-y)) 10 min-height) max-height))))
-          (setf (xlib:drawable-width window) (min (max (+ orig-width (- root-x o-x)) 10 min-width) max-width)
-                (xlib:drawable-height window) (min (max (+ orig-height (- root-y o-y)) 10 min-height) max-height)))))
+              (setf (x-drawable-height window) (min (max (+ orig-height (- root-y o-y)) 10 min-height) max-height))))
+          (setf (x-drawable-width window) (min (max (+ orig-width (- root-x o-x)) 10 min-width) max-width)
+                (x-drawable-height window) (min (max (+ orig-height (- root-y o-y)) 10 min-height) max-height)))))
 
   (define-handler resize-window-mode :key-release ()
     (throw 'exit-resize-window-mode nil))
@@ -599,8 +599,8 @@ Expand in handle-event-fun-main-mode-key-press"
 	    add-arg additional-arg
 	    o-x orig-x
 	    o-y orig-y
-	    orig-width (xlib:drawable-width window)
-	    orig-height (xlib:drawable-height window)
+	    orig-width (x-drawable-width window)
+	    orig-height (x-drawable-height window)
 	    min-width (or (and hints (xlib:wm-size-hints-min-width hints)) 0)
 	    min-height (or (and hints (xlib:wm-size-hints-min-height hints)) 0)
 	    max-width (or (and hints (xlib:wm-size-hints-max-width hints)) most-positive-fixnum)
@@ -820,13 +820,13 @@ Expand in handle-event-fun-main-mode-key-press"
 (defun clear-pixmap-buffer (window gc)
   (rotatef (xlib:gcontext-foreground gc) (xlib:gcontext-background gc))
   (xlib:draw-rectangle *pixmap-buffer* gc
-		       0 0 (xlib:drawable-width window) (xlib:drawable-height window)
+		       0 0 (x-drawable-width window) (x-drawable-height window)
 		       t)
   (rotatef (xlib:gcontext-foreground gc) (xlib:gcontext-background gc)))
 
 (defun copy-pixmap-buffer (window gc)
   (xlib:copy-area *pixmap-buffer* gc
-		  0 0 (xlib:drawable-width window) (xlib:drawable-height window)
+		  0 0 (x-drawable-width window) (x-drawable-height window)
 		  window 0 0))
 
 
@@ -845,3 +845,4 @@ Expand in handle-event-fun-main-mode-key-press"
   `(defun ,symbol (window)
      (when (xlib:window-p window)
        (string-equal (xlib:wm-name window) ,name))))
+

@@ -51,10 +51,10 @@
 
 
 (defun find-info-item-from-mouse (root-x root-y info)
-  (if (< (xlib:drawable-x (info-window info)) root-x
-	 (+ (xlib:drawable-x (info-window info))
-	    (xlib:drawable-width (info-window info))))
-      (truncate (/ (- (+ (- root-y (xlib:drawable-y (info-window info)))
+  (if (< (x-drawable-x (info-window info)) root-x
+	 (+ (x-drawable-x (info-window info))
+	    (x-drawable-width (info-window info))))
+      (truncate (/ (- (+ (- root-y (x-drawable-y (info-window info)))
 			 (xlib:max-char-ascent (info-font info))
 			 (info-y info)) (info-ilh info)) (info-ilh info)))
       nil))
@@ -135,8 +135,8 @@
 	"Move one line down"
 	(incf-info-selected-item info 1)
 	(when (> (info-y-display-coords info *info-selected-item*)
-		 (+ (xlib:drawable-y (info-window info))
-		    (xlib:drawable-height (info-window info))))
+		 (+ (x-drawable-y (info-window info))
+		    (x-drawable-height (info-window info))))
 	  (setf (info-y info) (min (+ (info-y info) (info-ilh info)) (info-max-y info))))
 	(draw-info-window info)))
   (define-info-key ("Up")
@@ -144,7 +144,7 @@
 	"Move one line up"
 	(decf-info-selected-item info 1)
 	(when (< (info-y-display-coords info *info-selected-item*)
-		 (+ (xlib:drawable-y (info-window info))
+		 (+ (x-drawable-y (info-window info))
 		    (info-ilh info)))
 	  (setf (info-y info) (max (- (info-y info) (info-ilh info)) 0)))
 	(draw-info-window info)))
@@ -169,7 +169,7 @@
       (defun info-end-line (info)
 	"Move to last line"
 	(setf (info-x info) 0
-	      (info-y info) (- (* (length (info-list info)) (info-ilh info)) (xlib:drawable-height (info-window info))))
+	      (info-y info) (- (* (length (info-list info)) (info-ilh info)) (x-drawable-height (info-window info))))
 	(setf *info-selected-item* (1- (or (length (info-list info)) 1)))
 	(draw-info-window info)))
   (define-info-key ("Page_Down")
@@ -177,8 +177,8 @@
 	"Move ten lines down"
 	(incf-info-selected-item info 10)
 	(when (> (info-y-display-coords info *info-selected-item*)
-		 (+ (xlib:drawable-y (info-window info))
-		    (xlib:drawable-height (info-window info))))
+		 (+ (x-drawable-y (info-window info))
+		    (x-drawable-height (info-window info))))
 	  (setf (info-y info) (min (+ (info-y info) (* (info-ilh info) 10)) (info-max-y info))))
 	(draw-info-window info)))
   (define-info-key ("Page_Up")
@@ -186,7 +186,7 @@
 	"Move ten lines up"
 	(decf-info-selected-item info 10)
 	(when (< (info-y-display-coords info *info-selected-item*)
-		 (+ (xlib:drawable-y (info-window info))
+		 (+ (x-drawable-y (info-window info))
 		    (info-ilh info)))
 	  (setf (info-y info) (max (- (info-y info) (* (info-ilh info) 10)) 0)))
 	(draw-info-window info))))

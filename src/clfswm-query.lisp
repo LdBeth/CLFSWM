@@ -102,7 +102,7 @@
 
 
 (defun query-print-string ()
-  (let ((dec (min 0 (- (- (xlib:drawable-width *query-window*) 10)
+  (let ((dec (min 0 (- (- (x-drawable-width *query-window*) 10)
 		       (+ 10 (* *query-pos* (xlib:max-char-width *query-font*)))))))
     (clear-pixmap-buffer *query-window* *query-gc*)
     (setf (xlib:gcontext-foreground *query-gc*) (get-color *query-message-color*))
