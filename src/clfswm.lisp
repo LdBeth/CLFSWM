@@ -155,7 +155,7 @@
   (loop
      (call-hook *loop-hook*)
      (process-timers)
-     (with-xlib-protect
+     (with-xlib-protect ()
        (when (xlib:event-listen *display* *loop-timeout*)
 	 (xlib:process-event *display* :handler #'handle-event))
        (xlib:display-finish-output *display*))))

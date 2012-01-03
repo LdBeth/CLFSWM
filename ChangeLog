@@ -1,3 +1,9 @@
+2012-01-03  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/xlib-util.lisp (handle-event): Fix a clisp/new-clx error
+	when sometimes window slot of event-slots is a pixmap instead of a
+	window.
+
 2011-12-26  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-query.lisp: Fill the history list with a non-nil

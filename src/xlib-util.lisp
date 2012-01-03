@@ -63,7 +63,7 @@ Window types are in +WINDOW-TYPES+.")
   "Alist mapping NETWM window types to keywords.")
 
 
-(defmacro with-xlib-protect (&body body)
+(defmacro with-xlib-protect (() &body body)
   "Prevent Xlib errors"
   `(handler-case
        (with-simple-restart (top-level "Return to clfswm's top level")
@@ -171,8 +171,30 @@ Expand in handle-event-fun-main-mode-key-press"
 
 
 
+;;; Workaround for pixmap error taken from STUMPWM - thanks:
+;; XXX: In both the clisp and sbcl clx libraries, sometimes what
+;; should be a window will be a pixmap instead. In this case, we
+;; need to manually translate it to a window to avoid breakage
+;; in stumpwm. So far the only slot that seems to be affected is
+;; the :window slot for configure-request and reparent-notify
+;; events. It appears as though the hash table of XIDs and clx
+;; structures gets out of sync with X or perhaps X assigns a
+;; duplicate ID for a pixmap and a window.
+(defun make-xlib-window (xobject)
+  "For some reason the clx xid cache screws up returns pixmaps when
+they should be windows. So use this function to make a window out of them."
+  #+clisp (make-instance 'xlib:window :id (slot-value xobject 'xlib::id) :display *display*)
+  #+(or sbcl ecl openmcl) (xlib::make-window :id (slot-value xobject 'xlib::id) :display *display*)
+  #-(or sbcl clisp ecl openmcl)
+  (error 'not-implemented))
+
+
 (defun handle-event (&rest event-slots &key event-key &allow-other-keys)
-  (with-xlib-protect
+  (with-xlib-protect ()
+    (let ((win (getf event-slots :window)))
+      (when (and win (not (xlib:window-p win)))
+        (dbg "Pixmap Workaround! Should be a window: " win)
+        (setf (getf event-slots :window) (make-xlib-window win))))
     (if (fboundp event-key)
 	(apply event-key event-slots)
 	#+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal))
