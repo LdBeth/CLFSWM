@@ -237,7 +237,7 @@
 	(managed-in-parent (get-managed-child parent)))
     (dolist (ch managed-in-parent)
       (unless (child-member ch managed-children)
-	(setf managed-children (append managed-children (list child)))))
+	(setf managed-children (append managed-children (list ch)))))
     (setf managed-children (remove-if-not (lambda (x)
 					    (child-member x managed-in-parent))
 					  managed-children))
