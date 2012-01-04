@@ -1,3 +1,7 @@
+2012-01-04  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* load.lisp: Support clisp 2.49+ module system to load CLX.
+
 2012-01-04  Ales Guzik <ales.guzik@gmail.com>
 
 	* src/clfswm-layout.lisp (update-layout-managed-children-keep-position):

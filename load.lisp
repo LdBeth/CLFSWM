@@ -41,6 +41,10 @@
 #+(or CMU ECL)
 (require :clx)
 
+#+(AND CLISP (not CLX))
+(when (fboundp 'require)
+  (require "clx.lisp"))
+
 #-ASDF
 (load (make-pathname :host (pathname-host *base-dir*)
 		     :device (pathname-device *base-dir*)

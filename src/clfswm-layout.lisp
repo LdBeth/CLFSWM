@@ -233,6 +233,7 @@
 
 
 (defun update-layout-managed-children-keep-position (child parent)
+  (declare (ignore child))
   (let ((managed-children (frame-data-slot parent :layout-managed-children))
 	(managed-in-parent (get-managed-child parent)))
     (dolist (ch managed-in-parent)
