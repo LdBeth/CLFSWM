@@ -68,9 +68,9 @@ Window types are in +WINDOW-TYPES+.")
   `(handler-case
        (with-simple-restart (top-level "Return to clfswm's top level")
 	 ,@body)
-     ((or xlib:match-error xlib:window-error xlib:drawable-error) (c)
+     ((or xlib:match-error xlib:window-error xlib:drawable-error xlib:lookup-error) (c)
        (progn
-	 (dbg "Ignore Xlib Error" c ',body)
+         (format t "Ignoring XLib error: ~S~%" c)
 	 (unassoc-keyword-handle-event)
 	 (assoc-keyword-handle-event 'main-mode)
 	 (setf *in-second-mode* nil)))))

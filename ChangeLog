@@ -1,3 +1,9 @@
+2012-01-04  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/xlib-util.lisp (with-xlib-protect): Protect from
+	xlib:lookup-error. This prevent an error in clisp/new-clx when
+	sometimes an xlib:colormap is expected instead of an xlib:window.
+
 2012-01-03  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/xlib-util.lisp (handle-event): Fix a clisp/new-clx error
