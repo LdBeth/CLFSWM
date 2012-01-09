@@ -311,6 +311,41 @@
 
 
 
+
+;; Mix tile layout : automatic choose between vertical/horizontal
+(defgeneric tile-layout-mix (child parent)
+  (:documentation "Tile child in its frame (mix: automatic choose between vertical/horizontal)"))
+
+(defmethod tile-layout-mix (child parent)
+  (let* ((managed-children (update-layout-managed-children child parent))
+         (pos (child-position child managed-children))
+         (len (length managed-children))
+         (d1 (ceiling (sqrt len)))
+         (d2  (ceiling (/ len d1)))
+         (nx (if (> (frame-rw parent) (frame-rh parent)) d1 d2))
+         (ny (if (> (frame-rw parent) (frame-rh parent)) d2 d1))
+         (dx (/ (frame-rw parent) nx))
+         (dy (/ (frame-rh parent) ny))
+         (dpos (- (* nx ny) len))
+         (width dx))
+    (when (plusp dpos)
+      (if (zerop pos)
+          (setf width (* dx (1+ dpos)))
+          (incf pos dpos)))
+    (values (round (adj-border-xy (+ (frame-rx parent)
+                                     (truncate (* (mod pos nx) dx))) child))
+            (round (adj-border-xy (+ (frame-ry parent)
+                                     (truncate (* (truncate (/ pos nx)) dy))) child))
+            (round (adj-border-wh width child))
+            (round (adj-border-wh dy child)))))
+
+
+(defun set-tile-layout-mix ()
+  "Tile child in its frame (mix: automatic choose between vertical/horizontal)"
+  (set-layout-managed-children)
+  (set-layout #'tile-layout-mix))
+
+
 ;; One column layout
 (defgeneric one-column-layout (child parent)
   (:documentation "One column layout"))
@@ -359,19 +394,28 @@
   "Tile Space: tile child in its frame leaving spaces between them"
   (with-slots (rx ry rw rh) parent
     (let* ((managed-children (update-layout-managed-children child parent))
-	   (pos (child-position child managed-children))
-	   (len (length managed-children))
-	   (n (ceiling (sqrt len)))
-	   (dx (/ rw n))
-	   (dy (/ rh (ceiling (/ len n))))
-	   (size (or (frame-data-slot parent :tile-space-size) 0.1)))
-      (when (> size 0.5) (setf size 0.45))
-      (values (round (adj-border-xy (+ rx (truncate (* (mod pos n) dx)) (* dx size)) child))
-	      (round (adj-border-xy (+ ry (truncate (* (truncate (/ pos n)) dy)) (* dy size)) child))
-	      (round (adj-border-wh (- dx (* dx size 2)) child))
-	      (round (adj-border-wh (- dy (* dy size 2)) child))))))
-
-
+           (pos (child-position child managed-children))
+           (len (length managed-children))
+           (d1 (ceiling (sqrt len)))
+           (d2 (ceiling (/ len d1)))
+           (cols (if (> rw rh) d1 d2))
+           (rows (if (> rw rh) d2 d1))
+           (col (mod pos cols))
+           (row (floor pos cols))
+           (space-percent (or (frame-data-slot parent :tile-space-size) 0.05))
+           (col-space-total (* rw space-percent))
+           (row-space-total (* rh space-percent))
+           (col-space (floor col-space-total (1+ cols)))
+           (row-space (floor row-space-total (1+ rows)))
+           (child-width (floor (- rw col-space-total) cols))
+           (child-height (floor (- rh row-space-total) rows))
+           )
+      (values (round (adj-border-xy (+ rx col-space
+                                       (* (+ col-space child-width) col)) child))
+              (round (adj-border-xy (+ ry row-space
+                               (* (+ row-space child-height) row)) child))
+              (round (adj-border-wh child-width child))
+              (round (adj-border-wh child-height child))))))
 
 
 (defun set-tile-space-layout ()
@@ -385,6 +429,7 @@
 (register-layout-sub-menu 'frame-tile-layout-menu "Frame tile layout menu"
 			  '(("v" set-tile-layout)
 			    ("h" set-tile-horizontal-layout)
+                            ("m" set-tile-layout-mix)
 			    ("c" set-one-column-layout)
 			    ("l" set-one-line-layout)
 			    ("s" set-tile-space-layout)))

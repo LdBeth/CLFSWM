@@ -1,3 +1,10 @@
+2012-01-09  Ales Guzik <ales.guzik@gmail.com>
+
+	* src/clfswm-layout.lisp (tile-layout-mix): New layout to
+	automatically choose between vertival and horizontal tile layout.
+	(tile-space-layout): Fix to have space between screen border and
+	frame the same as between frames.
+
 2012-01-04  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* load.lisp: Support clisp 2.49+ module system to load CLX.
