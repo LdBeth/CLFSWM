@@ -45,6 +45,8 @@
 This variable may be useful to speed up some slow version of CLX.
 It is particulary useful with CLISP/MIT-CLX.")
 
+(defconfig *transparent-background* t nil
+           "Enable transparent background")
 
 (defconfig *show-root-frame-p* nil nil
            "Show the root frame information or not")
@@ -67,6 +69,9 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defparameter *screen* nil)
 (defparameter *root* nil)
 (defparameter *no-focus-window* nil)
+
+(defparameter *background-image* nil)
+(defparameter *background-gc* nil)
 
 (defconfig *loop-timeout* 0.1 nil
            "Maximum time (in seconds) to wait before calling *loop-hook*")

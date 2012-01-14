@@ -1,3 +1,7 @@
+2012-01-14  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/*.lisp: Add transparency support.
+
 2012-01-09  Ales Guzik <ales.guzik@gmail.com>
 
 	* src/clfswm-layout.lisp (tile-layout-mix): New layout to

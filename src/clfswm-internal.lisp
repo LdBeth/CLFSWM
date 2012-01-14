@@ -1243,10 +1243,44 @@ managed."
 
 
 
+(defun with-all-mapped-windows (screen fun)
+  (let ((all-windows (get-all-windows)))
+    (dolist (win (xlib:query-tree (xlib:screen-root screen)))
+      (unless (child-member win all-windows)
+	(let ((map-state (xlib:window-map-state win))
+	      (wm-state (window-state win)))
+	  (unless (or (eql (xlib:window-override-redirect win) :on)
+		      (eql win *no-focus-window*)
+                      (is-notify-window-p win))
+	    (when (or (eql map-state :viewable)
+		      (eql wm-state +iconic-state+))
+              (funcall fun win))))))))
+
+(defun store-root-background ()
+  (with-all-mapped-windows *screen* #'hide-window)
+  (setf *background-image* (xlib:create-pixmap :width (xlib:screen-width *screen*)
+                                               :height (xlib:screen-height *screen*)
+                                               :depth (xlib:screen-root-depth *screen*)
+                                               :drawable *root*)
+        *background-gc* (xlib:create-gcontext :drawable *background-image*
+                                              :foreground (get-color *frame-foreground*)
+                                              :background (get-color *frame-background*)
+                                              :font *default-font*
+                                              :line-style :solid))
+  (xlib:copy-area *root* *background-gc*
+                  0 0 (xlib:screen-width *screen*) (xlib:screen-height *screen*)
+                  *background-image* 0 0)
+  (with-all-mapped-windows *screen* #'unhide-window))
+
+
+
+
 (defun hide-existing-windows (screen)
   "Hide all existing windows in screen"
   (dolist (win (xlib:query-tree (xlib:screen-root screen)))
     (hide-window win)))
+
+
 
 (defun process-existing-windows (screen)
   "Windows present when clfswm starts up must be absorbed by clfswm."

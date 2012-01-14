@@ -190,6 +190,7 @@
 					    :depth (xlib:screen-root-depth *screen*)
 					    :drawable *root*)
 	*in-second-mode* nil)
+  (store-root-background)
   (init-modifier-list)
   (xgrab-init-pointer)
   (xgrab-init-keyboard)

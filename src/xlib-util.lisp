@@ -837,19 +837,25 @@ they should be windows. So use this function to make a window out of them."
 
 
 
-
 ;;; Double buffering tools
 (defun clear-pixmap-buffer (window gc)
-  (rotatef (xlib:gcontext-foreground gc) (xlib:gcontext-background gc))
-  (xlib:draw-rectangle *pixmap-buffer* gc
-		       0 0 (x-drawable-width window) (x-drawable-height window)
-		       t)
-  (rotatef (xlib:gcontext-foreground gc) (xlib:gcontext-background gc)))
+  (if *transparent-background*
+      (xlib:copy-area *background-image* *background-gc*
+                      (x-drawable-x window) (x-drawable-y window)
+                      (x-drawable-width window) (x-drawable-height window)
+                      *pixmap-buffer* 0 0)
+      (xlib:with-gcontext (gc :foreground (xlib:gcontext-background gc)
+                              :background (xlib:gcontext-foreground gc))
+        (xlib:draw-rectangle *pixmap-buffer* gc
+                             0 0 (x-drawable-width window) (x-drawable-height window)
+                             t))))
+
 
 (defun copy-pixmap-buffer (window gc)
   (xlib:copy-area *pixmap-buffer* gc
-		  0 0 (x-drawable-width window) (x-drawable-height window)
-		  window 0 0))
+  		  0 0 (x-drawable-width window) (x-drawable-height window)
+  		  window 0 0))
+
 
 
 (defun is-a-key-pressed-p ()
