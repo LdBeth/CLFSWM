@@ -221,6 +221,22 @@ they should be windows. So use this function to make a window out of them."
     (xlib:warp-pointer *root* x y)))
 
 
+;;; Transparency support
+(let ((opaque #xFFFFFFFF))
+  (defun window-transparency (window)
+    "Return the window transparency"
+    (float (/ (or (first (xlib:get-property window :_NET_WM_WINDOW_OPACITY)) opaque)  opaque)))
+
+  (defun set-window-transparency (window value)
+    "Set the window transparency"
+    (when (numberp value)
+      (xlib:change-property window :_NET_WM_WINDOW_OPACITY
+                            (list (min (round (* opaque (if (equal *transparent-background* t) value 1))) opaque))
+                            :cardinal 32)))
+
+  (defsetf window-transparency set-window-transparency))
+
+
 
 (defun window-state (win)
   "Get the state (iconic, normal, withdrawn) of a window."
@@ -389,7 +405,6 @@ they should be windows. So use this function to make a window out of them."
       (and (xlib:get-property window :WM_TRANSIENT_FOR)
            :transient)
       :normal))
-
 
 
 
@@ -839,7 +854,7 @@ they should be windows. So use this function to make a window out of them."
 
 ;;; Double buffering tools
 (defun clear-pixmap-buffer (window gc)
-  (if *transparent-background*
+  (if (equal *transparent-background* :pseudo)
       (xlib:copy-area *background-image* *background-gc*
                       (x-drawable-x window) (x-drawable-y window)
                       (x-drawable-width window) (x-drawable-height window)

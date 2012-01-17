@@ -237,6 +237,34 @@
   "???")
 
 
+(defgeneric child-transparency (child))
+
+(defmethod child-transparency ((child xlib:window))
+  (window-transparency child))
+
+(defmethod child-transparency ((child frame))
+  (window-transparency (frame-window child)))
+
+(defmethod child-transparency (child)
+  (declare (ignore child))
+  1)
+
+(defgeneric set-child-transparency (child value))
+
+(defmethod set-child-transparency ((child xlib:window) value)
+  (setf (window-transparency child) value))
+
+(defmethod set-child-transparency ((child frame) value)
+  (setf (window-transparency (frame-window child)) value))
+
+(defmethod set-child-transparency (child value)
+  (declare (ignore child value)))
+
+(defsetf child-transparency set-child-transparency)
+
+
+
+
 (defgeneric child-x (child))
 (defmethod child-x ((child xlib:window))
   (x-drawable-x child))
@@ -444,16 +472,18 @@
 
 
 (defun create-frame-window ()
-  (xlib:create-window :parent *root*
-                      :x 0
-                      :y 0
-                      :width 200
-                      :height 200
-                      :background (get-color *frame-background*)
-                      :colormap (xlib:screen-default-colormap *screen*)
-                      :border-width *border-size*
-                      :border (get-color *color-selected*)
-                      :event-mask '(:exposure :button-press :button-release :pointer-motion :enter-window)))
+  (let ((win (xlib:create-window :parent *root*
+                                 :x 0
+                                 :y 0
+                                 :width 200
+                                 :height 200
+                                 :background (get-color *frame-background*)
+                                 :colormap (xlib:screen-default-colormap *screen*)
+                                 :border-width *border-size*
+                                 :border (get-color *color-selected*)
+                                 :event-mask '(:exposure :button-press :button-release :pointer-motion :enter-window))))
+    (setf (window-transparency win) *frame-transparency*)
+    win))
 
 (defun create-frame-gc (window)
   (xlib:create-gcontext :drawable window

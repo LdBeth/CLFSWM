@@ -148,6 +148,7 @@
 					     :background (get-color *query-background*)
 					     :font *query-font*
 					     :line-style :solid))
+      (setf (window-transparency *query-window*) *query-transparency*)
       (map-window *query-window*)
       (query-print-string)
       (wait-no-key-or-button-press))))

@@ -80,6 +80,20 @@
     (leave-second-mode)))
 
 
+(defun ask-child-transparency (msg child)
+  (let ((trans (query-number (format nil "New ~A transparency: (last: ~A)"
+                                     msg
+                                     (* 100 (child-transparency child)))
+                             (* 100 (child-transparency child)))))
+    (when (numberp trans)
+      (setf (child-transparency child) (float (/ trans 100))))))
+
+(defun set-current-child-transparency ()
+  "Set the current child transparency"
+  (ask-child-transparency "child" *current-child*)
+  (leave-second-mode))
+
+
 (defun renumber-current-frame ()
   "Renumber the current frame"
   (when (frame-p *current-child*)
@@ -337,6 +351,7 @@
 				   :background (get-color *identify-background*)
 				   :font font
 				   :line-style :solid)))
+    (setf (window-transparency window) *identify-transparency*)
     (labels ((print-doc (msg hash-table-key pos code state)
 	       (let ((function (find-key-from-code hash-table-key code state)))
 		 (when (and function (fboundp (first function)))
@@ -1010,7 +1025,14 @@ For window: set current child to window or its parent according to window-parent
 		     (format nil "Window name:  ~A" (xlib:wm-name window))
 		     (format nil "Window class: ~A" (xlib:get-wm-class window))
 		     (format nil "Window type:  ~:(~A~)" (window-type window))
-		     (format nil "Window id:    0x~X" (xlib:window-id window)))))
+		     (format nil "Window id:    0x~X" (xlib:window-id window))
+                     (format nil "Window transparency: ~A" (* 100 (window-transparency window))))))
+  (leave-second-mode))
+
+(defun set-current-window-transparency ()
+  "Set the current window transparency"
+  (with-current-window
+      (ask-child-transparency "window" window))
   (leave-second-mode))
 
 
@@ -1566,6 +1588,7 @@ For window: set current child to window or its parent according to window-parent
 					 :background (get-color *notify-window-background*)
 					 :font font
 					 :line-style :solid))
+          (setf (window-transparency window) *notify-window-transparency*)
 	  (when (frame-p *current-child*)
 	    (setf current-child *current-child*)
 	    (push (list #'is-notify-window-p 'raise-window) *never-managed-window-list*))

@@ -218,6 +218,7 @@
 					       :background (get-color *circulate-background*)
 					       :font *circulate-font*
 					       :line-style :solid))
+    (setf (window-transparency *circulate-window*) *circulate-transparency*)
     (map-window *circulate-window*)
     (draw-circulate-mode-window)
     (when child-direction

@@ -114,6 +114,7 @@
 					:background (get-color *sm-background-color*)
 					:font *sm-font*
 					:line-style :solid)))
+  (setf (window-transparency *sm-window*) *sm-transparency*)
   (map-window *sm-window*)
   (draw-second-mode-window)
   (no-focus)

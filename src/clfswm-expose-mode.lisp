@@ -130,6 +130,7 @@
 				       :background (get-color *expose-background*)
 				       :font *expose-font*
 				       :line-style :solid)))
+        (setf (window-transparency window) *expose-transparency*)
 	(map-window window)
 	(push (list window gc string child) *expose-windows-list*)))))
 

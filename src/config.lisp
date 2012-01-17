@@ -201,6 +201,8 @@ on the root window in the main mode with the mouse")
   'Frame-colors "Frame foreground when the frame is the root frame")
 (defconfig *frame-foreground-hidden* "Darkgreen"
   'Frame-colors "Frame foreground for hidden windows")
+(defconfig *frame-transparency* *default-transparency*
+  'Frame-colors "Frame background transparency")
 
 ;;; CONFIG: Default window size
 (defconfig *default-window-width* 400
@@ -221,7 +223,8 @@ on the root window in the main mode with the mouse")
   'Second-mode "Second mode window width")
 (defconfig *sm-height* 25
   'Second-mode "Second mode window height")
-
+(defconfig *sm-transparency* *default-transparency*
+  'Second-mode "Second mode background transparency")
 
 
 
@@ -235,6 +238,8 @@ on the root window in the main mode with the mouse")
   'Identify-key "Identify window foreground color")
 (defconfig *identify-border* "red"
   'Identify-key "Identify window border color")
+(defconfig *identify-transparency* *default-transparency*
+  'Identify-key "Identify window background transparency")
 
 ;;; CONFIG - Query string colors
 (defconfig *query-font-string* *default-font-string*
@@ -253,6 +258,8 @@ on the root window in the main mode with the mouse")
   'Query-string "Query string window parenthesis color when no match")
 (defconfig *query-border* "red"
   'Query-string "Query string window border color")
+(defconfig *query-transparency* *default-transparency*
+  'Query-string "Query string window background transparency")
 
 
 ;;; CONFIG - Info mode
@@ -268,6 +275,8 @@ on the root window in the main mode with the mouse")
   'Info-mode "Info selected item background color")
 (defconfig *info-font-string* *default-font-string*
   'Info-mode "Info window font string")
+(defconfig *info-transparency* *default-transparency*
+  'Info-mode "Info window background transparency")
 
 (defconfig *info-click-to-select* t
   'Info-mode "If true, click on info window select item. Otherwise, click to drag the menu")
@@ -285,6 +294,8 @@ on the root window in the main mode with the mouse")
   'Circulate-mode "Circulate mode window width")
 (defconfig *circulate-height* 15
   'Circulate-mode "Circulate mode window height")
+(defconfig *circulate-transparency* *default-transparency*
+  'Circulate-mode "Circulate window background transparency")
 
 
 (defconfig *circulate-text-limite* 30
@@ -304,6 +315,8 @@ on the root window in the main mode with the mouse")
   'Expose-mode "Valid expose mode when an accel key is pressed")
 (defconfig *expose-show-window-title* t
   'Expose-mode "Show the window title on accel window")
+(defconfig *expose-transparency* *default-transparency*
+  'Expose-mode "Expose string window background transparency")
 
 
 
@@ -341,5 +354,6 @@ on the root window in the main mode with the mouse")
   'Notify-Window "Notify Window border color")
 (defconfig *notify-window-delay* 10
   'Notify-Window "Notify Window display delay")
-
+(defconfig *notify-window-transparency* *default-transparency*
+  'Notify-window "Notify window background transparency")
 

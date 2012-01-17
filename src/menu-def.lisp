@@ -77,6 +77,7 @@
 
 
 (add-menu-key 'child-menu "r" 'rename-current-child)
+(add-menu-key 'child-menu "t" 'set-current-child-transparency)
 (add-menu-key 'child-menu "e" 'ensure-unique-name)
 (add-menu-key 'child-menu "n" 'ensure-unique-number)
 (add-menu-key 'child-menu "Delete" 'delete-current-child)
@@ -176,6 +177,7 @@
 
 
 (add-menu-key 'window-menu "i" 'display-current-window-info)
+(add-menu-key 'window-menu "t" 'set-current-window-transparency)
 (add-menu-key 'window-menu "f" 'force-window-in-frame)
 (add-menu-key 'window-menu "c" 'force-window-center-in-frame)
 (add-menu-key 'window-menu "m" 'manage-current-window)
@@ -192,7 +194,6 @@
 (add-menu-key 'selection-menu "p" 'paste-selection-no-clear)
 (add-menu-key 'selection-menu "Delete" 'remove-current-child)
 (add-menu-key 'selection-menu "z" 'clear-selection)
-
 
 
 (add-menu-key 'action-by-name-menu "f" 'focus-frame-by-name)

@@ -341,6 +341,7 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 				    :font font :ilw ilw :ilh ilh
 				    :max-x (* (loop for l in info-list maximize (compute-size l)) ilw)
 				    :max-y (* (length info-list) ilh)))
+              (setf (window-transparency window) *info-transparency*)
 	      (map-window window)
 	      (draw-info-window info)
 	      (xgrab-pointer *root* 68 69)
