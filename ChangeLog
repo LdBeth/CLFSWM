@@ -1,3 +1,10 @@
+2012-01-18  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-keys.lisp (define-keys): New macro to ease multiple
+	keys definitions. (Thanks Valentin Plechinger for the request).
+
+	* src/*.lisp: Add full transparency support with xcompmgr.
+
 2012-01-14  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/*.lisp: Add transparency support.

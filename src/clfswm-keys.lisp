@@ -248,3 +248,9 @@
 		      hashtable)))
     (dolist (h hashtables)
       (change h to from))))
+
+
+(defmacro define-keys ((mode) &body keys)
+  (let ((symb (symb "DEFINE-" mode "-KEY")))
+    `(progn
+       ,@(loop for k in keys collect `(,symb ,@k)))))
