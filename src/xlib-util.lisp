@@ -231,7 +231,9 @@ they should be windows. So use this function to make a window out of them."
     "Set the window transparency"
     (when (numberp value)
       (xlib:change-property window :_NET_WM_WINDOW_OPACITY
-                            (list (min (round (* opaque (if (equal *transparent-background* t) value 1))) opaque))
+                            (list (max (min (round (* opaque (if (equal *transparent-background* t) value 1)))
+                                            opaque)
+                                       0))
                             :cardinal 32)))
 
   (defsetf window-transparency set-window-transparency))

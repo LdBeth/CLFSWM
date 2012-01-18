@@ -1618,3 +1618,39 @@ For window: set current child to window or its parent according to window-parent
           (show-all-children t))
         (funcall run-fn))))
 
+;;; Transparency setting
+(defun inc-transparency (window root-x root-y)
+  "Increment the child under mouse transparency"
+  (declare (ignore root-x root-y))
+  (unless *in-second-mode* (stop-button-event))
+  (incf (child-transparency window) 0.1))
+
+(defun dec-transparency (window root-x root-y)
+  "Decrement the child under mouse transparency"
+  (declare (ignore root-x root-y))
+  (unless *in-second-mode* (stop-button-event))
+  (decf (child-transparency window) 0.1))
+
+(defun inc-transparency-slow (window root-x root-y)
+  "Increment slowly the child under mouse transparency"
+  (declare (ignore root-x root-y))
+  (unless *in-second-mode* (stop-button-event))
+  (incf (child-transparency window) 0.01))
+
+(defun dec-transparency-slow (window root-x root-y)
+  "Decrement slowly the child under mouse transparency"
+  (declare (ignore root-x root-y))
+  (unless *in-second-mode* (stop-button-event))
+  (decf (child-transparency window) 0.01))
+
+
+(defun key-inc-transparency ()
+  "Increment the current window transparency"
+  (with-current-window
+      (incf (child-transparency window) 0.1)))
+
+(defun key-dec-transparency ()
+  "Decrement the current window transparency"
+  (with-current-window
+      (decf (child-transparency window) 0.1)))
+

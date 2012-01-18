@@ -1,5 +1,11 @@
 2012-01-18  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/bindings-second-mode.lisp (set-default-second-keys): New
+	key binding to set window and frame transparency.
+
+	* src/bindings.lisp (set-default-main-mouse): New mouse binding to
+	set window and frame transparency.
+
 	* src/clfswm-keys.lisp (define-keys): New macro to ease multiple
 	keys definitions. (Thanks Valentin Plechinger for the request).
 

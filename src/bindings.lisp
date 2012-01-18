@@ -137,7 +137,11 @@
   (define-main-mouse (4) 'mouse-select-next-level)
   (define-main-mouse (5) 'mouse-select-previous-level)
   (define-main-mouse (4 :mod-1) 'mouse-enter-frame)
-  (define-main-mouse (5 :mod-1) 'mouse-leave-frame))
+  (define-main-mouse (5 :mod-1) 'mouse-leave-frame)
+  (define-main-mouse (4 :mod-1 :control) 'dec-transparency)
+  (define-main-mouse (5 :mod-1 :control) 'inc-transparency)
+  (define-main-mouse (4 :mod-1 :control :shift) 'dec-transparency-slow)
+  (define-main-mouse (5 :mod-1 :control :shift) 'inc-transparency-slow))
 
 (add-hook *binding-hook* 'set-default-main-mouse)
 

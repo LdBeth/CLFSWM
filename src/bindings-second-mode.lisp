@@ -181,7 +181,10 @@
   (define-second-key ("7" :mod-1) 'bind-or-jump 7)
   (define-second-key ("8" :mod-1) 'bind-or-jump 8)
   (define-second-key ("9" :mod-1) 'bind-or-jump 9)
-  (define-second-key ("0" :mod-1) 'bind-or-jump 10))
+  (define-second-key ("0" :mod-1) 'bind-or-jump 10)
+  ;;; Transparency
+  (define-second-key ("t" :control :shift) 'key-inc-transparency)
+  (define-second-key ("t" :control) 'key-dec-transparency))
 
 (add-hook *binding-hook* 'set-default-second-keys)
 
