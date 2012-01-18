@@ -1,5 +1,8 @@
 2012-01-18  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/*.lisp: Use create-symbol and create-symbol-in-package
+	instead of the shorter symb. (Thanks Aad Versteden).
+
 	* src/bindings-second-mode.lisp (set-default-second-keys): New
 	key binding to set window and frame transparency.
 

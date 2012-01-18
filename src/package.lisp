@@ -265,9 +265,9 @@ loading configuration file and before opening the display.")
 (defmacro make-x-drawable (argname type)
   "Drawable wrapper to prevent type error in some CLX versions.
 Replace xlib:drawable-* functions with x-drawable-* equivalents"
-  (let ((fun-symbol (symb 'x-drawable- argname))
-        (set-symbol (symb 'set-x-drawable- argname))
-        (xlib-equiv-symbol (symb-intern :xlib 'drawable- argname)))
+  (let ((fun-symbol (create-symbol 'x-drawable- argname))
+        (set-symbol (create-symbol 'set-x-drawable- argname))
+        (xlib-equiv-symbol (create-symbol-in-package :xlib 'drawable- argname)))
     `(progn
        (declaim (inline ,fun-symbol))
        (defun ,fun-symbol (window)
@@ -275,7 +275,7 @@ Replace xlib:drawable-* functions with x-drawable-* equivalents"
        (defun ,set-symbol (window ,argname)
          (if (typep ,argname ',type)
              (setf (,xlib-equiv-symbol window) ,argname)
-             (dbg ',(symb 'drawable-type-error- argname) window ,argname (xlib:wm-name window))))
+             (dbg ',(create-symbol 'drawable-type-error- argname) window ,argname (xlib:wm-name window))))
        (defsetf ,fun-symbol ,set-symbol))))
 
 

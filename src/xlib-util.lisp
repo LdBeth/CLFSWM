@@ -101,7 +101,7 @@ Window types are in +WINDOW-TYPES+.")
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (defun keyword->handle-event (mode keyword)
-    (symb 'handle-event-fun "-" mode "-" keyword)))
+    (create-symbol 'handle-event-fun "-" mode "-" keyword)))
 
 (defun handle-event->keyword (symbol)
   (let* ((name (string-downcase (symbol-name symbol)))

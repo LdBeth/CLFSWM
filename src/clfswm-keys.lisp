@@ -251,6 +251,6 @@
 
 
 (defmacro define-keys ((mode) &body keys)
-  (let ((symb (symb "DEFINE-" mode "-KEY")))
+  (let ((symbol (create-symbol "DEFINE-" mode "-KEY")))
     `(progn
-       ,@(loop for k in keys collect `(,symb ,@k)))))
+       ,@(loop for k in keys collect `(,symbol ,@k)))))

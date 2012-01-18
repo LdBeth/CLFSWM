@@ -81,7 +81,7 @@
 
 (defmacro define-expose-letter-keys ()
   (labels ((produce-name (n)
-	     (symb "%" "expose-fun-key-" n "%")))
+	     (create-symbol "%" "expose-fun-key-" n "%")))
     `(progn
        ,@(loop for n from 0 to 61
 	    collect `(progn

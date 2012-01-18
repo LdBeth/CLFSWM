@@ -40,7 +40,7 @@
 	   :nfuncall
 	   :pfuncall
 	   :symbol-search
-	   :symb :symb-intern
+	   :create-symbol :create-symbol-in-package
 	   :call-hook
 	   :add-hook
 	   :remove-hook
@@ -62,7 +62,6 @@
 	   :empty-string-p
 	   :find-common-string
 	   :setf/=
-	   :create-symbol
 	   :number->char
            :number->string
 	   :simple-type-of
@@ -209,11 +208,11 @@
       (dolist (a args)
 	(princ a s))))
 
-  (defun symb (&rest args)
-    (values (intern (apply #'mkstr args))))
+  (defun create-symbol (&rest args)
+    (values (intern (string-upcase (apply #'mkstr args)))))
 
-  (defun symb-intern (package &rest args)
-    (values (intern (apply #'mkstr args) package))))
+  (defun create-symbol-in-package (package &rest args)
+    (values (intern (string-upcase (apply #'mkstr args)) package))))
 
 
 ;;;,-----
@@ -441,13 +440,6 @@ Return the result of the last hook"
 	 (setf ,var ,gval)))))
 
 
-
-
-(defun create-symbol (&rest names)
-  "Return a new symbol from names"
-  (intern (string-upcase (apply #'concatenate 'string names))))
-
-
 (defun number->char (number)
   (cond ((<= number 25) (code-char (+ (char-code #\a) number)))
         ((<= 26 number 35) (code-char (+ (char-code #\0) (- number 26))))
@@ -614,8 +606,8 @@ of the program to return.
 		 (unless proc
 		   (error "Cannot create process."))
 		 proc)
-    #+:ecl(ext:run-program program args :input :stream :output :stream
-			   :error :output)
+    #+:ecl (ext:run-program program args :input :stream :output :stream
+                            :error :output)
     #+:openmcl (let ((proc (ccl:run-program program args :input
 							 :stream :output
 							 :stream :wait wt)))
