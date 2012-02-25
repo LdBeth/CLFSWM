@@ -118,8 +118,9 @@
 	(parent (find-parent-frame *current-child*)))
     (when parent
       (pushnew new-frame (frame-child parent))
-      (setf *current-root* parent
-	    *current-child* parent)
+      (when (child-equal-p *current-child* *current-root*)
+        (setf *current-root* parent))
+      (setf *current-child* parent)
       (set-layout-once #'tile-space-layout)
       (setf *current-child* new-frame)
       (leave-second-mode))))
@@ -774,8 +775,9 @@ For window: set current child to window or its parent according to window-parent
     "Jump to slot"
     (let ((jump-child (aref key-slots current-slot)))
       (when (find-child jump-child *root-frame*)
-	(setf *current-root* jump-child
-	      *current-child* *current-root*)
+        (unless (find-child jump-child *current-root*)
+          (setf *current-root* jump-child))
+	(setf *current-child* jump-child)
 	(focus-all-children *current-child* *current-child*)
 	(show-all-children t))))
 

@@ -3,6 +3,8 @@
 	* src/clfswm-util.lisp (place-frames-from-xrandr)
 	(swap-frame-geometry, rotate-frame-geometry): New helper functions
 	for multiple physical screen.
+	(jump-to-slot, add-frame-in-parent-frame): Change *current-root*
+	only when needed.
 
 2012-01-18  Philippe Brochard  <pbrochard@common-lisp.net>
 
