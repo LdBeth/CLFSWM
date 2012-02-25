@@ -118,6 +118,9 @@
   (define-second-key ("Right" :control :mod-1) 'select-brother-spatial-move-right)
   (define-second-key ("Up" :control :mod-1) 'select-brother-spatial-move-up)
   (define-second-key ("Down" :control :mod-1) 'select-brother-spatial-move-down)
+  (define-second-key ("j") 'swap-frame-geometry)
+  (define-second-key ("h") 'rotate-frame-geometry)
+  (define-second-key ("h" :shift) 'anti-rotate-frame-geometry)
 
   (define-second-key ("Right") 'speed-mouse-right)
   (define-second-key ("Left") 'speed-mouse-left)
@@ -133,6 +136,7 @@
   (define-second-key ("Tab") 'switch-to-last-child)
   (define-second-key ("Return" :mod-1) 'enter-frame)
   (define-second-key ("Return" :mod-1 :shift) 'leave-frame)
+  (define-second-key ("Return" :mod-1 :control) 'frame-toggle-maximize)
   (define-second-key ("Return" :mod-5) 'frame-toggle-maximize)
   (define-second-key ("Page_Up" :mod-1) 'frame-lower-child)
   (define-second-key ("Page_Down" :mod-1) 'frame-raise-child)
@@ -163,7 +167,6 @@
   (define-shell ("e" :control) b-start-emacsremote
     "start an emacs for another user"
     "exec xterm -e emacsremote")
-  (define-shell ("h") b-start-xclock "start an xclock" "exec xclock -d")
   (define-second-key ("F10" :mod-1) 'fast-layout-switch)
   (define-second-key ("F10" :shift :control) 'toggle-show-root-frame)
   (define-second-key ("F10") 'expose-windows-current-child-mode)

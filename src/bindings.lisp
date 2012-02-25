@@ -56,6 +56,7 @@
   (define-main-key ("Tab" :mod-1 :control) 'select-next-subchild)
   (define-main-key ("Return" :mod-1) 'enter-frame)
   (define-main-key ("Return" :mod-1 :shift) 'leave-frame)
+  (define-main-key ("Return" :mod-1 :control) 'frame-toggle-maximize)
   (define-main-key ("Return" :mod-5) 'frame-toggle-maximize)
   (define-main-key ("Page_Up" :mod-1) 'frame-select-previous-child)
   (define-main-key ("Page_Down" :mod-1) 'frame-select-next-child)

@@ -1654,3 +1654,76 @@ For window: set current child to window or its parent according to window-parent
   (with-current-window
       (decf (child-transparency window) 0.1)))
 
+;;; Multiple physical screen helper
+
+(defun get-xrandr-connected-size ()
+  (let ((output (do-shell "xrandr"))
+        (sizes '()))
+    (loop for line = (read-line output nil nil)
+       while line
+       do
+         (awhen (search " connected " line)
+           (incf it (length " connected "))
+           (push (mapcar #'parse-integer
+                         (split-string (substitute #\space #\x
+                                                   (substitute #\space #\+
+                                                               (subseq line it (position #\space line :start it))))))
+                 sizes)))
+    sizes))
+
+
+(defun place-frames-from-xrandr ()
+  "Place frames according to xrandr informations"
+  (let ((sizes (get-xrandr-connected-size))
+        (width (xlib:screen-width *screen*))
+        (height (xlib:screen-height *screen*)))
+    (loop while (< (length (frame-child *root-frame*)) (length sizes))
+       do (add-frame (create-frame) *root-frame*))
+    (loop for size in sizes
+       for frame in (frame-child *root-frame*)
+       do (setf (frame-w frame) (float (/ (first size) width))
+                (frame-h frame) (float (/ (second size) height))
+                (frame-x frame) (float (/ (third size) width))
+                (frame-y frame) (float (/ (fourth size) height))))))
+
+
+
+
+(defun swap-frame-geometry ()
+  "Swap current brother frame geometry"
+  (when (frame-p *current-child*)
+    (let ((parent (find-parent-frame *current-child*)))
+      (when (frame-p parent)
+        (let ((brother (second (frame-child parent))))
+          (when (frame-p brother)
+            (rotatef (frame-x *current-child*) (frame-x brother))
+            (rotatef (frame-y *current-child*) (frame-y brother))
+            (rotatef (frame-w *current-child*) (frame-w brother))
+            (rotatef (frame-h *current-child*) (frame-h brother))
+            (show-all-children t)
+            (leave-second-mode)))))))
+
+(defun rotate-frame-geometry-generic (fun)
+  "(Rotate brother frame geometry"
+  (when (frame-p *current-child*)
+    (let ((parent (find-parent-frame *current-child*)))
+      (when (frame-p parent)
+        (let* ((child-list (funcall fun (frame-child parent)))
+               (first (first child-list)))
+          (dolist (child (rest child-list))
+            (when (and (frame-p first) (frame-p child))
+              (rotatef (frame-x first) (frame-x child))
+              (rotatef (frame-y first) (frame-y child))
+              (rotatef (frame-w first) (frame-w child))
+              (rotatef (frame-h first) (frame-h child))
+              (setf first child)))
+          (show-all-children t))))))
+
+
+(defun rotate-frame-geometry ()
+  "Rotate brother frame geometry"
+  (rotate-frame-geometry-generic #'identity))
+
+(defun anti-rotate-frame-geometry ()
+  "Anti rotate brother frame geometry"
+  (rotate-frame-geometry-generic #'reverse))

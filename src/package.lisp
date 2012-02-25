@@ -220,24 +220,24 @@ loading configuration file and before opening the display.")
 ;;; middle-left  middle-middle  middle-right
 ;;; bottom-left  bottom-middle  bottom-right
 ;;;
-(defconfig *banish-pointer-placement* 'bottom-right-placement
+(defconfig *banish-pointer-placement* 'bottom-right-child-placement
   'Placement "Pointer banishment placement")
-(defconfig *second-mode-placement* 'top-middle-placement
+(defconfig *second-mode-placement* 'top-middle-child-placement
   'Placement "Second mode window placement")
-(defconfig *info-mode-placement* 'top-left-placement
+(defconfig *info-mode-placement* 'top-left-child-placement
   'Placement "Info mode window placement")
-(defconfig *query-mode-placement* 'top-left-placement
+(defconfig *query-mode-placement* 'top-left-child-placement
   'Placement "Query mode window placement")
-(defconfig *circulate-mode-placement* 'bottom-middle-placement
+(defconfig *circulate-mode-placement* 'bottom-middle-child-placement
   'Placement "Circulate mode window placement")
 (defconfig *expose-mode-placement* 'top-left-child-placement
   'Placement "Expose mode window placement (Selection keys position)")
-(defconfig *notify-window-placement* 'bottom-right-placement
+(defconfig *notify-window-placement* 'bottom-right-child-placement
   'Placement "Notify window placement")
-(defconfig *ask-close/kill-placement* 'top-right-placement
+(defconfig *ask-close/kill-placement* 'top-right-child-placement
   'Placement "Ask close/kill window placement")
 (defconfig *unmanaged-window-placement* 'middle-middle-child-placement
-  'PLACEMENT "Unmanager window placement")
+  'Placement "Unmanager window placement")
 
 
 (defparameter *in-process-existing-windows* nil)
