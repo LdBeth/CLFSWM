@@ -1,3 +1,8 @@
+2012-04-16  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-corner.lisp (wait-window-in-query-tree): Add a limit
+	of try to wait the command window.
+
 2012-02-25  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (place-frames-from-xrandr)

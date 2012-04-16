@@ -76,15 +76,17 @@ stop the button event"
 ;;; CONFIG - Corner actions definitions:  ;;;
 ;;;***************************************;;;
 (defun find-window-in-query-tree (target-win)
-  (dolist (win (xlib:query-tree *root*))
-    (when (child-equal-p win target-win)
-      (return t))))
+  (when target-win
+    (dolist (win (xlib:query-tree *root*))
+      (when (child-equal-p win target-win)
+        (return t)))))
 
 (defun wait-window-in-query-tree (wait-test)
-  (loop
+  (dotimes (try *corner-command-try-number*)
      (dolist (win (xlib:query-tree *root*))
        (when (funcall wait-test win)
-	 (return-from wait-window-in-query-tree win)))))
+	 (return-from wait-window-in-query-tree win)))
+     (sleep *corner-command-try-delay*)))
 
 
 (defun generic-present-body (cmd wait-test win &optional focus-p)
@@ -92,15 +94,21 @@ stop the button event"
   (unless (find-window-in-query-tree win)
     (do-shell cmd)
     (setf win (wait-window-in-query-tree wait-test))
-    (grab-all-buttons win)
-    (hide-window win))
-  (cond ((window-hidden-p win)
-	 (unhide-window win)
-	 (when focus-p
-	   (focus-window win))
-	 (raise-window win))
-	(t (hide-window win)
-	   (show-all-children)))
+    (if win
+        (progn
+          (grab-all-buttons win)
+          (hide-window win))
+        (notify-message *corner-error-message-delay*
+                        (list (format nil "Error with command ~S" cmd)
+                              *corner-error-message-color*))))
+  (when win
+    (cond ((window-hidden-p win)
+           (unhide-window win)
+           (when focus-p
+             (focus-window win))
+           (raise-window win))
+          (t (hide-window win)
+             (show-all-children))))
   win)
 
 

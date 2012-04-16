@@ -151,7 +151,14 @@ You can tweak this to what you want"
   'Corner "The clfswm terminal command.
 This command must set the window title to *clfswm-terminal-name*")
 
-
+(defconfig *corner-error-message-color* "red"
+  'Corner "Error message color")
+(defconfig *corner-error-message-delay* 5
+  'Corner "Time to display the error message on commad error")
+(defconfig *corner-command-try-delay* 0.2
+  'Corner "Time to wait before checking window in query tree")
+(defconfig *corner-command-try-number* 10
+  'Corner "Number of try to wait the window in query tree")
 
 
 ;;; Hook definitions

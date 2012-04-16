@@ -1598,11 +1598,16 @@ For window: set current child to window or its parent according to window-parent
 	  (refresh-notify-window)
 	  (xlib:display-finish-output *display*))))))
 
+(defun notify-message (delay &rest messages)
+  (erase-timer :close-notify-window)
+  (funcall #'open-notify-window messages)
+  (add-timer delay #'close-notify-window :close-notify-window))
+
 
 (defun display-hello-window ()
-  (open-notify-window '(("Welcome to CLFSWM" "yellow")
-			"Press Alt+F1 for help"))
-  (add-timer *notify-window-delay* #'close-notify-window))
+  (notify-message *notify-window-delay*
+                  '("Welcome to CLFSWM" "yellow")
+                  "Press Alt+F1 for help"))
 
 
 ;;; Run or raise functions
