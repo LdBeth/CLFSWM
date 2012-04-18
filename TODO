@@ -7,13 +7,14 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
--> Nothing here yet.
 
 
 FOR THE NEXT RELEASE
 ====================
 
-- Implement a save/restore root-frame system. And use it on error reset.
+- Implement a save/restore root-frame system. And use it on error reset or for undo/redo.
+
+- Add a modeline in contrib/
 
 MAYBE
 =====

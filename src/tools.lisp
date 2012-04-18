@@ -42,6 +42,7 @@
 	   :symbol-search
 	   :create-symbol :create-symbol-in-package
 	   :call-hook
+           :add-new-hook
 	   :add-hook
 	   :remove-hook
 	   :clear-timers
@@ -232,15 +233,25 @@ Return the result of the last hook"
       result)))
 
 
-(defmacro add-hook (hook &rest value)
+(defmacro add-new-hook (hook &rest value)
+  "Add a hook. Duplicate it if needed"
   `(setf ,hook (append (typecase ,hook
 			 (list ,hook)
 			 (t (list ,hook)))
 		       (list ,@value))))
 
+(defmacro add-hook (hook &rest value)
+  "Add a hook only if not duplicated"
+  (let ((i (gensym)))
+    `(dolist (,i (list ,@value) ,hook)
+       (unless (member ,i (typecase ,hook
+                            (list ,hook)
+                            (t (list ,hook))))
+         (add-new-hook ,hook ,i)))))
+
 (defmacro remove-hook (hook &rest value)
   (let ((i (gensym)))
-    `(dolist (,i (list ,@value))
+    `(dolist (,i (list ,@value) ,hook)
       (setf ,hook (remove ,i ,hook)))))
 
 

@@ -1661,8 +1661,8 @@ For window: set current child to window or its parent according to window-parent
   (with-current-window
       (decf (child-transparency window) 0.1)))
 
-;;; Multiple physical screen helper
 
+;;; Multiple physical screen helper
 (defun get-xrandr-connected-size ()
   (let ((output (do-shell "xrandr"))
         (sizes '()))

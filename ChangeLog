@@ -1,3 +1,9 @@
+2012-04-18  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/tools.lisp (add-new-hook, add-hook): New macro. Do not
+	duplicate hooks by default. Use add-new-hook if you want to
+	duplicate them.
+
 2012-04-16  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-corner.lisp (wait-window-in-query-tree): Add a limit
