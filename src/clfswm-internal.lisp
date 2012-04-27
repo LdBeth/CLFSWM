@@ -132,6 +132,8 @@
   nil)
 
 
+
+
 (declaim (inline child-member child-remove child-position))
 
 (defun child-member (child list)
@@ -366,19 +368,6 @@
   `(let ((,window (xlib:input-focus *display*)))
      (when (and ,window (not (xlib:window-equal ,window *no-focus-window*)))
        ,@body)))
-
-
-(defgeneric rename-child (child name))
-
-(defmethod rename-child ((child frame) name)
-  (setf (frame-name child) name)
-  (display-frame-info child))
-
-(defmethod rename-child ((child xlib:window) name)
-  (setf (xlib:wm-name child) name))
-
-(defmethod rename-child (child name)
-  (declare (ignore child name)))
 
 
 (defun is-in-current-child-p (child)
@@ -624,6 +613,72 @@
     (rec base)))
 
 
+;;; Multiple roots support (replace the old *current-root* variable)
+(let ((root-list nil)
+      (original-root-list nil))
+  (defun define-as-root (child x y width height)
+    (push (list child x y width height) root-list)
+    (setf original-root-list (copy-tree root-list)))
+
+  (defun all-root-child ()
+    (loop for root in root-list
+       collect (first root)))
+
+  (defun child-root (child)
+    (dolist (root root-list)
+      (when (child-equal-p child (first root))
+        (return root))))
+
+  (defun change-root (old new)
+    (let ((root (child-root old)))
+      (when (and root new)
+        (setf (first root) new))))
+
+  (defun find-root (child)
+    (if (child-root child)
+        child
+        (awhen (find-parent-frame child)
+          (find-root it))))
+
+  (defun find-original-root (child)
+    (dolist (root original-root-list)
+      (when (find-child child (first root))
+        (return-from find-original-root root))))
+
+  (defun find-root-in-child (child)
+    (if (child-root child)
+        child
+        (when (frame-p child)
+          (dolist (c (frame-child child))
+            (awhen (find-root-in-child c)
+              (return-from find-root-in-child it))))))
+
+  (defun find-all-root (child)
+    "Return a list of root in child"
+    (let ((roots nil))
+      (labels ((rec (child)
+                 (when (child-root child)
+                   (push child roots))
+                 (when (frame-p child)
+                   (dolist (c (frame-child child))
+                     (rec c)))))
+        (rec child)
+        roots)))
+
+  (defun find-child-in-all-root (child)
+    (dolist (root root-list)
+      (when (find-child child (first root))
+        (return-from find-child-in-all-root root))))
+
+  (defun only-one-root-in-p (child)
+    (<= (length (find-all-root child)) 1))
+
+  (defun find-current-root ()
+    (find-root *current-child*))
+
+  (defun find-related-root (child)
+    (or (find-root-in-child child)
+        (find-root-in-child (first (find-original-root child))))))
 
 
 (defun get-all-windows (&optional (root *root-frame*))
@@ -672,7 +727,7 @@
         (setf (xlib:gcontext-background gc) (get-color *frame-background*)
               (xlib:window-background window) (get-color *frame-background*))
         (clear-pixmap-buffer window gc)
-        (setf (xlib:gcontext-foreground gc) (get-color (if (and (child-equal-p frame *current-root*)
+        (setf (xlib:gcontext-foreground gc) (get-color (if (and (child-root frame)
                                                                 (child-equal-p frame *current-child*))
                                                            *frame-foreground-root* *frame-foreground*)))
         (xlib:draw-glyphs *pixmap-buffer* gc 5 dy
@@ -680,7 +735,7 @@
                                   number
                                   (if name  (format nil " - ~A" name) "")))
         (let ((pos dy))
-          (when (child-equal-p frame *current-root*)
+          (when (child-root frame)
             (when *child-selection*
               (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
                                 (with-output-to-string (str)
@@ -697,17 +752,33 @@
         (values t t)))))
 
 
-(defun display-all-frame-info (&optional (root *current-root*))
-  (with-all-frames (root frame)
+(defun display-all-frame-info ()
+  (with-all-frames (*root-frame* frame)
     (display-frame-info frame)))
 
+(defun display-all-root-frame-info ()
+  (dolist (root (all-root-child))
+    (display-frame-info root)))
+
+
+(defgeneric rename-child (child name))
+
+(defmethod rename-child ((child frame) name)
+  (setf (frame-name child) name)
+  (display-frame-info child))
+
+(defmethod rename-child ((child xlib:window) name)
+  (setf (xlib:wm-name child) name))
+
+(defmethod rename-child (child name)
+  (declare (ignore child name)))
 
 
 
 
 (defun get-parent-layout (child parent)
-  (if (child-equal-p child *current-root*)
-      (get-fullscreen-size)
+  (if (child-root child)
+      (values-list (rest (child-root child)))
       (if (or (frame-p child) (managed-window-p child parent))
           (if (frame-p parent)
               (aif (frame-layout parent)
@@ -780,7 +851,7 @@
   (declare (ignore parent))
   (with-slots (window show-window-p) frame
     (if (and show-window-p
-             (or *show-root-frame-p* (not (child-equal-p frame *current-root*))))
+             (or *show-root-frame-p* (not (child-root frame))))
         (progn
           (map-window window)
           (set-child-stack-order window previous)
@@ -849,7 +920,7 @@
   (select-child *current-child* selected))
 
 (defun unselect-all-frames ()
-  (with-all-children (*current-root* child)
+  (with-all-children (*root-frame* child)
     (select-child child nil)))
 
 
@@ -895,8 +966,7 @@
 
 
 (defun show-all-children (&optional (from-root-frame nil))
-  "Show all children from *current-root*. When from-root-frame is true
-Display all children from root frame and hide those not in *current-root*"
+  "Show all children and hide those not in a root frame"
   (let ((geometry-change nil)
         (displayed-child nil)
         (hidden-child nil))
@@ -947,7 +1017,7 @@ Display all children from root frame and hide those not in *current-root*"
                    (setf previous (child-rect-child rect)))))
 
              (rec (child parent selected-p in-current-root)
-               (let ((child-current-root-p (child-equal-p child *current-root*)))
+               (let ((child-current-root-p (child-root child)))
                  (unless (in-displayed-list child)
                    (set-geometry child parent in-current-root child-current-root-p))
                  (when (frame-p child)
@@ -956,16 +1026,13 @@ Display all children from root frame and hide those not in *current-root*"
                             (not (in-displayed-list child)))
                    (select-and-display child parent selected-p)))))
 
-      (rec (if from-root-frame *root-frame* *current-root*)
-           nil t (child-equal-p *current-root* *root-frame*))
+      (rec *root-frame* nil t (child-root *root-frame*))
       (display-displayed-child)
       (dolist (child hidden-child)
         (hide-child child))
       (set-focus-to-current-child)
       (xlib:display-finish-output *display*)
       geometry-change)))
-
-
 
 
 
@@ -1028,19 +1095,20 @@ Display all children from root frame and hide those not in *current-root*"
 
 (defun set-current-root (child parent window-parent)
   "Set current root if parent is not in current root"
-  (when (and window-parent
-             (not (child-equal-p child *current-root*))
-             (not (find-child parent *current-root*)))
-    (setf *current-root* parent)
-    t))
+  (let ((root (find-root child)))
+    (when (and window-parent
+               (not (child-root child))
+               (not (find-child parent root)))
+      (change-root root parent)
+      t)))
 
 
 (defun focus-all-children (child parent &optional (window-parent t))
   "Focus child and its parents -
 For window: set current child to window or its parent according to window-parent"
   (let ((new-focus (focus-child-rec child parent))
-	(new-current-child (set-current-child child parent window-parent))
-	(new-root (set-current-root child parent window-parent)))
+        (new-current-child (set-current-child child parent window-parent))
+        (new-root (set-current-root child parent window-parent)))
     (or new-focus new-current-child new-root)))
 
 
@@ -1056,27 +1124,29 @@ For window: set current child to window or its parent according to window-parent
 
 (defun select-previous-level ()
   "Select the previous level in frame"
-  (unless (child-equal-p *current-child* *current-root*)
+  (unless (child-root *current-child*)
     (select-current-frame :maybe)
     (awhen (find-parent-frame *current-child*)
       (setf *current-child* it))
     (show-all-children)))
 
 
-
 (defun enter-frame ()
   "Enter in the selected frame - ie make it the root frame"
-  (setf *current-root* *current-child*)
-  (show-all-children t))
+  (let ((root (find-root *current-child*)))
+    (unless (child-equal-p root *current-child*)
+      (change-root root *current-child*))
+    (show-all-children t)))
 
 (defun leave-frame ()
   "Leave the selected frame - ie make its parent the root frame"
-  (unless (child-equal-p *current-root* *root-frame*)
-    (hide-all *current-root* (get-first-window))
-    (awhen (find-parent-frame *current-root*)
-           (when (frame-p it)
-             (setf *current-root* it)))
-    (show-all-children)))
+  (let ((root (find-root *current-child*)))
+    (unless (child-equal-p root *root-frame*)
+      (awhen (find-parent-frame root)
+        (when (and (frame-p it)
+                   (only-one-root-in-p it))
+          (change-root root it)))
+      (show-all-children))))
 
 
 ;;; Other actions (select-next-child, select-next-brother...) are in
@@ -1129,14 +1199,15 @@ For window: set current child to window or its parent according to window-parent
 
 (defun switch-to-root-frame (&key (show-later nil))
   "Switch to the root frame"
-  (setf *current-root* *root-frame*)
+  (change-root (find-root *current-child*) (first (find-original-root *current-child*)))
   (unless show-later
     (show-all-children t)))
 
 (defun switch-and-select-root-frame (&key (show-later nil))
   "Switch and select the root frame"
-  (setf *current-root* *root-frame*)
-  (setf *current-child* *current-root*)
+  (let ((new-root (first (find-original-root *current-child*))))
+    (change-root (find-root *current-child*) new-root)
+    (setf *current-child* new-root))
   (unless show-later
     (show-all-children t)))
 
@@ -1150,10 +1221,14 @@ For window: set current child to window or its parent according to window-parent
 
 (defun prevent-current-*-equal-child (child)
   " Prevent current-root and current-child equal to child"
-  (when (child-equal-p child *current-root*)
-    (setf *current-root* (find-parent-frame child)))
-  (when (child-equal-p child *current-child*)
-    (setf *current-child* *current-root*)))
+  (let* ((parent (find-parent-frame child))
+         (parent-is-root-frame-p (child-equal-p parent *root-frame*)))
+    (when (and (child-root child)
+               (not parent-is-root-frame-p))
+      (change-root child parent))
+    (when (child-equal-p child *current-child*)
+      (setf *current-child* (find-current-root)))
+    (not parent-is-root-frame-p)))
 
 
 (defun remove-child-in-frame (child frame)
@@ -1169,8 +1244,8 @@ For window: set current child to window or its parent according to window-parent
 
 (defun remove-child-in-all-frames (child)
   "Remove child in all frames from *root-frame*"
-  (prevent-current-*-equal-child child)
-  (remove-child-in-frames child *root-frame*))
+  (when (prevent-current-*-equal-child child)
+    (remove-child-in-frames child *root-frame*)))
 
 
 (defun delete-child-in-frames (child root)
@@ -1187,8 +1262,8 @@ Warning:frame window and gc are freeed."
 
 (defun delete-child-in-all-frames (child)
   "Delete child in all frames from *root-frame*"
-  (prevent-current-*-equal-child child)
-  (delete-child-in-frames child *root-frame*))
+  (when (prevent-current-*-equal-child child)
+    (delete-child-in-frames child *root-frame*)))
 
 (defun delete-child-and-children-in-frames (child root)
   "Delete child and its children in the frame root and in all its children
@@ -1200,11 +1275,11 @@ Warning:frame window and gc are freeed."
 
 (defun delete-child-and-children-in-all-frames (child &optional (close-methode 'delete-window))
   "Delete child and its children in all frames from *root-frame*"
-  (prevent-current-*-equal-child child)
-  (delete-child-and-children-in-frames child *root-frame*)
-  (when (xlib:window-p child)
-    (funcall close-methode child))
-  (show-all-children))
+  (when (prevent-current-*-equal-child child)
+    (delete-child-and-children-in-frames child *root-frame*)
+    (when (xlib:window-p child)
+      (funcall close-methode child))
+    (show-all-children)))
 
 
 (defun clean-windows-in-all-frames ()
@@ -1214,9 +1289,9 @@ Warning:frame window and gc are freeed."
       (dolist (child (frame-child frame))
         (when (xlib:window-p child)
           (unless (member child x-tree :test #'xlib:window-equal)
-            (prevent-current-*-equal-child child)
-            (setf (frame-child frame)
-                  (child-remove child (frame-child frame)))))))))
+            (when (prevent-current-*-equal-child child)
+              (setf (frame-child frame)
+                    (child-remove child (frame-child frame))))))))))
 
 
 

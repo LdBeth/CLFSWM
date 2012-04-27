@@ -51,7 +51,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defconfig *default-transparency* 0.6 nil
            "Default transparency for all windows when in xcompmgr transparency mode")
 
-(defconfig *show-root-frame-p* nil nil
+(defconfig *show-root-frame-p* t nil
            "Show the root frame information or not")
 
 
@@ -133,6 +133,8 @@ It is particulary useful with CLISP/MIT-CLX.")
    (ry :initarg :ry :accessor frame-ry :initform 0)
    (rw :initarg :rw :accessor frame-rw :initform 800)
    (rh :initarg :rh :accessor frame-rh :initform 600)
+;;   (root :initarg :root :accessor frame-root :initform nil
+;;         :documentation "A list a physical coordinates (x y w h) if frame is a root frame. Nil otherwise")
    (layout :initarg :layout :accessor frame-layout :initform nil
 	   :documentation "Layout to display windows on a frame")
    (nw-hook :initarg :nw-hook :accessor frame-nw-hook :initform nil
@@ -166,7 +168,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 (defparameter *root-frame* nil
   "Root of the root - ie the root frame")
-(defparameter *current-root* nil
+(defparameter *current-root* nil    ;;; PHIL: TO REMOVE
   "The current fullscreen maximized child")
 (defparameter *current-child* nil
   "The current child with the focus")

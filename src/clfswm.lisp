@@ -58,8 +58,8 @@
     (xlib:with-state (window)
       (when (has-bw value-mask)
 	(setf (x-drawable-border-width window) border-width))
-      (if (find-child window *current-root*)
-	  (let ((parent (find-parent-frame window *current-root*)))
+      (if (find-child window (find-current-root))
+	  (let ((parent (find-parent-frame window (find-current-root))))
 	    (if (and parent (managed-window-p window parent))
 		(adapt-child-to-parent window parent)
 		(adjust-from-request)))
@@ -75,7 +75,7 @@
 		       (is-in-current-child-p window))
 	       (raise-window window)
 	       (focus-window window)
-	       (focus-all-children window (find-parent-frame window *current-root*))))))))))
+	       (focus-all-children window (find-parent-frame window (find-current-root)))))))))))
 
 
 (define-handler main-mode :map-request (window send-event-p)
@@ -121,7 +121,7 @@
 			(focus-window window)))
       (:sloppy-select (let* ((child (find-child-under-mouse root-x root-y))
 			     (parent (find-parent-frame child)))
-			(unless (or (child-equal-p child *current-root*)
+			(unless (or (child-root child)
 				    (equal (typecase child
 				    	     (xlib:window parent)
 					     (t child))
@@ -130,7 +130,7 @@
 			    (show-all-children)))))))
 
 (define-handler main-mode :exposure (window)
-  (awhen (find-frame-window window *current-root*)
+  (awhen (find-frame-window window)
     (display-frame-info it)))
 
 
@@ -199,6 +199,9 @@
   (clear-timers)
   (map-window *no-focus-window*)
   (dbg *display*)
+  (dbg (xlib:display-roots *display*))
+  (dbg (xlib:display-plist *display*))
+  (dbg (xlib:query-extension *display* "XINERAMA"))
   (setf (xlib:window-event-mask *root*) (xlib:make-event-mask :substructure-redirect
 							      :substructure-notify
 							      :property-change
@@ -211,8 +214,8 @@
   (xlib:display-force-output *display*)
   (setf *child-selection* nil)
   (setf *root-frame* (create-frame :name "Root" :number 0)
-        *current-root* *root-frame*
-	*current-child* *current-root*)
+        *current-root* *root-frame*  ;;; PHIL: TO REMOVE
+	*current-child* *root-frame*)
   (call-hook *init-hook*)
   (process-existing-windows *screen*)
   (show-all-children)
