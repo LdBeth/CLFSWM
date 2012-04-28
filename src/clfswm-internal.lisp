@@ -645,6 +645,11 @@
       (when (find-child child (first root))
         (return-from find-original-root root))))
 
+  (defun child-is-original-root-p (child)
+    (dolist (root original-root-list)
+      (when (child-equal-p child (first root))
+        (return-from child-is-original-root-p t))))
+
   (defun find-root-in-child (child)
     (if (child-root child)
         child
