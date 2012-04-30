@@ -838,16 +838,17 @@
 
 (defun get-parent-layout (child parent)
   (aif (child-root-p child)
-      ;;(values-list (rest (child-root-p child)))
-      (values (root-x it) (root-y it) (root-w it) (root-h it))
-      (if (or (frame-p child) (managed-window-p child parent))
-          (if (frame-p parent)
-              (aif (frame-layout parent)
-                   (funcall it child parent)
-                   (no-layout child parent))
-              (get-fullscreen-size))
-          (values (x-drawable-x child) (x-drawable-y child)
-                  (x-drawable-width child) (x-drawable-height child)))))
+       (values (root-x it) (root-y it) (root-w it) (root-h it))
+       (if (or (frame-p child) (managed-window-p child parent))
+           (if (frame-p parent)
+               (aif (frame-layout parent)
+                    (funcall it child parent)
+                    (no-layout child parent))
+               (values (- *border-size*) (- *border-size*)
+                       (xlib:screen-width *screen*)
+                       (xlib:screen-height *screen*)))
+           (values (x-drawable-x child) (x-drawable-y child)
+                   (x-drawable-width child) (x-drawable-height child)))))
 
 
 

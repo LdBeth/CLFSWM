@@ -73,18 +73,6 @@ A list of (list match-function handle-function)")
            "Delay to display the new child after doing a spatial move")
 
 
-;;; CONFIG - Screen size
-(defun get-fullscreen-size ()
-  "Return the size of root child (values rx ry rw rh)
-You can tweak this to what you want"
-  (values (- *border-size*) (- *border-size*)
-          (xlib:screen-width *screen*)
-          (xlib:screen-height *screen*)))
-  ;;(values -1 -1 (xlib:screen-width *screen*) (xlib:screen-height *screen*)))
-;; (values -1 -1 1024 768))
-;;  (values 100 100 800 600))
-
-
 (defconfig  *corner-size* 3 'Corner
             "The size of the corner square")
 
