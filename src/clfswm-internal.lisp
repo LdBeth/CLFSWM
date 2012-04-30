@@ -616,6 +616,8 @@
 ;;; Multiple roots support (replace the old *current-root* variable)
 (let ((root-list nil)
       (original-root-list nil))
+  ;; TODO: Add find-root-by-coordinates, change-root-geometry
+
   (defun define-as-root (child x y width height)
     (push (make-root :child child :x x :y y :w width :h height) root-list)
     (push (make-root :child child :x x :y y :w width :h height) original-root-list))
