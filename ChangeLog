@@ -1,3 +1,8 @@
+2012-04-30  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp: Big change to replace *current-root*
+	variable to support multiple root.
+
 2012-04-18  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/tools.lisp (add-new-hook, add-hook): New macro. Do not

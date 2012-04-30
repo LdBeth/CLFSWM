@@ -7,7 +7,7 @@
 
 (defsystem clfswm
   :description "CLFSWM: Fullscreen Window Manager"
-  :version "Please, see in src/version.lisp"
+  :version "1106"
   :author "Philippe Brochard  <hocwp@free.fr>"
   :licence "GNU Public License (GPL)"
   :components ((:module src

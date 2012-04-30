@@ -1282,14 +1282,15 @@ For window: set current child to window or its parent according to window-parent
 
 (defun prevent-current-*-equal-child (child)
   " Prevent current-root and current-child equal to child"
-  (let* ((parent (find-parent-frame child))
-         (parent-is-root-frame-p (child-equal-p parent *root-frame*)))
-    (when (and (child-root-p child)
-               (not parent-is-root-frame-p))
-      (change-root child parent))
-    (when (child-equal-p child *current-child*)
-      (setf *current-child* (find-current-root)))
-    (not parent-is-root-frame-p)))
+  (if (child-is-original-root-p child)
+      nil
+      (progn
+        (when (child-root-p child)
+          (change-root child (find-parent-frame child)))
+        (when (child-equal-p child *current-child*)
+          (setf *current-child* (find-current-root)))
+        t)))
+
 
 
 (defun remove-child-in-frame (child frame)
