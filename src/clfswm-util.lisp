@@ -657,7 +657,7 @@ Focus child and its parents -
 For window: set current child to window or its parent according to window-parent"
   (labels ((move/resize-managed (child)
 	     (let ((parent (find-parent-frame child)))
-	       (when (and parent child
+	       (when (and child
                           (frame-p child)
                           (child-root-p child))
 		 (setf parent child
