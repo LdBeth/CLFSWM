@@ -51,7 +51,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defconfig *default-transparency* 0.6 nil
            "Default transparency for all windows when in xcompmgr transparency mode")
 
-(defconfig *show-root-frame-p* t nil
+(defconfig *show-root-frame-p* nil nil
            "Show the root frame information or not")
 
 
@@ -118,6 +118,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 (defstruct child-rect child parent selected-p x y w h)
 
+(defstruct root child x y w h)
 
 (defclass frame ()
   ((name :initarg :name :accessor frame-name :initform nil)

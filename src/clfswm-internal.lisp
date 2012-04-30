@@ -617,41 +617,41 @@
 (let ((root-list nil)
       (original-root-list nil))
   (defun define-as-root (child x y width height)
-    (push (list child x y width height) root-list)
-    (setf original-root-list (copy-tree root-list)))
+    (push (make-root :child child :x x :y y :w width :h height) root-list)
+    (push (make-root :child child :x x :y y :w width :h height) original-root-list))
 
   (defun all-root-child ()
     (loop for root in root-list
-       collect (first root)))
+       collect (root-child root)))
 
-  (defun child-root (child)
+  (defun child-root-p (child)
     (dolist (root root-list)
-      (when (child-equal-p child (first root))
+      (when (child-equal-p child (root-child root))
         (return root))))
 
   (defun change-root (old new)
-    (let ((root (child-root old)))
+    (let ((root (child-root-p old)))
       (when (and root new)
-        (setf (first root) new))))
+        (setf (root-child root) new))))
 
   (defun find-root (child)
-    (if (child-root child)
+    (if (child-root-p child)
         child
         (awhen (find-parent-frame child)
           (find-root it))))
 
   (defun find-original-root (child)
     (dolist (root original-root-list)
-      (when (find-child child (first root))
+      (when (find-child child (root-child root))
         (return-from find-original-root root))))
 
   (defun child-is-original-root-p (child)
     (dolist (root original-root-list)
-      (when (child-equal-p child (first root))
+      (when (child-equal-p child (root-child root))
         (return-from child-is-original-root-p t))))
 
   (defun find-root-in-child (child)
-    (if (child-root child)
+    (if (child-root-p child)
         child
         (when (frame-p child)
           (dolist (c (frame-child child))
@@ -662,7 +662,7 @@
     "Return a list of root in child"
     (let ((roots nil))
       (labels ((rec (child)
-                 (when (child-root child)
+                 (when (child-root-p child)
                    (push child roots))
                  (when (frame-p child)
                    (dolist (c (frame-child child))
@@ -672,7 +672,7 @@
 
   (defun find-child-in-all-root (child)
     (dolist (root root-list)
-      (when (find-child child (first root))
+      (when (find-child child (root-child root))
         (return-from find-child-in-all-root root))))
 
   (defun only-one-root-in-p (child)
@@ -683,7 +683,62 @@
 
   (defun find-related-root (child)
     (or (find-root-in-child child)
-        (find-root-in-child (first (find-original-root child))))))
+        (find-root-in-child (root-child (find-original-root child))))))
+
+
+
+;;; Multiple physical screen helper
+(defun get-xrandr-connected-size ()
+  (let ((output (do-shell "xrandr"))
+        (sizes '()))
+    (loop for line = (read-line output nil nil)
+       while line
+       do
+         (awhen (search " connected " line)
+           (incf it (length " connected "))
+           (destructuring-bind (w h x y)
+               (mapcar #'parse-integer
+                       (split-string (substitute #\space #\x
+                                                 (substitute #\space #\+
+                                                             (subseq line it (position #\space line :start it))))))
+             (push (list (- x *border-size*) (- y *border-size*) w h) sizes))))
+    (dbg sizes)
+    sizes))
+    ;;'((10 10 500 300) (520 20 480 300) (310 330 600 250))))  ;;; For test
+
+(defun add-placed-frame-tmp (frame n)
+  (add-frame (create-frame :x 0.01 :y 0.01 :w 0.4 :h 0.4) frame)
+  (add-frame (create-frame :x 0.55 :y 0.01 :w 0.4 :h 0.4) frame)
+  (add-frame (create-frame :x 0.03 :y 0.5 :w 0.64 :h 0.44) frame)
+  (when (plusp n)
+    (add-placed-frame-tmp (first (frame-child frame)) (1- n))))
+
+
+(defun place-frames-from-xrandr ()
+  "Place frames according to xrandr informations"
+  (let ((sizes (get-xrandr-connected-size))
+        (width (xlib:screen-width *screen*))
+        (height (xlib:screen-height *screen*)))
+    ;;(add-placed-frame-tmp (first (frame-child *root-frame*)) 2)
+    (if (<= (length sizes) 1)
+        (define-as-root *root-frame* (- *border-size*) (- *border-size*) width height)
+        (progn
+          (loop while (< (length (frame-child *root-frame*)) (length sizes))
+             do (let ((frame (create-frame)))
+                  (add-frame frame *root-frame*)))
+                  ;;(add-placed-frame-tmp frame 2)))
+          (loop for size in sizes
+             for frame in (frame-child *root-frame*)
+             do (destructuring-bind (x y w h) size
+                  (setf (frame-x frame) (float (/ x width))
+                        (frame-y frame) (float (/ y height))
+                        (frame-w frame) (float (/ w width))
+                        (frame-h frame) (float (/ h height)))
+                  (add-frame (create-frame) frame)
+                  (define-as-root frame x y w h)))
+          (setf *current-child* (first (frame-child (first (frame-child *root-frame*)))))))))
+
+
 
 
 (defun get-all-windows (&optional (root *root-frame*))
@@ -732,7 +787,7 @@
         (setf (xlib:gcontext-background gc) (get-color *frame-background*)
               (xlib:window-background window) (get-color *frame-background*))
         (clear-pixmap-buffer window gc)
-        (setf (xlib:gcontext-foreground gc) (get-color (if (and (child-root frame)
+        (setf (xlib:gcontext-foreground gc) (get-color (if (and (child-root-p frame)
                                                                 (child-equal-p frame *current-child*))
                                                            *frame-foreground-root* *frame-foreground*)))
         (xlib:draw-glyphs *pixmap-buffer* gc 5 dy
@@ -740,7 +795,7 @@
                                   number
                                   (if name  (format nil " - ~A" name) "")))
         (let ((pos dy))
-          (when (child-root frame)
+          (when (child-root-p frame)
             (when *child-selection*
               (xlib:draw-glyphs *pixmap-buffer* gc 5 (incf pos dy)
                                 (with-output-to-string (str)
@@ -782,8 +837,9 @@
 
 
 (defun get-parent-layout (child parent)
-  (if (child-root child)
-      (values-list (rest (child-root child)))
+  (aif (child-root-p child)
+      ;;(values-list (rest (child-root-p child)))
+      (values (root-x it) (root-y it) (root-w it) (root-h it))
       (if (or (frame-p child) (managed-window-p child parent))
           (if (frame-p parent)
               (aif (frame-layout parent)
@@ -856,7 +912,7 @@
   (declare (ignore parent))
   (with-slots (window show-window-p) frame
     (if (and show-window-p
-             (or *show-root-frame-p* (not (child-root frame))))
+             (or *show-root-frame-p* (not (child-root-p frame))))
         (progn
           (map-window window)
           (set-child-stack-order window previous)
@@ -1022,7 +1078,7 @@
                    (setf previous (child-rect-child rect)))))
 
              (rec (child parent selected-p in-current-root)
-               (let ((child-current-root-p (child-root child)))
+               (let ((child-current-root-p (child-root-p child)))
                  (unless (in-displayed-list child)
                    (set-geometry child parent in-current-root child-current-root-p))
                  (when (frame-p child)
@@ -1031,7 +1087,7 @@
                             (not (in-displayed-list child)))
                    (select-and-display child parent selected-p)))))
 
-      (rec *root-frame* nil t (child-root *root-frame*))
+      (rec *root-frame* nil t (child-root-p *root-frame*))
       (display-displayed-child)
       (dolist (child hidden-child)
         (hide-child child))
@@ -1102,7 +1158,7 @@
   "Set current root if parent is not in current root"
   (let ((root (find-root child)))
     (when (and window-parent
-               (not (child-root child))
+               (not (child-root-p child))
                (not (find-child parent root)))
       (change-root root parent)
       t)))
@@ -1129,7 +1185,7 @@ For window: set current child to window or its parent according to window-parent
 
 (defun select-previous-level ()
   "Select the previous level in frame"
-  (unless (child-root *current-child*)
+  (unless (child-root-p *current-child*)
     (select-current-frame :maybe)
     (awhen (find-parent-frame *current-child*)
       (setf *current-child* it))
@@ -1204,13 +1260,13 @@ For window: set current child to window or its parent according to window-parent
 
 (defun switch-to-root-frame (&key (show-later nil))
   "Switch to the root frame"
-  (change-root (find-root *current-child*) (first (find-original-root *current-child*)))
+  (change-root (find-root *current-child*) (root-child (find-original-root *current-child*)))
   (unless show-later
     (show-all-children t)))
 
 (defun switch-and-select-root-frame (&key (show-later nil))
   "Switch and select the root frame"
-  (let ((new-root (first (find-original-root *current-child*))))
+  (let ((new-root (root-child (find-original-root *current-child*))))
     (change-root (find-root *current-child*) new-root)
     (setf *current-child* new-root))
   (unless show-later
@@ -1228,7 +1284,7 @@ For window: set current child to window or its parent according to window-parent
   " Prevent current-root and current-child equal to child"
   (let* ((parent (find-parent-frame child))
          (parent-is-root-frame-p (child-equal-p parent *root-frame*)))
-    (when (and (child-root child)
+    (when (and (child-root-p child)
                (not parent-is-root-frame-p))
       (change-root child parent))
     (when (child-equal-p child *current-child*)

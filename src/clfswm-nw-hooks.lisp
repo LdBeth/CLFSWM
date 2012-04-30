@@ -46,7 +46,6 @@
   (let ((frame (if (xlib:window-p *current-child*)
 		   (find-parent-frame *current-child*)
 		   *current-child*)))
-    (dbg (child-is-original-root-p frame))
     (unless (or (child-member frame *permanent-nw-hook-frames*)
                 (child-is-original-root-p frame))
       (setf (frame-nw-hook frame) hook)

@@ -138,7 +138,7 @@
 
 (defun expose-mode-display-accel-windows ()
   (let ((n -1))
-    (with-all-children-reversed (*current-root* child)
+    (with-all-children-reversed ((find-current-root) child)
       (if (or (frame-p child)
 	      (managed-window-p child (find-parent-frame child *root-frame*)))
 	  (when (< n 61)
@@ -200,7 +200,7 @@
 (defun expose-windows-mode ()
   "Present all windows in the current frame (An expose like)"
   (stop-button-event)
-  (expose-windows-generic *current-root*))
+  (expose-windows-generic (find-current-root)))
 
 (defun expose-all-windows-mode ()
   "Present all windows in all frames (An expose like)"

@@ -96,8 +96,8 @@
 	    (setf (frame-child *circulate-parent*) (cons elem (child-remove elem *circulate-orig*))
                   (frame-selected-pos *circulate-parent*) 0
 		  *current-child* (frame-selected-child *circulate-parent*))))
-        (when (and (not (child-root *current-child*))
-                   (child-root old-child))
+        (when (and (not (child-root-p *current-child*))
+                   (child-root-p old-child))
           (change-root old-child *current-child*))))
     (show-all-children t)
     (draw-circulate-mode-window)))
@@ -294,7 +294,7 @@
 
 
 (defun reorder-brother-simple (reorder-fun)
-  (unless (child-root *current-child*)
+  (unless (child-root-p *current-child*)
     (no-focus)
     (select-current-frame nil)
     (let ((parent-frame (find-parent-frame *current-child*)))
@@ -318,7 +318,7 @@
 ;;; Spatial move functions
 (defun select-brother-generic-spatial-move (fun-found)
   "Select the nearest brother of the current child based on the fun-found function"
-  (let ((is-root-p (child-root *current-child*)))
+  (let ((is-root-p (child-root-p *current-child*)))
     (when is-root-p
       (leave-frame)
       (sleep *spatial-move-delay-before*))

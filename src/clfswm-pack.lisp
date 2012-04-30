@@ -240,7 +240,7 @@
                      (frame-w child) (w-px->fl (anti-adj-border-wh (x-drawable-width (frame-window child)) parent) parent)
                      (frame-h child) (h-px->fl (anti-adj-border-wh (x-drawable-height (frame-window child)) parent) parent))))))
   (defun move-frame-constrained (frame parent orig-x orig-y)
-    (when (and frame parent (not (child-root frame)))
+    (when (and frame parent (not (child-root-p frame)))
       (hide-all-children frame)
       (with-slots (window) frame
         (let ((lx orig-x)
@@ -285,7 +285,7 @@
 
 
   (defun resize-frame-constrained (frame parent orig-x orig-y)
-    (when (and frame parent (not (child-root frame)))
+    (when (and frame parent (not (child-root-p frame)))
       (hide-all-children frame)
       (with-slots (window) frame
         (let ((lx orig-x)

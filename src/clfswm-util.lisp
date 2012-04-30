@@ -118,7 +118,7 @@
 	(parent (find-parent-frame *current-child*)))
     (when (and parent (only-one-root-in-p parent))
       (pushnew new-frame (frame-child parent))
-      (when (child-root *current-child*)
+      (when (child-root-p *current-child*)
         (change-root *current-child* parent))
       (setf *current-child* parent)
       (set-layout-once #'tile-space-layout)
@@ -244,7 +244,7 @@
 
 (defun cut-current-child (&optional (show-now t))
   "Cut the current child to the selection"
-  (unless (child-root *current-child*)
+  (unless (child-root-p *current-child*)
     (let ((parent (find-parent-frame *current-child*)))
       (hide-all *current-child*)
       (copy-current-child)
@@ -257,7 +257,7 @@
 
 (defun remove-current-child ()
   "Remove the current child from its parent frame"
-  (unless (child-root *current-child*)
+  (unless (child-root-p *current-child*)
     (let ((parent (find-parent-frame *current-child*)))
       (hide-all *current-child*)
       (remove-child-in-frame *current-child* (find-parent-frame *current-child* (find-current-root)))
@@ -268,7 +268,7 @@
 
 (defun delete-current-child ()
   "Delete the current child and its children in all frames"
-  (unless (child-root *current-child*)
+  (unless (child-root-p *current-child*)
     (hide-all *current-child*)
     (delete-child-and-children-in-all-frames *current-child*)
     (show-all-children t)
@@ -492,7 +492,7 @@
 ;;; Delete by functions
 (defun delete-frame-by (frame)
   (unless (or (child-equal-p frame *root-frame*)
-              (child-root frame))
+              (child-root-p frame))
     (when (child-equal-p frame *current-child*)
       (setf *current-child* (find-current-root)))
     (remove-child-in-frame frame (find-parent-frame frame)))
@@ -579,7 +579,7 @@
 
 
 (defun move-frame (frame parent orig-x orig-y)
-  (when (and frame parent (not (child-root frame)))
+  (when (and frame parent (not (child-root-p frame)))
     (hide-all-children frame)
     (with-slots (window) frame
       (move-window window orig-x orig-y #'display-frame-info (list frame))
@@ -588,7 +588,7 @@
     (show-all-children)))
 
 (defun resize-frame (frame parent orig-x orig-y)
-  (when (and frame parent (not (child-root frame)))
+  (when (and frame parent (not (child-root-p frame)))
     (hide-all-children frame)
     (with-slots (window) frame
       (resize-window window orig-x orig-y #'display-frame-info (list frame))
@@ -604,7 +604,7 @@ mouse-fun is #'move-frame or #'resize-frame"
   (let* ((to-replay t)
 	 (child (find-child-under-mouse root-x root-y))
 	 (parent (find-parent-frame child))
-         (root-p (child-root child)))
+         (root-p (child-root-p child)))
     (labels ((add-new-frame ()
                (when (frame-p child)
                  (setf parent child
@@ -616,10 +616,10 @@ mouse-fun is #'move-frame or #'resize-frame"
                  (pushnew child (frame-child parent)))))
       (when (and root-p  *create-frame-on-root*)
         (add-new-frame))
-      (when (and (frame-p child) (not (child-root child)))
+      (when (and (frame-p child) (not (child-root-p child)))
         (funcall mouse-fn child parent root-x root-y))
       (when (and child parent
-                 (focus-all-children child parent (not (child-root child))))
+                 (focus-all-children child parent (not (child-root-p child))))
         (when (show-all-children)
           (setf to-replay nil)))
       (if to-replay
@@ -659,7 +659,7 @@ For window: set current child to window or its parent according to window-parent
 	     (let ((parent (find-parent-frame child)))
 	       (when (and parent child
                           (frame-p child)
-                          (child-root child))
+                          (child-root-p child))
 		 (setf parent child
                        child (create-frame)
 		       mouse-fn #'resize-frame)
@@ -1060,7 +1060,7 @@ For window: set current child to window or its parent according to window-parent
   "Move the child under the mouse cursor to another frame"
   (declare (ignore window))
   (let ((child (find-child-under-mouse root-x root-y)))
-    (unless (child-root child)
+    (unless (child-root-p child)
       (hide-all child)
       (remove-child-in-frame child (find-parent-frame child))
       (wait-mouse-button-release 50 51)
@@ -1099,7 +1099,7 @@ For window: set current child to window or its parent according to window-parent
 ;;; Hide/Unhide current child
 (defun hide-current-child ()
   "Hide the current child"
-  (unless (child-root *current-child*)
+  (unless (child-root-p *current-child*)
     (let ((parent (find-parent-frame *current-child*)))
       (when (frame-p parent)
 	(with-slots (child hidden-children) parent
@@ -1655,54 +1655,10 @@ For window: set current child to window or its parent according to window-parent
       (decf (child-transparency window) 0.1)))
 
 
-;;; Multiple physical screen helper
-(defun get-xrandr-connected-size ()
-  (let ((output (do-shell "xrandr"))
-        (sizes '()))
-    (loop for line = (read-line output nil nil)
-       while line
-       do
-         (awhen (search " connected " line)
-           (incf it (length " connected "))
-           (push (mapcar #'parse-integer
-                         (split-string (substitute #\space #\x
-                                                   (substitute #\space #\+
-                                                               (subseq line it (position #\space line :start it))))))
-                 sizes)))
-    sizes
-    '((10 10 500 300) (520 20 480 300) (310 330 600 250))))
-
-(defun add-placed-frame-tmp (frame n)
-  (add-frame (create-frame :x 0.01 :y 0.01 :w 0.4 :h 0.4) frame)
-  (add-frame (create-frame :x 0.55 :y 0.01 :w 0.4 :h 0.4) frame)
-  (add-frame (create-frame :x 0.03 :y 0.5 :w 0.64 :h 0.44) frame)
-  (when (plusp n)
-    (add-placed-frame-tmp (first (frame-child frame)) (1- n))))
-
-
-(defun place-frames-from-xrandr ()
-  "Place frames according to xrandr informations"
-  (let ((sizes (get-xrandr-connected-size))
-        (width (xlib:screen-width *screen*))
-        (height (xlib:screen-height *screen*)))
-    (add-placed-frame-tmp (first (frame-child *root-frame*)) 2)
-    (loop while (< (length (frame-child *root-frame*)) (length sizes))
-       do (let ((frame (create-frame)))
-            (add-frame frame *root-frame*)
-            (add-placed-frame-tmp frame 2)))
-    (setf *current-child* (first (frame-child *root-frame*)))
-    (loop for size in sizes
-       for frame in (frame-child *root-frame*)
-       do (destructuring-bind (x y w h) size
-            (setf (frame-x frame) (float (/ x width))
-                  (frame-y frame) (float (/ y height))
-                  (frame-w frame) (float (/ w width))
-                  (frame-h frame) (float (/ h height)))
-         (define-as-root frame x y w h)))))
 
 
 
-
+;;; Geometry change functions
 (defun swap-frame-geometry ()
   "Swap current brother frame geometry"
   (when (frame-p *current-child*)

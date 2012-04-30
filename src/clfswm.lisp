@@ -121,7 +121,7 @@
 			(focus-window window)))
       (:sloppy-select (let* ((child (find-child-under-mouse root-x root-y))
 			     (parent (find-parent-frame child)))
-			(unless (or (child-root child)
+			(unless (or (child-root-p child)
 				    (equal (typecase child
 				    	     (xlib:window parent)
 					     (t child))
