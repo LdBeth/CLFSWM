@@ -1291,7 +1291,7 @@ For window: set current child to window or its parent according to window-parent
         (when (child-root-p child)
           (change-root child (find-parent-frame child)))
         (when (child-equal-p child *current-child*)
-          (setf *current-child* (find-current-root)))
+          (setf *current-child* (find-related-root child)))
         t)))
 
 
