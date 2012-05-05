@@ -1,3 +1,8 @@
+2012-05-06  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp : Use only one list for root
+	management.
+
 2012-04-30  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp: Big change to replace *current-root*

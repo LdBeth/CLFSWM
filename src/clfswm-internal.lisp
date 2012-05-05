@@ -84,15 +84,19 @@
 
 
 ;;; in-*: Find if point (x,y) is in frame, window or child
+(defun in-rect (x y xr yr wr hr)
+  (and (<= xr x (+ xr wr))
+       (<= yr y (+ yr hr))))
+
 (defun in-frame (frame x y)
   (and (frame-p frame)
-       (<= (frame-rx frame) x (+ (frame-rx frame) (frame-rw frame)))
-       (<= (frame-ry frame) y (+ (frame-ry frame) (frame-rh frame)))))
+       (in-rect x y (frame-rx frame) (frame-ry frame) (frame-rw frame) (frame-rh frame))))
 
 (defun in-window (window x y)
   (and (xlib:window-p window)
-       (<= (x-drawable-x window) x (+ (x-drawable-x window) (x-drawable-width window)))
-       (<= (x-drawable-y window) y (+ (x-drawable-y window) (x-drawable-height window)))))
+       (in-rect x y
+                (x-drawable-x window) (x-drawable-y window)
+                (x-drawable-width window) (x-drawable-height window))))
 
 (defgeneric in-child (child x y))
 
@@ -614,13 +618,16 @@
 
 
 ;;; Multiple roots support (replace the old *current-root* variable)
-(let ((root-list nil)
-      (original-root-list nil))
+(let ((root-list nil))
   ;; TODO: Add find-root-by-coordinates, change-root-geometry
 
   (defun define-as-root (child x y width height)
-    (push (make-root :child child :x x :y y :w width :h height) root-list)
-    (push (make-root :child child :x x :y y :w width :h height) original-root-list))
+    (push (make-root :child child :original child :current-child nil :x x :y y :w width :h height) root-list))
+
+  (defun find-root-by-coordinates (x y)
+    (dolist (root root-list)
+      (when (in-rect x y (root-x root) (root-y root) (root-w root) (root-h root))
+        (return root))))
 
   (defun all-root-child ()
     (loop for root in root-list
@@ -643,13 +650,13 @@
           (find-root it))))
 
   (defun find-original-root (child)
-    (dolist (root original-root-list)
-      (when (find-child child (root-child root))
+    (dolist (root root-list)
+      (when (find-child child (root-original root))
         (return-from find-original-root root))))
 
   (defun child-is-original-root-p (child)
-    (dolist (root original-root-list)
-      (when (child-equal-p child (root-child root))
+    (dolist (root root-list)
+      (when (child-equal-p child (root-original root))
         (return-from child-is-original-root-p t))))
 
   (defun find-root-in-child (child)
@@ -1263,13 +1270,13 @@ For window: set current child to window or its parent according to window-parent
 
 (defun switch-to-root-frame (&key (show-later nil))
   "Switch to the root frame"
-  (change-root (find-root *current-child*) (root-child (find-original-root *current-child*)))
+  (change-root (find-root *current-child*) (root-original (find-original-root *current-child*)))
   (unless show-later
     (show-all-children t)))
 
 (defun switch-and-select-root-frame (&key (show-later nil))
   "Switch and select the root frame"
-  (let ((new-root (root-child (find-original-root *current-child*))))
+  (let ((new-root (root-original (find-original-root *current-child*))))
     (change-root (find-root *current-child*) new-root)
     (setf *current-child* new-root))
   (unless show-later

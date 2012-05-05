@@ -118,7 +118,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 (defstruct child-rect child parent selected-p x y w h)
 
-(defstruct root child x y w h)
+(defstruct root child original current-child x y w h)
 
 (defclass frame ()
   ((name :initarg :name :accessor frame-name :initform nil)
