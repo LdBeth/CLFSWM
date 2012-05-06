@@ -2,6 +2,7 @@
 
 	* src/clfswm-internal.lisp : Use only one list for root
 	management.
+	(*root*): Root management API simplification.
 
 2012-04-30  Philippe Brochard  <pbrochard@common-lisp.net>
 

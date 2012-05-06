@@ -114,16 +114,16 @@
 
 (defun add-frame-in-parent-frame ()
   "Add a frame in the parent frame (and reorganize parent frame)"
-  (let ((new-frame (create-frame))
-	(parent (find-parent-frame *current-child*)))
-    (when (and parent (only-one-root-in-p parent))
-      (pushnew new-frame (frame-child parent))
-      (when (child-root-p *current-child*)
-        (change-root *current-child* parent))
-      (setf *current-child* parent)
-      (set-layout-once #'tile-space-layout)
-      (setf *current-child* new-frame)
-      (leave-second-mode))))
+  (let ((parent (find-parent-frame *current-child*)))
+    (when (and parent (not (child-original-root-p *current-child*)))
+      (let ((new-frame (create-frame)))
+        (pushnew new-frame (frame-child parent))
+        (awhen (child-root-p *current-child*)
+          (change-root it parent))
+        (setf *current-child* parent)
+        (set-layout-once #'tile-space-layout)
+        (setf *current-child* new-frame)
+        (leave-second-mode)))))
 
 
 
@@ -769,7 +769,7 @@ For window: set current child to window or its parent according to window-parent
     (let ((jump-child (aref key-slots current-slot)))
       (when (find-child jump-child *root-frame*)
         (unless (find-child-in-all-root jump-child)
-          (change-root (find-related-root jump-child) jump-child))
+          (change-root (find-root jump-child) jump-child))
 	(setf *current-child* jump-child)
 	(focus-all-children *current-child* *current-child*)
 	(show-all-children t))))
@@ -1176,7 +1176,7 @@ For window: set current child to window or its parent according to window-parent
     "Store the current child and switch to the previous one"
     (let ((current-child *current-child*))
       (when last-child
-        (change-root (find-related-root last-child) last-child)
+        (change-root (find-root last-child) last-child)
         (setf *current-child* last-child)
 	(focus-all-children *current-child* *current-child*)
 	(show-all-children t))
@@ -1613,7 +1613,7 @@ For window: set current child to window or its parent according to window-parent
           (setf *current-child* parent)
 	  (put-child-on-top window parent)
           (when maximized
-            (change-root (find-related-root parent) parent))
+            (change-root (find-root parent) parent))
 	  (focus-all-children window parent)
           (show-all-children t))
         (funcall run-fn))))

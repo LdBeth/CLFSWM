@@ -47,7 +47,7 @@
 		   (find-parent-frame *current-child*)
 		   *current-child*)))
     (unless (or (child-member frame *permanent-nw-hook-frames*)
-                (child-is-original-root-p frame))
+                (child-original-root-p frame))
       (setf (frame-nw-hook frame) hook)
       (leave-second-mode))))
 
@@ -171,7 +171,7 @@
     (when parent
       (pushnew new-frame (frame-child parent))
       (pushnew window (frame-child new-frame))
-      (change-root (find-related-root parent) parent)
+      (change-root (find-root parent) parent)
       (setf *current-child* parent)
       (set-layout-once #'tile-space-layout)
       (setf *current-child* new-frame)
@@ -214,7 +214,7 @@
   (when (frame-p frame)
     (pushnew window (frame-child frame))
     (unless (find-child-in-all-root frame)
-      (change-root (find-related-root frame) frame))
+      (change-root (find-root frame) frame))
     (setf *current-child* frame)
     (focus-all-children window frame)
     (default-window-placement frame window)
@@ -260,7 +260,7 @@
       (pushnew window (frame-child frame))
       (unless *in-process-existing-windows*
 	(unless (find-child-in-all-root frame)
-          (change-root (find-related-root frame) frame))
+          (change-root (find-root frame) frame))
 	(setf *current-child* frame)
 	(focus-all-children window frame)
 	(default-window-placement frame window)

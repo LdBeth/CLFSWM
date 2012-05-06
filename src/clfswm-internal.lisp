@@ -633,67 +633,33 @@
     (loop for root in root-list
        collect (root-child root)))
 
-  (defun child-root-p (child)
-    (dolist (root root-list)
-      (when (child-equal-p child (root-child root))
-        (return root))))
+  (labels ((generic-child-root-p (child function)
+             (dolist (root root-list)
+               (when (child-equal-p child (funcall function root))
+                 (return root)))))
+    (defun child-root-p (child)
+      (generic-child-root-p child #'root-child))
 
-  (defun change-root (old new)
-    (let ((root (child-root-p old)))
-      (when (and root new)
-        (setf (root-child root) new))))
+    (defun child-original-root-p (child)
+      (generic-child-root-p child #'root-original)))
+
+  (defun change-root (old-root new-child)
+    (when (and old-root new-child)
+      (setf (root-child old-root) new-child)))
 
   (defun find-root (child)
-    (if (child-root-p child)
-        child
+    (aif (child-original-root-p child)
+        it
         (awhen (find-parent-frame child)
           (find-root it))))
-
-  (defun find-original-root (child)
-    (dolist (root root-list)
-      (when (find-child child (root-original root))
-        (return-from find-original-root root))))
-
-  (defun child-is-original-root-p (child)
-    (dolist (root root-list)
-      (when (child-equal-p child (root-original root))
-        (return-from child-is-original-root-p t))))
-
-  (defun find-root-in-child (child)
-    (if (child-root-p child)
-        child
-        (when (frame-p child)
-          (dolist (c (frame-child child))
-            (awhen (find-root-in-child c)
-              (return-from find-root-in-child it))))))
-
-  (defun find-all-root (child)
-    "Return a list of root in child"
-    (let ((roots nil))
-      (labels ((rec (child)
-                 (when (child-root-p child)
-                   (push child roots))
-                 (when (frame-p child)
-                   (dolist (c (frame-child child))
-                     (rec c)))))
-        (rec child)
-        roots)))
 
   (defun find-child-in-all-root (child)
     (dolist (root root-list)
       (when (find-child child (root-child root))
         (return-from find-child-in-all-root root))))
 
-  (defun only-one-root-in-p (child)
-    (<= (length (find-all-root child)) 1))
-
   (defun find-current-root ()
-    (find-root *current-child*))
-
-  (defun find-related-root (child)
-    (or (find-root-in-child child)
-        (find-root-in-child (root-child (find-original-root child))))))
-
+    (root-child (find-root *current-child*))))
 
 
 ;;; Multiple physical screen helper
@@ -734,8 +700,9 @@
         (progn
           (loop while (< (length (frame-child *root-frame*)) (length sizes))
              do (let ((frame (create-frame)))
-                  (add-frame frame *root-frame*)))
+                  (add-frame frame *root-frame*)
                   ;;(add-placed-frame-tmp frame 2)))
+                  ))
           (loop for size in sizes
              for frame in (frame-child *root-frame*)
              do (destructuring-bind (x y w h) size
@@ -1169,7 +1136,7 @@
   (let ((root (find-root child)))
     (when (and window-parent
                (not (child-root-p child))
-               (not (find-child parent root)))
+               (not (find-child parent (root-child root))))
       (change-root root parent)
       t)))
 
@@ -1205,17 +1172,17 @@ For window: set current child to window or its parent according to window-parent
 (defun enter-frame ()
   "Enter in the selected frame - ie make it the root frame"
   (let ((root (find-root *current-child*)))
-    (unless (child-equal-p root *current-child*)
+    (unless (child-equal-p (root-child root) *current-child*)
       (change-root root *current-child*))
     (show-all-children t)))
 
 (defun leave-frame ()
   "Leave the selected frame - ie make its parent the root frame"
   (let ((root (find-root *current-child*)))
-    (unless (child-equal-p root *root-frame*)
-      (awhen (find-parent-frame root)
-        (when (and (frame-p it)
-                   (only-one-root-in-p it))
+    (unless (or (child-equal-p (root-child root) *root-frame*)
+                (child-original-root-p (root-child root)))
+      (awhen (and root (find-parent-frame (root-child root)))
+        (when (frame-p it)
           (change-root root it)))
       (show-all-children))))
 
@@ -1270,15 +1237,16 @@ For window: set current child to window or its parent according to window-parent
 
 (defun switch-to-root-frame (&key (show-later nil))
   "Switch to the root frame"
-  (change-root (find-root *current-child*) (root-original (find-original-root *current-child*)))
+  (let ((root (find-root *current-child*)))
+    (change-root root (root-original root)))
   (unless show-later
     (show-all-children t)))
 
 (defun switch-and-select-root-frame (&key (show-later nil))
   "Switch and select the root frame"
-  (let ((new-root (root-original (find-original-root *current-child*))))
-    (change-root (find-root *current-child*) new-root)
-    (setf *current-child* new-root))
+  (let ((root (find-root *current-child*)))
+    (change-root root (root-original root))
+    (setf *current-child* (root-original root)))
   (unless show-later
     (show-all-children t)))
 
@@ -1292,13 +1260,13 @@ For window: set current child to window or its parent according to window-parent
 
 (defun prevent-current-*-equal-child (child)
   " Prevent current-root and current-child equal to child"
-  (if (child-is-original-root-p child)
+  (if (child-original-root-p child)
       nil
       (progn
-        (when (child-root-p child)
-          (change-root child (find-parent-frame child)))
+        (awhen (child-root-p child)
+          (change-root it (find-parent-frame child)))
         (when (child-equal-p child *current-child*)
-          (setf *current-child* (find-related-root child)))
+          (setf *current-child* (root-child (find-root child))))
         t)))
 
 

@@ -98,7 +98,7 @@
 		  *current-child* (frame-selected-child *circulate-parent*))))
         (when (and (not (child-root-p *current-child*))
                    (child-root-p old-child))
-          (change-root old-child *current-child*))))
+          (change-root (find-root old-child) *current-child*))))
     (show-all-children t)
     (draw-circulate-mode-window)))
 
