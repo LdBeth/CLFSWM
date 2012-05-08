@@ -1,3 +1,8 @@
+2012-05-09  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp: Use xdpyinfo/xinerama informations
+	instead of xrandr informations.
+
 2012-05-06  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp : Use only one list for root

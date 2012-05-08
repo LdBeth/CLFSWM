@@ -159,7 +159,9 @@ This command must set the window title to *clfswm-terminal-name*")
 ;;;
 ;;; See clfswm.lisp for hooks examples.
 
-(defconfig *init-hook* '(default-init-hook place-frames-from-xrandr display-hello-window)
+(defconfig *init-hook* '(default-init-hook
+                         place-frames-from-xinerama-infos
+                         display-hello-window)
   'Hook "Init hook. This hook is run just after the first root frame is created")
 
 (defconfig *close-hook* '(close-notify-window close-clfswm-terminal close-virtual-keyboard)

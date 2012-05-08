@@ -624,6 +624,11 @@
   (defun define-as-root (child x y width height)
     (push (make-root :child child :original child :current-child nil :x x :y y :w width :h height) root-list))
 
+  (defun unsure-at-least-one-root ()
+    (unless root-list
+      (define-as-root *root-frame* (- *border-size*) (- *border-size*)
+                      (xlib:screen-width *screen*) (xlib:screen-height *screen*))))
+
   (defun find-root-by-coordinates (x y)
     (dolist (root root-list)
       (when (in-rect x y (root-x root) (root-y root) (root-w root) (root-h root))
@@ -663,35 +668,36 @@
 
 
 ;;; Multiple physical screen helper
-(defun get-xrandr-connected-size ()
-  (let ((output (do-shell "xrandr"))
-        (sizes '()))
-    (loop for line = (read-line output nil nil)
-       while line
-       do
-         (awhen (search " connected " line)
-           (incf it (length " connected "))
-           (destructuring-bind (w h x y)
-               (mapcar #'parse-integer
-                       (split-string (substitute #\space #\x
-                                                 (substitute #\space #\+
-                                                             (subseq line it (position #\space line :start it))))))
-             (push (list (- x *border-size*) (- y *border-size*) w h) sizes))))
-    (dbg sizes)
-    sizes))
-    ;;'((10 10 500 300) (520 20 480 300) (310 330 600 250))))  ;;; For test
-
-(defun add-placed-frame-tmp (frame n)
+(defun add-placed-frame-tmp (frame n)   ;; For test
   (add-frame (create-frame :x 0.01 :y 0.01 :w 0.4 :h 0.4) frame)
   (add-frame (create-frame :x 0.55 :y 0.01 :w 0.4 :h 0.4) frame)
   (add-frame (create-frame :x 0.03 :y 0.5 :w 0.64 :h 0.44) frame)
   (when (plusp n)
     (add-placed-frame-tmp (first (frame-child frame)) (1- n))))
 
+(defun parse-xinerama-info (line)
+  (remove nil
+          (mapcar (lambda (string)
+                    (parse-integer string :junk-allowed t))
+                  (split-string (substitute #\space #\x (substitute #\space #\, line))))))
 
-(defun place-frames-from-xrandr ()
-  "Place frames according to xrandr informations"
-  (let ((sizes (get-xrandr-connected-size))
+(defun get-connected-heads-size ()
+  (when (xlib:query-extension *display* "XINERAMA")
+    (let ((output (do-shell "xdpyinfo -ext XINERAMA"))
+          (sizes '()))
+      (loop for line = (read-line output nil nil)
+         while line
+         do (when (search " head " line)
+              (destructuring-bind (w h x y)
+                  (parse-xinerama-info line)
+                (push (list (- x *border-size*) (- y *border-size*) w h) sizes))))
+      (remove-duplicates sizes :test #'equal))))
+  ;;'((10 10 500 300) (520 20 480 300) (310 330 600 250))))  ;;; For test
+
+
+(defun place-frames-from-xinerama-infos ()
+  "Place frames according to xdpyinfo/xinerama informations"
+  (let ((sizes (get-connected-heads-size))
         (width (xlib:screen-width *screen*))
         (height (xlib:screen-height *screen*)))
     ;;(add-placed-frame-tmp (first (frame-child *root-frame*)) 2)
@@ -700,9 +706,8 @@
         (progn
           (loop while (< (length (frame-child *root-frame*)) (length sizes))
              do (let ((frame (create-frame)))
-                  (add-frame frame *root-frame*)
                   ;;(add-placed-frame-tmp frame 2)))
-                  ))
+                  (add-frame frame *root-frame*)))
           (loop for size in sizes
              for frame in (frame-child *root-frame*)
              do (destructuring-bind (x y w h) size

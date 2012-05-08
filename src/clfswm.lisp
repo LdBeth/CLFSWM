@@ -218,6 +218,7 @@
         *current-root* *root-frame*  ;;; PHIL: TO REMOVE
 	*current-child* *root-frame*)
   (call-hook *init-hook*)
+  (unsure-at-least-one-root)
   (process-existing-windows *screen*)
   (show-all-children)
   (grab-main-keys)
