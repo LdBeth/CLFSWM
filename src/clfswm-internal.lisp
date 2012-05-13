@@ -704,7 +704,7 @@
                     (parse-integer string :junk-allowed t))
                   (split-string (substitute #\space #\x (substitute #\space #\, line))))))
 
-(defun get-connected-heads-size (&optional (fake t))
+(defun get-connected-heads-size (&optional (fake nil))
   (labels ((heads-info ()
              (if (not fake)
                  (do-shell "xdpyinfo -ext XINERAMA")
