@@ -39,7 +39,8 @@
 				:depends-on ("package" "tools" "xlib-util" "clfswm-internal"))
 			 (:file "clfswm-circulate-mode"
 				:depends-on ("xlib-util" "clfswm-keys" "clfswm-generic-mode"
-							 "clfswm-internal" "netwm-util" "tools" "config"))
+							 "clfswm-internal" "netwm-util" "tools" "config"
+                                                         "clfswm-placement"))
 			 (:file "clfswm"
 				:depends-on ("xlib-util" "netwm-util" "clfswm-keys" "config"
 							 "clfswm-internal" "clfswm-circulate-mode" "tools"))
@@ -47,7 +48,8 @@
 				:depends-on ("package" "clfswm" "clfswm-internal" "clfswm-generic-mode"
 						       "clfswm-placement"))
 			 (:file "clfswm-expose-mode"
-				:depends-on ("package" "config" "clfswm-internal" "xlib-util" "tools" "clfswm-keys" "clfswm-generic-mode"))
+				:depends-on ("package" "config" "clfswm-internal" "xlib-util" "tools"
+                                                       "clfswm-keys" "clfswm-generic-mode" "clfswm-placement"))
 			 (:file "clfswm-corner"
 				:depends-on ("package" "config" "clfswm-internal" "clfswm-expose-mode" "xlib-util"))
 			 (:file "clfswm-info"

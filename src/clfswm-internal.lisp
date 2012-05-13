@@ -620,22 +620,6 @@
 ;; TODO: Add find-root-by-coordinates, change-root-geometry
 (let ((root-list nil)
       (current-child nil))
-  (defun current-child ()
-    current-child)
-
-  (defun current-child-setter (value)
-    (setf current-child value))
-
-  (defmacro with-current-child ((new-child) &body body)
-    "Temporarly change the current child"
-    (let ((old-child (gensym))
-          (ret (gensym)))
-      `(let ((,old-child (current-child)))
-         (setf (current-child) ,new-child)
-         (let ((,ret (multiple-value-list (progn ,@body))))
-           (setf (current-child) ,old-child)
-           (values-list ,ret)))))
-
   (defun define-as-root (child x y width height)
     (push (make-root :child child :original child :current-child nil :x x :y y :w width :h height) root-list))
 
@@ -671,7 +655,7 @@
     (aif (child-original-root-p child)
          it
          (awhen (find-parent-frame child)
-                (find-root it))))
+           (find-root it))))
 
   (defun find-child-in-all-root (child)
     (dolist (root root-list)
@@ -679,7 +663,28 @@
         (return-from find-child-in-all-root root))))
 
   (defun find-current-root ()
-    (root-child (find-root (current-child)))))
+    (root-child (find-root (current-child))))
+
+  (defun current-child ()
+    current-child)
+
+  (defun current-child-setter (value)
+    (let ((current-root (find-root current-child)))
+      (dolist (root root-list)
+        (when (equal root current-root)
+          (setf (root-current-child root) current-child))))
+    (setf current-child value))
+
+  (defmacro with-current-child ((new-child) &body body)
+    "Temporarly change the current child"
+    (let ((old-child (gensym))
+          (ret (gensym)))
+      `(let ((,old-child (current-child)))
+         (setf (current-child) ,new-child)
+         (let ((,ret (multiple-value-list (progn ,@body))))
+           (setf (current-child) ,old-child)
+           (values-list ,ret)))))
+)
 
 (defsetf current-child current-child-setter)
 

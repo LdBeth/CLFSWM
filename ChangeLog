@@ -2,6 +2,8 @@
 
 	* src/clfswm-internal.lisp: Remove the *current-child* variable
 	and use a setfable function (current-child) instead.
+	(current-child-setter): Store root current child before apllying
+	current child change.
 
 2012-05-09  Philippe Brochard  <pbrochard@common-lisp.net>
 

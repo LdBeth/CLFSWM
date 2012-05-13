@@ -106,33 +106,33 @@
 			 (third lwin))))
 
 (defun expose-create-window (child n)
-  (let* (;;((current-child) child) ;;; PHIL: Broken
-	 (string (format nil "~A~A" (number->string n)
-			 (if *expose-show-window-title*
-			     (format nil " - ~A" (ensure-printable (child-fullname child)))
-			     "")))
-	 (width (if *expose-show-window-title*
-		    (min (* (xlib:max-char-width *expose-font*) (+ (length string) 2))
-			 (- (child-width child) 4))
-		    (* (xlib:max-char-width *expose-font*) 3)))
-	 (height (* (xlib:font-ascent *expose-font*) 2)))
-    (with-placement (*expose-mode-placement* x y width height)
-      (let* ((window (xlib:create-window :parent *root*
-					 :x x   :y y
-					 :width width   :height height
-					 :background (get-color *expose-background*)
-					 :border-width *border-size*
-					 :border (get-color *expose-border*)
-					 :colormap (xlib:screen-default-colormap *screen*)
-					 :event-mask '(:exposure :key-press)))
-	     (gc (xlib:create-gcontext :drawable window
-				       :foreground (get-color *expose-foreground*)
-				       :background (get-color *expose-background*)
-				       :font *expose-font*
-				       :line-style :solid)))
-        (setf (window-transparency window) *expose-transparency*)
-	(map-window window)
-	(push (list window gc string child) *expose-windows-list*)))))
+  (with-current-child (child)
+    (let* ((string (format nil "~A~A" (number->string n)
+                           (if *expose-show-window-title*
+                               (format nil " - ~A" (ensure-printable (child-fullname child)))
+                               "")))
+           (width (if *expose-show-window-title*
+                      (min (* (xlib:max-char-width *expose-font*) (+ (length string) 2))
+                           (- (child-width child) 4))
+                      (* (xlib:max-char-width *expose-font*) 3)))
+           (height (* (xlib:font-ascent *expose-font*) 2)))
+      (with-placement (*expose-mode-placement* x y width height)
+        (let* ((window (xlib:create-window :parent *root*
+                                           :x x   :y y
+                                           :width width   :height height
+                                           :background (get-color *expose-background*)
+                                           :border-width *border-size*
+                                           :border (get-color *expose-border*)
+                                           :colormap (xlib:screen-default-colormap *screen*)
+                                           :event-mask '(:exposure :key-press)))
+               (gc (xlib:create-gcontext :drawable window
+                                         :foreground (get-color *expose-foreground*)
+                                         :background (get-color *expose-background*)
+                                         :font *expose-font*
+                                         :line-style :solid)))
+          (setf (window-transparency window) *expose-transparency*)
+          (map-window window)
+          (push (list window gc string child) *expose-windows-list*))))))
 
 
 
