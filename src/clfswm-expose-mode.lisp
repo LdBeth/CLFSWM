@@ -106,7 +106,7 @@
 			 (third lwin))))
 
 (defun expose-create-window (child n)
-  (let* ((*current-child* child)
+  (let* (;;((current-child) child) ;;; PHIL: Broken
 	 (string (format nil "~A~A" (number->string n)
 			 (if *expose-show-window-title*
 			     (format nil " - ~A" (ensure-printable (child-fullname child)))
@@ -216,10 +216,10 @@
 (defun expose-windows-current-child-mode ()
   "Present all windows in the current child (An expose like)"
   (stop-button-event)
-  (when (frame-p *current-child*)
+  (when (frame-p (current-child))
     (let ((orig-root *current-root*))
-      (unless (child-equal-p *current-child* *current-root*)
-	(setf *current-root* *current-child*))
+      (unless (child-equal-p (current-child) *current-root*)
+	(setf *current-root* (current-child)))
       (expose-windows-generic *current-root*
                               (lambda (parent)
                                 (setf *current-root* parent))

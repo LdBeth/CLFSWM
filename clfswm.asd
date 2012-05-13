@@ -19,12 +19,10 @@
 				:depends-on ("tools"))
 			 (:file "package"
 				:depends-on ("my-html" "tools" "version"))
-			 (:file "clfswm-placement"
-				:depends-on ("package"))
 			 (:file "keysyms"
 				:depends-on ("package"))
 			 (:file "xlib-util"
-				:depends-on ("package" "keysyms" "tools" "clfswm-placement"))
+				:depends-on ("package" "keysyms" "tools"))
 			 (:file "config"
 				:depends-on ("package" "xlib-util"))
 			 (:file "netwm-util"
@@ -35,6 +33,8 @@
 				:depends-on ("package" "clfswm-keys" "my-html" "tools" "config"))
 			 (:file "clfswm-internal"
 				:depends-on ("xlib-util" "clfswm-keys" "netwm-util" "tools" "config"))
+                         (:file "clfswm-placement"
+				:depends-on ("package" "clfswm-internal"))
 			 (:file "clfswm-generic-mode"
 				:depends-on ("package" "tools" "xlib-util" "clfswm-internal"))
 			 (:file "clfswm-circulate-mode"
@@ -61,7 +61,8 @@
 						       "clfswm-generic-mode" "clfswm-placement"))
 			 (:file "clfswm-util"
 				:depends-on ("clfswm" "keysyms" "clfswm-info" "clfswm-second-mode" "clfswm-query"
-                                                      "clfswm-menu" "clfswm-autodoc" "clfswm-corner"))
+                                                      "clfswm-menu" "clfswm-autodoc" "clfswm-corner"
+                                                      "clfswm-placement"))
                          (:file "clfswm-configuration"
 				:depends-on ("package" "config" "clfswm-internal" "clfswm-util" "clfswm-query"
 						       "clfswm-menu"))

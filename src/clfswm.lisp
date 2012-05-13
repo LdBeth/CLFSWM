@@ -72,7 +72,7 @@
 	(case stack-mode
 	  (:above
 	   (unless (null-size-window-p window)
-	     (when (or (child-equal-p window *current-child*)
+	     (when (or (child-equal-p window (current-child))
 		       (is-in-current-child-p window))
 	       (raise-window window)
 	       (focus-window window)
@@ -113,12 +113,12 @@
 (define-handler main-mode :enter-notify  (window root-x root-y)
   (unless (and (> root-x (- (xlib:screen-width *screen*) 3))
 	       (> root-y (- (xlib:screen-height *screen*) 3)))
-    (case (if (frame-p *current-child*)
-	      (frame-focus-policy *current-child*)
+    (case (if (frame-p (current-child))
+	      (frame-focus-policy (current-child))
 	      *default-focus-policy*)
       (:sloppy (focus-window window))
-      (:sloppy-strict (when (and (frame-p *current-child*)
-				 (child-member window (frame-child *current-child*)))
+      (:sloppy-strict (when (and (frame-p (current-child))
+				 (child-member window (frame-child (current-child))))
 			(focus-window window)))
       (:sloppy-select (let* ((child (find-child-under-mouse root-x root-y))
 			     (parent (find-parent-frame child)))
@@ -126,7 +126,7 @@
 				    (equal (typecase child
 				    	     (xlib:window parent)
 					     (t child))
-					   *current-child*))
+					   (current-child)))
 			    (focus-all-children child parent)
 			    (show-all-children)))))))
 
@@ -176,7 +176,7 @@
                                         :layout nil :x 0.05 :y 0.05
                                         :w 0.9 :h 0.9)
                           *root-frame*)))
-    (setf *current-child* frame)))
+    (setf (current-child) frame)))
 
 
 (defun init-display ()
@@ -200,9 +200,6 @@
   (clear-timers)
   (map-window *no-focus-window*)
   (dbg *display*)
-  (dbg (xlib:display-roots *display*))
-  (dbg (xlib:display-plist *display*))
-  (dbg (xlib:query-extension *display* "XINERAMA"))
   (setf (xlib:window-event-mask *root*) (xlib:make-event-mask :substructure-redirect
 							      :substructure-notify
 							      :property-change
@@ -216,7 +213,7 @@
   (setf *child-selection* nil)
   (setf *root-frame* (create-frame :name "Root" :number 0)
         *current-root* *root-frame*  ;;; PHIL: TO REMOVE
-	*current-child* *root-frame*)
+	(current-child) *root-frame*)
   (call-hook *init-hook*)
   (unsure-at-least-one-root)
   (process-existing-windows *screen*)

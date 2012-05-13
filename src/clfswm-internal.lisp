@@ -375,8 +375,8 @@
 
 
 (defun is-in-current-child-p (child)
-  (and (frame-p *current-child*)
-       (child-member child (frame-child *current-child*))))
+  (and (frame-p (current-child))
+       (child-member child (frame-child (current-child)))))
 
 
 
@@ -558,9 +558,9 @@
 
 (defun fixe-real-size-current-child ()
   "Fixe real (pixel) coordinates in float coordinates for children in the current child"
-  (when (frame-p *current-child*)
-    (dolist (child (frame-child *current-child*))
-      (fixe-real-size child *current-child*))))
+  (when (frame-p (current-child))
+    (dolist (child (frame-child (current-child)))
+      (fixe-real-size child (current-child)))))
 
 
 
@@ -616,10 +616,25 @@
 		 (rec parent)))))
     (rec base)))
 
-
 ;;; Multiple roots support (replace the old *current-root* variable)
-(let ((root-list nil))
-  ;; TODO: Add find-root-by-coordinates, change-root-geometry
+;; TODO: Add find-root-by-coordinates, change-root-geometry
+(let ((root-list nil)
+      (current-child nil))
+  (defun current-child ()
+    current-child)
+
+  (defun current-child-setter (value)
+    (setf current-child value))
+
+  (defmacro with-current-child ((new-child) &body body)
+    "Temporarly change the current child"
+    (let ((old-child (gensym))
+          (ret (gensym)))
+      `(let ((,old-child (current-child)))
+         (setf (current-child) ,new-child)
+         (let ((,ret (multiple-value-list (progn ,@body))))
+           (setf (current-child) ,old-child)
+           (values-list ,ret)))))
 
   (defun define-as-root (child x y width height)
     (push (make-root :child child :original child :current-child nil :x x :y y :w width :h height) root-list))
@@ -654,9 +669,9 @@
 
   (defun find-root (child)
     (aif (child-original-root-p child)
-        it
-        (awhen (find-parent-frame child)
-          (find-root it))))
+         it
+         (awhen (find-parent-frame child)
+                (find-root it))))
 
   (defun find-child-in-all-root (child)
     (dolist (root root-list)
@@ -664,7 +679,10 @@
         (return-from find-child-in-all-root root))))
 
   (defun find-current-root ()
-    (root-child (find-root *current-child*))))
+    (root-child (find-root (current-child)))))
+
+(defsetf current-child current-child-setter)
+
 
 
 ;;; Multiple physical screen helper
@@ -681,18 +699,31 @@
                     (parse-integer string :junk-allowed t))
                   (split-string (substitute #\space #\x (substitute #\space #\, line))))))
 
-(defun get-connected-heads-size ()
-  (when (xlib:query-extension *display* "XINERAMA")
-    (let ((output (do-shell "xdpyinfo -ext XINERAMA"))
-          (sizes '()))
-      (loop for line = (read-line output nil nil)
-         while line
-         do (when (search " head " line)
-              (destructuring-bind (w h x y)
-                  (parse-xinerama-info line)
-                (push (list (- x *border-size*) (- y *border-size*) w h) sizes))))
-      (remove-duplicates sizes :test #'equal))))
-  ;;'((10 10 500 300) (520 20 480 300) (310 330 600 250))))  ;;; For test
+(defun get-connected-heads-size (&optional (fake t))
+  (labels ((heads-info ()
+             (if (not fake)
+                 (do-shell "xdpyinfo -ext XINERAMA")
+                 (progn
+                   (setf *show-root-frame-p* t)
+                   (do-shell "echo '    available colormap entries:    256 per subfield
+    red, green, blue masks:    0xff0000, 0xff00, 0xff
+    significant bits in color specification:    8 bits
+
+XINERAMA version 1.1 opcode: 150
+  head #0: 500x300 @ 10,10
+  head #1: 480x300 @ 520,20
+  head #2: 600x250 @ 310,330'")))))
+    (when (xlib:query-extension *display* "XINERAMA")
+      (let ((output (heads-info))
+            (sizes nil))
+        (loop for line = (read-line output nil nil)
+           while line
+           do (when (search " head " line)
+                (destructuring-bind (w h x y)
+                    (parse-xinerama-info line)
+                  (push (list (- x *border-size*) (- y *border-size*) w h) sizes))))
+        (dbg sizes)
+        (remove-duplicates sizes :test #'equal)))))
 
 
 (defun place-frames-from-xinerama-infos ()
@@ -717,7 +748,7 @@
                         (frame-h frame) (float (/ h height)))
                   (add-frame (create-frame) frame)
                   (define-as-root frame x y w h)))
-          (setf *current-child* (first (frame-child (first (frame-child *root-frame*)))))))))
+          (setf (current-child) (first (frame-child (first (frame-child *root-frame*)))))))))
 
 
 
@@ -741,9 +772,9 @@
 
 ;;; Current window utilities
 (defun get-current-window ()
-  (typecase *current-child*
-    (xlib:window  *current-child*)
-    (frame (frame-selected-child *current-child*))))
+  (typecase (current-child)
+    (xlib:window  (current-child))
+    (frame (frame-selected-child (current-child)))))
 
 (defmacro with-current-window (&body body)
   "Bind 'window' to the current window"
@@ -752,10 +783,10 @@
 	,@body)))
 
 (defun get-first-window ()
-  (typecase *current-child*
-    (xlib:window  *current-child*)
-    (frame (or (first (frame-child *current-child*))
-               *current-child*))))
+  (typecase (current-child)
+    (xlib:window  (current-child))
+    (frame (or (first (frame-child (current-child)))
+               (current-child)))))
 
 
 
@@ -769,7 +800,7 @@
               (xlib:window-background window) (get-color *frame-background*))
         (clear-pixmap-buffer window gc)
         (setf (xlib:gcontext-foreground gc) (get-color (if (and (child-root-p frame)
-                                                                (child-equal-p frame *current-child*))
+                                                                (child-equal-p frame (current-child)))
                                                            *frame-foreground-root* *frame-foreground*)))
         (xlib:draw-glyphs *pixmap-buffer* gc 5 dy
                           (format nil "Frame: ~A~A"
@@ -913,9 +944,9 @@
 
 (defmethod show-child ((window xlib:window) parent previous)
   (if (or (managed-window-p window parent)
-	  (child-equal-p window *current-child*)
+	  (child-equal-p window (current-child))
 	  (not (hide-unmanaged-window-p parent))
-	  (child-equal-p parent *current-child*))
+	  (child-equal-p parent (current-child)))
       (progn
 	(map-window window)
 	(set-child-stack-order window previous))
@@ -943,7 +974,7 @@
 (defgeneric select-child (child selected))
 
 (labels ((get-selected-color (child selected-p)
-           (get-color (cond ((child-equal-p child *current-child*) *color-selected*)
+           (get-color (cond ((child-equal-p child (current-child)) *color-selected*)
                             (selected-p *color-maybe-selected*)
                             (t *color-unselected*)))))
   (defmethod select-child ((frame frame) selected-p)
@@ -960,7 +991,7 @@
     ()))
 
 (defun select-current-frame (selected)
-  (select-child *current-child* selected))
+  (select-child (current-child) selected))
 
 (defun unselect-all-frames ()
   (with-all-children (*root-frame* child)
@@ -974,7 +1005,7 @@
 	       (xlib:window (focus-window child))
 	       (frame (rec (frame-selected-child child))))))
     (no-focus)
-    (rec *current-child*)))
+    (rec (current-child))))
 
 
 
@@ -1118,8 +1149,8 @@
 
 
 (defun set-current-child-generic (child)
-  (unless (child-equal-p *current-child* child)
-    (setf *current-child* child)
+  (unless (child-equal-p (current-child) child)
+    (setf (current-child) child)
     t))
 
 (defgeneric set-current-child (child parent window-parent))
@@ -1160,30 +1191,30 @@ For window: set current child to window or its parent according to window-parent
 (defun select-next-level ()
   "Select the next level in frame"
   (select-current-frame :maybe)
-  (when (frame-p *current-child*)
-    (awhen (frame-selected-child *current-child*)
-      (setf *current-child* it)))
+  (when (frame-p (current-child))
+    (awhen (frame-selected-child (current-child))
+      (setf (current-child) it)))
   (show-all-children))
 
 (defun select-previous-level ()
   "Select the previous level in frame"
-  (unless (child-root-p *current-child*)
+  (unless (child-root-p (current-child))
     (select-current-frame :maybe)
-    (awhen (find-parent-frame *current-child*)
-      (setf *current-child* it))
+    (awhen (find-parent-frame (current-child))
+      (setf (current-child) it))
     (show-all-children)))
 
 
 (defun enter-frame ()
   "Enter in the selected frame - ie make it the root frame"
-  (let ((root (find-root *current-child*)))
-    (unless (child-equal-p (root-child root) *current-child*)
-      (change-root root *current-child*))
+  (let ((root (find-root (current-child))))
+    (unless (child-equal-p (root-child root) (current-child))
+      (change-root root (current-child)))
     (show-all-children t)))
 
 (defun leave-frame ()
   "Leave the selected frame - ie make its parent the root frame"
-  (let ((root (find-root *current-child*)))
+  (let ((root (find-root (current-child))))
     (unless (or (child-equal-p (root-child root) *root-frame*)
                 (child-original-root-p (root-child root)))
       (awhen (and root (find-parent-frame (root-child root)))
@@ -1199,8 +1230,8 @@ For window: set current child to window or its parent according to window-parent
 
 (defun frame-lower-child ()
   "Lower the child in the current frame"
-  (when (frame-p *current-child*)
-    (with-slots (child selected-pos) *current-child*
+  (when (frame-p (current-child))
+    (with-slots (child selected-pos) (current-child)
       (unless (>= selected-pos (length child))
 	(when (nth (1+ selected-pos) child)
 	  (rotatef (nth selected-pos child)
@@ -1211,8 +1242,8 @@ For window: set current child to window or its parent according to window-parent
 
 (defun frame-raise-child ()
   "Raise the child in the current frame"
-  (when (frame-p *current-child*)
-    (with-slots (child selected-pos) *current-child*
+  (when (frame-p (current-child))
+    (with-slots (child selected-pos) (current-child)
       (unless (< selected-pos 1)
 	(when (nth (1- selected-pos) child)
 	  (rotatef (nth selected-pos child)
@@ -1223,8 +1254,8 @@ For window: set current child to window or its parent according to window-parent
 
 (defun frame-select-next-child ()
   "Select the next child in the current frame"
-  (when (frame-p *current-child*)
-    (with-slots (child selected-pos) *current-child*
+  (when (frame-p (current-child))
+    (with-slots (child selected-pos) (current-child)
       (unless (>= selected-pos (length child))
 	(incf selected-pos)))
     (show-all-children)))
@@ -1232,8 +1263,8 @@ For window: set current child to window or its parent according to window-parent
 
 (defun frame-select-previous-child ()
   "Select the previous child in the current frame"
-  (when (frame-p *current-child*)
-    (with-slots (child selected-pos) *current-child*
+  (when (frame-p (current-child))
+    (with-slots (child selected-pos) (current-child)
       (unless (< selected-pos 1)
 	(decf selected-pos)))
     (show-all-children)))
@@ -1242,16 +1273,16 @@ For window: set current child to window or its parent according to window-parent
 
 (defun switch-to-root-frame (&key (show-later nil))
   "Switch to the root frame"
-  (let ((root (find-root *current-child*)))
+  (let ((root (find-root (current-child))))
     (change-root root (root-original root)))
   (unless show-later
     (show-all-children t)))
 
 (defun switch-and-select-root-frame (&key (show-later nil))
   "Switch and select the root frame"
-  (let ((root (find-root *current-child*)))
+  (let ((root (find-root (current-child))))
     (change-root root (root-original root))
-    (setf *current-child* (root-original root)))
+    (setf (current-child) (root-original root)))
   (unless show-later
     (show-all-children t)))
 
@@ -1270,8 +1301,8 @@ For window: set current child to window or its parent according to window-parent
       (progn
         (awhen (child-root-p child)
           (change-root it (find-parent-frame child)))
-        (when (child-equal-p child *current-child*)
-          (setf *current-child* (root-child (find-root child))))
+        (when (child-equal-p child (current-child))
+          (setf (current-child) (root-child (find-root child))))
         t)))
 
 
@@ -1337,28 +1368,6 @@ Warning:frame window and gc are freeed."
             (when (prevent-current-*-equal-child child)
               (setf (frame-child frame)
                     (child-remove child (frame-child frame))))))))))
-
-
-
-
-
-(defun place-window-from-hints (window)
-  "Place a window from its hints"
-  (let* ((hints (xlib:wm-normal-hints window))
-	 (min-width (or (and hints (xlib:wm-size-hints-min-width hints)) 0))
-	 (min-height (or (and hints (xlib:wm-size-hints-min-height hints)) 0))
-	 (max-width (or (and hints (xlib:wm-size-hints-max-width hints)) (x-drawable-width *root*)))
-	 (max-height (or (and hints (xlib:wm-size-hints-max-height hints)) (x-drawable-height *root*)))
-	 (rwidth (or (and hints (or (xlib:wm-size-hints-width hints) (xlib:wm-size-hints-base-width hints)))
-		     (x-drawable-width window)))
-	 (rheight (or (and hints (or (xlib:wm-size-hints-height hints) (xlib:wm-size-hints-base-height hints)))
-		      (x-drawable-height window))))
-    (setf (x-drawable-width window) (min (max min-width rwidth *default-window-width*) max-width)
-	  (x-drawable-height window) (min (max min-height rheight *default-window-height*) max-height))
-    (with-placement (*unmanaged-window-placement* x y (x-drawable-width window) (x-drawable-height window))
-      (setf (x-drawable-x window) x
-            (x-drawable-y window) y))
-    (xlib:display-finish-output *display*)))
 
 
 

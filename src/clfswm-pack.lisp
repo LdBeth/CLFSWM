@@ -207,7 +207,7 @@
 
 (defun explode-current-frame ()
   "Create a new frame for each window in frame"
-  (explode-frame *current-child*)
+  (explode-frame (current-child))
   (leave-second-mode))
 
 
@@ -223,7 +223,7 @@
 
 (defun implode-current-frame ()
   "Absorb all frames subchildren in frame (explode frame opposite)"
-  (implode-frame *current-child*)
+  (implode-frame (current-child))
   (leave-second-mode))
 
 

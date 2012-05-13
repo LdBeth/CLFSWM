@@ -45,14 +45,14 @@
 ;;; Generic functions
 (defun set-layout (layout)
   "Set the layout of the current child"
-  (when (frame-p *current-child*)
-    (setf (frame-layout *current-child*) layout)
+  (when (frame-p (current-child))
+    (setf (frame-layout (current-child)) layout)
     (leave-second-mode)))
 
 (defun set-layout-dont-leave (layout)
   "Set the layout of the current child"
-  (when (frame-p *current-child*)
-    (setf (frame-layout *current-child*) layout)))
+  (when (frame-p (current-child))
+    (setf (frame-layout (current-child)) layout)))
 
 (defun set-layout-once (layout-name)
   (set-layout-dont-leave layout-name)
@@ -90,14 +90,14 @@
 
 
 (defun layout-ask-size (msg slot &optional (min 80))
-  (when (frame-p *current-child*)
-    (let ((new-size (/ (or (query-number msg (* (frame-data-slot *current-child* slot) 100)) min) 100)))
-      (setf (frame-data-slot *current-child* slot) (max (min new-size 0.99) 0.01)))))
+  (when (frame-p (current-child))
+    (let ((new-size (/ (or (query-number msg (* (frame-data-slot (current-child) slot) 100)) min) 100)))
+      (setf (frame-data-slot (current-child) slot) (max (min new-size 0.99) 0.01)))))
 
 (defun adjust-layout-size (slot inc)
-  (when (frame-p *current-child*)
-    (setf (frame-data-slot *current-child* slot)
-          (max (min (+ (frame-data-slot *current-child* slot) inc) 0.99) 0.01))))
+  (when (frame-p (current-child))
+    (setf (frame-data-slot (current-child) slot)
+          (max (min (+ (frame-data-slot (current-child) slot) inc) 0.99) 0.01))))
 
 (defun inc-tile-layout-size ()
   "Increase the tile layout size"
@@ -124,9 +124,9 @@
 
 (defun fast-layout-switch ()
   "Switch between two layouts"
-  (when (frame-p *current-child*)
-    (with-slots (layout) *current-child*
-      (let* ((layout-list (frame-data-slot *current-child* :fast-layout))
+  (when (frame-p (current-child))
+    (with-slots (layout) (current-child)
+      (let* ((layout-list (frame-data-slot (current-child) :fast-layout))
 	     (first-layout (ensure-function (first layout-list)))
 	     (second-layout (ensure-function (second layout-list))))
 	(setf layout (if (eql layout first-layout)
@@ -137,10 +137,10 @@
 
 (defun push-in-fast-layout-list ()
   "Push the current layout in the fast layout list"
-  (when (frame-p *current-child*)
-    (setf (frame-data-slot *current-child* :fast-layout)
-	  (list (frame-layout *current-child*)
-		(first (frame-data-slot *current-child* :fast-layout))))
+  (when (frame-p (current-child))
+    (setf (frame-data-slot (current-child) :fast-layout)
+	  (list (frame-layout (current-child))
+		(first (frame-data-slot (current-child) :fast-layout))))
     (leave-second-mode)))
 
 
@@ -208,25 +208,25 @@
 
 ;;; Tile layout
 (defun tile-layout-ask-keep-position ()
-  (when (frame-p *current-child*)
+  (when (frame-p (current-child))
     (if (query-yes-or-no "Keep frame children positions?")
-	(setf (frame-data-slot *current-child* :tile-layout-keep-position) :yes)
-	(remove-frame-data-slot *current-child* :tile-layout-keep-position))))
+	(setf (frame-data-slot (current-child) :tile-layout-keep-position) :yes)
+	(remove-frame-data-slot (current-child) :tile-layout-keep-position))))
 
 
 
 (labels ((set-managed ()
-           (setf (frame-data-slot *current-child* :layout-managed-children)
-                 (copy-list (get-managed-child *current-child*)))))
+           (setf (frame-data-slot (current-child) :layout-managed-children)
+                 (copy-list (get-managed-child (current-child))))))
   (defun set-layout-managed-children ()
-    (when (frame-p *current-child*)
+    (when (frame-p (current-child))
       (set-managed)
       (tile-layout-ask-keep-position)))
 
 
   (defun update-layout-managed-children-position ()
     "Update layout managed children position"
-    (when (frame-p *current-child*)
+    (when (frame-p (current-child))
       (set-managed)
       (leave-second-mode))))
 
@@ -573,9 +573,9 @@
 
 ;;; Left and space layout: like left layout but leave a space on the left
 (defun layout-ask-space (msg slot &optional (default 100))
-  (when (frame-p *current-child*)
-    (let ((new-space (or (query-number msg (or (frame-data-slot *current-child* slot) default)) default)))
-      (setf (frame-data-slot *current-child* slot) new-space))))
+  (when (frame-p (current-child))
+    (let ((new-space (or (query-number msg (or (frame-data-slot (current-child) slot) default)) default)))
+      (setf (frame-data-slot (current-child) slot) new-space))))
 
 
 (defun tile-left-space-layout (child parent)
@@ -734,26 +734,26 @@
 
 (defun add-in-main-window-list ()
   "Add the current window in the main window list"
-  (when (frame-p *current-child*)
+  (when (frame-p (current-child))
     (with-current-window
-      (when (child-member window (get-managed-child *current-child*))
-	(pushnew window (frame-data-slot *current-child* :main-window-list)))))
+      (when (child-member window (get-managed-child (current-child)))
+	(pushnew window (frame-data-slot (current-child) :main-window-list)))))
   (leave-second-mode))
 
 
 (defun remove-in-main-window-list ()
   "Remove the current window from the main window list"
-  (when (frame-p *current-child*)
+  (when (frame-p (current-child))
     (with-current-window
-      (when (child-member window (get-managed-child *current-child*))
-	(setf (frame-data-slot *current-child* :main-window-list)
-	      (child-remove window (frame-data-slot *current-child* :main-window-list))))))
+      (when (child-member window (get-managed-child (current-child)))
+	(setf (frame-data-slot (current-child) :main-window-list)
+	      (child-remove window (frame-data-slot (current-child) :main-window-list))))))
   (leave-second-mode))
 
 (defun clear-main-window-list ()
   "Clear the main window list"
-  (when (frame-p *current-child*)
-    (setf (frame-data-slot *current-child* :main-window-list) nil))
+  (when (frame-p (current-child))
+    (setf (frame-data-slot (current-child) :main-window-list) nil))
   (leave-second-mode))
 
 
@@ -778,15 +778,15 @@
 
 (defun select-next/previous-child-no-main-window (fun-rotate)
   "Select the next/previous child - Skip windows in main window list"
-  (when (frame-p *current-child*)
-    (with-slots (child) *current-child*
-      (let* ((main-windows (frame-data-slot *current-child* :main-window-list))
+  (when (frame-p (current-child))
+    (with-slots (child) (current-child)
+      (let* ((main-windows (frame-data-slot (current-child) :main-window-list))
 	     (to-skip? (not (= (length main-windows)
 			       (length child)))))
 	(labels ((rec ()
 		   (setf child (funcall fun-rotate child))
 		   (when (and to-skip?
-			      (child-member (frame-selected-child *current-child*) main-windows))
+			      (child-member (frame-selected-child (current-child)) main-windows))
 		     (rec))))
 	  (unselect-all-frames)
 	  (rec)
@@ -806,8 +806,8 @@
   "Move and focus the current frame or focus the current window parent.
 Or do actions on corners - Skip windows in main window list"
   (unless (do-corner-action root-x root-y *corner-main-mode-left-button*)
-    (if (and (frame-p *current-child*)
-	     (child-member window (frame-data-slot *current-child* :main-window-list)))
+    (if (and (frame-p (current-child))
+	     (child-member window (frame-data-slot (current-child) :main-window-list)))
 	(replay-button-event)
 	(mouse-click-to-focus-generic root-x root-y #'move-frame))))
 
@@ -832,7 +832,7 @@ Or do actions on corners - Skip windows in main window list"
 
   (defun set-gimp-layout ()
     "The GIMP Layout"
-    (when (frame-p *current-child*)
+    (when (frame-p (current-child))
       ;; Note: There is no need to ungrab/grab keys because this
       ;; is done when leaving the second mode.
       (define-main-key ("F8" :mod-1) 'add-in-main-window-list)
@@ -841,11 +841,11 @@ Or do actions on corners - Skip windows in main window list"
       (define-main-key ("Tab" :mod-1) 'select-next-child-no-main-window)
       (define-main-key ("Tab" :mod-1 :shift) 'select-previous-child-no-main-window)
       (define-main-mouse (1) 'mouse-click-to-focus-and-move-no-main-window)
-      (setf (frame-data-slot *current-child* :focus-policy-save)
-            (frame-focus-policy *current-child*))
-      (setf (frame-focus-policy *current-child*) :sloppy)
-      (setf (frame-data-slot *current-child* :layout-save)
-            (frame-layout *current-child*))
+      (setf (frame-data-slot (current-child) :focus-policy-save)
+            (frame-focus-policy (current-child)))
+      (setf (frame-focus-policy (current-child)) :sloppy)
+      (setf (frame-data-slot (current-child) :layout-save)
+            (frame-layout (current-child)))
       (open-notify-window help-text-list)
       (add-timer *gimp-layout-notify-window-delay* #'close-notify-window)
       ;; Set the default layout and leave the second mode.
@@ -860,10 +860,10 @@ Or do actions on corners - Skip windows in main window list"
   (define-main-key ("Tab" :mod-1) 'select-next-child)
   (define-main-key ("Tab" :mod-1 :shift) 'select-previous-child)
   (define-main-mouse (1) 'mouse-click-to-focus-and-move)
-  (setf (frame-focus-policy *current-child*)
-	(frame-data-slot *current-child* :focus-policy-save))
-  (setf (frame-layout *current-child*)
-	(frame-data-slot *current-child* :layout-save))
+  (setf (frame-focus-policy (current-child))
+	(frame-data-slot (current-child) :focus-policy-save))
+  (setf (frame-layout (current-child))
+	(frame-data-slot (current-child) :layout-save))
   (leave-second-mode))
 
 

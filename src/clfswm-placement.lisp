@@ -106,15 +106,15 @@
 ;;; Current child placement
 ;;;
 (defun current-child-coord ()
-  (typecase *current-child*
-    (xlib:window (values (x-drawable-x *current-child*)
-			 (x-drawable-y *current-child*)
-			 (x-drawable-width *current-child*)
-			 (x-drawable-height *current-child*)))
-    (frame (values (frame-rx *current-child*)
-		   (frame-ry *current-child*)
-		   (frame-rw *current-child*)
-		   (frame-rh *current-child*)))
+  (typecase (current-child)
+    (xlib:window (values (x-drawable-x (current-child))
+			 (x-drawable-y (current-child))
+			 (x-drawable-width (current-child))
+			 (x-drawable-height (current-child))))
+    (frame (values (frame-rx (current-child))
+		   (frame-ry (current-child))
+		   (frame-rw (current-child))
+		   (frame-rh (current-child))))
     (t (values 0 0 10 10))))
 
 (defmacro with-current-child-coord ((x y w h) &body body)

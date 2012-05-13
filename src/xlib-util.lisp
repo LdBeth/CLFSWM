@@ -215,12 +215,6 @@ they should be windows. So use this function to make a window out of them."
     (values host num)))
 
 
-(defun banish-pointer ()
-  "Move the pointer to the lower right corner of the screen"
-  (with-placement (*banish-pointer-placement* x y)
-    (xlib:warp-pointer *root* x y)))
-
-
 ;;; Transparency support
 (let ((opaque #xFFFFFFFF))
   (defun window-transparency (window)

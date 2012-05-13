@@ -39,7 +39,7 @@
   (let* ((text (format nil "~A [~A]"
 		       (limit-length (ensure-printable (child-name (xlib:input-focus *display*)))
 				     *circulate-text-limite*)
-		       (limit-length (ensure-printable (child-name *current-child*))
+		       (limit-length (ensure-printable (child-name (current-child)))
 				     *circulate-text-limite*)))
 	 (len (length text)))
     (xlib:draw-glyphs *pixmap-buffer* *circulate-gc*
@@ -59,10 +59,10 @@
 (defun reset-circulate-child ()
   (setf *circulate-hit* 0
 	*circulate-parent* nil
-	*circulate-orig* (frame-child *current-child*)))
+	*circulate-orig* (frame-child (current-child))))
 
 (defun reset-circulate-brother ()
-  (setf *circulate-parent* (find-parent-frame *current-child*)
+  (setf *circulate-parent* (find-parent-frame (current-child))
         *circulate-hit* 0)
   (when (frame-p *circulate-parent*)
     (setf *circulate-orig* (frame-child *circulate-parent*))))
@@ -71,7 +71,7 @@
 
 (defun reorder-child (direction)
   (no-focus)
-  (with-slots (child selected-pos) *current-child*
+  (with-slots (child selected-pos) (current-child)
     (unless *circulate-orig*
       (reset-circulate-child))
     (let ((len (length *circulate-orig*)))
@@ -85,27 +85,27 @@
 
 (defun reorder-brother (direction)
   (no-focus)
-  (let ((old-child *current-child*))
+  (let ((old-child (current-child)))
     (select-current-frame nil)
     (unless (and *circulate-orig* *circulate-parent*)
       (reset-circulate-brother))
     (let ((len (length *circulate-orig*)))
       (when (plusp len)
 	(when (frame-p *circulate-parent*)
-	  (let ((elem (nth (mod  (incf *circulate-hit* direction) len) *circulate-orig*)))
+	  (let ((elem (nth (mod (incf *circulate-hit* direction) len) *circulate-orig*)))
 	    (setf (frame-child *circulate-parent*) (cons elem (child-remove elem *circulate-orig*))
                   (frame-selected-pos *circulate-parent*) 0
-		  *current-child* (frame-selected-child *circulate-parent*))))
-        (when (and (not (child-root-p *current-child*))
+		  (current-child) (frame-selected-child *circulate-parent*))))
+        (when (and (not (child-root-p (current-child)))
                    (child-root-p old-child))
-          (change-root (find-root old-child) *current-child*))))
+          (change-root (find-root old-child) (current-child)))))
     (show-all-children t)
     (draw-circulate-mode-window)))
 
 (defun reorder-subchild (direction)
   (declare (ignore direction))
-  (when (frame-p *current-child*)
-    (let ((selected-child (frame-selected-child *current-child*)))
+  (when (frame-p (current-child))
+    (let ((selected-child (frame-selected-child (current-child))))
       (when (frame-p selected-child)
 	(no-focus)
 	(with-slots (child selected-pos) selected-child
@@ -122,14 +122,14 @@
 
 (defun circulate-select-next-child ()
   "Select the next child"
-  (when (frame-p *current-child*)
+  (when (frame-p (current-child))
     (when *circulate-parent*
       (reset-circulate-child))
     (reorder-child +1)))
 
 (defun circulate-select-previous-child ()
   "Select the previous child"
-  (when (frame-p *current-child*)
+  (when (frame-p (current-child))
     (when *circulate-parent*
       (reset-circulate-child))
     (reorder-child -1)))
@@ -248,60 +248,60 @@
 
 (defun select-next-child ()
   "Select the next child"
-  (when (frame-p *current-child*)
-    (setf *circulate-orig* (frame-child *current-child*)
+  (when (frame-p (current-child))
+    (setf *circulate-orig* (frame-child (current-child))
 	  *circulate-parent* nil)
     (circulate-mode :child-direction +1)))
 
 (defun select-previous-child ()
   "Select the previous child"
-  (when (frame-p *current-child*)
-    (setf *circulate-orig* (frame-child *current-child*)
+  (when (frame-p (current-child))
+    (setf *circulate-orig* (frame-child (current-child))
 	  *circulate-parent* nil)
     (circulate-mode :child-direction -1)))
 
 
 (defun select-next-brother ()
   "Select the next brother"
-  (setf *circulate-parent* (find-parent-frame *current-child*))
+  (setf *circulate-parent* (find-parent-frame (current-child)))
   (when (frame-p *circulate-parent*)
     (setf *circulate-orig* (frame-child *circulate-parent*)))
   (circulate-mode :brother-direction +1))
 
 (defun select-previous-brother ()
   "Select the previous brother"
-  (setf *circulate-parent* (find-parent-frame *current-child*))
+  (setf *circulate-parent* (find-parent-frame (current-child)))
   (when (frame-p *circulate-parent*)
     (setf *circulate-orig* (frame-child *circulate-parent*)))
   (circulate-mode :brother-direction -1))
 
 (defun select-next-subchild ()
   "Select the next subchild"
-  (when (and (frame-p *current-child*)
-	     (frame-p (frame-selected-child *current-child*)))
-    (setf *circulate-orig* (frame-child *current-child*)
+  (when (and (frame-p (current-child))
+	     (frame-p (frame-selected-child (current-child))))
+    (setf *circulate-orig* (frame-child (current-child))
 	  *circulate-parent* nil)
     (circulate-mode :subchild-direction +1)))
 
 
 (defun select-next-child-simple ()
   "Select the next child (do not enter in circulate mode)"
-  (when (frame-p *current-child*)
-    (with-slots (child) *current-child*
+  (when (frame-p (current-child))
+    (with-slots (child) (current-child)
       (setf child (rotate-list child)))
     (show-all-children)))
 
 
 
 (defun reorder-brother-simple (reorder-fun)
-  (unless (child-root-p *current-child*)
+  (unless (child-root-p (current-child))
     (no-focus)
     (select-current-frame nil)
-    (let ((parent-frame (find-parent-frame *current-child*)))
+    (let ((parent-frame (find-parent-frame (current-child))))
       (when (frame-p parent-frame)
         (with-slots (child) parent-frame
           (setf child (funcall reorder-fun child)
-                *current-child* (frame-selected-child parent-frame))))
+                (current-child) (frame-selected-child parent-frame))))
       (show-all-children t))))
 
 
@@ -318,27 +318,27 @@
 ;;; Spatial move functions
 (defun select-brother-generic-spatial-move (fun-found)
   "Select the nearest brother of the current child based on the fun-found function"
-  (let ((is-root-p (child-root-p *current-child*)))
+  (let ((is-root-p (child-root-p (current-child))))
     (when is-root-p
       (leave-frame)
       (sleep *spatial-move-delay-before*))
     (no-focus)
     (select-current-frame nil)
-    (let ((parent-frame (find-parent-frame *current-child*)))
+    (let ((parent-frame (find-parent-frame (current-child))))
       (when (frame-p parent-frame)
         (with-slots (child selected-pos) parent-frame
           (let ((found nil)
                 (found-dist nil))
             (dolist (c child)
-              (let ((dist (funcall fun-found *current-child* c)))
+              (let ((dist (funcall fun-found (current-child) c)))
                 (when (and dist
-                           (not (child-equal-p *current-child* c))
+                           (not (child-equal-p (current-child) c))
                            (or (not found)
                                (and found-dist (< dist found-dist))))
                   (setf found c
                         found-dist dist))))
             (when found
-              (setf *current-child* found
+              (setf (current-child) found
                     selected-pos 0
                     child (cons found (child-remove found child)))))))
       (show-all-children t)
@@ -379,4 +379,24 @@
                                            (when (< (child-y child) (child-y current))
                                              (distance (middle-child-x current) (child-y current)
                                                        (middle-child-x child) (child-y2 child))))))
+
+
+
+
+(defun select-generic-root (fun)
+  (no-focus)
+  (let* ((current-root (find-root (current-child)))
+         (parent (find-parent-frame (root-original current-root))))
+    (setf (frame-child parent) (funcall fun (frame-child parent))
+          (current-child) (frame-selected-child parent)))
+  (show-all-children t)
+  (leave-second-mode))
+
+(defun select-next-root ()
+  "Select the next root"
+  (select-generic-root #'rotate-list))
+
+(defun select-previous-root ()
+  "Select the previous root"
+  (select-generic-root #'anti-rotate-list))
 

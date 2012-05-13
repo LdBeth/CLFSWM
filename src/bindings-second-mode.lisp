@@ -122,6 +122,9 @@
   (define-second-key ("h") 'rotate-frame-geometry)
   (define-second-key ("h" :shift) 'anti-rotate-frame-geometry)
 
+  (define-second-key ("Page_Up") 'select-next-root)
+  (define-second-key ("Page_Down") 'select-previous-root)
+
   (define-second-key ("Right") 'speed-mouse-right)
   (define-second-key ("Left") 'speed-mouse-left)
   (define-second-key ("Down") 'speed-mouse-down)
