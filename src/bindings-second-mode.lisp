@@ -52,16 +52,16 @@
   (open-menu (find-menu 'action-by-number-menu)))
 
 (defun open-frame-pack-menu ()
-  "Open the frame pack menu"
-  (open-menu (find-menu 'frame-pack-menu)))
+  "Open the frame pack/fill/resize menu"
+  (open-menu (find-menu 'frame-movement-menu)))
 
-(defun open-frame-fill-menu ()
-  "Open the frame fill menu"
-  (open-menu (find-menu 'frame-fill-menu)))
+(defun open-root-menu ()
+  "Open the root menu"
+  (open-menu (find-menu 'root-menu) nil t))
 
-(defun open-frame-resize-menu ()
-  "Open the frame resize menu"
-  (open-menu (find-menu 'frame-resize-menu)))
+(defun open-child-menu ()
+  "Open the child menu"
+  (open-menu (find-menu 'child-menu)))
 
 (defun tile-current-frame ()
   "Tile the current frame"
@@ -97,8 +97,8 @@
   (define-second-key ("n") 'open-action-by-name-menu)
   (define-second-key ("u") 'open-action-by-number-menu)
   (define-second-key ("p") 'open-frame-pack-menu)
-  (define-second-key ("l") 'open-frame-fill-menu)
-  (define-second-key ("r") 'open-frame-resize-menu)
+  (define-second-key ("r") 'open-root-menu)
+  (define-second-key ("c") 'open-child-menu)
   (define-second-key ("x") 'update-layout-managed-children-position)
   (define-second-key ("g" :control) 'stop-all-pending-actions)
   (define-second-key ("q") 'sm-delete-focus-window)
@@ -108,7 +108,7 @@
   (define-second-key ("exclam") 'run-program-from-query-string)
   (define-second-key ("Return") 'leave-second-mode)
   (define-second-key ("Escape") 'leave-second-mode)
-  (define-second-key ("t") 'tile-current-frame)
+  (define-second-key ("t" :shift) 'tile-current-frame)
   (define-second-key ("Home" :mod-1 :control :shift) 'exit-clfswm)
   (define-second-key ("Right" :mod-1) 'select-next-brother)
   (define-second-key ("Left" :mod-1) 'select-previous-brother)
@@ -167,7 +167,7 @@
   (define-second-key ("v" :control :shift) 'paste-selection-no-clear)
   (define-second-key ("Delete" :control) 'remove-current-child)
   (define-second-key ("Delete") 'delete-current-child)
-  (define-shell ("c") b-start-xterm "start an xterm" "cd $HOME && exec xterm")
+  (define-shell ("t") b-start-xterm "start an xterm" "cd $HOME && exec xterm")
   (define-shell ("e") b-start-emacs "start emacs" "cd $HOME && exec emacs")
   (define-shell ("e" :control) b-start-emacsremote
     "start an emacs for another user"

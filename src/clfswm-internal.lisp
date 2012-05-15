@@ -642,21 +642,26 @@
     (root-child (find-root (current-child))))
 
   (defun rotate-root-geometry ()
-    (let* ((current (first root-list))
-           (orig-x (root-x current))
-           (orig-y (root-y current))
-           (orig-w (root-w current))
-           (orig-h (root-h current)))
-      (dolist (root (rest root-list))
-        (setf (root-x current) (root-x root)
-              (root-y current) (root-y root)
-              (root-w current) (root-w root)
-              (root-h current) (root-h root)
-              current root))
-      (setf (root-x current) orig-x
-            (root-y current) orig-y
-            (root-w current) orig-w
-            (root-h current) orig-h)))
+    (let* ((first (first root-list))
+           (len (length root-list))
+           (orig-x (root-x first))
+           (orig-y (root-y first))
+           (orig-w (root-w first))
+           (orig-h (root-h first)))
+      (dotimes (i (1- len))
+        (let ((root-1 (nth i root-list))
+              (root-2 (nth (1+ i) root-list)))
+          (rotatef (root-x root-1) (root-x root-2))
+          (rotatef (root-y root-1) (root-y root-2))
+          (rotatef (root-w root-1) (root-w root-2))
+          (rotatef (root-h root-1) (root-h root-2))))
+      (let ((root-1 (nth (1- len) root-list)))
+        (setf (root-x root-1) orig-x)
+        (setf (root-y root-1) orig-y)
+        (setf (root-w root-1) orig-w)
+        (setf (root-h root-1) orig-h))))
+
+
 
   (defun anti-rotate-root-geometry ()
     (setf root-list (nreverse root-list))

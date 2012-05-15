@@ -50,6 +50,7 @@
 (add-sub-menu 'main "F1" 'help-menu "Help menu")
 (add-sub-menu 'main "d" 'standard-menu "Standard menu")
 (add-sub-menu 'main "c" 'child-menu "Child menu")
+(add-sub-menu 'main "r" 'root-menu "Root menu")
 (add-sub-menu 'main "f" 'frame-menu "Frame menu")
 (add-sub-menu 'main "w" 'window-menu "Window menu")
 (add-sub-menu 'main "s" 'selection-menu "Selection menu")
@@ -89,6 +90,11 @@
 (add-menu-key 'child-menu "Page_Up" 'frame-lower-child)
 (add-menu-key 'child-menu "Page_Down" 'frame-raise-child)
 
+(add-menu-key 'root-menu "n" 'select-next-root)
+(add-menu-key 'root-menu "p" 'select-previous-root)
+(add-menu-key 'root-menu "g" 'rotate-root-geometry-next)
+(add-menu-key 'root-menu "f" 'rotate-root-geometry-previous)
+(add-menu-key 'root-menu "m" 'exchange-root-geometry-with-mouse)
 
 
 (add-sub-menu 'frame-menu "a" 'frame-adding-menu "Adding frame menu")
