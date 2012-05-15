@@ -124,6 +124,8 @@
 
   (define-second-key ("Page_Up") 'select-next-root)
   (define-second-key ("Page_Down") 'select-previous-root)
+  (define-second-key ("Page_Up" :control) 'rotate-root-geometry-next)
+  (define-second-key ("Page_Down" :control) 'rotate-root-geometry-previous)
 
   (define-second-key ("Right") 'speed-mouse-right)
   (define-second-key ("Left") 'speed-mouse-left)

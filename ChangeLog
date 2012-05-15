@@ -1,3 +1,9 @@
+2012-05-15  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-circulate-mode.lisp (rotate-root-geometry-next)
+	(rotate-root-geometry-previous): New second mode binding to change
+	root geometry.
+
 2012-05-13  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp: Remove the *current-child* variable

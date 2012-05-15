@@ -374,11 +374,6 @@
        ,@body)))
 
 
-(defun is-in-current-child-p (child)
-  (and (frame-p (current-child))
-       (child-member child (frame-child (current-child)))))
-
-
 
 ;; (with-all-children (*root-frame* child) (typecase child (xlib:window (print child)) (frame (print (frame-number child)))))
 (defmacro with-all-children ((root child) &body body)
@@ -525,9 +520,6 @@
     (apply #'make-instance 'frame :number number :window window :gc gc args)))
 
 
-
-
-
 (defun add-frame (frame parent)
   (push frame (frame-child parent))
   frame)
@@ -546,22 +538,6 @@
 	    w (w-px->fl prw parent)
 	    h (h-px->fl prh parent))
       (xlib:display-finish-output *display*))))
-
-(defun fixe-real-size (frame parent)
-  "Fixe real (pixel) coordinates in float coordinates"
-  (when (frame-p frame)
-    (with-slots (x y w h rx ry rw rh) frame
-      (setf x (x-px->fl rx parent)
-	    y (y-px->fl ry parent)
-	    w (w-px->fl (anti-adj-border-wh rw parent) parent)
-	    h (h-px->fl (anti-adj-border-wh rh parent) parent)))))
-
-(defun fixe-real-size-current-child ()
-  "Fixe real (pixel) coordinates in float coordinates for children in the current child"
-  (when (frame-p (current-child))
-    (dolist (child (frame-child (current-child)))
-      (fixe-real-size child (current-child)))))
-
 
 
 
@@ -665,14 +641,34 @@
   (defun find-current-root ()
     (root-child (find-root (current-child))))
 
+  (defun rotate-root-geometry ()
+    (let* ((current (first root-list))
+           (orig-x (root-x current))
+           (orig-y (root-y current))
+           (orig-w (root-w current))
+           (orig-h (root-h current)))
+      (dolist (root (rest root-list))
+        (setf (root-x current) (root-x root)
+              (root-y current) (root-y root)
+              (root-w current) (root-w root)
+              (root-h current) (root-h root)
+              current root))
+      (setf (root-x current) orig-x
+            (root-y current) orig-y
+            (root-w current) orig-w
+            (root-h current) orig-h)))
+
+  (defun anti-rotate-root-geometry ()
+    (setf root-list (nreverse root-list))
+    (rotate-root-geometry)
+    (setf root-list (nreverse root-list)))
+
   (defun current-child ()
     current-child)
 
   (defun current-child-setter (value)
-    (let ((current-root (find-root current-child)))
-      (dolist (root root-list)
-        (when (equal root current-root)
-          (setf (root-current-child root) current-child))))
+    (awhen (find-root value)
+      (setf (root-current-child it) value))
     (setf current-child value))
 
   (defmacro with-current-child ((new-child) &body body)
@@ -683,10 +679,30 @@
          (setf (current-child) ,new-child)
          (let ((,ret (multiple-value-list (progn ,@body))))
            (setf (current-child) ,old-child)
-           (values-list ,ret)))))
-)
+           (values-list ,ret))))))
 
 (defsetf current-child current-child-setter)
+
+
+(defun is-in-current-child-p (child)
+  (and (frame-p (current-child))
+       (child-member child (frame-child (current-child)))))
+
+
+(defun fixe-real-size (frame parent)
+  "Fixe real (pixel) coordinates in float coordinates"
+  (when (frame-p frame)
+    (with-slots (x y w h rx ry rw rh) frame
+      (setf x (x-px->fl rx parent)
+	    y (y-px->fl ry parent)
+	    w (w-px->fl (anti-adj-border-wh rw parent) parent)
+	    h (h-px->fl (anti-adj-border-wh rh parent) parent)))))
+
+(defun fixe-real-size-current-child ()
+  "Fixe real (pixel) coordinates in float coordinates for children in the current child"
+  (when (frame-p (current-child))
+    (dolist (child (frame-child (current-child)))
+      (fixe-real-size child (current-child)))))
 
 
 
@@ -704,7 +720,7 @@
                     (parse-integer string :junk-allowed t))
                   (split-string (substitute #\space #\x (substitute #\space #\, line))))))
 
-(defun get-connected-heads-size (&optional (fake nil))
+(defun get-connected-heads-size (&optional (fake t))
   (labels ((heads-info ()
              (if (not fake)
                  (do-shell "xdpyinfo -ext XINERAMA")

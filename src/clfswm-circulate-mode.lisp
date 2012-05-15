@@ -403,3 +403,18 @@
   "Select the previous root"
   (select-generic-root #'anti-rotate-list))
 
+
+(defun rotate-root-geometry-generic (fun)
+  (no-focus)
+  (funcall fun)
+  (show-all-children t)
+  (leave-second-mode))
+
+
+(defun rotate-root-geometry-next ()
+  "Rotate root geometry to next root"
+  (rotate-root-geometry-generic #'rotate-root-geometry))
+
+(defun rotate-root-geometry-previous ()
+  "Rotate root geometry to previous root"
+  (rotate-root-geometry-generic #'anti-rotate-root-geometry))
