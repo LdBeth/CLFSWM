@@ -1,3 +1,8 @@
+2012-05-17  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (exchange-root-geometry-with-mouse): New
+	function and menu.
+
 2012-05-16  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/menu-def.lisp: New root menu.

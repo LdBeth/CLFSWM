@@ -1722,3 +1722,81 @@ For window: set current child to window or its parent according to window-parent
 (defun anti-rotate-frame-geometry ()
   "Anti rotate brother frame geometry"
   (rotate-frame-geometry-generic #'reverse))
+
+
+;;; Root functions utility
+(defun select-generic-root (fun restart-menu)
+  (no-focus)
+  (let* ((current-root (find-root (current-child)))
+         (parent (find-parent-frame (root-original current-root))))
+    (setf (frame-child parent) (funcall fun (frame-child parent)))
+    (let ((new-root (find-root (frame-selected-child parent))))
+      (setf (current-child) (aif (root-current-child new-root)
+                                 it
+                                 (frame-selected-child parent)))))
+  (show-all-children t)
+  (if restart-menu
+      (open-menu (find-menu 'root-menu))
+      (leave-second-mode)))
+
+(defun select-next-root ()
+  "Select the next root"
+  (select-generic-root #'rotate-list nil))
+
+(defun select-previous-root ()
+  "Select the previous root"
+  (select-generic-root #'anti-rotate-list nil))
+
+
+(defun select-next-root-restart-menu ()
+  "Select the next root"
+  (select-generic-root #'rotate-list t))
+
+(defun select-previous-root-restart-menu ()
+  "Select the previous root"
+  (select-generic-root #'anti-rotate-list t))
+
+
+(defun rotate-root-geometry-generic (fun restart-menu)
+  (no-focus)
+  (funcall fun)
+  (show-all-children t)
+  (if restart-menu
+      (open-menu (find-menu 'root-menu))
+      (leave-second-mode)))
+
+
+(defun rotate-root-geometry-next ()
+  "Rotate root geometry to next root"
+  (rotate-root-geometry-generic #'rotate-root-geometry nil))
+
+(defun rotate-root-geometry-previous ()
+  "Rotate root geometry to previous root"
+  (rotate-root-geometry-generic #'anti-rotate-root-geometry nil))
+
+(defun rotate-root-geometry-next-restart-menu ()
+  "Rotate root geometry to next root"
+  (rotate-root-geometry-generic #'rotate-root-geometry t))
+
+(defun rotate-root-geometry-previous-restart-menu ()
+  "Rotate root geometry to previous root"
+  (rotate-root-geometry-generic #'anti-rotate-root-geometry t))
+
+
+
+(defun exchange-root-geometry-with-mouse ()
+  "Exchange two root geometry pointed with the mouse"
+  (open-notify-window '("Select the first root to exchange"))
+  (wait-no-key-or-button-press)
+  (wait-mouse-button-release)
+  (close-notify-window)
+  (multiple-value-bind (x1 y1) (xlib:query-pointer *root*)
+    (open-notify-window '("Select the second root to exchange"))
+    (wait-no-key-or-button-press)
+    (wait-mouse-button-release)
+    (close-notify-window)
+    (multiple-value-bind (x2 y2) (xlib:query-pointer *root*)
+      (exchange-root-geometry (find-root-by-coordinates x1 y1)
+                              (find-root-by-coordinates x2 y2))))
+  (leave-second-mode))
+

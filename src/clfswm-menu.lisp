@@ -137,7 +137,7 @@
 	 (funcall action)))))
 
 
-(defun open-menu (&optional (menu *menu*) (parent nil) (restart-menu nil))
+(defun open-menu (&optional (menu *menu*) (parent nil))
   "Open the main menu"
   (when menu
     (let ((action nil)
@@ -165,9 +165,6 @@
           (when selected-item
             (awhen (nth selected-item (menu-item menu))
               (setf action (menu-item-value it)))))
-        (let ((*in-second-mode* (if restart-menu nil *in-second-mode*)))
-          (open-menu-do-action action menu parent))
-        (when (and action restart-menu)
-          (open-menu menu parent restart-menu))))))
+        (open-menu-do-action action menu parent)))))
 
 

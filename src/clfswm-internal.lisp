@@ -641,6 +641,12 @@
   (defun find-current-root ()
     (root-child (find-root (current-child))))
 
+  (defun exchange-root-geometry (root-1 root-2)
+    (rotatef (root-x root-1) (root-x root-2))
+    (rotatef (root-y root-1) (root-y root-2))
+    (rotatef (root-w root-1) (root-w root-2))
+    (rotatef (root-h root-1) (root-h root-2)))
+
   (defun rotate-root-geometry ()
     (let* ((first (first root-list))
            (len (length root-list))
@@ -649,12 +655,7 @@
            (orig-w (root-w first))
            (orig-h (root-h first)))
       (dotimes (i (1- len))
-        (let ((root-1 (nth i root-list))
-              (root-2 (nth (1+ i) root-list)))
-          (rotatef (root-x root-1) (root-x root-2))
-          (rotatef (root-y root-1) (root-y root-2))
-          (rotatef (root-w root-1) (root-w root-2))
-          (rotatef (root-h root-1) (root-h root-2))))
+        (exchange-root-geometry (nth i root-list) (nth (1+ i) root-list)))
       (let ((root-1 (nth (1- len) root-list)))
         (setf (root-x root-1) orig-x)
         (setf (root-y root-1) orig-y)
@@ -662,12 +663,12 @@
         (setf (root-h root-1) orig-h))))
 
 
-
   (defun anti-rotate-root-geometry ()
     (setf root-list (nreverse root-list))
     (rotate-root-geometry)
     (setf root-list (nreverse root-list)))
 
+  ;;; Current child functions
   (defun current-child ()
     current-child)
 

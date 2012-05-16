@@ -57,7 +57,7 @@
 
 (defun open-root-menu ()
   "Open the root menu"
-  (open-menu (find-menu 'root-menu) nil t))
+  (open-menu (find-menu 'root-menu)))
 
 (defun open-child-menu ()
   "Open the child menu"

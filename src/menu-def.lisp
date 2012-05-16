@@ -90,10 +90,10 @@
 (add-menu-key 'child-menu "Page_Up" 'frame-lower-child)
 (add-menu-key 'child-menu "Page_Down" 'frame-raise-child)
 
-(add-menu-key 'root-menu "n" 'select-next-root)
-(add-menu-key 'root-menu "p" 'select-previous-root)
-(add-menu-key 'root-menu "g" 'rotate-root-geometry-next)
-(add-menu-key 'root-menu "f" 'rotate-root-geometry-previous)
+(add-menu-key 'root-menu "n" 'select-next-root-restart-menu)
+(add-menu-key 'root-menu "p" 'select-previous-root-restart-menu)
+(add-menu-key 'root-menu "g" 'rotate-root-geometry-next-restart-menu)
+(add-menu-key 'root-menu "f" 'rotate-root-geometry-previous-restart-menu)
 (add-menu-key 'root-menu "m" 'exchange-root-geometry-with-mouse)
 
 
