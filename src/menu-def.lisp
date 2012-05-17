@@ -94,7 +94,7 @@
 (add-menu-key 'root-menu "p" 'select-previous-root-restart-menu)
 (add-menu-key 'root-menu "g" 'rotate-root-geometry-next-restart-menu)
 (add-menu-key 'root-menu "f" 'rotate-root-geometry-previous-restart-menu)
-(add-menu-key 'root-menu "m" 'exchange-root-geometry-with-mouse)
+(add-menu-key 'root-menu "x" 'exchange-root-geometry-with-mouse)
 
 
 (add-sub-menu 'frame-menu "a" 'frame-adding-menu "Adding frame menu")

@@ -1729,11 +1729,12 @@ For window: set current child to window or its parent according to window-parent
   (no-focus)
   (let* ((current-root (find-root (current-child)))
          (parent (find-parent-frame (root-original current-root))))
-    (setf (frame-child parent) (funcall fun (frame-child parent)))
-    (let ((new-root (find-root (frame-selected-child parent))))
-      (setf (current-child) (aif (root-current-child new-root)
-                                 it
-                                 (frame-selected-child parent)))))
+    (when parent
+      (setf (frame-child parent) (funcall fun (frame-child parent)))
+      (let ((new-root (find-root (frame-selected-child parent))))
+        (setf (current-child) (aif (root-current-child new-root)
+                                   it
+                                   (frame-selected-child parent))))))
   (show-all-children t)
   (if restart-menu
       (open-menu (find-menu 'root-menu))

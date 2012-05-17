@@ -642,10 +642,11 @@
     (root-child (find-root (current-child))))
 
   (defun exchange-root-geometry (root-1 root-2)
-    (rotatef (root-x root-1) (root-x root-2))
-    (rotatef (root-y root-1) (root-y root-2))
-    (rotatef (root-w root-1) (root-w root-2))
-    (rotatef (root-h root-1) (root-h root-2)))
+    (when (and root-1 root-2)
+      (rotatef (root-x root-1) (root-x root-2))
+      (rotatef (root-y root-1) (root-y root-2))
+      (rotatef (root-w root-1) (root-w root-2))
+      (rotatef (root-h root-1) (root-h root-2))))
 
   (defun rotate-root-geometry ()
     (let* ((first (first root-list))
@@ -726,7 +727,7 @@
                     (parse-integer string :junk-allowed t))
                   (split-string (substitute #\space #\x (substitute #\space #\, line))))))
 
-(defun get-connected-heads-size (&optional (fake nil))
+(defun get-connected-heads-size (&optional (fake (string= (getenv "DISPLAY") ":1")))
   (labels ((heads-info ()
              (if (not fake)
                  (do-shell "xdpyinfo -ext XINERAMA")
