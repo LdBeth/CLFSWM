@@ -155,6 +155,7 @@
     (multiple-value-bind (x2 y2) (xlib:query-pointer *root*)
       (exchange-root-geometry (find-root-by-coordinates x1 y1)
                               (find-root-by-coordinates x2 y2))))
+  (show-all-children)
   (leave-second-mode))
 
 (defun change-current-root-geometry ()
@@ -166,7 +167,8 @@
          (h (query-number "New root height" (root-h root))))
     (setf (root-x root) x  (root-y root) y
           (root-w root) w  (root-h root) h)
-    (show-all-children)))
+    (show-all-children)
+    (leave-second-mode)))
 
 
 

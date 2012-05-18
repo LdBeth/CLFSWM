@@ -180,3 +180,78 @@
   (with-current-child-coord (x y w h)
     (values (+ x (- w width 2))
 	    (+ y (- h height 2)))))
+
+
+;;;
+;;; Current root placement
+;;;
+(defun current-root-coord ()
+  (let ((root (find-root (current-child))))
+    (values (root-x root) (root-y root)
+            (root-w root) (root-h root))))
+
+
+(defmacro with-current-root-coord ((x y w h) &body body)
+  `(multiple-value-bind (,x ,y ,w ,h)
+       (current-root-coord)
+     ,@body))
+
+
+(defun top-left-root-placement (&optional (width 0) (height 0))
+  (declare (ignore width height))
+  (with-current-root-coord (x y w h)
+    (declare (ignore w h))
+    (values (+ x 2)
+	    (+ y 2))))
+
+(defun top-middle-root-placement (&optional (width 0) (height 0))
+  (declare (ignore height))
+  (with-current-root-coord (x y w h)
+    (declare (ignore h))
+    (values (+ x (truncate (/ (- w width) 2)))
+	    (+ y 2))))
+
+(defun top-right-root-placement (&optional (width 0) (height 0))
+  (declare (ignore height))
+  (with-current-root-coord (x y w h)
+    (declare (ignore h))
+    (values (+ x (- w width 2))
+	    (+ y 2))))
+
+
+
+(defun middle-left-root-placement (&optional (width 0) (height 0))
+  (declare (ignore width))
+  (with-current-root-coord (x y w h)
+    (declare (ignore w))
+    (values (+ x 2)
+	    (+ y (truncate (/ (- h height) 2))))))
+
+(defun middle-middle-root-placement (&optional (width 0) (height 0))
+  (with-current-root-coord (x y w h)
+    (values (+ x (truncate (/ (- w width) 2)))
+	    (+ y (truncate (/ (- h height) 2))))))
+
+(defun middle-right-root-placement (&optional (width 0) (height 0))
+  (with-current-root-coord (x y w h)
+    (values (+ x (- w width 2))
+	    (+ y (truncate (/ (- h height) 2))))))
+
+
+(defun bottom-left-root-placement (&optional (width 0) (height 0))
+  (declare (ignore width))
+  (with-current-root-coord (x y w h)
+    (declare (ignore w))
+    (values (+ x 2)
+	    (+ y (- h height 2)))))
+
+(defun bottom-middle-root-placement (&optional (width 0) (height 0))
+  (with-current-root-coord (x y w h)
+    (values (+ x (truncate (/ (- w width) 2)))
+	    (+ y (- h height 2)))))
+
+(defun bottom-right-root-placement (&optional (width 0) (height 0))
+  (with-current-root-coord (x y w h)
+    (values (+ x (- w width 2))
+	    (+ y (- h height 2)))))
+

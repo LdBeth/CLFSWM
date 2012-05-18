@@ -1,5 +1,7 @@
 2012-05-18  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-placement.lisp: New root placement possibility.
+
 	* src/clfswm-util.lisp (change-current-root-geometry): New
 	function.
 

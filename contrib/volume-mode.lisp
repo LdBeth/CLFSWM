@@ -63,7 +63,7 @@
 (format t "Loading Volume mode code... ")
 
 (defparameter *volume-keys* nil)
-(defconfig *volume-mode-placement* 'bottom-middle-placement
+(defconfig *volume-mode-placement* 'bottom-middle-root-placement
   'Placement "Volume mode window placement")
 
 

@@ -216,30 +216,31 @@ loading configuration file and before opening the display.")
 
 ;;; Placement variables. A list of two absolute coordinates
 ;;; or a function: 'Y-X-placement' for absolute placement or
-;;; 'Y-X-child-placement' for child relative placement.
+;;; 'Y-X-child-placement' for child relative placement or
+;;; 'Y-X-root-placement' for root relative placement.
 ;;; Where Y-X are one of:
 ;;;
 ;;; top-left     top-middle     top-right
 ;;; middle-left  middle-middle  middle-right
 ;;; bottom-left  bottom-middle  bottom-right
 ;;;
-(defconfig *banish-pointer-placement* 'bottom-right-child-placement
+(defconfig *banish-pointer-placement* 'bottom-right-root-placement
   'Placement "Pointer banishment placement")
-(defconfig *second-mode-placement* 'top-middle-child-placement
+(defconfig *second-mode-placement* 'top-middle-root-placement
   'Placement "Second mode window placement")
-(defconfig *info-mode-placement* 'top-left-child-placement
+(defconfig *info-mode-placement* 'top-left-root-placement
   'Placement "Info mode window placement")
-(defconfig *query-mode-placement* 'top-left-child-placement
+(defconfig *query-mode-placement* 'top-left-root-placement
   'Placement "Query mode window placement")
-(defconfig *circulate-mode-placement* 'bottom-middle-child-placement
+(defconfig *circulate-mode-placement* 'bottom-middle-root-placement
   'Placement "Circulate mode window placement")
-(defconfig *expose-mode-placement* 'top-left-child-placement
+(defconfig *expose-mode-placement* 'top-left-root-placement
   'Placement "Expose mode window placement (Selection keys position)")
-(defconfig *notify-window-placement* 'bottom-right-child-placement
+(defconfig *notify-window-placement* 'bottom-right-root-placement
   'Placement "Notify window placement")
-(defconfig *ask-close/kill-placement* 'top-right-child-placement
+(defconfig *ask-close/kill-placement* 'top-right-root-placement
   'Placement "Ask close/kill window placement")
-(defconfig *unmanaged-window-placement* 'middle-middle-child-placement
+(defconfig *unmanaged-window-placement* 'middle-middle-root-placement
   'Placement "Unmanager window placement")
 
 
