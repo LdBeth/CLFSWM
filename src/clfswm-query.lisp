@@ -337,4 +337,8 @@
 
 (defun query-number (msg &optional (default 0))
   "Query a number from the query input"
-  (parse-integer (or (query-string msg (format nil "~A" default)) "") :junk-allowed t))
+  (multiple-value-bind (string return)
+      (query-string msg (format nil "~A" default))
+    (if (equal return :Return)
+        (or (parse-integer (or string "") :junk-allowed t) default)
+        default)))
