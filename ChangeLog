@@ -1,3 +1,8 @@
+2012-05-19  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-placement.lisp: Adjust width and height in child and
+	root placement to prevent too big child size.
+
 2012-05-18  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-placement.lisp: New root placement possibility.
