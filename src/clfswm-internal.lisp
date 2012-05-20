@@ -593,7 +593,6 @@
     (rec base)))
 
 ;;; Multiple roots support (replace the old *current-root* variable)
-;; TODO: Add find-root-by-coordinates, change-root-geometry
 (let ((root-list nil)
       (current-child nil))
   (defun define-as-root (child x y width height)
