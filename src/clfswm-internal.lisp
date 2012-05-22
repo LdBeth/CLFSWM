@@ -595,6 +595,10 @@
 ;;; Multiple roots support (replace the old *current-root* variable)
 (let ((root-list nil)
       (current-child nil))
+  (defun reset-root-list ()
+    (setf root-list nil
+          current-child nil))
+
   (defun define-as-root (child x y width height)
     (push (make-root :child child :original child :current-child nil :x x :y y :w width :h height) root-list))
 
@@ -758,6 +762,7 @@ XINERAMA version 1.1 opcode: 150
   (let ((sizes (get-connected-heads-size))
         (width (xlib:screen-width *screen*))
         (height (xlib:screen-height *screen*)))
+    (reset-root-list)
     ;;(add-placed-frame-tmp (first (frame-child *root-frame*)) 2)
     (if (<= (length sizes) 1)
         (define-as-root *root-frame* (- *border-size*) (- *border-size*) width height)

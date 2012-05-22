@@ -205,8 +205,11 @@
 ;;;
 ;;; Current root placement
 ;;;
+(defparameter *get-current-root-fun* (lambda ()
+                                       (find-root (current-child))))
+
 (defun current-root-coord ()
-  (let ((root (find-root (current-child))))
+  (let ((root (funcall *get-current-root-fun*)))
     (values (root-x root) (root-y root)
             (root-w root) (root-h root))))
 
