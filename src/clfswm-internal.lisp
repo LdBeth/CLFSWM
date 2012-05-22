@@ -762,7 +762,6 @@ XINERAMA version 1.1 opcode: 150
   (let ((sizes (get-connected-heads-size))
         (width (xlib:screen-width *screen*))
         (height (xlib:screen-height *screen*)))
-    (reset-root-list)
     ;;(add-placed-frame-tmp (first (frame-child *root-frame*)) 2)
     (if (<= (length sizes) 1)
         (define-as-root *root-frame* (- *border-size*) (- *border-size*) width height)

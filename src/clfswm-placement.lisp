@@ -214,6 +214,8 @@
             (root-w root) (root-h root))))
 
 
+
+
 (defmacro with-current-root-coord ((x y w h) &body body)
   `(multiple-value-bind (,x ,y ,w ,h)
        (current-root-coord)
