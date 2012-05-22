@@ -32,7 +32,7 @@
 
 (format t "Loading Toolbar code... ")
 
-(defstruct toolbar root-x root-y direction size thickness placement autohide modules font window gc)
+(defstruct toolbar root-x root-y root direction size thickness placement autohide modules font window gc)
 
 (defparameter *toolbar-list* nil)
 
@@ -43,7 +43,7 @@
   'Toolbar-Window "Toolbar Window background color")
 (defconfig *toolbar-window-foreground* "green"
   'Toolbar-Window "Toolbar Window foreground color")
-(defconfig *toolbar-window-border* "grey70"
+(defconfig *toolbar-window-border* "red"
   'Toolbar-Window "Toolbar Window border color")
 (defconfig *toolbar-window-transparency* *default-transparency*
   'Toolbar-window "Toolbar window background transparency")
@@ -52,6 +52,25 @@
 
 (defconfig *toolbar-window-placement* 'top-left-placement
   'Placement "Toolbar window placement")
+
+
+
+(defun toolbar-adjust-root-size (toolbar)
+  (unless (toolbar-autohide toolbar)
+    (let ((root (toolbar-root toolbar))
+          (placement-name (symbol-name (toolbar-placement toolbar)))
+          (thickness (+ (toolbar-thickness toolbar) (* 2 *border-size*))))
+      (case (toolbar-direction toolbar)
+        (:horiz (cond ((search "TOP" placement-name)
+                       (incf (root-y root) thickness)
+                       (decf (root-h root) thickness))
+                      ((search "BOTTOM" placement-name)
+                       (decf (root-h root) thickness))))
+        (t (cond ((search "LEFT" placement-name)
+                  (incf (root-x root) thickness)
+                  (decf (root-w root) thickness))
+                 ((search "RIGHT" placement-name)
+                  (decf (root-w root) thickness))))))))
 
 
 (let ((windows-list nil))
@@ -87,9 +106,9 @@
   ;;	    font nil))
 
   (defun open-toolbar (toolbar)
-    (dbg toolbar)
     (let ((root (find-root-by-coordinates (toolbar-root-x toolbar) (toolbar-root-y toolbar))))
       (when (root-p root)
+        (setf (toolbar-root toolbar) root)
         (let ((*get-current-root-fun* (lambda () root)))
           (setf (toolbar-font toolbar) (xlib:open-font *display* *toolbar-window-font-string*))
           (let* ((width (if (equal (toolbar-direction toolbar) :horiz)
@@ -98,9 +117,7 @@
                  (height (if (equal (toolbar-direction toolbar) :horiz)
                              (toolbar-thickness toolbar)
                              (round (/ (* (root-h root) (toolbar-size toolbar)) 100)))))
-            (dbg width height)
             (with-placement ((toolbar-placement toolbar) x y width height)
-              (dbg x y width height)
               (setf (toolbar-window toolbar) (xlib:create-window :parent *root*
                                                                  :x x
                                                                  :y y
@@ -124,16 +141,13 @@
               ;;(refresh-toolbar-window)
               (xlib:display-finish-output *display*))))))))
 
-
-;;(defun open-toolbar (toolbar)
-;;  ;;(open-toolbar-window '("toto plop")))
-;;  (dbg toolbar)
-;;  )
-
 (defun open-all-toolbars ()
   "Open all toolbars"
   (dolist (toolbar *toolbar-list*)
-    (open-toolbar toolbar)))
+    (open-toolbar toolbar))
+  (dolist (toolbar *toolbar-list*)
+    (toolbar-adjust-root-size toolbar)))
+
 
 (defun add-toolbar (root-x root-y direction size placement autohide &rest modules)
   "Add a new toolbar.
