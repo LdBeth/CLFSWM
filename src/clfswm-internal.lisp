@@ -652,20 +652,22 @@
       (rotatef (root-h root-1) (root-h root-2))))
 
   (defun rotate-root-geometry ()
-    (let* ((first (first root-list))
-           (len (length root-list))
-           (orig-x (root-x first))
-           (orig-y (root-y first))
-           (orig-w (root-w first))
-           (orig-h (root-h first)))
-      (dotimes (i (1- len))
-        (exchange-root-geometry (nth i root-list) (nth (1+ i) root-list)))
-      (let ((root-1 (nth (1- len) root-list)))
-        (setf (root-x root-1) orig-x)
-        (setf (root-y root-1) orig-y)
-        (setf (root-w root-1) orig-w)
-        (setf (root-h root-1) orig-h))))
-
+    (let* ((current (first root-list))
+           (orig-x (root-x current))
+           (orig-y (root-y current))
+           (orig-w (root-w current))
+           (orig-h (root-h current)))
+      (dolist (elem (rest root-list))
+        (setf (root-x current) (root-x elem)
+              (root-y current) (root-y elem)
+              (root-w current) (root-w elem)
+              (root-h current) (root-h elem)
+              current elem))
+      (let ((last (car (last root-list))))
+        (setf (root-x last) orig-x
+              (root-y last) orig-y
+              (root-w last) orig-w
+              (root-h last) orig-h))))
 
   (defun anti-rotate-root-geometry ()
     (setf root-list (nreverse root-list))
@@ -1201,7 +1203,7 @@ XINERAMA version 1.1 opcode: 150
 (defun set-current-root (child parent window-parent)
   "Set current root if parent is not in current root"
   (let ((root (find-root child)))
-    (when (and window-parent
+    (when (and root window-parent
                (not (child-root-p child))
                (not (find-child parent (root-child root))))
       (change-root root parent)
@@ -1239,7 +1241,7 @@ For window: set current child to window or its parent according to window-parent
 (defun enter-frame ()
   "Enter in the selected frame - ie make it the root frame"
   (let ((root (find-root (current-child))))
-    (unless (child-equal-p (root-child root) (current-child))
+    (when (and root (not (child-equal-p (root-child root) (current-child))))
       (change-root root (current-child)))
     (show-all-children t)))
 
@@ -1305,17 +1307,19 @@ For window: set current child to window or its parent according to window-parent
 (defun switch-to-root-frame (&key (show-later nil))
   "Switch to the root frame"
   (let ((root (find-root (current-child))))
-    (change-root root (root-original root)))
-  (unless show-later
-    (show-all-children t)))
+    (when root
+      (change-root root (root-original root)))
+    (unless show-later
+      (show-all-children t))))
 
 (defun switch-and-select-root-frame (&key (show-later nil))
   "Switch and select the root frame"
   (let ((root (find-root (current-child))))
-    (change-root root (root-original root))
-    (setf (current-child) (root-original root)))
-  (unless show-later
-    (show-all-children t)))
+    (when root
+      (change-root root (root-original root))
+      (setf (current-child) (root-original root)))
+    (unless show-later
+      (show-all-children t))))
 
 
 (defun toggle-show-root-frame ()
@@ -1333,7 +1337,8 @@ For window: set current child to window or its parent according to window-parent
         (awhen (child-root-p child)
           (change-root it (find-parent-frame child)))
         (when (child-equal-p child (current-child))
-          (setf (current-child) (root-child (find-root child))))
+          (awhen (find-root child)
+            (setf (current-child) (root-child it))))
         t)))
 
 

@@ -1,3 +1,8 @@
+2012-05-24  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-internal.lisp (rotate-root-geometry): Do not use
+	rotatef but a simpler algorithm.
+
 2012-05-19  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-placement.lisp: Adjust width and height in child and

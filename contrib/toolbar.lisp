@@ -60,24 +60,26 @@
     (let ((root (toolbar-root toolbar))
           (placement-name (symbol-name (toolbar-placement toolbar)))
           (thickness (+ (toolbar-thickness toolbar) (* 2 *border-size*))))
-      (case (toolbar-direction toolbar)
-        (:horiz (cond ((search "TOP" placement-name)
-                       (incf (root-y root) thickness)
-                       (decf (root-h root) thickness))
-                      ((search "BOTTOM" placement-name)
-                       (decf (root-h root) thickness))))
-        (t (cond ((search "LEFT" placement-name)
-                  (incf (root-x root) thickness)
-                  (decf (root-w root) thickness))
-                 ((search "RIGHT" placement-name)
-                  (decf (root-w root) thickness))))))))
+      (when (root-p root)
+        (case (toolbar-direction toolbar)
+          (:horiz (cond ((search "TOP" placement-name)
+                         (incf (root-y root) thickness)
+                         (decf (root-h root) thickness))
+                        ((search "BOTTOM" placement-name)
+                         (decf (root-h root) thickness))))
+          (t (cond ((search "LEFT" placement-name)
+                    (incf (root-x root) thickness)
+                    (decf (root-w root) thickness))
+                   ((search "RIGHT" placement-name)
+                    (decf (root-w root) thickness)))))))))
 
 
 (let ((windows-list nil))
   (defun is-toolbar-window-p (win)
     (and (xlib:window-p win) (member win windows-list :test 'xlib:window-equal)))
 
-  ;;    (defun refresh-toolbar-window ()
+  (defun refresh-toolbar (toolbar)
+    (dbg (toolbar-modules toolbar)))
   ;;      (add-timer 0.1 #'refresh-toolbar-window :refresh-toolbar-window)
   ;;      (raise-window window)
   ;;      (let ((text-height (- (xlib:font-ascent font) (xlib:font-descent font))))
@@ -89,21 +91,21 @@
   ;;			       (* text-height i 2)
   ;;			       (text-string tx)))))
   ;;
-  ;;    (defun close-toolbar-window ()
-  ;;      (erase-timer :refresh-toolbar-window)
-  ;;      (setf *never-managed-window-list*
-  ;;	    (remove (list #'is-toolbar-window-p 'raise-window)
-  ;;		    *never-managed-window-list* :test #'equal))
-  ;;      (when gc
-  ;;	(xlib:free-gcontext gc))
-  ;;      (when window
-  ;;	(xlib:destroy-window window))
-  ;;      (when font
-  ;;	(xlib:close-font font))
-  ;;      (xlib:display-finish-output *display*)
-  ;;      (setf window nil
-  ;;	    gc nil
-  ;;	    font nil))
+    (defun close-toolbar (toolbar)
+      (erase-timer :refresh-toolbar-window)
+      (setf *never-managed-window-list*
+	    (remove (list #'is-toolbar-window-p nil)
+		    *never-managed-window-list* :test #'equal))
+      (awhen (toolbar-gc toolbar)
+	(xlib:free-gcontext it))
+      (awhen (toolbar-window toolbar)
+	(xlib:destroy-window it))
+      (awhen (toolbar-font toolbar)
+	(xlib:close-font it))
+      (xlib:display-finish-output *display*)
+      (setf (toolbar-window toolbar) nil
+	    (toolbar-gc toolbar) nil
+            (toolbar-font toolbar) nil))
 
   (defun open-toolbar (toolbar)
     (let ((root (find-root-by-coordinates (toolbar-root-x toolbar) (toolbar-root-y toolbar))))
@@ -135,10 +137,10 @@
                                                                :line-style :solid))
               (push (toolbar-window toolbar) windows-list)
               (setf (window-transparency (toolbar-window toolbar)) *toolbar-window-transparency*)
-              (push (list #'is-toolbar-window-p 'raise-window) *never-managed-window-list*)
+              (push (list #'is-toolbar-window-p nil) *never-managed-window-list*)
               (map-window (toolbar-window toolbar))
               (raise-window (toolbar-window toolbar))
-              ;;(refresh-toolbar-window)
+              (refresh-toolbar toolbar)
               (xlib:display-finish-output *display*))))))))
 
 (defun open-all-toolbars ()
@@ -147,6 +149,10 @@
     (open-toolbar toolbar))
   (dolist (toolbar *toolbar-list*)
     (toolbar-adjust-root-size toolbar)))
+
+(defun close-all-toolbars ()
+  (dolist (toolbar *toolbar-list*)
+    (close-toolbar toolbar)))
 
 
 (defun add-toolbar (root-x root-y direction size placement autohide &rest modules)
@@ -165,6 +171,7 @@
 
 
 (add-hook *init-hook* 'open-all-toolbars)
+(add-hook *close-hook* 'close-all-toolbars)
 
 
 (format t "done~%")
