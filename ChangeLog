@@ -1,3 +1,7 @@
+2012-05-28  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/toolbar.lisp: begining of toolbar support.
+
 2012-05-24  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-internal.lisp (rotate-root-geometry): Do not use

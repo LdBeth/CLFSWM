@@ -35,6 +35,7 @@
 (defstruct toolbar root-x root-y root direction size thickness placement autohide modules font window gc)
 
 (defparameter *toolbar-list* nil)
+(defparameter *toolbar-module-list* nil)
 
 ;;; CONFIG - Toolbar window string colors
 (defconfig *toolbar-window-font-string* *default-font-string*
@@ -47,13 +48,14 @@
   'Toolbar-Window "Toolbar Window border color")
 (defconfig *toolbar-window-transparency* *default-transparency*
   'Toolbar-window "Toolbar window background transparency")
-(defconfig *toolbar-default-thickness* 10
+(defconfig *toolbar-default-thickness* 20
   'toolbar-window "Toolbar default thickness")
 
 (defconfig *toolbar-window-placement* 'top-left-placement
   'Placement "Toolbar window placement")
 
-
+(defun toolbar-symbol-fun (name)
+  (create-symbol 'toolbar- name '-module))
 
 (defun toolbar-adjust-root-size (toolbar)
   (unless (toolbar-autohide toolbar)
@@ -74,38 +76,64 @@
                     (decf (root-w root) thickness)))))))))
 
 
+(defun toolbar-draw-text (toolbar pos1 pos2 text)
+  "pos1: percent, pos2: pixels"
+  (labels ((horiz-text ()
+             (let* ((height (- (xlib:font-ascent (toolbar-font toolbar)) (xlib:font-descent (toolbar-font toolbar))))
+                    (dy (truncate (+ pos2 (/ height 2))))
+                    (width (xlib:text-width (toolbar-font toolbar) text))
+                    (pos (truncate (/ (* (- (xlib:drawable-width (toolbar-window toolbar)) width) pos1) 100))))
+               (xlib:draw-glyphs *pixmap-buffer* (toolbar-gc toolbar) pos dy text)))
+           (vert-text ()
+             (let* ((width (xlib:max-char-width (toolbar-font toolbar)))
+                    (dx (truncate (- pos2 (/ width 2))))
+                    (dpos (xlib:max-char-ascent (toolbar-font toolbar)))
+                    (height (* dpos (length text)))
+                    (pos (+ (truncate (/ (* (- (xlib:drawable-height (toolbar-window toolbar)) height
+                                               (xlib:max-char-descent (toolbar-font toolbar)))
+                                            pos1) 100))
+                            (xlib:font-ascent (toolbar-font toolbar)))))
+               (loop for c across text
+                  do (xlib:draw-glyphs *pixmap-buffer* (toolbar-gc toolbar) dx pos (string c))
+                    (incf pos dpos)))))
+    (case (toolbar-direction toolbar)
+      (:horiz (horiz-text))
+      (:vert (vert-text)))))
+
+
 (let ((windows-list nil))
   (defun is-toolbar-window-p (win)
     (and (xlib:window-p win) (member win windows-list :test 'xlib:window-equal)))
 
   (defun refresh-toolbar (toolbar)
-    (dbg (toolbar-modules toolbar)))
-  ;;      (add-timer 0.1 #'refresh-toolbar-window :refresh-toolbar-window)
-  ;;      (raise-window window)
-  ;;      (let ((text-height (- (xlib:font-ascent font) (xlib:font-descent font))))
-  ;;	(loop for tx in text
-  ;;	   for i from 1 do
-  ;;	     (setf (xlib:gcontext-foreground gc) (text-color tx))
-  ;;	     (xlib:draw-glyphs window gc
-  ;;			       (truncate (/ (- width (* (xlib:max-char-width font) (length (text-string tx)))) 2))
-  ;;			       (* text-height i 2)
-  ;;			       (text-string tx)))))
-  ;;
-    (defun close-toolbar (toolbar)
-      (erase-timer :refresh-toolbar-window)
-      (setf *never-managed-window-list*
-	    (remove (list #'is-toolbar-window-p nil)
-		    *never-managed-window-list* :test #'equal))
-      (awhen (toolbar-gc toolbar)
-	(xlib:free-gcontext it))
-      (awhen (toolbar-window toolbar)
-	(xlib:destroy-window it))
-      (awhen (toolbar-font toolbar)
-	(xlib:close-font it))
-      (xlib:display-finish-output *display*)
-      (setf (toolbar-window toolbar) nil
-	    (toolbar-gc toolbar) nil
-            (toolbar-font toolbar) nil))
+    (add-timer 1 (lambda ()
+                   (refresh-toolbar toolbar))
+               :refresh-toolbar)
+    (clear-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar))
+;;    (toolbar-draw-text toolbar 0 (/ *toolbar-default-thickness* 2) "This is a test!!! abcpdj")
+;;    (toolbar-draw-text toolbar 100 (/ *toolbar-default-thickness* 2) "This ijTjjs a test!!! abcpdj")
+    ;;    (dbg (toolbar-modules toolbar))
+    (dolist (module (toolbar-modules toolbar))
+      (let ((fun (toolbar-symbol-fun (first module))))
+        (when (fboundp fun)
+          (funcall fun toolbar module))))
+    (copy-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar)))
+
+  (defun close-toolbar (toolbar)
+    (erase-timer :refresh-toolbar-window)
+    (setf *never-managed-window-list*
+          (remove (list #'is-toolbar-window-p nil)
+                  *never-managed-window-list* :test #'equal))
+    (awhen (toolbar-gc toolbar)
+      (xlib:free-gcontext it))
+    (awhen (toolbar-window toolbar)
+      (xlib:destroy-window it))
+    (awhen (toolbar-font toolbar)
+      (xlib:close-font it))
+    (xlib:display-finish-output *display*)
+    (setf (toolbar-window toolbar) nil
+          (toolbar-gc toolbar) nil
+          (toolbar-font toolbar) nil))
 
   (defun open-toolbar (toolbar)
     (let ((root (find-root-by-coordinates (toolbar-root-x toolbar) (toolbar-root-y toolbar))))
@@ -172,6 +200,27 @@
 
 (add-hook *init-hook* 'open-all-toolbars)
 (add-hook *close-hook* 'close-all-toolbars)
+
+
+(defmacro define-toolbar-module ((name) &body body)
+  (let ((symbol-fun (toolbar-symbol-fun name)))
+    `(progn
+       (pushnew ',name *toolbar-module-list*)
+       (defun ,symbol-fun (toolbar module)
+         ,@body))))
+
+
+
+(define-toolbar-module (clock)
+  "The clock module"
+  (toolbar-draw-text toolbar (second module) (/ *toolbar-default-thickness* 2)
+                     "Clock"))
+
+
+(define-toolbar-module (label)
+  "The label module"
+  (toolbar-draw-text toolbar (second module) (/ *toolbar-default-thickness* 2)
+                     "Label"))
 
 
 (format t "done~%")
