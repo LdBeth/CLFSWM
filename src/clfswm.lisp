@@ -134,6 +134,9 @@
   (awhen (find-frame-window window)
     (display-frame-info it)))
 
+(define-handler main-mode :resize-request (window)
+  (dbg :resize-request window))
+
 
 (defun error-handler (display error-key &rest key-vals &key asynchronous &allow-other-keys)
   "Handle X errors"
@@ -204,6 +207,7 @@
   (setf (xlib:window-event-mask *root*) (xlib:make-event-mask :substructure-redirect
 							      :substructure-notify
 							      :property-change
+                                                              :resize-redirect
 							      :exposure
 							      :button-press
 							      :button-release

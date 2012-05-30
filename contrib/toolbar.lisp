@@ -154,7 +154,7 @@
                                                                  :width width
                                                                  :height height
                                                                  :background (get-color *toolbar-window-background*)
-                                                                 :border-width *border-size*
+                                                                 :border-width 0
                                                                  :border (get-color *toolbar-window-border*)
                                                                  :colormap (xlib:screen-default-colormap *screen*)
                                                                  :event-mask '(:exposure :key-press))
@@ -213,8 +213,11 @@
 
 (define-toolbar-module (clock)
   "The clock module"
-  (toolbar-draw-text toolbar (second module) (/ *toolbar-default-thickness* 2)
-                     "Clock"))
+  (multiple-value-bind (s m h)
+      (get-decoded-time)
+    (declare (ignore s))
+    (toolbar-draw-text toolbar (second module) (/ *toolbar-default-thickness* 2)
+                       (format nil "~A:~A" h m))))
 
 
 (define-toolbar-module (label)

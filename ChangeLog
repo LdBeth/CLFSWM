@@ -1,3 +1,7 @@
+2012-05-30  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/toolbar.lisp (clock): Add a clock module.
+
 2012-05-28  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/toolbar.lisp: begining of toolbar support.
