@@ -225,7 +225,7 @@
       (get-decoded-time)
     (declare (ignore s))
     (toolbar-draw-text toolbar (second module) (/ *toolbar-default-thickness* 2)
-                       (format nil "~A:~A" h m))))
+                       (format nil "~2,'0D:~2,'0D" h m))))
 
 
 (define-toolbar-module (label)

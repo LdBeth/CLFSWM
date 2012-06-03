@@ -53,6 +53,8 @@
 
 (push *base-dir* asdf:*central-registry*)
 
+;;(setf asdf:*verbose-out* t)
+
 ;;;; Uncomment the line above if you want to follow the
 ;;;; handle event mecanism.
 ;;(pushnew :event-debug *features*)
