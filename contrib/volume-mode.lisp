@@ -85,13 +85,15 @@
 
 ;;; CONFIG - Volume mode
 (defconfig *volume-font-string* *default-font-string*
-  'Volume-mode "Volume string window font string")
+  'Volume-mode "Volume window font string")
 (defconfig *volume-background* "black"
-  'Volume-mode "Volume string window background color")
+  'Volume-mode "Volume window background color")
 (defconfig *volume-foreground* "green"
-  'Volume-mode "Volume string window foreground color")
+  'Volume-mode "Volume window foreground color")
 (defconfig *volume-border* "red"
-  'Volume-mode "Volume string window border color")
+  'Volume-mode "Volume window border color")
+(defconfig *volume-border-size* 1
+  'Volume-mode "Volume window border size")
 (defconfig *volume-width* 400
   'Volume-mode "Volume mode window width")
 (defconfig *volume-height* 15
@@ -174,7 +176,7 @@
          (erase-timer :volume-mode-timer))))
 
 (defun volume-enter-function ()
-  (with-placement (*volume-mode-placement* x y *volume-width* *volume-height*)
+  (with-placement (*volume-mode-placement* x y *volume-width* *volume-height* *volume-border-size*)
     (setf *volume-font* (xlib:open-font *display* *volume-font-string*)
           *volume-window* (xlib:create-window :parent *root*
                                               :x x
@@ -182,8 +184,9 @@
                                               :width *volume-width*
                                               :height *volume-height*
                                               :background (get-color *volume-background*)
-                                              :border-width 1
-                                              :border (get-color *volume-border*)
+                                              :border-width *volume-border-size*
+                                              :border (when (plusp *volume-border-size*)
+                                                        (get-color *volume-border*))
                                               :colormap (xlib:screen-default-colormap *screen*)
                                               :event-mask '(:exposure :key-press))
           *volume-gc* (xlib:create-gcontext :drawable *volume-window*

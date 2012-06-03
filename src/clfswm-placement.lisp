@@ -25,19 +25,19 @@
 
 (in-package :clfswm)
 
-(defun get-placement-values (placement &optional (width 0) (height 0))
+(defun get-placement-values (placement &optional (width 0) (height 0) (border-size *border-size*))
   (typecase placement
     (list (values-list placement))
-    (function (funcall placement width height))
+    (function (funcall placement width height border-size))
     (symbol
      (if (fboundp placement)
-	 (funcall placement width height)
+	 (funcall placement width height border-size)
 	 (values 0 0 width height)))
     (t (values 0 0 width height))))
 
-(defmacro with-placement ((placement x y &optional (width 0) (height 0)) &body body)
+(defmacro with-placement ((placement x y &optional (width 0) (height 0) (border-size *border-size*)) &body body)
   `(multiple-value-bind (,x ,y width height)
-       (get-placement-values ,placement ,width ,height)
+       (get-placement-values ,placement ,width ,height ,border-size)
      (declare (ignorable width height))
      ,@body))
 
@@ -58,50 +58,54 @@
 ;;;
 ;;; Absolute placement
 ;;;
-(defun top-left-placement (&optional (width 0) (height 0))
+(defun top-left-placement (&optional (width 0) (height 0) (border-size *border-size*))
+  (declare (ignore border-size))
   (values 0 0 width height))
 
-(defun top-middle-placement (&optional (width 0) (height 0))
+(defun top-middle-placement (&optional (width 0) (height 0) (border-size *border-size*))
+  (declare (ignore border-size))
   (values (truncate (/ (- (xlib:screen-width *screen*) width) 2))
 	  0
           width height))
 
-(defun top-right-placement (&optional (width 0) (height 0))
-  (values (- (xlib:screen-width *screen*) width (* *border-size* 2))
+(defun top-right-placement (&optional (width 0) (height 0) (border-size *border-size*))
+  (values (- (xlib:screen-width *screen*) width (* border-size 2))
 	  0
           width height))
 
 
 
-(defun middle-left-placement (&optional (width 0) (height 0))
+(defun middle-left-placement (&optional (width 0) (height 0) (border-size *border-size*))
+  (declare (ignore border-size))
   (values 0
 	  (truncate (/ (- (xlib:screen-height *screen*) height) 2))
           width height))
 
-(defun middle-middle-placement (&optional (width 0) (height 0))
+(defun middle-middle-placement (&optional (width 0) (height 0) (border-size *border-size*))
+  (declare (ignore border-size))
   (values (truncate (/ (- (xlib:screen-width *screen*) width) 2))
 	  (truncate (/ (- (xlib:screen-height *screen*) height) 2))
           width height))
 
-(defun middle-right-placement (&optional (width 0) (height 0))
-  (values (- (xlib:screen-width *screen*) width (* *border-size* 2))
+(defun middle-right-placement (&optional (width 0) (height 0) (border-size *border-size*))
+  (values (- (xlib:screen-width *screen*) width (* border-size 2))
 	  (truncate (/ (- (xlib:screen-height *screen*) height) 2))
           width height))
 
 
-(defun bottom-left-placement (&optional (width 0) (height 0))
+(defun bottom-left-placement (&optional (width 0) (height 0) (border-size *border-size*))
   (values 0
-	  (- (xlib:screen-height *screen*) height (* *border-size* 2))
+	  (- (xlib:screen-height *screen*) height (* border-size 2))
           width height))
 
-(defun bottom-middle-placement (&optional (width 0) (height 0))
+(defun bottom-middle-placement (&optional (width 0) (height 0) (border-size *border-size*))
   (values (truncate (/ (- (xlib:screen-width *screen*) width) 2))
-	  (- (xlib:screen-height *screen*) height (* *border-size* 2))
+	  (- (xlib:screen-height *screen*) height (* border-size 2))
           width height))
 
-(defun bottom-right-placement (&optional (width 0) (height 0))
-  (values (- (xlib:screen-width *screen*) width (* *border-size* 2))
-	  (- (xlib:screen-height *screen*) height (* *border-size* 2))
+(defun bottom-right-placement (&optional (width 0) (height 0) (border-size *border-size*))
+  (values (- (xlib:screen-width *screen*) width (* border-size 2))
+	  (- (xlib:screen-height *screen*) height (* border-size 2))
           width height))
 
 
@@ -126,7 +130,8 @@
      ,@body))
 
 
-(defun top-left-child-placement (&optional (width 0) (height 0))
+(defun top-left-child-placement (&optional (width 0) (height 0) (border-size *border-size*))
+  (declare (ignore border-size))
   (with-current-child-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
@@ -134,7 +139,8 @@
               (+ y 2)
               width height))))
 
-(defun top-middle-child-placement (&optional (width 0) (height 0))
+(defun top-middle-child-placement (&optional (width 0) (height 0) (border-size *border-size*))
+  (declare (ignore border-size))
   (with-current-child-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
@@ -142,7 +148,8 @@
               (+ y 2)
               width height))))
 
-(defun top-right-child-placement (&optional (width 0) (height 0))
+(defun top-right-child-placement (&optional (width 0) (height 0) (border-size *border-size*))
+  (declare (ignore border-size))
   (with-current-child-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
@@ -152,7 +159,8 @@
 
 
 
-(defun middle-left-child-placement (&optional (width 0) (height 0))
+(defun middle-left-child-placement (&optional (width 0) (height 0) (border-size *border-size*))
+  (declare (ignore border-size))
   (with-current-child-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
@@ -160,7 +168,8 @@
               (+ y (truncate (/ (- h height) 2)))
               width height))))
 
-(defun middle-middle-child-placement (&optional (width 0) (height 0))
+(defun middle-middle-child-placement (&optional (width 0) (height 0) (border-size *border-size*))
+  (declare (ignore border-size))
   (with-current-child-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
@@ -168,7 +177,8 @@
               (+ y (truncate (/ (- h height) 2)))
               width height))))
 
-(defun middle-right-child-placement (&optional (width 0) (height 0))
+(defun middle-right-child-placement (&optional (width 0) (height 0) (border-size *border-size*))
+  (declare (ignore border-size))
   (with-current-child-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
@@ -177,7 +187,8 @@
               width height))))
 
 
-(defun bottom-left-child-placement (&optional (width 0) (height 0))
+(defun bottom-left-child-placement (&optional (width 0) (height 0) (border-size *border-size*))
+  (declare (ignore border-size))
   (with-current-child-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
@@ -185,7 +196,8 @@
               (+ y (- h height 2))
               width height))))
 
-(defun bottom-middle-child-placement (&optional (width 0) (height 0))
+(defun bottom-middle-child-placement (&optional (width 0) (height 0) (border-size *border-size*))
+  (declare (ignore border-size))
   (with-current-child-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
@@ -193,7 +205,8 @@
               (+ y (- h height 2))
               width height))))
 
-(defun bottom-right-child-placement (&optional (width 0) (height 0))
+(defun bottom-right-child-placement (&optional (width 0) (height 0) (border-size *border-size*))
+  (declare (ignore border-size))
   (with-current-child-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
@@ -222,41 +235,42 @@
      ,@body))
 
 
-(defun top-left-root-placement (&optional (width 0) (height 0))
+(defun top-left-root-placement (&optional (width 0) (height 0) (border-size *border-size*))
   (with-current-root-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
-      (values (+ x 2)
-              (+ y 2)
+      (values (+ x border-size 1)
+              (+ y border-size 1)
               width height))))
 
-(defun top-middle-root-placement (&optional (width 0) (height 0))
+(defun top-middle-root-placement (&optional (width 0) (height 0) (border-size *border-size*))
   (with-current-root-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
       (values (+ x (truncate (/ (- w width) 2)))
-              (+ y 2)
+              (+ y border-size 1)
               width height))))
 
-(defun top-right-root-placement (&optional (width 0) (height 0))
+(defun top-right-root-placement (&optional (width 0) (height 0) (border-size *border-size*))
   (with-current-root-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
-      (values (+ x (- w width 2))
-              (+ y 2)
+      (values (+ x (- w width border-size 1))
+              (+ y border-size 1)
               width height))))
 
 
 
-(defun middle-left-root-placement (&optional (width 0) (height 0))
+(defun middle-left-root-placement (&optional (width 0) (height 0) (border-size *border-size*))
   (with-current-root-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
-      (values (+ x 2)
+      (values (+ x border-size 1)
               (+ y (truncate (/ (- h height) 2)))
               width height))))
 
-(defun middle-middle-root-placement (&optional (width 0) (height 0))
+(defun middle-middle-root-placement (&optional (width 0) (height 0) (border-size *border-size*))
+  (declare (ignore border-size))
   (with-current-root-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
@@ -264,36 +278,36 @@
 	    (+ y (truncate (/ (- h height) 2)))
             width height))))
 
-(defun middle-right-root-placement (&optional (width 0) (height 0))
+(defun middle-right-root-placement (&optional (width 0) (height 0) (border-size *border-size*))
   (with-current-root-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
-      (values (+ x (- w width 2))
+      (values (+ x (- w width border-size 1))
               (+ y (truncate (/ (- h height) 2)))
               width height))))
 
 
-(defun bottom-left-root-placement (&optional (width 0) (height 0))
+(defun bottom-left-root-placement (&optional (width 0) (height 0) (border-size *border-size*))
   (with-current-root-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
-      (values (+ x 2)
-              (+ y (- h height 2))
+      (values (+ x border-size 1)
+              (+ y (- h height border-size 1))
               width height))))
 
-(defun bottom-middle-root-placement (&optional (width 0) (height 0))
+(defun bottom-middle-root-placement (&optional (width 0) (height 0) (border-size *border-size*))
   (with-current-root-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
       (values (+ x (truncate (/ (- w width) 2)))
-              (+ y (- h height 2))
+              (+ y (- h height border-size 1))
               width height))))
 
-(defun bottom-right-root-placement (&optional (width 0) (height 0))
+(defun bottom-right-root-placement (&optional (width 0) (height 0) (border-size *border-size*))
   (with-current-root-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
-      (values (+ x (- w width 2))
-              (+ y (- h height 2))
+      (values (+ x (- w width border-size 1))
+              (+ y (- h height border-size 1))
               width height))))
 

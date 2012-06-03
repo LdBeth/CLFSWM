@@ -1,3 +1,8 @@
+2012-06-03  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-placement.lisp: Add an optional border size in all
+	placement functions.
+
 2012-05-30  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/toolbar.lisp (clock): Add a clock module.

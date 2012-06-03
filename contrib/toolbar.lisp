@@ -32,24 +32,31 @@
 
 (format t "Loading Toolbar code... ")
 
-(defstruct toolbar root-x root-y root direction size thickness placement autohide modules font window gc)
+(defstruct toolbar root-x root-y root direction size thickness placement refresh-delay
+           autohide modules font window gc border-size)
 
 (defparameter *toolbar-list* nil)
 (defparameter *toolbar-module-list* nil)
 
 ;;; CONFIG - Toolbar window string colors
 (defconfig *toolbar-window-font-string* *default-font-string*
-  'Toolbar-Window "Toolbar window font string")
+  'Toolbar "Toolbar window font string")
 (defconfig *toolbar-window-background* "black"
-  'Toolbar-Window "Toolbar Window background color")
+  'Toolbar "Toolbar Window background color")
 (defconfig *toolbar-window-foreground* "green"
-  'Toolbar-Window "Toolbar Window foreground color")
+  'Toolbar "Toolbar Window foreground color")
 (defconfig *toolbar-window-border* "red"
-  'Toolbar-Window "Toolbar Window border color")
+  'Toolbar "Toolbar Window border color")
+(defconfig *toolbar-default-border-size* 0
+  'Toolbar "Toolbar Window border size")
 (defconfig *toolbar-window-transparency* *default-transparency*
-  'Toolbar-window "Toolbar window background transparency")
+  'Toolbar "Toolbar window background transparency")
 (defconfig *toolbar-default-thickness* 20
-  'toolbar-window "Toolbar default thickness")
+  'Toolbar "Toolbar default thickness")
+(defconfig *toolbar-default-refresh-delay* 30
+  'Toolbar "Toolbar default refresh delay")
+(defconfig *toolbar-default-autohide* nil
+  'Toolbar "Toolbar default autohide value")
 
 (defconfig *toolbar-window-placement* 'top-left-placement
   'Placement "Toolbar window placement")
@@ -61,7 +68,7 @@
   (unless (toolbar-autohide toolbar)
     (let ((root (toolbar-root toolbar))
           (placement-name (symbol-name (toolbar-placement toolbar)))
-          (thickness (+ (toolbar-thickness toolbar) (* 2 *border-size*))))
+          (thickness (+ (toolbar-thickness toolbar) (* 2 (toolbar-border-size toolbar)))))
       (when (root-p root)
         (case (toolbar-direction toolbar)
           (:horiz (cond ((search "TOP" placement-name)
@@ -106,13 +113,11 @@
     (and (xlib:window-p win) (member win windows-list :test 'xlib:window-equal)))
 
   (defun refresh-toolbar (toolbar)
-    (add-timer 1 (lambda ()
-                   (refresh-toolbar toolbar))
+    (add-timer (toolbar-refresh-delay toolbar)
+               (lambda ()
+                 (refresh-toolbar toolbar))
                :refresh-toolbar)
     (clear-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar))
-;;    (toolbar-draw-text toolbar 0 (/ *toolbar-default-thickness* 2) "This is a test!!! abcpdj")
-;;    (toolbar-draw-text toolbar 100 (/ *toolbar-default-thickness* 2) "This ijTjjs a test!!! abcpdj")
-    ;;    (dbg (toolbar-modules toolbar))
     (dolist (module (toolbar-modules toolbar))
       (let ((fun (toolbar-symbol-fun (first module))))
         (when (fboundp fun)
@@ -147,15 +152,16 @@
                  (height (if (equal (toolbar-direction toolbar) :horiz)
                              (toolbar-thickness toolbar)
                              (round (/ (* (root-h root) (toolbar-size toolbar)) 100)))))
-            (with-placement ((toolbar-placement toolbar) x y width height)
+            (with-placement ((toolbar-placement toolbar) x y width height (toolbar-border-size toolbar))
               (setf (toolbar-window toolbar) (xlib:create-window :parent *root*
                                                                  :x x
                                                                  :y y
                                                                  :width width
                                                                  :height height
                                                                  :background (get-color *toolbar-window-background*)
-                                                                 :border-width 0
-                                                                 :border (get-color *toolbar-window-border*)
+                                                                 :border-width (toolbar-border-size toolbar)
+                                                                 :border (when (plusp (toolbar-border-size toolbar))
+                                                                           (get-color *toolbar-window-border*))
                                                                  :colormap (xlib:screen-default-colormap *screen*)
                                                                  :event-mask '(:exposure :key-press))
                     (toolbar-gc toolbar) (xlib:create-gcontext :drawable (toolbar-window toolbar)
@@ -183,7 +189,7 @@
     (close-toolbar toolbar)))
 
 
-(defun add-toolbar (root-x root-y direction size placement autohide &rest modules)
+(defun add-toolbar (root-x root-y direction size placement &rest modules)
   "Add a new toolbar.
      root-x, root-y: root coordinates
      direction: one of :horiz or :vert
@@ -192,7 +198,9 @@
                       :direction direction :size size
                       :thickness *toolbar-default-thickness*
                       :placement placement
-                      :autohide autohide
+                      :autohide *toolbar-default-autohide*
+                      :refresh-delay *toolbar-default-refresh-delay*
+                      :border-size *toolbar-default-border-size*
                       :modules modules)))
     (push toolbar *toolbar-list*)
     toolbar))
