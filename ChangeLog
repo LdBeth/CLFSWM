@@ -1,3 +1,8 @@
+2012-06-06  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/xlib-util.lisp (handle-event): Add an additional hook event
+	system to handle events in contrib code.
+
 2012-06-03  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-placement.lisp: Add an optional border size in all

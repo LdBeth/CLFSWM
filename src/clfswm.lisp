@@ -292,6 +292,7 @@
 	(xlib:free-pixmap *pixmap-buffer*)
         (destroy-all-frames-window)
 	(call-hook *close-hook*)
+        (clear-event-hooks)
 	(xlib:close-display *display*)
 	#+:event-debug
 	(format t "~2&Unhandled events: ~A~%" *unhandled-events*))))

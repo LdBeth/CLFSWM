@@ -228,7 +228,9 @@ Return the result of the last hook"
 		 (typecase hook
 		   (cons (dolist (h hook)
 			   (rec h)))
-		   (t (setf result (apply hook args)))))))
+                   (function (setf result (apply hook args)))
+		   (symbol (when (fboundp hook)
+                             (setf result (apply hook args))))))))
       (rec hook)
       result)))
 
@@ -236,14 +238,14 @@ Return the result of the last hook"
 (defmacro add-new-hook (hook &rest value)
   "Add a hook. Duplicate it if needed"
   `(setf ,hook (append (typecase ,hook
-			 (list ,hook)
-			 (t (list ,hook)))
-		       (list ,@value))))
+                         (list ,hook)
+                         (t (list ,hook)))
+                       (list ,@value))))
 
 (defmacro add-hook (hook &rest value)
   "Add a hook only if not duplicated"
   (let ((i (gensym)))
-    `(dolist (,i (list ,@value) ,hook)
+    `(dolist (,i (list ,@value))
        (unless (member ,i (typecase ,hook
                             (list ,hook)
                             (t (list ,hook))))

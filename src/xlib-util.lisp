@@ -170,36 +170,63 @@ Expand in handle-event-fun-main-mode-key-press"
      ,@body))
 
 
+(defun event-hook-name (event-keyword)
+  (create-symbol '*event- event-keyword '-hook*))
 
-;;; Workaround for pixmap error taken from STUMPWM - thanks:
-;; XXX: In both the clisp and sbcl clx libraries, sometimes what
-;; should be a window will be a pixmap instead. In this case, we
-;; need to manually translate it to a window to avoid breakage
-;; in stumpwm. So far the only slot that seems to be affected is
-;; the :window slot for configure-request and reparent-notify
-;; events. It appears as though the hash table of XIDs and clx
-;; structures gets out of sync with X or perhaps X assigns a
-;; duplicate ID for a pixmap and a window.
-(defun make-xlib-window (xobject)
-  "For some reason the clx xid cache screws up returns pixmaps when
-they should be windows. So use this function to make a window out of them."
-  #+clisp (make-instance 'xlib:window :id (slot-value xobject 'xlib::id) :display *display*)
-  #+(or sbcl ecl openmcl) (xlib::make-window :id (slot-value xobject 'xlib::id) :display *display*)
-  #-(or sbcl clisp ecl openmcl)
-  (error 'not-implemented))
+(let ((event-hook-list nil))
+  (defmacro create-event-hook (event-keyword)
+    (let ((symb (event-hook-name event-keyword)))
+      (pushnew symb event-hook-list)
+      `(defvar ,symb nil)))
+
+  (defmacro add-event-hook (name &rest value)
+    (let ((symb (event-hook-name name)))
+      `(add-hook ,symb ,@value)))
+
+  (defun clear-event-hooks ()
+    (dolist (symb event-hook-list)
+      (makunbound symb))))
+
+
+(defmacro define-event-hook (event-keyword args &body body)
+  `(add-event-hook ,event-keyword
+                   (lambda (&rest event-slots &key #+:event-debug event-key ,@args &allow-other-keys)
+                     (declare (ignorable event-slots))
+                     #+:event-debug (print (list ,event-keyword event-key))
+                     ,@body)))
 
 
 (defun handle-event (&rest event-slots &key event-key &allow-other-keys)
-  (with-xlib-protect ()
-    (let ((win (getf event-slots :window)))
-      (when (and win (not (xlib:window-p win)))
-        (dbg "Pixmap Workaround! Should be a window: " win)
-        (setf (getf event-slots :window) (make-xlib-window win))))
-    (if (fboundp event-key)
-	(apply event-key event-slots)
-	#+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal))
-    (xlib:display-finish-output *display*))
-  t)
+  (labels ((make-xlib-window (xobject)
+             "For some reason the clx xid cache screws up returns pixmaps when
+they should be windows. So use this function to make a window out of them."
+             ;; Workaround for pixmap error taken from STUMPWM - thanks:
+             ;; XXX: In both the clisp and sbcl clx libraries, sometimes what
+             ;; should be a window will be a pixmap instead. In this case, we
+             ;; need to manually translate it to a window to avoid breakage
+             ;; in stumpwm. So far the only slot that seems to be affected is
+             ;; the :window slot for configure-request and reparent-notify
+             ;; events. It appears as though the hash table of XIDs and clx
+             ;; structures gets out of sync with X or perhaps X assigns a
+             ;; duplicate ID for a pixmap and a window.
+             #+clisp (make-instance 'xlib:window :id (slot-value xobject 'xlib::id) :display *display*)
+             #+(or sbcl ecl openmcl) (xlib::make-window :id (slot-value xobject 'xlib::id) :display *display*)
+             #-(or sbcl clisp ecl openmcl)
+             (error 'not-implemented)))
+    (with-xlib-protect ()
+      (catch 'exit-handle-event
+        (let ((win (getf event-slots :window)))
+          (when (and win (not (xlib:window-p win)))
+            (dbg "Pixmap Workaround! Should be a window: " win)
+            (setf (getf event-slots :window) (make-xlib-window win))))
+        (let ((hook-symbol (event-hook-name event-key)))
+          (when (boundp hook-symbol)
+            (call-hook (symbol-value hook-symbol) event-slots)))
+        (if (fboundp event-key)
+            (apply event-key event-slots)
+            #+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal)))
+      (xlib:display-finish-output *display*))
+    t))
 
 
 

@@ -108,21 +108,33 @@
       (:vert (vert-text)))))
 
 
+
+(defun refresh-toolbar (toolbar)
+  (add-timer (toolbar-refresh-delay toolbar)
+             (lambda ()
+               (refresh-toolbar toolbar))
+             :refresh-toolbar)
+  (clear-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar))
+  (dolist (module (toolbar-modules toolbar))
+    (let ((fun (toolbar-symbol-fun (first module))))
+      (when (fboundp fun)
+        (funcall fun toolbar module))))
+  (copy-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar)))
+
+
+(create-event-hook :exposure)
+
+(defun define-toolbar-hooks (toolbar)
+  (define-event-hook :exposure (window)
+    (when (and (xlib:window-p window) (xlib:window-equal (toolbar-window toolbar) window))
+      (refresh-toolbar toolbar))))
+
+
+
+
 (let ((windows-list nil))
   (defun is-toolbar-window-p (win)
     (and (xlib:window-p win) (member win windows-list :test 'xlib:window-equal)))
-
-  (defun refresh-toolbar (toolbar)
-    (add-timer (toolbar-refresh-delay toolbar)
-               (lambda ()
-                 (refresh-toolbar toolbar))
-               :refresh-toolbar)
-    (clear-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar))
-    (dolist (module (toolbar-modules toolbar))
-      (let ((fun (toolbar-symbol-fun (first module))))
-        (when (fboundp fun)
-          (funcall fun toolbar module))))
-    (copy-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar)))
 
   (defun close-toolbar (toolbar)
     (erase-timer :refresh-toolbar-window)
@@ -175,7 +187,8 @@
               (map-window (toolbar-window toolbar))
               (raise-window (toolbar-window toolbar))
               (refresh-toolbar toolbar)
-              (xlib:display-finish-output *display*))))))))
+              (xlib:display-finish-output *display*)
+              (define-toolbar-hooks toolbar))))))))
 
 (defun open-all-toolbars ()
   "Open all toolbars"
