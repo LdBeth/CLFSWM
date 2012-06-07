@@ -36,6 +36,7 @@
 				:colormap-change
 				:focus-change
 				:enter-window
+                                :leave-window
 				:exposure)
   "The events to listen for on managed windows.")
 

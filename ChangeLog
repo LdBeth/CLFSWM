@@ -2,6 +2,8 @@
 
 	* contrib/toolbar.lisp (define-toolbar-hooks): Add auto-hide
 	clickable toolbar.
+	(define-toolbar-hooks): Add auto-hide toolbar (show/hide on mouse
+	motion event).
 
 2012-06-06  Philippe Brochard  <pbrochard@common-lisp.net>
 

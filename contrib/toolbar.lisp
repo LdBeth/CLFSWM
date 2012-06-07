@@ -146,6 +146,8 @@
 
 (use-event-hook :exposure)
 (use-event-hook :button-press)
+(use-event-hook :motion-notify)
+(use-event-hook :leave-notify)
 
 
 (defun toolbar-add-exposure-hook (toolbar)
@@ -170,10 +172,27 @@
             (stop-button-event)
             (throw 'exit-handle-event nil)))))))
 
+(defun toolbar-add-hide-motion-hook (toolbar)
+  (define-event-hook :motion-notify (root-x root-y)
+    (unless (compress-motion-notify)
+      (when (toolbar-in-sensibility-zone-p toolbar root-x root-y)
+        (map-window (toolbar-window toolbar))
+        (raise-window (toolbar-window toolbar))
+        (refresh-toolbar toolbar)
+        (throw 'exit-handle-event nil)))))
+
+(defun toolbar-add-hide-leave-hook (toolbar)
+  (define-event-hook :leave-notify (window)
+    (when (xlib:window-equal (toolbar-window toolbar) window)
+      (hide-window window)
+      (throw 'exit-handle-event nil))))
+
 (defun define-toolbar-hooks (toolbar)
   (toolbar-add-exposure-hook toolbar)
   (case (toolbar-autohide toolbar)
-    (:click (toolbar-add-hide-button-press-hook toolbar))))
+    (:click (toolbar-add-hide-button-press-hook toolbar))
+    (:motion (toolbar-add-hide-motion-hook toolbar)
+             (toolbar-add-hide-leave-hook toolbar))))
 
 
 
@@ -222,7 +241,7 @@
                                                                  :border (when (plusp (toolbar-border-size toolbar))
                                                                            (get-color *toolbar-window-border*))
                                                                  :colormap (xlib:screen-default-colormap *screen*)
-                                                                 :event-mask '(:exposure :key-press))
+                                                                 :event-mask '(:exposure :key-press :leave-window))
                     (toolbar-gc toolbar) (xlib:create-gcontext :drawable (toolbar-window toolbar)
                                                                :foreground (get-color *toolbar-window-foreground*)
                                                                :background (get-color *toolbar-window-background*)
@@ -231,10 +250,11 @@
               (push (toolbar-window toolbar) windows-list)
               (setf (window-transparency (toolbar-window toolbar)) *toolbar-window-transparency*)
               (push (list #'is-toolbar-window-p nil) *never-managed-window-list*)
-              (unless (toolbar-autohide toolbar)
-                (map-window (toolbar-window toolbar))
-                (raise-window (toolbar-window toolbar))
-                (refresh-toolbar toolbar))
+              (map-window (toolbar-window toolbar))
+              (raise-window (toolbar-window toolbar))
+              (refresh-toolbar toolbar);)
+              (when (toolbar-autohide toolbar)
+                (hide-window (toolbar-window toolbar)))
               (xlib:display-finish-output *display*)
               (define-toolbar-hooks toolbar))))))))
 
@@ -250,7 +270,8 @@
     (close-toolbar toolbar)))
 
 
-(defun add-toolbar (root-x root-y direction size placement &rest modules)
+(defun add-toolbar (root-x root-y direction size placement modules
+                    &key (autohide *toolbar-default-autohide*))
   "Add a new toolbar.
      root-x, root-y: root coordinates
      direction: one of :horiz or :vert
@@ -259,7 +280,7 @@
                       :direction direction :size size
                       :thickness *toolbar-default-thickness*
                       :placement placement
-                      :autohide *toolbar-default-autohide*
+                      :autohide autohide
                       :refresh-delay *toolbar-default-refresh-delay*
                       :border-size *toolbar-default-border-size*
                       :modules modules)))
