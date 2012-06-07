@@ -174,7 +174,7 @@ Expand in handle-event-fun-main-mode-key-press"
   (create-symbol '*event- event-keyword '-hook*))
 
 (let ((event-hook-list nil))
-  (defmacro create-event-hook (event-keyword)
+  (defmacro use-event-hook (event-keyword)
     (let ((symb (event-hook-name event-keyword)))
       (pushnew symb event-hook-list)
       `(defvar ,symb nil)))

@@ -57,6 +57,8 @@
   'Toolbar "Toolbar default refresh delay")
 (defconfig *toolbar-default-autohide* nil
   'Toolbar "Toolbar default autohide value")
+(defconfig *toolbar-sensibility* 3
+  'Toolbar "Toolbar sensibility in pixels")
 
 (defconfig *toolbar-window-placement* 'top-left-placement
   'Placement "Toolbar window placement")
@@ -121,13 +123,58 @@
         (funcall fun toolbar module))))
   (copy-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar)))
 
+(defun toolbar-in-sensibility-zone-p (toolbar root-x root-y)
+  (let* ((tb-win (toolbar-window toolbar))
+         (win-x (xlib:drawable-x tb-win))
+         (win-y (xlib:drawable-y tb-win))
+         (width (xlib:drawable-width tb-win))
+         (height (xlib:drawable-height tb-win))
+         (tb-dir (toolbar-direction toolbar) )
+         (placement-name (symbol-name (toolbar-placement toolbar))))
+    (or (and (equal tb-dir :horiz) (search "TOP" placement-name)
+             (<= root-y win-y (+ root-y *toolbar-sensibility*))
+             (<= win-x root-x (+ win-x width)) (toolbar-autohide toolbar))
+        (and (equal tb-dir :horiz) (search "BOTTOM" placement-name)
+             (<= (+ win-y height) root-y (+ win-y height *toolbar-sensibility*))
+             (<= win-x root-x (+ win-x width)) (toolbar-autohide toolbar))
+        (and (equal tb-dir :vert) (search "LEFT" placement-name)
+             (<= root-x win-x (+ root-x *toolbar-sensibility*))
+             (<= win-y root-y (+ win-y height)) (toolbar-autohide toolbar))
+        (and (equal tb-dir :vert) (search "RIGHT" placement-name)
+             (<= (+ win-x width) root-x (+ win-x win-x *toolbar-sensibility*))
+             (<= win-y root-y (+ win-y height)) (toolbar-autohide toolbar)))))
 
-(create-event-hook :exposure)
+(use-event-hook :exposure)
+(use-event-hook :button-press)
 
-(defun define-toolbar-hooks (toolbar)
+
+(defun toolbar-add-exposure-hook (toolbar)
   (define-event-hook :exposure (window)
     (when (and (xlib:window-p window) (xlib:window-equal (toolbar-window toolbar) window))
       (refresh-toolbar toolbar))))
+
+(defun toolbar-add-hide-button-press-hook (toolbar)
+  (let ((hide t))
+    (define-event-hook :button-press (code root-x root-y)
+      (when (= code 1)
+        (let* ((tb-win (toolbar-window toolbar)))
+          (when (toolbar-in-sensibility-zone-p toolbar root-x root-y)
+            (if hide
+                (progn
+                  (map-window tb-win)
+                  (raise-window tb-win)
+                  (refresh-toolbar toolbar))
+                (hide-window tb-win))
+            (setf hide (not hide))
+            (wait-mouse-button-release)
+            (stop-button-event)
+            (throw 'exit-handle-event nil)))))))
+
+(defun define-toolbar-hooks (toolbar)
+  (toolbar-add-exposure-hook toolbar)
+  (case (toolbar-autohide toolbar)
+    (:click (toolbar-add-hide-button-press-hook toolbar))))
+
 
 
 
@@ -184,9 +231,10 @@
               (push (toolbar-window toolbar) windows-list)
               (setf (window-transparency (toolbar-window toolbar)) *toolbar-window-transparency*)
               (push (list #'is-toolbar-window-p nil) *never-managed-window-list*)
-              (map-window (toolbar-window toolbar))
-              (raise-window (toolbar-window toolbar))
-              (refresh-toolbar toolbar)
+              (unless (toolbar-autohide toolbar)
+                (map-window (toolbar-window toolbar))
+                (raise-window (toolbar-window toolbar))
+                (refresh-toolbar toolbar))
               (xlib:display-finish-output *display*)
               (define-toolbar-hooks toolbar))))))))
 
@@ -232,6 +280,10 @@
 
 
 
+
+;;;
+;;; Modules definitions
+;;;
 (define-toolbar-module (clock)
   "The clock module"
   (multiple-value-bind (s m h)
