@@ -278,8 +278,8 @@ Return the result of the last hook"
   "Start the function fun at delay seconds."
   (push (list id
 	      (let ((time (+ (get-internal-real-time) (s->realtime delay))))
-		(lambda ()
-		  (when (>= (get-internal-real-time) time)
+		(lambda (current-time)
+		  (when (>= current-time time)
 		    (funcall fun)
 		    t))))
 	*timer-list*)
@@ -299,34 +299,31 @@ Return the result of the last hook"
 
 (defun process-timers ()
   "Call each timers in *timer-list* if needed"
-  (dolist (timer *timer-list*)
-    (when (funcall (second timer))
-      (setf *timer-list* (remove timer *timer-list* :test #'equal)))))
+  (let ((current-time (get-internal-real-time)))
+    (dolist (timer *timer-list*)
+      (when (funcall (second timer) current-time)
+        (setf *timer-list* (remove timer *timer-list* :test #'equal))))))
 
 (defun erase-timer (id)
   "Erase the timer identified by its id"
-  (dolist (timer *timer-list*)
-    (when (equal id (first timer))
-      (setf *timer-list* (remove timer *timer-list* :test #'equal)))))
+  (setf *timer-list* (remove id *timer-list* :test (lambda (x y)
+                                                     (equal x (first y))))))
 
 (defun timer-test-loop ()
-  (loop
-     (princ ".") (force-output)
-     (process-timers)
-     (sleep 0.5)))
-
-;;(defun plop ()
-;;  (princ 'plop)
-;;  (erase-timer :toto))
-;;
-;;(defun toto ()
-;;  (princ 'toto)
-;;  (add-timer 5 #'toto :toto))
-;;
-;;(add-timer 5 #'toto :toto)
-;;(add-timer 30 #'plop)
-;;
-;;(timer-test-loop)
+  (let ((count 0))
+    (labels ((plop ()
+               (format t "Plop-~A" count)
+               (erase-timer :toto))
+             (toto ()
+               (format t "Toto-~A" count)
+               (add-timer 3 #'toto :toto)))
+      (add-timer 3 #'toto :toto)
+      (add-timer 13 #'plop)
+      (loop
+         (princ ".") (force-output)
+         (process-timers)
+         (sleep 0.5)
+         (incf count)))))
 
 
 

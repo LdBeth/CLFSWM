@@ -1,3 +1,8 @@
+2012-06-08  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/tools.lisp (process-timers): Call get-internal-real-time
+	only once for all times.
+
 2012-06-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/toolbar.lisp (define-toolbar-hooks): Add auto-hide

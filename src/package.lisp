@@ -76,7 +76,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defparameter *background-image* nil)
 (defparameter *background-gc* nil)
 
-(defconfig *loop-timeout* 0.1 nil
+(defconfig *loop-timeout* 1 nil
            "Maximum time (in seconds) to wait before calling *loop-hook*")
 
 (defparameter *pixmap-buffer* nil)
