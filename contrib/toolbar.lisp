@@ -33,7 +33,7 @@
 (format t "Loading Toolbar code... ")
 
 (defstruct toolbar root-x root-y root direction size thickness placement refresh-delay
-           autohide modules font window gc border-size)
+           autohide modules clickable font window gc border-size)
 
 (defparameter *toolbar-list* nil)
 (defparameter *toolbar-module-list* nil)
@@ -57,7 +57,7 @@
   'Toolbar "Toolbar default refresh delay")
 (defconfig *toolbar-default-autohide* nil
   'Toolbar "Toolbar default autohide value")
-(defconfig *toolbar-sensibility* 3
+(defconfig *toolbar-sensibility* 10
   'Toolbar "Toolbar sensibility in pixels")
 
 (defconfig *toolbar-window-placement* 'top-left-placement
@@ -135,13 +135,13 @@
              (<= root-y win-y (+ root-y *toolbar-sensibility*))
              (<= win-x root-x (+ win-x width)) (toolbar-autohide toolbar))
         (and (equal tb-dir :horiz) (search "BOTTOM" placement-name)
-             (<= (+ win-y height) root-y (+ win-y height *toolbar-sensibility*))
+             (<= (+ win-y height (- *toolbar-sensibility*)) root-y (+ win-y height))
              (<= win-x root-x (+ win-x width)) (toolbar-autohide toolbar))
         (and (equal tb-dir :vert) (search "LEFT" placement-name)
              (<= root-x win-x (+ root-x *toolbar-sensibility*))
              (<= win-y root-y (+ win-y height)) (toolbar-autohide toolbar))
         (and (equal tb-dir :vert) (search "RIGHT" placement-name)
-             (<= (+ win-x width) root-x (+ win-x win-x *toolbar-sensibility*))
+             (<= (+ win-x width (- *toolbar-sensibility*)) root-x (+ win-x width))
              (<= win-y root-y (+ win-y height)) (toolbar-autohide toolbar)))))
 
 (use-event-hook :exposure)
@@ -182,18 +182,28 @@
         (throw 'exit-handle-event nil)))))
 
 (defun toolbar-add-hide-leave-hook (toolbar)
-  (define-event-hook :leave-notify (window)
-    (when (xlib:window-equal (toolbar-window toolbar) window)
+  (define-event-hook :leave-notify (window root-x root-y)
+    (when (and (xlib:window-equal (toolbar-window toolbar) window)
+               (not (in-window (toolbar-window toolbar) root-x root-y)))
       (hide-window window)
       (throw 'exit-handle-event nil))))
 
 (defun define-toolbar-hooks (toolbar)
   (toolbar-add-exposure-hook toolbar)
+  (when (toolbar-clickable toolbar)
+    (define-event-hook :button-press (code root-x root-y)
+      (dbg code root-x root-y)))
   (case (toolbar-autohide toolbar)
     (:click (toolbar-add-hide-button-press-hook toolbar))
     (:motion (toolbar-add-hide-motion-hook toolbar)
              (toolbar-add-hide-leave-hook toolbar))))
 
+(defun set-clickable-toolbar (toolbar)
+  (dolist (module *toolbar-module-list*)
+    (when (and (member (first module) (toolbar-modules toolbar)
+                       :test (lambda (x y) (equal x (first y))))
+               (second module))
+      (setf (toolbar-clickable toolbar) t))))
 
 
 
@@ -252,10 +262,11 @@
               (push (list #'is-toolbar-window-p nil) *never-managed-window-list*)
               (map-window (toolbar-window toolbar))
               (raise-window (toolbar-window toolbar))
-              (refresh-toolbar toolbar);)
+              (refresh-toolbar toolbar)
               (when (toolbar-autohide toolbar)
                 (hide-window (toolbar-window toolbar)))
               (xlib:display-finish-output *display*)
+              (set-clickable-toolbar toolbar)
               (define-toolbar-hooks toolbar))))))))
 
 (defun open-all-toolbars ()
@@ -292,10 +303,10 @@
 (add-hook *close-hook* 'close-all-toolbars)
 
 
-(defmacro define-toolbar-module ((name) &body body)
+(defmacro define-toolbar-module ((name &optional clickable) &body body)
   (let ((symbol-fun (toolbar-symbol-fun name)))
     `(progn
-       (pushnew ',name *toolbar-module-list*)
+       (pushnew (list ',name ,clickable) *toolbar-module-list*)
        (defun ,symbol-fun (toolbar module)
          ,@body))))
 
@@ -318,6 +329,15 @@
   "The label module"
   (toolbar-draw-text toolbar (second module) (/ *toolbar-default-thickness* 2)
                      "Label"))
+
+
+(define-toolbar-module (clickable-clock t)
+  "The clock module (clickable)"
+  (multiple-value-bind (s m h)
+      (get-decoded-time)
+    (declare (ignore s))
+    (toolbar-draw-text toolbar (second module) (/ *toolbar-default-thickness* 2)
+                       (format nil "Click:~2,'0D:~2,'0D" h m))))
 
 
 (format t "done~%")

@@ -35,9 +35,11 @@
 	 (values 0 0 width height)))
     (t (values 0 0 width height))))
 
-(defmacro with-placement ((placement x y &optional (width 0) (height 0) (border-size *border-size*)) &body body)
+(defmacro with-placement ((placement x y &optional (width 0) (height 0) border-size) &body body)
   `(multiple-value-bind (,x ,y width height)
-       (get-placement-values ,placement ,width ,height ,border-size)
+       ,(if border-size
+            `(get-placement-values ,placement ,width ,height ,border-size)
+            `(get-placement-values ,placement ,width ,height))
      (declare (ignorable width height))
      ,@body))
 
@@ -70,7 +72,7 @@
 
 (defun top-right-placement (&optional (width 0) (height 0) (border-size *border-size*))
   (values (- (xlib:screen-width *screen*) width (* border-size 2))
-	  0
+          0
           width height))
 
 
@@ -89,23 +91,23 @@
 
 (defun middle-right-placement (&optional (width 0) (height 0) (border-size *border-size*))
   (values (- (xlib:screen-width *screen*) width (* border-size 2))
-	  (truncate (/ (- (xlib:screen-height *screen*) height) 2))
+          (truncate (/ (- (xlib:screen-height *screen*) height) 2))
           width height))
 
 
 (defun bottom-left-placement (&optional (width 0) (height 0) (border-size *border-size*))
   (values 0
-	  (- (xlib:screen-height *screen*) height (* border-size 2))
+          (- (xlib:screen-height *screen*) height (* border-size 2))
           width height))
 
 (defun bottom-middle-placement (&optional (width 0) (height 0) (border-size *border-size*))
   (values (truncate (/ (- (xlib:screen-width *screen*) width) 2))
-	  (- (xlib:screen-height *screen*) height (* border-size 2))
+          (- (xlib:screen-height *screen*) height (* border-size 2))
           width height))
 
 (defun bottom-right-placement (&optional (width 0) (height 0) (border-size *border-size*))
   (values (- (xlib:screen-width *screen*) width (* border-size 2))
-	  (- (xlib:screen-height *screen*) height (* border-size 2))
+          (- (xlib:screen-height *screen*) height (* border-size 2))
           width height))
 
 
@@ -239,8 +241,8 @@
   (with-current-root-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
-      (values (+ x border-size 1)
-              (+ y border-size 1)
+      (values (+ x border-size)
+              (+ y border-size)
               width height))))
 
 (defun top-middle-root-placement (&optional (width 0) (height 0) (border-size *border-size*))
@@ -248,15 +250,15 @@
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
       (values (+ x (truncate (/ (- w width) 2)))
-              (+ y border-size 1)
+              (+ y border-size)
               width height))))
 
 (defun top-right-root-placement (&optional (width 0) (height 0) (border-size *border-size*))
   (with-current-root-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
-      (values (+ x (- w width border-size 1))
-              (+ y border-size 1)
+      (values (+ x (- w width border-size))
+              (+ y border-size)
               width height))))
 
 
@@ -265,7 +267,7 @@
   (with-current-root-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
-      (values (+ x border-size 1)
+      (values (+ x border-size)
               (+ y (truncate (/ (- h height) 2)))
               width height))))
 
@@ -274,15 +276,15 @@
   (with-current-root-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
-    (values (+ x (truncate (/ (- w width) 2)))
-	    (+ y (truncate (/ (- h height) 2)))
-            width height))))
+      (values (+ x (truncate (/ (- w width) 2)))
+              (+ y (truncate (/ (- h height) 2)))
+              width height))))
 
 (defun middle-right-root-placement (&optional (width 0) (height 0) (border-size *border-size*))
   (with-current-root-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
-      (values (+ x (- w width border-size 1))
+      (values (+ x (- w width border-size))
               (+ y (truncate (/ (- h height) 2)))
               width height))))
 
@@ -291,8 +293,8 @@
   (with-current-root-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
-      (values (+ x border-size 1)
-              (+ y (- h height border-size 1))
+      (values (+ x border-size)
+              (+ y (- h height border-size))
               width height))))
 
 (defun bottom-middle-root-placement (&optional (width 0) (height 0) (border-size *border-size*))
@@ -300,14 +302,14 @@
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
       (values (+ x (truncate (/ (- w width) 2)))
-              (+ y (- h height border-size 1))
+              (+ y (- h height border-size))
               width height))))
 
 (defun bottom-right-root-placement (&optional (width 0) (height 0) (border-size *border-size*))
   (with-current-root-coord (x y w h)
     (let ((width (min (- w 4) width))
           (height (min (- h 4) height)))
-      (values (+ x (- w width border-size 1))
-              (+ y (- h height border-size 1))
+      (values (+ x (- w width border-size))
+              (+ y (- h height border-size))
               width height))))
 
