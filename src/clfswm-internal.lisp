@@ -27,6 +27,32 @@
 
 
 
+(defgeneric child-border-size (child))
+
+(defmethod child-border-size ((child frame))
+  (x-drawable-border-width (frame-window child)))
+
+(defmethod child-border-size ((child xlib:window))
+  (x-drawable-border-width child))
+
+(defmethod child-border-size (child)
+  0)
+
+(defgeneric set-child-border-size (child value))
+
+(defmethod set-child-border-size ((child frame) value)
+  (setf (x-drawable-border-width (frame-window child)) value))
+
+(defmethod set-child-border-size ((child xlib:window) value)
+  (setf (x-drawable-border-width child) value))
+
+(defmethod set-child-border-size (child value)
+  (declare (ignore child value)))
+
+(defsetf child-border-size set-child-border-size)
+
+
+
 ;;; Conversion functions
 ;;; Float -> Pixel conversion
 (defun x-fl->px (x parent)
@@ -48,11 +74,11 @@
 ;;; Pixel -> Float conversion
 (defun x-px->fl (x parent)
   "Convert pixel X coordinate to float"
-  (/ (- x (frame-rx parent) *border-size*) (frame-rw parent)))
+  (/ (- x (frame-rx parent) (child-border-size parent)) (frame-rw parent)))
 
 (defun y-px->fl (y parent)
   "Convert pixel Y coordinate to float"
-  (/ (- y (frame-ry parent) *border-size*) (frame-rh parent)))
+  (/ (- y (frame-ry parent) (child-border-size parent)) (frame-rh parent)))
 
 (defun w-px->fl (w parent)
   "Convert pixel Width coordinate to float"
@@ -267,7 +293,6 @@
   (declare (ignore child value)))
 
 (defsetf child-transparency set-child-transparency)
-
 
 
 
@@ -604,8 +629,7 @@
 
   (defun unsure-at-least-one-root ()
     (unless root-list
-      (define-as-root *root-frame* (- *border-size*) (- *border-size*)
-                      (xlib:screen-width *screen*) (xlib:screen-height *screen*))))
+      (define-as-root *root-frame* 0 0 (xlib:screen-width *screen*) (xlib:screen-height *screen*))))
 
   (defun find-root-by-coordinates (x y)
     (dolist (root root-list)
@@ -754,7 +778,7 @@ XINERAMA version 1.1 opcode: 150
            do (when (search " head " line)
                 (destructuring-bind (w h x y)
                     (parse-xinerama-info line)
-                  (push (list (- x *border-size*) (- y *border-size*) w h) sizes))))
+                  (push (list x y w h) sizes))))
         (dbg sizes)
         (remove-duplicates sizes :test #'equal)))))
 
@@ -766,22 +790,22 @@ XINERAMA version 1.1 opcode: 150
         (height (xlib:screen-height *screen*)))
     ;;(add-placed-frame-tmp (first (frame-child *root-frame*)) 2)
     (if (<= (length sizes) 1)
-        (define-as-root *root-frame* (- *border-size*) (- *border-size*) width height)
-        (progn
-          (loop while (< (length (frame-child *root-frame*)) (length sizes))
-             do (let ((frame (create-frame)))
-                  ;;(add-placed-frame-tmp frame 2)))
-                  (add-frame frame *root-frame*)))
-          (loop for size in sizes
-             for frame in (frame-child *root-frame*)
-             do (destructuring-bind (x y w h) size
-                  (setf (frame-x frame) (float (/ x width))
-                        (frame-y frame) (float (/ y height))
-                        (frame-w frame) (float (/ w width))
-                        (frame-h frame) (float (/ h height)))
-                  (add-frame (create-frame) frame)
-                  (define-as-root frame x y w h)))
-          (setf (current-child) (first (frame-child (first (frame-child *root-frame*)))))))))
+        (define-as-root *root-frame* 0 0 width height))
+    (progn
+      (loop while (< (length (frame-child *root-frame*)) (length sizes))
+         do (let ((frame (create-frame)))
+              ;;(add-placed-frame-tmp frame 2)))
+              (add-frame frame *root-frame*)))
+      (loop for size in sizes
+         for frame in (frame-child *root-frame*)
+         do (destructuring-bind (x y w h) size
+              (setf (frame-x frame) (float (/ x width))
+                    (frame-y frame) (float (/ y height))
+                    (frame-w frame) (float (/ w width))
+                    (frame-h frame) (float (/ h height)))
+              (add-frame (create-frame) frame)
+              (define-as-root frame x y w h)))
+      (setf (current-child) (first (frame-child (first (frame-child *root-frame*))))))))
 
 
 
@@ -879,17 +903,16 @@ XINERAMA version 1.1 opcode: 150
   (declare (ignore child name)))
 
 
-
-
 (defun get-parent-layout (child parent)
   (aif (child-root-p child)
-       (values (root-x it) (root-y it) (root-w it) (root-h it))
+       (values (- (root-x it) (child-border-size child)) (- (root-y it) (child-border-size child))
+               (root-w it) (root-h it))
        (if (or (frame-p child) (managed-window-p child parent))
            (if (frame-p parent)
                (aif (frame-layout parent)
                     (funcall it child parent)
                     (no-layout child parent))
-               (values (- *border-size*) (- *border-size*)
+               (values (- (child-border-size child)) (- (child-border-size child))
                        (xlib:screen-width *screen*)
                        (xlib:screen-height *screen*)))
            (values (x-drawable-x child) (x-drawable-y child)

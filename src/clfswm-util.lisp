@@ -213,6 +213,21 @@
   (leave-second-mode))
 
 
+(defun ask-child-border-size (msg child)
+  (let ((size (query-number (format nil "New ~A border size: (last: ~A)"
+                                    msg
+                                    (child-border-size child))
+                            (child-border-size child))))
+    (when (numberp size)
+      (setf (child-border-size child) size))))
+
+
+(defun set-current-child-border-size ()
+  "Set the current child border size"
+  (ask-child-border-size "child" (current-child))
+  (leave-second-mode))
+
+
 (defun renumber-current-frame ()
   "Renumber the current frame"
   (when (frame-p (current-child))
@@ -711,8 +726,8 @@
     (hide-all-children frame)
     (with-slots (window) frame
       (resize-window window orig-x orig-y #'display-frame-info (list frame))
-      (setf (frame-w frame) (w-px->fl (x-drawable-width window) parent)
-	    (frame-h frame) (h-px->fl (x-drawable-height window) parent)))
+      (setf (frame-w frame) (w-px->fl (anti-adj-border-wh (x-drawable-width window) frame) parent)
+	    (frame-h frame) (h-px->fl (anti-adj-border-wh (x-drawable-height window) frame) parent)))
     (show-all-children)))
 
 

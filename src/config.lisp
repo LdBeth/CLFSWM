@@ -63,8 +63,8 @@ A list of (list match-function handle-function)")
 (defconfig *hide-unmanaged-window* t nil
            "Hide or not unmanaged windows when a child is deselected.")
 
-(defconfig *snap-size* 20 nil
-           "Snap size (in pixels) when move or resize frame is constrained")
+(defconfig *snap-size* 5 nil
+           "Snap size (in % of parent size) when move or resize frame is constrained")
 
 (defconfig *spatial-move-delay-before* 0.2 nil
            "Delay to display the current child before doing a spatial move")

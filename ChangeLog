@@ -1,3 +1,8 @@
+2012-06-18  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-placement.lisp: Each child can have its own border
+	size. New binding to change the child border size on the fly.
+
 2012-06-08  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/tools.lisp (process-timers): Call get-internal-real-time

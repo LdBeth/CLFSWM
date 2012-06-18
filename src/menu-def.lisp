@@ -79,6 +79,7 @@
 
 (add-menu-key 'child-menu "r" 'rename-current-child)
 (add-menu-key 'child-menu "t" 'set-current-child-transparency)
+(add-menu-key 'child-menu "b" 'set-current-child-border-size)
 (add-menu-key 'child-menu "e" 'ensure-unique-name)
 (add-menu-key 'child-menu "n" 'ensure-unique-number)
 (add-menu-key 'child-menu "Delete" 'delete-current-child)
