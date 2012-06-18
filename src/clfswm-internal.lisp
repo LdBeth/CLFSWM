@@ -36,6 +36,7 @@
   (x-drawable-border-width child))
 
 (defmethod child-border-size (child)
+  (declare (ignore child))
   0)
 
 (defgeneric set-child-border-size (child value))

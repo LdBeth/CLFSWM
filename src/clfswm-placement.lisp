@@ -120,15 +120,18 @@
     (xlib:window (values (x-drawable-x (current-child))
 			 (x-drawable-y (current-child))
 			 (- (x-drawable-width (current-child)) (* 2 border-size))
-			 (- (x-drawable-height (current-child)) (* 2 border-size))))
+			 (- (x-drawable-height (current-child)) (* 2 border-size))
+                         (x-drawable-border-width (current-child))))
     (frame (values (frame-rx (current-child))
 		   (frame-ry (current-child))
 		   (- (frame-rw (current-child)) (* 2 border-size))
-		   (- (frame-rh (current-child)) (* 2 border-size))))
-    (t (values 0 0 10 10))))
+		   (- (frame-rh (current-child)) (* 2 border-size))
+                   (x-drawable-border-width (frame-window (current-child)))))
+    (t (values 0 0 10 10 1))))
 
-(defmacro with-current-child-coord ((border-size x y w h) &body body)
-  `(multiple-value-bind (,x ,y ,w ,h)
+(defmacro with-current-child-coord ((border-size x y w h bds) &body body)
+  "Bind x y w h bds to current child coordinates and border size"
+  `(multiple-value-bind (,x ,y ,w ,h ,bds)
        (current-child-coord ,border-size)
      (let ((width (min w width))
            (height (min h height)))
@@ -136,47 +139,45 @@
 
 
 (defun top-left-child-placement (&optional (width 0) (height 0) (border-size *border-size*))
-  (with-current-child-coord (border-size x y w h)
-    (values (+ x border-size) (+ y border-size) width height)))
+  (with-current-child-coord (border-size x y w h bds)
+    (values (+ x bds) (+ y bds) width height)))
 
 (defun top-middle-child-placement (&optional (width 0) (height 0) (border-size *border-size*))
-  (with-current-child-coord (border-size x y w h)
-    (values (+ x (truncate (/ (- w width) 2)) border-size) (+ y border-size) width height)))
+  (with-current-child-coord (border-size x y w h bds)
+    (values (+ x (truncate (/ (- w width) 2)) bds) (+ y bds) width height)))
 
 (defun top-right-child-placement (&optional (width 0) (height 0) (border-size *border-size*))
-  (with-current-child-coord (border-size x y w h)
-    (values (+ x (- w width) border-size) (+ y border-size) width height)))
+  (with-current-child-coord (border-size x y w h bds)
+    (values (+ x (- w width) bds) (+ y bds) width height)))
 
 
 
 (defun middle-left-child-placement (&optional (width 0) (height 0) (border-size *border-size*))
-  (with-current-child-coord (border-size x y w h)
-    (values (+ x border-size) (+ y (truncate (/ (- h height) 2)) border-size) width height)))
+  (with-current-child-coord (border-size x y w h bds)
+    (values (+ x bds) (+ y (truncate (/ (- h height) 2)) bds) width height)))
 
 (defun middle-middle-child-placement (&optional (width 0) (height 0) (border-size *border-size*))
-  (with-current-child-coord (border-size x y w h)
-    (values (+ x (truncate (/ (- w width) 2)) border-size)
-            (+ y (truncate (/ (- h height) 2)) border-size)
+  (with-current-child-coord (border-size x y w h bds)
+    (values (+ x (truncate (/ (- w width) 2)) bds) (+ y (truncate (/ (- h height) 2)) bds)
             width height)))
 
 (defun middle-right-child-placement (&optional (width 0) (height 0) (border-size *border-size*))
-  (with-current-child-coord (border-size x y w h)
-    (values (+ x (- w width) border-size)
-            (+ y (truncate (/ (- h height) 2)) border-size)
+  (with-current-child-coord (border-size x y w h bds)
+    (values (+ x (- w width) bds) (+ y (truncate (/ (- h height) 2)) bds)
             width height)))
 
 
 (defun bottom-left-child-placement (&optional (width 0) (height 0) (border-size *border-size*))
-  (with-current-child-coord (border-size x y w h)
-    (values (+ x border-size) (+ y (- h height) border-size) width height)))
+  (with-current-child-coord (border-size x y w h bds)
+    (values (+ x bds) (+ y (- h height) bds) width height)))
 
 (defun bottom-middle-child-placement (&optional (width 0) (height 0) (border-size *border-size*))
-  (with-current-child-coord (border-size x y w h)
-    (values (+ x (truncate (/ (- w width) 2)) border-size) (+ y (- h height) border-size) width height)))
+  (with-current-child-coord (border-size x y w h bds)
+    (values (+ x (truncate (/ (- w width) 2)) bds) (+ y (- h height) bds) width height)))
 
 (defun bottom-right-child-placement (&optional (width 0) (height 0) (border-size *border-size*))
-  (with-current-child-coord (border-size x y w h)
-    (values (+ x (- w width) border-size) (+ y (- h height) border-size) width height)))
+  (with-current-child-coord (border-size x y w h bds)
+    (values (+ x (- w width) bds) (+ y (- h height) bds) width height)))
 
 
 ;;;
@@ -240,8 +241,8 @@
     (values (+ x (- w width)) (+ y (- h height)) width height)))
 
 
-;;;;; Some tests
-;;(defun test-some-placement (placement)
-;;  (setf *second-mode-placement* placement
-;;        *query-mode-placement* placement))
+;;; Some tests
+(defun test-some-placement (placement)
+  (setf *second-mode-placement* placement
+        *query-mode-placement* placement))
 
