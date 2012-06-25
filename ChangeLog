@@ -1,3 +1,7 @@
+2012-06-26  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-query.lisp: Add completion for shell commands.
+
 2012-06-18  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-placement.lisp: Each child can have its own border

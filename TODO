@@ -16,7 +16,7 @@ FOR THE NEXT RELEASE
 
 - Add a toolbar in contrib/
 
-- Add completion in query input.
+- Add completion in query input (done for shell command / TODO for lisp symbols).
 
 - Add a tabbar layout : save some space on top/left... of the frame and display clickable
     children name.

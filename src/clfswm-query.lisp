@@ -39,7 +39,6 @@
 (defparameter *query-return* nil)
 
 
-
 (defun query-show-paren (orig-string pos dec)
   "Replace matching parentheses with brackets"
   (let ((string (copy-seq orig-string)))
@@ -95,20 +94,24 @@
 (add-hook *binding-hook* 'init-*query-keys*)
 
 
+
 (defun query-find-complet-list ()
-  (remove-if-not (lambda (x)
-		   (zerop (or (search *query-string* x :test #'string-equal) -1)))
-		 *query-complet-list*))
+  (let* ((pos (or (position #\space *query-string* :end *query-pos* :from-end t) 0))
+         (str (string-trim " " (subseq *query-string* pos *query-pos*))))
+    (when (>= (length str) *query-min-complet-char*)
+      (values (string-match str *query-complet-list*) pos))))
 
 
 (defun query-print-string ()
   (let ((dec (min 0 (- (- (x-drawable-width *query-window*) 10)
-		       (+ 10 (* *query-pos* (xlib:max-char-width *query-font*)))))))
+		       (+ 10 (* *query-pos* (xlib:max-char-width *query-font*))))))
+        (complet (query-find-complet-list)))
     (clear-pixmap-buffer *query-window* *query-gc*)
     (setf (xlib:gcontext-foreground *query-gc*) (get-color *query-message-color*))
     (xlib:draw-glyphs *pixmap-buffer* *query-gc* 5 (+ (xlib:max-char-ascent *query-font*) 5)
 		      (format nil "~A ~{~A~^, ~}" *query-message*
-			      (query-find-complet-list)))
+			      (if (< (length complet) *query-max-complet-length*)
+                                  complet nil)))
     (when (< *query-pos* 0)
       (setf *query-pos* 0))
     (when (> *query-pos* (length *query-string*))
@@ -251,12 +254,24 @@
 
 
 (defun query-mode-complet ()
-  (setf *query-string* (find-common-string *query-string* (query-find-complet-list)))
-  (let ((complet (query-find-complet-list)))
-    (when (= (length complet) 1)
-      (setf *query-string* (first complet))))
-  (query-end))
-
+  (multiple-value-bind (complet pos)
+      (query-find-complet-list)
+    (if (= (length complet) 1)
+        (setf *query-string* (concatenate 'string
+                                          (subseq *query-string* 0 pos)
+                                          (if (plusp pos) " " "")
+                                          (first complet) " "
+                                          (subseq *query-string* *query-pos*))
+              *query-pos* (+ pos (length (first complet)) (if (plusp pos) 2 1)))
+        (let ((common (find-common-string (string-trim " " (subseq *query-string* pos *query-pos*))
+                                          complet)))
+          (when (and complet common)
+            (setf *query-string* (concatenate 'string
+                                              (subseq *query-string* 0 pos)
+                                              (if (plusp pos) " " "")
+                                              common
+                                              (subseq *query-string* *query-pos*))
+                  *query-pos* (+ pos (length common) (if (plusp pos) 1 0))))))))
 
 
 (add-hook *binding-hook* 'set-default-query-keys)
@@ -271,7 +286,9 @@
   (define-query-key ("Delete") 'query-delete)
   (define-query-key ("Delete" :control) 'query-delete-word)
   (define-query-key ("Home") 'query-home)
+  (define-query-key ("a" :control) 'query-home)
   (define-query-key ("End") 'query-end)
+  (define-query-key ("e" :control) 'query-end)
   (define-query-key ("Left") 'query-left)
   (define-query-key ("Left" :control) 'query-left-word)
   (define-query-key ("Right") 'query-right)

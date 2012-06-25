@@ -65,7 +65,7 @@
 
 
 (defun query-yes-or-no (formatter &rest args)
-  (let ((rep (query-string (apply #'format nil formatter args) "" '("yes" "no"))))
+  (let ((rep (query-string (apply #'format nil formatter args) "" '("Yes" "No"))))
     (or (string= rep "")
 	(char= (char rep 0) #\y)
 	(char= (char rep 0) #\Y))))
@@ -562,15 +562,19 @@
 
 
 
-(defun run-program-from-query-string ()
-  "Run a program from the query input"
-  (multiple-value-bind (program return)
-      (query-string "Run:")
-    (when (and (equal return :return) program (not (equal program "")))
-      (setf *second-mode-leave-function* (let ((cmd (concatenate 'string "cd $HOME && " program)))
-					   (lambda ()
-					     (do-shell cmd))))
-      (leave-second-mode))))
+
+(let ((commands nil))
+  (defun run-program-from-query-string ()
+    "Run a program from the query input"
+    (unless commands
+      (setf commands (remove-duplicates (cmd-in-path) :test #'string-equal)))
+    (multiple-value-bind (program return)
+        (query-string "Run:" "" commands)
+      (when (and (equal return :return) program (not (equal program "")))
+        (setf *second-mode-leave-function* (let ((cmd (concatenate 'string "cd $HOME && " program)))
+                                             (lambda ()
+                                               (do-shell cmd))))
+        (leave-second-mode)))))
 
 
 

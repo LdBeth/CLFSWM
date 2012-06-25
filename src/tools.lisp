@@ -62,6 +62,7 @@
 	   :ensure-function
 	   :empty-string-p
 	   :find-common-string
+           :cmd-in-path
 	   :setf/=
 	   :number->char
            :number->string
@@ -69,6 +70,7 @@
 	   :repeat-chars
 	   :nth-insert
 	   :split-string
+           :string-match
 	   :append-newline-space
 	   :expand-newline
 	   :ensure-list
@@ -440,6 +442,20 @@ Return the result of the last hook"
       string))
 
 
+(defun cmd-in-path (&optional (tmpfile "/tmp/clfswm-cmd.tmp"))
+  (labels ((delete-tmp ()
+             (when (probe-file tmpfile)
+               (delete-file tmpfile))))
+    (delete-tmp)
+    (dolist (dir (split-string (getenv "PATH") #\:))
+      (ushell (format nil "ls ~A/* >> ~A" dir tmpfile)))
+    (prog1
+        (with-open-file (stream tmpfile :direction :input)
+          (loop for line = (read-line stream nil nil)
+             while line
+             collect (subseq line (1+ (or (position #\/ line :from-end t) -1)))))
+      (delete-tmp))))
+
 
 ;;; Tools
 (defmacro setf/= (var val)
@@ -489,6 +505,14 @@ Return the result of the last hook"
      as sub = (subseq string i j)
      unless (string= sub "") collect sub
      while j))
+
+(defun string-match (match list)
+  "Return the string in list witch match the match string"
+  (let ((len (length match)))
+    (remove-duplicates (remove-if-not (lambda (x)
+                                        (string-equal match (subseq x 0 (min len (length x)))))
+                                      list)
+                       :test #'string-equal)))
 
 
 (defun append-newline-space (string)
