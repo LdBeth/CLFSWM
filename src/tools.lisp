@@ -62,7 +62,7 @@
 	   :ensure-function
 	   :empty-string-p
 	   :find-common-string
-           :cmd-in-path
+           :command-in-path
 	   :setf/=
 	   :number->char
            :number->string
@@ -71,6 +71,7 @@
 	   :nth-insert
 	   :split-string
            :string-match
+           :extented-alphanumericp
 	   :append-newline-space
 	   :expand-newline
 	   :ensure-list
@@ -442,19 +443,23 @@ Return the result of the last hook"
       string))
 
 
-(defun cmd-in-path (&optional (tmpfile "/tmp/clfswm-cmd.tmp"))
+(defun command-in-path (&optional (tmpfile "/tmp/clfswm-cmd.tmp"))
+  (format t "Updating command list...~%")
   (labels ((delete-tmp ()
              (when (probe-file tmpfile)
                (delete-file tmpfile))))
     (delete-tmp)
     (dolist (dir (split-string (getenv "PATH") #\:))
       (ushell (format nil "ls ~A/* >> ~A" dir tmpfile)))
-    (prog1
-        (with-open-file (stream tmpfile :direction :input)
-          (loop for line = (read-line stream nil nil)
-             while line
-             collect (subseq line (1+ (or (position #\/ line :from-end t) -1)))))
-      (delete-tmp))))
+    (let ((commands nil))
+      (with-open-file (stream tmpfile :direction :input)
+        (loop for line = (read-line stream nil nil)
+           while line
+           do (pushnew (subseq line (1+ (or (position #\/ line :from-end t) -1))) commands
+                       :test #'string=)))
+      (delete-tmp)
+      (format t "Done. Found ~A commands in shell PATH.~%" (length commands))
+      commands)))
 
 
 ;;; Tools
@@ -513,6 +518,14 @@ Return the result of the last hook"
                                         (string-equal match (subseq x 0 (min len (length x)))))
                                       list)
                        :test #'string-equal)))
+
+
+(defun extented-alphanumericp (char)
+  (or (alphanumericp char)
+      (eq char #\-)
+      (eq char #\_)
+      (eq char #\.)
+      (eq char #\+)))
 
 
 (defun append-newline-space (string)

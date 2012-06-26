@@ -257,9 +257,9 @@ on the root window in the main mode with the mouse")
   'Query-string "Query string window border color")
 (defconfig *query-transparency* *default-transparency*
   'Query-string "Query string window background transparency")
-(defconfig *query-max-complet-length* 50
+(defconfig *query-max-complet-length* 100
   'Query-string "Query maximum length of completion list")
-(defconfig *query-min-complet-char* 2
+(defconfig *query-min-complet-char* 1
   'Query-string "Query minimum input length for completion")
 
 

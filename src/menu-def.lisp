@@ -27,6 +27,9 @@
 
 (in-package :clfswm)
 
+(format t "Updating menus...")
+(force-output)
+
 (init-menu)
 
 ;;; Here is a small example of menu manipulation:
@@ -236,3 +239,5 @@
 (add-menu-key 'clfswm-menu "l" 'reload-clfswm)
 (add-menu-key 'clfswm-menu "x" 'exit-clfswm)
 
+(format t " Done.~%")
+(force-output)

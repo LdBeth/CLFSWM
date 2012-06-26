@@ -563,11 +563,9 @@
 
 
 
-(let ((commands nil))
+(let ((commands (command-in-path)))
   (defun run-program-from-query-string ()
     "Run a program from the query input"
-    (unless commands
-      (setf commands (remove-duplicates (cmd-in-path) :test #'string-equal)))
     (multiple-value-bind (program return)
         (query-string "Run:" "" commands)
       (when (and (equal return :return) program (not (equal program "")))

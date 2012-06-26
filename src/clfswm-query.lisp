@@ -96,9 +96,12 @@
 
 
 (defun query-find-complet-list ()
-  (let* ((pos (or (position #\space *query-string* :end *query-pos* :from-end t) 0))
-         (str (string-trim " " (subseq *query-string* pos *query-pos*))))
-    (when (>= (length str) *query-min-complet-char*)
+  (let* ((pos (1+ (or (position-if-not #'extented-alphanumericp *query-string*
+                                       :end *query-pos* :from-end t)
+                      -1)))
+         (str (subseq *query-string* pos *query-pos*)))
+    (when (or (> (length str) (1- *query-min-complet-char*))
+              (< (length *query-complet-list*) *query-max-complet-length*))
       (values (string-match str *query-complet-list*) pos))))
 
 
@@ -256,22 +259,20 @@
 (defun query-mode-complet ()
   (multiple-value-bind (complet pos)
       (query-find-complet-list)
-    (if (= (length complet) 1)
-        (setf *query-string* (concatenate 'string
-                                          (subseq *query-string* 0 pos)
-                                          (if (plusp pos) " " "")
-                                          (first complet) " "
-                                          (subseq *query-string* *query-pos*))
-              *query-pos* (+ pos (length (first complet)) (if (plusp pos) 2 1)))
-        (let ((common (find-common-string (string-trim " " (subseq *query-string* pos *query-pos*))
-                                          complet)))
-          (when (and complet common)
-            (setf *query-string* (concatenate 'string
-                                              (subseq *query-string* 0 pos)
-                                              (if (plusp pos) " " "")
-                                              common
-                                              (subseq *query-string* *query-pos*))
-                  *query-pos* (+ pos (length common) (if (plusp pos) 1 0))))))))
+    (when complet
+      (if (= (length complet) 1)
+          (setf *query-string* (concatenate 'string
+                                            (subseq *query-string* 0 pos)
+                                            (first complet) " "
+                                            (subseq *query-string* *query-pos*))
+                *query-pos* (+ pos (length (first complet)) 1))
+          (let ((common (find-common-string (subseq *query-string* pos *query-pos*) complet)))
+            (when common
+              (setf *query-string* (concatenate 'string
+                                                (subseq *query-string* 0 pos)
+                                                common
+                                                (subseq *query-string* *query-pos*))
+                    *query-pos* (+ pos (length common)))))))))
 
 
 (add-hook *binding-hook* 'set-default-query-keys)

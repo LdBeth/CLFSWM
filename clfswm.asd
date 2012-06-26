@@ -64,7 +64,7 @@
 			 (:file "clfswm-util"
 				:depends-on ("clfswm" "keysyms" "clfswm-info" "clfswm-second-mode" "clfswm-query"
                                                       "clfswm-menu" "clfswm-autodoc" "clfswm-corner"
-                                                      "clfswm-placement"))
+                                                      "clfswm-placement" "tools"))
                          (:file "clfswm-configuration"
 				:depends-on ("package" "config" "clfswm-internal" "clfswm-util" "clfswm-query"
 						       "clfswm-menu"))
