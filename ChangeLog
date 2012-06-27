@@ -1,3 +1,8 @@
+2012-06-27  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-util.lisp (eval-from-query-string): Add completion
+	for eval for query string.
+
 2012-06-26  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-query.lisp: Add completion for shell commands.

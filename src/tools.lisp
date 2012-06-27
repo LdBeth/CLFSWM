@@ -56,6 +56,7 @@
 	   :dbgnl
 	   :dbgc
            :distance
+           :collect-all-symbols
 	   :with-all-internal-symbols
 	   :export-all-functions :export-all-variables
 	   :export-all-functions-and-variables
@@ -383,6 +384,19 @@ Return the result of the last hook"
 
 
 ;;; Symbols tools
+(defun collect-all-symbols (&optional package)
+  (format t "Collecting all symbols for completion...")
+  (let (all-symbols)
+    (do-symbols (symbol (or package *package*))
+      (pushnew (string-downcase (symbol-name symbol)) all-symbols :test #'string=))
+    (do-symbols (symbol :keyword)
+      (pushnew (concatenate 'string ":" (string-downcase (symbol-name symbol)))
+               all-symbols :test #'string=))
+    (format t " Done.~%")
+    all-symbols))
+
+
+
 (defmacro with-all-internal-symbols ((var package) &body body)
   "Bind symbol to all internal symbols in package"
   `(do-symbols (,var ,package)
@@ -525,7 +539,11 @@ Return the result of the last hook"
       (eq char #\-)
       (eq char #\_)
       (eq char #\.)
-      (eq char #\+)))
+      (eq char #\+)
+      (eq char #\=)
+      (eq char #\*)
+      (eq char #\:)
+      (eq char #\%)))
 
 
 (defun append-newline-space (string)

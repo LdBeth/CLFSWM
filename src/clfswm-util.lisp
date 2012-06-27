@@ -540,24 +540,34 @@
 
 
 
-(defun eval-from-query-string ()
-  "Eval a lisp form from the query input"
-  (let ((form (query-string (format nil "Eval Lisp - ~A" (package-name *package*))))
-	(result nil))
-    (when (and form (not (equal form "")))
-      (let ((printed-result
-	     (with-output-to-string (*standard-output*)
-	       (setf result (handler-case
-				(loop for i in (multiple-value-list
-						(eval (read-from-string form)))
-				   collect (format nil "~S" i))
-			      (error (condition)
-				(format nil "~A" condition)))))))
-	(info-mode (expand-newline (append (ensure-list (format nil "> ~A" form))
-					   (ensure-list printed-result)
-					   (ensure-list result)))
-		   :width (- (xlib:screen-width *screen*) 2))
-	(eval-from-query-string)))))
+(let ((all-symbols (collect-all-symbols)))
+  (defun eval-from-query-string ()
+    "Eval a lisp form from the query input"
+    (let ((form (query-string (format nil "Eval Lisp <~A> " (package-name *package*))
+                              "" all-symbols))
+            (result nil))
+        (when (and form (not (equal form "")))
+          (let ((printed-result
+                 (with-output-to-string (*standard-output*)
+                   (setf result (handler-case
+                                    (loop for i in (multiple-value-list
+                                                    (eval (read-from-string form)))
+                                       collect (format nil "~S" i))
+                                  (error (condition)
+                                    (format nil "~A" condition)))))))
+            (let ((ret (info-mode (expand-newline (append (ensure-list (format nil "> ~A" form))
+                                                          (ensure-list printed-result)
+                                                          (ensure-list result)))
+                                  :width (- (xlib:screen-width *screen*) 2))))
+              (when (or (search "defparameter" form :test #'string-equal)
+                        (search "defvar" form :test #'string-equal))
+                (let ((elem (split-string form)))
+                  (pushnew (string-downcase (if (string= (first elem) "(") (third elem) (second elem)))
+                           all-symbols :test #'string=)))
+              (when (search "in-package" form :test #'string-equal)
+                (setf all-symbols (collect-all-symbols)))
+              (when ret
+                (eval-from-query-string))))))))
 
 
 
