@@ -67,10 +67,12 @@
 	   :setf/=
 	   :number->char
            :number->string
+           :number->letter
 	   :simple-type-of
 	   :repeat-chars
 	   :nth-insert
 	   :split-string
+           :substring-equal
            :string-match
            :extented-alphanumericp
 	   :append-newline-space
@@ -223,7 +225,7 @@
 ;;;,-----
 ;;;| Minimal hook
 ;;;`-----
-(defun call-hook (hook &optional args)
+(defun call-hook (hook &rest args)
   "Call a hook (a function, a symbol or a list of functions)
 Return the result of the last hook"
   (let ((result nil))
@@ -385,7 +387,7 @@ Return the result of the last hook"
 
 ;;; Symbols tools
 (defun collect-all-symbols (&optional package)
-  (format t "Collecting all symbols for completion...")
+  (format t "Collecting all symbols for Lisp REPL completion...")
   (let (all-symbols)
     (do-symbols (symbol (or package *package*))
       (pushnew (string-downcase (symbol-name symbol)) all-symbols :test #'string=))
@@ -458,7 +460,7 @@ Return the result of the last hook"
 
 
 (defun command-in-path (&optional (tmpfile "/tmp/clfswm-cmd.tmp"))
-  (format t "Updating command list...~%")
+  (format t "Updating command list for Shell completion...~%")
   (labels ((delete-tmp ()
              (when (probe-file tmpfile)
                (delete-file tmpfile))))
@@ -494,6 +496,14 @@ Return the result of the last hook"
 (defun number->string (number)
   (string (number->char number)))
 
+(defun  number->letter (n &optional (base 26))
+  (nreverse
+   (with-output-to-string (str)
+     (labels ((rec (n)
+                (princ (code-char (+ (char-code #\a) (mod n base))) str)
+                (when (>= n base)
+                  (rec (- (truncate (/ n base)) 1)))))
+       (rec n)))))
 
 
 (defun simple-type-of (object)
@@ -524,6 +534,9 @@ Return the result of the last hook"
      as sub = (subseq string i j)
      unless (string= sub "") collect sub
      while j))
+
+(defun substring-equal (substring string)
+  (string-equal substring (subseq string 0 (min (length substring) (length string)))))
 
 (defun string-match (match list)
   "Return the string in list witch match the match string"

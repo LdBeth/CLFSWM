@@ -234,8 +234,10 @@ loading configuration file and before opening the display.")
   'Placement "Query mode window placement")
 (defconfig *circulate-mode-placement* 'bottom-middle-root-placement
   'Placement "Circulate mode window placement")
-(defconfig *expose-mode-placement* 'top-left-root-placement
+(defconfig *expose-mode-placement* 'top-left-child-placement
   'Placement "Expose mode window placement (Selection keys position)")
+(defconfig *expose-query-placement* 'bottom-left-root-placement
+  'Placement "Expose mode query window placement")
 (defconfig *notify-window-placement* 'bottom-right-root-placement
   'Placement "Notify window placement")
 (defconfig *ask-close/kill-placement* 'top-right-root-placement

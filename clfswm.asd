@@ -37,6 +37,9 @@
 				:depends-on ("package" "clfswm-internal"))
 			 (:file "clfswm-generic-mode"
 				:depends-on ("package" "tools" "xlib-util" "clfswm-internal"))
+                         (:file "clfswm-query"
+				:depends-on ("package" "config" "xlib-util" "clfswm-keys"
+						       "clfswm-generic-mode" "clfswm-placement"))
 			 (:file "clfswm-circulate-mode"
 				:depends-on ("xlib-util" "clfswm-keys" "clfswm-generic-mode"
 							 "clfswm-internal" "netwm-util" "tools" "config"
@@ -49,7 +52,8 @@
 						       "clfswm-placement"))
 			 (:file "clfswm-expose-mode"
 				:depends-on ("package" "config" "clfswm-internal" "xlib-util" "tools"
-                                                       "clfswm-keys" "clfswm-generic-mode" "clfswm-placement"))
+                                                       "clfswm-keys" "clfswm-generic-mode" "clfswm-placement"
+                                                       "clfswm-query"))
 			 (:file "clfswm-corner"
 				:depends-on ("package" "config" "clfswm-internal" "clfswm-expose-mode" "xlib-util"))
 			 (:file "clfswm-info"
@@ -58,9 +62,6 @@
 						       "clfswm-generic-mode" "clfswm-placement"))
 			 (:file "clfswm-menu"
 				:depends-on ("package" "clfswm-info"))
-			 (:file "clfswm-query"
-				:depends-on ("package" "config" "xlib-util" "clfswm-keys"
-						       "clfswm-generic-mode" "clfswm-placement"))
 			 (:file "clfswm-util"
 				:depends-on ("clfswm" "keysyms" "clfswm-info" "clfswm-second-mode" "clfswm-query"
                                                       "clfswm-menu" "clfswm-autodoc" "clfswm-corner"
@@ -79,8 +80,8 @@
 			 (:file "bindings"
 				:depends-on ("clfswm" "clfswm-internal" "clfswm-util" "clfswm-menu"))
 			 (:file "bindings-second-mode"
-				:depends-on ("clfswm" "clfswm-util" "clfswm-query" "bindings" "clfswm-pack" "clfswm-menu" "menu-def"
-						      "clfswm-layout")))))
+				:depends-on ("clfswm" "clfswm-util" "clfswm-query" "bindings" "clfswm-pack"
+                                                      "clfswm-menu" "menu-def" "clfswm-layout")))))
   :depends-on ( #-:CLX :clx #+:sbcl :sb-posix ))
 
 

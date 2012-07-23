@@ -48,74 +48,38 @@
   (throw 'exit-expose-loop t))
 
 
-(define-handler expose-mode :key-press (code state)
-  (funcall-key-from-code *expose-keys* code state))
-
-(define-handler expose-mode :button-press (code state window root-x root-y)
-  (funcall-button-from-code *expose-mouse* code state window root-x root-y *fun-press*))
-
-(define-handler expose-mode :exposure ()
-  (expose-draw-letter))
-
-
-(add-hook *binding-hook* 'set-default-expose-keys)
-
-(defun set-default-expose-keys ()
-  (define-expose-key ("Escape") 'leave-expose-mode)
-  (define-expose-key ("g" :control) 'leave-expose-mode)
-  (define-expose-key ("Escape" :alt) 'leave-expose-mode)
-  (define-expose-key ("g" :control :alt) 'leave-expose-mode)
-  (define-expose-key ("Return") 'valid-expose-mode)
-  (define-expose-key ("space") 'valid-expose-mode)
-  (define-expose-key ("Tab") 'valid-expose-mode)
-  (define-expose-key ("Right") 'speed-mouse-right)
-  (define-expose-key ("Left") 'speed-mouse-left)
-  (define-expose-key ("Down") 'speed-mouse-down)
-  (define-expose-key ("Up") 'speed-mouse-up)
-  (define-expose-key ("Left" :control) 'speed-mouse-undo)
-  (define-expose-key ("Up" :control) 'speed-mouse-first-history)
-  (define-expose-key ("Down" :control) 'speed-mouse-reset)
-  (define-expose-mouse (1) 'mouse-valid-expose-mode)
-  (define-expose-mouse (2) 'mouse-leave-expose-mode)
-  (define-expose-mouse (3) 'mouse-leave-expose-mode))
-
-(defmacro define-expose-letter-keys ()
-  (labels ((produce-name (n)
-	     (create-symbol "%" "expose-fun-key-" n "%")))
-    `(progn
-       ,@(loop for n from 0 to 61
-	    collect `(progn
-		       (defun ,(produce-name n) ()
-			 ,(format nil "Select child '~A' (~A)" (number->string n) n)
-			 (let ((child (nth ,n *expose-windows-list*)))
-			   (when child
-			     (xlib:warp-pointer *root* (x-drawable-x (first child)) (x-drawable-y (first child)))
-			     (setf *expose-selected-child* (fourth child))
-			     (when *expose-valid-on-key*
-			       (valid-expose-mode)))))
-		       (define-expose-key (,(number->string n)) ',(produce-name n)))))))
-
-(define-expose-letter-keys)
-
-
 (defun expose-draw-letter ()
-  (loop for lwin in *expose-windows-list* do
-       (xlib:draw-glyphs (first lwin) (second lwin)
-			 (xlib:max-char-width *expose-font*)
-			 (+ (xlib:font-ascent *expose-font*) (xlib:font-descent *expose-font*))
-			 (third lwin))))
+  (dolist (lwin *expose-windows-list*)
+    (destructuring-bind (window gc string child letter) lwin
+      (declare (ignore child))
+      (clear-pixmap-buffer window gc)
+      (xlib:with-gcontext (gc :foreground (get-color (if (substring-equal *query-string* letter)
+                                                         *expose-foreground-letter*
+                                                         *expose-foreground-letter-nok*))
+                              :background (get-color (if (string-equal *query-string* letter)
+                                                         *expose-background-letter-match*
+                                                         *expose-background*)))
+        (xlib:draw-image-glyphs *pixmap-buffer* gc
+                                (xlib:max-char-width *expose-font*)
+                                (+ (xlib:font-ascent *expose-font*) (xlib:font-descent *expose-font*))
+                                letter))
+      (xlib:draw-glyphs *pixmap-buffer* gc
+                        (xlib:max-char-width *expose-font*)
+                        (+ (* 2 (xlib:font-ascent *expose-font*)) (xlib:font-descent *expose-font*) 1)
+                        string)
+      (copy-pixmap-buffer window gc))))
 
 (defun expose-create-window (child n)
   (with-current-child (child)
-    (let* ((string (format nil "~A~A" (number->string n)
+    (let* ((string (format nil "~A"
                            (if *expose-show-window-title*
-                               (format nil " - ~A" (ensure-printable (child-fullname child)))
+                               (ensure-printable (child-fullname child))
                                "")))
            (width (if *expose-show-window-title*
                       (min (* (xlib:max-char-width *expose-font*) (+ (length string) 2))
                            (- (child-width child) 4))
                       (* (xlib:max-char-width *expose-font*) 3)))
-           (height (* (xlib:font-ascent *expose-font*) 2)))
+           (height (* (xlib:font-ascent *expose-font*) 3)))
       (with-placement (*expose-mode-placement* x y width height)
         (let* ((window (xlib:create-window :parent *root*
                                            :x x   :y y
@@ -132,98 +96,116 @@
                                          :line-style :solid)))
           (setf (window-transparency window) *expose-transparency*)
           (map-window window)
-          (push (list window gc string child) *expose-windows-list*))))))
+          (push (list window gc string child (number->letter n)) *expose-windows-list*))))))
 
 
+
+
+(defun expose-query-key-press-hook (code state)
+  (declare (ignore code state))
+  (expose-draw-letter))
+
+(defun expose-query-button-press-hook (code state x y)
+  (declare (ignore state))
+  (when (= code 1)
+    (setf *expose-selected-child* (find-child-under-mouse x y)))
+  (leave-query-mode :click))
+
+
+(defun expose-init ()
+  (setf *expose-font* (xlib:open-font *display* *expose-font-string*)
+	*expose-windows-list* nil
+	*expose-selected-child* nil
+        *query-string* "")
+  (xlib:warp-pointer *root* (truncate (/ (xlib:screen-width *screen*) 2))
+		     (truncate (/ (xlib:screen-height *screen*) 2)))
+  (add-hook *query-key-press-hook* 'expose-query-key-press-hook)
+  (add-hook *query-button-press-hook* 'expose-query-button-press-hook))
+
+(defun expose-present-windows ()
+  (dolist (root (all-root-child))
+    (with-all-frames (root frame)
+      (setf (frame-data-slot frame :old-layout) (frame-layout frame)
+            (frame-layout frame) #'tile-space-layout)))
+  (show-all-children t))
 
 (defun expose-mode-display-accel-windows ()
   (let ((n -1))
-    (with-all-children-reversed ((find-current-root) child)
-      (if (or (frame-p child)
-	      (managed-window-p child (find-parent-frame child *root-frame*)))
-	  (when (< n 61)
-	    (expose-create-window child (incf n)))
-	  (hide-child child))))
-  (setf *expose-windows-list* (nreverse *expose-windows-list*))
-  (expose-draw-letter))
+    (dolist (root (nreverse (all-root-child)))
+      (with-all-children-reversed (root child)
+        (if (or (frame-p child)
+                (managed-window-p child (find-parent-frame child *root-frame*)))
+            (expose-create-window child (incf n))
+            (hide-child child))))
+    (setf *expose-windows-list* (nreverse *expose-windows-list*))
+    (expose-draw-letter)))
 
+(defun expose-find-child-from-letters (letters)
+  (fourth (find letters *expose-windows-list* :test #'string-equal :key #'fifth)))
 
-(defun expose-windows-generic (first-restore-frame &optional body body-escape)
-  (setf *expose-font* (xlib:open-font *display* *expose-font-string*)
-	*expose-windows-list* nil
-	*expose-selected-child* nil)
-  (xlib:warp-pointer *root* (truncate (/ (xlib:screen-width *screen*) 2))
-		     (truncate (/ (xlib:screen-height *screen*) 2)))
-  (with-all-frames (first-restore-frame frame)
-    (setf (frame-data-slot frame :old-layout) (frame-layout frame)
-	  (frame-layout frame) #'tile-space-layout))
-  (show-all-children t)
-  (expose-mode-display-accel-windows)
-  (let ((grab-keyboard-p (xgrab-keyboard-p))
-	(grab-pointer-p (xgrab-pointer-p)))
-    (xgrab-pointer *root* 92 93)
-    (unless grab-keyboard-p
-      (ungrab-main-keys)
-      (xgrab-keyboard *root*))
-    (if (generic-mode 'expose-mode 'exit-expose-loop
-		      :original-mode '(main-mode))
-	(multiple-value-bind (x y) (xlib:query-pointer *root*)
-	  (let* ((child (or *expose-selected-child* (find-child-under-mouse x y)))
-		 (parent (find-parent-frame child *root-frame*)))
-	    (when (and child parent)
-	      (pfuncall body parent)
-	      (focus-all-children child parent))))
-	(pfuncall body-escape))
-    (dolist (lwin *expose-windows-list*)
-      (awhen (first lwin)
-	(xlib:destroy-window it))
-      (awhen (second lwin)
-	     (xlib:free-gcontext it)))
-    (when *expose-font*
-      (xlib:close-font *expose-font*))
-    (setf *expose-windows-list* nil)
-    (with-all-frames (first-restore-frame frame)
+(defun expose-select-child ()
+  (let ((*query-mode-placement* *expose-query-placement*))
+    (multiple-value-bind (letters return)
+        (query-string "Child string")
+      (let ((child (case return
+                     (:return (expose-find-child-from-letters letters))
+                     (:click *expose-selected-child*))))
+        (when (find-child-in-all-root child)
+          child)))))
+
+(defun expose-restore-windows ()
+  (remove-hook *query-key-press-hook* 'expose-query-key-press-hook)
+  (remove-hook *query-button-press-hook* 'expose-query-button-press-hook)
+  (dolist (lwin *expose-windows-list*)
+    (awhen (first lwin)
+      (xlib:destroy-window it))
+    (awhen (second lwin)
+      (xlib:free-gcontext it)))
+  (when *expose-font*
+    (xlib:close-font *expose-font*))
+  (setf *expose-windows-list* nil)
+  (dolist (root (all-root-child))
+    (with-all-frames (root frame)
       (setf (frame-layout frame) (frame-data-slot frame :old-layout)
-	    (frame-data-slot frame :old-layout) nil))
-    (show-all-children t)
-    (banish-pointer)
-    (unless grab-keyboard-p
-      (xungrab-keyboard)
-      (grab-main-keys))
-    (if grab-pointer-p
-	(xgrab-pointer *root* 66 67)
-	(xungrab-pointer))
-    (wait-no-key-or-button-press))
+            (frame-data-slot frame :old-layout) nil))))
+
+(defun expose-focus-child (child)
+  (let ((parent (typecase child
+                  (xlib:window (find-parent-frame child))
+                  (frame child))))
+    (when (and child parent)
+      (change-root (find-root parent) parent)
+      (setf (current-child) child)
+      (focus-all-children child parent t))))
+
+(defun expose-do-main ()
+  (stop-button-event)
+  (expose-init)
+  (expose-present-windows)
+  (expose-mode-display-accel-windows)
+  (let ((child (expose-select-child)))
+    (expose-restore-windows)
+    child))
+
+(defun expose-windows-mode ()
+  "Present all windows in currents roots (An expose like)"
+  (awhen (expose-do-main)
+    (expose-focus-child it))
+  (show-all-children)
   t)
 
 
-(defun expose-windows-mode ()
-  "Present all windows in the current frame (An expose like)"
-  (stop-button-event)
-  (expose-windows-generic (find-current-root)))
-
 (defun expose-all-windows-mode ()
   "Present all windows in all frames (An expose like)"
-  (stop-button-event)
-  (let ((orig-root *current-root*))
-    (switch-to-root-frame :show-later t)
-    (expose-windows-generic *root-frame*
-			    (lambda (parent)
-			      (setf *current-root* parent))
-			    (lambda ()
-			      (setf *current-root* orig-root)))))
+  (let ((child nil))
+    (with-saved-root-list ()
+      (dolist (root (get-root-list))
+        (change-root root (root-original root)))
+      (setf child (expose-do-main)))
+    (when child
+      (expose-focus-child child)))
+  (show-all-children)
+  t)
 
-(defun expose-windows-current-child-mode ()
-  "Present all windows in the current child (An expose like)"
-  (stop-button-event)
-  (when (frame-p (current-child))
-    (let ((orig-root *current-root*))
-      (unless (child-equal-p (current-child) *current-root*)
-	(setf *current-root* (current-child)))
-      (expose-windows-generic *current-root*
-                              (lambda (parent)
-                                (setf *current-root* parent))
-                              (lambda ()
-                                (setf *current-root* orig-root))))))
 
 

@@ -184,6 +184,7 @@
 
 (defun init-display ()
   (reset-root-list)
+  (reset-bind-or-jump-slots)
   (fill-handle-event-fun-symbols)
   (assoc-keyword-handle-event 'main-mode)
   (setf *screen* (first (xlib:display-roots *display*))

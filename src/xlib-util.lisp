@@ -180,9 +180,18 @@ Expand in handle-event-fun-main-mode-key-press"
       (pushnew symb event-hook-list)
       `(defvar ,symb nil)))
 
+  (defun unuse-event-hook (event-keyword)
+    (let ((symb (event-hook-name event-keyword)))
+      (setf event-hook-list (remove symb event-hook-list))
+      (makunbound symb)))
+
   (defmacro add-event-hook (name &rest value)
     (let ((symb (event-hook-name name)))
       `(add-hook ,symb ,@value)))
+
+  (defmacro remove-event-hook (name &rest value)
+    (let ((symb (event-hook-name name)))
+      `(remove-hook ,symb ,@value)))
 
   (defun clear-event-hooks ()
     (dolist (symb event-hook-list)
@@ -195,6 +204,12 @@ Expand in handle-event-fun-main-mode-key-press"
                      (declare (ignorable event-slots))
                      #+:event-debug (print (list ,event-keyword event-key))
                      ,@body)))
+
+(defmacro event-defun (name args &body body)
+  `(defun ,name (&rest event-slots &key #+:event-debug event-key ,@args &allow-other-keys)
+     (declare (ignorable event-slots))
+     #+:event-debug (print (list ,event-keyword event-key))
+     ,@body))
 
 
 (defun handle-event (&rest event-slots &key event-key &allow-other-keys)
@@ -220,9 +235,11 @@ they should be windows. So use this function to make a window out of them."
           (when (and win (not (xlib:window-p win)))
             (dbg "Pixmap Workaround! Should be a window: " win)
             (setf (getf event-slots :window) (make-xlib-window win))))
-        (let ((hook-symbol (event-hook-name event-key)))
-          (when (boundp hook-symbol)
-            (call-hook (symbol-value hook-symbol) event-slots)))
+        ;;;; Note: This code is not in use for now. Please ask if you want to use it and call
+        ;;;; a hook on specified events.
+        ;;(let ((hook-symbol (event-hook-name event-key)))
+        ;;  (when (boundp hook-symbol)
+        ;;    (apply #'call-hook (symbol-value hook-symbol) event-slots)))
         (if (fboundp event-key)
             (apply event-key event-slots)
             #+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal)))

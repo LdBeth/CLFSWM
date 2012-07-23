@@ -902,6 +902,10 @@ For window: set current child to window or its parent according to window-parent
 ;;;  Bind or jump functions
 (let ((key-slots (make-array 10 :initial-element nil))
       (current-slot 1))
+  (defun reset-bind-or-jump-slots ()
+    (dotimes (i 10)
+      (setf (aref key-slots i) nil)))
+
   (defun bind-on-slot (&optional (slot current-slot))
     "Bind current child to slot"
     (setf (aref key-slots slot) (current-child)))
@@ -913,12 +917,12 @@ For window: set current child to window or its parent according to window-parent
   (defun jump-to-slot ()
     "Jump to slot"
     (let ((jump-child (aref key-slots current-slot)))
-      (when (find-child jump-child *root-frame*)
+      (when (and jump-child (find-child jump-child *root-frame*))
         (unless (find-child-in-all-root jump-child)
           (change-root (find-root jump-child) jump-child))
-	(setf (current-child) jump-child)
-	(focus-all-children (current-child) (current-child))
-	(show-all-children t))))
+        (setf (current-child) jump-child)
+        (focus-all-children jump-child jump-child)
+        (show-all-children t))))
 
   (defun bind-or-jump (n)
     "Bind or jump to a slot (a frame or a window)"

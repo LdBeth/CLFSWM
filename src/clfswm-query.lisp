@@ -318,7 +318,11 @@
 (define-handler query-mode :key-press (code state)
   (unless (funcall-key-from-code *query-keys* code state)
     (add-in-query-string code state))
-  (query-print-string))
+  (query-print-string)
+  (call-hook *query-key-press-hook* code state))
+
+(define-handler query-mode :button-press (code state x y)
+  (call-hook *query-button-press-hook* code state x y))
 
 
 
@@ -357,6 +361,7 @@
   "Query a number from the query input"
   (multiple-value-bind (string return)
       (query-string msg (format nil "~A" default))
-    (if (equal return :Return)
-        (or (parse-integer (or string "") :junk-allowed t) default)
-        default)))
+    (values (if (equal return :Return)
+                (or (parse-integer (or string "") :junk-allowed t) default)
+                default)
+            return)))

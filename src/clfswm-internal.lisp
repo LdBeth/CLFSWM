@@ -621,6 +621,25 @@
 ;;; Multiple roots support (replace the old *current-root* variable)
 (let ((root-list nil)
       (current-child nil))
+  (defun get-root-list ()
+    root-list)
+
+  (let ((save-root-list nil))
+    (defun save-root-list ()
+      (setf save-root-list nil)
+      (dolist (root root-list)
+        (push (copy-root root) save-root-list)))
+    (defun restore-root-list ()
+      (setf root-list nil)
+      (dolist (root save-root-list)
+        (push (copy-root root) root-list))))
+
+  (defmacro with-saved-root-list (() &body body)
+    `(progn
+       (save-root-list)
+       ,@body
+       (restore-root-list)))
+
   (defun reset-root-list ()
     (setf root-list nil
           current-child nil))
@@ -726,6 +745,7 @@
        (child-member child (frame-child (current-child)))))
 
 
+
 (defun fixe-real-size (frame parent)
   "Fixe real (pixel) coordinates in float coordinates"
   (when (frame-p frame)
@@ -780,8 +800,8 @@ XINERAMA version 1.1 opcode: 150
                 (destructuring-bind (w h x y)
                     (parse-xinerama-info line)
                   (push (list x y w h) sizes))))
-        (dbg sizes)
         (remove-duplicates sizes :test #'equal)))))
+        ;;'((10 10 500 300) (550 50 400 400) (100 320 400 270))))))
 
 
 (defun place-frames-from-xinerama-infos ()
@@ -789,24 +809,21 @@ XINERAMA version 1.1 opcode: 150
   (let ((sizes (get-connected-heads-size))
         (width (xlib:screen-width *screen*))
         (height (xlib:screen-height *screen*)))
-    ;;(add-placed-frame-tmp (first (frame-child *root-frame*)) 2)
-    (if (<= (length sizes) 1)
-        (define-as-root *root-frame* 0 0 width height))
-    (progn
-      (loop while (< (length (frame-child *root-frame*)) (length sizes))
-         do (let ((frame (create-frame)))
-              ;;(add-placed-frame-tmp frame 2)))
-              (add-frame frame *root-frame*)))
-      (loop for size in sizes
-         for frame in (frame-child *root-frame*)
-         do (destructuring-bind (x y w h) size
-              (setf (frame-x frame) (float (/ x width))
-                    (frame-y frame) (float (/ y height))
-                    (frame-w frame) (float (/ w width))
-                    (frame-h frame) (float (/ h height)))
-              (add-frame (create-frame) frame)
-              (define-as-root frame x y w h)))
-      (setf (current-child) (first (frame-child (first (frame-child *root-frame*))))))))
+    (dbg sizes)
+    (loop while (< (length (frame-child *root-frame*)) (length sizes))
+       do (let ((frame (create-frame)))
+            (add-frame frame *root-frame*)))
+    (loop for size in sizes
+       for frame in (frame-child *root-frame*)
+       do (destructuring-bind (x y w h) size
+            (setf (frame-x frame) (float (/ x width))
+                  (frame-y frame) (float (/ y height))
+                  (frame-w frame) (float (/ w width))
+                  (frame-h frame) (float (/ h height)))
+            ;;(add-placed-frame-tmp frame 2)  ;; For tests
+            (add-frame (create-frame) frame)
+            (define-as-root frame x y w h)))
+    (setf (current-child) (first (frame-child (first (frame-child *root-frame*)))))))
 
 
 
@@ -1437,7 +1454,7 @@ Warning:frame window and gc are freeed."
     (let ((found nil))
       (with-all-frames (*root-frame* frame)
 	(awhen (frame-nw-hook frame)
-	  (setf found (call-hook it (list frame window)))))
+	  (setf found (call-hook it frame window))))
       found)))
 
 
@@ -1456,7 +1473,7 @@ managed."
   (grab-all-buttons window)
   (unless (never-managed-window-p window)
     (unless (do-all-frames-nw-hook window)
-      (call-hook *default-nw-hook* (list *root-frame* window))))
+      (call-hook *default-nw-hook* *root-frame* window)))
   (netwm-add-in-client-list window))
 
 

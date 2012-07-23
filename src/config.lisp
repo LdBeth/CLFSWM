@@ -170,8 +170,10 @@ This command must set the window title to *clfswm-terminal-name*")
 (defconfig *default-nw-hook* 'default-frame-nw-hook
   'Hook "Default action to do on newly created windows")
 
-
-
+(defconfig *query-key-press-hook* nil
+  'Hook "Query hook. Hook called on each key press event in query loop")
+(defconfig *query-button-press-hook* nil
+  'Hook "Query hook. Hook called on each button press event in query loop")
 
 ;;; CONFIG
 (defconfig *create-frame-on-root* nil
@@ -306,11 +308,17 @@ on the root window in the main mode with the mouse")
 ;;; CONFIG - Expose string colors
 (defconfig *expose-font-string* *default-font-string*
   'Expose-mode "Expose string window font string")
-(defconfig *expose-background* "black"
+(defconfig *expose-background* "grey10"
   'Expose-mode "Expose string window background color")
-(defconfig *expose-foreground* "green"
+(defconfig *expose-foreground* "grey50"
   'Expose-mode "Expose string window foreground color")
-(defconfig *expose-border* "red"
+(defconfig *expose-foreground-letter* "red"
+  'Expose-mode "Expose string window foreground color for letters")
+(defconfig *expose-foreground-letter-nok* "grey30"
+  'Expose-mode "Expose string window foreground color for letter not selected")
+(defconfig *expose-background-letter-match* "green"
+  'Expose-mode "Expose string window background color for matching letters")
+(defconfig *expose-border* "grey20"
   'Expose-mode "Expose string window border color")
 (defconfig *expose-valid-on-key* t
   'Expose-mode "Valid expose mode when an accel key is pressed")
