@@ -218,7 +218,6 @@
   (xlib:display-force-output *display*)
   (setf *child-selection* nil)
   (setf *root-frame* (create-frame :name "Root" :number 0)
-        *current-root* *root-frame*  ;;; PHIL: TO REMOVE
 	(current-child) *root-frame*)
   (call-hook *init-hook*)
   (unsure-at-least-one-root)

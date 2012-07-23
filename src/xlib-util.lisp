@@ -235,11 +235,9 @@ they should be windows. So use this function to make a window out of them."
           (when (and win (not (xlib:window-p win)))
             (dbg "Pixmap Workaround! Should be a window: " win)
             (setf (getf event-slots :window) (make-xlib-window win))))
-        ;;;; Note: This code is not in use for now. Please ask if you want to use it and call
-        ;;;; a hook on specified events.
-        ;;(let ((hook-symbol (event-hook-name event-key)))
-        ;;  (when (boundp hook-symbol)
-        ;;    (apply #'call-hook (symbol-value hook-symbol) event-slots)))
+        (let ((hook-symbol (event-hook-name event-key)))
+          (when (boundp hook-symbol)
+            (apply #'call-hook (symbol-value hook-symbol) event-slots)))
         (if (fboundp event-key)
             (apply event-key event-slots)
             #+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal)))
