@@ -15,6 +15,8 @@
     Circulate mode window width
   *CIRCULATE-HEIGHT* = 15
     Circulate mode window height
+  *CIRCULATE-TRANSPARENCY* = 0.6
+    Circulate window background transparency
   *CIRCULATE-TEXT-LIMITE* = 30
     Maximum text limite in the circulate window
 
@@ -64,22 +66,38 @@
   *CLFSWM-TERMINAL-CMD* = "xterm -T clfswm-terminal"
     The clfswm terminal command.
 This command must set the window title to *clfswm-terminal-name*
+  *CORNER-ERROR-MESSAGE-COLOR* = "red"
+    Error message color
+  *CORNER-ERROR-MESSAGE-DELAY* = 5
+    Time to display the error message on commad error
+  *CORNER-COMMAND-TRY-DELAY* = 0.2
+    Time to wait before checking window in query tree
+  *CORNER-COMMAND-TRY-NUMBER* = 10
+    Number of try to wait the window in query tree
 
 
 <= Expose Mode Group =>
 
   *EXPOSE-FONT-STRING* = "fixed"
     Expose string window font string
-  *EXPOSE-BACKGROUND* = "black"
+  *EXPOSE-BACKGROUND* = "grey10"
     Expose string window background color
-  *EXPOSE-FOREGROUND* = "green"
+  *EXPOSE-FOREGROUND* = "grey50"
     Expose string window foreground color
-  *EXPOSE-BORDER* = "red"
+  *EXPOSE-FOREGROUND-LETTER* = "red"
+    Expose string window foreground color for letters
+  *EXPOSE-FOREGROUND-LETTER-NOK* = "grey30"
+    Expose string window foreground color for letter not selected
+  *EXPOSE-BACKGROUND-LETTER-MATCH* = "green"
+    Expose string window background color for matching letters
+  *EXPOSE-BORDER* = "grey20"
     Expose string window border color
   *EXPOSE-VALID-ON-KEY* = T
     Valid expose mode when an accel key is pressed
   *EXPOSE-SHOW-WINDOW-TITLE* = T
     Show the window title on accel window
+  *EXPOSE-TRANSPARENCY* = 0.6
+    Expose string window background transparency
 
 
 <= Frame Colors Group =>
@@ -92,6 +110,8 @@ This command must set the window title to *clfswm-terminal-name*
     Frame foreground when the frame is the root frame
   *FRAME-FOREGROUND-HIDDEN* = "Darkgreen"
     Frame foreground for hidden windows
+  *FRAME-TRANSPARENCY* = 0.6
+    Frame background transparency
 
 
 <= Gimp Layout Group =>
@@ -102,34 +122,38 @@ This command must set the window title to *clfswm-terminal-name*
 
 <= Hook Group =>
 
-  *BINDING-HOOK* = (SET-DEFAULT-CIRCULATE-KEYS SET-DEFAULT-EXPOSE-KEYS
-                                               INIT-*INFO-KEYS*
-                                               INIT-*INFO-MOUSE*
-                                               SET-DEFAULT-INFO-KEYS
-                                               SET-DEFAULT-INFO-MOUSE
-                                               INIT-*QUERY-KEYS*
-                                               SET-DEFAULT-QUERY-KEYS
-                                               INIT-*MAIN-KEYS*
-                                               INIT-*MAIN-MOUSE*
-                                               SET-DEFAULT-MAIN-KEYS
-                                               SET-DEFAULT-MAIN-MOUSE
-                                               INIT-*SECOND-KEYS*
-                                               INIT-*SECOND-MOUSE*
-                                               SET-DEFAULT-SECOND-KEYS
-                                               SET-DEFAULT-SECOND-MOUSE)
+  *BINDING-HOOK* = (INIT-*QUERY-KEYS* SET-DEFAULT-QUERY-KEYS
+                                      SET-DEFAULT-CIRCULATE-KEYS
+                                      INIT-*INFO-KEYS*
+                                      INIT-*INFO-MOUSE*
+                                      SET-DEFAULT-INFO-KEYS
+                                      SET-DEFAULT-INFO-MOUSE
+                                      INIT-*MAIN-KEYS*
+                                      INIT-*MAIN-MOUSE*
+                                      SET-DEFAULT-MAIN-KEYS
+                                      SET-DEFAULT-MAIN-MOUSE
+                                      INIT-*SECOND-KEYS*
+                                      INIT-*SECOND-MOUSE*
+                                      SET-DEFAULT-SECOND-KEYS
+                                      SET-DEFAULT-SECOND-MOUSE)
     Hook executed when keys/buttons are bounds
   *LOOP-HOOK* = NIL
     Hook executed on each event loop
   *MAIN-ENTRANCE-HOOK* = NIL
     Hook executed on the main function entrance after
 loading configuration file and before opening the display.
-  *INIT-HOOK* = (DEFAULT-INIT-HOOK DISPLAY-HELLO-WINDOW)
+  *INIT-HOOK* = (DEFAULT-INIT-HOOK PLACE-FRAMES-FROM-XINERAMA-INFOS
+                                   DISPLAY-HELLO-WINDOW)
     Init hook. This hook is run just after the first root frame is created
   *CLOSE-HOOK* = (CLOSE-NOTIFY-WINDOW CLOSE-CLFSWM-TERMINAL
                                       CLOSE-VIRTUAL-KEYBOARD)
     Close hook. This hook is run just before closing the display
   *DEFAULT-NW-HOOK* = DEFAULT-FRAME-NW-HOOK
     Default action to do on newly created windows
+  *QUERY-KEY-PRESS-HOOK* = NIL
+    Query hook. Hook called on each key press event in query loop
+  *QUERY-BUTTON-PRESS-HOOK* = NIL
+    Query hook. Hook called on each button press event in query loop
 
 
 <= Identify Key Group =>
@@ -142,6 +166,8 @@ loading configuration file and before opening the display.
     Identify window foreground color
   *IDENTIFY-BORDER* = "red"
     Identify window border color
+  *IDENTIFY-TRANSPARENCY* = 0.6
+    Identify window background transparency
 
 
 <= Info Mode Group =>
@@ -158,6 +184,8 @@ loading configuration file and before opening the display.
     Info selected item background color
   *INFO-FONT-STRING* = "fixed"
     Info window font string
+  *INFO-TRANSPARENCY* = 0.6
+    Info window background transparency
   *INFO-CLICK-TO-SELECT* = T
     If true, click on info window select item. Otherwise, click to drag the menu
   *INFO-COLOR-TITLE* = "Magenta"
@@ -184,6 +212,11 @@ loading configuration file and before opening the display.
 
 <= Menu Group =>
 
+  *XDG-SECTION-LIST* = (TEXTEDITOR FILEMANAGER WEBBROWSER AUDIOVIDEO AUDIO
+                        VIDEO DEVELOPMENT EDUCATION GAME GRAPHICS NETWORK
+                        OFFICE SETTINGS SYSTEM UTILITY TERMINALEMULATOR
+                        SCREENSAVER)
+    Standard menu sections
   *MENU-COLOR-SUBMENU* = "Cyan"
     Submenu color in menu
   *MENU-COLOR-COMMENT* = "Yellow"
@@ -192,11 +225,6 @@ loading configuration file and before opening the display.
     Key color in menu
   *MENU-COLOR-MENU-KEY* = #<XLIB:COLOR 0.99609375 0.6015625 0.99609375>
     Menu key color in menu
-  *XDG-SECTION-LIST* = (TEXTEDITOR FILEMANAGER WEBBROWSER AUDIOVIDEO AUDIO
-                        VIDEO DEVELOPMENT EDUCATION GAME GRAPHICS NETWORK
-                        OFFICE SETTINGS SYSTEM UTILITY TERMINALEMULATOR
-                        ARCHLINUX SCREENSAVER)
-    Standard menu sections
 
 
 <= Miscellaneous Group =>
@@ -205,11 +233,15 @@ loading configuration file and before opening the display.
     Compress event notify?
 This variable may be useful to speed up some slow version of CLX.
 It is particulary useful with CLISP/MIT-CLX.
+  *TRANSPARENT-BACKGROUND* = T
+    Enable transparent background: one of nil, :pseudo, t (xcompmgr must be started)
+  *DEFAULT-TRANSPARENCY* = 0.6
+    Default transparency for all windows when in xcompmgr transparency mode
   *SHOW-ROOT-FRAME-P* = NIL
     Show the root frame information or not
   *BORDER-SIZE* = 1
     Windows and frames border size
-  *LOOP-TIMEOUT* = 0.1
+  *LOOP-TIMEOUT* = 1
     Maximum time (in seconds) to wait before calling *loop-hook*
   *DEFAULT-FONT-STRING* = "fixed"
     The default font used in clfswm
@@ -231,8 +263,8 @@ Example: :mod-2 for num_lock, :lock for Caps_lock...
 A list of (list match-function handle-function)
   *HIDE-UNMANAGED-WINDOW* = T
     Hide or not unmanaged windows when a child is deselected.
-  *SNAP-SIZE* = 20
-    Snap size (in pixels) when move or resize frame is constrained
+  *SNAP-SIZE* = 5
+    Snap size (in % of parent size) when move or resize frame is constrained
   *SPATIAL-MOVE-DELAY-BEFORE* = 0.2
     Delay to display the current child before doing a spatial move
   *SPATIAL-MOVE-DELAY-AFTER* = 0.5
@@ -259,26 +291,32 @@ on the root window in the main mode with the mouse
     Notify Window border color
   *NOTIFY-WINDOW-DELAY* = 10
     Notify Window display delay
+  *NOTIFY-WINDOW-TRANSPARENCY* = 0.6
+    Notify window background transparency
 
 
 <= Placement Group =>
 
-  *BANISH-POINTER-PLACEMENT* = BOTTOM-RIGHT-PLACEMENT
+  *BANISH-POINTER-PLACEMENT* = BOTTOM-RIGHT-ROOT-PLACEMENT
     Pointer banishment placement
-  *SECOND-MODE-PLACEMENT* = TOP-MIDDLE-PLACEMENT
+  *SECOND-MODE-PLACEMENT* = TOP-MIDDLE-ROOT-PLACEMENT
     Second mode window placement
-  *INFO-MODE-PLACEMENT* = TOP-LEFT-PLACEMENT
+  *INFO-MODE-PLACEMENT* = TOP-LEFT-ROOT-PLACEMENT
     Info mode window placement
-  *QUERY-MODE-PLACEMENT* = TOP-LEFT-PLACEMENT
+  *QUERY-MODE-PLACEMENT* = TOP-LEFT-ROOT-PLACEMENT
     Query mode window placement
-  *CIRCULATE-MODE-PLACEMENT* = BOTTOM-MIDDLE-PLACEMENT
+  *CIRCULATE-MODE-PLACEMENT* = BOTTOM-MIDDLE-ROOT-PLACEMENT
     Circulate mode window placement
   *EXPOSE-MODE-PLACEMENT* = TOP-LEFT-CHILD-PLACEMENT
     Expose mode window placement (Selection keys position)
-  *NOTIFY-WINDOW-PLACEMENT* = BOTTOM-RIGHT-PLACEMENT
+  *EXPOSE-QUERY-PLACEMENT* = BOTTOM-LEFT-ROOT-PLACEMENT
+    Expose mode query window placement
+  *NOTIFY-WINDOW-PLACEMENT* = BOTTOM-RIGHT-ROOT-PLACEMENT
     Notify window placement
-  *ASK-CLOSE/KILL-PLACEMENT* = TOP-RIGHT-PLACEMENT
+  *ASK-CLOSE/KILL-PLACEMENT* = TOP-RIGHT-ROOT-PLACEMENT
     Ask close/kill window placement
+  *UNMANAGED-WINDOW-PLACEMENT* = MIDDLE-MIDDLE-ROOT-PLACEMENT
+    Unmanager window placement
 
 
 <= Query String Group =>
@@ -299,6 +337,12 @@ on the root window in the main mode with the mouse
     Query string window parenthesis color when no match
   *QUERY-BORDER* = "red"
     Query string window border color
+  *QUERY-TRANSPARENCY* = 0.6
+    Query string window background transparency
+  *QUERY-MAX-COMPLET-LENGTH* = 100
+    Query maximum length of completion list
+  *QUERY-MIN-COMPLET-CHAR* = 2
+    Query minimum input length for completion
 
 
 <= Second Mode Group =>
@@ -315,6 +359,8 @@ on the root window in the main mode with the mouse
     Second mode window width
   *SM-HEIGHT* = 25
     Second mode window height
+  *SM-TRANSPARENCY* = 0.6
+    Second mode background transparency
 
  Those variables can be changed in clfswm.
 Maybe you'll need to restart clfswm to take care of new values

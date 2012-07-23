@@ -149,6 +149,14 @@
     &nbsp; &nbsp; &nbsp; &nbsp;     Circulate mode window height <br>
 
     <font color='#ff0000'>
+      &nbsp;&nbsp;  *circulate-transparency*
+    </font>
+    <font color='#0000ff'>
+       = 0.6 <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Circulate window background transparency <br>
+
+    <font color='#ff0000'>
       &nbsp;&nbsp;  *circulate-text-limite*
     </font>
     <font color='#0000ff'>
@@ -287,6 +295,38 @@
 
     &nbsp; &nbsp; &nbsp; &nbsp; This command must set the window title to *clfswm-terminal-name* <br>
 
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *corner-error-message-color*
+    </font>
+    <font color='#0000ff'>
+       = "red" <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Error message color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *corner-error-message-delay*
+    </font>
+    <font color='#0000ff'>
+       = 5 <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Time to display the error message on commad error <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *corner-command-try-delay*
+    </font>
+    <font color='#0000ff'>
+       = 0.2 <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Time to wait before checking window in query tree <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *corner-command-try-number*
+    </font>
+    <font color='#0000ff'>
+       = 10 <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Number of try to wait the window in query tree <br>
+
     <p>
       <a name='expose-mode' href='#top'>
         &lt;= Expose Mode Group =&gt; 
@@ -304,7 +344,7 @@
       &nbsp;&nbsp;  *expose-background*
     </font>
     <font color='#0000ff'>
-       = "black" <br>
+       = "grey10" <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Expose string window background color <br>
 
@@ -312,15 +352,39 @@
       &nbsp;&nbsp;  *expose-foreground*
     </font>
     <font color='#0000ff'>
-       = "green" <br>
+       = "grey50" <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Expose string window foreground color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *expose-foreground-letter*
+    </font>
+    <font color='#0000ff'>
+       = "red" <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Expose string window foreground color for letters <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *expose-foreground-letter-nok*
+    </font>
+    <font color='#0000ff'>
+       = "grey30" <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Expose string window foreground color for letter not selected <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *expose-background-letter-match*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Expose string window background color for matching letters <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *expose-border*
     </font>
     <font color='#0000ff'>
-       = "red" <br>
+       = "grey20" <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Expose string window border color <br>
 
@@ -339,6 +403,14 @@
        = T <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Show the window title on accel window <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *expose-transparency*
+    </font>
+    <font color='#0000ff'>
+       = 0.6 <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Expose string window background transparency <br>
 
     <p>
       <a name='frame-colors' href='#top'>
@@ -377,6 +449,14 @@
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Frame foreground for hidden windows <br>
 
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *frame-transparency*
+    </font>
+    <font color='#0000ff'>
+       = 0.6 <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Frame background transparency <br>
+
     <p>
       <a name='gimp-layout' href='#top'>
         &lt;= Gimp Layout Group =&gt; 
@@ -399,35 +479,33 @@
       &nbsp;&nbsp;  *binding-hook*
     </font>
     <font color='#0000ff'>
-       = (SET-DEFAULT-CIRCULATE-KEYS SET-DEFAULT-EXPOSE-KEYS <br>
+       = (INIT-*QUERY-KEYS* SET-DEFAULT-QUERY-KEYS <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                INIT-*INFO-KEYS* <br>
+    &nbsp; &nbsp; &nbsp; &nbsp;                                       SET-DEFAULT-CIRCULATE-KEYS <br>
 
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                INIT-*INFO-MOUSE* <br>
+    &nbsp; &nbsp; &nbsp; &nbsp;                                       INIT-*INFO-KEYS* <br>
 
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                SET-DEFAULT-INFO-KEYS <br>
+    &nbsp; &nbsp; &nbsp; &nbsp;                                       INIT-*INFO-MOUSE* <br>
 
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                SET-DEFAULT-INFO-MOUSE <br>
+    &nbsp; &nbsp; &nbsp; &nbsp;                                       SET-DEFAULT-INFO-KEYS <br>
 
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                INIT-*QUERY-KEYS* <br>
+    &nbsp; &nbsp; &nbsp; &nbsp;                                       SET-DEFAULT-INFO-MOUSE <br>
 
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                SET-DEFAULT-QUERY-KEYS <br>
+    &nbsp; &nbsp; &nbsp; &nbsp;                                       INIT-*MAIN-KEYS* <br>
 
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                INIT-*MAIN-KEYS* <br>
+    &nbsp; &nbsp; &nbsp; &nbsp;                                       INIT-*MAIN-MOUSE* <br>
 
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                INIT-*MAIN-MOUSE* <br>
+    &nbsp; &nbsp; &nbsp; &nbsp;                                       SET-DEFAULT-MAIN-KEYS <br>
 
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                SET-DEFAULT-MAIN-KEYS <br>
+    &nbsp; &nbsp; &nbsp; &nbsp;                                       SET-DEFAULT-MAIN-MOUSE <br>
 
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                SET-DEFAULT-MAIN-MOUSE <br>
+    &nbsp; &nbsp; &nbsp; &nbsp;                                       INIT-*SECOND-KEYS* <br>
 
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                INIT-*SECOND-KEYS* <br>
+    &nbsp; &nbsp; &nbsp; &nbsp;                                       INIT-*SECOND-MOUSE* <br>
 
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                INIT-*SECOND-MOUSE* <br>
+    &nbsp; &nbsp; &nbsp; &nbsp;                                       SET-DEFAULT-SECOND-KEYS <br>
 
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                SET-DEFAULT-SECOND-KEYS <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                SET-DEFAULT-SECOND-MOUSE) <br>
+    &nbsp; &nbsp; &nbsp; &nbsp;                                       SET-DEFAULT-SECOND-MOUSE) <br>
 
     &nbsp; &nbsp; &nbsp; &nbsp;     Hook executed when keys/buttons are bounds <br>
 
@@ -453,8 +531,10 @@
       &nbsp;&nbsp;  *init-hook*
     </font>
     <font color='#0000ff'>
-       = (DEFAULT-INIT-HOOK DISPLAY-HELLO-WINDOW) <br>
+       = (DEFAULT-INIT-HOOK PLACE-FRAMES-FROM-XINERAMA-INFOS <br>
     </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;                                    DISPLAY-HELLO-WINDOW) <br>
+
     &nbsp; &nbsp; &nbsp; &nbsp;     Init hook. This hook is run just after the first root frame is created <br>
 
     <font color='#ff0000'>
@@ -474,6 +554,22 @@
        = DEFAULT-FRAME-NW-HOOK <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Default action to do on newly created windows <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *query-key-press-hook*
+    </font>
+    <font color='#0000ff'>
+       = NIL <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Query hook. Hook called on each key press event in query loop <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *query-button-press-hook*
+    </font>
+    <font color='#0000ff'>
+       = NIL <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Query hook. Hook called on each button press event in query loop <br>
 
     <p>
       <a name='identify-key' href='#top'>
@@ -511,6 +607,14 @@
        = "red" <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Identify window border color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *identify-transparency*
+    </font>
+    <font color='#0000ff'>
+       = 0.6 <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Identify window background transparency <br>
 
     <p>
       <a name='info-mode' href='#top'>
@@ -564,6 +668,14 @@
        = "fixed" <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Info window font string <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *info-transparency*
+    </font>
+    <font color='#0000ff'>
+       = 0.6 <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Info window background transparency <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *info-click-to-select*
@@ -648,6 +760,20 @@
       </a>
     </p>
     <font color='#ff0000'>
+      &nbsp;&nbsp;  *xdg-section-list*
+    </font>
+    <font color='#0000ff'>
+       = (TEXTEDITOR FILEMANAGER WEBBROWSER AUDIOVIDEO AUDIO <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;                         VIDEO DEVELOPMENT EDUCATION GAME GRAPHICS NETWORK <br>
+
+    &nbsp; &nbsp; &nbsp; &nbsp;                         OFFICE SETTINGS SYSTEM UTILITY TERMINALEMULATOR <br>
+
+    &nbsp; &nbsp; &nbsp; &nbsp;                         SCREENSAVER) <br>
+
+    &nbsp; &nbsp; &nbsp; &nbsp;     Standard menu sections <br>
+
+    <font color='#ff0000'>
       &nbsp;&nbsp;  *menu-color-submenu*
     </font>
     <font color='#0000ff'>
@@ -679,20 +805,6 @@
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Menu key color in menu <br>
 
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *xdg-section-list*
-    </font>
-    <font color='#0000ff'>
-       = (TEXTEDITOR FILEMANAGER WEBBROWSER AUDIOVIDEO AUDIO <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;                         VIDEO DEVELOPMENT EDUCATION GAME GRAPHICS NETWORK <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                         OFFICE SETTINGS SYSTEM UTILITY TERMINALEMULATOR <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                         ARCHLINUX SCREENSAVER) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;     Standard menu sections <br>
-
     <p>
       <a name='miscellaneous' href='#top'>
         &lt;= Miscellaneous Group =&gt; 
@@ -709,6 +821,22 @@
     &nbsp; &nbsp; &nbsp; &nbsp; This variable may be useful to speed up some slow version of CLX. <br>
 
     &nbsp; &nbsp; &nbsp; &nbsp; It is particulary useful with CLISP/MIT-CLX. <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *transparent-background*
+    </font>
+    <font color='#0000ff'>
+       = T <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Enable transparent background: one of nil, :pseudo, t (xcompmgr must be started) <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *default-transparency*
+    </font>
+    <font color='#0000ff'>
+       = 0.6 <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Default transparency for all windows when in xcompmgr transparency mode <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *show-root-frame-p*
@@ -730,7 +858,7 @@
       &nbsp;&nbsp;  *loop-timeout*
     </font>
     <font color='#0000ff'>
-       = 0.1 <br>
+       = 1 <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Maximum time (in seconds) to wait before calling *loop-hook* <br>
 
@@ -806,9 +934,9 @@
       &nbsp;&nbsp;  *snap-size*
     </font>
     <font color='#0000ff'>
-       = 20 <br>
+       = 5 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Snap size (in pixels) when move or resize frame is constrained <br>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Snap size (in % of parent size) when move or resize frame is constrained <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *spatial-move-delay-before*
@@ -899,6 +1027,14 @@
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Notify Window display delay <br>
 
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *notify-window-transparency*
+    </font>
+    <font color='#0000ff'>
+       = 0.6 <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Notify window background transparency <br>
+
     <p>
       <a name='placement' href='#top'>
         &lt;= Placement Group =&gt; 
@@ -908,7 +1044,7 @@
       &nbsp;&nbsp;  *banish-pointer-placement*
     </font>
     <font color='#0000ff'>
-       = BOTTOM-RIGHT-PLACEMENT <br>
+       = BOTTOM-RIGHT-ROOT-PLACEMENT <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Pointer banishment placement <br>
 
@@ -916,7 +1052,7 @@
       &nbsp;&nbsp;  *second-mode-placement*
     </font>
     <font color='#0000ff'>
-       = TOP-MIDDLE-PLACEMENT <br>
+       = TOP-MIDDLE-ROOT-PLACEMENT <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Second mode window placement <br>
 
@@ -924,7 +1060,7 @@
       &nbsp;&nbsp;  *info-mode-placement*
     </font>
     <font color='#0000ff'>
-       = TOP-LEFT-PLACEMENT <br>
+       = TOP-LEFT-ROOT-PLACEMENT <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Info mode window placement <br>
 
@@ -932,7 +1068,7 @@
       &nbsp;&nbsp;  *query-mode-placement*
     </font>
     <font color='#0000ff'>
-       = TOP-LEFT-PLACEMENT <br>
+       = TOP-LEFT-ROOT-PLACEMENT <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Query mode window placement <br>
 
@@ -940,7 +1076,7 @@
       &nbsp;&nbsp;  *circulate-mode-placement*
     </font>
     <font color='#0000ff'>
-       = BOTTOM-MIDDLE-PLACEMENT <br>
+       = BOTTOM-MIDDLE-ROOT-PLACEMENT <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Circulate mode window placement <br>
 
@@ -953,10 +1089,18 @@
     &nbsp; &nbsp; &nbsp; &nbsp;     Expose mode window placement (Selection keys position) <br>
 
     <font color='#ff0000'>
+      &nbsp;&nbsp;  *expose-query-placement*
+    </font>
+    <font color='#0000ff'>
+       = BOTTOM-LEFT-ROOT-PLACEMENT <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Expose mode query window placement <br>
+
+    <font color='#ff0000'>
       &nbsp;&nbsp;  *notify-window-placement*
     </font>
     <font color='#0000ff'>
-       = BOTTOM-RIGHT-PLACEMENT <br>
+       = BOTTOM-RIGHT-ROOT-PLACEMENT <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Notify window placement <br>
 
@@ -964,9 +1108,17 @@
       &nbsp;&nbsp;  *ask-close/kill-placement*
     </font>
     <font color='#0000ff'>
-       = TOP-RIGHT-PLACEMENT <br>
+       = TOP-RIGHT-ROOT-PLACEMENT <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Ask close/kill window placement <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *unmanaged-window-placement*
+    </font>
+    <font color='#0000ff'>
+       = MIDDLE-MIDDLE-ROOT-PLACEMENT <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Unmanager window placement <br>
 
     <p>
       <a name='query-string' href='#top'>
@@ -1037,6 +1189,30 @@
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Query string window border color <br>
 
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *query-transparency*
+    </font>
+    <font color='#0000ff'>
+       = 0.6 <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Query string window background transparency <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *query-max-complet-length*
+    </font>
+    <font color='#0000ff'>
+       = 100 <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Query maximum length of completion list <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *query-min-complet-char*
+    </font>
+    <font color='#0000ff'>
+       = 2 <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Query minimum input length for completion <br>
+
     <p>
       <a name='second-mode' href='#top'>
         &lt;= Second Mode Group =&gt; 
@@ -1089,6 +1265,14 @@
        = 25 <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Second mode window height <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *sm-transparency*
+    </font>
+    <font color='#0000ff'>
+       = 0.6 <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Second mode background transparency <br>
 
     <p>
       <small>

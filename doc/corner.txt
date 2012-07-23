@@ -3,7 +3,7 @@ Here are the actions associated to screen corners in CLFSWM:
 *Corner-Main-Mode-Left-Button*:
   Top-Left: Open the main menu
   Top-Right: Present a virtual keyboard
-  Bottom-Right: Present all windows in the current frame (An expose like)
+  Bottom-Right: Present all windows in currents roots (An expose like)
   Bottom-Left: ---
 
 *Corner-Main-Mode-Middle-Button*:
@@ -21,7 +21,7 @@ Here are the actions associated to screen corners in CLFSWM:
 *Corner-Second-Mode-Left-Button*:
   Top-Left: ---
   Top-Right: ---
-  Bottom-Right: Present all windows in the current frame (An expose like)
+  Bottom-Right: Present all windows in currents roots (An expose like)
   Bottom-Left: ---
 
 *Corner-Second-Mode-Middle-Button*:

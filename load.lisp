@@ -23,7 +23,7 @@
 ;;;
 ;;; --------------------------------------------------------------------------
 
-;;;;;; Uncomment lines above to save the default documentation.
+;;;;;; Uncomment lines above to build the default documentation.
 ;;(pushnew :BUILD-DOC *features*)
 
 

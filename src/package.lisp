@@ -169,8 +169,8 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 (defparameter *root-frame* nil
   "Root of the root - ie the root frame")
-(defparameter *current-root* nil    ;;; PHIL: TO REMOVE
-  "The current fullscreen maximized child")
+;;(defparameter *current-root* nil    ;;; PHIL: TO REMOVE
+;;  "The current fullscreen maximized child")
 ;;(defparameter (current-child) nil  ;;; PHIL: TO REMOVE
 ;;  "The current child with the focus")
 

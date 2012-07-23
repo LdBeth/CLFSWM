@@ -197,6 +197,17 @@
       </tr>
       <tr>
         <td align="right" style="color:#ff0000" nowrap>
+           Mod-1  Control 
+        </td>
+        <td align="center" nowrap>
+          Return
+        </td>
+        <td style="color:#0000ff" nowrap>
+          Maximize/Unmaximize the current frame in its parent frame
+        </td>
+      </tr>
+      <tr>
+        <td align="right" style="color:#ff0000" nowrap>
            Mod-5 
         </td>
         <td align="center" nowrap>
@@ -291,7 +302,7 @@
           F10
         </td>
         <td style="color:#0000ff" nowrap>
-          Present all windows in all frames (An expose like)
+          Show/Hide the root frame
         </td>
       </tr>
       <tr>
@@ -302,7 +313,7 @@
           F10
         </td>
         <td style="color:#0000ff" nowrap>
-          Present all windows in the current child (An expose like)
+          Present all windows in currents roots (An expose like)
         </td>
       </tr>
       <tr>
@@ -313,7 +324,7 @@
           F10
         </td>
         <td style="color:#0000ff" nowrap>
-          Present all windows in the current frame (An expose like)
+          Present all windows in all frames (An expose like)
         </td>
       </tr>
       <tr>
@@ -655,6 +666,50 @@ Or do actions on corners
           Leave the selected frame - ie make its parent the root frame
         </td>
       </tr>
+      <tr>
+        <td align="right" style="color:#ff0000" nowrap>
+           Mod-1  Control 
+        </td>
+        <td align="center" nowrap>
+          4
+        </td>
+        <td style="color:#0000ff" nowrap>
+          Decrement the child under mouse transparency
+        </td>
+      </tr>
+      <tr>
+        <td align="right" style="color:#ff0000" nowrap>
+           Mod-1  Control 
+        </td>
+        <td align="center" nowrap>
+          5
+        </td>
+        <td style="color:#0000ff" nowrap>
+          Increment the child under mouse transparency
+        </td>
+      </tr>
+      <tr>
+        <td align="right" style="color:#ff0000" nowrap>
+           Mod-1  Control  Shift 
+        </td>
+        <td align="center" nowrap>
+          4
+        </td>
+        <td style="color:#0000ff" nowrap>
+          Decrement slowly the child under mouse transparency
+        </td>
+      </tr>
+      <tr>
+        <td align="right" style="color:#ff0000" nowrap>
+           Mod-1  Control  Shift 
+        </td>
+        <td align="center" nowrap>
+          5
+        </td>
+        <td style="color:#0000ff" nowrap>
+          Increment slowly the child under mouse transparency
+        </td>
+      </tr>
     </table>
     <h3>
       <u>
@@ -769,18 +824,7 @@ Or do actions on corners
           P
         </td>
         <td style="color:#0000ff" nowrap>
-          Open the frame pack menu
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          L
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Open the frame fill menu
+          Open the frame pack/fill/resize menu
         </td>
       </tr>
       <tr>
@@ -791,7 +835,18 @@ Or do actions on corners
           R
         </td>
         <td style="color:#0000ff" nowrap>
-          Open the frame resize menu
+          Open the root menu
+        </td>
+      </tr>
+      <tr>
+        <td align="right" style="color:#ff0000" nowrap>
+          
+        </td>
+        <td align="center" nowrap>
+          C
+        </td>
+        <td style="color:#0000ff" nowrap>
+          Open the child menu
         </td>
       </tr>
       <tr>
@@ -895,7 +950,7 @@ Or do actions on corners
       </tr>
       <tr>
         <td align="right" style="color:#ff0000" nowrap>
-          
+           Shift 
         </td>
         <td align="center" nowrap>
           T
@@ -1001,6 +1056,83 @@ Or do actions on corners
         </td>
         <td style="color:#0000ff" nowrap>
           Select spatially the nearest brother of the current child in the down direction
+        </td>
+      </tr>
+      <tr>
+        <td align="right" style="color:#ff0000" nowrap>
+          
+        </td>
+        <td align="center" nowrap>
+          J
+        </td>
+        <td style="color:#0000ff" nowrap>
+          Swap current brother frame geometry
+        </td>
+      </tr>
+      <tr>
+        <td align="right" style="color:#ff0000" nowrap>
+          
+        </td>
+        <td align="center" nowrap>
+          H
+        </td>
+        <td style="color:#0000ff" nowrap>
+          Rotate brother frame geometry
+        </td>
+      </tr>
+      <tr>
+        <td align="right" style="color:#ff0000" nowrap>
+           Shift 
+        </td>
+        <td align="center" nowrap>
+          H
+        </td>
+        <td style="color:#0000ff" nowrap>
+          Anti rotate brother frame geometry
+        </td>
+      </tr>
+      <tr>
+        <td align="right" style="color:#ff0000" nowrap>
+          
+        </td>
+        <td align="center" nowrap>
+          Page_up
+        </td>
+        <td style="color:#0000ff" nowrap>
+          Select the next root
+        </td>
+      </tr>
+      <tr>
+        <td align="right" style="color:#ff0000" nowrap>
+          
+        </td>
+        <td align="center" nowrap>
+          Page_down
+        </td>
+        <td style="color:#0000ff" nowrap>
+          Select the previous root
+        </td>
+      </tr>
+      <tr>
+        <td align="right" style="color:#ff0000" nowrap>
+           Control 
+        </td>
+        <td align="center" nowrap>
+          Page_up
+        </td>
+        <td style="color:#0000ff" nowrap>
+          Rotate root geometry to next root
+        </td>
+      </tr>
+      <tr>
+        <td align="right" style="color:#ff0000" nowrap>
+           Control 
+        </td>
+        <td align="center" nowrap>
+          Page_down
+        </td>
+        <td style="color:#0000ff" nowrap>
+          Rotate root geometry to previous root
         </td>
       </tr>
       <tr>
@@ -1144,6 +1276,17 @@ Or do actions on corners
         </td>
         <td style="color:#0000ff" nowrap>
           Leave the selected frame - ie make its parent the root frame
+        </td>
+      </tr>
+      <tr>
+        <td align="right" style="color:#ff0000" nowrap>
+           Mod-1  Control 
+        </td>
+        <td align="center" nowrap>
+          Return
+        </td>
+        <td style="color:#0000ff" nowrap>
+          Maximize/Unmaximize the current frame in its parent frame
         </td>
       </tr>
       <tr>
@@ -1404,7 +1547,7 @@ Or do actions on corners
           
         </td>
         <td align="center" nowrap>
-          C
+          T
         </td>
         <td style="color:#0000ff" nowrap>
           start an xterm
@@ -1434,17 +1577,6 @@ Or do actions on corners
       </tr>
       <tr>
         <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          H
-        </td>
-        <td style="color:#0000ff" nowrap>
-          start an xclock
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
            Mod-1 
         </td>
         <td align="center" nowrap>
@@ -1462,7 +1594,7 @@ Or do actions on corners
           F10
         </td>
         <td style="color:#0000ff" nowrap>
-          Present all windows in all frames (An expose like)
+          Show/Hide the root frame
         </td>
       </tr>
       <tr>
@@ -1473,7 +1605,7 @@ Or do actions on corners
           F10
         </td>
         <td style="color:#0000ff" nowrap>
-          Present all windows in the current child (An expose like)
+          Present all windows in currents roots (An expose like)
         </td>
       </tr>
       <tr>
@@ -1484,7 +1616,7 @@ Or do actions on corners
           F10
         </td>
         <td style="color:#0000ff" nowrap>
-          Present all windows in the current frame (An expose like)
+          Present all windows in all frames (An expose like)
         </td>
       </tr>
       <tr>
@@ -1617,6 +1749,28 @@ Or do actions on corners
         </td>
         <td style="color:#0000ff" nowrap>
           Bind or jump to a slot (a frame or a window)
+        </td>
+      </tr>
+      <tr>
+        <td align="right" style="color:#ff0000" nowrap>
+           Control  Shift 
+        </td>
+        <td align="center" nowrap>
+          T
+        </td>
+        <td style="color:#0000ff" nowrap>
+          Increment the current window transparency
+        </td>
+      </tr>
+      <tr>
+        <td align="right" style="color:#ff0000" nowrap>
+           Control 
+        </td>
+        <td align="center" nowrap>
+          T
+        </td>
+        <td style="color:#0000ff" nowrap>
+          Decrement the current window transparency
         </td>
       </tr>
     </table>
@@ -2175,842 +2329,6 @@ Or do corners actions
           Function
         </th>
       </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          A
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'a' (0)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          B
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'b' (1)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          C
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'c' (2)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          D
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'd' (3)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          E
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'e' (4)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          F
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'f' (5)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          G
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'g' (6)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          H
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'h' (7)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          I
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'i' (8)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          J
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'j' (9)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          K
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'k' (10)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          L
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'l' (11)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          M
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'm' (12)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          N
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'n' (13)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          O
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'o' (14)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          P
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'p' (15)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          Q
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'q' (16)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          R
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'r' (17)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          S
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 's' (18)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          T
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 't' (19)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          U
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'u' (20)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          V
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'v' (21)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          W
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'w' (22)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          X
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'x' (23)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          Y
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'y' (24)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          Z
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'z' (25)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          0
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child '0' (26)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          1
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child '1' (27)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          2
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child '2' (28)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          3
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child '3' (29)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          4
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child '4' (30)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          5
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child '5' (31)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          6
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child '6' (32)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          7
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child '7' (33)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          8
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child '8' (34)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          9
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child '9' (35)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          A
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'A' (36)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          B
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'B' (37)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          C
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'C' (38)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          D
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'D' (39)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          E
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'E' (40)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          F
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'F' (41)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          G
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'G' (42)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          H
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'H' (43)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          I
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'I' (44)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          J
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'J' (45)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          K
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'K' (46)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          L
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'L' (47)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          M
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'M' (48)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          N
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'N' (49)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          O
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'O' (50)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          P
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'P' (51)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          Q
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'Q' (52)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          R
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'R' (53)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          S
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'S' (54)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          T
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'T' (55)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          U
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'U' (56)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          V
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'V' (57)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          W
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'W' (58)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          X
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'X' (59)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          Y
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'Y' (60)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          Z
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Select child 'Z' (61)
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          Escape
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Leave the expose mode
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-           Control 
-        </td>
-        <td align="center" nowrap>
-          G
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Leave the expose mode
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-           Mod-1 
-        </td>
-        <td align="center" nowrap>
-          Escape
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Leave the expose mode
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-           Mod-1  Control 
-        </td>
-        <td align="center" nowrap>
-          G
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Leave the expose mode
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          Return
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Valid the expose mode
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          Space
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Valid the expose mode
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          Tab
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Valid the expose mode
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          Right
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Speed move mouse to right
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          Left
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Speed move mouse to left
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          Down
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Speed move mouse to down
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          Up
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Speed move mouse to up
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-           Control 
-        </td>
-        <td align="center" nowrap>
-          Left
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Undo last speed mouse move
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-           Control 
-        </td>
-        <td align="center" nowrap>
-          Up
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Revert to the first speed move mouse
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-           Control 
-        </td>
-        <td align="center" nowrap>
-          Down
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Reset speed mouse coordinates
-        </td>
-      </tr>
     </table>
     <h3>
       <u>
@@ -3028,39 +2346,6 @@ Or do corners actions
         <th align="left">
           Function
         </th>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          1
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Valid the expose mode
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          2
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Leave the expose mode
-        </td>
-      </tr>
-      <tr>
-        <td align="right" style="color:#ff0000" nowrap>
-          
-        </td>
-        <td align="center" nowrap>
-          3
-        </td>
-        <td style="color:#0000ff" nowrap>
-          Leave the expose mode
-        </td>
       </tr>
     </table>
     <p>

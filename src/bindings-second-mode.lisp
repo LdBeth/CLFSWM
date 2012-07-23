@@ -174,9 +174,8 @@
     "exec xterm -e emacsremote")
   (define-second-key ("F10" :mod-1) 'fast-layout-switch)
   (define-second-key ("F10" :shift :control) 'toggle-show-root-frame)
-  (define-second-key ("F10") 'expose-windows-current-child-mode)
-  (define-second-key ("F10" :control) 'expose-windows-mode)
-  (define-second-key ("F10" :control :shift) 'expose-all-windows-mode)
+  (define-second-key ("F10") 'expose-windows-mode)
+  (define-second-key ("F10" :control) 'expose-all-windows-mode)
   (define-second-key ("L2" :shift) 'show-all-frames-info-key)
   (define-second-key ("L2" :shift :mod-1) 'show-all-frames-info)
   ;; Bind or jump functions
