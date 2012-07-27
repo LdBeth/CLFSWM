@@ -146,7 +146,7 @@
 (defun expose-select-child ()
   (let ((*query-mode-placement* *expose-query-placement*))
     (multiple-value-bind (letters return)
-        (query-string "Child string")
+        (query-string "Which child ?")
       (let ((child (case return
                      (:return (expose-find-child-from-letters letters))
                      (:click *expose-selected-child*))))

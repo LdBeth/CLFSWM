@@ -324,7 +324,7 @@ on the root window in the main mode with the mouse")
   'Expose-mode "Valid expose mode when an accel key is pressed")
 (defconfig *expose-show-window-title* t
   'Expose-mode "Show the window title on accel window")
-(defconfig *expose-transparency* *default-transparency*
+(defconfig *expose-transparency* 0.9
   'Expose-mode "Expose string window background transparency")
 
 

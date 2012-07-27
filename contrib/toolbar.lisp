@@ -188,11 +188,16 @@
       (hide-window window)
       (throw 'exit-handle-event nil))))
 
+(defun toolbar-add-clickable-module-hook (toolbar)
+  (define-event-hook :button-press (code root-x root-y)
+    (when (in-window (toolbar-window toolbar) root-x root-y)
+      (dbg toolbar code root-x root-y))))
+
+
 (defun define-toolbar-hooks (toolbar)
   (toolbar-add-exposure-hook toolbar)
   (when (toolbar-clickable toolbar)
-    (define-event-hook :button-press (code root-x root-y)
-      (dbg code root-x root-y)))
+    (toolbar-add-clickable-module-hook toolbar))
   (case (toolbar-autohide toolbar)
     (:click (toolbar-add-hide-button-press-hook toolbar))
     (:motion (toolbar-add-hide-motion-hook toolbar)
@@ -338,6 +343,8 @@
     (declare (ignore s))
     (toolbar-draw-text toolbar (second module) (/ *toolbar-default-thickness* 2)
                        (format nil "Click:~2,'0D:~2,'0D" h m))))
+
+
 
 
 (format t "done~%")
