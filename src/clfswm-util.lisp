@@ -313,13 +313,14 @@
 (defun find-window-under-mouse (x y)
   "Return the child window under the mouse"
   (let ((win *root*))
-    (with-all-windows-frames-and-parent (*root-frame* child parent)
-      (when (and (or (managed-window-p child parent) (child-equal-p parent (current-child)))
-                 (not (window-hidden-p child))
-		 (in-window child x y))
-	(setf win child))
-      (when (in-frame child x y)
-	(setf win (frame-window child))))
+    (dolist (root (all-root-child))
+      (with-all-windows-frames-and-parent (root child parent)
+        (when (and (or (managed-window-p child parent) (child-equal-p parent (current-child)))
+                   (not (window-hidden-p child))
+                   (in-window child x y))
+          (setf win child))
+        (when (in-frame child x y)
+          (setf win (frame-window child)))))
     win))
 
 
@@ -340,18 +341,19 @@
 (defun find-child-under-mouse-in-child-tree (x y &optional first-foundp)
   "Return the child under the mouse"
   (let ((ret nil))
-    (with-all-windows-frames-and-parent (*root-frame* child parent)
-      (when (and (not (window-hidden-p child))
-		 (or (managed-window-p child parent) (child-equal-p parent (current-child)))
-		 (in-window child x y))
-	(if first-foundp
-	    (return-from find-child-under-mouse-in-child-tree child)
-	    (setf ret child)))
-      (when (in-frame child x y)
-	(if first-foundp
-	    (return-from find-child-under-mouse-in-child-tree child)
-	    (setf ret child))))
+    (dolist (root (all-root-child))
+      (with-all-windows-frames (root child)
+        (when (and (not (window-hidden-p child))
+                   (in-window child x y))
+          (if first-foundp
+              (return-from find-child-under-mouse-in-child-tree child)
+              (setf ret child)))
+        (when (in-frame child x y)
+          (if first-foundp
+              (return-from find-child-under-mouse-in-child-tree child)
+              (setf ret child)))))
     ret))
+
 
 
 (defun find-child-under-mouse (x y &optional first-foundp also-never-managed)

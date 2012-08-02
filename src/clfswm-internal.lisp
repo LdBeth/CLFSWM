@@ -802,6 +802,7 @@ XINERAMA version 1.1 opcode: 150
                   (push (list x y w h) sizes))))
         (remove-duplicates sizes :test #'equal)))))
         ;;'((10 10 500 300) (550 50 400 400) (100 320 400 270))))))
+        ;;'((10 10 500 580) (540 50 470 500))))))
 
 
 (defun place-frames-from-xinerama-infos ()
@@ -1249,7 +1250,6 @@ XINERAMA version 1.1 opcode: 150
                (not (find-child parent (root-child root))))
       (change-root root parent)
       t)))
-
 
 (defun focus-all-children (child parent &optional (window-parent t))
   "Focus child and its parents -
