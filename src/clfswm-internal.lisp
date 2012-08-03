@@ -809,9 +809,9 @@ XINERAMA version 1.1 opcode: 150
                 (destructuring-bind (w h x y)
                     (parse-xinerama-info line)
                   (push (list x y w h) sizes))))
-        ;;(remove-duplicates sizes :test #'equal)))))
+        (remove-duplicates sizes :test #'equal)))))
         ;;'((10 10 500 300) (550 50 400 400) (100 320 400 270))))))
-        '((10 10 500 580) (540 50 470 500))))))
+        ;;'((10 10 500 580) (540 50 470 500))))))
 
 
 (defun place-frames-from-xinerama-infos ()
