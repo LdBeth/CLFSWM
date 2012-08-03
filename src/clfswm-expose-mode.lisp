@@ -123,7 +123,7 @@
   (add-hook *query-button-press-hook* 'expose-query-button-press-hook))
 
 (defun expose-present-windows ()
-  (dolist (root (all-root-child))
+  (with-all-root-child (root)
     (with-all-frames (root frame)
       (setf (frame-data-slot frame :old-layout) (frame-layout frame)
             (frame-layout frame) #'tile-space-layout)))
@@ -131,7 +131,7 @@
 
 (defun expose-mode-display-accel-windows ()
   (let ((n -1))
-    (dolist (root (nreverse (all-root-child)))
+    (with-all-root-child (root)
       (with-all-children-reversed (root child)
         (if (or (frame-p child)
                 (managed-window-p child (find-parent-frame child *root-frame*)))
@@ -164,7 +164,7 @@
   (when *expose-font*
     (xlib:close-font *expose-font*))
   (setf *expose-windows-list* nil)
-  (dolist (root (all-root-child))
+  (with-all-root-child (root)
     (with-all-frames (root frame)
       (setf (frame-layout frame) (frame-data-slot frame :old-layout)
             (frame-data-slot frame :old-layout) nil))))

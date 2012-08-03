@@ -313,7 +313,7 @@
 (defun find-window-under-mouse (x y)
   "Return the child window under the mouse"
   (let ((win *root*))
-    (dolist (root (all-root-child))
+    (with-all-root-child (root)
       (with-all-windows-frames-and-parent (root child parent)
         (when (and (or (managed-window-p child parent) (child-equal-p parent (current-child)))
                    (not (window-hidden-p child))
@@ -341,7 +341,7 @@
 (defun find-child-under-mouse-in-child-tree (x y &optional first-foundp)
   "Return the child under the mouse"
   (let ((ret nil))
-    (dolist (root (all-root-child))
+    (with-all-root-child (root)
       (with-all-windows-frames (root child)
         (when (and (not (window-hidden-p child))
                    (in-window child x y))
@@ -710,7 +710,7 @@
   "Show all frames info windows"
   (let ((*show-root-frame-p* t))
     (show-all-children)
-    (dolist (root (all-root-child))
+    (with-all-root-child (root)
       (with-all-frames (root frame)
         (raise-window (frame-window frame))
         (display-frame-info frame)))))

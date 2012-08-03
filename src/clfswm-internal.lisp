@@ -660,6 +660,12 @@
     (loop for root in root-list
        collect (root-child root)))
 
+  (defmacro with-all-root-child ((root) &body body)
+    (let ((root-symb (gensym)))
+      `(dolist (,root-symb (get-root-list))
+         (let ((,root (root-child ,root-symb)))
+           ,@body))))
+
   (labels ((generic-child-root-p (child function)
              (dolist (root root-list)
                (when (child-equal-p child (funcall function root))
@@ -735,7 +741,10 @@
          (setf (current-child) ,new-child)
          (let ((,ret (multiple-value-list (progn ,@body))))
            (setf (current-child) ,old-child)
-           (values-list ,ret))))))
+           (values-list ,ret)))))
+
+  (defun child-is-a-current-child-p (child)
+    (find child root-list :test #'child-equal-p :key #'root-current-child)))
 
 (defsetf current-child current-child-setter)
 
@@ -800,9 +809,9 @@ XINERAMA version 1.1 opcode: 150
                 (destructuring-bind (w h x y)
                     (parse-xinerama-info line)
                   (push (list x y w h) sizes))))
-        (remove-duplicates sizes :test #'equal)))))
+        ;;(remove-duplicates sizes :test #'equal)))))
         ;;'((10 10 500 300) (550 50 400 400) (100 320 400 270))))))
-        ;;'((10 10 500 580) (540 50 470 500))))))
+        '((10 10 500 580) (540 50 470 500))))))
 
 
 (defun place-frames-from-xinerama-infos ()
@@ -905,7 +914,7 @@ XINERAMA version 1.1 opcode: 150
     (display-frame-info frame)))
 
 (defun display-all-root-frame-info ()
-  (dolist (root (all-root-child))
+  (with-all-root-child (root)
     (display-frame-info root)))
 
 
@@ -1021,7 +1030,7 @@ XINERAMA version 1.1 opcode: 150
   (if (or (managed-window-p window parent)
 	  (child-equal-p window (current-child))
 	  (not (hide-unmanaged-window-p parent))
-	  (child-equal-p parent (current-child)))
+          (child-is-a-current-child-p parent))
       (progn
 	(map-window window)
 	(set-child-stack-order window previous))
