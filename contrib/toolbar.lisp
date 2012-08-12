@@ -388,11 +388,21 @@
          ,@body))))
 
 
+(defun list-toolbar-modules (&optional (stream t))
+  "List all toolbar modules"
+  (format stream "Toolbar modules availables:~%")
+  (dolist (module (reverse *toolbar-module-list*))
+    (format stream "  Module: ~A~%" module)
+    (when (fboundp (toolbar-symbol-fun module))
+      (format stream "    ~A~%" (documentation (toolbar-symbol-fun module) 'function)))
+    (when (fboundp (toolbar-symbol-fun module 'click))
+      (format stream "    On click: ~A~%" (documentation (toolbar-symbol-fun module 'click) 'function)))))
+
 ;;;
 ;;; Modules definitions
 ;;;
 (define-toolbar-module (clock)
-  "The clock module"
+  "A clock module"
   (multiple-value-bind (s m h)
       (get-decoded-time)
     (declare (ignore s))
@@ -400,7 +410,7 @@
                        (format nil "~2,'0D:~2,'0D" h m))))
 
 (define-toolbar-module (clock-second)
-  "The clock module"
+  "A clock module with seconds"
   (multiple-value-bind (s m h)
       (get-decoded-time)
     (toolbar-draw-text toolbar (toolbar-module-pos module) (/ *toolbar-default-thickness* 2)
@@ -408,13 +418,13 @@
 
 
 (define-toolbar-module (label)
-  "The label module"
+  "A label module (for test)"
   (toolbar-draw-text toolbar (toolbar-module-pos module) (/ *toolbar-default-thickness* 2)
                      "Label"))
 
 
 (define-toolbar-module (clickable-clock)
-  "The clock module (clickable)"
+  "A clickable clock module"
   (multiple-value-bind (s m h)
       (get-decoded-time)
     (declare (ignore s))

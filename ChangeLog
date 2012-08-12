@@ -1,6 +1,7 @@
 2012-08-12  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/toolbar.lisp: End of toolbar framework.
+	(list-toolbar-modules): Add a list toolbar modules function.
 
 2012-08-03  Philippe Brochard  <pbrochard@common-lisp.net>
 
