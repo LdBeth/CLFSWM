@@ -656,6 +656,13 @@
       (when (in-rect x y (root-x root) (root-y root) (root-w root) (root-h root))
         (return root))))
 
+  (defun root (x &optional y)
+    "Return the root at coordinates (x,y) if y is not nil.
+     Otherwise, return the x nth root in root-list"
+    (if y
+        (find-root-by-coordinates x y)
+        (nth x root-list)))
+
   (defun all-root-child ()
     (loop for root in root-list
        collect (root-child root)))
@@ -907,15 +914,6 @@ XINERAMA version 1.1 opcode: 150
                               (format nil "  ~A" (ensure-printable (child-fullname ch))))))
         (copy-pixmap-buffer window gc)
         (values t t)))))
-
-
-(defun display-all-frame-info ()
-  (with-all-frames (*root-frame* frame)
-    (display-frame-info frame)))
-
-(defun display-all-root-frame-info ()
-  (with-all-root-child (root)
-    (display-frame-info root)))
 
 
 (defgeneric rename-child (child name))

@@ -55,6 +55,9 @@
 	   :dbg
 	   :dbgnl
 	   :dbgc
+           :make-rectangle
+           :rectangle-x :rectangle-y :rectangle-width :rectangle-height
+           :in-rectangle
            :distance
            :collect-all-symbols
 	   :with-all-internal-symbols
@@ -124,6 +127,7 @@
 (in-package :tools)
 
 
+(defstruct rectangle x y width height)
 
 (setq *random-state* (make-random-state t))
 
@@ -379,6 +383,14 @@ Return the result of the last hook"
   (when newline
     (terpri))
   (force-output))
+
+
+
+(defun in-rectangle (x y rectangle)
+  (and rectangle
+       (<= (rectangle-x rectangle) x (+ (rectangle-x rectangle) (rectangle-width rectangle)))
+       (<= (rectangle-y rectangle) y (+ (rectangle-y rectangle) (rectangle-height rectangle)))))
+
 
 
 (defun distance (x1 y1 x2 y2)

@@ -200,7 +200,7 @@ on the root window in the main mode with the mouse")
   'Frame-colors "Frame foreground when the frame is the root frame")
 (defconfig *frame-foreground-hidden* "Darkgreen"
   'Frame-colors "Frame foreground for hidden windows")
-(defconfig *frame-transparency* *default-transparency*
+(defconfig *frame-transparency* 0.6
   'Frame-colors "Frame background transparency")
 
 ;;; CONFIG: Default window size

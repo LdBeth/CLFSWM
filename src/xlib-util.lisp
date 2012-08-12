@@ -37,6 +37,7 @@
 				:focus-change
 				:enter-window
                                 :leave-window
+                                :pointer-motion
 				:exposure)
   "The events to listen for on managed windows.")
 
@@ -210,6 +211,9 @@ Expand in handle-event-fun-main-mode-key-press"
      (declare (ignorable event-slots))
      #+:event-debug (print (list ,event-keyword event-key))
      ,@body))
+
+(defun exit-handle-event ()
+  (throw 'exit-handle-event nil))
 
 
 (defun handle-event (&rest event-slots &key event-key &allow-other-keys)

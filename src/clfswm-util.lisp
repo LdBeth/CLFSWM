@@ -172,6 +172,16 @@
 
 
 
+(defun display-all-frame-info ()
+  (with-all-frames (*root-frame* frame)
+    (display-frame-info frame)))
+
+(defun display-all-root-frame-info ()
+  (with-all-root-child (root)
+    (display-frame-info root)))
+
+
+
 (defun place-window-from-hints (window)
   "Place a window from its hints"
   (let* ((hints (xlib:wm-normal-hints window))

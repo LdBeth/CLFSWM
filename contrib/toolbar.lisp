@@ -33,7 +33,9 @@
 (format t "Loading Toolbar code... ")
 
 (defstruct toolbar root-x root-y root direction size thickness placement refresh-delay
-           autohide modules clickable font window gc border-size)
+           autohide modules clickable hide-state font window gc border-size)
+
+(defstruct toolbar-module name pos display-fun click-fun rect)
 
 (defparameter *toolbar-list* nil)
 (defparameter *toolbar-module-list* nil)
@@ -57,14 +59,14 @@
   'Toolbar "Toolbar default refresh delay")
 (defconfig *toolbar-default-autohide* nil
   'Toolbar "Toolbar default autohide value")
-(defconfig *toolbar-sensibility* 10
+(defconfig *toolbar-sensibility* 3
   'Toolbar "Toolbar sensibility in pixels")
 
 (defconfig *toolbar-window-placement* 'top-left-placement
   'Placement "Toolbar window placement")
 
-(defun toolbar-symbol-fun (name)
-  (create-symbol 'toolbar- name '-module))
+(defun toolbar-symbol-fun (name &optional (type 'display))
+  (create-symbol 'toolbar- name '-module- type))
 
 (defun toolbar-adjust-root-size (toolbar)
   (unless (toolbar-autohide toolbar)
@@ -86,13 +88,17 @@
 
 
 (defun toolbar-draw-text (toolbar pos1 pos2 text)
-  "pos1: percent, pos2: pixels"
+  "pos1: percent of toolbar, pos2: pixels in toolbar"
   (labels ((horiz-text ()
              (let* ((height (- (xlib:font-ascent (toolbar-font toolbar)) (xlib:font-descent (toolbar-font toolbar))))
                     (dy (truncate (+ pos2 (/ height 2))))
                     (width (xlib:text-width (toolbar-font toolbar) text))
                     (pos (truncate (/ (* (- (xlib:drawable-width (toolbar-window toolbar)) width) pos1) 100))))
-               (xlib:draw-glyphs *pixmap-buffer* (toolbar-gc toolbar) pos dy text)))
+               (xlib:draw-glyphs *pixmap-buffer* (toolbar-gc toolbar) pos dy text)
+               (values (+ pos (xlib:drawable-x (toolbar-window toolbar)))
+                       (xlib:drawable-y (toolbar-window toolbar))
+                       width
+                       (xlib:drawable-height (toolbar-window toolbar)))))
            (vert-text ()
              (let* ((width (xlib:max-char-width (toolbar-font toolbar)))
                     (dx (truncate (- pos2 (/ width 2))))
@@ -103,8 +109,12 @@
                                             pos1) 100))
                             (xlib:font-ascent (toolbar-font toolbar)))))
                (loop for c across text
-                  do (xlib:draw-glyphs *pixmap-buffer* (toolbar-gc toolbar) dx pos (string c))
-                    (incf pos dpos)))))
+                    for i from 0
+                  do (xlib:draw-glyphs *pixmap-buffer* (toolbar-gc toolbar) dx (+ pos (* i dpos)) (string c)))
+               (values (xlib:drawable-x (toolbar-window toolbar))
+                       (+ (- pos dpos) (xlib:drawable-y (toolbar-window toolbar)))
+                       (xlib:drawable-width (toolbar-window toolbar))
+                       height))))
     (case (toolbar-direction toolbar)
       (:horiz (horiz-text))
       (:vert (vert-text)))))
@@ -118,9 +128,8 @@
              :refresh-toolbar)
   (clear-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar))
   (dolist (module (toolbar-modules toolbar))
-    (let ((fun (toolbar-symbol-fun (first module))))
-      (when (fboundp fun)
-        (funcall fun toolbar module))))
+    (when (fboundp (toolbar-module-display-fun module))
+      (funcall (toolbar-module-display-fun module) toolbar module)))
   (copy-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar)))
 
 (defun toolbar-in-sensibility-zone-p (toolbar root-x root-y)
@@ -156,42 +165,58 @@
       (refresh-toolbar toolbar))))
 
 (defun toolbar-add-hide-button-press-hook (toolbar)
-  (let ((hide t))
-    (define-event-hook :button-press (code root-x root-y)
-      (when (= code 1)
-        (let* ((tb-win (toolbar-window toolbar)))
-          (when (toolbar-in-sensibility-zone-p toolbar root-x root-y)
-            (if hide
-                (progn
-                  (map-window tb-win)
-                  (raise-window tb-win)
-                  (refresh-toolbar toolbar))
-                (hide-window tb-win))
-            (setf hide (not hide))
-            (wait-mouse-button-release)
-            (stop-button-event)
-            (throw 'exit-handle-event nil)))))))
+  (define-event-hook :button-press (code root-x root-y)
+    (when (= code 1)
+      (let* ((tb-win (toolbar-window toolbar)))
+        (when (toolbar-in-sensibility-zone-p toolbar root-x root-y)
+          (if (toolbar-hide-state toolbar)
+              (progn
+                (map-window tb-win)
+                (raise-window tb-win)
+                (refresh-toolbar toolbar)
+                (setf (toolbar-hide-state toolbar) nil))
+              (progn
+                (hide-window tb-win)
+                (setf (toolbar-hide-state toolbar) t)))
+          (wait-mouse-button-release)
+          (stop-button-event)
+          (exit-handle-event))))))
 
 (defun toolbar-add-hide-motion-hook (toolbar)
   (define-event-hook :motion-notify (root-x root-y)
     (unless (compress-motion-notify)
-      (when (toolbar-in-sensibility-zone-p toolbar root-x root-y)
+      (when (and (toolbar-hide-state toolbar)
+                 (toolbar-in-sensibility-zone-p toolbar root-x root-y))
         (map-window (toolbar-window toolbar))
         (raise-window (toolbar-window toolbar))
         (refresh-toolbar toolbar)
-        (throw 'exit-handle-event nil)))))
+        (setf (toolbar-hide-state toolbar) nil)
+        (exit-handle-event)))))
 
 (defun toolbar-add-hide-leave-hook (toolbar)
-  (define-event-hook :leave-notify (window root-x root-y)
-    (when (and (xlib:window-equal (toolbar-window toolbar) window)
+  (define-event-hook :leave-notify (root-x root-y)
+    (when (and (not (toolbar-hide-state toolbar))
                (not (in-window (toolbar-window toolbar) root-x root-y)))
-      (hide-window window)
-      (throw 'exit-handle-event nil))))
+      (hide-window (toolbar-window toolbar))
+      (setf (toolbar-hide-state toolbar) t)
+      (exit-handle-event))))
+
+;;    (when (and (xlib:window-equal (toolbar-window toolbar) window)
+;;               (not (in-window (toolbar-window toolbar) root-x root-y)))
+;;      (hide-window window)
+;;      (setf (toolbar-hide-state toolbar) t)
+;;      (exit-handle-event))))
 
 (defun toolbar-add-clickable-module-hook (toolbar)
-  (define-event-hook :button-press (code root-x root-y)
-    (when (in-window (toolbar-window toolbar) root-x root-y)
-      (dbg toolbar code root-x root-y))))
+  (define-event-hook :button-press (code state root-x root-y)
+    (when (and (in-window (toolbar-window toolbar) root-x root-y)
+               (not (toolbar-hide-state toolbar)))
+      (dolist (module (toolbar-modules toolbar))
+        (when (and (in-rectangle root-x root-y (toolbar-module-rect module))
+                   (fboundp (toolbar-module-click-fun module)))
+          (funcall (toolbar-module-click-fun module) toolbar module code state)
+          (stop-button-event)
+          (exit-handle-event))))))
 
 
 (defun define-toolbar-hooks (toolbar)
@@ -204,12 +229,9 @@
              (toolbar-add-hide-leave-hook toolbar))))
 
 (defun set-clickable-toolbar (toolbar)
-  (dolist (module *toolbar-module-list*)
-    (when (and (member (first module) (toolbar-modules toolbar)
-                       :test (lambda (x y) (equal x (first y))))
-               (second module))
+  (dolist (module (toolbar-modules toolbar))
+    (when (fboundp (toolbar-module-click-fun module))
       (setf (toolbar-clickable toolbar) t))))
-
 
 
 
@@ -234,7 +256,7 @@
           (toolbar-font toolbar) nil))
 
   (defun open-toolbar (toolbar)
-    (let ((root (find-root-by-coordinates (toolbar-root-x toolbar) (toolbar-root-y toolbar))))
+    (let ((root (root (toolbar-root-x toolbar) (toolbar-root-y toolbar))))
       (when (root-p root)
         (setf (toolbar-root toolbar) root)
         (let ((*get-current-root-fun* (lambda () root)))
@@ -256,7 +278,8 @@
                                                                  :border (when (plusp (toolbar-border-size toolbar))
                                                                            (get-color *toolbar-window-border*))
                                                                  :colormap (xlib:screen-default-colormap *screen*)
-                                                                 :event-mask '(:exposure :key-press :leave-window))
+                                                                 :event-mask '(:exposure :key-press :leave-window
+                                                                               :pointer-motion))
                     (toolbar-gc toolbar) (xlib:create-gcontext :drawable (toolbar-window toolbar)
                                                                :foreground (get-color *toolbar-window-foreground*)
                                                                :background (get-color *toolbar-window-background*)
@@ -269,27 +292,53 @@
               (raise-window (toolbar-window toolbar))
               (refresh-toolbar toolbar)
               (when (toolbar-autohide toolbar)
-                (hide-window (toolbar-window toolbar)))
+                (hide-window (toolbar-window toolbar))
+                (setf (toolbar-hide-state toolbar) t))
               (xlib:display-finish-output *display*)
               (set-clickable-toolbar toolbar)
               (define-toolbar-hooks toolbar))))))))
+
+(defun optimize-all-toolbar-event ()
+  (let ((use-button-press nil)
+        (use-motion nil))
+    (dolist (toolbar *toolbar-list*)
+      (when (toolbar-clickable toolbar)
+        (setf use-button-press t))
+      (case (toolbar-autohide toolbar)
+        (:motion (setf use-motion t))
+        (:click (setf use-button-press t))))
+    (unless use-button-press
+      (unuse-event-hook :button-press))
+    (unless use-motion
+      (unuse-event-hook :motion-notify)
+      (unuse-event-hook :leave-notify))))
+
 
 (defun open-all-toolbars ()
   "Open all toolbars"
   (dolist (toolbar *toolbar-list*)
     (open-toolbar toolbar))
   (dolist (toolbar *toolbar-list*)
-    (toolbar-adjust-root-size toolbar)))
+    (toolbar-adjust-root-size toolbar))
+  (optimize-all-toolbar-event))
 
 (defun close-all-toolbars ()
   (dolist (toolbar *toolbar-list*)
     (close-toolbar toolbar)))
 
+(defun create-toolbar-modules (modules)
+  (loop for mod in modules
+     collect (make-toolbar-module :name (first mod)
+                                  :pos (second mod)
+                                  :display-fun (toolbar-symbol-fun (first mod))
+                                  :click-fun (toolbar-symbol-fun (first mod) 'click)
+                                  :rect nil)))
+
 
 (defun add-toolbar (root-x root-y direction size placement modules
                     &key (autohide *toolbar-default-autohide*))
   "Add a new toolbar.
-     root-x, root-y: root coordinates
+     root-x, root-y: root coordinates or if root-y is nil, root-x is the nth root in root-list.
      direction: one of :horiz or :vert
      size: toolbar size in percent of root size"
   (let ((toolbar (make-toolbar :root-x root-x :root-y root-y
@@ -299,7 +348,7 @@
                       :autohide autohide
                       :refresh-delay *toolbar-default-refresh-delay*
                       :border-size *toolbar-default-border-size*
-                      :modules modules)))
+                      :modules (create-toolbar-modules modules))))
     (push toolbar *toolbar-list*)
     toolbar))
 
@@ -308,14 +357,35 @@
 (add-hook *close-hook* 'close-all-toolbars)
 
 
-(defmacro define-toolbar-module ((name &optional clickable) &body body)
+(defun set-toolbar-module-rectangle (module x y width height)
+  (unless (toolbar-module-rect module)
+    (setf (toolbar-module-rect module) (make-rectangle)))
+  (setf (rectangle-x (toolbar-module-rect module)) x
+        (rectangle-y (toolbar-module-rect module)) y
+        (rectangle-width (toolbar-module-rect module)) width
+        (rectangle-height (toolbar-module-rect module)) height))
+
+(defmacro with-set-toolbar-module-rectangle ((module) &body body)
+  (let ((x (gensym)) (y (gensym)) (width (gensym)) (height (gensym)))
+    `(multiple-value-bind (,x ,y ,width ,height)
+         ,@body
+       (set-toolbar-module-rectangle ,module ,x ,y ,width ,height))))
+
+
+
+(defmacro define-toolbar-module ((name) &body body)
   (let ((symbol-fun (toolbar-symbol-fun name)))
     `(progn
-       (pushnew (list ',name ,clickable) *toolbar-module-list*)
+       (pushnew ',name *toolbar-module-list*)
        (defun ,symbol-fun (toolbar module)
          ,@body))))
 
-
+(defmacro define-toolbar-module-click ((name) &body body)
+  (let ((symbol-fun (toolbar-symbol-fun name 'click)))
+    `(progn
+       (pushnew ',name *toolbar-module-list*)
+       (defun ,symbol-fun (toolbar module code state)
+         ,@body))))
 
 
 ;;;
@@ -326,25 +396,38 @@
   (multiple-value-bind (s m h)
       (get-decoded-time)
     (declare (ignore s))
-    (toolbar-draw-text toolbar (second module) (/ *toolbar-default-thickness* 2)
+    (toolbar-draw-text toolbar (toolbar-module-pos module) (/ *toolbar-default-thickness* 2)
                        (format nil "~2,'0D:~2,'0D" h m))))
+
+(define-toolbar-module (clock-second)
+  "The clock module"
+  (multiple-value-bind (s m h)
+      (get-decoded-time)
+    (toolbar-draw-text toolbar (toolbar-module-pos module) (/ *toolbar-default-thickness* 2)
+                       (format nil "~2,'0D:~2,'0D:~2,'0D" h m s))))
 
 
 (define-toolbar-module (label)
   "The label module"
-  (toolbar-draw-text toolbar (second module) (/ *toolbar-default-thickness* 2)
+  (toolbar-draw-text toolbar (toolbar-module-pos module) (/ *toolbar-default-thickness* 2)
                      "Label"))
 
 
-(define-toolbar-module (clickable-clock t)
+(define-toolbar-module (clickable-clock)
   "The clock module (clickable)"
   (multiple-value-bind (s m h)
       (get-decoded-time)
     (declare (ignore s))
-    (toolbar-draw-text toolbar (second module) (/ *toolbar-default-thickness* 2)
-                       (format nil "Click:~2,'0D:~2,'0D" h m))))
+    (with-set-toolbar-module-rectangle (module)
+      (toolbar-draw-text toolbar (toolbar-module-pos module) (/ *toolbar-default-thickness* 2)
+                         (format nil "Click:~2,'0D:~2,'0D" h m)))))
 
 
+(define-toolbar-module-click (clickable-clock)
+  "Start a digital clock"
+  (declare (ignore toolbar module state))
+  (when (= code 1)
+    (do-shell "xclock")))
 
 
 (format t "done~%")
