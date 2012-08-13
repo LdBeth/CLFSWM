@@ -196,7 +196,17 @@ Expand in handle-event-fun-main-mode-key-press"
 
   (defun clear-event-hooks ()
     (dolist (symb event-hook-list)
-      (makunbound symb))))
+      (makunbound symb)))
+
+
+  (defun optimize-event-hook ()
+    "Remove unused event hooks"
+    (dolist (symb event-hook-list)
+      (when (and (boundp symb)
+                 (null (symbol-value symb)))
+        (makunbound symb)
+        (setf event-hook-list (remove symb event-hook-list))))))
+
 
 
 (defmacro define-event-hook (event-keyword args &body body)

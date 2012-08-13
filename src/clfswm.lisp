@@ -224,7 +224,8 @@
   (process-existing-windows *screen*)
   (show-all-children)
   (grab-main-keys)
-  (xlib:display-finish-output *display*))
+  (xlib:display-finish-output *display*)
+  (optimize-event-hook))
 
 
 

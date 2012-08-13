@@ -48,7 +48,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defconfig *transparent-background* t nil
            "Enable transparent background: one of nil, :pseudo, t (xcompmgr must be started)")
 
-(defconfig *default-transparency* 0.9 nil
+(defconfig *default-transparency* 0.8 nil
            "Default transparency for all windows when in xcompmgr transparency mode")
 
 (defconfig *show-root-frame-p* nil nil

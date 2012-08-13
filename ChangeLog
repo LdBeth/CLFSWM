@@ -1,3 +1,11 @@
+2012-08-13  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/toolbar.lisp (toolbar-module-text): Print a formatted
+	text at module position centered in toolbar.
+
+	* src/xlib-util.lisp (optimize-event-hook): Remove unused event
+	hooks.
+
 2012-08-12  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/toolbar.lisp: End of toolbar framework.

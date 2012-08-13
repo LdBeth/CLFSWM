@@ -26,6 +26,54 @@
 ;;;
 ;;;   (load-contrib "toolbar.lisp")
 ;;;
+;;; You can add a toolbar with the function add-toolbar in your configuration
+;;; file. You can obtain modules list with the list-toolbar-modules function.
+;;;
+;;; For convenience, here is the add-toolbar documentation:
+;;;
+;;;  add-toolbar (root-x root-y direction size placement modules
+;;;                      &key (autohide *toolbar-default-autohide*)
+;;;                      (thickness *toolbar-default-thickness*)
+;;;                      (refresh-delay *toolbar-default-refresh-delay*)
+;;;                      (border-size *toolbar-default-border-size*))
+;;;    "Add a new toolbar.
+;;;       root-x, root-y: root coordinates or if root-y is nil, root-x is the nth root in root-list.
+;;;       direction: one of :horiz or :vert
+;;;       placement: same argument as with-placement macro
+;;;       modules: list of modules: a list of module name and position in percent.
+;;;                0%=left/up   <->   100%=right/down.
+;;;                Example: '((clock 1) (label 50) (clickable-clock 90))
+;;;       size: toolbar size in percent of root size
+;;;       thickness: toolbar height for horizontal toolbar or width for vertical one
+;;;       autohide: one of nil, :click, or :motion
+;;;       refresh-delay: refresh delay for toolbar in seconds
+;;;       border-size: toolbar window border size"
+;;;
+;;; Here are some examples:
+;;;    (load-contrib "toolbar.lisp")
+;;;
+;;;  ;; Add an horizontal toolbar on root at coordinates 0,0 pixels
+;;;
+;;;    (add-toolbar 0 0 :horiz 90 'top-middle-root-placement
+;;;                 '((clock 1) (label 50) (clock-second 25) (clickable-clock 99))
+;;;                 :autohide :click
+;;;                 :refresh-delay 1)
+;;;
+;;;
+;;;  ;; Add an horizontal toolbar on root at coordinates 0,0 pixels
+;;;
+;;;    (add-toolbar 0 0 :horiz 70 'bottom-middle-root-placement '((clock 1) (label 50) (clock 99))
+;;;                 :autohide :motion)
+;;;
+;;;
+;;;  ;; Add a vertical toolbar on root 0
+;;;
+;;;    (add-toolbar 0 nil :vert 60 'middle-left-root-placement '((clock 1) (label 50) (clock 90)))
+;;;
+;;;
+;;;  ;; Add a vertical toolbar on root 1
+;;;
+;;;    (add-toolbar 1 nil :vert 70 'bottom-right-root-placement '((clock 1) (label 50) (clickable-clock 99)))
 ;;; --------------------------------------------------------------------------
 
 (in-package :clfswm)
@@ -120,17 +168,24 @@
       (:vert (vert-text)))))
 
 
+(defun toolbar-module-text (toolbar module formatter &rest text)
+  "Print a formatted text at module position centered in toolbar"
+  (toolbar-draw-text toolbar (toolbar-module-pos module) (/ *toolbar-default-thickness* 2)
+                     (apply #'format nil formatter text)))
+
+
 
 (defun refresh-toolbar (toolbar)
-  (add-timer (toolbar-refresh-delay toolbar)
-             (lambda ()
-               (refresh-toolbar toolbar))
-             :refresh-toolbar)
-  (clear-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar))
-  (dolist (module (toolbar-modules toolbar))
-    (when (fboundp (toolbar-module-display-fun module))
-      (funcall (toolbar-module-display-fun module) toolbar module)))
-  (copy-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar)))
+  (unless (toolbar-hide-state toolbar)
+    (add-timer (toolbar-refresh-delay toolbar)
+               (lambda ()
+                 (refresh-toolbar toolbar))
+               :refresh-toolbar)
+    (clear-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar))
+    (dolist (module (toolbar-modules toolbar))
+      (when (fboundp (toolbar-module-display-fun module))
+        (funcall (toolbar-module-display-fun module) toolbar module)))
+    (copy-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar))))
 
 (defun toolbar-in-sensibility-zone-p (toolbar root-x root-y)
   (let* ((tb-win (toolbar-window toolbar))
@@ -171,10 +226,10 @@
         (when (toolbar-in-sensibility-zone-p toolbar root-x root-y)
           (if (toolbar-hide-state toolbar)
               (progn
+                (setf (toolbar-hide-state toolbar) nil)
                 (map-window tb-win)
                 (raise-window tb-win)
-                (refresh-toolbar toolbar)
-                (setf (toolbar-hide-state toolbar) nil))
+                (refresh-toolbar toolbar))
               (progn
                 (hide-window tb-win)
                 (setf (toolbar-hide-state toolbar) t)))
@@ -201,11 +256,6 @@
       (setf (toolbar-hide-state toolbar) t)
       (exit-handle-event))))
 
-;;    (when (and (xlib:window-equal (toolbar-window toolbar) window)
-;;               (not (in-window (toolbar-window toolbar) root-x root-y)))
-;;      (hide-window window)
-;;      (setf (toolbar-hide-state toolbar) t)
-;;      (exit-handle-event))))
 
 (defun toolbar-add-clickable-module-hook (toolbar)
   (define-event-hook :button-press (code state root-x root-y)
@@ -298,29 +348,13 @@
               (set-clickable-toolbar toolbar)
               (define-toolbar-hooks toolbar))))))))
 
-(defun optimize-all-toolbar-event ()
-  (let ((use-button-press nil)
-        (use-motion nil))
-    (dolist (toolbar *toolbar-list*)
-      (when (toolbar-clickable toolbar)
-        (setf use-button-press t))
-      (case (toolbar-autohide toolbar)
-        (:motion (setf use-motion t))
-        (:click (setf use-button-press t))))
-    (unless use-button-press
-      (unuse-event-hook :button-press))
-    (unless use-motion
-      (unuse-event-hook :motion-notify)
-      (unuse-event-hook :leave-notify))))
-
 
 (defun open-all-toolbars ()
   "Open all toolbars"
   (dolist (toolbar *toolbar-list*)
     (open-toolbar toolbar))
   (dolist (toolbar *toolbar-list*)
-    (toolbar-adjust-root-size toolbar))
-  (optimize-all-toolbar-event))
+    (toolbar-adjust-root-size toolbar)))
 
 (defun close-all-toolbars ()
   (dolist (toolbar *toolbar-list*)
@@ -336,19 +370,30 @@
 
 
 (defun add-toolbar (root-x root-y direction size placement modules
-                    &key (autohide *toolbar-default-autohide*))
+                    &key (autohide *toolbar-default-autohide*)
+                    (thickness *toolbar-default-thickness*)
+                    (refresh-delay *toolbar-default-refresh-delay*)
+                    (border-size *toolbar-default-border-size*))
   "Add a new toolbar.
      root-x, root-y: root coordinates or if root-y is nil, root-x is the nth root in root-list.
      direction: one of :horiz or :vert
-     size: toolbar size in percent of root size"
+     placement: same argument as with-placement macro
+     modules: list of modules: a list of module name and position in percent.
+              0%=left/up   <->   100%=right/down.
+              Example: '((clock 1) (label 50) (clickable-clock 90))
+     size: toolbar size in percent of root size
+     thickness: toolbar height for horizontal toolbar or width for vertical one
+     autohide: one of nil, :click, or :motion
+     refresh-delay: refresh delay for toolbar in seconds
+     border-size: toolbar window border size"
   (let ((toolbar (make-toolbar :root-x root-x :root-y root-y
-                      :direction direction :size size
-                      :thickness *toolbar-default-thickness*
-                      :placement placement
-                      :autohide autohide
-                      :refresh-delay *toolbar-default-refresh-delay*
-                      :border-size *toolbar-default-border-size*
-                      :modules (create-toolbar-modules modules))))
+                               :direction direction :size size
+                               :thickness thickness
+                               :placement placement
+                               :autohide autohide
+                               :refresh-delay refresh-delay
+                               :border-size border-size
+                               :modules (create-toolbar-modules modules))))
     (push toolbar *toolbar-list*)
     toolbar))
 
@@ -406,21 +451,18 @@
   (multiple-value-bind (s m h)
       (get-decoded-time)
     (declare (ignore s))
-    (toolbar-draw-text toolbar (toolbar-module-pos module) (/ *toolbar-default-thickness* 2)
-                       (format nil "~2,'0D:~2,'0D" h m))))
+    (toolbar-module-text toolbar module "~2,'0D:~2,'0D" h m)))
 
 (define-toolbar-module (clock-second)
   "A clock module with seconds"
   (multiple-value-bind (s m h)
       (get-decoded-time)
-    (toolbar-draw-text toolbar (toolbar-module-pos module) (/ *toolbar-default-thickness* 2)
-                       (format nil "~2,'0D:~2,'0D:~2,'0D" h m s))))
+    (toolbar-module-text toolbar module "~2,'0D:~2,'0D:~2,'0D" h m s)))
 
 
 (define-toolbar-module (label)
   "A label module (for test)"
-  (toolbar-draw-text toolbar (toolbar-module-pos module) (/ *toolbar-default-thickness* 2)
-                     "Label"))
+  (toolbar-module-text toolbar module "Label"))
 
 
 (define-toolbar-module (clickable-clock)
@@ -429,8 +471,7 @@
       (get-decoded-time)
     (declare (ignore s))
     (with-set-toolbar-module-rectangle (module)
-      (toolbar-draw-text toolbar (toolbar-module-pos module) (/ *toolbar-default-thickness* 2)
-                         (format nil "Click:~2,'0D:~2,'0D" h m)))))
+      (toolbar-module-text toolbar module "Click:~2,'0D:~2,'0D" h m))))
 
 
 (define-toolbar-module-click (clickable-clock)
