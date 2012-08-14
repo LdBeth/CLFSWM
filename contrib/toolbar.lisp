@@ -40,9 +40,9 @@
 ;;;       root-x, root-y: root coordinates or if root-y is nil, root-x is the nth root in root-list.
 ;;;       direction: one of :horiz or :vert
 ;;;       placement: same argument as with-placement macro
-;;;       modules: list of modules: a list of module name and position in percent.
+;;;       modules: list of modules: a list of module name, position in percent and arguments.
 ;;;                0%=left/up   <->   100%=right/down.
-;;;                Example: '((clock 1) (label 50) (clickable-clock 90))
+;;;                Example: '((clock 1) (label 50 \"My label\") (clickable-clock 90))
 ;;;       size: toolbar size in percent of root size
 ;;;       thickness: toolbar height for horizontal toolbar or width for vertical one
 ;;;       autohide: one of nil, :click, or :motion
@@ -55,20 +55,20 @@
 ;;;  ;; Add an horizontal toolbar on root at coordinates 0,0 pixels
 ;;;
 ;;;    (add-toolbar 0 0 :horiz 90 'top-middle-root-placement
-;;;                 '((clock 1) (label 50) (clock-second 25) (clickable-clock 99))
+;;;                 '((clock 1) (label 50 "Plop") (clock-second 25) (clickable-clock 99))
 ;;;                 :autohide :click
 ;;;                 :refresh-delay 1)
 ;;;
 ;;;
 ;;;  ;; Add an horizontal toolbar on root at coordinates 0,0 pixels
 ;;;
-;;;    (add-toolbar 0 0 :horiz 70 'bottom-middle-root-placement '((clock 1) (label 50) (clock 99))
+;;;    (add-toolbar 0 0 :horiz 70 'bottom-middle-root-placement '((clock 1) (label 50 "Paf) (clock 99))
 ;;;                 :autohide :motion)
 ;;;
 ;;;
 ;;;  ;; Add a vertical toolbar on root 0
 ;;;
-;;;    (add-toolbar 0 nil :vert 60 'middle-left-root-placement '((clock 1) (label 50) (clock 90)))
+;;;    (add-toolbar 0 nil :vert 60 'middle-left-root-placement '((clock 1) (label 50 "My label") (clock 90)))
 ;;;
 ;;;
 ;;;  ;; Add a vertical toolbar on root 1
@@ -83,7 +83,7 @@
 (defstruct toolbar root-x root-y root direction size thickness placement refresh-delay
            autohide modules clickable hide-state font window gc border-size)
 
-(defstruct toolbar-module name pos display-fun click-fun rect)
+(defstruct toolbar-module name pos display-fun click-fun args rect)
 
 (defparameter *toolbar-list* nil)
 (defparameter *toolbar-module-list* nil)
@@ -114,7 +114,7 @@
   'Placement "Toolbar window placement")
 
 (defun toolbar-symbol-fun (name &optional (type 'display))
-  (create-symbol 'toolbar- name '-module- type))
+  (create-symbol-in-package :clfswm 'toolbar- name '-module- type))
 
 (defun toolbar-adjust-root-size (toolbar)
   (unless (toolbar-autohide toolbar)
@@ -184,7 +184,7 @@
     (clear-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar))
     (dolist (module (toolbar-modules toolbar))
       (when (fboundp (toolbar-module-display-fun module))
-        (funcall (toolbar-module-display-fun module) toolbar module)))
+        (apply (toolbar-module-display-fun module) toolbar module (toolbar-module-args module))))
     (copy-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar))))
 
 (defun toolbar-in-sensibility-zone-p (toolbar root-x root-y)
@@ -366,6 +366,7 @@
                                   :pos (second mod)
                                   :display-fun (toolbar-symbol-fun (first mod))
                                   :click-fun (toolbar-symbol-fun (first mod) 'click)
+                                  :args (cddr mod)
                                   :rect nil)))
 
 
@@ -378,9 +379,9 @@
      root-x, root-y: root coordinates or if root-y is nil, root-x is the nth root in root-list.
      direction: one of :horiz or :vert
      placement: same argument as with-placement macro
-     modules: list of modules: a list of module name and position in percent.
+     modules: list of modules: a list of module name, position in percent and arguments.
               0%=left/up   <->   100%=right/down.
-              Example: '((clock 1) (label 50) (clickable-clock 90))
+              Example: '((clock 1) (label 50 \"My label\") (clickable-clock 90))
      size: toolbar size in percent of root size
      thickness: toolbar height for horizontal toolbar or width for vertical one
      autohide: one of nil, :click, or :motion
@@ -418,11 +419,11 @@
 
 
 
-(defmacro define-toolbar-module ((name) &body body)
+(defmacro define-toolbar-module ((name &optional args) &body body)
   (let ((symbol-fun (toolbar-symbol-fun name)))
     `(progn
        (pushnew ',name *toolbar-module-list*)
-       (defun ,symbol-fun (toolbar module)
+       (defun ,symbol-fun (toolbar module ,@(when args `(&optional ,args)))
          ,@body))))
 
 (defmacro define-toolbar-module-click ((name) &body body)
@@ -446,6 +447,10 @@
 ;;;
 ;;; Modules definitions
 ;;;
+
+;;;
+;;; Clock module
+;;;
 (define-toolbar-module (clock)
   "A clock module"
   (multiple-value-bind (s m h)
@@ -453,6 +458,9 @@
     (declare (ignore s))
     (toolbar-module-text toolbar module "~2,'0D:~2,'0D" h m)))
 
+;;;
+;;; Clock module with seconds
+;;;
 (define-toolbar-module (clock-second)
   "A clock module with seconds"
   (multiple-value-bind (s m h)
@@ -460,25 +468,33 @@
     (toolbar-module-text toolbar module "~2,'0D:~2,'0D:~2,'0D" h m s)))
 
 
-(define-toolbar-module (label)
-  "A label module (for test)"
-  (toolbar-module-text toolbar module "Label"))
+;;;
+;;; Label module
+;;;
+(define-toolbar-module (label text)
+  "(text) - Display a text in toolbar"
+  (toolbar-module-text toolbar module (or text "Empty")))
 
-
+;;;
+;;;  Clickable clock module
+;;;
 (define-toolbar-module (clickable-clock)
   "A clickable clock module"
   (multiple-value-bind (s m h)
       (get-decoded-time)
     (declare (ignore s))
     (with-set-toolbar-module-rectangle (module)
-      (toolbar-module-text toolbar module "Click:~2,'0D:~2,'0D" h m))))
+      (toolbar-module-text toolbar module "|~2,'0D:~2,'0D|" h m))))
 
+
+(defconfig *toolbar-clock-action* "xclock -analog"
+  'toolbar "Toolbar clickable clock module action on click")
 
 (define-toolbar-module-click (clickable-clock)
-  "Start a digital clock"
+  "Start an external clock"
   (declare (ignore toolbar module state))
   (when (= code 1)
-    (do-shell "xclock")))
+    (do-shell *toolbar-clock-action*)))
 
 
 (format t "done~%")
