@@ -81,6 +81,11 @@
 
 
 ;;; Root functions utility
+(defun show-current-root ()
+  (when *have-to-show-current-root*
+    (let ((*notify-window-placement* *show-current-root-placement*))
+      (notify-message *show-current-root-delay* *show-current-root-message*))))
+
 (defun select-generic-root (fun restart-menu)
   (no-focus)
   (let* ((current-root (find-root (current-child)))
@@ -92,6 +97,7 @@
                                    it
                                    (frame-selected-child parent))))))
   (show-all-children t)
+  (show-current-root)
   (if restart-menu
       (open-menu (find-menu 'root-menu))
       (leave-second-mode)))
@@ -118,6 +124,7 @@
   (no-focus)
   (funcall fun)
   (show-all-children t)
+  (show-current-root)
   (if restart-menu
       (open-menu (find-menu 'root-menu))
       (leave-second-mode)))
@@ -156,6 +163,7 @@
       (exchange-root-geometry (find-root-by-coordinates x1 y1)
                               (find-root-by-coordinates x2 y2))))
   (show-all-children)
+  (show-current-root)
   (leave-second-mode))
 
 (defun change-current-root-geometry ()
@@ -168,6 +176,7 @@
     (setf (root-x root) x  (root-y root) y
           (root-w root) w  (root-h root) h)
     (show-all-children)
+    (show-current-root)
     (leave-second-mode)))
 
 
@@ -1696,17 +1705,21 @@ For window: set current child to window or its parent according to window-parent
       (when (and (xlib:window-p win) (xlib:window-p window))
 	(xlib:window-equal win window)))
 
+    (defun raise-notify-window ()
+      (raise-window window))
+
     (defun refresh-notify-window ()
       (add-timer 0.1 #'refresh-notify-window :refresh-notify-window)
-      (raise-window window)
-      (let ((text-height (- (xlib:font-ascent font) (xlib:font-descent font))))
-	(loop for tx in text
-	   for i from 1 do
-	     (setf (xlib:gcontext-foreground gc) (text-color tx))
-	     (xlib:draw-glyphs window gc
-			       (truncate (/ (- width (* (xlib:max-char-width font) (length (text-string tx)))) 2))
-			       (* text-height i 2)
-			       (text-string tx)))))
+      (when (and window gc font)
+        (raise-window window)
+        (let ((text-height (- (xlib:font-ascent font) (xlib:font-descent font))))
+          (loop for tx in text
+             for i from 1 do
+               (setf (xlib:gcontext-foreground gc) (text-color tx))
+               (xlib:draw-glyphs window gc
+                                 (truncate (/ (- width (* (xlib:max-char-width font) (length (text-string tx)))) 2))
+                                 (* text-height i 2)
+                                 (text-string tx))))))
 
     (defun close-notify-window ()
       (erase-timer :refresh-notify-window)

@@ -2,6 +2,8 @@
 
 	* src/clfswm-util.lisp (eval-from-query-string): Show a notify
 	window when updating symobls list for REPL completion.
+	(show-current-root): New function and configuration menu to
+	display a message on the current root.
 
 	* contrib/toolbar.lisp: Add arguments in toolbar modules.
 

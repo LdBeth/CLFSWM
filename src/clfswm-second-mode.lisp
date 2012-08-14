@@ -135,6 +135,7 @@
   (grab-main-keys)
   (show-all-children)
   (display-all-frame-info)
+  (raise-notify-window)
   (wait-no-key-or-button-press)
   (setf *in-second-mode* nil))
 

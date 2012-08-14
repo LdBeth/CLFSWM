@@ -175,11 +175,19 @@ This command must set the window title to *clfswm-terminal-name*")
 (defconfig *query-button-press-hook* nil
   'Hook "Query hook. Hook called on each button press event in query loop")
 
-;;; CONFIG
+;;; CONFIG: Root
 (defconfig *create-frame-on-root* nil
-  nil "Create frame on root.
+  'Root "Create frame on root.
 Set this variable to true if you want to allow to create a new frame
 on the root window in the main mode with the mouse")
+(defconfig *have-to-show-current-root* t
+  'Root "Show the current root if true")
+(defconfig *show-current-root-delay* 1
+  'Root "Delay to show the current root")
+(defconfig *show-current-root-placement* 'middle-middle-root-placement
+  'Root "Current root notify window placement")
+(defconfig *show-current-root-message* "Current root"
+  'Root "Current root notify window message")
 
 
 ;;; CONFIG: Main mode colors
