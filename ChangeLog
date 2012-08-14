@@ -1,8 +1,11 @@
 2012-08-14  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-util.lisp (eval-from-query-string): Show a notify
+	window when updating symobls list for REPL completion.
+
 	* contrib/toolbar.lisp: Add arguments in toolbar modules.
 
-	* src/xlib-util.lisp (event-hook-name): Intern hook name symbole
+	* src/xlib-util.lisp (event-hook-name): Intern hook name symbol
 	in :clfswm package.
 
 2012-08-13  Philippe Brochard  <pbrochard@common-lisp.net>

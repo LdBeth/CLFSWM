@@ -577,7 +577,10 @@
                   (pushnew (string-downcase (if (string= (first elem) "(") (third elem) (second elem)))
                            all-symbols :test #'string=)))
               (when (search "in-package" form :test #'string-equal)
-                (setf all-symbols (collect-all-symbols)))
+                (let ((*notify-window-placement* 'middle-middle-root-placement))
+                  (open-notify-window '("Collecting all symbols for Lisp REPL completion."))
+                  (setf all-symbols (collect-all-symbols))
+                  (close-notify-window)))
               (when ret
                 (eval-from-query-string))))))))
 
