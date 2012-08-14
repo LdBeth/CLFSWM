@@ -1,3 +1,8 @@
+2012-08-14  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/xlib-util.lisp (event-hook-name): Intern hook name symbole
+	in :clfswm package.
+
 2012-08-13  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/toolbar.lisp (toolbar-module-text): Print a formatted

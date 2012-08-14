@@ -173,9 +173,12 @@ Expand in handle-event-fun-main-mode-key-press"
 
 
 (defun event-hook-name (event-keyword)
-  (create-symbol '*event- event-keyword '-hook*))
+  (create-symbol-in-package :clfswm '*event- event-keyword '-hook*))
 
 (let ((event-hook-list nil))
+  (defun get-event-hook-list ()
+    event-hook-list)
+
   (defmacro use-event-hook (event-keyword)
     (let ((symb (event-hook-name event-keyword)))
       (pushnew symb event-hook-list)
