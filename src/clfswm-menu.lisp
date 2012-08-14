@@ -137,34 +137,41 @@
 	 (funcall action)))))
 
 
-(defun open-menu (&optional (menu *menu*) (parent nil))
-  "Open the main menu"
-  (when menu
-    (let ((action nil)
-          (old-info-keys (copy-hash-table *info-keys*)))
-      (labels ((populate-menu ()
-                 (let ((info-list nil))
-                   (dolist (item (menu-item menu))
-                     (let ((value (menu-item-value item)))
-                       (push (typecase value
-                               (menu (list (list (format nil "~A" (menu-item-key item)) *menu-color-menu-key*)
-                                           (list (format nil ": < ~A >" (menu-doc value)) *menu-color-submenu*)))
-                               (string (list (list (format nil "~A" (menu-item-value item)) *menu-color-comment*)))
-                               (t (list (list (format nil "~A" (menu-item-key item)) *menu-color-key*)
-                                        (format nil ": ~A" (documentation value 'function)))))
-                             info-list)
-                       (when (menu-item-key item)
-                         (define-info-key-fun (list (menu-item-key item))
-                             (lambda (&optional args)
-                               (declare (ignore args))
-                               (setf action value)
-                               (leave-info-mode nil))))))
-                   (nreverse info-list))))
-        (let ((selected-item (info-mode (populate-menu))))
-          (setf *info-keys* old-info-keys)
-          (when selected-item
-            (awhen (nth selected-item (menu-item menu))
-              (setf action (menu-item-value it)))))
-        (open-menu-do-action action menu parent)))))
+(let ((menu-oppened nil))
+  (defun reset-open-menu ()
+    (setf menu-oppened nil))
+
+  (defun open-menu (&optional (menu *menu*) (parent nil))
+    "Open the main menu"
+    (unless menu-oppened
+      (setf menu-oppened t)
+      (when menu
+        (let ((action nil)
+              (old-info-keys (copy-hash-table *info-keys*)))
+          (labels ((populate-menu ()
+                     (let ((info-list nil))
+                       (dolist (item (menu-item menu))
+                         (let ((value (menu-item-value item)))
+                           (push (typecase value
+                                   (menu (list (list (format nil "~A" (menu-item-key item)) *menu-color-menu-key*)
+                                               (list (format nil ": < ~A >" (menu-doc value)) *menu-color-submenu*)))
+                                   (string (list (list (format nil "~A" (menu-item-value item)) *menu-color-comment*)))
+                                   (t (list (list (format nil "~A" (menu-item-key item)) *menu-color-key*)
+                                            (format nil ": ~A" (documentation value 'function)))))
+                                 info-list)
+                           (when (menu-item-key item)
+                             (define-info-key-fun (list (menu-item-key item))
+                                 (lambda (&optional args)
+                                   (declare (ignore args))
+                                   (setf action value)
+                                   (leave-info-mode nil))))))
+                       (nreverse info-list))))
+            (let ((selected-item (info-mode (populate-menu))))
+              (setf *info-keys* old-info-keys)
+              (when (and selected-item (>= selected-item 0))
+                (awhen (nth selected-item (menu-item menu))
+                  (setf action (menu-item-value it)))))
+            (setf menu-oppened nil)
+            (open-menu-do-action action menu parent)))))))
 
 

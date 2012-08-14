@@ -264,7 +264,8 @@
       (dolist (module (toolbar-modules toolbar))
         (when (and (in-rectangle root-x root-y (toolbar-module-rect module))
                    (fboundp (toolbar-module-click-fun module)))
-          (funcall (toolbar-module-click-fun module) toolbar module code state)
+          (apply (toolbar-module-click-fun module) toolbar module code state
+                 (toolbar-module-args module))
           (stop-button-event)
           (exit-handle-event))))))
 
@@ -419,18 +420,18 @@
 
 
 
-(defmacro define-toolbar-module ((name &optional args) &body body)
+(defmacro define-toolbar-module ((name &rest args) &body body)
   (let ((symbol-fun (toolbar-symbol-fun name)))
     `(progn
        (pushnew ',name *toolbar-module-list*)
-       (defun ,symbol-fun (toolbar module ,@(when args `(&optional ,args)))
+       (defun ,symbol-fun (toolbar module ,@(when args `(&optional ,@args)))
          ,@body))))
 
-(defmacro define-toolbar-module-click ((name) &body body)
+(defmacro define-toolbar-module-click ((name &rest args) &body body)
   (let ((symbol-fun (toolbar-symbol-fun name 'click)))
     `(progn
        (pushnew ',name *toolbar-module-list*)
-       (defun ,symbol-fun (toolbar module code state)
+       (defun ,symbol-fun (toolbar module code state ,@(when args `(&optional ,@args)))
          ,@body))))
 
 
@@ -476,6 +477,21 @@
   (toolbar-module-text toolbar module (or text "Empty")))
 
 ;;;
+;;; Clickable label module
+;;;
+(define-toolbar-module (clickable-label text action)
+  "(text action) - Display a clickable text in toolbar"
+  (declare (ignore action))
+  (with-set-toolbar-module-rectangle (module)
+    (toolbar-module-text toolbar module (or text "Empty"))))
+
+(define-toolbar-module-click (clickable-label text action)
+  "Call the function 'action'"
+  (declare (ignore text))
+  (when action
+    (funcall action toolbar module code state )))
+
+;;;
 ;;;  Clickable clock module
 ;;;
 (define-toolbar-module (clickable-clock)
@@ -498,3 +514,21 @@
 
 
 (format t "done~%")
+
+
+;;;
+;;; CLFSWM menu module
+;;;
+(define-toolbar-module (clfswm-menu text placement)
+  "(text placement) - Display an entry for the CLFSWM menu"
+  (declare (ignore placement))
+  (with-set-toolbar-module-rectangle (module)
+    (toolbar-module-text toolbar module (or text "CLFSWM"))))
+
+(define-toolbar-module-click (clfswm-menu text placement)
+  "Open the CLFSWM main menu"
+  (declare (ignore text code state toolbar module))
+  (dbg placement)
+  (let ((*info-mode-placement* (or placement *info-mode-placement*)))
+    (open-menu)))
+

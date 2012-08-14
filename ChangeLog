@@ -1,3 +1,11 @@
+2012-08-15  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/toolbar.lisp: Add a clickable label module for toolbar.
+	Add a clickable entry to open the CLFSWM main menu.
+
+	* src/clfswm-menu.lisp (open-menu): Prevent to reopen an opened
+	menu. Fixe a but with negative selected-item.
+
 2012-08-14  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-util.lisp (eval-from-query-string): Show a notify
