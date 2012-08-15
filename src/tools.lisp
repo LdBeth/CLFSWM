@@ -121,7 +121,11 @@
 	   :find-string
 	   :find-all-strings
 	   :subst-strings
-	   :test-find-string))
+	   :test-find-string
+           :memory-usage
+           :cpu-usage
+           :battery-usage
+           :battery-alert-string))
 
 
 (in-package :tools)
@@ -1035,4 +1039,54 @@ Useful for re-using the &REST arg after removing some options."
 		  hour minute second
 		  (nth day days) (nth (1- month) months) date year)))))
 
+
+;;;
+;;; System information functions
+;;;
+(defmacro with-search-line ((word line) &body body)
+  `(let ((pos (search ,word ,line :test #'string-equal)))
+    (when (>= (or pos -1) 0)
+      ,@body)))
+
+(defun memory-usage ()
+  (let ((output (do-shell "free"))
+        (used 0)
+        (total 0))
+    (loop for line = (read-line output nil nil)
+       while line
+       do (with-search-line ("cache:" line)
+            (setf used (parse-integer (subseq line (+ pos 6)) :junk-allowed t)))
+         (with-search-line ("mem:" line)
+           (setf total (parse-integer (subseq line (+ pos 4)) :junk-allowed t))))
+    (values used total)))
+
+
+(defun cpu-usage ()
+  (let ((output (do-shell "top -b -n 2 -d 0.1"))
+        (cpu 0))
+    (loop for line = (read-line output nil nil)
+       while line
+       do (with-search-line ("%Cpu(s):" line)
+            (setf cpu (parse-integer (subseq line (+ pos 8)) :junk-allowed t))))
+    cpu))
+
+(defun battery-usage ()
+  (let ((output (do-shell "acpi -b"))
+        (bat 0))
+    (loop for line = (read-line output nil nil)
+       while line
+       do (with-search-line ("%" line)
+            (setf bat (parse-integer (subseq line (- pos 3) pos) :junk-allowed t))))
+    bat))
+
+(defun battery-alert-string (bat)
+  (cond ((<= bat 5) "/!\\")
+        ((<= bat 10) "!!")
+        ((<= bat 25) "!")
+        (t "")))
+
+;;;
+;;; System usage poll system
+;;;
+;;; echo "while true; do (acpi -b; top -b -n 2 -d 1 | grep '%Cpu(s)' ; free) > /tmp/clfswm-sys-poll.tmp; mv /tmp/clfswm-sys-poll.tmp /tmp/clfswm-sys-poll; sleep 10; done" > poller
 

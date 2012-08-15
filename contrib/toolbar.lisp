@@ -88,6 +88,14 @@
 (defparameter *toolbar-list* nil)
 (defparameter *toolbar-module-list* nil)
 
+(defconfig *default-toolbar* '((clfswm-menu 1)
+                               (bat 70)
+                               (mem 80)
+                               (cpu 90)
+                               (clickable-clock 99))
+  'Toolbar "Default toolbar modules")
+
+
 ;;; CONFIG - Toolbar window string colors
 (defconfig *toolbar-window-font-string* *default-font-string*
   'Toolbar "Toolbar window font string")
@@ -500,7 +508,7 @@
       (get-decoded-time)
     (declare (ignore s))
     (with-set-toolbar-module-rectangle (module)
-      (toolbar-module-text toolbar module "|~2,'0D:~2,'0D|" h m))))
+      (toolbar-module-text toolbar module "(~2,'0D:~2,'0D)" h m))))
 
 
 (defconfig *toolbar-clock-action* "xclock -analog"
@@ -523,12 +531,41 @@
   "(text placement) - Display an entry for the CLFSWM menu"
   (declare (ignore placement))
   (with-set-toolbar-module-rectangle (module)
-    (toolbar-module-text toolbar module (or text "CLFSWM"))))
+    (toolbar-module-text toolbar module (or text "(CLFSWM)"))))
 
 (define-toolbar-module-click (clfswm-menu text placement)
   "Open the CLFSWM main menu"
   (declare (ignore text code state toolbar module))
-  (dbg placement)
   (let ((*info-mode-placement* (or placement *info-mode-placement*)))
     (open-menu)))
+
+;;;
+;;; CPU usage
+;;;
+(define-toolbar-module (cpu)
+  "Display the CPU usage"
+  (toolbar-module-text toolbar module "CPU:~A%" (cpu-usage)))
+
+
+;;;
+;;; Memory usage
+;;;
+(define-toolbar-module (mem)
+  "Display the memory usage"
+  (multiple-value-bind (used total)
+      (memory-usage)
+    (toolbar-module-text toolbar module "Mem:~A%" (round (* (/ used total) 100.0)))))
+
+
+
+;;;
+;;; Battery usage
+;;;
+(define-toolbar-module (bat)
+  "Display the battery usage"
+  (let* ((bat (battery-usage))
+         (alert (battery-alert-string bat)))
+    (toolbar-module-text toolbar module "Bat:~A~A%~A" alert bat alert)))
+
+
 

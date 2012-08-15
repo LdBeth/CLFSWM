@@ -2,6 +2,7 @@
 
 	* contrib/toolbar.lisp: Add a clickable label module for toolbar.
 	Add a clickable entry to open the CLFSWM main menu.
+	Add memory, cpu and battery usage module.
 
 	* src/clfswm-menu.lisp (open-menu): Prevent to reopen an opened
 	menu. Fixe a but with negative selected-item.
