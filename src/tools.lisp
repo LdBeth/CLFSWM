@@ -93,7 +93,7 @@
 	   :find-free-number
 	   :date-string
 	   :do-execute
-	   :do-shell
+	   :do-shell :fdo-shell
 	   :getenv
 	   :uquit
 	   :urun-prog
@@ -125,7 +125,10 @@
            :memory-usage
            :cpu-usage
            :battery-usage
-           :battery-alert-string))
+           :battery-alert-string
+           :start-system-poll
+           :stop-system-poll
+           :system-usage-poll))
 
 
 (in-package :tools)
@@ -714,6 +717,8 @@ of the program to return.
 (defun do-shell (program &optional args (wait nil) (io :stream))
   (do-execute "/bin/sh" `("-c" ,program ,@args) wait io))
 
+(defun fdo-shell (formatter &rest args)
+  (do-shell (apply #'format nil formatter args)))
 
 
 
@@ -1086,7 +1091,70 @@ Useful for re-using the &REST arg after removing some options."
         (t "")))
 
 ;;;
-;;; System usage poll system
+;;; System usage with a poll system - Memory, CPU and battery all in one
 ;;;
-;;; echo "while true; do (acpi -b; top -b -n 2 -d 1 | grep '%Cpu(s)' ; free) > /tmp/clfswm-sys-poll.tmp; mv /tmp/clfswm-sys-poll.tmp /tmp/clfswm-sys-poll; sleep 10; done" > poller
+(let ((poll-log "/tmp/clfswm-system.log")
+      (bat-cmd "acpi -b")
+      (cpu-cmd "top -b -n 2 -d 1 | grep '%Cpu(s)'")
+      (mem-cmd "free")
+      (poll-exec "/tmp/clfswm-system.sh")
+      (running nil))
+  (defun create-system-poll (delay)
+    (with-open-file (stream poll-exec :direction :output :if-exists :supersede)
+      (format stream "#! /bin/sh
+
+while true; do
+ (~A; ~A ; ~A) > ~A.tmp;
+  mv ~A.tmp ~A;
+  sleep ~A;
+done~%" bat-cmd cpu-cmd mem-cmd poll-log poll-log poll-log delay))
+    (fdo-shell "/bin/chmod a+x ~A" poll-exec))
+
+  (defun system-poll-pid ()
+    (let ((pid nil))
+      (let ((output (do-shell "ps x")))
+        (loop for line = (read-line output nil nil)
+           while line
+           do (when (search poll-exec line)
+                (push (parse-integer line :junk-allowed t) pid))))
+      pid))
+
+  (defun stop-system-poll ()
+    (dolist (pid (system-poll-pid))
+      (fdo-shell "kill ~A" pid))
+    (setf running nil))
+
+  (defun start-system-poll (delay)
+    (unless running
+      (stop-system-poll)
+      (create-system-poll delay)
+      (do-execute poll-exec nil nil :stream)
+      (setf running t)))
+
+  (defun system-usage-poll (&optional (delay 10))
+    (let ((bat -1)
+          (cpu -1)
+          (used -1)
+          (total -1))
+      (start-system-poll delay)
+      (when (probe-file poll-log)
+        (with-open-file (stream poll-log :direction :input)
+          (loop for line = (read-line stream nil nil)
+             while line
+             do (with-search-line ("Battery" line)
+                  (let ((pos (position #\% line)))
+                    (when pos
+                      (setf bat (parse-integer (subseq line (- pos 3) pos) :junk-allowed t)))))
+               (with-search-line ("%Cpu(s):" line)
+                 (setf cpu (parse-integer (subseq line (+ pos 8)) :junk-allowed t)))
+               (with-search-line ("cache:" line)
+                 (setf used (parse-integer (subseq line (+ pos 6)) :junk-allowed t)))
+               (with-search-line ("mem:" line)
+                 (setf total (parse-integer (subseq line (+ pos 4)) :junk-allowed t))))
+          (values cpu used total bat))))))
+
+
+
+
+
 

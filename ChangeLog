@@ -1,3 +1,9 @@
+2012-08-16  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/toolbar.lisp: Add memory, cpu and battery usage module
+	with a poll methode. More responsive but up to date every 10s by
+	default.
+
 2012-08-15  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/toolbar.lisp: Add a clickable label module for toolbar.

@@ -53,6 +53,12 @@
 ;;;    (load-contrib "toolbar.lisp")
 ;;;
 ;;;  ;; Add an horizontal toolbar on root at coordinates 0,0 pixels
+;;;  ;; with default modules
+;;;
+;;;    (add-toolbar 0 0 :horiz 80 'top-middle-root-placement *default-toolbar*)
+;;;
+;;;
+;;;  ;; Add an horizontal toolbar on root at coordinates 0,0 pixels
 ;;;
 ;;;    (add-toolbar 0 0 :horiz 90 'top-middle-root-placement
 ;;;                 '((clock 1) (label 50 "Plop") (clock-second 25) (clickable-clock 99))
@@ -89,9 +95,7 @@
 (defparameter *toolbar-module-list* nil)
 
 (defconfig *default-toolbar* '((clfswm-menu 1)
-                               (bat 70)
-                               (mem 80)
-                               (cpu 90)
+                               (system-usage 90)
                                (clickable-clock 99))
   'Toolbar "Default toolbar modules")
 
@@ -569,3 +573,25 @@
 
 
 
+;;;
+;;; System usage - Battery, CPU and Memory usage all in one
+;;;
+(define-toolbar-module (system-usage (poll-delay 10))
+  "Display system usage: CPU, Memory and Battery (poll methode)"
+  (multiple-value-bind (cpu used total bat)
+      (system-usage-poll poll-delay)
+    (let ((alert (battery-alert-string bat)))
+      (toolbar-module-text toolbar module "Bat:~A~A%~A CPU:~A% Mem:~A%"
+                           alert bat alert cpu
+                           (round (* (/ used total) 100))))))
+
+;;;
+;;; CPU and Memory usage - CPU and Memory usage
+;;;
+(define-toolbar-module (system-cpu-mem (poll-delay 10))
+  "Display system usage: CPU and Memory (poll methode)"
+  (multiple-value-bind (cpu used total)
+      (system-usage-poll poll-delay)
+    (toolbar-module-text toolbar module "CPU:~A% Mem:~A%"
+                         cpu
+                         (round (* (/ used total) 100)))))
