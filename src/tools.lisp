@@ -1048,56 +1048,82 @@ Useful for re-using the &REST arg after removing some options."
 ;;;
 ;;; System information functions
 ;;;
+(defparameter *bat-cmd* "acpi -b")
+(defparameter *cpu-cmd* "top -b -n 2 -d 1 -p 0")
+(defparameter *cpu-cmd-fast* "top -b -n 2 -d 0.1 -p 0")
+(defparameter *mem-cmd* "free")
+
 (defmacro with-search-line ((word line) &body body)
   `(let ((pos (search ,word ,line :test #'string-equal)))
     (when (>= (or pos -1) 0)
       ,@body)))
 
-(defun memory-usage ()
-  (let ((output (do-shell "free"))
-        (used 0)
-        (total 0))
-    (loop for line = (read-line output nil nil)
-       while line
-       do (with-search-line ("cache:" line)
-            (setf used (parse-integer (subseq line (+ pos 6)) :junk-allowed t)))
-         (with-search-line ("mem:" line)
-           (setf total (parse-integer (subseq line (+ pos 4)) :junk-allowed t))))
-    (values used total)))
+(defun extract-battery-usage (line)
+  (with-search-line ("Battery" line)
+    (let ((pos (position #\% line)))
+      (when pos
+        (parse-integer (subseq line (- pos 3) pos) :junk-allowed t)))))
+
+(defun extract-cpu-usage (line)
+  (with-search-line ("%Cpu(s):" line)
+    (let ((pos1 (search "id" line)))
+      (when pos1
+        (let ((pos2 (position #\, line :from-end t :end pos1)))
+          (when pos2
+            (- 100 (parse-integer (subseq line (1+ pos2) pos1) :junk-allowed t))))))))
+
+(defun extract-mem-used (line)
+  (with-search-line ("cache:" line)
+    (parse-integer (subseq line (+ pos 6)) :junk-allowed t)))
+
+(defun extract-mem-total (line)
+  (with-search-line ("mem:" line)
+    (parse-integer (subseq line (+ pos 4)) :junk-allowed t)))
+
+(let ((total -1))
+  (defun memory-usage ()
+    (let ((output (do-shell *mem-cmd*))
+          (used -1))
+      (loop for line = (read-line output nil nil)
+         while line
+         do (awhen (extract-mem-used line)
+              (setf used it))
+           (awhen (and (= total -1) (extract-mem-total line))
+             (setf total it)))
+      (values used total))))
 
 
 (defun cpu-usage ()
-  (let ((output (do-shell "top -b -n 2 -d 0.1"))
-        (cpu 0))
+  (let ((output (do-shell *cpu-cmd-fast*))
+        (cpu -1))
     (loop for line = (read-line output nil nil)
        while line
-       do (with-search-line ("%Cpu(s):" line)
-            (setf cpu (parse-integer (subseq line (+ pos 8)) :junk-allowed t))))
+       do (awhen (extract-cpu-usage line)
+            (setf cpu it)))
     cpu))
 
 (defun battery-usage ()
-  (let ((output (do-shell "acpi -b"))
-        (bat 0))
+  (let ((output (do-shell *bat-cmd*))
+        (bat -1))
     (loop for line = (read-line output nil nil)
        while line
-       do (with-search-line ("%" line)
-            (setf bat (parse-integer (subseq line (- pos 3) pos) :junk-allowed t))))
+       do (awhen (extract-battery-usage line)
+            (setf bat it)))
     bat))
 
 (defun battery-alert-string (bat)
-  (cond ((<= bat 5) "/!\\")
-        ((<= bat 10) "!!")
-        ((<= bat 25) "!")
-        (t "")))
+  (if (numberp bat)
+      (cond ((<= bat 5) "/!\\")
+            ((<= bat 10) "!!")
+            ((<= bat 25) "!")
+            (t ""))
+      ""))
 
 ;;;
 ;;; System usage with a poll system - Memory, CPU and battery all in one
 ;;;
-(let ((poll-log "/tmp/clfswm-system.log")
-      (bat-cmd "acpi -b")
-      (cpu-cmd "top -b -n 2 -d 1 | grep '%Cpu(s)'")
-      (mem-cmd "free")
-      (poll-exec "/tmp/clfswm-system.sh")
+(let ((poll-log "/tmp/.clfswm-system.log")
+      (poll-exec "/tmp/.clfswm-system.sh")
       (running nil))
   (defun create-system-poll (delay)
     (with-open-file (stream poll-exec :direction :output :if-exists :supersede)
@@ -1107,8 +1133,7 @@ while true; do
  (~A; ~A ; ~A) > ~A.tmp;
   mv ~A.tmp ~A;
   sleep ~A;
-done~%" bat-cmd cpu-cmd mem-cmd poll-log poll-log poll-log delay))
-    (fdo-shell "/bin/chmod a+x ~A" poll-exec))
+done~%" *bat-cmd* *cpu-cmd* *mem-cmd* poll-log poll-log poll-log delay)))
 
   (defun system-poll-pid ()
     (let ((pid nil))
@@ -1122,13 +1147,17 @@ done~%" bat-cmd cpu-cmd mem-cmd poll-log poll-log poll-log delay))
   (defun stop-system-poll ()
     (dolist (pid (system-poll-pid))
       (fdo-shell "kill ~A" pid))
+    (when (probe-file poll-log)
+      (delete-file poll-log))
+    (when (probe-file poll-exec)
+      (delete-file poll-exec))
     (setf running nil))
 
   (defun start-system-poll (delay)
     (unless running
       (stop-system-poll)
       (create-system-poll delay)
-      (do-execute poll-exec nil nil :stream)
+      (fdo-shell "exec sh ~A" poll-exec)
       (setf running t)))
 
   (defun system-usage-poll (&optional (delay 10))
@@ -1141,17 +1170,15 @@ done~%" bat-cmd cpu-cmd mem-cmd poll-log poll-log poll-log delay))
         (with-open-file (stream poll-log :direction :input)
           (loop for line = (read-line stream nil nil)
              while line
-             do (with-search-line ("Battery" line)
-                  (let ((pos (position #\% line)))
-                    (when pos
-                      (setf bat (parse-integer (subseq line (- pos 3) pos) :junk-allowed t)))))
-               (with-search-line ("%Cpu(s):" line)
-                 (setf cpu (parse-integer (subseq line (+ pos 8)) :junk-allowed t)))
-               (with-search-line ("cache:" line)
-                 (setf used (parse-integer (subseq line (+ pos 6)) :junk-allowed t)))
-               (with-search-line ("mem:" line)
-                 (setf total (parse-integer (subseq line (+ pos 4)) :junk-allowed t))))
-          (values cpu used total bat))))))
+             do (awhen (extract-battery-usage line)
+                  (setf bat it))
+               (awhen (extract-cpu-usage line)
+                 (setf cpu it))
+               (awhen (extract-mem-used line)
+                 (setf used it))
+               (awhen (and (= total -1) (extract-mem-total line))
+                 (setf total it)))))
+      (values cpu used total bat))))
 
 
 

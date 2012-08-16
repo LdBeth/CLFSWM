@@ -371,7 +371,8 @@
 
 (defun close-all-toolbars ()
   (dolist (toolbar *toolbar-list*)
-    (close-toolbar toolbar)))
+    (close-toolbar toolbar))
+  (stop-system-poll))
 
 (defun create-toolbar-modules (modules)
   (loop for mod in modules
@@ -512,7 +513,7 @@
       (get-decoded-time)
     (declare (ignore s))
     (with-set-toolbar-module-rectangle (module)
-      (toolbar-module-text toolbar module "(~2,'0D:~2,'0D)" h m))))
+      (toolbar-module-text toolbar module "~2,'0D:~2,'0D" h m))))
 
 
 (defconfig *toolbar-clock-action* "xclock -analog"
@@ -535,7 +536,7 @@
   "(text placement) - Display an entry for the CLFSWM menu"
   (declare (ignore placement))
   (with-set-toolbar-module-rectangle (module)
-    (toolbar-module-text toolbar module (or text "(CLFSWM)"))))
+    (toolbar-module-text toolbar module (or text "CLFSWM"))))
 
 (define-toolbar-module-click (clfswm-menu text placement)
   "Open the CLFSWM main menu"
@@ -547,7 +548,7 @@
 ;;; CPU usage
 ;;;
 (define-toolbar-module (cpu)
-  "Display the CPU usage"
+  "Display the CPU usage (slow methode)"
   (toolbar-module-text toolbar module "CPU:~A%" (cpu-usage)))
 
 
@@ -555,7 +556,7 @@
 ;;; Memory usage
 ;;;
 (define-toolbar-module (mem)
-  "Display the memory usage"
+  "Display the memory usage (slow methode)"
   (multiple-value-bind (used total)
       (memory-usage)
     (toolbar-module-text toolbar module "Mem:~A%" (round (* (/ used total) 100.0)))))
@@ -566,7 +567,7 @@
 ;;; Battery usage
 ;;;
 (define-toolbar-module (bat)
-  "Display the battery usage"
+  "Display the battery usage (slow methode)"
   (let* ((bat (battery-usage))
          (alert (battery-alert-string bat)))
     (toolbar-module-text toolbar module "Bat:~A~A%~A" alert bat alert)))
@@ -595,3 +596,4 @@
     (toolbar-module-text toolbar module "CPU:~A% Mem:~A%"
                          cpu
                          (round (* (/ used total) 100)))))
+
