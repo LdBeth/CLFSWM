@@ -1124,7 +1124,7 @@ Useful for re-using the &REST arg after removing some options."
 ;;;
 (let ((poll-log "/tmp/.clfswm-system.log")
       (poll-exec "/tmp/.clfswm-system.sh")
-      (running nil))
+      (poll-lock "/tmp/.clfswm-system.lock"))
   (defun create-system-poll (delay)
     (with-open-file (stream poll-exec :direction :output :if-exists :supersede)
       (format stream "#! /bin/sh
@@ -1151,14 +1151,16 @@ done~%" *bat-cmd* *cpu-cmd* *mem-cmd* poll-log poll-log poll-log delay)))
       (delete-file poll-log))
     (when (probe-file poll-exec)
       (delete-file poll-exec))
-    (setf running nil))
+    (when (probe-file poll-lock)
+      (delete-file poll-lock)))
 
   (defun start-system-poll (delay)
-    (unless running
+    (unless (probe-file poll-lock)
       (stop-system-poll)
       (create-system-poll delay)
       (fdo-shell "exec sh ~A" poll-exec)
-      (setf running t)))
+      (with-open-file (stream poll-lock :direction :output :if-exists :supersede)
+        (format stream "CLFSWM system poll started~%"))))
 
   (defun system-usage-poll (&optional (delay 10))
     (let ((bat -1)

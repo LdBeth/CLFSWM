@@ -1,6 +1,7 @@
 2012-08-16  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/tools.lisp: Factorize system usage information collection.
+	(start-system-poll): Use a lock file instead of a local variable.
 
 	* contrib/toolbar.lisp: Add memory, cpu and battery usage module
 	with a poll methode. More responsive but up to date every 10s by
