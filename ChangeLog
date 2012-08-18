@@ -1,3 +1,8 @@
+2012-08-18  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/toolbar.lisp: Add configurable colors in toolbar
+	modules.
+
 2012-08-16  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/tools.lisp: Factorize system usage information collection.

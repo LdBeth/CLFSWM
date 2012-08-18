@@ -147,7 +147,7 @@
                     (decf (root-w root) thickness)))))))))
 
 
-(defun toolbar-draw-text (toolbar pos1 pos2 text)
+(defun toolbar-draw-text (toolbar pos1 pos2 text color)
   "pos1: percent of toolbar, pos2: pixels in toolbar"
   (labels ((horiz-text ()
              (let* ((height (- (xlib:font-ascent (toolbar-font toolbar)) (xlib:font-descent (toolbar-font toolbar))))
@@ -175,15 +175,17 @@
                        (+ (- pos dpos) (xlib:drawable-y (toolbar-window toolbar)))
                        (xlib:drawable-width (toolbar-window toolbar))
                        height))))
-    (case (toolbar-direction toolbar)
-      (:horiz (horiz-text))
-      (:vert (vert-text)))))
+    (xlib:with-gcontext ((toolbar-gc toolbar) :foreground (get-color color))
+      (case (toolbar-direction toolbar)
+        (:horiz (horiz-text))
+        (:vert (vert-text))))))
 
 
-(defun toolbar-module-text (toolbar module formatter &rest text)
+(defun toolbar-module-text (toolbar module color formatter &rest text)
   "Print a formatted text at module position centered in toolbar"
   (toolbar-draw-text toolbar (toolbar-module-pos module) (/ *toolbar-default-thickness* 2)
-                     (apply #'format nil formatter text)))
+                     (apply #'format nil formatter text)
+                     color))
 
 
 
@@ -458,6 +460,15 @@
     (when (fboundp (toolbar-symbol-fun module 'click))
       (format stream "    On click: ~A~%" (documentation (toolbar-symbol-fun module 'click) 'function)))))
 
+
+(defmacro define-toolbar-color (name doc-string &optional (value *toolbar-window-foreground*))
+  (let ((symbol-name (create-symbol '*toolbar- name '-color*)))
+    `(defconfig ,symbol-name ,value 'Toolbar ,doc-string)))
+
+(defmacro tb-color (name)
+  (let ((symbol-name (create-symbol '*toolbar- name '-color*)))
+    symbol-name))
+
 ;;;
 ;;; Modules definitions
 ;;;
@@ -465,12 +476,14 @@
 ;;;
 ;;; Clock module
 ;;;
+(define-toolbar-color clock "Clock color")
+
 (define-toolbar-module (clock)
   "A clock module"
   (multiple-value-bind (s m h)
       (get-decoded-time)
     (declare (ignore s))
-    (toolbar-module-text toolbar module "~2,'0D:~2,'0D" h m)))
+    (toolbar-module-text toolbar module (tb-color clock) "~2,'0D:~2,'0D" h m)))
 
 ;;;
 ;;; Clock module with seconds
@@ -479,24 +492,28 @@
   "A clock module with seconds"
   (multiple-value-bind (s m h)
       (get-decoded-time)
-    (toolbar-module-text toolbar module "~2,'0D:~2,'0D:~2,'0D" h m s)))
+    (toolbar-module-text toolbar module (tb-color clock) "~2,'0D:~2,'0D:~2,'0D" h m s)))
 
 
 ;;;
 ;;; Label module
 ;;;
+(define-toolbar-color label "Label color")
+
 (define-toolbar-module (label text)
   "(text) - Display a text in toolbar"
-  (toolbar-module-text toolbar module (or text "Empty")))
+  (toolbar-module-text toolbar module (tb-color label) (or text "Empty")))
 
 ;;;
 ;;; Clickable label module
 ;;;
+(define-toolbar-color clickable-label "Clickable label color")
+
 (define-toolbar-module (clickable-label text action)
   "(text action) - Display a clickable text in toolbar"
   (declare (ignore action))
   (with-set-toolbar-module-rectangle (module)
-    (toolbar-module-text toolbar module (or text "Empty"))))
+    (toolbar-module-text toolbar module (tb-color clickable-label) (or text "Empty"))))
 
 (define-toolbar-module-click (clickable-label text action)
   "Call the function 'action'"
@@ -507,13 +524,15 @@
 ;;;
 ;;;  Clickable clock module
 ;;;
+(define-toolbar-color clickable-clock "Clickable clock color")
+
 (define-toolbar-module (clickable-clock)
   "A clickable clock module"
   (multiple-value-bind (s m h)
       (get-decoded-time)
     (declare (ignore s))
     (with-set-toolbar-module-rectangle (module)
-      (toolbar-module-text toolbar module "~2,'0D:~2,'0D" h m))))
+      (toolbar-module-text toolbar module (tb-color clickable-clock) "~2,'0D:~2,'0D" h m))))
 
 
 (defconfig *toolbar-clock-action* "xclock -analog"
@@ -532,11 +551,13 @@
 ;;;
 ;;; CLFSWM menu module
 ;;;
+(define-toolbar-color clfswm-menu "CLFSWM menu color")
+
 (define-toolbar-module (clfswm-menu text placement)
   "(text placement) - Display an entry for the CLFSWM menu"
   (declare (ignore placement))
   (with-set-toolbar-module-rectangle (module)
-    (toolbar-module-text toolbar module (or text "CLFSWM"))))
+    (toolbar-module-text toolbar module (tb-color clfswm-menu) (or text "CLFSWM"))))
 
 (define-toolbar-module-click (clfswm-menu text placement)
   "Open the CLFSWM main menu"
@@ -547,30 +568,48 @@
 ;;;
 ;;; CPU usage
 ;;;
+(define-toolbar-color cpu "CPU color")
+
 (define-toolbar-module (cpu)
   "Display the CPU usage (slow methode)"
-  (toolbar-module-text toolbar module "CPU:~A%" (cpu-usage)))
+  (toolbar-module-text toolbar module (tb-color cpu) "CPU:~A%" (cpu-usage)))
 
 
 ;;;
 ;;; Memory usage
 ;;;
+(define-toolbar-color mem "Memory color")
+
 (define-toolbar-module (mem)
   "Display the memory usage (slow methode)"
   (multiple-value-bind (used total)
       (memory-usage)
-    (toolbar-module-text toolbar module "Mem:~A%" (round (* (/ used total) 100.0)))))
+    (toolbar-module-text toolbar module (tb-color mem) "Mem:~A%" (round (* (/ used total) 100.0)))))
 
 
 
 ;;;
 ;;; Battery usage
 ;;;
+(define-toolbar-color system-info "System information colors (CPU+Mem+Battery)")
+(define-toolbar-color system-info-low "System information colors (CPU+Mem+Battery)" "Yellow")
+(define-toolbar-color system-info-alert "System information colors (CPU+Mem+Battery)" "Magenta")
+(define-toolbar-color system-info-urgent "System information colors (CPU+Mem+Battery)" "Red")
+
+(defun toolbar-battery-color (bat)
+  (if (numberp bat)
+      (cond ((<= bat 5) (tb-color system-info-urgent))
+            ((<= bat 10) (tb-color system-info-alert))
+            ((<= bat 25) (tb-color system-info-low))
+            (t (tb-color system-info)))
+      (tb-color system-info)))
+
 (define-toolbar-module (bat)
   "Display the battery usage (slow methode)"
-  (let* ((bat (battery-usage))
-         (alert (battery-alert-string bat)))
-    (toolbar-module-text toolbar module "Bat:~A~A%~A" alert bat alert)))
+  (let* ((bat (battery-usage)))
+    (toolbar-module-text toolbar module
+                         (toolbar-battery-color bat)
+                         "Bat:~A%" bat)))
 
 
 
@@ -581,10 +620,10 @@
   "Display system usage: CPU, Memory and Battery (poll methode)"
   (multiple-value-bind (cpu used total bat)
       (system-usage-poll poll-delay)
-    (let ((alert (battery-alert-string bat)))
-      (toolbar-module-text toolbar module "Bat:~A~A%~A CPU:~A% Mem:~A%"
-                           alert bat alert cpu
-                           (round (* (/ used total) 100))))))
+    (toolbar-module-text toolbar module (toolbar-battery-color bat)
+                         "Bat:~A% CPU:~A% Mem:~A%"
+                         bat cpu
+                         (round (* (/ used total) 100)))))
 
 ;;;
 ;;; CPU and Memory usage - CPU and Memory usage
@@ -593,7 +632,8 @@
   "Display system usage: CPU and Memory (poll methode)"
   (multiple-value-bind (cpu used total)
       (system-usage-poll poll-delay)
-    (toolbar-module-text toolbar module "CPU:~A% Mem:~A%"
+    (toolbar-module-text toolbar module (tb-color cpu)
+                         "CPU:~A% Mem:~A%"
                          cpu
                          (round (* (/ used total) 100)))))
 
