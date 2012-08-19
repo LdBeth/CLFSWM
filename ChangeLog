@@ -1,3 +1,7 @@
+2012-08-19  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/toolbar.lisp (remove-toolbar): New function.
+
 2012-08-18  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/toolbar.lisp: Add configurable colors in toolbar

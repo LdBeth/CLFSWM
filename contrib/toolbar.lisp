@@ -87,7 +87,8 @@
 (format t "Loading Toolbar code... ")
 
 (defstruct toolbar root-x root-y root direction size thickness placement refresh-delay
-           autohide modules clickable hide-state font window gc border-size)
+           autohide modules clickable hide-state font window gc border-size
+           exposure-hook button-press-hook motion-notify-hook leave-notify-hook)
 
 (defstruct toolbar-module name pos display-fun click-fun args rect)
 
@@ -187,19 +188,22 @@
                      (apply #'format nil formatter text)
                      color))
 
+(defun is-valid-toolbar (toolbar)
+  (member toolbar *toolbar-list*))
 
 
 (defun refresh-toolbar (toolbar)
-  (unless (toolbar-hide-state toolbar)
-    (add-timer (toolbar-refresh-delay toolbar)
-               (lambda ()
-                 (refresh-toolbar toolbar))
-               :refresh-toolbar)
-    (clear-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar))
-    (dolist (module (toolbar-modules toolbar))
-      (when (fboundp (toolbar-module-display-fun module))
-        (apply (toolbar-module-display-fun module) toolbar module (toolbar-module-args module))))
-    (copy-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar))))
+  (when (is-valid-toolbar toolbar)
+    (unless (toolbar-hide-state toolbar)
+      (add-timer (toolbar-refresh-delay toolbar)
+                 (lambda ()
+                   (refresh-toolbar toolbar))
+                 :refresh-toolbar)
+      (clear-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar))
+      (dolist (module (toolbar-modules toolbar))
+        (when (fboundp (toolbar-module-display-fun module))
+          (apply (toolbar-module-display-fun module) toolbar module (toolbar-module-args module))))
+      (copy-pixmap-buffer (toolbar-window toolbar) (toolbar-gc toolbar)))))
 
 (defun toolbar-in-sensibility-zone-p (toolbar root-x root-y)
   (let* ((tb-win (toolbar-window toolbar))
@@ -229,59 +233,70 @@
 
 
 (defun toolbar-add-exposure-hook (toolbar)
-  (define-event-hook :exposure (window)
-    (when (and (xlib:window-p window) (xlib:window-equal (toolbar-window toolbar) window))
-      (refresh-toolbar toolbar))))
+  (push (define-event-hook :exposure (window)
+          (when (and (is-valid-toolbar toolbar)
+                     (xlib:window-p window)
+                     (xlib:window-equal (toolbar-window toolbar) window))
+            (refresh-toolbar toolbar)))
+        (toolbar-exposure-hook toolbar)))
+
 
 (defun toolbar-add-hide-button-press-hook (toolbar)
-  (define-event-hook :button-press (code root-x root-y)
-    (when (= code 1)
-      (let* ((tb-win (toolbar-window toolbar)))
-        (when (toolbar-in-sensibility-zone-p toolbar root-x root-y)
-          (if (toolbar-hide-state toolbar)
-              (progn
-                (setf (toolbar-hide-state toolbar) nil)
-                (map-window tb-win)
-                (raise-window tb-win)
-                (refresh-toolbar toolbar))
-              (progn
-                (hide-window tb-win)
-                (setf (toolbar-hide-state toolbar) t)))
-          (wait-mouse-button-release)
-          (stop-button-event)
-          (exit-handle-event))))))
+  (push (define-event-hook :button-press (code root-x root-y)
+          (when (and (is-valid-toolbar toolbar) (= code 1))
+            (let* ((tb-win (toolbar-window toolbar)))
+              (when (toolbar-in-sensibility-zone-p toolbar root-x root-y)
+                (if (toolbar-hide-state toolbar)
+                    (progn
+                      (setf (toolbar-hide-state toolbar) nil)
+                      (map-window tb-win)
+                      (raise-window tb-win)
+                      (refresh-toolbar toolbar))
+                    (progn
+                      (hide-window tb-win)
+                      (setf (toolbar-hide-state toolbar) t)))
+                (wait-mouse-button-release)
+                (stop-button-event)
+                (exit-handle-event)))))
+         (toolbar-button-press-hook toolbar)))
 
 (defun toolbar-add-hide-motion-hook (toolbar)
-  (define-event-hook :motion-notify (root-x root-y)
-    (unless (compress-motion-notify)
-      (when (and (toolbar-hide-state toolbar)
-                 (toolbar-in-sensibility-zone-p toolbar root-x root-y))
-        (map-window (toolbar-window toolbar))
-        (raise-window (toolbar-window toolbar))
-        (refresh-toolbar toolbar)
-        (setf (toolbar-hide-state toolbar) nil)
-        (exit-handle-event)))))
+  (push (define-event-hook :motion-notify (root-x root-y)
+          (unless (compress-motion-notify)
+            (when (and (is-valid-toolbar toolbar)
+                       (toolbar-hide-state toolbar)
+                       (toolbar-in-sensibility-zone-p toolbar root-x root-y))
+              (map-window (toolbar-window toolbar))
+              (raise-window (toolbar-window toolbar))
+              (refresh-toolbar toolbar)
+              (setf (toolbar-hide-state toolbar) nil)
+              (exit-handle-event))))
+         (toolbar-motion-notify-hook toolbar)))
 
 (defun toolbar-add-hide-leave-hook (toolbar)
-  (define-event-hook :leave-notify (root-x root-y)
-    (when (and (not (toolbar-hide-state toolbar))
-               (not (in-window (toolbar-window toolbar) root-x root-y)))
-      (hide-window (toolbar-window toolbar))
-      (setf (toolbar-hide-state toolbar) t)
-      (exit-handle-event))))
+  (push (define-event-hook :leave-notify (root-x root-y)
+          (when (and (is-valid-toolbar toolbar)
+                     (not (toolbar-hide-state toolbar))
+                     (not (in-window (toolbar-window toolbar) root-x root-y)))
+            (hide-window (toolbar-window toolbar))
+            (setf (toolbar-hide-state toolbar) t)
+            (exit-handle-event)))
+         (toolbar-leave-notify-hook toolbar)))
 
 
 (defun toolbar-add-clickable-module-hook (toolbar)
-  (define-event-hook :button-press (code state root-x root-y)
-    (when (and (in-window (toolbar-window toolbar) root-x root-y)
-               (not (toolbar-hide-state toolbar)))
-      (dolist (module (toolbar-modules toolbar))
-        (when (and (in-rectangle root-x root-y (toolbar-module-rect module))
-                   (fboundp (toolbar-module-click-fun module)))
-          (apply (toolbar-module-click-fun module) toolbar module code state
-                 (toolbar-module-args module))
-          (stop-button-event)
-          (exit-handle-event))))))
+  (push (define-event-hook :button-press (code state root-x root-y)
+          (when (and (is-valid-toolbar toolbar)
+                     (in-window (toolbar-window toolbar) root-x root-y)
+                     (not (toolbar-hide-state toolbar)))
+            (dolist (module (toolbar-modules toolbar))
+              (when (and (in-rectangle root-x root-y (toolbar-module-rect module))
+                         (fboundp (toolbar-module-click-fun module)))
+                (apply (toolbar-module-click-fun module) toolbar module code state
+                       (toolbar-module-args module))
+                (stop-button-event)
+                (exit-handle-event)))))
+          (toolbar-button-press-hook toolbar)))
 
 
 (defun define-toolbar-hooks (toolbar)
@@ -299,6 +314,12 @@
       (setf (toolbar-clickable toolbar) t))))
 
 
+(defmacro remove-toolbar-hook (toolbar keyword)
+  (let ((fun (create-symbol 'toolbar- keyword '-hook)))
+    `(dolist (hook (,fun ,toolbar))
+       (remove-event-hook ,keyword hook))))
+
+
 
 (let ((windows-list nil))
   (defun is-toolbar-window-p (win)
@@ -306,6 +327,10 @@
 
   (defun close-toolbar (toolbar)
     (erase-timer :refresh-toolbar-window)
+    (remove-toolbar-hook toolbar :exposure)
+    (remove-toolbar-hook toolbar :button-press)
+    (remove-toolbar-hook toolbar :leave-notify)
+    (remove-toolbar-hook toolbar :motion-notify)
     (setf *never-managed-window-list*
           (remove (list #'is-toolbar-window-p nil)
                   *never-managed-window-list* :test #'equal))
@@ -413,6 +438,10 @@
                                :modules (create-toolbar-modules modules))))
     (push toolbar *toolbar-list*)
     toolbar))
+
+(defun remove-toolbar (toolbar)
+  (close-toolbar toolbar)
+  (setf *toolbar-list* (remove toolbar *toolbar-list* :test #'equal)))
 
 
 (add-hook *init-hook* 'open-all-toolbars)

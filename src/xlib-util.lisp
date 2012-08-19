@@ -213,11 +213,14 @@ Expand in handle-event-fun-main-mode-key-press"
 
 
 (defmacro define-event-hook (event-keyword args &body body)
-  `(add-event-hook ,event-keyword
-                   (lambda (&rest event-slots &key #+:event-debug event-key ,@args &allow-other-keys)
-                     (declare (ignorable event-slots))
-                     #+:event-debug (print (list ,event-keyword event-key))
-                     ,@body)))
+  (let ((event-fun (gensym)))
+    `(let ((,event-fun (lambda (&rest event-slots &key #+:event-debug event-key ,@args &allow-other-keys)
+                         (declare (ignorable event-slots))
+                         #+:event-debug (print (list ,event-keyword event-key))
+                         ,@body)))
+       (add-event-hook ,event-keyword ,event-fun)
+       ,event-fun)))
+
 
 (defmacro event-defun (name args &body body)
   `(defun ,name (&rest event-slots &key #+:event-debug event-key ,@args &allow-other-keys)
