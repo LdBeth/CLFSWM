@@ -378,7 +378,7 @@
                                                                :line-style :solid))
               (push (toolbar-window toolbar) windows-list)
               (setf (window-transparency (toolbar-window toolbar)) *toolbar-window-transparency*)
-              (push (list #'is-toolbar-window-p nil) *never-managed-window-list*)
+              (add-in-never-managed-window-list (list 'is-toolbar-window-p nil))
               (map-window (toolbar-window toolbar))
               (raise-window (toolbar-window toolbar))
               (refresh-toolbar toolbar)

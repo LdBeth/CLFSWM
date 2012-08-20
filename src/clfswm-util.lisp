@@ -1764,7 +1764,7 @@ For window: set current child to window or its parent according to window-parent
           (setf (window-transparency window) *notify-window-transparency*)
 	  (when (frame-p (current-child))
 	    (setf current-child (current-child)))
-          (push (list #'is-notify-window-p 'raise-window) *never-managed-window-list*)
+          (add-in-never-managed-window-list (list 'is-notify-window-p 'raise-window))
 	  (map-window window)
 	  (refresh-notify-window)
 	  (xlib:display-finish-output *display*))))))

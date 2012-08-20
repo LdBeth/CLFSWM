@@ -25,8 +25,6 @@
 
 (in-package :clfswm)
 
-
-
 (defgeneric child-border-size (child))
 
 (defmethod child-border-size ((child frame))
@@ -217,6 +215,9 @@
 		 (member (xlib:wm-name window) managed :test #'string-equal-p))))
       t))
 
+
+(defun add-in-never-managed-window-list (value)
+  (pushnew value *never-managed-window-list* :test #'equal))
 
 (defun never-managed-window-p (window)
   (when (xlib:window-p window)

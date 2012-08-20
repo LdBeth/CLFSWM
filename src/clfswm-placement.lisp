@@ -117,6 +117,7 @@
 ;;; Here placement: Evaluates to current position of pointer.
 ;;;
 (defun here-placement (&optional (width 0) (height 0) (border-size *border-size*))
+  (declare (ignore border-size))
   (with-x-pointer
       (values x y width height)))
 
