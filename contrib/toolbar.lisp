@@ -126,6 +126,11 @@
 (defconfig *toolbar-window-placement* 'top-left-placement
   'Placement "Toolbar window placement")
 
+(use-event-hook :exposure)
+(use-event-hook :button-press)
+(use-event-hook :motion-notify)
+(use-event-hook :leave-notify)
+
 (defun toolbar-symbol-fun (name &optional (type 'display))
   (create-symbol-in-package :clfswm 'toolbar- name '-module- type))
 
@@ -226,11 +231,6 @@
              (<= (+ win-x width (- *toolbar-sensibility*)) root-x (+ win-x width))
              (<= win-y root-y (+ win-y height)) (toolbar-autohide toolbar)))))
 
-(use-event-hook :exposure)
-(use-event-hook :button-press)
-(use-event-hook :motion-notify)
-(use-event-hook :leave-notify)
-
 
 (defun toolbar-add-exposure-hook (toolbar)
   (push (define-event-hook :exposure (window)
@@ -326,24 +326,25 @@
     (and (xlib:window-p win) (member win windows-list :test 'xlib:window-equal)))
 
   (defun close-toolbar (toolbar)
-    (erase-timer :refresh-toolbar-window)
-    (remove-toolbar-hook toolbar :exposure)
-    (remove-toolbar-hook toolbar :button-press)
-    (remove-toolbar-hook toolbar :leave-notify)
-    (remove-toolbar-hook toolbar :motion-notify)
-    (setf *never-managed-window-list*
-          (remove (list #'is-toolbar-window-p nil)
-                  *never-managed-window-list* :test #'equal))
-    (awhen (toolbar-gc toolbar)
-      (xlib:free-gcontext it))
-    (awhen (toolbar-window toolbar)
-      (xlib:destroy-window it))
-    (awhen (toolbar-font toolbar)
-      (xlib:close-font it))
-    (xlib:display-finish-output *display*)
-    (setf (toolbar-window toolbar) nil
-          (toolbar-gc toolbar) nil
-          (toolbar-font toolbar) nil))
+    (when (toolbar-p toolbar)
+      (erase-timer :refresh-toolbar-window)
+      (remove-toolbar-hook toolbar :exposure)
+      (remove-toolbar-hook toolbar :button-press)
+      (remove-toolbar-hook toolbar :leave-notify)
+      (remove-toolbar-hook toolbar :motion-notify)
+      (setf *never-managed-window-list*
+            (remove (list #'is-toolbar-window-p nil)
+                    *never-managed-window-list* :test #'equal))
+      (awhen (toolbar-gc toolbar)
+        (xlib:free-gcontext it))
+      (awhen (toolbar-window toolbar)
+        (xlib:destroy-window it))
+      (awhen (toolbar-font toolbar)
+        (xlib:close-font it))
+      (xlib:display-finish-output *display*)
+      (setf (toolbar-window toolbar) nil
+            (toolbar-gc toolbar) nil
+            (toolbar-font toolbar) nil)))
 
   (defun open-toolbar (toolbar)
     (let ((root (root (toolbar-root-x toolbar) (toolbar-root-y toolbar))))
@@ -665,4 +666,21 @@
                          "CPU:~A% Mem:~A%"
                          cpu
                          (round (* (/ used total) 100)))))
+
+;;;
+;;; Expose-mode-button
+;;;
+(define-toolbar-color expose-mode-button "Expose-mode button")
+
+(define-toolbar-module (expose-mode-button text)
+  "On click, switch to expose-mode"
+  (with-set-toolbar-module-rectangle (module)
+    (toolbar-module-text toolbar module (tb-color expose-mode-button) (or text "Xpo"))))
+
+(define-toolbar-module-click (expose-mode-button)
+  "left click=Show only current frames ; Right click=show all roots frames"
+  (declare (ignore state toolbar module))
+  (if (= code 1)
+      (expose-windows-mode)
+      (expose-all-windows-mode)))
 
