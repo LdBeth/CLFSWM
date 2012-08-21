@@ -32,6 +32,14 @@
 
 (format t "Loading Reboot/Halt code... ")
 
+(defconfig *power-suspend-to-ram-cmd* "sudo pm-suspend"
+  'power-management "Suspend to ram command")
+(defconfig *power-suspend-to-disk-cmd* "sudo pm-hibernate"
+  'power-management "Suspend to disk command")
+(defconfig *power-reboot-cmd* "sudo /sbin/reboot"
+  'power-management "Reboot command")
+(defconfig *power-halt-cmd* "sudo /sbin/halt"
+  'power-management "Halt command")
 
 (defun reboot-halt-menu ()
   "Open the Reboot/Halt menu"
@@ -48,19 +56,19 @@
 
 (defun do-suspend ()
   "Suspend the computer to RAM"
-  (do-with-terminal "sudo pm-suspend"))
+  (do-with-terminal *power-suspend-to-ram-cmd*))
 
 (defun do-hibernate ()
   "Suspend the computer to DISK"
-  (do-with-terminal "sudo pm-hibernate"))
+  (do-with-terminal *power-suspend-to-disk-cmd*))
 
 (defun do-reboot ()
   "Reboot the computer"
-  (do-with-terminal "sudo reboot"))
+  (do-with-terminal *power-reboot-cmd*))
 
 (defun do-halt ()
   "Halt the computer"
-  (do-with-terminal "sudo halt"))
+  (do-with-terminal *power-halt-cmd*))
 
 (unless (find-menu 'reboot-halt-menu)
   (add-sub-menu 'clfswm-menu "Pause" 'reboot-halt-menu "Suspend/Reboot/Halt menu")

@@ -1,5 +1,8 @@
 2012-08-21  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* contrib/reboot-halt.lisp: Add configuration command for system
+	actions.
+
 	* contrib/toolbar.lisp (toggle-toolbar-hide-state): New function.
 
 2012-08-20  Philippe Brochard  <pbrochard@common-lisp.net>
