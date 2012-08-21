@@ -241,24 +241,27 @@
         (toolbar-exposure-hook toolbar)))
 
 
+(defun toggle-toolbar-hide-state (toolbar)
+  (let* ((tb-win (toolbar-window toolbar)))
+    (if (toolbar-hide-state toolbar)
+        (progn
+          (setf (toolbar-hide-state toolbar) nil)
+          (map-window tb-win)
+          (raise-window tb-win)
+          (refresh-toolbar toolbar))
+        (progn
+          (hide-window tb-win)
+          (setf (toolbar-hide-state toolbar) t)))))
+
 (defun toolbar-add-hide-button-press-hook (toolbar)
   (push (define-event-hook :button-press (code root-x root-y)
-          (when (and (is-valid-toolbar toolbar) (= code 1))
-            (let* ((tb-win (toolbar-window toolbar)))
-              (when (toolbar-in-sensibility-zone-p toolbar root-x root-y)
-                (if (toolbar-hide-state toolbar)
-                    (progn
-                      (setf (toolbar-hide-state toolbar) nil)
-                      (map-window tb-win)
-                      (raise-window tb-win)
-                      (refresh-toolbar toolbar))
-                    (progn
-                      (hide-window tb-win)
-                      (setf (toolbar-hide-state toolbar) t)))
-                (wait-mouse-button-release)
-                (stop-button-event)
-                (exit-handle-event)))))
-         (toolbar-button-press-hook toolbar)))
+          (when (and (is-valid-toolbar toolbar) (= code 1)
+                     (toolbar-in-sensibility-zone-p toolbar root-x root-y))
+            (toggle-toolbar-hide-state toolbar)
+            (wait-mouse-button-release)
+            (stop-button-event)
+            (exit-handle-event)))
+        (toolbar-button-press-hook toolbar)))
 
 (defun toolbar-add-hide-motion-hook (toolbar)
   (push (define-event-hook :motion-notify (root-x root-y)
