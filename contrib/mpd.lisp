@@ -52,15 +52,21 @@
   (info-on-shell "MPD informations:" "mpc")
   (mpd-menu))
 
-(defun mpd-previous ()
+(defun mpd-previous (&optional (in-menu t))
   "Play the previous song in the current playlist"
-  (info-on-shell "MPD:" "mpc prev")
-  (mpd-menu))
+  (if in-menu
+      (progn
+        (info-on-shell "MPD:" "mpc prev")
+        (mpd-menu))
+      (do-shell "mpc prev" nil t)))
 
-(defun mpd-next ()
+(defun mpd-next (&optional (in-menu t))
   "Play the next song in the current playlist"
-  (info-on-shell "MPD:" "mpc next")
-  (mpd-menu))
+  (if in-menu
+      (progn
+        (info-on-shell "MPD:" "mpc next")
+        (mpd-menu))
+      (do-shell "mpc next" nil t)))
 
 (defun mpd-toggle ()
   "Toggles Play/Pause, plays if stopped"
@@ -75,15 +81,21 @@
   (do-shell "mpc stop"))
 
 
-(defun mpd-seek-+5% ()
+(defun mpd-seek-+5% (&optional (in-menu t))
   "Seeks to +5%"
-  (do-shell "mpc seek +5%")
-  (mpd-menu))
+  (if in-menu
+      (progn
+        (do-shell "mpc seek +5%")
+        (mpd-menu))
+      (do-shell "mpc seek +5%" nil t)))
 
-(defun mpd-seek--5% ()
+(defun mpd-seek--5% (&optional (in-menu t))
   "Seeks to -5%"
-  (do-shell "mpc seek -5%")
-  (mpd-menu))
+  (if in-menu
+      (progn
+        (do-shell "mpc seek -5%")
+        (mpd-menu))
+      (do-shell "mpc seek -5%" nil t)))
 
 (defun show-mpd-playlist ()
   "Show the current MPD playlist"
@@ -111,6 +123,53 @@
 
 (add-hook *binding-hook* 'mpd-binding)
 
+
+
+#+:clfswm-toolbar
+(progn
+  (defconfig *mpd-toolbar* '((mpd-buttons 1)
+                             (mpd-info 60))
+    'Toolbar "MPD toolbar modules")
+
+  (defconfig *mpd-toolbar-client* "gmpc"
+    'Toolbar "MPD client")
+
+  (define-toolbar-color mpd-info "MPD - Music Player Daemon information color")
+  (define-toolbar-color mpd-buttons "MPD - Music Player Daemon buttons color")
+
+  (define-toolbar-module (mpd-info)
+    "MPD (Music Player Daemon) informations"
+    (let* ((lines (do-shell "mpc" nil t))
+           (mpd-line (loop for line = (read-line lines nil nil)
+                        while line
+                        collect line)))
+      (if (>= (length mpd-line) 3)
+          (toolbar-module-text toolbar module (tb-color mpd-info)
+                               "~A - ~A"
+                               (ensure-printable (first mpd-line))
+                               (ensure-printable (second mpd-line)))
+          (toolbar-module-text toolbar module (tb-color mpd-info)
+                               "MPD - Not playing"))))
+
+  (define-toolbar-module (mpd-buttons)
+    "MPD (Music Player Daemon) buttons"
+    (with-set-toolbar-module-rectangle (module)
+      (toolbar-module-text toolbar module (tb-color mpd-buttons)
+                           "P N T < > C")))
+
+  (define-toolbar-module-click (mpd-buttons)
+    "P=Previous, N=Next, T=Toogle, <=seek-5% >=seek+5% C=start MPD client"
+    (declare (ignore state))
+    (when (= code 1)
+      (let ((pos (toolbar-module-subdiv toolbar module root-x root-y 6)))
+        (case pos
+          (0 (mpd-previous nil))
+          (1 (mpd-next nil))
+          (2 (mpd-toggle))
+          (3 (mpd-seek--5% nil))
+          (4 (mpd-seek-+5% nil))
+          (5 (do-shell *mpd-toolbar-client*))))
+      (refresh-toolbar toolbar))))
 
 
 (format t "done~%")

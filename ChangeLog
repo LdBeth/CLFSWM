@@ -1,3 +1,8 @@
+2012-08-24  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/mpd.lisp: New toolbar modules (available only if
+	toolbar.lisp is loaded).
+
 2012-08-21  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/reboot-halt.lisp: Add configuration command for system

@@ -86,6 +86,8 @@
 
 (format t "Loading Toolbar code... ")
 
+(pushnew :clfswm-toolbar *features*)
+
 (defstruct toolbar root-x root-y root direction size thickness placement refresh-delay
            autohide modules clickable hide-state font window gc border-size
            exposure-hook button-press-hook motion-notify-hook leave-notify-hook)
@@ -96,6 +98,7 @@
 (defparameter *toolbar-module-list* nil)
 
 (defconfig *default-toolbar* '((clfswm-menu 1)
+                               (expose-mode-button 10)
                                (system-usage 90)
                                (clickable-clock 99))
   'Toolbar "Default toolbar modules")
@@ -295,7 +298,7 @@
             (dolist (module (toolbar-modules toolbar))
               (when (and (in-rectangle root-x root-y (toolbar-module-rect module))
                          (fboundp (toolbar-module-click-fun module)))
-                (apply (toolbar-module-click-fun module) toolbar module code state
+                (apply (toolbar-module-click-fun module) toolbar module code state root-x root-y
                        (toolbar-module-args module))
                 (stop-button-event)
                 (exit-handle-event)))))
@@ -479,7 +482,7 @@
   (let ((symbol-fun (toolbar-symbol-fun name 'click)))
     `(progn
        (pushnew ',name *toolbar-module-list*)
-       (defun ,symbol-fun (toolbar module code state ,@(when args `(&optional ,@args)))
+       (defun ,symbol-fun (toolbar module code state root-x root-y ,@(when args `(&optional ,@args)))
          ,@body))))
 
 
@@ -501,6 +504,24 @@
 (defmacro tb-color (name)
   (let ((symbol-name (create-symbol '*toolbar- name '-color*)))
     symbol-name))
+
+
+;;;
+;;; Module subdivisions functions
+;;;
+(defun toolbar-module-subdiv-horiz (module root-x N)
+  (truncate (* N  (/ (- root-x (rectangle-x (toolbar-module-rect module)))
+                     (rectangle-width (toolbar-module-rect module))))))
+
+(defun toolbar-module-subdiv-vert (module root-y N)
+  (truncate (* N  (/ (- root-y (rectangle-y (toolbar-module-rect module)))
+                     (rectangle-height (toolbar-module-rect module))))))
+
+(defun toolbar-module-subdiv (toolbar module root-x root-y N)
+  (case (toolbar-direction toolbar)
+    (:horiz (toolbar-module-subdiv-horiz module root-x N))
+    (:vert (toolbar-module-subdiv-vert module root-y N))))
+
 
 ;;;
 ;;; Modules definitions
@@ -550,7 +571,7 @@
 
 (define-toolbar-module-click (clickable-label text action)
   "Call the function 'action'"
-  (declare (ignore text))
+  (declare (ignore text root-x root-y))
   (when action
     (funcall action toolbar module code state )))
 
@@ -573,7 +594,7 @@
 
 (define-toolbar-module-click (clickable-clock)
   "Start an external clock"
-  (declare (ignore toolbar module state))
+  (declare (ignore toolbar module state root-x root-y))
   (when (= code 1)
     (do-shell *toolbar-clock-action*)))
 
@@ -594,7 +615,7 @@
 
 (define-toolbar-module-click (clfswm-menu text placement)
   "Open the CLFSWM main menu"
-  (declare (ignore text code state toolbar module))
+  (declare (ignore text code state toolbar module root-x root-y))
   (let ((*info-mode-placement* (or placement *info-mode-placement*)))
     (open-menu)))
 
@@ -682,7 +703,7 @@
 
 (define-toolbar-module-click (expose-mode-button)
   "left click=Show only current frames ; Right click=show all roots frames"
-  (declare (ignore state toolbar module))
+  (declare (ignore state toolbar module root-x root-y))
   (if (= code 1)
       (expose-windows-mode)
       (expose-all-windows-mode)))

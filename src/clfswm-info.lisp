@@ -573,7 +573,7 @@ Pass the :no-producing-doc symbol to remove the producing doc"
     (info-mode (append (list (list msg *menu-color-comment*))
 		       (loop for line = (read-line lines nil nil)
 			  while line
-			  collect line)))))
+			  collect (ensure-printable line))))))
 
 
 
