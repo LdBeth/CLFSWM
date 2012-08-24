@@ -63,6 +63,8 @@
 (format t "Loading Volume mode code... ")
 
 (defparameter *volume-keys* nil)
+(defparameter *volume-mouse* nil)
+
 (defconfig *volume-mode-placement* 'bottom-middle-root-placement
   'Placement "Volume mode window placement")
 
@@ -104,7 +106,10 @@
   'Volume-mode "Command to start an external mixer program")
 
 (define-init-hash-table-key *volume-keys* "Volume mode keys")
+(define-init-hash-table-key *volume-mouse* "Volume mode mouse button")
+
 (define-define-key "volume" *volume-keys*)
+(define-define-mouse "volume-mouse" *volume-mouse*)
 
 (add-hook *binding-hook* 'init-*volume-keys*)
 
@@ -128,6 +133,11 @@
   (define-volume-key ("Escape") 'leave-volume-mode)
   (define-volume-key ("g" :control) 'leave-volume-mode)
   (define-volume-key ("e") 'run-external-volume-mixer)
+  (define-volume-mouse (1) 'leave-volume-mode)
+  (define-volume-mouse (2) 'run-external-volume-mixer)
+  (define-volume-mouse (3) 'volume-mute)
+  (define-volume-mouse (4) 'volume-raise)
+  (define-volume-mouse (5) 'volume-lower)
   ;;; Main mode
   (define-main-key ("XF86AudioMute") 'volume-mute)
   (define-main-key ("XF86AudioLowerVolume") 'volume-lower)
@@ -159,8 +169,9 @@
                       text))
   (copy-pixmap-buffer *volume-window* *volume-gc*))
 
-(defun leave-volume-mode ()
+(defun leave-volume-mode (&optional window root-x root-y)
   "Leave the volume mode"
+  (declare (ignore window root-x root-y))
   (throw 'exit-volume-loop nil))
 
 (defun update-volume-mode ()
@@ -221,6 +232,10 @@
 (define-handler volume-mode :key-press (code state)
   (funcall-key-from-code *volume-keys* code state))
 
+(define-handler volume-mode :button-press (code state window root-x root-y)
+  (funcall-button-from-code *volume-mouse* code state window root-x root-y *fun-press*))
+
+
 (defun volume-mode ()
   (let ((grab-keyboard-p (xgrab-keyboard-p))
         (grab-pointer-p (xgrab-pointer-p)))
@@ -251,20 +266,44 @@
 (defvar *volume-lower-function* nil)
 (defvar *volume-raise-function* nil)
 
-(defun volume-mute ()
+(defun volume-mute (&optional window root-x root-y)
   "Toggle mute."
+  (declare (ignore window root-x root-y))
   (volume-set *volume-mute-function*))
 
-(defun volume-lower ()
+(defun volume-lower (&optional window root-x root-y)
   "Lower volume."
+  (declare (ignore window root-x root-y))
   (volume-set *volume-lower-function*))
 
-(defun volume-raise ()
+(defun volume-raise (&optional window root-x root-y)
   "Raise volume."
+  (declare (ignore window root-x root-y))
   (volume-set *volume-raise-function*))
 
-(defun run-external-volume-mixer ()
+(defun run-external-volume-mixer (&optional window root-x root-y)
   "Start an external volume mixer"
+  (declare (ignore window root-x root-y))
   (do-shell *volume-external-mixer-cmd*))
+
+
+#+:clfswm-toolbar
+(progn
+  (define-toolbar-color volume-mode-button "Volume mode color")
+
+  (define-toolbar-module (volume-mode-button (text "Vol"))
+    "Volume mode button"
+    (with-set-toolbar-module-rectangle (module)
+      (toolbar-module-text toolbar module (tb-color volume-mode-button) text)))
+
+  (define-toolbar-module-click (volume-mode-button text)
+    "Volume mode"
+    (declare (ignore text module))
+    (if *in-volume-mode*
+        (funcall-button-from-code *volume-mouse* code state (toolbar-window toolbar)
+                                  root-x root-y *fun-press*)
+        (volume-mode))))
+
+
 
 (format t "done~%")

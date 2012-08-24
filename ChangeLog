@@ -1,3 +1,8 @@
+2012-08-25  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/volume-mode.lisp: Add mouse buttons actions in volume
+	mode. Add a volume button toolbar module.
+
 2012-08-24  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/mpd.lisp: New toolbar modules (available only if
