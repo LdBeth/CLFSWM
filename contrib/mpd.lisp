@@ -137,29 +137,35 @@
   (define-toolbar-color mpd-info "MPD - Music Player Daemon information color")
   (define-toolbar-color mpd-buttons "MPD - Music Player Daemon buttons color")
 
-  (define-toolbar-module (mpd-info)
-    "MPD (Music Player Daemon) informations"
+  (define-toolbar-module (mpd-info small)
+    "(small) - MPD (Music Player Daemon) informations"
     (let* ((lines (do-shell "mpc" nil t))
            (mpd-line (loop for line = (read-line lines nil nil)
                         while line
                         collect line)))
       (if (>= (length mpd-line) 3)
-          (toolbar-module-text toolbar module (tb-color mpd-info)
-                               "~A - ~A"
-                               (ensure-printable (first mpd-line))
-                               (ensure-printable (second mpd-line)))
+          (if small
+              (toolbar-module-text toolbar module (tb-color mpd-info)
+                               "~A"
+                               (ensure-printable (first mpd-line)))
+              (toolbar-module-text toolbar module (tb-color mpd-info)
+                                   "~A - ~A"
+                                   (ensure-printable (first mpd-line))
+                                   (ensure-printable (second mpd-line))))
           (toolbar-module-text toolbar module (tb-color mpd-info)
                                "MPD - Not playing"))))
 
-  (define-toolbar-module (mpd-buttons)
-    "MPD (Music Player Daemon) buttons"
+  (define-toolbar-module (mpd-buttons small)
+    "(small) - MPD (Music Player Daemon) buttons"
     (with-set-toolbar-module-rectangle (module)
       (toolbar-module-text toolbar module (tb-color mpd-buttons)
-                           "P N T < > C")))
+                           (if small
+                               "PNT<>C"
+                               "P N T < > C"))))
 
-  (define-toolbar-module-click (mpd-buttons)
+  (define-toolbar-module-click (mpd-buttons small)
     "P=Previous, N=Next, T=Toogle, <=seek-5% >=seek+5% C=start MPD client"
-    (declare (ignore state))
+    (declare (ignore state small))
     (when (= code 1)
       (let ((pos (toolbar-module-subdiv toolbar module root-x root-y 6)))
         (case pos

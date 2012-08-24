@@ -2,6 +2,8 @@
 
 	* contrib/mpd.lisp: New toolbar modules (available only if
 	toolbar.lisp is loaded).
+	Add a small parameter for toolbar modules useful with vertical
+	toolbars.
 
 2012-08-21  Philippe Brochard  <pbrochard@common-lisp.net>
 
