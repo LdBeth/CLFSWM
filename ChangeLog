@@ -1,3 +1,9 @@
+2012-08-28  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-expose-mode.lisp (expose-query-key-press-hook): Add
+	an option to immediately select child if they can be directly
+	accessed.
+
 2012-08-25  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/volume-mode.lisp: Add mouse buttons actions in volume

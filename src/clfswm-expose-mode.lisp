@@ -103,7 +103,9 @@
 
 (defun expose-query-key-press-hook (code state)
   (declare (ignore code state))
-  (expose-draw-letter))
+  (expose-draw-letter)
+  (when (and *expose-direct-select* (<= (length *expose-windows-list*) 26))
+    (leave-query-mode :return)))
 
 (defun expose-query-button-press-hook (code state x y)
   (declare (ignore state))

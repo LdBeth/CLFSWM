@@ -334,7 +334,8 @@ on the root window in the main mode with the mouse")
   'Expose-mode "Show the window title on accel window")
 (defconfig *expose-transparency* 0.9
   'Expose-mode "Expose string window background transparency")
-
+(defconfig *expose-direct-select* t
+  'Expose-mode "Immediately select child if they can be directly accessed")
 
 
 ;;; CONFIG - Show key binding colors
