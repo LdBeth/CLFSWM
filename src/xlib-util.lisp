@@ -65,17 +65,37 @@ Window types are in +WINDOW-TYPES+.")
   "Alist mapping NETWM window types to keywords.")
 
 
-(defmacro with-xlib-protect (() &body body)
+;;(defmacro with-xlib-protect (() &body body)
+;;  "Prevent Xlib errors"
+;;  `(handler-case
+;;       (with-simple-restart (top-level "Return to clfswm's top level")
+;;	 ,@body)
+;;     ((or xlib:match-error xlib:window-error xlib:drawable-error xlib:lookup-error) (c)
+;;       (progn
+;;         (format t "Ignoring XLib error: ~S~%" c)
+;;	 (unassoc-keyword-handle-event)
+;;	 (assoc-keyword-handle-event 'main-mode)
+;;	 (setf *in-second-mode* nil)))))
+
+
+(defmacro with-xlib-protect ((&optional name tag) &body body)
   "Prevent Xlib errors"
   `(handler-case
        (with-simple-restart (top-level "Return to clfswm's top level")
 	 ,@body)
-     ((or xlib:match-error xlib:window-error xlib:drawable-error xlib:lookup-error) (c)
-       (progn
-         (format t "Ignoring XLib error: ~S~%" c)
-	 (unassoc-keyword-handle-event)
-	 (assoc-keyword-handle-event 'main-mode)
-	 (setf *in-second-mode* nil)))))
+     (xlib::x-error (c)
+       (declare (ignore c))
+       (if ,tag
+           (format t "~A ~A~%" ,name ,tag)
+           (format t "~A ~A~%" ,name ',body))
+       (force-output))))
+
+;;       (format t "Ignoring XLib error: ~S~%" c))))
+;;       (funcall 'exit-generic-mode))))
+;;       (unassoc-keyword-handle-event)
+;;       (assoc-keyword-handle-event 'main-mode)
+;;       (setf *in-second-mode* nil))))
+
 
 
 (defmacro with-x-pointer (&body body)
@@ -169,7 +189,8 @@ Expand in handle-event-fun-main-mode-key-press"
   `(defun ,(keyword->handle-event mode keyword) (&rest event-slots &key #+:event-debug event-key ,@args &allow-other-keys)
      (declare (ignorable event-slots))
      #+:event-debug (print (list *current-event-mode* event-key))
-     ,@body))
+     (with-xlib-protect (:define-handler (list ',mode ,keyword))
+       ,@body)))
 
 
 (defun event-hook-name (event-keyword)
@@ -217,9 +238,11 @@ Expand in handle-event-fun-main-mode-key-press"
     `(let ((,event-fun (lambda (&rest event-slots &key #+:event-debug event-key ,@args &allow-other-keys)
                          (declare (ignorable event-slots))
                          #+:event-debug (print (list ,event-keyword event-key))
-                         ,@body)))
+                         (with-xlib-protect (:define-event-hook ,event-keyword)
+                           ,@body))))
        (add-event-hook ,event-keyword ,event-fun)
-       ,event-fun)))
+       (with-xlib-protect (:define-event-hook-2 ,event-keyword)
+         ,event-fun))))
 
 
 (defmacro event-defun (name args &body body)
@@ -249,18 +272,20 @@ they should be windows. So use this function to make a window out of them."
              #+(or sbcl ecl openmcl) (xlib::make-window :id (slot-value xobject 'xlib::id) :display *display*)
              #-(or sbcl clisp ecl openmcl)
              (error 'not-implemented)))
-    (with-xlib-protect ()
+    (with-xlib-protect (:handle-event event-key)
       (catch 'exit-handle-event
         (let ((win (getf event-slots :window)))
           (when (and win (not (xlib:window-p win)))
             (dbg "Pixmap Workaround! Should be a window: " win)
             (setf (getf event-slots :window) (make-xlib-window win))))
-        (let ((hook-symbol (event-hook-name event-key)))
-          (when (boundp hook-symbol)
-            (apply #'call-hook (symbol-value hook-symbol) event-slots)))
-        (if (fboundp event-key)
-            (apply event-key event-slots)
-            #+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal)))
+        (with-xlib-protect (:handle-event-2 event-key)
+          (let ((hook-symbol (event-hook-name event-key)))
+            (when (boundp hook-symbol)
+              (apply #'call-hook (symbol-value hook-symbol) event-slots))))
+        (with-xlib-protect (:handle-event-3 event-key)
+          (if (fboundp event-key)
+              (apply event-key event-slots)
+              #+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal))))
       (xlib:display-finish-output *display*))
     t))
 
@@ -838,11 +863,12 @@ they should be windows. So use this function to make a window out of them."
      (unwind-protect
 	  (progn
 	    ,@body)
-       (if pointer-grabbed
-	   (xgrab-pointer *root* ,old-cursor ,old-mask)
-	   (xungrab-pointer))
-       (unless keyboard-grabbed
-	 (xungrab-keyboard)))))
+       (progn
+         (if pointer-grabbed
+             (xgrab-pointer *root* ,old-cursor ,old-mask)
+             (xungrab-pointer))
+         (unless keyboard-grabbed
+           (xungrab-keyboard))))))
 
 
 

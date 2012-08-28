@@ -549,12 +549,14 @@
       (force-output)
       (unwind-protect
 	   (loop until done do
-		(when (xlib:event-listen *display* *loop-timeout*)
-		  (xlib:process-event *display* :handler #'handle-identify))
-		(xlib:display-finish-output *display*))
-	(xlib:destroy-window window)
-	(xlib:close-font font)
-	(xgrab-pointer *root* 66 67)))))
+                (with-xlib-protect (:Identify-Loop nil)
+                  (when (xlib:event-listen *display* *loop-timeout*)
+                    (xlib:process-event *display* :handler #'handle-identify))
+                  (xlib:display-finish-output *display*)))
+        (progn
+          (xlib:destroy-window window)
+          (xlib:close-font font)
+          (xgrab-pointer *root* 66 67))))))
 
 
 

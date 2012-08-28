@@ -199,7 +199,7 @@
                                               :border (when (plusp *volume-border-size*)
                                                         (get-color *volume-border*))
                                               :colormap (xlib:screen-default-colormap *screen*)
-                                              :event-mask '(:exposure :key-press))
+                                              :event-mask '(:exposure :key-press :button-press))
           *volume-gc* (xlib:create-gcontext :drawable *volume-window*
                                             :foreground (get-color *volume-foreground*)
                                             :background (get-color *volume-background*)
@@ -243,17 +243,18 @@
     (unless grab-keyboard-p
       (ungrab-main-keys)
       (xgrab-keyboard *root*))
-    (generic-mode 'volume-mode 'exit-volume-loop
-                  :enter-function 'volume-enter-function
-                  :loop-function 'volume-loop-function
-                  :leave-function 'volume-leave-function
-                  :original-mode '(main-mode))
-    (unless grab-keyboard-p
-      (xungrab-keyboard)
-      (grab-main-keys))
-    (if grab-pointer-p
-        (xgrab-pointer *root* 66 67)
-        (xungrab-pointer))))
+    (unwind-protect
+         (generic-mode 'volume-mode 'exit-volume-loop
+                       :enter-function 'volume-enter-function
+                       :loop-function 'volume-loop-function
+                       :leave-function 'volume-leave-function
+                       :original-mode '(main-mode))
+      (unless grab-keyboard-p
+        (xungrab-keyboard)
+        (grab-main-keys))
+      (if grab-pointer-p
+          (xgrab-pointer *root* 66 67)
+          (xungrab-pointer)))))
 
 (defun volume-set (fn)
   (when fn

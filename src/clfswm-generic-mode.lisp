@@ -25,27 +25,29 @@
 
 (in-package :clfswm)
 
-
 (defun generic-mode (mode exit-tag &key enter-function loop-function leave-function
-		     (loop-hook *loop-hook*) original-mode)
+                     (loop-hook *loop-hook*) original-mode)
   "Enter in a generic mode"
   (let ((last-mode *current-event-mode*))
     (unassoc-keyword-handle-event)
     (when original-mode
       (dolist (add-mode (ensure-list original-mode))
-	(assoc-keyword-handle-event add-mode)))
+        (assoc-keyword-handle-event add-mode)))
     (assoc-keyword-handle-event mode)
     (nfuncall enter-function)
     (catch exit-tag
       (unwind-protect
-	   (loop
-	      (call-hook loop-hook)
-	      (process-timers)
-	      (nfuncall loop-function)
-	      (when (xlib:event-listen *display* *loop-timeout*)
-		(xlib:process-event *display* :handler #'handle-event))
-	      (xlib:display-finish-output *display*))
-	(nfuncall leave-function)
-	(unassoc-keyword-handle-event)
-	(assoc-keyword-handle-event last-mode)))))
+           (loop
+              (with-xlib-protect (:generic-mode exit-tag)
+                (call-hook loop-hook)
+                (process-timers)
+                (nfuncall loop-function)
+                (when (xlib:event-listen *display* *loop-timeout*)
+                  (xlib:process-event *display* :handler #'handle-event))
+                (xlib:display-finish-output *display*)))
+        (progn
+          (nfuncall leave-function)
+          (unassoc-keyword-handle-event)
+          (assoc-keyword-handle-event last-mode))))))
+
 

@@ -157,9 +157,10 @@
 
 (defun main-loop ()
   (loop
-     (call-hook *loop-hook*)
-     (process-timers)
-     (with-xlib-protect ()
+     (with-xlib-protect (:main-loop nil)
+       (call-hook *loop-hook*)
+       (process-timers)
+       ;;(with-xlib-protect ()
        (when (xlib:event-listen *display* *loop-timeout*)
 	 (xlib:process-event *display* :handler #'handle-event))
        (xlib:display-finish-output *display*))))
@@ -289,15 +290,16 @@
   (catch 'exit-main-loop
       (unwind-protect
 	   (main-loop)
-	(ungrab-main-keys)
-	(xlib:destroy-window *no-focus-window*)
-	(xlib:free-pixmap *pixmap-buffer*)
-        (destroy-all-frames-window)
-	(call-hook *close-hook*)
-        (clear-event-hooks)
-	(xlib:close-display *display*)
-	#+:event-debug
-	(format t "~2&Unhandled events: ~A~%" *unhandled-events*))))
+        (progn
+          (ungrab-main-keys)
+          (xlib:destroy-window *no-focus-window*)
+          (xlib:free-pixmap *pixmap-buffer*)
+          (destroy-all-frames-window)
+          (call-hook *close-hook*)
+          (clear-event-hooks)
+          (xlib:close-display *display*)
+          #+:event-debug
+          (format t "~2&Unhandled events: ~A~%" *unhandled-events*)))))
 
 
 
