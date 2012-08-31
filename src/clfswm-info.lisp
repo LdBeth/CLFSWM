@@ -321,9 +321,7 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 			   (min (round (+ (* (length info-list) ilh) (/ ilh 2)))
 				(xlib:screen-height *screen*)))))
 	  (with-placement (*info-mode-placement* x y width height)
-	    (let* ((pointer-grabbed-p (xgrab-pointer-p))
-		   (keyboard-grabbed-p (xgrab-keyboard-p))
-		   (window (xlib:create-window :parent *root*
+	    (let* ((window (xlib:create-window :parent *root*
 					       :x x :y y
 					       :width width
 					       :height height
@@ -344,19 +342,12 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
               (setf (window-transparency window) *info-transparency*)
 	      (map-window window)
 	      (draw-info-window info)
-	      (xgrab-pointer *root* 68 69)
-	      (unless keyboard-grabbed-p
-		(xgrab-keyboard *root*))
-	      (wait-no-key-or-button-press)
-	      (generic-mode 'info-mode 'exit-info-loop
-			    :loop-function (lambda ()
-					     (raise-window (info-window info)))
-			    :original-mode '(main-mode))
-	      (if pointer-grabbed-p
-		  (xgrab-pointer *root* 66 67)
-		  (xungrab-pointer))
-	      (unless keyboard-grabbed-p
-		(xungrab-keyboard))
+              (wait-no-key-or-button-press)
+              (with-grab-keyboard-and-pointer (68 69 66 67)
+                (generic-mode 'info-mode 'exit-info-loop
+                              :loop-function (lambda ()
+                                               (raise-window (info-window info)))
+                              :original-mode '(main-mode)))
 	      (xlib:free-gcontext gc)
 	      (xlib:destroy-window window)
 	      (xlib:close-font font)

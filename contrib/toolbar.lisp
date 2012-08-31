@@ -137,7 +137,7 @@
 (defun toolbar-symbol-fun (name &optional (type 'display))
   (create-symbol-in-package :clfswm 'toolbar- name '-module- type))
 
-(defun toolbar-adjust-root-size (toolbar)
+(defun toolbar-adjust-root-size (toolbar &optional (dir +1))
   (unless (toolbar-autohide toolbar)
     (let ((root (toolbar-root toolbar))
           (placement-name (symbol-name (toolbar-placement toolbar)))
@@ -145,15 +145,15 @@
       (when (root-p root)
         (case (toolbar-direction toolbar)
           (:horiz (cond ((search "TOP" placement-name)
-                         (incf (root-y root) thickness)
-                         (decf (root-h root) thickness))
+                         (incf (root-y root) (* thickness dir))
+                         (decf (root-h root) (* thickness dir)))
                         ((search "BOTTOM" placement-name)
-                         (decf (root-h root) thickness))))
+                         (decf (root-h root) (* thickness dir)))))
           (t (cond ((search "LEFT" placement-name)
-                    (incf (root-x root) thickness)
-                    (decf (root-w root) thickness))
+                    (incf (root-x root) (* thickness dir))
+                    (decf (root-w root) (* thickness dir)))
                    ((search "RIGHT" placement-name)
-                    (decf (root-w root) thickness)))))))))
+                    (decf (root-w root) (* thickness dir))))))))))
 
 
 (defun toolbar-draw-text (toolbar pos1 pos2 text color)
@@ -396,6 +396,12 @@
               (define-toolbar-hooks toolbar))))))))
 
 
+
+(defun remove-toolbar (toolbar)
+  (close-toolbar toolbar)
+  (setf *toolbar-list* (remove toolbar *toolbar-list* :test #'equal)))
+
+
 (defun open-all-toolbars ()
   "Open all toolbars"
   (dolist (toolbar *toolbar-list*)
@@ -405,7 +411,9 @@
 
 (defun close-all-toolbars ()
   (dolist (toolbar *toolbar-list*)
-    (close-toolbar toolbar))
+    (toolbar-adjust-root-size toolbar -1))
+  (dolist (toolbar *toolbar-list*)
+    (remove-toolbar toolbar))
   (stop-system-poll))
 
 (defun create-toolbar-modules (modules)
@@ -446,10 +454,6 @@
     (push toolbar *toolbar-list*)
     toolbar))
 
-(defun remove-toolbar (toolbar)
-  (close-toolbar toolbar)
-  (setf *toolbar-list* (remove toolbar *toolbar-list* :test #'equal)))
-
 
 (add-hook *init-hook* 'open-all-toolbars)
 (add-hook *close-hook* 'close-all-toolbars)
@@ -476,14 +480,14 @@
     `(progn
        (pushnew ',name *toolbar-module-list*)
        (defun ,symbol-fun (toolbar module ,@(when args `(&optional ,@args)))
-         ,@body))))
+           ,@body))))
 
 (defmacro define-toolbar-module-click ((name &rest args) &body body)
   (let ((symbol-fun (toolbar-symbol-fun name 'click)))
     `(progn
        (pushnew ',name *toolbar-module-list*)
        (defun ,symbol-fun (toolbar module code state root-x root-y ,@(when args `(&optional ,@args)))
-         ,@body))))
+           ,@body))))
 
 
 (defun list-toolbar-modules (&optional (stream t))

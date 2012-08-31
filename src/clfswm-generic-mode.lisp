@@ -29,25 +29,27 @@
                      (loop-hook *loop-hook*) original-mode)
   "Enter in a generic mode"
   (let ((last-mode *current-event-mode*))
-    (unassoc-keyword-handle-event)
-    (when original-mode
-      (dolist (add-mode (ensure-list original-mode))
-        (assoc-keyword-handle-event add-mode)))
-    (assoc-keyword-handle-event mode)
-    (nfuncall enter-function)
-    (catch exit-tag
-      (unwind-protect
-           (loop
-              (with-xlib-protect (:generic-mode exit-tag)
-                (call-hook loop-hook)
-                (process-timers)
-                (nfuncall loop-function)
-                (when (xlib:event-listen *display* *loop-timeout*)
-                  (xlib:process-event *display* :handler #'handle-event))
-                (xlib:display-finish-output *display*)))
-        (progn
-          (nfuncall leave-function)
-          (unassoc-keyword-handle-event)
-          (assoc-keyword-handle-event last-mode))))))
+    (unwind-protect
+         (progn
+           (unassoc-keyword-handle-event)
+           (when original-mode
+             (dolist (add-mode (ensure-list original-mode))
+               (assoc-keyword-handle-event add-mode)))
+           (assoc-keyword-handle-event mode)
+           (with-xlib-protect ()
+             (nfuncall enter-function)
+             (catch exit-tag
+               (loop
+                  (with-xlib-protect (:generic-mode exit-tag)
+                    (call-hook loop-hook)
+                    (process-timers)
+                    (nfuncall loop-function)
+                    (when (xlib:event-listen *display* *loop-timeout*)
+                      (xlib:process-event *display* :handler #'handle-event))
+                    (xlib:display-finish-output *display*))))))
+      (with-xlib-protect ()
+        (nfuncall leave-function))
+      (unassoc-keyword-handle-event)
+      (assoc-keyword-handle-event last-mode))))
 
 

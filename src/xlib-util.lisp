@@ -23,7 +23,9 @@
 ;;;
 ;;; --------------------------------------------------------------------------
 
+
 (in-package :clfswm)
+
 
 ;; Window states
 (defconstant +withdrawn-state+ 0)
@@ -65,36 +67,23 @@ Window types are in +WINDOW-TYPES+.")
   "Alist mapping NETWM window types to keywords.")
 
 
-;;(defmacro with-xlib-protect (() &body body)
-;;  "Prevent Xlib errors"
-;;  `(handler-case
-;;       (with-simple-restart (top-level "Return to clfswm's top level")
-;;	 ,@body)
-;;     ((or xlib:match-error xlib:window-error xlib:drawable-error xlib:lookup-error) (c)
-;;       (progn
-;;         (format t "Ignoring XLib error: ~S~%" c)
-;;	 (unassoc-keyword-handle-event)
-;;	 (assoc-keyword-handle-event 'main-mode)
-;;	 (setf *in-second-mode* nil)))))
 
 
 (defmacro with-xlib-protect ((&optional name tag) &body body)
   "Prevent Xlib errors"
+  #-:xlib-debug (declare (ignore name tag))
   `(handler-case
        (with-simple-restart (top-level "Return to clfswm's top level")
 	 ,@body)
      (xlib::x-error (c)
-       (declare (ignore c))
-       (if ,tag
-           (format t "~A ~A~%" ,name ,tag)
-           (format t "~A ~A~%" ,name ',body))
-       (force-output))))
+       #-:xlib-debug (declare (ignore c))
+       #+:xlib-debug
+       (progn
+         (if ,tag
+             (format t "Xlib error: ~A ~A: ~A~%" ,name ,tag c)
+             (format t "Xlib error: ~A ~A: ~A~%" ,name ',body c))
+         (force-output)))))
 
-;;       (format t "Ignoring XLib error: ~S~%" c))))
-;;       (funcall 'exit-generic-mode))))
-;;       (unassoc-keyword-handle-event)
-;;       (assoc-keyword-handle-event 'main-mode)
-;;       (setf *in-second-mode* nil))))
 
 
 
@@ -636,6 +625,42 @@ they should be windows. So use this function to make a window out of them."
   (xlib:ungrab-key window :any :modifiers :any))
 
 
+
+(defmacro with-grab-keyboard-and-pointer ((cursor mask old-cursor old-mask &optional ungrab-main) &body body)
+  `(let ((pointer-grabbed (xgrab-pointer-p))
+	 (keyboard-grabbed (xgrab-keyboard-p)))
+     (xgrab-pointer *root* ,cursor ,mask)
+     (unless keyboard-grabbed
+       (when ,ungrab-main
+         (ungrab-main-keys))
+       (xgrab-keyboard *root*))
+     (unwind-protect
+	  (progn
+	    ,@body)
+       (progn
+         (if pointer-grabbed
+             (xgrab-pointer *root* ,old-cursor ,old-mask)
+             (xungrab-pointer))
+         (unless keyboard-grabbed
+           (when ,ungrab-main
+             (grab-main-keys))
+           (xungrab-keyboard))))))
+
+
+(defmacro with-grab-pointer ((&optional cursor-char cursor-mask-char) &body body)
+  `(let ((pointer-grabbed-p (xgrab-pointer-p)))
+     (unless pointer-grabbed-p
+       (xgrab-pointer *root* ,cursor-char ,cursor-mask-char))
+     (unwind-protect
+          (progn
+            ,@body)
+       (unless pointer-grabbed-p
+         (xungrab-pointer)))))
+
+
+
+
+
 (defun stop-button-event ()
   (xlib:allow-events *display* :sync-pointer))
 
@@ -678,15 +703,11 @@ they should be windows. So use this function to make a window out of them."
 	  dy (- (x-drawable-y window) orig-y)
 	  (xlib:window-border window) (get-color *color-move-window*))
     (raise-window window)
-    (let ((pointer-grabbed-p (xgrab-pointer-p)))
-      (unless pointer-grabbed-p
-	(xgrab-pointer *root* nil nil))
+    (with-grab-pointer ()
       (when additional-fn
-	(apply additional-fn additional-arg))
+        (apply additional-fn additional-arg))
       (generic-mode 'move-window-mode 'exit-move-window-mode
-		    :original-mode '(main-mode))
-      (unless pointer-grabbed-p
-	(xungrab-pointer)))))
+                    :original-mode '(main-mode)))))
 
 
 (let (add-fn add-arg window
@@ -713,8 +734,7 @@ they should be windows. So use this function to make a window out of them."
     (throw 'exit-resize-window-mode nil))
 
   (defun resize-window (orig-window orig-x orig-y &optional additional-fn additional-arg)
-    (let* ((pointer-grabbed-p (xgrab-pointer-p))
-	   (hints (xlib:wm-normal-hints orig-window)))
+    (let* ((hints (xlib:wm-normal-hints orig-window)))
       (setf window orig-window
 	    add-fn additional-fn
 	    add-arg additional-arg
@@ -728,26 +748,21 @@ they should be windows. So use this function to make a window out of them."
 	    max-height (or (and hints (xlib:wm-size-hints-max-height hints)) most-positive-fixnum)
 	    (xlib:window-border window) (get-color *color-move-window*))
       (raise-window window)
-      (unless pointer-grabbed-p
-	(xgrab-pointer *root* nil nil))
-      (when additional-fn
-	(apply additional-fn additional-arg))
-      (generic-mode 'resize-window-mode 'exit-resize-window-mode
-		    :original-mode '(main-mode))
-      (unless pointer-grabbed-p
-	(xungrab-pointer)))))
+      (with-grab-pointer ()
+        (when additional-fn
+          (apply additional-fn additional-arg))
+        (generic-mode 'resize-window-mode 'exit-resize-window-mode
+                      :original-mode '(main-mode))))))
+
 
 
 (define-handler wait-mouse-button-release-mode :button-release ()
   (throw 'exit-wait-mouse-button-release-mode nil))
 
 (defun wait-mouse-button-release (&optional cursor-char cursor-mask-char)
-  (let ((pointer-grabbed-p (xgrab-pointer-p)))
-    (unless pointer-grabbed-p
-      (xgrab-pointer *root* cursor-char cursor-mask-char))
-    (generic-mode 'wait-mouse-button-release 'exit-wait-mouse-button-release-mode)
-    (unless pointer-grabbed-p
-      (xungrab-pointer))))
+  (with-grab-pointer (cursor-char cursor-mask-char)
+    (generic-mode 'wait-mouse-button-release 'exit-wait-mouse-button-release-mode)))
+
 
 
 
@@ -852,24 +867,6 @@ they should be windows. So use this function to make a window out of them."
   (xlib:keycode->keysym *display* code (cond ((member :shift modifiers) 1)
 					     ((member :mod-5 modifiers) 4)
 					     (t 0))))
-
-
-(defmacro with-grab-keyboard-and-pointer ((cursor mask old-cursor old-mask) &body body)
-  `(let ((pointer-grabbed (xgrab-pointer-p))
-	 (keyboard-grabbed (xgrab-keyboard-p)))
-     (xgrab-pointer *root* ,cursor ,mask)
-     (unless keyboard-grabbed
-       (xgrab-keyboard *root*))
-     (unwind-protect
-	  (progn
-	    ,@body)
-       (progn
-         (if pointer-grabbed
-             (xgrab-pointer *root* ,old-cursor ,old-mask)
-             (xungrab-pointer))
-         (unless keyboard-grabbed
-           (xungrab-keyboard))))))
-
 
 
 

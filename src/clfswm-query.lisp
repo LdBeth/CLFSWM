@@ -328,27 +328,16 @@
 
 (defun  query-string (message &optional (default "") complet-list)
   "Query a string from the keyboard. Display msg as prompt"
-  (let ((grab-keyboard-p (xgrab-keyboard-p))
-	(grab-pointer-p (xgrab-pointer-p)))
-    (setf *query-message* message
-	  *query-string* default
-	  *query-pos* (length default)
-	  *query-complet-list* complet-list)
-    (xgrab-pointer *root* 92 93)
-    (unless grab-keyboard-p
-      (ungrab-main-keys)
-      (xgrab-keyboard *root*))
+  (setf *query-message* message
+        *query-string* default
+        *query-pos* (length default)
+        *query-complet-list* complet-list)
+  (with-grab-keyboard-and-pointer (92 93 66 67 t)
     (generic-mode 'query-mode 'exit-query-loop
 		  :enter-function #'query-enter-function
 		  :loop-function #'query-loop-function
 		  :leave-function #'query-leave-function
-		  :original-mode '(main-mode))
-    (unless grab-keyboard-p
-      (xungrab-keyboard)
-      (grab-main-keys))
-    (if grab-pointer-p
-	(xgrab-pointer *root* 66 67)
-	(xungrab-pointer)))
+		  :original-mode '(main-mode)))
   (when (equal *query-return* :Return)
     (pushnew default *query-history* :test #'equal)
     (push *query-string* *query-history*))

@@ -172,7 +172,8 @@
 (defun leave-volume-mode (&optional window root-x root-y)
   "Leave the volume mode"
   (declare (ignore window root-x root-y))
-  (throw 'exit-volume-loop nil))
+  (when *in-volume-mode*
+    (throw 'exit-volume-loop nil)))
 
 (defun update-volume-mode ()
   (draw-volume-mode-window)
@@ -215,6 +216,8 @@
     (leave-volume-mode)))
 
 (defun volume-leave-function ()
+  (setf *in-volume-mode* nil
+        *leave-volume-mode* nil)
   (when *volume-gc*
     (xlib:free-gcontext *volume-gc*))
   (when *volume-window*
@@ -225,9 +228,7 @@
   (erase-timer :volume-mode-timer)
   (setf *volume-window* nil
         *volume-gc* nil
-        *volume-font* nil
-        *in-volume-mode* nil
-        *leave-volume-mode* nil))
+        *volume-font* nil))
 
 (define-handler volume-mode :key-press (code state)
   (funcall-key-from-code *volume-keys* code state))
@@ -237,24 +238,13 @@
 
 
 (defun volume-mode ()
-  (let ((grab-keyboard-p (xgrab-keyboard-p))
-        (grab-pointer-p (xgrab-pointer-p)))
-    (xgrab-pointer *root* 92 93)
-    (unless grab-keyboard-p
-      (ungrab-main-keys)
-      (xgrab-keyboard *root*))
-    (unwind-protect
-         (generic-mode 'volume-mode 'exit-volume-loop
-                       :enter-function 'volume-enter-function
-                       :loop-function 'volume-loop-function
-                       :leave-function 'volume-leave-function
-                       :original-mode '(main-mode))
-      (unless grab-keyboard-p
-        (xungrab-keyboard)
-        (grab-main-keys))
-      (if grab-pointer-p
-          (xgrab-pointer *root* 66 67)
-          (xungrab-pointer)))))
+  (with-grab-keyboard-and-pointer (92 93 66 67 t)
+    (generic-mode 'volume-mode 'exit-volume-loop
+                  :enter-function 'volume-enter-function
+                  :loop-function 'volume-loop-function
+                  :leave-function 'volume-leave-function
+                  :original-mode '(main-mode))))
+
 
 (defun volume-set (fn)
   (when fn
@@ -300,6 +290,7 @@
   (define-toolbar-module-click (volume-mode-button text)
     "Volume mode"
     (declare (ignore text module))
+
     (if *in-volume-mode*
         (funcall-button-from-code *volume-mouse* code state (toolbar-window toolbar)
                                   root-x root-y *fun-press*)

@@ -1,3 +1,8 @@
+2012-08-31  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/xlib-util.lisp (with-xlib-protect): Handle all Xlib errors
+	for better code protection.
+
 2012-08-28  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-expose-mode.lisp (expose-query-key-press-hook): Add

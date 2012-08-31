@@ -227,23 +227,12 @@
       (reorder-brother brother-direction))
     (when subchild-direction
       (reorder-subchild subchild-direction))
-    (let ((grab-keyboard-p (xgrab-keyboard-p))
-	  (grab-pointer-p (xgrab-pointer-p)))
-      (xgrab-pointer *root* 92 93)
-      (unless grab-keyboard-p
-	(ungrab-main-keys)
-	(xgrab-keyboard *root*))
+    (with-grab-keyboard-and-pointer (92 93 66 67 t)
       (generic-mode 'circulate-mode 'exit-circulate-loop
-		    :loop-function #'circulate-loop-function
-		    :leave-function #'circulate-leave-function
-		    :original-mode '(main-mode))
-      (circulate-leave-function)
-      (unless grab-keyboard-p
-	(xungrab-keyboard)
-	(grab-main-keys))
-      (if grab-pointer-p
-	  (xgrab-pointer *root* 66 67)
-	  (xungrab-pointer)))))
+                    :loop-function #'circulate-loop-function
+                    :leave-function #'circulate-leave-function
+                    :original-mode '(main-mode))
+      (circulate-leave-function))))
 
 
 (defun select-next-child ()

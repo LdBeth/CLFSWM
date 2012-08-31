@@ -34,6 +34,8 @@
 	   :exit-clfswm))
 
 
+;;;;; Uncomment the line below if you want to see all ignored X errors
+;;(pushnew :xlib-debug *features*)
 
 (in-package :clfswm)
 

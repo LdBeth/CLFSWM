@@ -127,17 +127,23 @@
   (raise-window *sm-window*))
 
 (defun sm-leave-function ()
-  (xlib:free-gcontext *sm-gc*)
-  (xlib:close-font *sm-font*)
-  (xlib:destroy-window *sm-window*)
+  (setf *in-second-mode* nil)
+  (when *sm-gc*
+    (xlib:free-gcontext *sm-gc*)
+    (setf *sm-gc* nil))
+  (when *sm-font*
+    (xlib:close-font *sm-font*)
+    (setf *sm-font* nil))
+  (when *sm-window*
+    (xlib:destroy-window *sm-window*)
+    (setf *sm-window* nil))
   (xungrab-keyboard)
   (xungrab-pointer)
   (grab-main-keys)
   (show-all-children)
   (display-all-frame-info)
   (raise-notify-window)
-  (wait-no-key-or-button-press)
-  (setf *in-second-mode* nil))
+  (wait-no-key-or-button-press))
 
 (defun second-key-mode ()
   "Switch to editing mode (second mode)"
