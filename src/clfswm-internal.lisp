@@ -1149,7 +1149,9 @@ XINERAMA version 1.1 opcode: 150
 
              (hidden-child-p (rect)
                (dolist (r displayed-child)
-                 (when (rect-hidden-p r rect)
+                 (when (and (rect-hidden-p r rect)
+                            (or (not (xlib:window-p (child-rect-child r)))
+                                (eq (window-type (child-rect-child r)) :normal)))
                    (return t))))
 
              (select-and-display (child parent selected-p)
@@ -1417,8 +1419,9 @@ Warning:frame window and gc are freeed."
     (unless (find-frame-window (frame-window frame))
       (awhen (frame-gc frame) (xlib:free-gcontext it) (setf it nil))
       (awhen (frame-window frame) (xlib:destroy-window it) (setf it nil))))
-  (when (xlib:window-p child)
-    (netwm-remove-in-client-list child)))
+    (when (xlib:window-p child)
+      (netwm-remove-in-client-list child)))
+
 
 
 (defun delete-child-in-all-frames (child)
@@ -1474,10 +1477,11 @@ managed."
   (setf (xlib:window-event-mask window) *window-events*)
   (set-window-state window +normal-state+)
   (setf (x-drawable-border-width window) (case (window-type window)
-					      (:normal *border-size*)
-					      (:maxsize *border-size*)
-					      (:transient *border-size*)
-					      (t *border-size*)))
+                                           (:normal *border-size*)
+                                           (:maxsize *border-size*)
+                                           (:transient *border-size*)
+                                           (:dialog *border-size*)
+                                           (t *border-size*)))
   (grab-all-buttons window)
   (unless (never-managed-window-p window)
     (unless (do-all-frames-nw-hook window)

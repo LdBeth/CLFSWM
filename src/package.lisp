@@ -37,6 +37,9 @@
 ;;;;; Uncomment the line below if you want to see all ignored X errors
 ;;(pushnew :xlib-debug *features*)
 
+;;;;; Uncomment the line below if you want to see all event debug messages
+;;(pushnew :event-debug *features*)
+
 (in-package :clfswm)
 
 ;;; CONFIG - Compress motion notify ?

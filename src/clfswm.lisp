@@ -91,24 +91,33 @@
 	  (show-all-children))))))
 
 
+
 (define-handler main-mode :unmap-notify (send-event-p event-window window)
   (unless (and (not send-event-p)
 	       (not (xlib:window-equal window event-window)))
     (when (find-child window *root-frame*)
-      (clean-windows-in-all-frames)
-      (show-all-children)
+      (setf (window-state window) +withdrawn-state+)
+      (xlib:unmap-window window)
+      ;;(xlib:display-finish-output *display*)
+      ;;(when (find-child window *root-frame*)
+      ;;(clean-windows-in-all-frames)
+      ;;(show-all-children)
       (delete-child-in-all-frames window)
       (show-all-children))))
+
+
+
 
 
 (define-handler main-mode :destroy-notify (send-event-p event-window window)
   (unless (or send-event-p
 	      (xlib:window-equal window event-window))
     (when (find-child window *root-frame*)
-      (clean-windows-in-all-frames)
-      (show-all-children)
+      ;; (clean-windows-in-all-frames)
+      ;; (show-all-children)
       (delete-child-in-all-frames window)
-      (show-all-children))))
+      (show-all-children))
+    (xlib:destroy-window window)))
 
 (define-handler main-mode :enter-notify  (window root-x root-y)
   (unless (and (> root-x (- (xlib:screen-width *screen*) 3))
@@ -144,13 +153,13 @@
     ;; ignore asynchronous window errors
     ((and asynchronous
           (find error-key '(xlib:window-error xlib:drawable-error xlib:match-error)))
-     (format t "Ignoring XLib asynchronous error: ~s~%" error-key))
+     (format t "~&Ignoring XLib asynchronous error: ~s~%" error-key))
     ((eq error-key 'xlib:access-error)
-     (write-line "Another window manager is running.")
+     (write-line "~&Another window manager is running.")
      (throw 'exit-clfswm nil))
      ;; all other asynchronous errors are printed.
      (asynchronous
-      (format t "Caught Asynchronous X Error: ~s ~s" error-key key-vals))
+      (format t "~&Caught Asynchronous X Error: ~s ~s" error-key key-vals))
      (t
       (apply 'error error-key :display display :error-key error-key key-vals))))
 
@@ -161,8 +170,9 @@
        (call-hook *loop-hook*)
        (process-timers)
        (when (xlib:event-listen *display* *loop-timeout*)
-	 (xlib:process-event *display* :handler #'handle-event))
+         (xlib:process-event *display* :handler #'handle-event))
        (xlib:display-finish-output *display*))))
+
 
 
 
