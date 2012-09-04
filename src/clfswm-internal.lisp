@@ -1478,7 +1478,7 @@ managed."
   (set-window-state window +normal-state+)
   (setf (x-drawable-border-width window) (case (window-type window)
                                            (:normal *border-size*)
-                                           (:maxsize *border-size*)
+                                           (:maxsize 0)
                                            (:transient *border-size*)
                                            (:dialog *border-size*)
                                            (t *border-size*)))
