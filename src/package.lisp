@@ -121,6 +121,12 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defconfig *default-focus-policy* :click nil
            "Default mouse focus policy. One of :click, :sloppy, :sloppy-strict or :sloppy-select.")
 
+
+(defconfig *show-hide-policy* #'<=
+  nil "'NIL': always display all children (better with transparency support).
+'<': Hide only children less than children above.
+'<=': Hide children less or equal to children above (better for performance on slow machine).")
+
 (defstruct child-rect child parent selected-p x y w h)
 
 (defstruct root child original current-child x y w h)

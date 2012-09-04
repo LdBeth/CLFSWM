@@ -91,10 +91,11 @@
 
 (defun rect-hidden-p (rect1 rect2)
   "Return T if child-rect1 hide child-rect2"
-  (and (<= (child-rect-x rect1) (child-rect-x rect2))
-       (<= (child-rect-y rect1) (child-rect-y rect2))
-       (>= (+ (child-rect-x rect1) (child-rect-w rect1)) (+ (child-rect-x rect2) (child-rect-w rect2)))
-       (>= (+ (child-rect-y rect1) (child-rect-h rect1)) (+ (child-rect-y rect2) (child-rect-h rect2)))))
+  (and *show-hide-policy*
+       (funcall *show-hide-policy* (child-rect-x rect1) (child-rect-x rect2))
+       (funcall *show-hide-policy* (child-rect-y rect1) (child-rect-y rect2))
+       (funcall *show-hide-policy* (+ (child-rect-x rect2) (child-rect-w rect2)) (+ (child-rect-x rect1) (child-rect-w rect1)))
+       (funcall *show-hide-policy* (+ (child-rect-y rect2) (child-rect-h rect2)) (+ (child-rect-y rect1) (child-rect-h rect1)))))
 
 
 
@@ -1124,6 +1125,7 @@ XINERAMA version 1.1 opcode: 150
 
 (defun show-all-children (&optional (from-root-frame nil))
   "Show all children and hide those not in a root frame"
+  (declare (ignore from-root-frame))
   (let ((geometry-change nil)
         (displayed-child nil)
         (hidden-child nil))
@@ -1160,7 +1162,7 @@ XINERAMA version 1.1 opcode: 150
                  (let ((rect (make-child-rect :child child :parent parent
                                               :selected-p selected-p
                                               :x nx :y ny :w nw :h nh)))
-                   (if (hidden-child-p rect)
+                   (if (and *show-hide-policy* (hidden-child-p rect))
                        (add-in-hidden-list child)
                        (push rect displayed-child)))))
 

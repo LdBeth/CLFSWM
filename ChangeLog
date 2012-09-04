@@ -4,6 +4,11 @@
 	hidden by normal windows or frames (but not :dialog,
 	:transient...).
 	(process-new-window): Remove borders for maxsize windows.
+	(show-all-children): Let the choice to always display children or
+	to optimize by hidding children not seen . The first option is
+	better with transparency support (frames behind orther frames are
+	seen). The second one is faster with many children in the same
+	frame (not seen children are not displayed).
 
 2012-08-31  Philippe Brochard  <pbrochard@common-lisp.net>
 
