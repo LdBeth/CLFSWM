@@ -97,6 +97,8 @@
 (defparameter *toolbar-list* nil)
 (defparameter *toolbar-module-list* nil)
 
+(defparameter *toolbar-root-usage* nil)
+
 (defconfig *default-toolbar* '((clfswm-menu 1)
                                (expose-mode-button 10)
                                (system-usage 90)
@@ -137,6 +139,12 @@
 (defun toolbar-symbol-fun (name &optional (type 'display))
   (create-symbol-in-package :clfswm 'toolbar- name '-module- type))
 
+(defmacro with-toolbar-root-usage ((root place) &body body)
+  "Apply body only if root place is not already used"
+  `(unless (member ,place (gethash ,root *toolbar-root-usage*))
+     ,@body
+     (pushnew ,place (gethash ,root *toolbar-root-usage*))))
+
 (defun toolbar-adjust-root-size (toolbar &optional (dir +1))
   (unless (toolbar-autohide toolbar)
     (let ((root (toolbar-root toolbar))
@@ -145,15 +153,19 @@
       (when (root-p root)
         (case (toolbar-direction toolbar)
           (:horiz (cond ((search "TOP" placement-name)
-                         (incf (root-y root) (* thickness dir))
-                         (decf (root-h root) (* thickness dir)))
+                         (with-toolbar-root-usage (root :top)
+                           (incf (root-y root) (* thickness dir))
+                           (decf (root-h root) (* thickness dir))))
                         ((search "BOTTOM" placement-name)
-                         (decf (root-h root) (* thickness dir)))))
+                         (with-toolbar-root-usage (root :bottom)
+                           (decf (root-h root) (* thickness dir))))))
           (t (cond ((search "LEFT" placement-name)
-                    (incf (root-x root) (* thickness dir))
-                    (decf (root-w root) (* thickness dir)))
+                    (with-toolbar-root-usage (root :left)
+                      (incf (root-x root) (* thickness dir))
+                      (decf (root-w root) (* thickness dir))))
                    ((search "RIGHT" placement-name)
-                    (decf (root-w root) (* thickness dir))))))))))
+                    (with-toolbar-root-usage (root :right)
+                      (decf (root-w root) (* thickness dir)))))))))))
 
 
 (defun toolbar-draw-text (toolbar pos1 pos2 text color)
@@ -404,12 +416,14 @@
 
 (defun open-all-toolbars ()
   "Open all toolbars"
+  (setf *toolbar-root-usage* (make-hash-table :test #'equal))
   (dolist (toolbar *toolbar-list*)
     (open-toolbar toolbar))
   (dolist (toolbar *toolbar-list*)
     (toolbar-adjust-root-size toolbar)))
 
 (defun close-all-toolbars ()
+  (setf *toolbar-root-usage* (make-hash-table :test #'equal))
   (dolist (toolbar *toolbar-list*)
     (toolbar-adjust-root-size toolbar -1))
   (dolist (toolbar *toolbar-list*)
