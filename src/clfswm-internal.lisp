@@ -94,8 +94,10 @@
   (and *show-hide-policy*
        (funcall *show-hide-policy* (child-rect-x rect1) (child-rect-x rect2))
        (funcall *show-hide-policy* (child-rect-y rect1) (child-rect-y rect2))
-       (funcall *show-hide-policy* (+ (child-rect-x rect2) (child-rect-w rect2)) (+ (child-rect-x rect1) (child-rect-w rect1)))
-       (funcall *show-hide-policy* (+ (child-rect-y rect2) (child-rect-h rect2)) (+ (child-rect-y rect1) (child-rect-h rect1)))))
+       (funcall *show-hide-policy* (+ (child-rect-x rect2) (child-rect-w rect2))
+                (+ (child-rect-x rect1) (child-rect-w rect1)))
+       (funcall *show-hide-policy* (+ (child-rect-y rect2) (child-rect-h rect2))
+                (+ (child-rect-y rect1) (child-rect-h rect1)))))
 
 
 

@@ -1,5 +1,8 @@
 2012-09-05  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* contrib/wallpaper.lisp: New functionality to handle backgrounds
+	on differents screen heads.
+
 	* contrib/toolbar.lisp (toolbar-adjust-root-size): Takes care of
 	multiple toolbar on the same root edge.
 

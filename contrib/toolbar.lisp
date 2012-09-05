@@ -617,9 +617,6 @@
     (do-shell *toolbar-clock-action*)))
 
 
-(format t "done~%")
-
-
 ;;;
 ;;; CLFSWM menu module
 ;;;
@@ -725,4 +722,10 @@
   (if (= code 1)
       (expose-windows-mode)
       (expose-all-windows-mode)))
+
+
+;;;
+;;; End of code
+;;;
+(format t "done~%")
 
