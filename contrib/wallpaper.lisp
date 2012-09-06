@@ -31,21 +31,18 @@
 ;;;
 ;;; Usage example:
 ;;;
-;;;  (defun create-my-wallpaper ()
-;;;    (create-wallpaper "/home/you/.background-full.png"
-;;;                      "/home/you/Lisp/test/test-create-background/Tux_Wallpaper_by_Narcoblix.png"
-;;;                      "/home/you/Lisp/test/test-create-background/background.png"))
+;;;  (defun my-wallpaper ()
+;;;    (wallpaper "/home/you/.background-full" nil
+;;;               "background-1.png"
+;;;               "background-2.png"))
 ;;;
-;;;  (defun use-my-wallpaper ()
-;;;    (use-wallpaper "/home/you/.background-full.png"))
+;;;  (add-hook *init-hook* 'my-wallpaper)
 ;;;
+;;; You can have more screen heads than wallpaper images listed in the
+;;; wallpaper function.
 ;;;
-;;;  (add-hook *init-hook* 'create-my-wallpaper 'use-my-wallpaper)
-;;;
-;;; When you're happy with your background, you can remove the creation part.
-;;;
-;;;  (add-hook *init-hook* 'use-my-wallpaper)
-;;;
+;;; You can force the wallpaper creation by replacing the nil value after the
+;;; wallpaper basename with a true (t) value.
 ;;; --------------------------------------------------------------------------
 
 (in-package :clfswm)
@@ -84,6 +81,22 @@
     (format t "Using wallpaper ~A~%" filename)
     (do-shell (format nil "~A ~A" *wallpaper-command* filename) nil t)
     (format t "Done.~%")))
+
+
+
+(defun wallpaper-name (basename)
+  (let ((sizes (get-connected-heads-size))
+        (count 0))
+    (dolist (s sizes)
+      (dolist (v s)
+        (incf count v)))
+    (format nil "~A-~A.png" basename count)))
+
+(defun wallpaper (basename force-create &rest images)
+  (let* ((filename (wallpaper-name basename)))
+    (when (or force-create (not (probe-file filename)))
+      (apply #'create-wallpaper filename images))
+    (use-wallpaper filename)))
 
 ;;;
 ;;; End of code

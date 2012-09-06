@@ -1,3 +1,8 @@
+2012-09-06  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* contrib/wallpaper.lisp (wallpaper): create/use-background
+	simplification function.
+
 2012-09-05  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/wallpaper.lisp: New functionality to handle backgrounds
