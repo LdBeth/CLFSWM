@@ -1,5 +1,9 @@
 2012-09-09  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-internal.lisp
+	(delete-child-and-children-in-all-frames): Remove all children in
+	frames and only close windows.
+
 	* src/*.lisp: Remove uneeded with-xlib-protect.
 
 2012-09-06  Philippe Brochard  <pbrochard@common-lisp.net>

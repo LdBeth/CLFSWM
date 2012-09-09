@@ -15,7 +15,7 @@
     Circulate mode window width
   *CIRCULATE-HEIGHT* = 15
     Circulate mode window height
-  *CIRCULATE-TRANSPARENCY* = 0.6
+  *CIRCULATE-TRANSPARENCY* = 0.8
     Circulate window background transparency
   *CIRCULATE-TEXT-LIMITE* = 30
     Maximum text limite in the circulate window
@@ -96,8 +96,10 @@ This command must set the window title to *clfswm-terminal-name*
     Valid expose mode when an accel key is pressed
   *EXPOSE-SHOW-WINDOW-TITLE* = T
     Show the window title on accel window
-  *EXPOSE-TRANSPARENCY* = 0.6
+  *EXPOSE-TRANSPARENCY* = 0.9
     Expose string window background transparency
+  *EXPOSE-DIRECT-SELECT* = T
+    Immediately select child if they can be directly accessed
 
 
 <= Frame Colors Group =>
@@ -166,7 +168,7 @@ loading configuration file and before opening the display.
     Identify window foreground color
   *IDENTIFY-BORDER* = "red"
     Identify window border color
-  *IDENTIFY-TRANSPARENCY* = 0.6
+  *IDENTIFY-TRANSPARENCY* = 0.8
     Identify window background transparency
 
 
@@ -184,7 +186,7 @@ loading configuration file and before opening the display.
     Info selected item background color
   *INFO-FONT-STRING* = "fixed"
     Info window font string
-  *INFO-TRANSPARENCY* = 0.6
+  *INFO-TRANSPARENCY* = 0.8
     Info window background transparency
   *INFO-CLICK-TO-SELECT* = T
     If true, click on info window select item. Otherwise, click to drag the menu
@@ -235,7 +237,7 @@ This variable may be useful to speed up some slow version of CLX.
 It is particulary useful with CLISP/MIT-CLX.
   *TRANSPARENT-BACKGROUND* = T
     Enable transparent background: one of nil, :pseudo, t (xcompmgr must be started)
-  *DEFAULT-TRANSPARENCY* = 0.6
+  *DEFAULT-TRANSPARENCY* = 0.8
     Default transparency for all windows when in xcompmgr transparency mode
   *SHOW-ROOT-FRAME-P* = NIL
     Show the root frame information or not
@@ -253,10 +255,15 @@ It is particulary useful with CLISP/MIT-CLX.
     Default managed window types
   *DEFAULT-FOCUS-POLICY* = :CLICK
     Default mouse focus policy. One of :click, :sloppy, :sloppy-strict or :sloppy-select.
+  *SHOW-HIDE-POLICY* = #<Function <= {10500641}>
+    'NIL': always display all children (better with transparency support).
+'<': Hide only children less than children above.
+'<=': Hide children less or equal to children above (better for performance on slow machine).
   *DEFAULT-MODIFIERS* = NIL
     Default modifiers list to append to explicit modifiers
 Example: :mod-2 for num_lock, :lock for Caps_lock...
-  *NEVER-MANAGED-WINDOW-LIST* = ((EQUAL-WM-CLASS-ROX-PINBOARD NIL)
+  *NEVER-MANAGED-WINDOW-LIST* = ((IS-NOTIFY-WINDOW-P RAISE-WINDOW)
+                                 (EQUAL-WM-CLASS-ROX-PINBOARD NIL)
                                  (EQUAL-WM-CLASS-XVKBD RAISE-WINDOW)
                                  (EQUAL-CLFSWM-TERMINAL RAISE-AND-FOCUS-WINDOW))
     CLFSWM will never manage windows of this type.
@@ -269,10 +276,6 @@ A list of (list match-function handle-function)
     Delay to display the current child before doing a spatial move
   *SPATIAL-MOVE-DELAY-AFTER* = 0.5
     Delay to display the new child after doing a spatial move
-  *CREATE-FRAME-ON-ROOT* = NIL
-    Create frame on root.
-Set this variable to true if you want to allow to create a new frame
-on the root window in the main mode with the mouse
   *DEFAULT-WINDOW-WIDTH* = 400
     Default window width
   *DEFAULT-WINDOW-HEIGHT* = 300
@@ -291,7 +294,7 @@ on the root window in the main mode with the mouse
     Notify Window border color
   *NOTIFY-WINDOW-DELAY* = 10
     Notify Window display delay
-  *NOTIFY-WINDOW-TRANSPARENCY* = 0.6
+  *NOTIFY-WINDOW-TRANSPARENCY* = 0.8
     Notify window background transparency
 
 
@@ -337,12 +340,28 @@ on the root window in the main mode with the mouse
     Query string window parenthesis color when no match
   *QUERY-BORDER* = "red"
     Query string window border color
-  *QUERY-TRANSPARENCY* = 0.6
+  *QUERY-TRANSPARENCY* = 0.8
     Query string window background transparency
   *QUERY-MAX-COMPLET-LENGTH* = 100
     Query maximum length of completion list
   *QUERY-MIN-COMPLET-CHAR* = 2
     Query minimum input length for completion
+
+
+<= Root Group =>
+
+  *CREATE-FRAME-ON-ROOT* = NIL
+    Create frame on root.
+Set this variable to true if you want to allow to create a new frame
+on the root window in the main mode with the mouse
+  *HAVE-TO-SHOW-CURRENT-ROOT* = T
+    Show the current root if true
+  *SHOW-CURRENT-ROOT-DELAY* = 1
+    Delay to show the current root
+  *SHOW-CURRENT-ROOT-PLACEMENT* = MIDDLE-MIDDLE-ROOT-PLACEMENT
+    Current root notify window placement
+  *SHOW-CURRENT-ROOT-MESSAGE* = "Current root"
+    Current root notify window message
 
 
 <= Second Mode Group =>
@@ -359,7 +378,7 @@ on the root window in the main mode with the mouse
     Second mode window width
   *SM-HEIGHT* = 25
     Second mode window height
-  *SM-TRANSPARENCY* = 0.6
+  *SM-TRANSPARENCY* = 0.8
     Second mode background transparency
 
  Those variables can be changed in clfswm.

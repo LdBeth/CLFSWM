@@ -90,6 +90,11 @@
         </a>
       </li>
       <li>
+        <a href='#root'>
+          Root Group
+        </a>
+      </li>
+      <li>
         <a href='#second-mode'>
           Second Mode Group
         </a>
@@ -152,7 +157,7 @@
       &nbsp;&nbsp;  *circulate-transparency*
     </font>
     <font color='#0000ff'>
-       = 0.6 <br>
+       = 0.8 <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Circulate window background transparency <br>
 
@@ -408,9 +413,17 @@
       &nbsp;&nbsp;  *expose-transparency*
     </font>
     <font color='#0000ff'>
-       = 0.6 <br>
+       = 0.9 <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Expose string window background transparency <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *expose-direct-select*
+    </font>
+    <font color='#0000ff'>
+       = T <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Immediately select child if they can be directly accessed <br>
 
     <p>
       <a name='frame-colors' href='#top'>
@@ -612,7 +625,7 @@
       &nbsp;&nbsp;  *identify-transparency*
     </font>
     <font color='#0000ff'>
-       = 0.6 <br>
+       = 0.8 <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Identify window background transparency <br>
 
@@ -673,7 +686,7 @@
       &nbsp;&nbsp;  *info-transparency*
     </font>
     <font color='#0000ff'>
-       = 0.6 <br>
+       = 0.8 <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Info window background transparency <br>
 
@@ -834,7 +847,7 @@
       &nbsp;&nbsp;  *default-transparency*
     </font>
     <font color='#0000ff'>
-       = 0.6 <br>
+       = 0.8 <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Default transparency for all windows when in xcompmgr transparency mode <br>
 
@@ -899,6 +912,21 @@
     &nbsp; &nbsp; &nbsp; &nbsp;     Default mouse focus policy. One of :click, :sloppy, :sloppy-strict or :sloppy-select. <br>
 
     <font color='#ff0000'>
+      &nbsp;&nbsp;  *show-hide-policy*
+    </font>
+    <font color='#0000ff'>
+       = #<Function <= {10500641}> <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     'NIL': always display all children (better with transparency support). <br>
+
+    &nbsp; &nbsp; &nbsp; &nbsp; '<': Hide only children less than children above. <br>
+
+    <p>
+      <a name='miscellaneous' href='#top'>
+        '&lt;=': Hide children less or equal to children above (better for performance on slow machine). 
+      </a>
+    </p>
+    <font color='#ff0000'>
       &nbsp;&nbsp;  *default-modifiers*
     </font>
     <font color='#0000ff'>
@@ -912,8 +940,10 @@
       &nbsp;&nbsp;  *never-managed-window-list*
     </font>
     <font color='#0000ff'>
-       = ((EQUAL-WM-CLASS-ROX-PINBOARD NIL) <br>
+       = ((IS-NOTIFY-WINDOW-P RAISE-WINDOW) <br>
     </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;                                  (EQUAL-WM-CLASS-ROX-PINBOARD NIL) <br>
+
     &nbsp; &nbsp; &nbsp; &nbsp;                                  (EQUAL-WM-CLASS-XVKBD RAISE-WINDOW) <br>
 
     &nbsp; &nbsp; &nbsp; &nbsp;                                  (EQUAL-CLFSWM-TERMINAL RAISE-AND-FOCUS-WINDOW)) <br>
@@ -953,18 +983,6 @@
        = 0.5 <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Delay to display the new child after doing a spatial move <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *create-frame-on-root*
-    </font>
-    <font color='#0000ff'>
-       = NIL <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Create frame on root. <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp; Set this variable to true if you want to allow to create a new frame <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp; on the root window in the main mode with the mouse <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *default-window-width*
@@ -1031,7 +1049,7 @@
       &nbsp;&nbsp;  *notify-window-transparency*
     </font>
     <font color='#0000ff'>
-       = 0.6 <br>
+       = 0.8 <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Notify window background transparency <br>
 
@@ -1193,7 +1211,7 @@
       &nbsp;&nbsp;  *query-transparency*
     </font>
     <font color='#0000ff'>
-       = 0.6 <br>
+       = 0.8 <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Query string window background transparency <br>
 
@@ -1212,6 +1230,55 @@
        = 2 <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Query minimum input length for completion <br>
+
+    <p>
+      <a name='root' href='#top'>
+        &lt;= Root Group =&gt; 
+      </a>
+    </p>
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *create-frame-on-root*
+    </font>
+    <font color='#0000ff'>
+       = NIL <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Create frame on root. <br>
+
+    &nbsp; &nbsp; &nbsp; &nbsp; Set this variable to true if you want to allow to create a new frame <br>
+
+    &nbsp; &nbsp; &nbsp; &nbsp; on the root window in the main mode with the mouse <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *have-to-show-current-root*
+    </font>
+    <font color='#0000ff'>
+       = T <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Show the current root if true <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *show-current-root-delay*
+    </font>
+    <font color='#0000ff'>
+       = 1 <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Delay to show the current root <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *show-current-root-placement*
+    </font>
+    <font color='#0000ff'>
+       = MIDDLE-MIDDLE-ROOT-PLACEMENT <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Current root notify window placement <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *show-current-root-message*
+    </font>
+    <font color='#0000ff'>
+       = "Current root" <br>
+    </font>
+    &nbsp; &nbsp; &nbsp; &nbsp;     Current root notify window message <br>
 
     <p>
       <a name='second-mode' href='#top'>
@@ -1270,7 +1337,7 @@
       &nbsp;&nbsp;  *sm-transparency*
     </font>
     <font color='#0000ff'>
-       = 0.6 <br>
+       = 0.8 <br>
     </font>
     &nbsp; &nbsp; &nbsp; &nbsp;     Second mode background transparency <br>
 

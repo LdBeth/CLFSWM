@@ -78,58 +78,72 @@ e: Bookmark Editor - Bookmark Organizer and Editor
 f: Konqueror
 g: Links 2
 h: Web Browser
+i: Midori Private Browsing - Open a new private browsing window
+j: Midori - Lightweight web browser
 
 Audiovideo
 a: Alsa Modular Synth - Modular Software Synth
 b: Audacity - Record and edit audio files
 c: Brasero - Create and copy CDs and DVDs
 d: Cheese - Take photos and videos with your webcam, with fun graphical effects
-e: Decibel Audio Player - A simple audio player
-f: Gnome Music Player Client - A gnome frontend for the mpd daemon
-g: GNOME ALSA Mixer - ALSA sound mixer for GNOME
-h: Sound Recorder - Record sound clips
-i: HasciiCam - (h)ascii for the masses!
-j: Dragon Player
-k: JuK
-l: KMix
-m: KsCD
-n: Music Player - Play your music files easily
-o: MediathekView - View streams from public German TV stations
-p: Musique - Play your music collection
-q: PulseAudio Volume Control - Adjust the volume level
-r: PulseAudio Volume Meter (Capture) - Monitor the input volume
-s: PulseAudio Volume Meter (Playback) - Monitor the output volume
-t: QjackCtl - QjackCtl is a JACK Audio Connection Kit Qt GUI Interface
-u: QVideoob - Search for videos on many websites, and get info about them
-v: Rhythmbox - Play and organize your music collection
-w: Rhythmbox - Play and organize your music collection
-x: Sonata - An elegant GTK+ MPD client
-y: Sound Juicer - Copy music from your CDs
-z: Stopmotion - Program to create stop-motion animations
-0: terminatorX - Scratch and mix audio
-1: Movie Player - Play movies and songs
-2: VLC media player - Read, capture, broadcast your multimedia streams
-3: Mixer - Audio mixer for the Xfce Desktop Environment
+e: Composite - Live performance sequencer
+f: Decibel Audio Player - A simple audio player
+g: Gnome Music Player Client - A gnome frontend for the mpd daemon
+h: GNOME ALSA Mixer - ALSA sound mixer for GNOME
+i: Sound Recorder - Record sound clips
+j: HasciiCam - (h)ascii for the masses!
+k: Dragon Player
+l: JuK
+m: KMix
+n: KsCD
+o: Music Player - Play your music files easily
+p: MediathekView - View streams from public German TV stations
+q: Musique - Play your music collection
+r: OpenShot Video Editor - Create and edit videos and movies
+s: PulseAudio Volume Control - Adjust the volume level
+t: PulseAudio Volume Meter (Capture) - Monitor the input volume
+u: PulseAudio Volume Meter (Playback) - Monitor the output volume
+v: Petri-Foo - Sound Sampler
+w: QjackCtl - QjackCtl is a JACK Audio Connection Kit Qt GUI Interface
+x: Qsampler - Qsampler is a LinuxSampler Qt GUI Interface
+y: QVideoob - Search for videos on many websites, and get info about them
+z: Rhythmbox - Play and organize your music collection
+0: Rhythmbox - Play and organize your music collection
+1: Sonata - An elegant GTK+ MPD client
+2: Sound Juicer - Copy music from your CDs
+3: Specimen - Sound Sampler
+4: Stopmotion - Program to create stop-motion animations
+5: Swami Instrument Editor - Create, play and organize MIDI instruments and sounds
+6: terminatorX - Scratch and mix audio
+7: Movie Player - Play movies and songs
+8: VLC media player - Read, capture, broadcast your multimedia streams
+9: Mixer - Audio mixer for the Xfce Desktop Environment
 
 Audio
 a: Alsa Modular Synth - Modular Software Synth
 b: Audacity - Record and edit audio files
-c: Decibel Audio Player - A simple audio player
-d: Sound Recorder - Record sound clips
-e: KMix
-f: Music Player - Play your music files easily
-g: Musique - Play your music collection
-h: PulseAudio Volume Control - Adjust the volume level
-i: PulseAudio Volume Meter (Capture) - Monitor the input volume
-j: PulseAudio Volume Meter (Playback) - Monitor the output volume
-k: QjackCtl - QjackCtl is a JACK Audio Connection Kit Qt GUI Interface
-l: Sound Juicer - Copy music from your CDs
-m: Mixer - Audio mixer for the Xfce Desktop Environment
+c: Composite - Live performance sequencer
+d: Decibel Audio Player - A simple audio player
+e: Sound Recorder - Record sound clips
+f: KMix
+g: Music Player - Play your music files easily
+h: Musique - Play your music collection
+i: PulseAudio Volume Control - Adjust the volume level
+j: PulseAudio Volume Meter (Capture) - Monitor the input volume
+k: PulseAudio Volume Meter (Playback) - Monitor the output volume
+l: Petri-Foo - Sound Sampler
+m: QjackCtl - QjackCtl is a JACK Audio Connection Kit Qt GUI Interface
+n: Qsampler - Qsampler is a LinuxSampler Qt GUI Interface
+o: Sound Juicer - Copy music from your CDs
+p: Swami Instrument Editor - Create, play and organize MIDI instruments and sounds
+q: Mixer - Audio mixer for the Xfce Desktop Environment
 
 Video
-a: OptGeo - Interactive tool to study and simulate optic assemblies
-b: Stopmotion - Program to create stop-motion animations
-c: Movie Player - Play movies and songs
+a: Camorama Webcam Viewer - View, alter and save images from a webcam
+b: OpenShot Video Editor - Create and edit videos and movies
+c: OptGeo - Interactive tool to study and simulate optic assemblies
+d: Stopmotion - Program to create stop-motion animations
+e: Movie Player - Play movies and songs
 
 Development
 a: GNU Emacs 23 - View and edit files
@@ -202,68 +216,91 @@ F: Xcas Computer Algebra System - The swiss knife for mathematics
 G: Maxima Algebra System - An interface to the Maxima Computer Algebra System
 
 Game
-a: Balder2D - 2D overhead shooter in Zero G
-b: PlayOnLinux - PlayOnLinux
-c: Search and rescue
-d: Alex the Allegator 4 - Retro platform game
-e: Amoebax - Defeat your opponent by filling up their grid up with garbage.
-f: Amphetamine - Fight evil monsters with your magic weapons.
-g: B.A.L.L.Z. - Platform game with some puzzle elements
-h: Between - game about consciousness and isolation
-i: Biloba - Up to four player network capable turn based strategy board game
-j: Biniax-2 - Colorful Logic game with arcade and tactics modes
-k: Block Attack - Rise of the Blocks - Switch blocks so they match
-l: Bomberclone - Play a Bomberman like game
-m: Childsplay - Suite of educational games for young children
-n: Dodgin Diamond 2
-o: DOSBox Emulator - Run old DOS applications
-p: eboard - A graphical chessboard program
-q: Feeding Frenzy! - multiplayer platform game with dwarfs fighting with/for food
-r: FloboPuyo
-s: FreeCell Solitaire - Play the popular FreeCell card game
-t: FreeCraft - The War begins
-u: DFArc - Dink frontend - Run, edit, install, remove and package D-Mods (Dink Modules)
-v: FreeDink - Humorous zelda-like isometric adventure/RPG
-w: FreeDinkedit - Portable Dink Smallwood game editor
-x: FreeGish - A physics based arcade game
-y: Frogatto - Young frog's adventure
-z: Educational suite GCompris - Educational game for ages 2 to 10
-0: Chess - Play the classic two-player boardgame of chess
-1: Five or More - Remove colored balls from the board by forming lines
-2: Four-in-a-Row - Make lines of the same color to win
-3: Nibbles - Guide a worm around a maze
-4: Robots - Avoid the robots and make them crash into each other
-5: Sudoku - Test your logic skills in this number grid puzzle
-6: Mines - Clear hidden mines from a minefield
-7: Tetravex - Complete the puzzle by matching numbered tiles
-8: Klotski - Slide blocks to solve the puzzle
-9: Golly - A Conway's Game of Life simulator
-A: Gravitation - game about mania, melancholia, and the creative process
-B: Tali - Beat the odds in a poker-style dice game
-C: Hedgewars
-D: Heroes - Collect powerups and avoid your opponents' trails
-E: Iagno - Dominate the board in a classic version of Reversi
-F: KGoldrunner - A game of action and puzzle-solving
-G: AMOR
-H: Blinken - A memory enhancement game
-I: Bomber
-J: Bovo
-K: Granatier
-L: Kajongg - The ancient Chinese board game for 4 players
-M: Kanagram - KDE Letter Order Game
-N: Kapman - Eat pills escaping ghosts
-O: KAtomic
-P: Naval Battle
-Q: KBlackBox
-R: KBlocks
-S: KBounce
-T: KBreakOut
-U: KSnake
-V: KDiamond
-W: KFourInLine
-X: KHangMan - KDE Hangman Game
-Y: Kigo
-Z: Killbots
+a: Ardentryst - Fantasy sidescroller game
+b: Balder2D - 2D overhead shooter in Zero G
+c: PlayOnLinux - PlayOnLinux
+d: Search and rescue
+e: Adanaxis - Fly your ship in a 4d environment
+f: Airstrike - Dogfight an enemy plane
+g: Alex the Allegator 4 - Retro platform game
+h: Amoebax - Defeat your opponent by filling up their grid up with garbage.
+i: Amphetamine - Fight evil monsters with your magic weapons.
+j: Angband (GTK) - A roguelike dungeon exploration game based on the books of J.R.R.Tolkien
+k: Angband (SDL) - A roguelike dungeon exploration game based on the books of J.R.R.Tolkien
+l: Angband (X11) - A roguelike dungeon exploration game based on the books of J.R.R.Tolkien
+m: Balazar - Play a 3D adventure and roleplaying game
+n: B.A.L.L.Z. - Platform game with some puzzle elements
+o: Beneath A Steel Sky - A science-fiction adventure game set in a bleak post-apocalyptic vision of the future
+p: Between - game about consciousness and isolation
+q: Billard-GL - Play Billard Game
+r: Biloba - Up to four player network capable turn based strategy board game
+s: Biniax-2 - Colorful Logic game with arcade and tactics modes
+t: Block Attack - Rise of the Blocks - Switch blocks so they match
+u: Bomberclone - Play a Bomberman like game
+v: Bouncy the Hungry Rabbit - Eat the yummy veggies in the garden (game for small kids)
+w: Ceferino - Save the cows!
+x: Childsplay - Suite of educational games for young children
+y: Chromium B.S.U. - Scrolling space shooter
+z: Crack Attack - Puzzle game similar to Tetris Attack
+0: Cytadela - old-school first person shooter
+1: Dodgin Diamond 2
+2: DOSBox Emulator - Run old DOS applications
+3: eboard - A graphical chessboard program
+4: Egoboo - 3D dungeon crawling game
+5: Feeding Frenzy! - multiplayer platform game with dwarfs fighting with/for food
+6: Fish Fillets - Puzzle game about witty fish saving the world sokoban-style
+7: Flight of the Amazon Queen - Embark on a quest to rescue a kidnapped princess and in the process, discover the true sinister intentions of a suspiciously located Lederhosen company
+8: FloboPuyo
+9: Foobillard - 3D billiards game using OpenGL
+A: FreeCell Solitaire - Play the popular FreeCell card game
+B: FreeCraft - The War begins
+C: DFArc - Dink frontend - Run, edit, install, remove and package D-Mods (Dink Modules)
+D: FreeDink - Humorous zelda-like isometric adventure/RPG
+E: FreeDinkedit - Portable Dink Smallwood game editor
+F: Freedroid - Clear a spaceship from all droids
+G: Freedroid RPG - Isometric role playing game
+H: FreeGish - A physics based arcade game
+I: Frogatto - Young frog's adventure
+J: Funny Boat - a side scrolling arcade shooter game on a steamboat
+K: Educational suite GCompris - Educational game for ages 2 to 10
+L: Chess - Play the classic two-player boardgame of chess
+M: Five or More - Remove colored balls from the board by forming lines
+N: Four-in-a-Row - Make lines of the same color to win
+O: Nibbles - Guide a worm around a maze
+P: Robots - Avoid the robots and make them crash into each other
+Q: Sudoku - Test your logic skills in this number grid puzzle
+R: Mines - Clear hidden mines from a minefield
+S: Tetravex - Complete the puzzle by matching numbered tiles
+T: Klotski - Slide blocks to solve the puzzle
+U: Golly - A Conway's Game of Life simulator
+V: Gravitation - game about mania, melancholia, and the creative process
+W: Tali - Beat the odds in a poker-style dice game
+X: Gunroar - Kenta Cho's Gunroar
+Y: Hedgewars
+Z: Heroes - Collect powerups and avoid your opponents' trails
+|: Iagno - Dominate the board in a classic version of Reversi
+|: ii-esu - HIZ's ES
+|: KGoldrunner - A game of action and puzzle-solving
+|: AMOR
+|: Blinken - A memory enhancement game
+|: Bomber
+|: Bovo
+|: Granatier
+|: Kajongg - The ancient Chinese board game for 4 players
+|: Kanagram - KDE Letter Order Game
+|: Kapman - Eat pills escaping ghosts
+|: KAtomic
+|: Naval Battle
+|: KBlackBox
+|: KBlocks
+|: KBounce
+|: KBreakOut
+|: KSnake
+|: KDiamond
+|: KFourInLine
+|: KHangMan - KDE Hangman Game
+|: Kigo
+|: Killbots
 |: Kiriki
 |: KJumpingCube
 |: Klickety
@@ -297,24 +334,42 @@ Z: Killbots
 |: LordsAWar Editor - Create or Edit LordsAWar maps
 |: LordsAWar Tile Editor - Create or Edit LordsAWar tilesets
 |: LordsAWar - Play a clone of Warlords II
+|: Lugaru - Third-person action game about an anthropomorphic rabbit with curiously well developed combat skills
 |: Luola
 |: Magicor - Puzzle game in the spirit of solomon's key
 |: Mahjongg - Disassemble a pile of tiles by removing matching pairs
+|: Mana - A 2D MMORPG client
 |: MegaGlest - A real time strategy game.
 |: Meritous - action-adventure dungeon crawl game
+|: Minetest - InfiniMiner/Minecraft-inspired open game world
 |: Monster Masher - Mash monsters and save the gnomes
 |: X NetHack
 |: Neverball - A 3D arcade game with a ball
 |: Neverputt - A 3D mini golf game
 |: Numpty Physics
 |: OpenArena - A fast-paced 3D first-person shooter, similar to id Software Inc.'s Quake III Arena
+|: OpenTTD
+|: Out Of Order - Adventure Game
 |: Passage - game about the passage through life
+|: Pathological - Solve puzzles involving paths and marbles
+|: PCSX - Sony PlayStation emulator
 |: PIX Frogger - Help the frog cross the street
+|: Plee the Bear - Catch your son, he ate all the honey then ran away
+|: PokerTH - Texas hold'em game
 |: Primrose - Captivating tile-clearing puzzle game
+|: PyChess - PyChess is a fully featured, nice looking, easy to use chess client for the Gnome desktop
+|: pyRacerz
 |: Quadrapassel - Fit falling blocks together
 |: Raincat - 2D puzzle game featuring a fuzzy little cat
+|: REminiscence - A port of FlashBack game engine
+|: Ri-li - a toy simulator game
+|: rRootage - Destroy autocreated battleships
+|: ScummVM - Interpreter for several adventure games
 |: SDL-Ball
+|: GTK Slash'EM - Super Lotsa Added Stuff Hack - Extended Magic (GTK)
 |: SDL Slash'EM - Super Lotsa Added Stuff Hack - Extended Magic (SDL)
+|: X Slash'EM - Super Lotsa Added Stuff Hack - Extended Magic (X11)
+|: SLUDGE Engine - Play SLUDGE games
 |: Secret Maryo Chronicles - A 2D platform game with style similar to classic sidescroller games
 |: AisleRiot Solitaire - Play many different solitaire games
 |: SuperTux - A Super Mario inspired penguin platform game
@@ -322,60 +377,85 @@ Z: Killbots
 |: Swell Foop - Clear the screen by removing groups of colored and shaped tiles
 |: Tatan - HIZ's Tatan
 |: Tennix! - Play tennis against the computer or a friend
+|: The Mana world - The Mana World 2D MMORPG client
 |: I Have No Tomatoes - How many tomatoes can you smash in ten short minutes?
 |: Tower Toppler - A clone of the 'Nebulus' game on old 8 and 16 bit machines.
 |: Trackballs
+|: Trigger - 3D rally racing car game
 |: Triplane Classic - side-scrolling dogfighting game
+|: Trophy - 2D car racing game with power-ups
+|: Tumiki Fighters - Kenta Cho's Tumiki Fighters
+|: Tuxfootball - 2D Football Game
+|: The Ur-Quan Masters - An interstellar adventure game
+|: Virus Killer
+|: VoR
 |: Battle for Wesnoth (1.10) - A fantasy turn-based strategy game
 |: Battle for Wesnoth Map Editor (1.10) - A map editor for Battle for Wesnoth maps
+|: Which Way is Up - 2D platform game with a slight rotational twist
+|: Widelands - A a real-time build-up strategy game
+|: Word War vi - side-scrolling shoot'em up arcade game
 |: Xboard - Resume XBoard chess tourney
 |: Xboard - Resume XBoard chess tourney
 |: Xboard - Resume XBoard chess tourney
 |: XBoard - Use an X Windows Chess Board
 |: Galaga:Hyperspace - Play enhanced Galaga Game
 |: Galaga - Play Galaga Game
+|: Xmille
 |: Xmoto
+|: XScavenger - X11 clone of Lode Runner
 |: Zatacka - Arcade multiplayer game for 2-6 players
 
 Graphics
-a: apvlv - Alf's PDF Viewer Like Vim
-b: ImageMagick (display) - Display and edit image files
-c: Image Viewer
-d: Document Viewer - View multi-page documents
-e: GNU Image Manipulation Program - Create images and edit photographs
+a: Hugin Batch Processor - Hugin project stitching queue manager
+b: apvlv - Alf's PDF Viewer Like Vim
+c: Hugin Calibrate Lens - Stitch photographs together
+d: Camorama Webcam Viewer - View, alter and save images from a webcam
+e: ImageMagick (display) - Display and edit image files
 f: Image Viewer
-g: gv - View PS and/or PDF files
-h: Inkscape - Create and edit Scalable Vector Graphics images
-i: K-3D - Free-as-in-freedom 3D modeling and animation software
-j: Gwenview - A simple image viewer
-k: KColorChooser
-l: KolourPaint
-m: KRuler
-n: KSnapshot
-o: Okular
-p: Okular
-q: Okular
-r: Okular
-s: Okular
-t: Okular
-u: Okular
-v: Okular
-w: Okular
+g: Document Viewer - View multi-page documents
+h: GNU Image Manipulation Program - Create images and edit photographs
+i: Image Viewer
+j: gv - View PS and/or PDF files
+k: Hugin Panorama Creator - Stitch photographs together
+l: Inkscape - Create and edit Scalable Vector Graphics images
+m: K-3D - Free-as-in-freedom 3D modeling and animation software
+n: digiKam
+o: DNGConverter - A tool to batch convert RAW camera images to DNG
+p: ExpoBlending - A tool to blend bracketed images
+q: Gwenview - A simple image viewer
+r: Kamoso - Take any picture with your web cam
+s: KColorChooser
+t: KIPI Plugins - KDE Image Plugins Interface
+u: KolourPaint
+v: KRuler
+w: KSnapshot
 x: Okular
 y: Okular
 z: Okular
-0: LibreOffice Draw
-1: Mandelbulber - Visit 3D Fractal World
-2: MuPDF - PDF file viewer
-3: MyPaint - Painting program for digital artists
-4: PDF Editor - PDF Editor
-5: Shotwell Viewer
-6: Shotwell - Organize your photos
-7: Simple Scan - Scan Documents
-8: Stopmotion - Program to create stop-motion animations
-9: Xaos - Fractal Zoomer - Fractal Generator
-A: xpdf - View PDF files
-B: XSane Image scanning program - A program to work with scanner. Can be used as a scanning, copier, OCR, fax tools.
+0: Okular
+1: Okular
+2: Okular
+3: Okular
+4: Okular
+5: Okular
+6: Okular
+7: Okular
+8: Okular
+9: Panorama - A tool to assemble images as a panorama
+A: Photo Layouts Editor
+B: AcquireImages - A tool to acquire images using a flat scanner
+C: LibreOffice Draw
+D: Mandelbulber - Visit 3D Fractal World
+E: MuPDF - PDF file viewer
+F: MyPaint - Painting program for digital artists
+G: PDF Editor - PDF Editor
+H: Shotwell Viewer
+I: Shotwell - Organize your photos
+J: Simple Scan - Scan Documents
+K: Stopmotion - Program to create stop-motion animations
+L: Xaos - Fractal Zoomer - Fractal Generator
+M: xpdf - View PDF files
+N: XSane Image scanning program - A program to work with scanner. Can be used as a scanning, copier, OCR, fax tools.
 
 Network
 a: Conkeror Web Browser - Browse the World Wide Web
@@ -407,21 +487,23 @@ z: Krfb
 0: Liferea - Download and view feeds
 1: Links 2
 2: Web Browser
-3: MLDonkey - Graphical frontend for MLDonkey
-4: Mumble - A low-latency, high quality voice chat program for gaming
-5: mutt - Simple text-based Mail User Agent
-6: QBoobmsg - Send and receive messages from various websites
-7: QFlatBoob - Search housings
-8: QHaveDate - Optimize your probabilities to have sex on dating websites
-9: QWebContentEdit - Edit website contents
-A: Remmina - Connect to remote desktops
-B: SSL/SSH VNC Viewer - SSVNC - access remote VNC desktops
-C: Transmission - Download and share files over BitTorrent
-D: Remote Desktop Viewer - Access remote desktops
-E: Desktop Sharing - Choose how other users can remotely view your desktop
-F: Wicd Network Manager
-G: Wireshark - Network traffic analyzer
-H: X11VNC Server - Share this desktop by VNC
+3: Midori Private Browsing - Open a new private browsing window
+4: Midori - Lightweight web browser
+5: MLDonkey - Graphical frontend for MLDonkey
+6: Mumble - A low-latency, high quality voice chat program for gaming
+7: mutt - Simple text-based Mail User Agent
+8: QBoobmsg - Send and receive messages from various websites
+9: QFlatBoob - Search housings
+A: QHaveDate - Optimize your probabilities to have sex on dating websites
+B: QWebContentEdit - Edit website contents
+C: Remmina - Connect to remote desktops
+D: SSL/SSH VNC Viewer - SSVNC - access remote VNC desktops
+E: Transmission - Download and share files over BitTorrent
+F: Remote Desktop Viewer - Access remote desktops
+G: Desktop Sharing - Choose how other users can remotely view your desktop
+H: Wicd Network Manager
+I: Wireshark - Network traffic analyzer
+J: X11VNC Server - Share this desktop by VNC
 
 Office
 a: AbiWord
@@ -494,26 +576,29 @@ C: Keyboard and Mouse - Configure keyboard, mouse, and other input devices
 D: Monitor Settings - Change screen resolution and configure external monitors
 E: Desktop Session Settings - Manage applications loaded in desktop session
 F: Network - Configure network devices and connections
-G: Openbox Configuration Manager - Configure and personalize the Openbox window manager
-H: OpenJDK Java 6 Policy Tool - OpenJDK Java 6 Policy Tool
-I: Panel
-J: Passwords and Keys - Manage your passwords and encryption keys
-K: Services - Configure which services will be run when the system starts
-L: Startup Applications - Choose what applications to start when you log in
-M: Shared Folders - Configure which folders are available for your network neighborhood
-N: Software Sources - Configure the sources for installable software and updates
-O: Synaptic Package Manager - Install, remove and upgrade software packages
-P: File Manager - Configure the Thunar file manager
-Q: Removable Drives and Media - Configure management of removable drives and media
-R: Time and Date - Change system time, date, and timezone
-S: Tux Paint Config. - Configure Tux Paint
-T: Software Center - Lets you choose from thousands of applications available for your system 
-U: Update Manager - Show and install available updates
-V: Users and Groups - Add or remove users and groups
-W: Desktop Sharing - Choose how other users can remotely view your desktop
-X: Desktop  - Set desktop background and menu and icon behaviour
-Y: Display - Configure screen settings and layout
-Z: Keyboard - Edit keyboard settings and application shortcuts
+G: Network Connections - Manage and change your network connection settings
+H: Openbox Configuration Manager - Configure and personalize the Openbox window manager
+I: OpenJDK Java 6 Policy Tool - OpenJDK Java 6 Policy Tool
+J: Panel
+K: Passwords and Keys - Manage your passwords and encryption keys
+L: Services - Configure which services will be run when the system starts
+M: Startup Applications - Choose what applications to start when you log in
+N: Shared Folders - Configure which folders are available for your network neighborhood
+O: Software Sources - Configure the sources for installable software and updates
+P: Synaptic Package Manager - Install, remove and upgrade software packages
+Q: Printing - Configure printers
+R: File Manager - Configure the Thunar file manager
+S: Removable Drives and Media - Configure management of removable drives and media
+T: Time and Date - Change system time, date, and timezone
+U: Panel tint2 - Customize the panel settings
+V: Tux Paint Config. - Configure Tux Paint
+W: Software Center - Lets you choose from thousands of applications available for your system 
+X: Update Manager - Show and install available updates
+Y: Users and Groups - Add or remove users and groups
+Z: Desktop Sharing - Choose how other users can remotely view your desktop
+|: Desktop  - Set desktop background and menu and icon behaviour
+|: Display - Configure screen settings and layout
+|: Keyboard - Edit keyboard settings and application shortcuts
 |: Mouse - Configure pointer device behavior and appearance
 |: Session and Startup - Customize desktop startup and splash screen
 |: Settings Manager - Graphical Settings Manager for Xfce 4
@@ -524,6 +609,7 @@ Z: Keyboard - Edit keyboard settings and application shortcuts
 |: Orage preferences - Settings for the Xfce 4 Calendar Application (Orage)
 |: Accessibility - Improve keyboard and mouse accessibility
 |: Notifications - Customize how notifications appear on your screen
+|: Power Manager - Settings for the Xfce Power Manager
 |: Settings Editor - Graphical settings editor for Xfconf
 |: Screensaver - Change screensaver properties
 
@@ -552,35 +638,35 @@ u: Software Install - Install selected software on the system
 v: Software Log Viewer - View past package management tasks
 w: Service Pack Creator - Create service packs for sharing with other computers
 x: Software Update - Update software installed on the system
-y: Reactivate HP LaserJet 1018/1020 after reloading paper - Click the button in this program when your printer ran out of paper and you have refilled the paper
-z: Htop - Show System Processes
-0: Dolphin
-1: KDiskFree
+y: Htop - Show System Processes
+z: Dolphin
+0: KDiskFree
+1: Konqueror
 2: Konqueror
 3: Konqueror
 4: Konqueror
-5: Konqueror
-6: KInfoCenter
-7: File Manager - Super User Mode
-8: Konsole
-9: KRandRTray - A panel applet for resizing and reorientating X screens.
-A: Krfb
-B: Krusader - root-mode
-C: System Monitor
-D: KSystemLog
-E: KUser
-F: KWalletManager
-G: KwikDisk
-H: Nepomuk Backup
-I: Nepomuk File Indexing Controller - System tray icon to control the behaviour of the Nepomuk file indexer
-J: Terminal emulator - Terminal Emulator
-K: Task Manager - Manage running processes
-L: Network - Configure network devices and connections
-M: Reportbug - Report bugs to the Debian BTS
-N: Services - Configure which services will be run when the system starts
-O: Shared Folders - Configure which folders are available for your network neighborhood
+5: KInfoCenter
+6: File Manager - Super User Mode
+7: Konsole
+8: KRandRTray - A panel applet for resizing and reorientating X screens.
+9: Krfb
+A: Krusader - root-mode
+B: System Monitor
+C: KSystemLog
+D: KUser
+E: KWalletManager
+F: KwikDisk
+G: Nepomuk Backup
+H: Nepomuk File Indexing Controller - System tray icon to control the behaviour of the Nepomuk file indexer
+I: Terminal emulator - Terminal Emulator
+J: Task Manager - Manage running processes
+K: Network - Configure network devices and connections
+L: Reportbug - Report bugs to the Debian BTS
+M: Services - Configure which services will be run when the system starts
+N: Shared Folders - Configure which folders are available for your network neighborhood
+O: Synaptic Package Manager - Install, remove and upgrade software packages
 P: Synaptic Package Manager - Install, remove and upgrade software packages
-Q: Synaptic Package Manager - Install, remove and upgrade software packages
+Q: Printing - Configure printers
 R: Time and Date - Change system time, date, and timezone
 S: Software Center - Lets you choose from thousands of applications available for your system 
 T: UNetbootin - Tool for creating Live USB drives
@@ -597,64 +683,65 @@ a: Bulk Rename - Rename Multiple Files
 b: Open Folder with Thunar - Open the specified folders in Thunar
 c: Thunar File Manager - Browse the filesystem with the file manager
 d: Main Menu - Add or remove applications from the main menu
-e: Bluetooth Transfer - Send files via Bluetooth
-f: Bluetooth Device Setup - Setup Bluetooth devices
-g: Brasero - Create and copy CDs and DVDs
+e: Battery Charge Graph - Battery Charge Graph
+f: Bluetooth Transfer - Send files via Bluetooth
+g: Bluetooth Device Setup - Setup Bluetooth devices
 h: Curtain - Show and move a curtain on the desktop
 i: GNU Emacs 23 - View and edit files
 j: File Manager - Configure the Thunar file manager
 k: Terminal Emulator
 l: Archive Manager - Create and modify an archive
-m: Calculator - Perform arithmetic, scientific or financial calculations
-n: gedit - Edit text files
-o: Gentoo - Fully GUI-configurable, two-pane X file manager
-p: Root Terminal - Opens a terminal as the root user, using gksu to ask for the password
-q: Orage Globaltime - Show clocks from different countries
-r: GNOME Commander - A two paned file manager
-s: Contacts
-t: Screenshot - Save images of your desktop or individual windows
-u: Search for Files... - Locate documents and folders on this computer by name or content
-v: GNOME Shell Extension Preferences - Configure GNOME Shell Extensions
-w: GNOME Shell - Window management and application launching
-x: Terminal - Use the command line
-y: On-Screen Keyboard - Navigate applications and type using alternative input devices
-z: Image Viewer
-0: Guake Terminal - Use the command line in a Quake-like terminal
-1: Character Map - Insert special characters into documents
-2: Time Tracking Overview - The overview window of hamster time tracker
-3: Time Tracker - Project Hamster - track your time
+m: Galculator - Perform simple and scientific calculations
+n: Calculator - Perform arithmetic, scientific or financial calculations
+o: gedit - Edit text files
+p: Gentoo - Fully GUI-configurable, two-pane X file manager
+q: Root Terminal - Opens a terminal as the root user, using gksu to ask for the password
+r: Orage Globaltime - Show clocks from different countries
+s: GNOME Commander - A two paned file manager
+t: Contacts
+u: Screenshot - Save images of your desktop or individual windows
+v: Search for Files... - Locate documents and folders on this computer by name or content
+w: GNOME Shell Extension Preferences - Configure GNOME Shell Extensions
+x: GNOME Shell - Window management and application launching
+y: Terminal - Use the command line
+z: On-Screen Keyboard - Navigate applications and type using alternative input devices
+0: Image Viewer
+1: Guake Terminal - Use the command line in a Quake-like terminal
+2: Character Map - Insert special characters into documents
+3: Time Tracking Overview - The overview window of hamster time tracker
 4: Time Tracker - Project Hamster - track your time
-5: Help - Get help with GNOME
-6: Home
-7: KCharSelect
-8: KJots
-9: Akonaditray
-A: Ark
-B: Filelight - View disk usage information
-C: KDE Groupware Wizard
-D: Jovie - KDE Text To Speech Service
-E: KAlarm
-F: Kate
-G: KCalc
-H: KFileReplace
-I: Find Files/Folders
-J: KFontView
-K: KGpg - A GnuPG frontend
-L: Kleopatra
+5: Time Tracker - Project Hamster - track your time
+6: Help - Get help with GNOME
+7: Home
+8: KCharSelect
+9: KJots
+A: Akonaditray
+B: Ark
+C: Filelight - View disk usage information
+D: KDE Groupware Wizard
+E: Jovie - KDE Text To Speech Service
+F: KAlarm
+G: Kate
+H: KCalc
+I: KFileReplace
+J: Find Files/Folders
+K: KFontView
+L: KGpg - A GnuPG frontend
 M: Kleopatra
-N: Klipper
-O: KMag
-P: KMouseTool - Clicks the mouse for you, reducing the effects of RSI
-Q: KMouth
-R: KNotes
-S: KonsoleKalendar
-T: Krusader
-U: KTeaTime
-V: Snippets datafile editor
-W: KTimer
-X: KTimeTracker
-Y: KWrite
-Z: Okteta
+N: Kleopatra
+O: Klipper
+P: KMag
+Q: KMouseTool - Clicks the mouse for you, reducing the effects of RSI
+R: KMouth
+S: KNotes
+T: KonsoleKalendar
+U: Krusader
+V: KTeaTime
+W: Snippets datafile editor
+X: KTimer
+Y: KTimeTracker
+Z: KWrite
+|: Okteta
 |: SuperKaramba - An engine for cool desktop eyecandy.
 |: Sweeper
 |: Kupfer - Convenient command and access tool for applications and documents
@@ -1125,12 +1212,13 @@ f: < Query String Group >
 g: < Identify Key Group >
 h: < Second Mode Group >
 i: < Frame Colors Group >
-j: < Corner Group >
-k: < Menu Group >
-l: < Placement Group >
-m: < Hook Group >
-n: < Main Mode Group >
-o: < Miscellaneous Group >
+j: < Root Group >
+k: < Corner Group >
+l: < Menu Group >
+m: < Placement Group >
+n: < Hook Group >
+o: < Main Mode Group >
+p: < Miscellaneous Group >
 F2: Save all configuration variables in clfswmrc
 F3: Reset all configuration variables to their default values
 
@@ -1146,16 +1234,17 @@ e: Configure NOTIFY-WINDOW-BACKGROUND
 f: Configure NOTIFY-WINDOW-FONT-STRING
 
 Conf-Expose-Mode
-a: Configure EXPOSE-TRANSPARENCY
-b: Configure EXPOSE-SHOW-WINDOW-TITLE
-c: Configure EXPOSE-VALID-ON-KEY
-d: Configure EXPOSE-BORDER
-e: Configure EXPOSE-BACKGROUND-LETTER-MATCH
-f: Configure EXPOSE-FOREGROUND-LETTER-NOK
-g: Configure EXPOSE-FOREGROUND-LETTER
-h: Configure EXPOSE-FOREGROUND
-i: Configure EXPOSE-BACKGROUND
-j: Configure EXPOSE-FONT-STRING
+a: Configure EXPOSE-DIRECT-SELECT
+b: Configure EXPOSE-TRANSPARENCY
+c: Configure EXPOSE-SHOW-WINDOW-TITLE
+d: Configure EXPOSE-VALID-ON-KEY
+e: Configure EXPOSE-BORDER
+f: Configure EXPOSE-BACKGROUND-LETTER-MATCH
+g: Configure EXPOSE-FOREGROUND-LETTER-NOK
+h: Configure EXPOSE-FOREGROUND-LETTER
+i: Configure EXPOSE-FOREGROUND
+j: Configure EXPOSE-BACKGROUND
+k: Configure EXPOSE-FONT-STRING
 
 Conf-Circulate-Mode
 a: Configure CIRCULATE-TEXT-LIMITE
@@ -1217,6 +1306,13 @@ c: Configure FRAME-FOREGROUND-ROOT
 d: Configure FRAME-FOREGROUND
 e: Configure FRAME-BACKGROUND
 
+Conf-Root
+a: Configure SHOW-CURRENT-ROOT-MESSAGE
+b: Configure SHOW-CURRENT-ROOT-PLACEMENT
+c: Configure SHOW-CURRENT-ROOT-DELAY
+d: Configure HAVE-TO-SHOW-CURRENT-ROOT
+e: Configure CREATE-FRAME-ON-ROOT
+
 Conf-Corner
 a: Configure CORNER-COMMAND-TRY-NUMBER
 b: Configure CORNER-COMMAND-TRY-DELAY
@@ -1271,13 +1367,13 @@ d: Configure COLOR-MOVE-WINDOW
 Conf-Miscellaneous
 a: Configure DEFAULT-WINDOW-HEIGHT
 b: Configure DEFAULT-WINDOW-WIDTH
-c: Configure CREATE-FRAME-ON-ROOT
-d: Configure SPATIAL-MOVE-DELAY-AFTER
-e: Configure SPATIAL-MOVE-DELAY-BEFORE
-f: Configure SNAP-SIZE
-g: Configure HIDE-UNMANAGED-WINDOW
-h: Configure NEVER-MANAGED-WINDOW-LIST
-i: Configure DEFAULT-MODIFIERS
+c: Configure SPATIAL-MOVE-DELAY-AFTER
+d: Configure SPATIAL-MOVE-DELAY-BEFORE
+e: Configure SNAP-SIZE
+f: Configure HIDE-UNMANAGED-WINDOW
+g: Configure NEVER-MANAGED-WINDOW-LIST
+h: Configure DEFAULT-MODIFIERS
+i: Configure SHOW-HIDE-POLICY
 j: Configure DEFAULT-FOCUS-POLICY
 k: Configure DEFAULT-MANAGED-TYPE
 l: Configure DEFAULT-FRAME-DATA
