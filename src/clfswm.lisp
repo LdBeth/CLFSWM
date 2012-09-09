@@ -98,10 +98,6 @@
     (when (find-child window *root-frame*)
       (setf (window-state window) +withdrawn-state+)
       (xlib:unmap-window window)
-      ;;(xlib:display-finish-output *display*)
-      ;;(when (find-child window *root-frame*)
-      ;;(clean-windows-in-all-frames)
-      ;;(show-all-children)
       (delete-child-in-all-frames window)
       (show-all-children))))
 
@@ -113,8 +109,6 @@
   (unless (or send-event-p
 	      (xlib:window-equal window event-window))
     (when (find-child window *root-frame*)
-      ;; (clean-windows-in-all-frames)
-      ;; (show-all-children)
       (delete-child-in-all-frames window)
       (show-all-children))
     (xlib:destroy-window window)))

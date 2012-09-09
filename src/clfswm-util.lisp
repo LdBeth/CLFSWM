@@ -301,6 +301,7 @@
       (setf (current-child) (find-current-root)))
     (delete-child-and-children-in-all-frames window close-fun)))
 
+
 (defun delete-focus-window ()
   "Close focus window: Delete the focus window in all frames and workspaces"
   (delete-focus-window-generic 'delete-window))

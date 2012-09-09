@@ -355,7 +355,7 @@ they should be windows. So use this function to make a window out of them."
 
 (defun delete-window (window)
   (send-client-message window :WM_PROTOCOLS
-		       (xlib:intern-atom *display* "WM_DELETE_WINDOW")))
+		       (xlib:intern-atom *display* :WM_DELETE_WINDOW)))
 
 (defun destroy-window (window)
   (xlib:kill-client *display* (xlib:window-id window)))

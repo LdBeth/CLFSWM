@@ -1415,7 +1415,7 @@ For window: set current child to window or its parent according to window-parent
     (remove-child-in-frames child *root-frame*)))
 
 
-(defun delete-child-in-frames (child root)
+(defun delete-child-in-frames (child root &optional (close-methode 'delete-window))
   "Delete child in the frame root and in all its children
 Warning:frame window and gc are freeed."
   (with-all-frames (root frame)
@@ -1423,31 +1423,32 @@ Warning:frame window and gc are freeed."
     (unless (find-frame-window (frame-window frame))
       (awhen (frame-gc frame) (xlib:free-gcontext it) (setf it nil))
       (awhen (frame-window frame) (xlib:destroy-window it) (setf it nil))))
-    (when (xlib:window-p child)
-      (netwm-remove-in-client-list child)))
+  (when (xlib:window-p child)
+    (funcall close-methode child)
+    (netwm-remove-in-client-list child)))
 
 
 
-(defun delete-child-in-all-frames (child)
+(defun delete-child-in-all-frames (child &optional (close-methode 'delete-window))
   "Delete child in all frames from *root-frame*"
   (when (prevent-current-*-equal-child child)
-    (delete-child-in-frames child *root-frame*)))
+    (delete-child-in-frames child *root-frame* close-methode)))
 
-(defun delete-child-and-children-in-frames (child root)
+(defun delete-child-and-children-in-frames (child root &optional (close-methode 'delete-window))
   "Delete child and its children in the frame root and in all its children
 Warning:frame window and gc are freeed."
   (when (and (frame-p child) (frame-child child))
     (dolist (ch (frame-child child))
-      (delete-child-and-children-in-frames ch root)))
-  (delete-child-in-frames child root))
+      (delete-child-and-children-in-frames ch root close-methode)))
+  (delete-child-in-frames child root close-methode))
 
 (defun delete-child-and-children-in-all-frames (child &optional (close-methode 'delete-window))
   "Delete child and its children in all frames from *root-frame*"
   (when (prevent-current-*-equal-child child)
-    (delete-child-and-children-in-frames child *root-frame*)
+    (when (frame-p child)
+      (delete-child-and-children-in-frames child *root-frame* close-methode))
     (when (xlib:window-p child)
-      (funcall close-methode child))
-    (show-all-children)))
+      (funcall close-methode child))))
 
 
 (defun clean-windows-in-all-frames ()
