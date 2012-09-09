@@ -120,8 +120,9 @@ Window types are in +WINDOW-TYPES+.")
     (when (and pos (zerop pos))
       (let ((pos-mod (search "mode" name)))
 	(when pos-mod
-	  (values (intern (string-upcase (subseq name (+ pos-mod 5))) :keyword)
-		  (subseq name (length "handle-event-fun-") (1- pos-mod))))))))
+          (intern (string-upcase (subseq name (+ pos-mod 5))) :keyword))))))
+;;	  (values (intern (string-upcase (subseq name (+ pos-mod 5))) :keyword)
+;;		  (subseq name (length "handle-event-fun-") (1- pos-mod))))))))
 
 (defparameter *handle-event-fun-symbols* nil)
 
@@ -178,8 +179,7 @@ Expand in handle-event-fun-main-mode-key-press"
   `(defun ,(keyword->handle-event mode keyword) (&rest event-slots &key #+:event-debug event-key ,@args &allow-other-keys)
      (declare (ignorable event-slots))
      #+:event-debug (print (list *current-event-mode* event-key))
-     (with-xlib-protect (:define-handler (list ',mode ,keyword))
-       ,@body)))
+     ,@body))
 
 
 (defun event-hook-name (event-keyword)
@@ -227,11 +227,9 @@ Expand in handle-event-fun-main-mode-key-press"
     `(let ((,event-fun (lambda (&rest event-slots &key #+:event-debug event-key ,@args &allow-other-keys)
                          (declare (ignorable event-slots))
                          #+:event-debug (print (list ,event-keyword event-key))
-                         (with-xlib-protect (:define-event-hook ,event-keyword)
-                           ,@body))))
+                         ,@body)))
        (add-event-hook ,event-keyword ,event-fun)
-       (with-xlib-protect (:define-event-hook-2 ,event-keyword)
-         ,event-fun))))
+       ,event-fun)))
 
 
 (defmacro event-defun (name args &body body)
@@ -261,20 +259,17 @@ they should be windows. So use this function to make a window out of them."
              #+(or sbcl ecl openmcl) (xlib::make-window :id (slot-value xobject 'xlib::id) :display *display*)
              #-(or sbcl clisp ecl openmcl)
              (error 'not-implemented)))
-    (with-xlib-protect (:handle-event event-key)
-      (catch 'exit-handle-event
-        (let ((win (getf event-slots :window)))
-          (when (and win (not (xlib:window-p win)))
-            (dbg "Pixmap Workaround! Should be a window: " win)
-            (setf (getf event-slots :window) (make-xlib-window win))))
-        (with-xlib-protect (:handle-event-2 event-key)
-          (let ((hook-symbol (event-hook-name event-key)))
-            (when (boundp hook-symbol)
-              (apply #'call-hook (symbol-value hook-symbol) event-slots))))
-        (with-xlib-protect (:handle-event-3 event-key)
-          (if (fboundp event-key)
-              (apply event-key event-slots)
-              #+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal))))
+    (catch 'exit-handle-event
+      (let ((win (getf event-slots :window)))
+        (when (and win (not (xlib:window-p win)))
+          (dbg "Pixmap Workaround! Should be a window: " win)
+          (setf (getf event-slots :window) (make-xlib-window win))))
+      (let ((hook-symbol (event-hook-name event-key)))
+        (when (boundp hook-symbol)
+          (apply #'call-hook (symbol-value hook-symbol) event-slots)))
+      (if (fboundp event-key)
+          (apply event-key event-slots)
+          #+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal))
       (xlib:display-finish-output *display*))
     t))
 

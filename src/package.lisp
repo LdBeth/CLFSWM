@@ -45,23 +45,23 @@
 ;;; CONFIG - Compress motion notify ?
 ;; This variable may be useful to speed up some slow version of CLX.
 ;; It is particulary useful with CLISP/MIT-CLX (and others).
-(defconfig *have-to-compress-notify* t nil
-           "Compress event notify?
+(defconfig *have-to-compress-notify* t
+  nil "Compress event notify?
 This variable may be useful to speed up some slow version of CLX.
 It is particulary useful with CLISP/MIT-CLX.")
 
-(defconfig *transparent-background* t nil
-           "Enable transparent background: one of nil, :pseudo, t (xcompmgr must be started)")
+(defconfig *transparent-background* t
+  nil "Enable transparent background: one of nil, :pseudo, t (xcompmgr must be started)")
 
-(defconfig *default-transparency* 0.8 nil
-           "Default transparency for all windows when in xcompmgr transparency mode")
+(defconfig *default-transparency* 0.8
+  nil "Default transparency for all windows when in xcompmgr transparency mode")
 
-(defconfig *show-root-frame-p* nil nil
-           "Show the root frame information or not")
+(defconfig *show-root-frame-p* nil
+  nil "Show the root frame information or not")
 
 
-(defconfig *border-size* 1 nil
-           "Windows and frames border size")
+(defconfig *border-size* 1
+  nil "Windows and frames border size")
 
 
 
