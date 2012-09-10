@@ -147,15 +147,15 @@
     ;; ignore asynchronous window errors
     ((and asynchronous
           (find error-key '(xlib:window-error xlib:drawable-error xlib:match-error)))
-     (format t "~&Ignoring XLib asynchronous error: ~s~%" error-key))
+     #+:xlib-debug (format t "~&Ignoring XLib asynchronous error: ~s~%" error-key))
     ((eq error-key 'xlib:access-error)
      (write-line "~&Another window manager is running.")
      (throw 'exit-clfswm nil))
-     ;; all other asynchronous errors are printed.
-     (asynchronous
-      (format t "~&Caught Asynchronous X Error: ~s ~s" error-key key-vals))
-     (t
-      (apply 'error error-key :display display :error-key error-key key-vals))))
+    ;; all other asynchronous errors are printed.
+    (asynchronous
+     #+:xlib-debug (format t "~&Caught Asynchronous X Error: ~s ~s" error-key key-vals))
+    (t
+     (apply 'error error-key :display display :error-key error-key key-vals))))
 
 
 (defun main-loop ()
