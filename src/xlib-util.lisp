@@ -73,7 +73,7 @@ Window types are in +WINDOW-TYPES+.")
   "Prevent Xlib errors"
   #-:xlib-debug (declare (ignore name tag))
   `(handler-case
-       (progn
+       (with-simple-restart (top-level "Return to clfswm's top level")
 	 ,@body)
      (xlib::x-error (c)
        #-:xlib-debug (declare (ignore c))
