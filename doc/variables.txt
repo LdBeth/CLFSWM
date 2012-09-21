@@ -124,20 +124,20 @@ This command must set the window title to *clfswm-terminal-name*
 
 <= Hook Group =>
 
-  *BINDING-HOOK* = (INIT-*QUERY-KEYS* SET-DEFAULT-QUERY-KEYS
-                                      SET-DEFAULT-CIRCULATE-KEYS
-                                      INIT-*INFO-KEYS*
-                                      INIT-*INFO-MOUSE*
-                                      SET-DEFAULT-INFO-KEYS
-                                      SET-DEFAULT-INFO-MOUSE
-                                      INIT-*MAIN-KEYS*
-                                      INIT-*MAIN-MOUSE*
-                                      SET-DEFAULT-MAIN-KEYS
-                                      SET-DEFAULT-MAIN-MOUSE
-                                      INIT-*SECOND-KEYS*
-                                      INIT-*SECOND-MOUSE*
-                                      SET-DEFAULT-SECOND-KEYS
-                                      SET-DEFAULT-SECOND-MOUSE)
+  *BINDING-HOOK* = (SET-DEFAULT-CIRCULATE-KEYS INIT-*QUERY-KEYS*
+                                               SET-DEFAULT-QUERY-KEYS
+                                               INIT-*INFO-KEYS*
+                                               INIT-*INFO-MOUSE*
+                                               SET-DEFAULT-INFO-KEYS
+                                               SET-DEFAULT-INFO-MOUSE
+                                               INIT-*MAIN-KEYS*
+                                               INIT-*MAIN-MOUSE*
+                                               SET-DEFAULT-MAIN-KEYS
+                                               SET-DEFAULT-MAIN-MOUSE
+                                               INIT-*SECOND-KEYS*
+                                               INIT-*SECOND-MOUSE*
+                                               SET-DEFAULT-SECOND-KEYS
+                                               SET-DEFAULT-SECOND-MOUSE)
     Hook executed when keys/buttons are bounds
   *LOOP-HOOK* = NIL
     Hook executed on each event loop
