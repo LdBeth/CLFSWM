@@ -44,39 +44,48 @@
 			      window root-x root-y *fun-press*)))
 
 (define-handler main-mode :configure-request (stack-mode window x y width height border-width value-mask)
-  (labels ((has-x (mask) (= 1 (logand mask 1)))
-	   (has-y (mask) (= 2 (logand mask 2)))
-	   (has-w (mask) (= 4 (logand mask 4)))
-	   (has-h (mask) (= 8 (logand mask 8)))
-	   (has-bw (mask) (= 16 (logand mask 16)))
-	   (has-stackmode (mask) (= 64 (logand mask 64)))
-	   (adjust-from-request ()
-	     (when (has-x value-mask) (setf (x-drawable-x window) x))
-	     (when (has-y value-mask) (setf (x-drawable-y window) y))
-	     (when (has-h value-mask) (setf (x-drawable-height window) height))
-	     (when (has-w value-mask) (setf (x-drawable-width window) width))))
-    (xlib:with-state (window)
-      (when (has-bw value-mask)
-	(setf (x-drawable-border-width window) border-width))
-      (let ((current-root (find-current-root)))
-        (if (find-child window current-root)
-            (let ((parent (find-parent-frame window current-root)))
-              (if (and parent (managed-window-p window parent))
-                  (adapt-child-to-parent window parent)
-                  (adjust-from-request)))
-            (adjust-from-request)))
-      (send-configuration-notify window (x-drawable-x window) (x-drawable-y window)
-				 (x-drawable-width window) (x-drawable-height window)
-				 (x-drawable-border-width window))
-      (when (has-stackmode value-mask)
-	(case stack-mode
-	  (:above
-	   (unless (null-size-window-p window)
-	     (when (or (child-equal-p window (current-child))
-		       (is-in-current-child-p window))
-	       (raise-window window)
-	       (focus-window window)
-	       (focus-all-children window (find-parent-frame window (find-current-root)))))))))))
+  (let ((to-send-conf-notify-p nil))
+    (labels ((has-x (mask) (= 1 (logand mask 1)))
+             (has-y (mask) (= 2 (logand mask 2)))
+             (has-w (mask) (= 4 (logand mask 4)))
+             (has-h (mask) (= 8 (logand mask 8)))
+             (has-bw (mask) (= 16 (logand mask 16)))
+             (has-stackmode (mask) (= 64 (logand mask 64)))
+             (adjust-from-request ()
+               (when (has-x value-mask) (setf (x-drawable-x window) x
+                                              to-send-conf-notify-p t))
+               (when (has-y value-mask) (setf (x-drawable-y window) y
+                                              to-send-conf-notify-p t))
+               (when (has-h value-mask) (setf (x-drawable-height window) height
+                                              to-send-conf-notify-p nil))
+               (when (has-w value-mask) (setf (x-drawable-width window) width
+                                              to-send-conf-notify-p nil))))
+      (when window
+        (xlib:with-state (window)
+          (when (has-bw value-mask)
+            (setf (x-drawable-border-width window) border-width))
+          (let ((current-root (find-current-root)))
+            (if (find-child window current-root)
+                (let ((parent (find-parent-frame window current-root)))
+                  (if (and parent (managed-window-p window parent))
+                      (adapt-child-to-parent window parent)
+                      (adjust-from-request)))
+                (adjust-from-request)))
+          (when to-send-conf-notify-p
+            ;; To be ICCCM compliant, send a fake configuration notify event only when
+            ;; the window has moved and not when it has been resized.
+            (send-configuration-notify window (x-drawable-x window) (x-drawable-y window)
+                                       (x-drawable-width window) (x-drawable-height window)
+                                       (x-drawable-border-width window)))
+          (when (has-stackmode value-mask)
+            (case stack-mode
+              (:above
+               (unless (null-size-window-p window)
+                 (when (or (child-equal-p window (current-child))
+                           (is-in-current-child-p window))
+                   (raise-window window)
+                   (focus-window window)
+                   (focus-all-children window (find-parent-frame window (find-current-root)))))))))))))
 
 
 (define-handler main-mode :map-request (window send-event-p)

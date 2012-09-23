@@ -1,3 +1,9 @@
+2012-09-23  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm.lisp (configure-request handler): To be ICCCM
+	compliant, send a fake configuration notify event only when the
+	window has moved and not when it has been resized.
+
 2012-09-21  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* Relase 1209
