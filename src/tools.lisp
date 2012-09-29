@@ -39,7 +39,7 @@
            :copy-hash-table
 	   :nfuncall
 	   :pfuncall
-	   :symbol-search
+           :symbol-search
 	   :create-symbol :create-symbol-in-package
 	   :call-hook
            :add-new-hook
@@ -92,6 +92,7 @@
 	   :first-position
 	   :find-free-number
 	   :date-string
+           :write-backtrace
 	   :do-execute
 	   :do-shell :fdo-shell
 	   :getenv
@@ -214,6 +215,7 @@
 	     (or (functionp function)
 		 (and (symbolp function) (fboundp function))))
     (apply function args)))
+
 
 
 (defun symbol-search (search symbol)
@@ -814,7 +816,7 @@ Useful for re-using the &REST arg after removing some options."
   #+lucid (apply #'lcl:run-program prog :wait wait :arguments args opts)
   #+sbcl (apply #'sb-ext:run-program prog args :wait wait :output *standard-output* opts)
   #+ecl (apply #'ext:run-program prog args opts)
-  #+ccl (apply #'ccl:run-program prog args opts :wait wait)
+  #+ccl (ccl:run-program prog args :wait wait)
   #-(or allegro clisp cmu gcl liquid lispworks lucid sbcl ecl ccl)
   (error 'not-implemented :proc (list 'run-prog prog opts)))
 
@@ -1043,6 +1045,31 @@ Useful for re-using the &REST arg after removing some options."
 	  (format nil "   ~2,'0D:~2,'0D:~2,'0D    ~A ~A ~2,'0D ~A "
 		  hour minute second
 		  (nth day days) (nth (1- month) months) date year)))))
+
+;;;
+;;; Backtrace function
+;;;
+(defun write-backtrace (filename &optional other-info clear)
+  (when (and clear (probe-file filename))
+    (delete-file filename))
+  (with-open-file (stream filename :direction :output :if-exists :append
+                          :if-does-not-exist :create)
+    (let ((*standard-output* stream)
+          (*debug-io* stream))
+      (format t "================== New backtrace ==================~%")
+      (format t "--- ~A ---~%" (date-string))
+      (format t "Lisp: ~A ; Version: ~A~2%" (lisp-implementation-type)
+              (lisp-implementation-version))
+      #+clisp (system::print-backtrace)
+      #+(or cmucl scl) (debug:backtrace)
+      #+sbcl (sb-debug:backtrace)
+      #+(or mcl ccl) (ccl:print-call-history :detailed-p nil)
+      #-(or clisp cmucl scl sbcl mcl ccl) (format t "Backtrace not defined~%")
+      (when other-info
+        (format t "~A~%" other-info))
+      (format t "--- log end ---~%")))
+  (format t "Backtrace logged in file: ~A~%" filename))
+
 
 
 ;;;

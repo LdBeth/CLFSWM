@@ -69,19 +69,34 @@ Window types are in +WINDOW-TYPES+.")
 
 
 
+(defparameter *x-error-count* 0)
+(defparameter *max-x-error-count* 10000)
+(defparameter *clfswm-x-error-filename* "/tmp/clfswm-backtrace.error")
+
+
 (defmacro with-xlib-protect ((&optional name tag) &body body)
   "Prevent Xlib errors"
-  #-:xlib-debug (declare (ignore name tag))
   `(handler-case
        (with-simple-restart (top-level "Return to clfswm's top level")
-	 ,@body)
+         ,@body
+         (setf *x-error-count* 0))
      (xlib::x-error (c)
-       #-:xlib-debug (declare (ignore c))
+       (incf *x-error-count*)
+       (when (> *x-error-count* *max-x-error-count*)
+         (format t "Xlib error: ~A ~A: ~A~%" ,name (if ,tag ,tag ',body) c)
+         (force-output)
+         (write-backtrace *clfswm-x-error-filename*
+                          (format nil "~%------- Additional information ---------
+Xlib error: ~A ~A: ~A
+Body: ~A
+
+Features: ~A"
+                                  ,name ,tag c ',body
+                                  *features*))
+         (error "Too many X errors: ~A (logged in ~A)" c *clfswm-x-error-filename*))
        #+:xlib-debug
        (progn
-         (if ,tag
-             (format t "Xlib error: ~A ~A: ~A~%" ,name ,tag c)
-             (format t "Xlib error: ~A ~A: ~A~%" ,name ',body c))
+         (format t "Xlib error: ~A ~A: ~A~%" ,name (if ,tag ,tag ',body) c)
          (force-output)))))
 
 

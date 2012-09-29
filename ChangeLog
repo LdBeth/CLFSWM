@@ -1,3 +1,8 @@
+2012-09-29  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/xlib-util.lisp (with-xlib-protect): Limit X errors ignored
+	to prevent freezes and add a backtrace system.
+
 2012-09-23  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm.lisp (configure-request handler): To be ICCCM

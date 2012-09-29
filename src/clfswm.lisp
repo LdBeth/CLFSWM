@@ -44,7 +44,9 @@
 			      window root-x root-y *fun-press*)))
 
 (define-handler main-mode :configure-request (stack-mode window x y width height border-width value-mask)
-  (let ((to-send-conf-notify-p nil))
+  (let ((old-width (x-drawable-height window))
+        (old-height (x-drawable-height window))
+        (old-border (x-drawable-border-width window)))
     (labels ((has-x (mask) (= 1 (logand mask 1)))
              (has-y (mask) (= 2 (logand mask 2)))
              (has-w (mask) (= 4 (logand mask 4)))
@@ -52,14 +54,10 @@
              (has-bw (mask) (= 16 (logand mask 16)))
              (has-stackmode (mask) (= 64 (logand mask 64)))
              (adjust-from-request ()
-               (when (has-x value-mask) (setf (x-drawable-x window) x
-                                              to-send-conf-notify-p t))
-               (when (has-y value-mask) (setf (x-drawable-y window) y
-                                              to-send-conf-notify-p t))
-               (when (has-h value-mask) (setf (x-drawable-height window) height
-                                              to-send-conf-notify-p nil))
-               (when (has-w value-mask) (setf (x-drawable-width window) width
-                                              to-send-conf-notify-p nil))))
+               (when (has-x value-mask) (setf (x-drawable-x window) x))
+               (when (has-y value-mask) (setf (x-drawable-y window) y))
+               (when (has-h value-mask) (setf (x-drawable-height window) height))
+               (when (has-w value-mask) (setf (x-drawable-width window) width))))
       (when window
         (xlib:with-state (window)
           (when (has-bw value-mask)
@@ -71,12 +69,6 @@
                       (adapt-child-to-parent window parent)
                       (adjust-from-request)))
                 (adjust-from-request)))
-          (when to-send-conf-notify-p
-            ;; To be ICCCM compliant, send a fake configuration notify event only when
-            ;; the window has moved and not when it has been resized.
-            (send-configuration-notify window (x-drawable-x window) (x-drawable-y window)
-                                       (x-drawable-width window) (x-drawable-height window)
-                                       (x-drawable-border-width window)))
           (when (has-stackmode value-mask)
             (case stack-mode
               (:above
@@ -85,7 +77,15 @@
                            (is-in-current-child-p window))
                    (raise-window window)
                    (focus-window window)
-                   (focus-all-children window (find-parent-frame window (find-current-root)))))))))))))
+                   (focus-all-children window (find-parent-frame window (find-current-root)))))))))
+        (unless (or (/= old-width (x-drawable-width window))
+                    (/= old-height (x-drawable-height window))
+                    (/= old-border (x-drawable-border-width window)))
+          ;; To be ICCCM compliant, send a fake configuration notify event only when
+          ;; the window has moved and not when it has been resized or the border width has changed.
+          (send-configuration-notify window (x-drawable-x window) (x-drawable-y window)
+                                     (x-drawable-width window) (x-drawable-height window)
+                                     (x-drawable-border-width window)))))))
 
 
 (define-handler main-mode :map-request (window send-event-p)
@@ -209,7 +209,8 @@
 					    :height (xlib:screen-height *screen*)
 					    :depth (xlib:screen-root-depth *screen*)
 					    :drawable *root*)
-	*in-second-mode* nil)
+	*in-second-mode* nil
+        *x-error-count* 0)
   (store-root-background)
   (init-modifier-list)
   (xgrab-init-pointer)

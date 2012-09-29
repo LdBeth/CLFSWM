@@ -35,7 +35,7 @@
 #+CMU
 (setf ext:*gc-verbose* nil)
 
-#+SBCL
+#+(or SBCL ECL)
 (require :asdf)
 
 #+(or CMU ECL)
