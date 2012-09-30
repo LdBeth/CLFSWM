@@ -85,9 +85,10 @@
         (unless (eq change :resized)
           ;; To be ICCCM compliant, send a fake configuration notify event only when
           ;; the window has moved and not when it has been resized or the border width has changed.
-          (send-configuration-notify window (x-drawable-x window) (x-drawable-y window)
-                                     (x-drawable-width window) (x-drawable-height window)
-                                     (x-drawable-border-width window)))))))
+          (with-xlib-protect ()
+            (send-configuration-notify window (x-drawable-x window) (x-drawable-y window)
+                                       (x-drawable-width window) (x-drawable-height window)
+                                       (x-drawable-border-width window))))))))
 
 
 (define-handler main-mode :map-request (window send-event-p)
