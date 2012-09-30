@@ -1,3 +1,8 @@
+2012-09-30  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm.lisp (configure-request handler): Send a
+	configuration notify event in a more precise way.
+
 2012-09-29  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/xlib-util.lisp (with-xlib-protect): Limit X errors ignored

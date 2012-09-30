@@ -44,9 +44,7 @@
 			      window root-x root-y *fun-press*)))
 
 (define-handler main-mode :configure-request (stack-mode window x y width height border-width value-mask)
-  (let ((old-width (x-drawable-height window))
-        (old-height (x-drawable-height window))
-        (old-border (x-drawable-border-width window)))
+  (let ((change nil))
     (labels ((has-x (mask) (= 1 (logand mask 1)))
              (has-y (mask) (= 2 (logand mask 2)))
              (has-w (mask) (= 4 (logand mask 4)))
@@ -54,19 +52,24 @@
              (has-bw (mask) (= 16 (logand mask 16)))
              (has-stackmode (mask) (= 64 (logand mask 64)))
              (adjust-from-request ()
-               (when (has-x value-mask) (setf (x-drawable-x window) x))
-               (when (has-y value-mask) (setf (x-drawable-y window) y))
-               (when (has-h value-mask) (setf (x-drawable-height window) height))
-               (when (has-w value-mask) (setf (x-drawable-width window) width))))
+               (when (has-x value-mask) (setf (x-drawable-x window) x
+                                              change :moved))
+               (when (has-y value-mask) (setf (x-drawable-y window) y
+                                              change :moved))
+               (when (has-h value-mask) (setf (x-drawable-height window) height
+                                              change :resized))
+               (when (has-w value-mask) (setf (x-drawable-width window) width
+                                              change :resized))))
       (when window
         (xlib:with-state (window)
           (when (has-bw value-mask)
-            (setf (x-drawable-border-width window) border-width))
+            (setf (x-drawable-border-width window) border-width
+                  change :resized))
           (let ((current-root (find-current-root)))
             (if (find-child window current-root)
                 (let ((parent (find-parent-frame window current-root)))
                   (if (and parent (managed-window-p window parent))
-                      (adapt-child-to-parent window parent)
+                      (setf change (adapt-child-to-parent window parent))
                       (adjust-from-request)))
                 (adjust-from-request)))
           (when (has-stackmode value-mask)
@@ -75,12 +78,11 @@
                (unless (null-size-window-p window)
                  (when (or (child-equal-p window (current-child))
                            (is-in-current-child-p window))
+                   (setf change :moved)
                    (raise-window window)
                    (focus-window window)
                    (focus-all-children window (find-parent-frame window (find-current-root)))))))))
-        (unless (or (/= old-width (x-drawable-width window))
-                    (/= old-height (x-drawable-height window))
-                    (/= old-border (x-drawable-border-width window)))
+        (unless (eq change :resized)
           ;; To be ICCCM compliant, send a fake configuration notify event only when
           ;; the window has moved and not when it has been resized or the border width has changed.
           (send-configuration-notify window (x-drawable-x window) (x-drawable-y window)

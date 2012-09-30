@@ -959,10 +959,13 @@ XINERAMA version 1.1 opcode: 150
     (multiple-value-bind (nx ny nw nh)
 	(get-parent-layout window parent)
       (setf nw (max nw 1)  nh (max nh 1))
-      (let ((change (or (/= (x-drawable-x window) nx)
-			(/= (x-drawable-y window) ny)
-			(/= (x-drawable-width window) nw)
-			(/= (x-drawable-height window) nh))))
+      (let ((change nil))
+        (when (or (/= (x-drawable-x window) nx)
+                  (/= (x-drawable-y window) ny))
+          (setf change :moved))
+        (when (or (/= (x-drawable-width window) nw)
+                  (/= (x-drawable-height window) nh))
+          (setf change :resized))
         (when change
           (setf (x-drawable-x window) nx
                 (x-drawable-y window) ny
@@ -974,10 +977,13 @@ XINERAMA version 1.1 opcode: 150
 (defmethod adapt-child-to-parent ((frame frame) parent)
   (declare (ignore parent))
     (with-slots (rx ry rw rh window) frame
-      (let ((change (or (/= (x-drawable-x window) rx)
-			(/= (x-drawable-y window) ry)
-			(/= (x-drawable-width window) rw)
-			(/= (x-drawable-height window) rh))))
+      (let ((change nil))
+        (when (or (/= (x-drawable-x window) rx)
+                  (/= (x-drawable-y window) ry))
+          (setf change :moved))
+        (when (or (/= (x-drawable-width window) rw)
+                  (/= (x-drawable-height window) rh))
+          (setf change :resized))
         (when change
           (setf (x-drawable-x window) rx
                 (x-drawable-y window) ry
