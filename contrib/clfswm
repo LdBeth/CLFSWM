@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# (C) 2008 Xavier Maillard <xma@gnu.org>
+# (C) 2012 Xavier Maillard <xma@gnu.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -155,7 +155,8 @@ if [ "x$lisp_bin" == "x" ]; then
     lisp_bin=$lisp
 fi
 
-dump_image="$dump_path/clfswm-$(cksum $(type -p $lisp) | cut -d ' ' -f 1).core"
+#dump_image="$dump_path/clfswm-$(cksum $(type -p $lisp) | cut -d ' ' -f 1)-$(echo "$clfswm_asd_path"|md5sum|cut -d ' ' -f 1).core"
+dump_image="$dump_path/clfswm-$(echo $(cksum $(type -p $lisp)) "$clfswm_asd_path" | md5sum |cut -d ' ' -f 1).core"
 
 if test yes = "$force" && test -e "$dump_image"
 then
@@ -176,6 +177,14 @@ done
 if test ! -e "$dump_image" || test $older_image -eq 1
 then
     echo "Image is nonexistent or older than sources. Rebuilding clfswm."
+    echo "  lisp=$lisp"
+    echo "  lisp_bin=$lisp_bin"
+    echo "  lisp_opt=$lisp_opt"
+    echo "  dump_path=$dump_path"
+    echo "  clfswm_asd_path=$clfswm_asd_path"
+    echo "  asdf_path=$asdf_path"
+    echo "  dump_image=$dump_image"
+
     test -x $(type -p "$lisp") || die "$lisp can't be found."
     test -e "$clfswm_asd_path"/clfswm.asd || die "can't find clfswm.asd in $clfswm_asd_path"
     test -e "$asdf_path"/asdf.lisp || die "can't find asdf.lisp in $asdf_path"

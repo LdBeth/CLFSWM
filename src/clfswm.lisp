@@ -43,6 +43,7 @@
 			      (modifiers->state *default-modifiers*)
 			      window root-x root-y *fun-press*)))
 
+
 (define-handler main-mode :configure-request (stack-mode window x y width height border-width value-mask)
   (let ((change nil))
     (labels ((has-x (mask) (= 1 (logand mask 1)))
@@ -60,11 +61,8 @@
                                               change :resized))
                (when (has-w value-mask) (setf (x-drawable-width window) width
                                               change :resized))))
-      (when window
+      (when (and window (find-child window *root-frame*))
         (xlib:with-state (window)
-          (when (has-bw value-mask)
-            (setf (x-drawable-border-width window) border-width
-                  change :resized))
           (let ((current-root (find-current-root)))
             (if (find-child window current-root)
                 (let ((parent (find-parent-frame window current-root)))
@@ -72,35 +70,38 @@
                       (setf change (adapt-child-to-parent window parent))
                       (adjust-from-request)))
                 (adjust-from-request)))
+          (when (has-bw value-mask)
+            (setf (x-drawable-border-width window) border-width
+                  change :resized))
           (when (has-stackmode value-mask)
             (case stack-mode
               (:above
                (unless (null-size-window-p window)
                  (when (or (child-equal-p window (current-child))
                            (is-in-current-child-p window))
-                   (setf change :moved)
+                   (setf change (or change :moved))
                    (raise-window window)
                    (focus-window window)
                    (focus-all-children window (find-parent-frame window (find-current-root)))))))))
         (unless (eq change :resized)
           ;; To be ICCCM compliant, send a fake configuration notify event only when
           ;; the window has moved and not when it has been resized or the border width has changed.
-          (with-xlib-protect ()
-            (send-configuration-notify window (x-drawable-x window) (x-drawable-y window)
-                                       (x-drawable-width window) (x-drawable-height window)
-                                       (x-drawable-border-width window))))))))
+          (send-configuration-notify window (x-drawable-x window) (x-drawable-y window)
+                                     (x-drawable-width window) (x-drawable-height window)
+                                     (x-drawable-border-width window)))))))
 
 
 (define-handler main-mode :map-request (window send-event-p)
   (unless send-event-p
-    (unhide-window window)
-    (process-new-window window)
-    (map-window window)
-    (unless (null-size-window-p window)
-      (multiple-value-bind (never-managed raise)
-	  (never-managed-window-p window)
-	(unless (and never-managed raise)
-	  (show-all-children))))))
+    (unless (find-child window *root-frame*)
+      (unhide-window window)
+      (process-new-window window)
+      (map-window window)
+      (unless (null-size-window-p window)
+        (multiple-value-bind (never-managed raise)
+            (never-managed-window-p window)
+          (unless (and never-managed raise)
+            (show-all-children)))))))
 
 
 
@@ -122,8 +123,8 @@
 	      (xlib:window-equal window event-window))
     (when (find-child window *root-frame*)
       (delete-child-in-all-frames window)
-      (show-all-children))
-    (xlib:destroy-window window)))
+      (show-all-children)
+      (xlib:destroy-window window))))
 
 (define-handler main-mode :enter-notify  (window root-x root-y)
   (unless (and (> root-x (- (xlib:screen-width *screen*) 3))
@@ -149,9 +150,6 @@
   (awhen (find-frame-window window)
     (display-frame-info it)))
 
-(define-handler main-mode :resize-request (window)
-  (dbg :resize-request window))
-
 
 (defun error-handler (display error-key &rest key-vals &key asynchronous &allow-other-keys)
   "Handle X errors"
@@ -166,6 +164,8 @@
     ;; all other asynchronous errors are printed.
     (asynchronous
      #+:xlib-debug (format t "~&Caught Asynchronous X Error: ~s ~s" error-key key-vals))
+    ;;((find error-key '(xlib:window-error xlib:drawable-error xlib:match-error))
+    ;; (format t "~&Ignoring Xlib error: ~S ~S~%" error-key key-vals))
     (t
      (apply 'error error-key :display display :error-key error-key key-vals))))
 
@@ -225,12 +225,14 @@
   (dbg *display*)
   (setf (xlib:window-event-mask *root*) (xlib:make-event-mask :substructure-redirect
 							      :substructure-notify
+                                                              :structure-notify
 							      :property-change
-                                                              :resize-redirect
+                                                              ;;:resize-redirect
 							      :exposure
 							      :button-press
 							      :button-release
 							      :pointer-motion))
+  (xlib:display-finish-output *display*)
   ;;(intern-atoms *display*)
   (netwm-set-properties)
   (xlib:display-force-output *display*)

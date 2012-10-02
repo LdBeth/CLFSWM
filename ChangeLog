@@ -1,3 +1,11 @@
+2012-10-02  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/xlib-util.lisp (handle-event): Ignore synchronous xlib
+	window-error and drawable-error in event handler.
+
+	* contrib/clfswm: Dump different image from different installation
+	path.
+
 2012-09-30  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm.lisp (configure-request handler): Send a

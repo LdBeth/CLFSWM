@@ -75,7 +75,7 @@ Window types are in +WINDOW-TYPES+.")
 
 
 (defmacro with-xlib-protect ((&optional name tag) &body body)
-  "Prevent Xlib errors"
+  "Ignore Xlib errors in body."
   `(handler-case
        (with-simple-restart (top-level "Return to clfswm's top level")
          ,@body
@@ -99,6 +99,10 @@ Features: ~A"
          (format t "Xlib error: ~A ~A: ~A~%" ,name (if ,tag ,tag ',body) c)
          (force-output)))))
 
+
+;;(defmacro with-xlib-protect ((&optional name tag) &body body)
+;;  `(progn
+;;     ,@body))
 
 
 
@@ -274,18 +278,21 @@ they should be windows. So use this function to make a window out of them."
              #+(or sbcl ecl openmcl) (xlib::make-window :id (slot-value xobject 'xlib::id) :display *display*)
              #-(or sbcl clisp ecl openmcl)
              (error 'not-implemented)))
-    (catch 'exit-handle-event
-      (let ((win (getf event-slots :window)))
-        (when (and win (not (xlib:window-p win)))
-          (dbg "Pixmap Workaround! Should be a window: " win)
-          (setf (getf event-slots :window) (make-xlib-window win))))
-      (let ((hook-symbol (event-hook-name event-key)))
-        (when (boundp hook-symbol)
-          (apply #'call-hook (symbol-value hook-symbol) event-slots)))
-      (if (fboundp event-key)
-          (apply event-key event-slots)
-          #+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal))
-      (xlib:display-finish-output *display*))
+    (handler-case
+        (catch 'exit-handle-event
+          (let ((win (getf event-slots :window)))
+            (when (and win (not (xlib:window-p win)))
+              (dbg "Pixmap Workaround! Should be a window: " win)
+              (setf (getf event-slots :window) (make-xlib-window win))))
+          (let ((hook-symbol (event-hook-name event-key)))
+            (when (boundp hook-symbol)
+              (apply #'call-hook (symbol-value hook-symbol) event-slots)))
+          (if (fboundp event-key)
+              (apply event-key event-slots)
+              #+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal))
+          (xlib:display-finish-output *display*))
+      ((or xlib:window-error xlib:drawable-error) (c)
+        #+xlib-debug (format t "Ignore Xlib synchronous error: ~a~%" c)))
     t))
 
 

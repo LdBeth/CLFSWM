@@ -967,10 +967,11 @@ XINERAMA version 1.1 opcode: 150
                   (/= (x-drawable-height window) nh))
           (setf change :resized))
         (when change
-          (setf (x-drawable-x window) nx
-                (x-drawable-y window) ny
-                (x-drawable-width window) nw
-                (x-drawable-height window) nh))
+          (xlib:with-state (window)
+            (setf (x-drawable-x window) nx
+                  (x-drawable-y window) ny
+                  (x-drawable-width window) nw
+                  (x-drawable-height window) nh)))
 	change))))
 
 
@@ -985,10 +986,11 @@ XINERAMA version 1.1 opcode: 150
                   (/= (x-drawable-height window) rh))
           (setf change :resized))
         (when change
-          (setf (x-drawable-x window) rx
-                (x-drawable-y window) ry
-                (x-drawable-width window) rw
-                (x-drawable-height window) rh))
+          (xlib:with-state (window)
+            (setf (x-drawable-x window) rx
+                  (x-drawable-y window) ry
+                  (x-drawable-width window) rw
+                  (x-drawable-height window) rh)))
 	change)))
 
 (defmethod adapt-child-to-parent (child parent)
