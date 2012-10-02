@@ -61,7 +61,7 @@
                                               change :resized))
                (when (has-w value-mask) (setf (x-drawable-width window) width
                                               change :resized))))
-      (when (and window (find-child window *root-frame*))
+      (when window
         (xlib:with-state (window)
           (let ((current-root (find-current-root)))
             (if (find-child window current-root)
