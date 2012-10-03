@@ -1,5 +1,8 @@
 2012-10-03  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-menu.lisp (open-menu): Show key bindings
+	correspondence in menu for main and second mode.
+
 	* src/clfswm.lisp (main-loop): Reset X error count only once for
 	all loops.
 

@@ -35,6 +35,7 @@
            :config-all-groups
            :config-group->string
 	   :find-in-hash
+           :search-in-hash
            :view-hash-table
            :copy-hash-table
 	   :nfuncall
@@ -191,6 +192,14 @@
 	       (when (and (consp v) (funcall test (first v) val))
 		 (return-from find-in-hash (values k v))))
 	   hashtable))
+
+(defun search-in-hash (val hashtable)
+  "Return the key who match the val in the hashtable"
+  (let ((val (symbol-name val)))
+    (maphash #'(lambda (k v)
+                 (when (and (consp v) (substring-equal (symbol-name (first v)) val))
+                   (return-from search-in-hash (values k v))))
+             hashtable)))
 
 
 (defun view-hash-table (title hashtable)

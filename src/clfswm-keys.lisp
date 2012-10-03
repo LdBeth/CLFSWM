@@ -254,3 +254,32 @@
   (let ((symbol (create-symbol "DEFINE-" mode "-KEY")))
     `(progn
        ,@(loop for k in keys collect `(,symbol ,@k)))))
+
+
+(defun find-associated-key-bindings (function)
+  "Return keys in main and second mode bounds to function"
+  (labels ((key-string (hash)
+             (let ((binding (or (find-in-hash function hash)
+                                (search-in-hash function hash))))
+               (when binding
+                 (let ((key (first binding))
+                       (modifier (and (second binding) (state->modifiers (second binding)))))
+                   (with-output-to-string (str)
+                     (when key
+                       (dolist (mod modifier)
+                         (format str "~A-" (cond
+                                             ((string-equal mod "MOD-1") "M")
+                                             ((string-equal mod "CONTROL") "C")
+                                             ((string-equal mod "SHIFT") "S")
+                                             (t mod))))
+                       (format str "~A" key))))))))
+    (let ((main-string (key-string *main-keys*))
+          (second-string (key-string *second-keys*)))
+      (if (or main-string second-string)
+          (if (string-equal main-string second-string)
+              (format nil "[~A]" main-string)
+              (format nil "[~A|~A]" (or main-string "-") (or second-string "-")))
+          ""))))
+
+
+

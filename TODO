@@ -9,7 +9,6 @@ Should handle these soon.
 
 - Make CLFSWM running with ECL
 - Handle screen heads changes on the fly (without the need to reset CLFSWM)
-- Add key bindings correspondence in menu for main and second mode
 
 
 FOR THE NEXT RELEASE

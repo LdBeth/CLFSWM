@@ -359,6 +359,8 @@ on the root window in the main mode with the mouse")
   'Menu "Key color in menu")
 (defconfig *menu-color-menu-key* (->color #xFF9AFF)
   'Menu "Menu key color in menu")
+(defconfig *menu-key-bound-color* "gray50"
+  'Menu "Key bound min menu color")
 
 
 ;;; CONFIG - Notify window string colors
