@@ -177,7 +177,8 @@
        (process-timers)
        (when (xlib:event-listen *display* *loop-timeout*)
          (xlib:process-event *display* :handler #'handle-event))
-       (xlib:display-finish-output *display*))))
+       (xlib:display-finish-output *display*)
+       (setf *x-error-count* 0))))
 
 
 

@@ -78,8 +78,7 @@ Window types are in +WINDOW-TYPES+.")
   "Ignore Xlib errors in body."
   `(handler-case
        (with-simple-restart (top-level "Return to clfswm's top level")
-         ,@body
-         (setf *x-error-count* 0))
+         ,@body)
      (xlib::x-error (c)
        (incf *x-error-count*)
        (when (> *x-error-count* *max-x-error-count*)

@@ -1,3 +1,8 @@
+2012-10-03  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm.lisp (main-loop): Reset X error count only once for
+	all loops.
+
 2012-10-02  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/xlib-util.lisp (handle-event): Ignore synchronous xlib
