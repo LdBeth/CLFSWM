@@ -51,8 +51,8 @@
   "Open the action by number menu"
   (open-menu (find-menu 'action-by-number-menu)))
 
-(defun open-frame-pack-menu ()
-  "Open the frame pack/fill/resize menu"
+(defun open-frame-movement-menu ()
+  "Open the frame movement menu (pack/fill/resize)"
   (open-menu (find-menu 'frame-movement-menu)))
 
 (defun open-root-menu ()
@@ -96,7 +96,7 @@
   (define-second-key ("w") 'open-window-menu)
   (define-second-key ("n") 'open-action-by-name-menu)
   (define-second-key ("u") 'open-action-by-number-menu)
-  (define-second-key ("p") 'open-frame-pack-menu)
+  (define-second-key ("p") 'open-frame-movement-menu)
   (define-second-key ("r") 'open-root-menu)
   (define-second-key ("c") 'open-child-menu)
   (define-second-key ("x") 'update-layout-managed-children-position)

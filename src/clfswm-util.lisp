@@ -976,11 +976,13 @@ For window: set current child to window or its parent according to window-parent
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defmacro with-movement (&body body)
   `(when (frame-p (current-child))
-     ,@body
-     (show-all-children)
-     (display-all-frame-info)
-     (draw-second-mode-window)
-     (open-menu (find-menu 'frame-movement-menu))))
+     (unwind-protect
+          (progn
+            ,@body)
+       (show-all-children)
+       (display-all-frame-info)
+       (draw-second-mode-window)
+       (open-menu (find-menu 'frame-movement-menu)))))
 
 
 ;;; Pack

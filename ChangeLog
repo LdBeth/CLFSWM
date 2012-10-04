@@ -1,3 +1,8 @@
+2012-10-04  Philippe Brochard  <pbrochard@common-lisp.net>
+
+	* src/clfswm-menu.lisp (open-menu): Show key bindings also for
+	menu entry.
+
 2012-10-03  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* src/clfswm-menu.lisp (open-menu): Show key bindings
