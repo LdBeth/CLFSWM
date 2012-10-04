@@ -216,6 +216,9 @@ It is particulary useful with CLISP/MIT-CLX.")
            "Hook executed on the main function entrance after
 loading configuration file and before opening the display.")
 
+(defconfig *root-size-change* nil 'Hook
+           "Hook executed when the root size has changed for example when adding/removing a monitor")
+
 
 (defparameter *in-second-mode* nil)
 

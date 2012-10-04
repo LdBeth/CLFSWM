@@ -71,7 +71,7 @@
 
 (defun create-wallpaper (filename &rest images)
   (format t "Creating wallpaper ~A from ~{~A ~}~%" filename images)
-  (generate-wallpaper filename (xlib:screen-width *screen*) (xlib:screen-height *screen*)
+  (generate-wallpaper filename (x-drawable-width *root*) (x-drawable-height *root*)
                       (get-connected-heads-size) images)
   (format t "Done.~%"))
 

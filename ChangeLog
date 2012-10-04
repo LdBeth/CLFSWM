@@ -1,5 +1,9 @@
 2012-10-04  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm.lisp (main-mode: configuer request): Call
+	*root-size-change* hook on each root size change. This let CLFSWM
+	refresh background wallpaper on root size changes.
+
 	* src/clfswm-internal.lisp (place-frames-from-xinerama-infos):
 	Handle root screen resize on the fly when adding or removing a
 	monitor.
