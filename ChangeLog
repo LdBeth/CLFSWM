@@ -1,5 +1,8 @@
 2012-10-04  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* contrib/wallpaper.lisp (generate-wallpaper): Force waiting the
+	end of convert.
+
 	* src/clfswm.lisp (main-mode: configuer request): Call
 	*root-size-change* hook on each root size change. This let CLFSWM
 	refresh background wallpaper on root size changes.

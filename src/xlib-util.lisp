@@ -291,6 +291,7 @@ they should be windows. So use this function to make a window out of them."
               #+:event-debug (pushnew (list *current-event-mode* event-key) *unhandled-events* :test #'equal))
           (xlib:display-finish-output *display*))
       ((or xlib:window-error xlib:drawable-error) (c)
+        #-xlib-debug (declare (ignore c))
         #+xlib-debug (format t "Ignore Xlib synchronous error: ~a~%" c)))
     t))
 
