@@ -1,5 +1,9 @@
 2012-10-04  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* src/clfswm-internal.lisp (place-frames-from-xinerama-infos):
+	Handle root screen resize on the fly when adding or removing a
+	monitor.
+
 	* src/clfswm-menu.lisp (open-menu): Show key bindings also for
 	menu entry.
 

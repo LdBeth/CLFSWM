@@ -150,6 +150,11 @@
   (awhen (find-frame-window window)
     (display-frame-info it)))
 
+(define-handler main-mode :configure-notify (window)
+  (when (child-equal-p window *root*)
+    (place-frames-from-xinerama-infos)
+    (show-all-children)))
+
 
 (defun error-handler (display error-key &rest key-vals &key asynchronous &allow-other-keys)
   "Handle X errors"
