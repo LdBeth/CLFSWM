@@ -2,6 +2,7 @@
 
 	* contrib/wallpaper.lisp (generate-wallpaper): Force waiting the
 	end of convert.
+	(wallpaper): Open a notify window to wait wallpaper creation.
 
 	* src/clfswm.lisp (main-mode: configuer request): Call
 	*root-size-change* hook on each root size change. This let CLFSWM

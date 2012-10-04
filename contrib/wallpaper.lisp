@@ -92,13 +92,15 @@
         (count 0))
     (dolist (s sizes)
       (dolist (v s)
-        (incf count v)))
+        (incf count (+ v count))))
     (format nil "~A-~A.png" basename count)))
 
 (defun wallpaper (basename force-create &rest images)
   (let* ((filename (wallpaper-name basename)))
     (when (or force-create (not (probe-file filename)))
-      (apply #'create-wallpaper filename images))
+      (open-notify-window '(" " " " "          Please wait. Updating wallpaper...        " " " " "))
+      (apply #'create-wallpaper filename images)
+      (close-notify-window))
     (use-wallpaper filename)))
 
 ;;;
