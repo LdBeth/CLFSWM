@@ -177,6 +177,7 @@ done
 if test ! -e "$dump_image" || test $older_image -eq 1
 then
     echo "Image is nonexistent or older than sources. Rebuilding clfswm."
+    echo "This may take some times."
     echo "  lisp=$lisp"
     echo "  lisp_bin=$lisp_bin"
     echo "  lisp_opt=$lisp_opt"
@@ -184,6 +185,12 @@ then
     echo "  clfswm_asd_path=$clfswm_asd_path"
     echo "  asdf_path=$asdf_path"
     echo "  dump_image=$dump_image"
+
+    PID=""
+    if test -x "$(which zenity)" ; then
+        zenity --info --text " Rebuilding CLFSWM:\n\n      Image is nonexistent or older than sources.\n\nPlease wait, the next CLFSWM boot will be faster." &
+        PID=$!
+    fi
 
     test -x $(type -p "$lisp") || die "$lisp can't be found."
     test -e "$clfswm_asd_path"/clfswm.asd || die "can't find clfswm.asd in $clfswm_asd_path"
@@ -208,6 +215,10 @@ then
     rm -rf $(find "$dump_path/" -name "*svn")
 
     rm -rf "$tmp_dir"/clfswm-tmp
+
+    if test "$PID" != "" ; then
+        kill $PID
+    fi
 
     echo "CLFSWM image is: $dump_image"
 fi

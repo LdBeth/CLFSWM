@@ -20,7 +20,7 @@ Defaults for the options are specified in brackets.
 Configuration:
   -h, --help                display this help and exit
   -V, --version             display version information and exit
-  --prefix=PREFIX           install architecture-independent files in PREFIX [/usr/local]
+  --prefix PREFIX           install architecture-independent files in PREFIX [/usr/local]
   -l, --with-lisp           use <lisp> as the common lisp implementation type [$lisp]
   -b, --lisp-bin            use <bin> as the common lisp program [$lisp_bin] (default: same as with-lisp type)
   -o, --lisp-opt            use <opt> as lisp option [$lisp_opt]

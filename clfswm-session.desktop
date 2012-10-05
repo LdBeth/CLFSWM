@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1209.2
+Encoding=UTF-8
+Name=clfswm
+Name[en_US]=clfswm
+Comment=A(nother) Common Lisp FullScreen Window Manager
+Terminal=false
+Exec=clfswm
+TryExec=clfswm
+
+[Window Manager]
+SessionManaged=true

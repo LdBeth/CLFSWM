@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1209.2
+Encoding=UTF-8
+Type=Application
+Name=clfswm
+Comment=A(nother) Common Lisp FullScreen Window Manager
+Exec=clfswm
