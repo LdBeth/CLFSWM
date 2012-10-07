@@ -198,11 +198,9 @@
 
 
 (defun default-init-hook ()
-  (let ((frame (add-frame (create-frame :name "Default"
-                                        :layout nil :x 0.05 :y 0.05
-                                        :w 0.9 :h 0.9)
-                          *root-frame*)))
-    (setf (current-child) frame)))
+  (place-frames-from-xinerama-infos)
+  (ensure-at-least-one-root)
+  (setf (current-child) (first (frame-child (first (frame-child *root-frame*))))))
 
 
 (defun init-display ()
@@ -247,7 +245,6 @@
   (setf *root-frame* (create-frame :name "Root" :number 0)
 	(current-child) *root-frame*)
   (call-hook *init-hook*)
-  (unsure-at-least-one-root)
   (process-existing-windows *screen*)
   (show-all-children)
   (grab-main-keys)

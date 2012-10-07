@@ -651,10 +651,6 @@
   (defun define-as-root (child x y width height)
     (push (make-root :child child :original child :current-child nil :x x :y y :w width :h height) root-list))
 
-  (defun unsure-at-least-one-root ()
-    (unless root-list
-      (define-as-root *root-frame* 0 0 (xlib:screen-width *screen*) (xlib:screen-height *screen*))))
-
   (defun find-root-by-coordinates (x y)
     (dolist (root root-list)
       (when (in-rect x y (root-x root) (root-y root) (root-w root) (root-h root))
@@ -759,6 +755,17 @@
 
 (defsetf current-child current-child-setter)
 
+(defun ensure-at-least-one-root ()
+  (unless (get-root-list)
+    (let ((frame (create-frame)))
+      (add-frame frame *root-frame*)
+      (define-as-root frame 0 0 (xlib:screen-width *screen*) (xlib:screen-height *screen*))
+      (add-frame (create-frame) frame))))
+
+
+
+
+
 
 (defun is-in-current-child-p (child)
   (and (frame-p (current-child))
@@ -837,7 +844,7 @@ XINERAMA version 1.1 opcode: 150
        do (let ((frame (create-frame)))
             (add-frame frame *root-frame*)))
     ;; On the opposite way: remove frames until there is more than screen heads in *root-frame*
-    (when (> (length (frame-child *root-frame*)) (length sizes))
+    (when (and sizes (> (length (frame-child *root-frame*)) (length sizes)))
       (dotimes (i (- (length (frame-child *root-frame*)) (length sizes)))
         (let ((deleted-child (pop (frame-child *root-frame*))))
           (typecase deleted-child
@@ -856,8 +863,8 @@ XINERAMA version 1.1 opcode: 150
             ;;(add-placed-frame-tmp frame 2)  ;; For tests
             (unless (frame-child frame)
               (add-frame (create-frame) frame))
-            (define-as-root frame x y w h)))
-    (setf (current-child) (first (frame-child (first (frame-child *root-frame*)))))))
+            (define-as-root frame x y w h)))))
+
 
 
 
