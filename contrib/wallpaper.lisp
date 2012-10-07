@@ -75,7 +75,9 @@
 (defun create-wallpaper (filename &rest images)
   (format t "Creating wallpaper ~A from ~{~A ~}~%" filename images)
   (generate-wallpaper filename (x-drawable-width *root*) (x-drawable-height *root*)
-                      (get-connected-heads-size) images)
+                      (or (get-connected-heads-size)
+                          `((0 0 ,(x-drawable-width *root*) ,(x-drawable-height *root*))))
+                      images)
   (format t "Done.~%"))
 
 
@@ -88,7 +90,8 @@
 
 
 (defun wallpaper-name (basename)
-  (let ((sizes (get-connected-heads-size))
+  (let ((sizes (or (get-connected-heads-size)
+                   `((0 0 ,(x-drawable-width *root*) ,(x-drawable-height *root*)))))
         (count 0))
     (dolist (s sizes)
       (dolist (v s)

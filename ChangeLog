@@ -1,7 +1,10 @@
 2012-10-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
+	* contrib/wallpaper.lisp (wallpaper): Handle no xinerama support
+	case.
+
 	* src/clfswm-internal.lisp (place-frames-from-xinerama-infos):
-	handle better no xinerama support case.
+	Handle better no xinerama support case.
 
 2012-10-04  Philippe Brochard  <pbrochard@common-lisp.net>
 
