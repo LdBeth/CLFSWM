@@ -979,10 +979,11 @@ Useful for re-using the &REST arg after removing some options."
   (when list
     (append (last list) (butlast list))))
 
-(defun n-rotate-list (list n)
-  (if (> n 0)
-      (n-rotate-list (rotate-list list) (1- n))
-      list))
+(defun n-rotate-list (list steps)
+  (when list
+    (let* ((len (length list))
+           (nsteps (mod steps len)))
+      (append (nthcdr nsteps list) (butlast list (- len nsteps))))))
 
 
 (defun append-formated-list (base-str

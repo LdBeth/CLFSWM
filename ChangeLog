@@ -1,3 +1,8 @@
+2012-10-08 Michael Raitza <spacefrogg-clfswm@meterriblecrew.net>
+
+	* src/tools.lisp (n-rotate-list): Implementation ehancements (1/2 GC,
+	2x speed).
+
 2012-10-07  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* contrib/wallpaper.lisp (wallpaper): Handle no xinerama support
