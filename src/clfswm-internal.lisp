@@ -1372,7 +1372,7 @@ For window: set current child to window or its parent according to window-parent
   "Select the next child in the current frame"
   (when (frame-p (current-child))
     (with-slots (child selected-pos) (current-child)
-      (setf selected-pos (mod (1+ selected-pos) (length child))))
+      (setf selected-pos (mod (1+ selected-pos) (max (length child) 1))))
     (show-all-children)))
 
 
@@ -1380,7 +1380,7 @@ For window: set current child to window or its parent according to window-parent
   "Select the previous child in the current frame"
   (when (frame-p (current-child))
     (with-slots (child selected-pos) (current-child)
-      (setf selected-pos (mod (1- selected-pos) (length child))))
+      (setf selected-pos (mod (1- selected-pos) (max (length child) 1))))
     (show-all-children)))
 
 
