@@ -287,6 +287,8 @@
   (define-query-key ("Tab") 'query-mode-complet)
   (define-query-key ("BackSpace") 'query-backspace)
   (define-query-key ("BackSpace" :control) 'query-backspace-word)
+  (define-query-key ("BackSpace" :control :shift) 'query-backspace-clear)
+  (define-query-key ("u" :control) 'query-backspace-clear)
   (define-query-key ("Delete") 'query-delete)
   (define-query-key ("Delete" :control) 'query-delete-word)
   (define-query-key ("Home") 'query-home)
