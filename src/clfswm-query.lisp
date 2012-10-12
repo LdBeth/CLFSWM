@@ -183,8 +183,11 @@
 
   (defun query-backspace-word ()
     "Delete a word backward"
-    (generic-backspace (or (position #\Space *query-string* :from-end t :end *query-pos*) 0))))
+    (generic-backspace (or (position #\Space *query-string* :from-end t :end *query-pos*) 0)))
 
+  (defun query-backspace-clear ()
+    "Delete backwards until beginning"
+    (generic-backspace 0)))
 
 (labels ((generic-delete (del-pos)
 	   (when (<= del-pos (length *query-string*))
