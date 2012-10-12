@@ -1,0 +1,123 @@
+'\" t
+.\"     Title: clfswm
+.\"    Author: [see the "AUTHOR" section]
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 10/12/2012
+.\"    Manual: \ \&
+.\"    Source: \ \&
+.\"  Language: English
+.\"
+.TH "CLFSWM" "1" "10/12/2012" "\ \&" "\ \&"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+clfswm \- A(nother) Common Lisp Full Screen Window Manager
+.SH "SYNOPSIS"
+.sp
+\fBclfswm\fR [\fIimplementation\fR]
+.SH "DESCRIPTION"
+.sp
+CLFSWM is a 100% Common Lisp X11 window manager (based on Tinywm and Stumpwm\&. Many thanks to them)\&. It can be driven only with the keyboard or with the mouse\&.
+.sp
+CLFSWM uses the following rules to determine which implementation should be used:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+the first command line argument\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+environment variable $LISP
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+the first line like "debian=<impl>" in its configuration file\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 4.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  4." 4.2
+.\}
+clisp
+.RE
+.sp
+CLFSWM handles clisp, sbcl and cmucl internally\&. If you specify a different implementation, CLFSWM will try to execute the command clfswm\-<implementation>\&. See /usr/share/doc/clfswm/README\&.Debian for details\&.
+.SH "OPTIONS"
+.PP
+\fIimplementation\fR
+.RS 4
+Indicates which implementation should be used\&.
+.RE
+.SH "ENVIRONMENT"
+.PP
+\fILISP\fR
+.RS 4
+Indicates which implementation should be used\&.
+.RE
+.SH "FILES"
+.PP
+\fI$XDG_CONFIG_HOME/clfswm/clfswmrc\fR
+.RS 4
+User configuration file\&. If XDG_CONFIG_HOME is undefined,
+\fI$HOME/\&.config/clfswm/clfswmrc\fR
+will be used\&.
+.RE
+.PP
+\fI$HOME/\&.clfswmrc\fR
+.RS 4
+Deprecated\&. This file will be used only if the previous file does not exist\&.
+.RE
+.PP
+\fI/etc/clfswmrc\fR
+.RS 4
+System\-wide configuration file\&.
+.RE
+.SH "SEE ALSO"
+.sp
+clisp(1), sbcl(1), cmucl(1)\&.
+.SH "AUTHOR"
+.sp
+CLFSWM was written by Philippe Brochard <pbrochard@common\-lisp\&.net>\&.
+.sp
+This manual page was written by Desmond O\&. Chang <dochang@gmail\&.com>, for the Debian project (and may be used by others)\&.

@@ -1,0 +1,73 @@
+// -*- mode: doc -*-
+// Use "a2x -f manpage clfswm.1.txt" to generate the man page.
+CLFSWM(1)
+=========
+:doctype: manpage
+
+
+NAME
+----
+clfswm - A(nother) Common Lisp Full Screen Window Manager
+
+
+SYNOPSIS
+--------
+*clfswm* ['implementation']
+
+
+DESCRIPTION
+-----------
+CLFSWM is a 100% Common Lisp X11 window manager (based on Tinywm and
+Stumpwm. Many thanks to them).  It can be driven only with the
+keyboard or with the mouse.
+
+CLFSWM uses the following rules to determine which implementation
+should be used:
+
+. the first command line argument.
+. environment variable $LISP
+. the first line like "debian=<impl>" in its configuration file.
+. clisp
+
+CLFSWM handles clisp, sbcl and cmucl internally.  If you specify a
+different implementation, CLFSWM will try to execute the command
+`clfswm-<implementation>`.  See /usr/share/doc/clfswm/README.Debian
+for details.
+
+
+OPTIONS
+-------
+'implementation'::
+	Indicates which implementation should be used.
+
+
+ENVIRONMENT
+-----------
+'LISP'::
+	Indicates which implementation should be used.
+
+
+FILES
+-----
+'$XDG_CONFIG_HOME/clfswm/clfswmrc'::
+	User configuration file.  If XDG_CONFIG_HOME is undefined,
+	'$HOME/.config/clfswm/clfswmrc' will be used.
+
+'$HOME/.clfswmrc'::
+	Deprecated.  This file will be used only if the previous file
+	does not exist.
+
+'/etc/clfswmrc'::
+	System-wide configuration file.
+
+
+SEE ALSO
+--------
+clisp(1), sbcl(1), cmucl(1).
+
+AUTHOR
+------
+CLFSWM was written by Philippe Brochard <pbrochard@common-lisp.net>.
+
+This manual page was written by Desmond O. Chang <dochang@gmail.com>,
+for the Debian project (and may be used by others).
