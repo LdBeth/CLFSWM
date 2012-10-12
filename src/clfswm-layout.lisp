@@ -60,6 +60,10 @@
   (fixe-real-size-current-child)
   (set-layout-dont-leave #'no-layout))
 
+(defun set-layout-simple (layout)
+  "Set the layout of the current child"
+  (set-layout-dont-leave layout)
+  (show-all-children))
 
 (defun get-managed-child (parent)
   "Return only the windows that are managed for tiling"
