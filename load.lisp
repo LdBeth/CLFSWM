@@ -23,20 +23,39 @@
 ;;;
 ;;; --------------------------------------------------------------------------
 
+(pushnew :clfswm-build *features*)
+(pushnew :clfswm-dump *features*)
+(pushnew :clfswm-start *features*)
+(pushnew :clfswm-install *features*)
+
 ;;;;;; Uncomment lines above to build the default documentation.
-;;(pushnew :BUILD-DOC *features*)
+;;(pushnew :clfswm-build-doc *features*)
 
-
-;;(load (compile-file "metering.cl"))
 
 (defparameter *base-dir* (directory-namestring *load-truename*))
 (export '*base-dir*)
 
+
 #+CMU
 (setf ext:*gc-verbose* nil)
 
+
+;;;; Loading ASDF
 #+(or SBCL ECL)
 (require :asdf)
+
+
+#-ASDF
+(load (make-pathname :host (pathname-host *base-dir*)
+		     :device (pathname-device *base-dir*)
+		     :directory (append (pathname-directory *base-dir*) (list "contrib"))
+		     :name "asdf" :type "lisp"))
+
+(push *base-dir* asdf:*central-registry*)
+
+
+
+
 
 #+(or CMU ECL)
 (require :clx)
@@ -63,12 +82,12 @@
 
 (in-package :clfswm)
 
-#-:BUILD-DOC
+#-:clfswm-build-doc
 (ignore-errors
   (main :read-conf-file-p t))
 
 
-#+:BUILD-DOC
+#+:clfswm-build-doc
 (ignore-errors
   (main :read-conf-file-p nil)
   (produce-all-docs))

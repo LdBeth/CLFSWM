@@ -280,6 +280,12 @@
       (setf child (rotate-list child)))
     (show-all-children)))
 
+(defun select-previous-child-simple ()
+  "Select the previous child (do not enter circulate mode)"
+  (when (frame-p (current-child))
+    (with-slots (child) (current-child)
+      (setf child (anti-rotate-list child)))
+    (show-all-children)))
 
 
 (defun reorder-brother-simple (reorder-fun)
