@@ -603,13 +603,21 @@
 (let ((commands (command-in-path)))
   (defun run-program-from-query-string ()
     "Run a program from the query input"
-    (multiple-value-bind (program return)
-        (query-string "Run:" "" commands)
-      (when (and (equal return :return) program (not (equal program "")))
-        (setf *second-mode-leave-function* (let ((cmd (concatenate 'string "cd $HOME && " program)))
-                                             (lambda ()
-                                               (do-shell cmd))))
-        (leave-second-mode)))))
+    (labels ((run-program-from-query-string-fun ()
+               (multiple-value-bind (program return)
+                   (query-string "Run:" "" commands)
+                 (when (and (equal return :return) program (not (equal program "")))
+                   (let ((cmd (concatenate 'string "cd $HOME && exec " program)))
+                     (lambda ()
+                       (do-shell cmd)))))))
+      (let ((fun (run-program-from-query-string-fun)))
+        (when fun
+          (if *in-second-mode*
+              (progn
+                (setf *second-mode-leave-function* fun)
+                (leave-second-mode))
+              (funcall fun)))))))
+
 
 
 
