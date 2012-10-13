@@ -32,6 +32,7 @@
 
 (defparameter *query-history* (list ""))
 (defparameter *query-complet-list* nil)
+(defparameter *query-completion-state* nil)
 
 (defparameter *query-message* nil)
 (defparameter *query-string* nil)
@@ -108,7 +109,9 @@
 (defun query-print-string ()
   (let ((dec (min 0 (- (- (x-drawable-width *query-window*) 10)
 		       (+ 10 (* *query-pos* (xlib:max-char-width *query-font*))))))
-        (complet (query-find-complet-list)))
+        (complet (if *query-completion-state*
+                     (first *query-completion-state*)
+                     (query-find-complet-list))))
     (clear-pixmap-buffer *query-window* *query-gc*)
     (setf (xlib:gcontext-foreground *query-gc*) (get-color *query-message-color*))
     (xlib:draw-glyphs *pixmap-buffer* *query-gc* 5 (+ (xlib:max-char-ascent *query-font*) 5)
@@ -277,6 +280,37 @@
                                                 (subseq *query-string* *query-pos*))
                     *query-pos* (+ pos (length common)))))))))
 
+(defun query-mode-complete-suggest ()
+  (flet ((complete (completions completion-pos pos initial-pos)
+	   (when completions
+	     (let ((completion (if (equal completion-pos (list-length completions))
+				   (subseq *query-string* pos initial-pos)
+				   (nth completion-pos completions))))
+	       (setf *query-string* (concatenate 'string
+						 (subseq *query-string* 0 pos)
+						 completion
+						 (subseq *query-string* *query-pos*))
+		     *query-pos* (+ pos (length completion))))
+	     (setf *query-completion-state*
+		   (list completions completion-pos pos initial-pos)))))
+    (if *query-completion-state*
+	(complete (first *query-completion-state*)
+		  (mod (1+ (second *query-completion-state*))
+		       (1+ (list-length (first *query-completion-state*))))
+		  (third *query-completion-state*)
+		  (fourth *query-completion-state*))
+	(multiple-value-bind (comps pos) (query-find-complet-list)
+	  (complete comps 0 pos *query-pos*)))))
+
+(add-hook *query-key-press-hook* 'query-mode-complete-suggest-reset)
+
+(defun query-mode-complete-suggest-reset (code state)
+  "Reset the query-completion-state if another key was pressed than a key
+that calls query-mode-complete-suggest."
+  (unless (equal 'query-mode-complete-suggest
+		 (first (find-key-from-code *query-keys* code state)))
+    (setf *query-completion-state* nil)
+    (query-print-string)))
 
 (add-hook *binding-hook* 'set-default-query-keys)
 
@@ -336,7 +370,8 @@
   (setf *query-message* message
         *query-string* default
         *query-pos* (length default)
-        *query-complet-list* complet-list)
+        *query-complet-list* complet-list
+	*query-completion-state* nil)
   (with-grab-keyboard-and-pointer (92 93 66 67 t)
     (generic-mode 'query-mode 'exit-query-loop
 		  :enter-function #'query-enter-function
