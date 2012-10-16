@@ -866,6 +866,9 @@ XINERAMA version 1.1 opcode: 150
             (define-as-root frame x y w h)))))
 
 
+(defun finish-configuring-root ()
+  (ensure-at-least-one-root)
+  (setf (current-child) (first (frame-child (first (frame-child *root-frame*))))))
 
 
 

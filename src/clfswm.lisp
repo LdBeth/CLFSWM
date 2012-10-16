@@ -153,6 +153,7 @@
 (define-handler main-mode :configure-notify (window)
   (when (child-equal-p window *root*)
     (place-frames-from-xinerama-infos)
+    (finish-configuring-root)
     (show-all-children)
     (call-hook *root-size-change*)))
 
@@ -199,8 +200,7 @@
 
 (defun default-init-hook ()
   (place-frames-from-xinerama-infos)
-  (ensure-at-least-one-root)
-  (setf (current-child) (first (frame-child (first (frame-child *root-frame*))))))
+  (finish-configuring-root))
 
 
 (defun init-display ()
