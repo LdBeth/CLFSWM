@@ -64,6 +64,15 @@
 
 
 
+;;;----------------------------
+;;; Lisp image part
+;;;----------------------------
+(defun build-lisp-image (dump-name)
+  #+CLISP (ext:saveinitmem dump-name :init-function (lambda () (clfswm:main) (ext:quit)) :executable t :norc t)
+  #+SBCL (sb-ext:save-lisp-and-die dump-name :toplevel 'clfswm:main :executable t))
+
+
+
 (defun query-yes-or-no (formatter &rest args)
   (let ((rep (query-string (apply #'format nil formatter args) "" '("Yes" "No"))))
     (or (string= rep "")
@@ -941,9 +950,9 @@ For window: set current child to window or its parent according to window-parent
     (dotimes (i 10)
       (setf (aref key-slots i) nil)))
 
-  (defun bind-on-slot (&optional (slot current-slot))
+  (defun bind-on-slot (&optional (slot current-slot) child)
     "Bind current child to slot"
-    (setf (aref key-slots slot) (current-child)))
+    (setf (aref key-slots slot) (if child child (current-child))))
 
   (defun remove-binding-on-slot ()
     "Remove binding on slot"

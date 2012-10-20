@@ -23,6 +23,9 @@
 ;;;
 ;;; --------------------------------------------------------------------------
 
+;;;------------------
+;;; Customization part
+;;;------------------
 (pushnew :clfswm-build *features*)
 (pushnew :clfswm-dump *features*)
 (pushnew :clfswm-start *features*)
@@ -31,40 +34,29 @@
 ;;;;;; Uncomment lines above to build the default documentation.
 ;;(pushnew :clfswm-build-doc *features*)
 
+;;;;; Uncomment the line below if you want to see all ignored X errors
+;;(pushnew :xlib-debug *features*)
+
+;;;;; Uncomment the line below if you want to see all event debug messages
+;;(pushnew :event-debug *features*)
+
 
 (defparameter *base-dir* (directory-namestring *load-truename*))
 (export '*base-dir*)
 
 
-#+CMU
+#+:CMU
 (setf ext:*gc-verbose* nil)
 
-
+;;;------------------
+;;; ASDF part
+;;;------------------
 ;;;; Loading ASDF
-#+(or SBCL ECL)
+#+(or :SBCL :ECL)
 (require :asdf)
 
 
-#-ASDF
-(load (make-pathname :host (pathname-host *base-dir*)
-		     :device (pathname-device *base-dir*)
-		     :directory (append (pathname-directory *base-dir*) (list "contrib"))
-		     :name "asdf" :type "lisp"))
-
-(push *base-dir* asdf:*central-registry*)
-
-
-
-
-
-#+(or CMU ECL)
-(require :clx)
-
-#+(AND CLISP (not CLX))
-(when (fboundp 'require)
-  (require "clx.lisp"))
-
-#-ASDF
+#-:ASDF
 (load (make-pathname :host (pathname-host *base-dir*)
 		     :device (pathname-device *base-dir*)
 		     :directory (append (pathname-directory *base-dir*) (list "contrib"))
@@ -74,33 +66,46 @@
 
 ;;(setf asdf:*verbose-out* t)
 
-;;;; Uncomment the line above if you want to follow the
-;;;; handle event mecanism.
-;;(pushnew :event-debug *features*)
 
+;;;------------------
+;;; XLib part
+;;;------------------
+#+(or :CMU :ECL)
+(require :clx)
+
+
+;;; This part needs clisp >= 2.50
+;;#+(AND CLISP (not CLX))
+;;(when (fboundp 'require)
+;;  (require "clx.lisp"))
+
+;;;------------------
+;;; CLFSWM loading
+;;;------------------
+#+:clfswm-build
 (asdf:oos 'asdf:load-op :clfswm)
 
+
+;;;-------------------------
+;;; Starting clfswm
+;;;-------------------------
 (in-package :clfswm)
 
-#-:clfswm-build-doc
+#+:clfswm-start
 (ignore-errors
-  (main :read-conf-file-p t))
+  (main :read-conf-file-p #-:clfswm-build-doc t #+:clfswm-build-doc nil))
 
 
+
+;;;-------------------------
+;;; Building documentation
+;;;-------------------------
 #+:clfswm-build-doc
-(ignore-errors
-  (main :read-conf-file-p nil)
-  (produce-all-docs))
+(produce-all-docs)
 
+;;;-----------------------
+;;; Building image part
+;;;-----------------------
+#+:clfswm-build
+(build-lisp-image "clfswm")
 
-;;; For debuging: start another sever (for example: 'startx -- :1'), Xnest
-;;; or Zephyr and add the lines above in a dot-clfswmrc-debug file
-;;; mod-2 is the numlock key on some keyboards.
-;;(setf *default-modifiers* '(:mod-2))
-;;
-;;(defun my-add-escape ()
-;;  (define-main-key ("Escape" :mod-2) 'exit-clfswm))
-;;
-;;(add-hook *binding-hook* 'my-add-escape)
-;;
-;;(clfswm:main :display ":1" :alternate-conf #P"/where/is/dot-clfswmrc-debug")

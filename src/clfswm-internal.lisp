@@ -879,6 +879,13 @@ XINERAMA version 1.1 opcode: 150
       (push window acc))
     acc))
 
+(defun get-all-frame-windows (&optional (root *root-frame*))
+  "Return all frame windows in root and in its children"
+  (let ((acc nil))
+    (with-all-frames (root frame)
+      (push (frame-window frame) acc))
+    acc))
+
 
 (defun get-hidden-windows ()
   "Return all hiddens windows"
@@ -1568,9 +1575,11 @@ managed."
   "Windows present when clfswm starts up must be absorbed by clfswm."
   (setf *in-process-existing-windows* t)
   (let ((id-list nil)
-	(all-windows (get-all-windows)))
+	(all-windows (get-all-windows))
+        (all-frame-windows (get-all-frame-windows)))
     (dolist (win (xlib:query-tree (xlib:screen-root screen)))
-      (unless (child-member win all-windows)
+      (unless (or (child-member win all-windows)
+                  (child-member win all-frame-windows))
 	(let ((map-state (xlib:window-map-state win))
 	      (wm-state (window-state win)))
 	  (unless (or (eql (xlib:window-override-redirect win) :on)

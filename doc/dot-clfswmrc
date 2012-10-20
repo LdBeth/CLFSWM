@@ -190,3 +190,16 @@
 ;;;;                                             my-init-hook-rox-filer
 ;;;;(setf *init-hook* nil)
 ;;;;; Init hook end
+
+
+;;; For debuging: start another sever (for example: 'startx -- :1'), Xnest
+;;; or Zephyr and add the lines above in a dot-clfswmrc-debug file
+;;; mod-2 is the numlock key on some keyboards.
+;;(setf *default-modifiers* '(:mod-2))
+;;
+;;(defun my-add-escape ()
+;;  (define-main-key ("Escape" :mod-2) 'exit-clfswm))
+;;
+;;(add-hook *binding-hook* 'my-add-escape)
+;;
+;;(clfswm:main :display ":1" :alternate-conf #P"/where/is/dot-clfswmrc-debug")

@@ -403,7 +403,6 @@ Return the result of the last hook"
   (force-output))
 
 
-
 (defun in-rectangle (x y rectangle)
   (and rectangle
        (<= (rectangle-x rectangle) x (+ (rectangle-x rectangle) (rectangle-width rectangle)))
