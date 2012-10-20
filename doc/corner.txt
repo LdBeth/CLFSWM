@@ -16,7 +16,7 @@ Here are the actions associated to screen corners in CLFSWM:
   Top-Left: Hide/Unhide a terminal
   Top-Right: Close or kill the current window (ask before doing anything)
   Bottom-Right: Present all windows in all frames (An expose like)
-  Bottom-Left: ---
+  Bottom-Left: Start the file manager
 
 *Corner-Second-Mode-Left-Button*:
   Top-Left: ---

@@ -779,7 +779,7 @@ of the program to return.
 
 (defun uquit ()
   #+(or clisp cmu) (ext:quit)
-  #+sbcl (sb-ext:quit)
+  #+sbcl (sb-ext:exit)
   #+ecl (si:quit)
   #+gcl (lisp:quit)
   #+lispworks (lw:quit)

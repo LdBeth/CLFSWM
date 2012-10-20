@@ -86,7 +86,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 (defparameter *pixmap-buffer* nil)
 
-(defparameter *contrib-dir* "")
+(defparameter *contrib-dir* "contrib/")
 
 (defparameter *default-font* nil)
 ;;(defparameter *default-font-string* "9x15")

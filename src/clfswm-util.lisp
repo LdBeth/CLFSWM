@@ -52,8 +52,9 @@
   "Load a file in the contrib directory"
   (let ((truename (merge-pathnames file *contrib-dir*)))
     (format t "Loading contribution file: ~A~%" truename)
-    (when (probe-file truename)
-      (load truename :verbose nil))))
+    (if (probe-file truename)
+        (load truename :verbose nil)
+        (format t "  File not found!~%"))))
 
 
 (defun reload-clfswm ()
@@ -67,9 +68,15 @@
 ;;;----------------------------
 ;;; Lisp image part
 ;;;----------------------------
+#+:ECL (require :cmp)
+
 (defun build-lisp-image (dump-name)
-  #+CLISP (ext:saveinitmem dump-name :init-function (lambda () (clfswm:main) (ext:quit)) :executable t :norc t)
-  #+SBCL (sb-ext:save-lisp-and-die dump-name :toplevel 'clfswm:main :executable t))
+  #+:CLISP (ext:saveinitmem dump-name :init-function (lambda () (clfswm:main) (ext:quit)) :executable t)
+  #+:SBCL (sb-ext:save-lisp-and-die dump-name :toplevel 'clfswm:main :executable t)
+  #+:CMU (ext:save-lisp dump-name :init-function (lambda () (clfswm:main) (ext:quit)) :executable t)
+  #+:CCL (ccl:save-application dump-name :toplevel-function (lambda () (clfswm:main) (ccl:quit)) :prepend-kernel t)
+  #+:ECL (c:build-program dump-name :epilogue-code '(clfswm:main)))
+
 
 
 
@@ -1500,7 +1507,7 @@ For window: set current child to window or its parent according to window-parent
   (let (name exec categories comment)
     (when (probe-file desktop)
       (with-open-file (stream desktop :direction :input)
-	(loop for line = (read-line stream nil nil)
+	(loop for line = (ignore-errors (read-line stream nil nil))
 	   while line
 	   do
 	   (cond ((first-position "Name=" line) (setf name (um-extract-value line)))

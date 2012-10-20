@@ -283,10 +283,8 @@
 
 
 (defun main-unprotected (&key (display (or (getenv "DISPLAY") ":0")) protocol
-			 (base-dir (asdf:system-source-directory :clfswm))
 			 (read-conf-file-p t) (alternate-conf nil)
 			 error-msg)
-  (setf *contrib-dir* (merge-pathnames "contrib/" base-dir))
   (conf-file-name alternate-conf)
   (when read-conf-file-p
     (read-conf-file))
@@ -326,7 +324,6 @@
 
 
 (defun main (&key (display (or (getenv "DISPLAY") ":0")) protocol
-	     (base-dir (asdf:system-source-directory :clfswm))
 	     (read-conf-file-p t)
 	     (alternate-conf nil))
   (let (error-msg)
@@ -335,7 +332,7 @@
 	 (handler-case
 	     (if *other-window-manager*
 		 (run-other-window-manager)
-		 (main-unprotected :display display :protocol protocol :base-dir base-dir
+		 (main-unprotected :display display :protocol protocol
 				   :read-conf-file-p read-conf-file-p
 				   :alternate-conf alternate-conf
 				   :error-msg error-msg))

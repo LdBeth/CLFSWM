@@ -85,6 +85,11 @@
         </a>
       </li>
       <li>
+        <a href='#power-management'>
+          Power Management Group
+        </a>
+      </li>
+      <li>
         <a href='#query-string'>
           Query String Group
         </a>
@@ -99,6 +104,21 @@
           Second Mode Group
         </a>
       </li>
+      <li>
+        <a href='#toolbar'>
+          Toolbar Group
+        </a>
+      </li>
+      <li>
+        <a href='#volume-mode'>
+          Volume Mode Group
+        </a>
+      </li>
+      <li>
+        <a href='#wallpaper'>
+          Wallpaper Group
+        </a>
+      </li>
     </ul>
     <p>
       <a name='circulate-mode' href='#top'>
@@ -106,52 +126,13 @@
       </a>
     </p>
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *circulate-font-string*
+      &nbsp;&nbsp;  *circulate-text-limite*
     </font>
     <font color='#0000ff'>
-       = "fixed" <br>
+       = 30 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Circulate string window font string <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *circulate-background*
-    </font>
-    <font color='#0000ff'>
-       = "black" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Circulate string window background color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *circulate-foreground*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Circulate string window foreground color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *circulate-border*
-    </font>
-    <font color='#0000ff'>
-       = "red" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Circulate string window border color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *circulate-width*
-    </font>
-    <font color='#0000ff'>
-       = 400 <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Circulate mode window width <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *circulate-height*
-    </font>
-    <font color='#0000ff'>
-       = 15 <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Circulate mode window height <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Maximum text limite in the circulate window <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *circulate-transparency*
@@ -159,15 +140,62 @@
     <font color='#0000ff'>
        = 0.8 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Circulate window background transparency <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Circulate window background transparency <br>
 
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *circulate-text-limite*
+      &nbsp;&nbsp;  *circulate-height*
     </font>
     <font color='#0000ff'>
-       = 30 <br>
+       = 15 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Maximum text limite in the circulate window <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Circulate mode window height <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *circulate-width*
+    </font>
+    <font color='#0000ff'>
+       = 400 <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Circulate mode window width <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *circulate-border*
+    </font>
+    <font color='#0000ff'>
+       = "red" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Circulate string window border color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *circulate-foreground*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Circulate string window foreground color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *circulate-background*
+    </font>
+    <font color='#0000ff'>
+       = "black" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Circulate string window background color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *circulate-font-string*
+    </font>
+    <font color='#0000ff'>
+       = "fixed" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Circulate string window font string <br>
 
     <p>
       <a name='corner' href='#top'>
@@ -175,146 +203,13 @@
       </a>
     </p>
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *corner-size*
+      &nbsp;&nbsp;  *corner-command-try-number*
     </font>
     <font color='#0000ff'>
-       = 3 <br>
+       = 10 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     The size of the corner square <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *corner-main-mode-left-button*
-    </font>
-    <font color='#0000ff'>
-       = ((:TOP-LEFT OPEN-MENU) <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;                                     (:TOP-RIGHT PRESENT-VIRTUAL-KEYBOARD) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                     (:BOTTOM-RIGHT EXPOSE-WINDOWS-MODE) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                     (:BOTTOM-LEFT NIL)) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;     Actions on corners in the main mode with the left mouse button <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *corner-main-mode-middle-button*
-    </font>
-    <font color='#0000ff'>
-       = ((:TOP-LEFT HELP-ON-CLFSWM) <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;                                       (:TOP-RIGHT <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                        ASK-CLOSE/KILL-CURRENT-WINDOW) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                       (:BOTTOM-RIGHT NIL) (:BOTTOM-LEFT NIL)) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;     Actions on corners in the main mode with the middle mouse button <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *corner-main-mode-right-button*
-    </font>
-    <font color='#0000ff'>
-       = ((:TOP-LEFT PRESENT-CLFSWM-TERMINAL) <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;                                      (:TOP-RIGHT ASK-CLOSE/KILL-CURRENT-WINDOW) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                      (:BOTTOM-RIGHT EXPOSE-ALL-WINDOWS-MODE) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                      (:BOTTOM-LEFT NIL)) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;     Actions on corners in the main mode with the right mouse button <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *corner-second-mode-left-button*
-    </font>
-    <font color='#0000ff'>
-       = ((:TOP-LEFT NIL) (:TOP-RIGHT NIL) <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;                                       (:BOTTOM-RIGHT EXPOSE-WINDOWS-MODE) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                       (:BOTTOM-LEFT NIL)) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;     Actions on corners in the second mode with the left mouse button <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *corner-second-mode-middle-button*
-    </font>
-    <font color='#0000ff'>
-       = ((:TOP-LEFT HELP-ON-CLFSWM) <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;                                         (:TOP-RIGHT NIL) (:BOTTOM-RIGHT NIL) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                         (:BOTTOM-LEFT NIL)) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;     Actions on corners in the second mode with the middle mouse button <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *corner-second-mode-right-button*
-    </font>
-    <font color='#0000ff'>
-       = ((:TOP-LEFT NIL) (:TOP-RIGHT NIL) <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;                                        (:BOTTOM-RIGHT EXPOSE-ALL-WINDOWS-MODE) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                        (:BOTTOM-LEFT NIL)) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;     Actions on corners in the second mode with the right mouse button <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *virtual-keyboard-cmd*
-    </font>
-    <font color='#0000ff'>
-       = "xvkbd" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     The command to display the virtual keybaord <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;   Here is an ~/.Xresources example for xvkbd: <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;     xvkbd.windowGeometry: 300x100-0-0 <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;     xvkbd*Font: 6x12 <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;     xvkbd.modalKeytop: true <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;     xvkbd.customization: -french <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;     xvkbd.keypad: false <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;   And make it always on top <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *clfswm-terminal-name*
-    </font>
-    <font color='#0000ff'>
-       = "clfswm-terminal" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     The clfswm terminal name <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *clfswm-terminal-cmd*
-    </font>
-    <font color='#0000ff'>
-       = "xterm -T clfswm-terminal" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     The clfswm terminal command. <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp; This command must set the window title to *clfswm-terminal-name* <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *corner-error-message-color*
-    </font>
-    <font color='#0000ff'>
-       = "red" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Error message color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *corner-error-message-delay*
-    </font>
-    <font color='#0000ff'>
-       = 5 <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Time to display the error message on commad error <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Number of try to wait the window in query tree <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *corner-command-try-delay*
@@ -322,15 +217,152 @@
     <font color='#0000ff'>
        = 0.2 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Time to wait before checking window in query tree <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Time to wait before checking window in query tree <br>
 
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *corner-command-try-number*
+      &nbsp;&nbsp;  *corner-error-message-delay*
     </font>
     <font color='#0000ff'>
-       = 10 <br>
+       = 5 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Number of try to wait the window in query tree <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Time to display the error message on commad error <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *corner-error-message-color*
+    </font>
+    <font color='#0000ff'>
+       = "red" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Error message color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *clfswm-terminal-cmd*
+    </font>
+    <font color='#0000ff'>
+       = "xterm -T clfswm-terminal" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;      <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; The clfswm terminal command. <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; This command must set the window title to *clfswm-terminal-name* <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *clfswm-terminal-name*
+    </font>
+    <font color='#0000ff'>
+       = "clfswm-terminal" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     The clfswm terminal name <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *virtual-keyboard-cmd*
+    </font>
+    <font color='#0000ff'>
+       = "xvkbd" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;      <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; The command to display the virtual keybaord <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp;   Here is an ~/.Xresources example for xvkbd: <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     xvkbd.windowGeometry: 300x100-0-0 <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     xvkbd*Font: 6x12 <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     xvkbd.modalKeytop: true <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     xvkbd.customization: -french <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     xvkbd.keypad: false <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp;   And make it always on top <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *corner-second-mode-right-button*
+    </font>
+    <font color='#0000ff'>
+       = ((:TOP-LEFT NIL) (:TOP-RIGHT NIL) (:BOTTOM-RIGHT EXPOSE-ALL-WINDOWS-MODE) (:BOTTOM-LEFT NIL)) <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Actions on corners in the second mode with the right mouse button <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *corner-second-mode-middle-button*
+    </font>
+    <font color='#0000ff'>
+       = ((:TOP-LEFT HELP-ON-CLFSWM) (:TOP-RIGHT NIL) (:BOTTOM-RIGHT NIL) (:BOTTOM-LEFT NIL)) <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Actions on corners in the second mode with the middle mouse button <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *corner-second-mode-left-button*
+    </font>
+    <font color='#0000ff'>
+       = ((:TOP-LEFT NIL) (:TOP-RIGHT NIL) (:BOTTOM-RIGHT EXPOSE-WINDOWS-MODE) (:BOTTOM-LEFT NIL)) <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Actions on corners in the second mode with the left mouse button <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *corner-main-mode-right-button*
+    </font>
+    <font color='#0000ff'>
+       =  <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp; ((:TOP-LEFT PRESENT-CLFSWM-TERMINAL) (:TOP-RIGHT ASK-CLOSE/KILL-CURRENT-WINDOW) (:BOTTOM-RIGHT EXPOSE-ALL-WINDOWS-MODE) <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp;  (:BOTTOM-LEFT START-FILE-MANAGER)) <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Config(Corner group): Actions on corners in the main mode with the right mouse button <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *corner-main-mode-middle-button*
+    </font>
+    <font color='#0000ff'>
+       = ((:TOP-LEFT HELP-ON-CLFSWM) (:TOP-RIGHT ASK-CLOSE/KILL-CURRENT-WINDOW) (:BOTTOM-RIGHT NIL) (:BOTTOM-LEFT NIL)) <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Actions on corners in the main mode with the middle mouse button <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *corner-main-mode-left-button*
+    </font>
+    <font color='#0000ff'>
+       = ((:TOP-LEFT OPEN-MENU) (:TOP-RIGHT PRESENT-VIRTUAL-KEYBOARD) (:BOTTOM-RIGHT EXPOSE-WINDOWS-MODE) (:BOTTOM-LEFT NIL)) <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Actions on corners in the main mode with the left mouse button <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *corner-size*
+    </font>
+    <font color='#0000ff'>
+       = 3 <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     The size of the corner square <br>
 
     <p>
       <a name='expose-mode' href='#top'>
@@ -338,76 +370,13 @@
       </a>
     </p>
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *expose-font-string*
-    </font>
-    <font color='#0000ff'>
-       = "fixed" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Expose string window font string <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *expose-background*
-    </font>
-    <font color='#0000ff'>
-       = "grey10" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Expose string window background color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *expose-foreground*
-    </font>
-    <font color='#0000ff'>
-       = "grey50" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Expose string window foreground color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *expose-foreground-letter*
-    </font>
-    <font color='#0000ff'>
-       = "red" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Expose string window foreground color for letters <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *expose-foreground-letter-nok*
-    </font>
-    <font color='#0000ff'>
-       = "grey30" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Expose string window foreground color for letter not selected <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *expose-background-letter-match*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Expose string window background color for matching letters <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *expose-border*
-    </font>
-    <font color='#0000ff'>
-       = "grey20" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Expose string window border color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *expose-valid-on-key*
+      &nbsp;&nbsp;  *expose-direct-select*
     </font>
     <font color='#0000ff'>
        = T <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Valid expose mode when an accel key is pressed <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *expose-show-window-title*
-    </font>
-    <font color='#0000ff'>
-       = T <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Show the window title on accel window <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Immediately select child if they can be directly accessed <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *expose-transparency*
@@ -415,15 +384,89 @@
     <font color='#0000ff'>
        = 0.9 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Expose string window background transparency <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Expose string window background transparency <br>
 
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *expose-direct-select*
+      &nbsp;&nbsp;  *expose-show-window-title*
     </font>
     <font color='#0000ff'>
        = T <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Immediately select child if they can be directly accessed <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Show the window title on accel window <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *expose-valid-on-key*
+    </font>
+    <font color='#0000ff'>
+       = T <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Valid expose mode when an accel key is pressed <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *expose-border*
+    </font>
+    <font color='#0000ff'>
+       = "grey20" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Expose string window border color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *expose-background-letter-match*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Expose string window background color for matching letters <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *expose-foreground-letter-nok*
+    </font>
+    <font color='#0000ff'>
+       = "grey30" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Expose string window foreground color for letter not selected <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *expose-foreground-letter*
+    </font>
+    <font color='#0000ff'>
+       = "red" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Expose string window foreground color for letters <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *expose-foreground*
+    </font>
+    <font color='#0000ff'>
+       = "grey50" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Expose string window foreground color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *expose-background*
+    </font>
+    <font color='#0000ff'>
+       = "grey10" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Expose string window background color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *expose-font-string*
+    </font>
+    <font color='#0000ff'>
+       = "fixed" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Expose string window font string <br>
 
     <p>
       <a name='frame-colors' href='#top'>
@@ -431,28 +474,13 @@
       </a>
     </p>
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *frame-background*
+      &nbsp;&nbsp;  *frame-transparency*
     </font>
     <font color='#0000ff'>
-       = "Black" <br>
+       = 0.6 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Frame background <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *frame-foreground*
-    </font>
-    <font color='#0000ff'>
-       = "Green" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Frame foreground <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *frame-foreground-root*
-    </font>
-    <font color='#0000ff'>
-       = "Red" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Frame foreground when the frame is the root frame <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Frame background transparency <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *frame-foreground-hidden*
@@ -460,15 +488,35 @@
     <font color='#0000ff'>
        = "Darkgreen" <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Frame foreground for hidden windows <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Frame foreground for hidden windows <br>
 
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *frame-transparency*
+      &nbsp;&nbsp;  *frame-foreground-root*
     </font>
     <font color='#0000ff'>
-       = 0.6 <br>
+       = "Red" <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Frame background transparency <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Frame foreground when the frame is the root frame <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *frame-foreground*
+    </font>
+    <font color='#0000ff'>
+       = "Green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Frame foreground <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *frame-background*
+    </font>
+    <font color='#0000ff'>
+       = "Black" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Frame background <br>
 
     <p>
       <a name='gimp-layout' href='#top'>
@@ -481,7 +529,8 @@
     <font color='#0000ff'>
        = 30 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Time to display the GIMP layout notify window help <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Time to display the GIMP layout notify window help <br>
 
     <p>
       <a name='hook' href='#top'>
@@ -489,76 +538,22 @@
       </a>
     </p>
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *binding-hook*
-    </font>
-    <font color='#0000ff'>
-       = (SET-DEFAULT-CIRCULATE-KEYS INIT-*QUERY-KEYS* <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                SET-DEFAULT-QUERY-KEYS <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                INIT-*INFO-KEYS* <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                INIT-*INFO-MOUSE* <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                SET-DEFAULT-INFO-KEYS <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                SET-DEFAULT-INFO-MOUSE <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                INIT-*MAIN-KEYS* <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                INIT-*MAIN-MOUSE* <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                SET-DEFAULT-MAIN-KEYS <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                SET-DEFAULT-MAIN-MOUSE <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                INIT-*SECOND-KEYS* <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                INIT-*SECOND-MOUSE* <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                SET-DEFAULT-SECOND-KEYS <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                                SET-DEFAULT-SECOND-MOUSE) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;     Hook executed when keys/buttons are bounds <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *loop-hook*
+      &nbsp;&nbsp;  *query-button-press-hook*
     </font>
     <font color='#0000ff'>
        = NIL <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Hook executed on each event loop <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Query hook. Hook called on each button press event in query loop <br>
 
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *main-entrance-hook*
+      &nbsp;&nbsp;  *query-key-press-hook*
     </font>
     <font color='#0000ff'>
-       = NIL <br>
+       = (QUERY-MODE-COMPLETE-SUGGEST-RESET) <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Hook executed on the main function entrance after <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp; loading configuration file and before opening the display. <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *init-hook*
-    </font>
-    <font color='#0000ff'>
-       = (DEFAULT-INIT-HOOK PLACE-FRAMES-FROM-XINERAMA-INFOS <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;                                    DISPLAY-HELLO-WINDOW) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;     Init hook. This hook is run just after the first root frame is created <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *close-hook*
-    </font>
-    <font color='#0000ff'>
-       = (CLOSE-NOTIFY-WINDOW CLOSE-CLFSWM-TERMINAL <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;                                       CLOSE-VIRTUAL-KEYBOARD) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;     Close hook. This hook is run just before closing the display <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Query hook. Hook called on each key press event in query loop <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *default-nw-hook*
@@ -566,23 +561,80 @@
     <font color='#0000ff'>
        = DEFAULT-FRAME-NW-HOOK <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Default action to do on newly created windows <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Default action to do on newly created windows <br>
 
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *query-key-press-hook*
+      &nbsp;&nbsp;  *close-hook*
+    </font>
+    <font color='#0000ff'>
+       = (CLOSE-NOTIFY-WINDOW CLOSE-CLFSWM-TERMINAL CLOSE-VIRTUAL-KEYBOARD CLOSE-ALL-TOOLBARS) <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Close hook. This hook is run just before closing the display <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *init-hook*
+    </font>
+    <font color='#0000ff'>
+       = (DEFAULT-INIT-HOOK DISPLAY-HELLO-WINDOW OPEN-ALL-TOOLBARS MY-INIT-HOOK MY-WALLPAPER) <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Init hook. This hook is run just after the first root frame is created <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *root-size-change*
+    </font>
+    <font color='#0000ff'>
+       = (MY-WALLPAPER) <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Hook executed when the root size has changed for example when adding/removing a monitor <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *main-entrance-hook*
     </font>
     <font color='#0000ff'>
        = NIL <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Query hook. Hook called on each key press event in query loop <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;      <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; Hook executed on the main function entrance after <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; loading configuration file and before opening the display. <br>
 
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *query-button-press-hook*
+      &nbsp;&nbsp;  *loop-hook*
     </font>
     <font color='#0000ff'>
        = NIL <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Query hook. Hook called on each button press event in query loop <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Hook executed on each event loop <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *binding-hook*
+    </font>
+    <font color='#0000ff'>
+       =  <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp; (INIT-*QUERY-KEYS* SET-DEFAULT-QUERY-KEYS SET-DEFAULT-CIRCULATE-KEYS INIT-*INFO-KEYS* INIT-*INFO-MOUSE* <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp;  SET-DEFAULT-INFO-KEYS SET-DEFAULT-INFO-MOUSE INIT-*MAIN-KEYS* INIT-*MAIN-MOUSE* SET-DEFAULT-MAIN-KEYS <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp;  SET-DEFAULT-MAIN-MOUSE INIT-*SECOND-KEYS* INIT-*SECOND-MOUSE* SET-DEFAULT-SECOND-KEYS SET-DEFAULT-SECOND-MOUSE <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp;  MPD-BINDING FR-BINDING REBOOT-HALT-BINDING INIT-*VOLUME-KEYS* SET-DEFAULT-VOLUME-KEYS AMIXER-VOLUME-BIND LOCAL-BINDING) <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Hook executed when keys/buttons are bounds <br>
 
     <p>
       <a name='identify-key' href='#top'>
@@ -590,28 +642,13 @@
       </a>
     </p>
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *identify-font-string*
+      &nbsp;&nbsp;  *identify-transparency*
     </font>
     <font color='#0000ff'>
-       = "fixed" <br>
+       = 0.8 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Identify window font string <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *identify-background*
-    </font>
-    <font color='#0000ff'>
-       = "black" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Identify window background color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *identify-foreground*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Identify window foreground color <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Identify window background transparency <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *identify-border*
@@ -619,15 +656,35 @@
     <font color='#0000ff'>
        = "red" <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Identify window border color <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Identify window border color <br>
 
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *identify-transparency*
+      &nbsp;&nbsp;  *identify-foreground*
     </font>
     <font color='#0000ff'>
-       = 0.8 <br>
+       = "green" <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Identify window background transparency <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Identify window foreground color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *identify-background*
+    </font>
+    <font color='#0000ff'>
+       = "black" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Identify window background color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *identify-font-string*
+    </font>
+    <font color='#0000ff'>
+       = "fixed" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Identify window font string <br>
 
     <p>
       <a name='info-mode' href='#top'>
@@ -635,84 +692,13 @@
       </a>
     </p>
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *info-background*
+      &nbsp;&nbsp;  *info-color-second*
     </font>
     <font color='#0000ff'>
-       = "black" <br>
+       = "lightblue" <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Info window background color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *info-foreground*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Info window foreground color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *info-border*
-    </font>
-    <font color='#0000ff'>
-       = "red" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Info window border color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *info-line-cursor*
-    </font>
-    <font color='#0000ff'>
-       = "white" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Info window line cursor color color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *info-selected-background*
-    </font>
-    <font color='#0000ff'>
-       = "blue" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Info selected item background color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *info-font-string*
-    </font>
-    <font color='#0000ff'>
-       = "fixed" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Info window font string <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *info-transparency*
-    </font>
-    <font color='#0000ff'>
-       = 0.8 <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Info window background transparency <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *info-click-to-select*
-    </font>
-    <font color='#0000ff'>
-       = T <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     If true, click on info window select item. Otherwise, click to drag the menu <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *info-color-title*
-    </font>
-    <font color='#0000ff'>
-       = "Magenta" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Colored info title color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *info-color-underline*
-    </font>
-    <font color='#0000ff'>
-       = "Yellow" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Colored info underline color <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Colored info second color <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *info-color-first*
@@ -720,15 +706,98 @@
     <font color='#0000ff'>
        = "Cyan" <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Colored info first color <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Colored info first color <br>
 
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *info-color-second*
+      &nbsp;&nbsp;  *info-color-underline*
     </font>
     <font color='#0000ff'>
-       = "lightblue" <br>
+       = "Yellow" <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Colored info second color <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Colored info underline color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *info-color-title*
+    </font>
+    <font color='#0000ff'>
+       = "Magenta" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Colored info title color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *info-click-to-select*
+    </font>
+    <font color='#0000ff'>
+       = T <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     If true, click on info window select item. Otherwise, click to drag the menu <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *info-transparency*
+    </font>
+    <font color='#0000ff'>
+       = 0.8 <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Info window background transparency <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *info-font-string*
+    </font>
+    <font color='#0000ff'>
+       = "fixed" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Info window font string <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *info-selected-background*
+    </font>
+    <font color='#0000ff'>
+       = "blue" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Info selected item background color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *info-line-cursor*
+    </font>
+    <font color='#0000ff'>
+       = "white" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Info window line cursor color color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *info-border*
+    </font>
+    <font color='#0000ff'>
+       = "red" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Info window border color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *info-foreground*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Info window foreground color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *info-background*
+    </font>
+    <font color='#0000ff'>
+       = "black" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Info window background color <br>
 
     <p>
       <a name='main-mode' href='#top'>
@@ -736,20 +805,13 @@
       </a>
     </p>
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *color-move-window*
+      &nbsp;&nbsp;  *color-maybe-selected*
     </font>
     <font color='#0000ff'>
-       = "DeepPink" <br>
+       = "Yellow" <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Color when moving or resizing a windows <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *color-selected*
-    </font>
-    <font color='#0000ff'>
-       = "Red" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Color of selected window <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Color of maybe selected windows <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *color-unselected*
@@ -757,15 +819,26 @@
     <font color='#0000ff'>
        = "Blue" <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Color of unselected color <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Color of unselected color <br>
 
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *color-maybe-selected*
+      &nbsp;&nbsp;  *color-selected*
     </font>
     <font color='#0000ff'>
-       = "Yellow" <br>
+       = "Red" <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Color of maybe selected windows <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Color of selected window <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *color-move-window*
+    </font>
+    <font color='#0000ff'>
+       = "DeepPink" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Color when moving or resizing a windows <br>
 
     <p>
       <a name='menu' href='#top'>
@@ -773,42 +846,13 @@
       </a>
     </p>
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *xdg-section-list*
+      &nbsp;&nbsp;  *menu-key-bound-color*
     </font>
     <font color='#0000ff'>
-       = (TEXTEDITOR FILEMANAGER WEBBROWSER AUDIOVIDEO AUDIO <br>
+       = "gray50" <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;                         VIDEO DEVELOPMENT EDUCATION GAME GRAPHICS NETWORK <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                         OFFICE SETTINGS SYSTEM UTILITY TERMINALEMULATOR <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                         SCREENSAVER) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;     Standard menu sections <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *menu-color-submenu*
-    </font>
-    <font color='#0000ff'>
-       = "Cyan" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Submenu color in menu <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *menu-color-comment*
-    </font>
-    <font color='#0000ff'>
-       = "Yellow" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Comment color in menu <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *menu-color-key*
-    </font>
-    <font color='#0000ff'>
-       = "Magenta" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Key color in menu <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Key bound min menu color <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *menu-color-menu-key*
@@ -816,7 +860,50 @@
     <font color='#0000ff'>
        = #<XLIB:COLOR 0.99609375 0.6015625 0.99609375> <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Menu key color in menu <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Menu key color in menu <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *menu-color-key*
+    </font>
+    <font color='#0000ff'>
+       = "Magenta" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Key color in menu <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *menu-color-comment*
+    </font>
+    <font color='#0000ff'>
+       = "Yellow" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Comment color in menu <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *menu-color-submenu*
+    </font>
+    <font color='#0000ff'>
+       = "Cyan" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Submenu color in menu <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *xdg-section-list*
+    </font>
+    <font color='#0000ff'>
+       =  <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp; (TEXTEDITOR FILEMANAGER WEBBROWSER AUDIOVIDEO AUDIO VIDEO DEVELOPMENT EDUCATION GAME GRAPHICS NETWORK OFFICE SETTINGS <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp;  SYSTEM UTILITY TERMINALEMULATOR SCREENSAVER) <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Standard menu sections <br>
 
     <p>
       <a name='miscellaneous' href='#top'>
@@ -824,165 +911,13 @@
       </a>
     </p>
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *have-to-compress-notify*
+      &nbsp;&nbsp;  *default-window-height*
     </font>
     <font color='#0000ff'>
-       = T <br>
+       = 300 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Compress event notify? <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp; This variable may be useful to speed up some slow version of CLX. <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp; It is particulary useful with CLISP/MIT-CLX. <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *transparent-background*
-    </font>
-    <font color='#0000ff'>
-       = T <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Enable transparent background: one of nil, :pseudo, t (xcompmgr must be started) <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *default-transparency*
-    </font>
-    <font color='#0000ff'>
-       = 0.8 <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Default transparency for all windows when in xcompmgr transparency mode <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *show-root-frame-p*
-    </font>
-    <font color='#0000ff'>
-       = NIL <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Show the root frame information or not <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *border-size*
-    </font>
-    <font color='#0000ff'>
-       = 1 <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Windows and frames border size <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *loop-timeout*
-    </font>
-    <font color='#0000ff'>
-       = 1 <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Maximum time (in seconds) to wait before calling *loop-hook* <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *default-font-string*
-    </font>
-    <font color='#0000ff'>
-       = "fixed" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     The default font used in clfswm <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *default-frame-data*
-    </font>
-    <font color='#0000ff'>
-       = ((:TILE-SIZE 0.8) (:TILE-SPACE-SIZE 0.1) <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;                           (:FAST-LAYOUT (TILE-LEFT-LAYOUT TILE-LAYOUT)) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                           (:MAIN-LAYOUT-WINDOWS NIL)) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;     Default slots set in frame date <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *default-managed-type*
-    </font>
-    <font color='#0000ff'>
-       = (:NORMAL) <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Default managed window types <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *default-focus-policy*
-    </font>
-    <font color='#0000ff'>
-       = :CLICK <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Default mouse focus policy. One of :click, :sloppy, :sloppy-strict or :sloppy-select. <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *show-hide-policy*
-    </font>
-    <font color='#0000ff'>
-       = #<Function <= {10500641}> <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     'NIL': always display all children (better with transparency support). <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp; '<': Hide only children less than children above. <br>
-
-    <p>
-      <a name='miscellaneous' href='#top'>
-        '&lt;=': Hide children less or equal to children above (better for performance on slow machine). 
-      </a>
-    </p>
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *default-modifiers*
-    </font>
-    <font color='#0000ff'>
-       = NIL <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Default modifiers list to append to explicit modifiers <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp; Example: :mod-2 for num_lock, :lock for Caps_lock... <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *never-managed-window-list*
-    </font>
-    <font color='#0000ff'>
-       = ((IS-NOTIFY-WINDOW-P RAISE-WINDOW) <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;                                  (EQUAL-WM-CLASS-ROX-PINBOARD NIL) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                  (EQUAL-WM-CLASS-XVKBD RAISE-WINDOW) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;                                  (EQUAL-CLFSWM-TERMINAL RAISE-AND-FOCUS-WINDOW)) <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp;     CLFSWM will never manage windows of this type. <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp; A list of (list match-function handle-function) <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *hide-unmanaged-window*
-    </font>
-    <font color='#0000ff'>
-       = T <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Hide or not unmanaged windows when a child is deselected. <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *snap-size*
-    </font>
-    <font color='#0000ff'>
-       = 5 <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Snap size (in % of parent size) when move or resize frame is constrained <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *spatial-move-delay-before*
-    </font>
-    <font color='#0000ff'>
-       = 0.2 <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Delay to display the current child before doing a spatial move <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *spatial-move-delay-after*
-    </font>
-    <font color='#0000ff'>
-       = 0.5 <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Delay to display the new child after doing a spatial move <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Default window height <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *default-window-width*
@@ -990,15 +925,199 @@
     <font color='#0000ff'>
        = 400 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Default window width <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Default window width <br>
 
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *default-window-height*
+      &nbsp;&nbsp;  *spatial-move-delay-after*
     </font>
     <font color='#0000ff'>
-       = 300 <br>
+       = 0.5 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Default window height <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Delay to display the new child after doing a spatial move <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *spatial-move-delay-before*
+    </font>
+    <font color='#0000ff'>
+       = 0.2 <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Delay to display the current child before doing a spatial move <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *snap-size*
+    </font>
+    <font color='#0000ff'>
+       = 5 <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Snap size (in % of parent size) when move or resize frame is constrained <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *hide-unmanaged-window*
+    </font>
+    <font color='#0000ff'>
+       = T <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Hide or not unmanaged windows when a child is deselected. <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *never-managed-window-list*
+    </font>
+    <font color='#0000ff'>
+       =  <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp; ((IS-NOTIFY-WINDOW-P RAISE-WINDOW) (EQUAL-WM-CLASS-ROX-PINBOARD NIL) (EQUAL-WM-CLASS-XVKBD RAISE-WINDOW) <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp;  (EQUAL-CLFSWM-TERMINAL RAISE-AND-FOCUS-WINDOW)) <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp;      <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; CLFSWM will never manage windows of this type. <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; A list of (list match-function handle-function) <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *default-modifiers*
+    </font>
+    <font color='#0000ff'>
+       = NIL <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;      <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; Default modifiers list to append to explicit modifiers <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; Example: :mod-2 for num_lock, :lock for Caps_lock... <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *show-hide-policy*
+    </font>
+    <font color='#0000ff'>
+       = #<SYSTEM-FUNCTION <=> <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;      <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; 'NIL': always display all children (better with transparency support). <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; '<': Hide only children less than children above. <br>
+
+    <p>
+      <a name='miscellaneous' href='#top'>
+        '&lt;=': Hide children less or equal to children above (better for performance on slow machine). 
+      </a>
+    </p>
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *default-focus-policy*
+    </font>
+    <font color='#0000ff'>
+       = :CLICK <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Default mouse focus policy. One of :click, :sloppy, :sloppy-strict or :sloppy-select. <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *default-managed-type*
+    </font>
+    <font color='#0000ff'>
+       = (:NORMAL) <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Default managed window types <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *default-frame-data*
+    </font>
+    <font color='#0000ff'>
+       = ((:TILE-SIZE 0.8) (:TILE-SPACE-SIZE 0.1) (:MAIN-LAYOUT-WINDOWS NIL) (:FAST-LAYOUT (TILE-SPACE-LAYOUT NO-LAYOUT))) <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Default slots set in frame date <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *default-font-string*
+    </font>
+    <font color='#0000ff'>
+       = "fixed" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     The default font used in clfswm <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *loop-timeout*
+    </font>
+    <font color='#0000ff'>
+       = 1 <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Maximum time (in seconds) to wait before calling *loop-hook* <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *border-size*
+    </font>
+    <font color='#0000ff'>
+       = 1 <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Windows and frames border size <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *show-root-frame-p*
+    </font>
+    <font color='#0000ff'>
+       = NIL <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Show the root frame information or not <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *default-transparency*
+    </font>
+    <font color='#0000ff'>
+       = 0.8 <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Default transparency for all windows when in xcompmgr transparency mode <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *transparent-background*
+    </font>
+    <font color='#0000ff'>
+       = T <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Enable transparent background: one of nil, :pseudo, t (xcompmgr must be started) <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *have-to-compress-notify*
+    </font>
+    <font color='#0000ff'>
+       = T <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;      <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; Compress event notify? <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; This variable may be useful to speed up some slow version of CLX. <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; It is particulary useful with CLISP/MIT-CLX. <br>
 
     <p>
       <a name='notify-window' href='#top'>
@@ -1006,36 +1125,13 @@
       </a>
     </p>
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *notify-window-font-string*
+      &nbsp;&nbsp;  *notify-window-transparency*
     </font>
     <font color='#0000ff'>
-       = "fixed" <br>
+       = 0.8 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Notify window font string <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *notify-window-background*
-    </font>
-    <font color='#0000ff'>
-       = "black" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Notify Window background color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *notify-window-foreground*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Notify Window foreground color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *notify-window-border*
-    </font>
-    <font color='#0000ff'>
-       = "red" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Notify Window border color <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Notify window background transparency <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *notify-window-delay*
@@ -1043,15 +1139,44 @@
     <font color='#0000ff'>
        = 10 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Notify Window display delay <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Notify Window display delay <br>
 
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *notify-window-transparency*
+      &nbsp;&nbsp;  *notify-window-border*
     </font>
     <font color='#0000ff'>
-       = 0.8 <br>
+       = "red" <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Notify window background transparency <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Notify Window border color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *notify-window-foreground*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Notify Window foreground color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *notify-window-background*
+    </font>
+    <font color='#0000ff'>
+       = "black" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Notify Window background color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *notify-window-font-string*
+    </font>
+    <font color='#0000ff'>
+       = "fixed" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Notify window font string <br>
 
     <p>
       <a name='placement' href='#top'>
@@ -1059,76 +1184,22 @@
       </a>
     </p>
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *banish-pointer-placement*
-    </font>
-    <font color='#0000ff'>
-       = BOTTOM-RIGHT-ROOT-PLACEMENT <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Pointer banishment placement <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *second-mode-placement*
-    </font>
-    <font color='#0000ff'>
-       = TOP-MIDDLE-ROOT-PLACEMENT <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Second mode window placement <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *info-mode-placement*
-    </font>
-    <font color='#0000ff'>
-       = TOP-LEFT-ROOT-PLACEMENT <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Info mode window placement <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *query-mode-placement*
-    </font>
-    <font color='#0000ff'>
-       = TOP-LEFT-ROOT-PLACEMENT <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Query mode window placement <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *circulate-mode-placement*
+      &nbsp;&nbsp;  *volume-mode-placement*
     </font>
     <font color='#0000ff'>
        = BOTTOM-MIDDLE-ROOT-PLACEMENT <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Circulate mode window placement <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Volume mode window placement <br>
 
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *expose-mode-placement*
+      &nbsp;&nbsp;  *toolbar-window-placement*
     </font>
     <font color='#0000ff'>
-       = TOP-LEFT-CHILD-PLACEMENT <br>
+       = TOP-LEFT-PLACEMENT <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Expose mode window placement (Selection keys position) <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *expose-query-placement*
-    </font>
-    <font color='#0000ff'>
-       = BOTTOM-LEFT-ROOT-PLACEMENT <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Expose mode query window placement <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *notify-window-placement*
-    </font>
-    <font color='#0000ff'>
-       = BOTTOM-RIGHT-ROOT-PLACEMENT <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Notify window placement <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *ask-close/kill-placement*
-    </font>
-    <font color='#0000ff'>
-       = TOP-RIGHT-ROOT-PLACEMENT <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Ask close/kill window placement <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar window placement <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *unmanaged-window-placement*
@@ -1136,7 +1207,130 @@
     <font color='#0000ff'>
        = MIDDLE-MIDDLE-ROOT-PLACEMENT <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Unmanager window placement <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Unmanager window placement <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *ask-close/kill-placement*
+    </font>
+    <font color='#0000ff'>
+       = TOP-RIGHT-ROOT-PLACEMENT <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Ask close/kill window placement <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *notify-window-placement*
+    </font>
+    <font color='#0000ff'>
+       = BOTTOM-RIGHT-ROOT-PLACEMENT <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Notify window placement <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *expose-query-placement*
+    </font>
+    <font color='#0000ff'>
+       = BOTTOM-LEFT-ROOT-PLACEMENT <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Expose mode query window placement <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *expose-mode-placement*
+    </font>
+    <font color='#0000ff'>
+       = TOP-LEFT-CHILD-PLACEMENT <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Expose mode window placement (Selection keys position) <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *circulate-mode-placement*
+    </font>
+    <font color='#0000ff'>
+       = BOTTOM-MIDDLE-ROOT-PLACEMENT <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Circulate mode window placement <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *query-mode-placement*
+    </font>
+    <font color='#0000ff'>
+       = TOP-LEFT-ROOT-PLACEMENT <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Query mode window placement <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *info-mode-placement*
+    </font>
+    <font color='#0000ff'>
+       = TOP-LEFT-ROOT-PLACEMENT <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Info mode window placement <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *second-mode-placement*
+    </font>
+    <font color='#0000ff'>
+       = TOP-MIDDLE-ROOT-PLACEMENT <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Second mode window placement <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *banish-pointer-placement*
+    </font>
+    <font color='#0000ff'>
+       = MIDDLE-RIGHT-ROOT-PLACEMENT <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Pointer banishment placement <br>
+
+    <p>
+      <a name='power-management' href='#top'>
+        &lt;= Power Management Group =&gt; 
+      </a>
+    </p>
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *power-halt-cmd*
+    </font>
+    <font color='#0000ff'>
+       = "sudo /sbin/halt" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Halt command <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *power-reboot-cmd*
+    </font>
+    <font color='#0000ff'>
+       = "sudo /sbin/reboot" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Reboot command <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *power-suspend-to-disk-cmd*
+    </font>
+    <font color='#0000ff'>
+       = "sudo pm-hibernate" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Suspend to disk command <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *power-suspend-to-ram-cmd*
+    </font>
+    <font color='#0000ff'>
+       = "sudo pm-suspend" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Suspend to ram command <br>
 
     <p>
       <a name='query-string' href='#top'>
@@ -1144,76 +1338,13 @@
       </a>
     </p>
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *query-font-string*
+      &nbsp;&nbsp;  *query-min-complet-char*
     </font>
     <font color='#0000ff'>
-       = "fixed" <br>
+       = 2 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Query string window font string <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *query-background*
-    </font>
-    <font color='#0000ff'>
-       = "black" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Query string window background color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *query-message-color*
-    </font>
-    <font color='#0000ff'>
-       = "yellow" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Query string window message color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *query-foreground*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Query string window foreground color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *query-cursor-color*
-    </font>
-    <font color='#0000ff'>
-       = "white" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Query string window foreground cursor color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *query-parent-color*
-    </font>
-    <font color='#0000ff'>
-       = "blue" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Query string window parenthesis color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *query-parent-error-color*
-    </font>
-    <font color='#0000ff'>
-       = "red" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Query string window parenthesis color when no match <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *query-border*
-    </font>
-    <font color='#0000ff'>
-       = "red" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Query string window border color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *query-transparency*
-    </font>
-    <font color='#0000ff'>
-       = 0.8 <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Query string window background transparency <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Query minimum input length for completion <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *query-max-complet-length*
@@ -1221,15 +1352,89 @@
     <font color='#0000ff'>
        = 100 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Query maximum length of completion list <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Query maximum length of completion list <br>
 
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *query-min-complet-char*
+      &nbsp;&nbsp;  *query-transparency*
     </font>
     <font color='#0000ff'>
-       = 2 <br>
+       = 0.8 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Query minimum input length for completion <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Query string window background transparency <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *query-border*
+    </font>
+    <font color='#0000ff'>
+       = "red" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Query string window border color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *query-parent-error-color*
+    </font>
+    <font color='#0000ff'>
+       = "red" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Query string window parenthesis color when no match <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *query-parent-color*
+    </font>
+    <font color='#0000ff'>
+       = "blue" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Query string window parenthesis color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *query-cursor-color*
+    </font>
+    <font color='#0000ff'>
+       = "white" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Query string window foreground cursor color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *query-foreground*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Query string window foreground color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *query-message-color*
+    </font>
+    <font color='#0000ff'>
+       = "yellow" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Query string window message color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *query-background*
+    </font>
+    <font color='#0000ff'>
+       = "black" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Query string window background color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *query-font-string*
+    </font>
+    <font color='#0000ff'>
+       = "fixed" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Query string window font string <br>
 
     <p>
       <a name='root' href='#top'>
@@ -1237,32 +1442,13 @@
       </a>
     </p>
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *create-frame-on-root*
+      &nbsp;&nbsp;  *show-current-root-message*
     </font>
     <font color='#0000ff'>
-       = NIL <br>
+       = "Current root" <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Create frame on root. <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp; Set this variable to true if you want to allow to create a new frame <br>
-
-    &nbsp; &nbsp; &nbsp; &nbsp; on the root window in the main mode with the mouse <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *have-to-show-current-root*
-    </font>
-    <font color='#0000ff'>
-       = T <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Show the current root if true <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *show-current-root-delay*
-    </font>
-    <font color='#0000ff'>
-       = 1 <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Delay to show the current root <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Current root notify window message <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *show-current-root-placement*
@@ -1270,15 +1456,44 @@
     <font color='#0000ff'>
        = MIDDLE-MIDDLE-ROOT-PLACEMENT <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Current root notify window placement <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Current root notify window placement <br>
 
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *show-current-root-message*
+      &nbsp;&nbsp;  *show-current-root-delay*
     </font>
     <font color='#0000ff'>
-       = "Current root" <br>
+       = 1 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Current root notify window message <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Delay to show the current root <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *have-to-show-current-root*
+    </font>
+    <font color='#0000ff'>
+       = T <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Show the current root if true <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *create-frame-on-root*
+    </font>
+    <font color='#0000ff'>
+       = NIL <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;      <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; Create frame on root. <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; Set this variable to true if you want to allow to create a new frame <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; on the root window in the main mode with the mouse <br>
 
     <p>
       <a name='second-mode' href='#top'>
@@ -1286,44 +1501,13 @@
       </a>
     </p>
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *sm-border-color*
+      &nbsp;&nbsp;  *sm-transparency*
     </font>
     <font color='#0000ff'>
-       = "Green" <br>
+       = 0.8 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Second mode window border color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *sm-background-color*
-    </font>
-    <font color='#0000ff'>
-       = "Black" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Second mode window background color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *sm-foreground-color*
-    </font>
-    <font color='#0000ff'>
-       = "Red" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Second mode window foreground color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *sm-font-string*
-    </font>
-    <font color='#0000ff'>
-       = "fixed" <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Second mode window font string <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *sm-width*
-    </font>
-    <font color='#0000ff'>
-       = 300 <br>
-    </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Second mode window width <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Second mode background transparency <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *sm-height*
@@ -1331,25 +1515,431 @@
     <font color='#0000ff'>
        = 25 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Second mode window height <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Second mode window height <br>
 
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *sm-transparency*
+      &nbsp;&nbsp;  *sm-width*
+    </font>
+    <font color='#0000ff'>
+       = 300 <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Second mode window width <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *sm-font-string*
+    </font>
+    <font color='#0000ff'>
+       = "fixed" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Second mode window font string <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *sm-foreground-color*
+    </font>
+    <font color='#0000ff'>
+       = "Red" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Second mode window foreground color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *sm-background-color*
+    </font>
+    <font color='#0000ff'>
+       = "Black" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Second mode window background color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *sm-border-color*
+    </font>
+    <font color='#0000ff'>
+       = "Green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Second mode window border color <br>
+
+    <p>
+      <a name='toolbar' href='#top'>
+        &lt;= Toolbar Group =&gt; 
+      </a>
+    </p>
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-volume-mode-button-color*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Volume mode color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-mpd-buttons-color*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     MPD - Music Player Daemon buttons color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-mpd-info-color*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     MPD - Music Player Daemon information color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *mpd-toolbar-client*
+    </font>
+    <font color='#0000ff'>
+       = "gmpc" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     MPD client <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *mpd-toolbar*
+    </font>
+    <font color='#0000ff'>
+       = ((MPD-BUTTONS 1) (MPD-INFO 60)) <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     MPD toolbar modules <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-expose-mode-button-color*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Expose-mode button <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-system-info-urgent-color*
+    </font>
+    <font color='#0000ff'>
+       = "Red" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     System information colors (CPU+Mem+Battery) <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-system-info-alert-color*
+    </font>
+    <font color='#0000ff'>
+       = "Magenta" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     System information colors (CPU+Mem+Battery) <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-system-info-low-color*
+    </font>
+    <font color='#0000ff'>
+       = "Yellow" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     System information colors (CPU+Mem+Battery) <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-system-info-color*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     System information colors (CPU+Mem+Battery) <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-mem-color*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Memory color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-cpu-color*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     CPU color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-clfswm-menu-color*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     CLFSWM menu color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-clock-action*
+    </font>
+    <font color='#0000ff'>
+       = "xclock -analog" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar clickable clock module action on click <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-clickable-clock-color*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Clickable clock color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-clickable-label-color*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Clickable label color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-label-color*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Label color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-clock-color*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Clock color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-sensibility*
+    </font>
+    <font color='#0000ff'>
+       = 3 <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar sensibility in pixels <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-default-autohide*
+    </font>
+    <font color='#0000ff'>
+       = NIL <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar default autohide value <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-default-refresh-delay*
+    </font>
+    <font color='#0000ff'>
+       = 30 <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar default refresh delay <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-default-thickness*
+    </font>
+    <font color='#0000ff'>
+       = 20 <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar default thickness <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-window-transparency*
     </font>
     <font color='#0000ff'>
        = 0.8 <br>
     </font>
-    &nbsp; &nbsp; &nbsp; &nbsp;     Second mode background transparency <br>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar window background transparency <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-default-border-size*
+    </font>
+    <font color='#0000ff'>
+       = 0 <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar Window border size <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-window-border*
+    </font>
+    <font color='#0000ff'>
+       = "red" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar Window border color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-window-foreground*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar Window foreground color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-window-background*
+    </font>
+    <font color='#0000ff'>
+       = "black" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar Window background color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *toolbar-window-font-string*
+    </font>
+    <font color='#0000ff'>
+       = "fixed" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar window font string <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *default-toolbar*
+    </font>
+    <font color='#0000ff'>
+       = ((CLFSWM-MENU 1) (EXPOSE-MODE-BUTTON 10) (SYSTEM-USAGE 90) (CLICKABLE-CLOCK 99)) <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Default toolbar modules <br>
+
+    <p>
+      <a name='volume-mode' href='#top'>
+        &lt;= Volume Mode Group =&gt; 
+      </a>
+    </p>
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *volume-external-mixer-cmd*
+    </font>
+    <font color='#0000ff'>
+       = "/usr/bin/gnome-alsamixer" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Command to start an external mixer program <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *volume-text-limit*
+    </font>
+    <font color='#0000ff'>
+       = 30 <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Maximum text limit in the volume window <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *volume-height*
+    </font>
+    <font color='#0000ff'>
+       = 15 <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Volume mode window height <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *volume-width*
+    </font>
+    <font color='#0000ff'>
+       = 400 <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Volume mode window width <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *volume-border-size*
+    </font>
+    <font color='#0000ff'>
+       = 1 <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Volume window border size <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *volume-border*
+    </font>
+    <font color='#0000ff'>
+       = "red" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Volume window border color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *volume-foreground*
+    </font>
+    <font color='#0000ff'>
+       = "green" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Volume window foreground color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *volume-background*
+    </font>
+    <font color='#0000ff'>
+       = "black" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Volume window background color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *volume-font-string*
+    </font>
+    <font color='#0000ff'>
+       = "fixed" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Volume window font string <br>
+
+    <p>
+      <a name='wallpaper' href='#top'>
+        &lt;= Wallpaper Group =&gt; 
+      </a>
+    </p>
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *wallpaper-command*
+    </font>
+    <font color='#0000ff'>
+       = "Esetroot -scale" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Command to install the wallpaper <br>
 
     <p>
       <small>
-        This documentation was produced with the CLFSWM auto-doc functions. To reproduce it, use the produce-conf-var-doc-html-in-file or
+        
+This documentation was produced with the CLFSWM auto-doc functions. To reproduce it, use the produce-conf-var-doc-html-in-file or
 the produce-all-docs function from the Lisp REPL.
       </small>
     </p>
     <p>
       <small>
-        Something like this:<br>
+        
+Something like this:<br>
 LISP> (in-package :clfswm)<br>
 CLFSWM> (produce-conf-var-doc-html-in-file "my-variables.html")<br>
 or<br> CLFSWM> (produce-all-docs)

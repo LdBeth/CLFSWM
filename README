@@ -53,7 +53,12 @@ it with cmucl regularly and I use it with clisp (you need the clx/xlib
 package).
 
 To use CLFSWM, load the load.lisp file. It loads the ASDF package,
-build the system and start the main loop.
+build the system and start the main loop. Then it dumps an executable
+image. it may also install files for you in a standard directory
+(/usr/local for example).
+
+Have a look at load.lisp for more details. You can also make a copy and
+tweak it.
 
 Another way is to do something like this:
 $ cd /in/the/directory/of/clfswm/
