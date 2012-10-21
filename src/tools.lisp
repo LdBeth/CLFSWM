@@ -95,7 +95,7 @@
 	   :date-string
            :write-backtrace
 	   :do-execute
-	   :do-shell :fdo-shell
+	   :do-shell :fdo-shell :do-shell-output
 	   :getenv
 	   :uquit
 	   :urun-prog
@@ -730,7 +730,11 @@ of the program to return.
 (defun fdo-shell (formatter &rest args)
   (do-shell (apply #'format nil formatter args)))
 
-
+(defun do-shell-output (formatter &rest args)
+  (let ((output (do-shell (apply #'format nil formatter args) nil t)))
+    (loop for line = (read-line output nil nil)
+       while line
+       collect line)))
 
 
 

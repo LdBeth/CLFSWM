@@ -67,10 +67,8 @@
                        (setf ind (if (< ind len) (1+ ind) 0))))
                    (format str "~A" filename))))
     (format t "~A~%" command)
-    (let ((output (do-shell command nil t)))
-      (loop for line = (read-line output nil nil)
-         while line
-         do (format t "~A~%" line)))))
+    (do-shell-output command)))
+
 
 (defun create-wallpaper (filename &rest images)
   (format t "Creating wallpaper ~A from ~{~A ~}~%" filename images)

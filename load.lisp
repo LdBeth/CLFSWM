@@ -22,25 +22,32 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 ;;;
 ;;; --------------------------------------------------------------------------
+;;;
+;;; Edit this file (or its copy) and load it with your lisp implementation.
+;;; If you want, it can download ASDF and CLX for you. You'll need wget and
+;;; git program.
+;;;
+;;; Here are command line reference:
+;;;
+;;; clisp -E iso-8859-1 load.lisp
+;;; sbcl --load load.lisp
+;;; cmucl -load load.lisp
+;;; ccl -l load.lisp
+;;; ecl -load load.lisp
+;;;
+;;; --------------------------------------------------------------------------
 
 ;;;------------------
 ;;; Customization part
 ;;;------------------
+(defparameter *interactive* t)
+
+;;; Comment or uncomment the lines above to fit your needs.
 (pushnew :clfswm-compile *features*)
 (pushnew :clfswm-run *features*)
 (pushnew :clfswm-build-image *features*)
-
 ;;(pushnew :clfswm-install *features*)
-
-;;;;;; Uncomment lines above to build the default documentation.
 ;;(pushnew :clfswm-build-doc *features*)
-
-;;;;; Uncomment the line below if you want to see all ignored X errors
-;;(pushnew :xlib-debug *features*)
-
-;;;;; Uncomment the line below if you want to see all event debug messages
-;;(pushnew :event-debug *features*)
-
 
 (defparameter *binary-name* "clfswm")
 
@@ -55,8 +62,28 @@
 (defparameter *install-man*     (with-prefix "/share/man/man1/"))
 
 
+;;;;; Uncomment the line below if you want to see all ignored X errors
+;;(pushnew :xlib-debug *features*)
+
+;;;;; Uncomment the line below if you want to see all event debug messages
+;;(pushnew :event-debug *features*)
+
+
 
 #+:CMU (setf ext:*gc-verbose* nil)
+
+#+:SBCL
+(require :sb-posix)
+
+(load (compile-file "src/tools.lisp"))
+
+(defun load-info (formatter &rest args)
+  (format t "~&  ==> ~A~%" (apply #'format nil formatter args))
+  (force-output))
+
+(defun interactive-ask (formatter &rest args)
+  (when *interactive*
+    (y-or-n-p (apply #'format nil formatter args))))
 
 ;;;------------------
 ;;; XLib part 1
@@ -69,26 +96,54 @@
 ;;; ASDF part
 ;;;------------------
 ;;;; Loading ASDF
+(load-info "Requiring ASDF")
+
 #+(or :SBCL :CMUCL :CCL :ECL)
 (require :asdf)
 
-#-:ASDF
-(load "contrib/asdf.lisp")
+#-ASDF
+(when (probe-file "asdf.lisp")
+  (load "asdf.lisp"))
 
+#-:ASDF
+(let ((asdf-url "http://common-lisp.net/project/asdf/asdf.lisp"))
+  (when (interactive-ask "ASDF not found. Do you want to download it from ~A ?" asdf-url)
+    (tools:do-shell-output "wget ~A" asdf-url)
+    (load "asdf.lisp")))
+
+(format t "ASDF version: ~A~%" (asdf:asdf-version))
 
 ;;;------------------
 ;;; XLib part 2
 ;;;------------------
+(load-info "Requiring CLX")
+
 ;;; Loading clisp dynamic module. This part needs clisp >= 2.50
 ;;#+(AND CLISP (not CLX))
 ;;(when (fboundp 'require)
 ;;  (require "clx.lisp"))
+#-CLX
+(progn
+  (when (probe-file "clx/clx.asd")
+    (load "clx/clx.asd")
+    (asdf:oos 'asdf:load-op :clx)))
+
+#-CLX
+(progn
+  (let ((clx-url "git://github.com/sharplispers/clx.git"))
+    (when (interactive-ask "CLX not found. Do you want to download it from ~A ?" clx-url)
+      (unless (probe-file "clx/clx.asd")
+        (tools:do-shell-output "git clone ~A" clx-url))
+      (load "clx/clx.asd")
+      (asdf:oos 'asdf:load-op :clx))))
 
 ;;;------------------
 ;;; CLFSWM loading
 ;;;------------------
 #+:clfswm-compile
-(asdf:oos 'asdf:load-op :clfswm)
+(progn
+  (load-info "Compiling CLFSWM")
+  (asdf:oos 'asdf:load-op :clfswm))
 
 
 ;;;-------------------------
@@ -98,33 +153,33 @@
 (in-package :clfswm)
 
 #+:clfswm-run
-(ignore-errors
-  (main :read-conf-file-p t))
+(progn
+  (cl-user::load-info "Running CLFSWM")
+  (ignore-errors
+    (main :read-conf-file-p t)))
 
 
 ;;;-------------------------
 ;;; Building documentation
 ;;;-------------------------
 #+:clfswm-build-doc
-(produce-all-docs)
+(progn
+  (cl-user::load-info "Building documentation")
+  (produce-all-docs))
 
 ;;;-----------------------
 ;;; Building image part
 ;;;-----------------------
 #+:clfswm-build-image
-(build-lisp-image "clfswm")
+(progn
+  (cl-user::load-info "Building CLFSWM executable image")
+   (build-lisp-image "clfswm"))
 
 ;;;-----------------------
 ;;; Installation part
 ;;;-----------------------
 #+:clfswm-install
 (in-package :cl-user)
-
-#+:SBCL
-(require :sb-posix)
-
-#+:clfswm-install
-(load (compile-file "src/tools.lisp"))
 
 #+:clfswm-install
 (defun check-directory (dir)
@@ -134,13 +189,14 @@
 
 #+:clfswm-install
 (defun move-file (file where)
-  (format t "cp -R ~A ~A~%" file where)
-  (tools:fdo-shell "cp -R ~A ~A" file where))
+  (format t "cp -Rf ~A ~A~%" file where)
+  (tools:do-shell-output "cp -Rf ~A ~A" file where))
 
 
 
 #+:clfswm-install
 (progn
+  (load-info "Installing CLFSWM")
   (check-directory *install-prefix*)
   (check-directory *install-bin*)
   (check-directory *install-contrib*)
@@ -152,7 +208,6 @@
   (move-file "clfswm.1" *install-man*)
   (format t "Please, adjust *contrib-dir* variable to ~A in your configuration file.~%" *install-contrib*)
   (format t "Something like: (setf *contrib-dir* ~S)~%" *install-contrib*)
-  (sleep 0.5)
-  (tools:fdo-shell "rm -f ~A/clfswm.1.gz && gzip ~A/clfswm.1" *install-man* *install-man*)
+  (tools:do-shell-output "rm -f ~A/clfswm.1.gz && gzip ~A/clfswm.1" *install-man* *install-man*)
   (tools:uquit))
 
