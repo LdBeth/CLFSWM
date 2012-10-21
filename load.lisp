@@ -44,14 +44,14 @@
 
 ;;; Comment or uncomment the lines above to fit your needs.
 (pushnew :clfswm-compile *features*)
-(pushnew :clfswm-run *features*)
+;;(pushnew :clfswm-run *features*)
 (pushnew :clfswm-build-image *features*)
 ;;(pushnew :clfswm-install *features*)
 ;;(pushnew :clfswm-build-doc *features*)
 
 (defparameter *binary-name* "clfswm")
 
-(defparameter *install-prefix* "/tmp/usr/local")
+(defparameter *install-prefix* "/usr/local")
 
 (defun with-prefix (&rest place)
   (apply #'concatenate 'string *install-prefix* place))
