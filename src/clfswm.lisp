@@ -150,12 +150,14 @@
   (awhen (find-frame-window window)
     (display-frame-info it)))
 
+
 (define-handler main-mode :configure-notify (window)
   (when (child-equal-p window *root*)
-    (place-frames-from-xinerama-infos)
-    (finish-configuring-root)
-    (show-all-children)
-    (call-hook *root-size-change*)))
+    (unless (null-size-window-in-frame *root-frame*)
+      (place-frames-from-xinerama-infos)
+      (finish-configuring-root)
+      (show-all-children)
+      (call-hook *root-size-change*))))
 
 
 (defun error-handler (display error-key &rest key-vals &key asynchronous &allow-other-keys)

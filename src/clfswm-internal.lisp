@@ -489,6 +489,16 @@
 
 
 
+
+(defun null-size-window-in-frame (frame)
+  (let ((null-size-window-p nil))
+    (with-all-windows (frame window)
+      (when (null-size-window-p window)
+        (setf null-size-window-p t)))
+    null-size-window-p))
+
+
+
 (defun create-frame-window ()
   (let ((win (xlib:create-window :parent *root*
                                  :x 0
