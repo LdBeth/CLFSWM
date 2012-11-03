@@ -70,7 +70,7 @@
          (fmt "amixer ~A ~A~{ ~A~} 2>/dev/null | tail -1 | ~A")
          (shell (format nil fmt cmd scontrol parameters sed))
          (line (read-line (do-shell shell) nil t)))
-    (when line
+    (when (stringp line)
       (let* ((ratio (parse-integer line :junk-allowed t))
              (%-pos (position #\% line)))
         (values (and ratio (/ ratio 100))
