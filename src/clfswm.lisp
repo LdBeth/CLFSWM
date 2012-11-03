@@ -111,7 +111,7 @@
     (when (find-child window *root-frame*)
       (setf (window-state window) +withdrawn-state+)
       (xlib:unmap-window window)
-      (delete-child-in-all-frames window)
+      (remove-child-in-all-frames window)
       (show-all-children))))
 
 
