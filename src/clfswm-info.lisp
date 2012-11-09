@@ -125,6 +125,7 @@
 (defun set-default-info-keys ()
   (define-info-key (#\q) 'leave-info-mode)
   (define-info-key ("Return") 'leave-info-mode-and-valid)
+  (define-info-key ("KP_Enter" :mod-2) 'leave-info-mode-and-valid)
   (define-info-key ("space") 'leave-info-mode-and-valid)
   (define-info-key ("Escape") 'leave-info-mode)
   (define-info-key ("g" :control) 'leave-info-mode)

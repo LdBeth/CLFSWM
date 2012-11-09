@@ -40,6 +40,16 @@
 (defparameter *query-return* nil)
 
 
+(defun add-char-in-query-string (char)
+  (setf *query-string* (concatenate 'string
+                                    (when (<= *query-pos* (length *query-string*))
+                                      (subseq *query-string* 0 *query-pos*))
+                                    (string char)
+                                    (when (< *query-pos* (length *query-string*))
+                                      (subseq *query-string* *query-pos*))))
+  (incf *query-pos*))
+
+
 (defun query-show-paren (orig-string pos dec)
   "Replace matching parentheses with brackets"
   (let ((string (copy-seq orig-string)))
@@ -335,7 +345,23 @@ that calls query-mode-complete-suggest."
   (define-query-key ("Right" :control) 'query-right-word)
   (define-query-key ("Up") 'query-previous-history)
   (define-query-key ("Down") 'query-next-history)
-  (define-query-key ("k" :control) 'query-delete-eof))
+  (define-query-key ("k" :control) 'query-delete-eof)
+  (define-query-key ("KP_Insert" :mod-2) 'add-char-in-query-string "0")
+  (define-query-key ("KP_End" :mod-2) 'add-char-in-query-string "1")
+  (define-query-key ("KP_Down" :mod-2) 'add-char-in-query-string "2")
+  (define-query-key ("KP_Page_Down" :mod-2) 'add-char-in-query-string "3")
+  (define-query-key ("KP_Left" :mod-2) 'add-char-in-query-string "4")
+  (define-query-key ("KP_Begin" :mod-2) 'add-char-in-query-string "5")
+  (define-query-key ("KP_Right" :mod-2) 'add-char-in-query-string "6")
+  (define-query-key ("KP_Home" :mod-2) 'add-char-in-query-string "7")
+  (define-query-key ("KP_Up" :mod-2) 'add-char-in-query-string "8")
+  (define-query-key ("KP_Page_Up" :mod-2) 'add-char-in-query-string "9")
+  (define-query-key ("KP_Delete" :mod-2) 'add-char-in-query-string ".")
+  (define-query-key ("KP_Add" :mod-2) 'add-char-in-query-string "+")
+  (define-query-key ("KP_Subtract" :mod-2) 'add-char-in-query-string "-")
+  (define-query-key ("KP_Multiply" :mod-2) 'add-char-in-query-string "*")
+  (define-query-key ("KP_Divide" :mod-2) 'add-char-in-query-string "/")
+  (define-query-key ("KP_Enter" :mod-2) 'leave-query-mode-valid))
 
 
 
@@ -344,13 +370,7 @@ that calls query-mode-complete-suggest."
 	 (keysym (keycode->keysym code modifiers))
 	 (char (xlib:keysym->character *display* keysym state)))
     (when (and char (characterp char))
-      (setf *query-string* (concatenate 'string
-					(when (<= *query-pos* (length *query-string*))
-					  (subseq *query-string* 0 *query-pos*))
-					(string char)
-					(when (< *query-pos* (length *query-string*))
-					  (subseq *query-string* *query-pos*))))
-      (incf *query-pos*))))
+      (add-char-in-query-string char))))
 
 
 
