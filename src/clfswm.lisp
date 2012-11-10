@@ -157,7 +157,7 @@
       (place-frames-from-xinerama-infos)
       (finish-configuring-root)
       (show-all-children)
-      (call-hook *root-size-change*))))
+      (call-hook *root-size-change-hook*))))
 
 
 (defun error-handler (display error-key &rest key-vals &key asynchronous &allow-other-keys)
