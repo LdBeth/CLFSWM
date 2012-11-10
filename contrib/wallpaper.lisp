@@ -67,7 +67,7 @@
                        (setf ind (if (< ind len) (1+ ind) 0))))
                    (format str "~A" filename))))
     (format t "~A~%" command)
-    (do-shell-output command)))
+    (do-shell-output "~A" command)))
 
 
 (defun create-wallpaper (filename &rest images)

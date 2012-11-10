@@ -842,38 +842,53 @@ XINERAMA version 1.1 opcode: 150
         ;;'((10 10 500 580) (540 50 470 500))))))
 
 
-(defun place-frames-from-xinerama-infos ()
-  "Place frames according to xdpyinfo/xinerama informations"
-  (reset-root-list)
-  (let ((sizes (get-connected-heads-size))
-        (width (xlib:screen-width *screen*))
-        (height (xlib:screen-height *screen*)))
-    (format t "Screen sizes: ~A~%" sizes)
-    ;; Add frames in *root-frame* until we get the same number as screen heads
-    (loop while (< (length (frame-child *root-frame*)) (length sizes))
-       do (let ((frame (create-frame)))
-            (add-frame frame *root-frame*)))
-    ;; On the opposite way: remove frames until there is more than screen heads in *root-frame*
-    (when (and sizes (> (length (frame-child *root-frame*)) (length sizes)))
-      (dotimes (i (- (length (frame-child *root-frame*)) (length sizes)))
-        (let ((deleted-child (pop (frame-child *root-frame*))))
-          (typecase deleted-child
-            (xlib:window (push deleted-child (frame-child (first (frame-child *root-frame*)))))
-            (frame (dolist (child (frame-child deleted-child))
-                     (push child (frame-child (first (frame-child *root-frame*)))))))
-          (setf (frame-layout (first (frame-child *root-frame*))) 'tile-space-layout
-                (frame-data-slot (first (frame-child *root-frame*)) :tile-layout-keep-position) :yes))))
-    (loop for size in sizes
-       for frame in (frame-child *root-frame*)
-       do (destructuring-bind (x y w h) size
-            (setf (frame-x frame) (float (/ x width))
-                  (frame-y frame) (float (/ y height))
-                  (frame-w frame) (float (/ w width))
-                  (frame-h frame) (float (/ h height)))
-            ;;(add-placed-frame-tmp frame 2)  ;; For tests
-            (unless (frame-child frame)
-              (add-frame (create-frame) frame))
-            (define-as-root frame x y w h)))))
+(let ((last-sizes nil))
+  (defun place-frames-from-xinerama-infos ()
+    "Place frames according to xdpyinfo/xinerama informations"
+    (let ((sizes (get-connected-heads-size))
+          (width (xlib:screen-width *screen*))
+          (height (xlib:screen-height *screen*)))
+      (labels ((update-root-geometry ()
+                 (loop for size in sizes
+                    for root in (get-root-list)
+                    do (destructuring-bind (x y w h) size
+                         (setf (root-x root) x
+                               (root-y root) y
+                               (root-w root) w
+                               (root-h root) h))))
+               (create-root-geometry ()
+                 (reset-root-list)
+                 ;; Add frames in *root-frame* until we get the same number as screen heads
+                 (loop while (< (length (frame-child *root-frame*)) (length sizes))
+                    do (let ((frame (create-frame)))
+                         (add-frame frame *root-frame*)))
+                 ;; On the opposite way: remove frames while there is more than screen heads in *root-frame*
+                 (when (and sizes (> (length (frame-child *root-frame*)) (length sizes)))
+                   (dotimes (i (- (length (frame-child *root-frame*)) (length sizes)))
+                     (let ((deleted-child (pop (frame-child *root-frame*))))
+                       (typecase deleted-child
+                         (xlib:window (push deleted-child (frame-child (first (frame-child *root-frame*)))))
+                         (frame (dolist (child (frame-child deleted-child))
+                                  (push child (frame-child (first (frame-child *root-frame*)))))))
+                       (setf (frame-layout (first (frame-child *root-frame*))) 'tile-space-layout
+                             (frame-data-slot (first (frame-child *root-frame*)) :tile-layout-keep-position) :yes))))
+                 (loop for size in sizes
+                    for frame in (frame-child *root-frame*)
+                    do (destructuring-bind (x y w h) size
+                         (setf (frame-x frame) (float (/ x width))
+                               (frame-y frame) (float (/ y height))
+                               (frame-w frame) (float (/ w width))
+                               (frame-h frame) (float (/ h height)))
+                         ;;(add-placed-frame-tmp frame 2)  ;; For tests
+                         (unless (frame-child frame)
+                           (add-frame (create-frame) frame))
+                         (define-as-root frame x y w h)))))
+        (format t "Screen sizes: ~A~%" sizes)
+        (if (= (length sizes) (length last-sizes))
+            (update-root-geometry)
+            (create-root-geometry))
+        (setf last-sizes sizes)))))
+
 
 
 (defun finish-configuring-root ()
