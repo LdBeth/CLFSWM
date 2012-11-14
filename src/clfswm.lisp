@@ -154,8 +154,8 @@
 (define-handler main-mode :configure-notify (window)
   (when (child-equal-p window *root*)
     (unless (null-size-window-in-frame *root-frame*)
-      (place-frames-from-xinerama-infos)
-      (finish-configuring-root)
+      (unless (eql (place-frames-from-xinerama-infos) :update)
+        (finish-configuring-root))
       (show-all-children)
       (call-hook *root-size-change-hook*))))
 

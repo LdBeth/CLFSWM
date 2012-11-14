@@ -855,7 +855,9 @@ XINERAMA version 1.1 opcode: 150
                          (setf (root-x root) x
                                (root-y root) y
                                (root-w root) w
-                               (root-h root) h))))
+                               (root-h root) h)))
+                 (setf last-sizes sizes)
+                 :update)
                (create-root-geometry ()
                  (reset-root-list)
                  ;; Add frames in *root-frame* until we get the same number as screen heads
@@ -882,12 +884,13 @@ XINERAMA version 1.1 opcode: 150
                          ;;(add-placed-frame-tmp frame 2)  ;; For tests
                          (unless (frame-child frame)
                            (add-frame (create-frame) frame))
-                         (define-as-root frame x y w h)))))
+                         (define-as-root frame x y w h)))
+                 (setf last-sizes sizes)
+                 nil))
         (format t "Screen sizes: ~A~%" sizes)
         (if (= (length sizes) (length last-sizes))
             (update-root-geometry)
-            (create-root-geometry))
-        (setf last-sizes sizes)))))
+            (create-root-geometry))))))
 
 
 
