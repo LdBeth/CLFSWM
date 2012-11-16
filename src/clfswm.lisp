@@ -112,7 +112,8 @@
       (setf (window-state window) +withdrawn-state+)
       (xlib:unmap-window window)
       (remove-child-in-all-frames window)
-      (show-all-children))))
+      (unless (null-size-window-in-frame *root-frame*)
+        (show-all-children)))))
 
 
 
@@ -123,7 +124,8 @@
 	      (xlib:window-equal window event-window))
     (when (find-child window *root-frame*)
       (delete-child-in-all-frames window)
-      (show-all-children)
+      (unless (null-size-window-in-frame *root-frame*)
+        (show-all-children))
       (xlib:destroy-window window))))
 
 (define-handler main-mode :enter-notify  (window root-x root-y)
