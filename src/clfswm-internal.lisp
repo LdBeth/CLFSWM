@@ -837,7 +837,17 @@ XINERAMA version 1.1 opcode: 150
                 (destructuring-bind (w h x y)
                     (parse-xinerama-info line)
                   (push (list x y w h) sizes))))
-        (remove-duplicates sizes :test #'equal)))))
+        (remove-if (lambda (size)
+                     (destructuring-bind (x y w h) size
+                       (dolist (s sizes)
+                         (unless (equal s size)
+                           (destructuring-bind (x1 y1 w1 h1) s
+                             (when (and (>= x x1)
+                                        (>= y y1)
+                                        (<= (+ x w) (+ x1 w1))
+                                        (<= (+ y h) (+ y1 h1)))
+                               (return t)))))))
+                   sizes)))))
         ;;'((10 10 500 300) (550 50 400 400) (100 320 400 270))))))
         ;;'((10 10 500 580) (540 50 470 500))))))
 
