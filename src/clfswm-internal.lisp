@@ -840,7 +840,7 @@ XINERAMA version 1.1 opcode: 150
         (remove-if (lambda (size)
                      (destructuring-bind (x y w h) size
                        (dolist (s sizes)
-                         (unless (equal s size)
+                         (unless (eq s size)
                            (destructuring-bind (x1 y1 w1 h1) s
                              (when (and (>= x x1)
                                         (>= y y1)
