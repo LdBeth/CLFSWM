@@ -814,7 +814,7 @@
                     (parse-integer string :junk-allowed t))
                   (split-string (substitute #\space #\x (substitute #\space #\, line))))))
 
-(defun get-connected-heads-size (&optional (fake (string= (getenv "DISPLAY") ":1")))
+(defun get-connected-heads-size (&optional fake)
   (labels ((heads-info ()
              (if (not fake)
                  (do-shell "xdpyinfo -ext XINERAMA")
@@ -836,20 +836,19 @@ XINERAMA version 1.1 opcode: 150
            do (when (search " head " line)
                 (destructuring-bind (w h x y)
                     (parse-xinerama-info line)
-                  (push (list x y w h) sizes))))
-        (remove-if (lambda (size)
-                     (destructuring-bind (x y w h) size
-                       (dolist (s sizes)
-                         (unless (eq s size)
+                  (let ((found
+                         (dolist (s sizes)
                            (destructuring-bind (x1 y1 w1 h1) s
                              (when (and (>= x x1)
                                         (>= y y1)
                                         (<= (+ x w) (+ x1 w1))
                                         (<= (+ y h) (+ y1 h1)))
-                               (return t)))))))
-                   sizes)))))
-        ;;'((10 10 500 300) (550 50 400 400) (100 320 400 270))))))
-        ;;'((10 10 500 580) (540 50 470 500))))))
+                               (return t))))))
+                    (unless found
+                      (push (list x y w h) sizes))))))
+        sizes))))
+;;'((10 10 500 300) (550 50 400 400) (100 320 400 270))))))
+;;'((10 10 500 580) (540 50 470 500))))))
 
 
 (let ((last-sizes nil))
