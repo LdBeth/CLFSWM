@@ -209,6 +209,7 @@
 
 (defun init-display ()
   (reset-root-list)
+  (reset-last-head-size)
   (reset-bind-or-jump-slots)
   (reset-open-menu)
   (fill-handle-event-fun-symbols)

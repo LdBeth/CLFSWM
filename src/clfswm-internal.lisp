@@ -852,6 +852,9 @@ XINERAMA version 1.1 opcode: 150
 
 
 (let ((last-sizes nil))
+  (defun reset-last-head-size ()
+    (setf last-sizes nil))
+
   (defun place-frames-from-xinerama-infos ()
     "Place frames according to xdpyinfo/xinerama informations"
     (let ((sizes (get-connected-heads-size))
