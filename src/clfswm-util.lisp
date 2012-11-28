@@ -48,13 +48,21 @@
 
 
 
-(defun load-contrib (file)
-  "Load a file in the contrib directory"
-  (let ((truename (merge-pathnames file *contrib-dir*)))
-    (format t "Loading contribution file: ~A~%" truename)
-    (if (probe-file truename)
-        (load truename :verbose nil)
-        (format t "  File not found!~%"))))
+(let ((already-warn nil))
+  (defun load-contrib (file)
+    "Load a file in the contrib directory"
+    (let ((truename (merge-pathnames file *contrib-dir*)))
+      (format t "Loading contribution file: ~A~%" truename)
+      (if (probe-file truename)
+          (load truename :verbose nil)
+          (progn
+            (format t "  File not found!~%")
+            (unless already-warn
+              (setf already-warn t)
+              (format t "  ~&Please, adjust the *contrib-dir* variable to the place where CLFSWM can
+find its contrib module files. For example: /usr/local/lib/clfswm/.
+Write (defparameter *contrib-dir* \"/usr/local/lib/clfswm/\") in ~A.~%"
+                      (conf-file-name))))))))
 
 
 (defun reload-clfswm ()
