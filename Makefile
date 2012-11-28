@@ -5,7 +5,7 @@ SBCL=$(shell which sbcl)
 CMUCL=$(shell which cmucl || which lisp)
 CCL=$(shell which ccl)
 ECL=$(shell which ecl)
-LOADTMP=load.tmp.lisp
+LOAD=load.lisp
 
 SRC=$(wildcard *.lisp src/*.lisp)
 
@@ -13,11 +13,11 @@ all: clfswm
 
 clfswm: $(SRC)
 	@echo "Please, tweak the file load.lisp to fit your needs."
-	@if test -f "$(CLISP)"; then echo "Building with CLISP"; $(CLISP) -E iso-8859-1 $(LOADTMP); \
-	elif test -f "$(SBCL)"; then echo "Building with SBCL"; $(SBCL) --load $(LOADTMP); \
-	elif test -f "$(CMUCL)"; then echo "Building with CMUCL"; $(CMUCL) -load $(LOADTMP); \
-	elif test -f "$(CCL)"; then echo "Building with CCL"; $(CCL) --load $(LOADTMP); \
-	elif test -f "$(ECL)"; then echo "Building with ECL"; $(ECL) -load $(LOADTMP); \
+	@if test -f "$(CLISP)"; then echo "Building with CLISP"; $(CLISP) -E iso-8859-1 $(LOAD); \
+	elif test -f "$(SBCL)"; then echo "Building with SBCL"; $(SBCL) --load $(LOAD); \
+	elif test -f "$(CMUCL)"; then echo "Building with CMUCL"; $(CMUCL) -load $(LOAD); \
+	elif test -f "$(CCL)"; then echo "Building with CCL"; $(CCL) --load $(LOAD); \
+	elif test -f "$(ECL)"; then echo "Building with ECL"; $(ECL) -load $(LOAD); \
 	else echo "No Lisp found. Please, install one of CLISP, SBCL, CMUCL, CCL or ECL"; \
 	fi
 
