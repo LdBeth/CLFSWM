@@ -148,8 +148,8 @@ from $XDG_CONFIG_HOME/clfswm/clfswmrc")
 #+(or :clfswm-run :clfswm-build-doc)
 (progn
   (cl-user::load-info "Running CLFSWM")
-;;  (ignore-errors
-    (main :read-conf-file-p (not cl-user::*build-original-doc*)));)
+  (ignore-errors
+    (main :read-conf-file-p (not cl-user::*build-original-doc*))))
 
 
 ;;;-------------------------
@@ -163,6 +163,10 @@ from $XDG_CONFIG_HOME/clfswm/clfswmrc")
 ;;;-----------------------
 ;;; Building image part
 ;;;-----------------------
+
+;;; Uncomment the line below to set the contrib directory in the image
+;; (setf *contrib-dir* "/usr/local/lib/clfswm/")
+
 #+:clfswm-build-image
 (progn
   (cl-user::load-info "Building CLFSWM executable image")
