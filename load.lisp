@@ -42,11 +42,15 @@
 ;;;------------------
 (defparameter *interactive* t)
 
+(defparameter *build-original-doc* t
+  "Set to t to use original configuration or to nil to use your own configuration
+from $XDG_CONFIG_HOME/clfswm/clfswmrc")
+
+
 ;;; Comment or uncomment the lines above to fit your needs.
 (pushnew :clfswm-compile *features*)
 ;;(pushnew :clfswm-run *features*)
 (pushnew :clfswm-build-image *features*)
-;;(pushnew :clfswm-install *features*)
 ;;(pushnew :clfswm-build-doc *features*)
 
 (defparameter *binary-name* "clfswm")
@@ -141,11 +145,11 @@
 #+(or :clfswm-run :clfswm-build-doc :clfswm-build-image)
 (in-package :clfswm)
 
-#+:clfswm-run
+#+(or :clfswm-run :clfswm-build-doc)
 (progn
   (cl-user::load-info "Running CLFSWM")
-  (ignore-errors
-    (main :read-conf-file-p t)))
+;;  (ignore-errors
+    (main :read-conf-file-p (not cl-user::*build-original-doc*)));)
 
 
 ;;;-------------------------

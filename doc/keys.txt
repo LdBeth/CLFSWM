@@ -6,36 +6,16 @@ Note: Mod-1 is the Meta or Alt key
 Main mode keys:
 --------------
 
-  Control              Sunprint_screen   Open the screenshot window
-                       Sunprint_screen   Take a screenshot
-                       Xf86audioplay   Toggles Play/Pause, plays if stopped
-                       Xf86tools       Start gmpc
-                       Xf86mail        Run a file manager
-                       Xf86search      Run a Web browser search
-                       Xf86favorites   Run a Web Browser
-                       Xf86homepage    Run Emacs
-  Control              Pause           Open the Reboot/Halt menu
-  Mod-4                A               Move the pointer to the lower right corner of the screen
-  Control Shift        66              Present all windows in all frames (An expose like)
-  Control              66              Present all windows in currents roots (An expose like)
-                       Control_r       Move the pointer to the lower right corner of the screen
-  Control              Twosuperior     Start Apwal
-                       Xf86audioraisevolume   Raise volume.
-                       Xf86audiolowervolume   Lower volume.
-                       Xf86audiomute   Toggle mute.
-                       Pause           Start a black screen
-  Mod-1                Agrave          Bind or jump to a slot (a frame or a window)
-  Mod-1                F2              Open the Music Player Daemon (MPD) menu
-                       Twosuperior     Move the pointer to the lower right corner of the screen
-  Mod-1                Ampersand       Bind or jump to a slot (a frame or a window)
-  Mod-1                Eacute          Bind or jump to a slot (a frame or a window)
-  Mod-1                Quotedbl        Bind or jump to a slot (a frame or a window)
-  Mod-1                Quoteright      Bind or jump to a slot (a frame or a window)
-  Mod-1                Parenleft       Bind or jump to a slot (a frame or a window)
-  Mod-1                Minus           Bind or jump to a slot (a frame or a window)
-  Mod-1                Egrave          Bind or jump to a slot (a frame or a window)
-  Mod-1                Underscore      Bind or jump to a slot (a frame or a window)
-  Mod-1                Ccedilla        Bind or jump to a slot (a frame or a window)
+  Mod-1                0               Bind or jump to a slot (a frame or a window)
+  Mod-1                9               Bind or jump to a slot (a frame or a window)
+  Mod-1                8               Bind or jump to a slot (a frame or a window)
+  Mod-1                7               Bind or jump to a slot (a frame or a window)
+  Mod-1                6               Bind or jump to a slot (a frame or a window)
+  Mod-1                5               Bind or jump to a slot (a frame or a window)
+  Mod-1                4               Bind or jump to a slot (a frame or a window)
+  Mod-1                3               Bind or jump to a slot (a frame or a window)
+  Mod-1                2               Bind or jump to a slot (a frame or a window)
+  Mod-1                1               Bind or jump to a slot (a frame or a window)
   Control              Less            Switch to editing mode (second mode)
   Mod-1                T               Switch to editing mode (second mode)
   Control              Escape          Close or kill the current window (ask before doing anything)
@@ -100,31 +80,18 @@ Or do actions on corners
 Second mode keys:
 ----------------
 
-                       L2              Raise volume.
-                       L1              Lower volume.
-  Shift                S               Ask an URL to be opened in the Surf browser
-  Control              S               start the web browser on the search page with google
-                       S               start the web browser on the search page
-  Shift                Z               start the Konqueror web browser
-                       Z               start the web browser
-                       Space           start the file manager
-                       Greater         Raise 1% volume.
-                       Xf86audioraisevolume   Raise volume.
-                       Xf86audiolowervolume   Lower volume.
-                       Xf86audiomute   Toggle mute.
-  Mod-1                Agrave          Bind or jump to a slot (a frame or a window)
   Control              T               Decrement the current window transparency
   Control Shift        T               Increment the current window transparency
-                       Twosuperior     Move the pointer to the lower right corner of the screen
-  Mod-1                Ampersand       Bind or jump to a slot (a frame or a window)
-  Mod-1                Eacute          Bind or jump to a slot (a frame or a window)
-  Mod-1                Quotedbl        Bind or jump to a slot (a frame or a window)
-  Mod-1                Quoteright      Bind or jump to a slot (a frame or a window)
-  Mod-1                Parenleft       Bind or jump to a slot (a frame or a window)
-  Mod-1                Minus           Bind or jump to a slot (a frame or a window)
-  Mod-1                Egrave          Bind or jump to a slot (a frame or a window)
-  Mod-1                Underscore      Bind or jump to a slot (a frame or a window)
-  Mod-1                Ccedilla        Bind or jump to a slot (a frame or a window)
+  Mod-1                0               Bind or jump to a slot (a frame or a window)
+  Mod-1                9               Bind or jump to a slot (a frame or a window)
+  Mod-1                8               Bind or jump to a slot (a frame or a window)
+  Mod-1                7               Bind or jump to a slot (a frame or a window)
+  Mod-1                6               Bind or jump to a slot (a frame or a window)
+  Mod-1                5               Bind or jump to a slot (a frame or a window)
+  Mod-1                4               Bind or jump to a slot (a frame or a window)
+  Mod-1                3               Bind or jump to a slot (a frame or a window)
+  Mod-1                2               Bind or jump to a slot (a frame or a window)
+  Mod-1                1               Bind or jump to a slot (a frame or a window)
   Mod-1 Shift          L2              Show all frames info windows
   Shift                L2              Show all frames info windows until a key is release
   Control              F10             Present all windows in all frames (An expose like)
@@ -205,7 +172,7 @@ Second mode keys:
                        W               Open the window menu
                        F               Open the frame menu
   Control              Less            Open the main menu
-                       Less            Lower 1% volume.
+                       Less            Open the main menu
                        M               Open the main menu
   Mod-1                F1              Open the help and info window
 
@@ -246,6 +213,7 @@ Info mode keys:
   Control              G               Leave the info mode
                        Escape          Leave the info mode
                        Space           Leave the info mode and valid the selected item
+  Mod-2                Kp_enter        Leave the info mode and valid the selected item
                        Return          Leave the info mode and valid the selected item
                        Q               Leave the info mode
 

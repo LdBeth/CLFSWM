@@ -55,8 +55,8 @@ The command to display the virtual keybaord
     Actions on corners in the second mode with the left mouse button
   *CORNER-MAIN-MODE-RIGHT-BUTTON* = 
 ((:TOP-LEFT PRESENT-CLFSWM-TERMINAL) (:TOP-RIGHT ASK-CLOSE/KILL-CURRENT-WINDOW) (:BOTTOM-RIGHT EXPOSE-ALL-WINDOWS-MODE)
- (:BOTTOM-LEFT START-FILE-MANAGER))
-    Config(Corner group): Actions on corners in the main mode with the right mouse button
+ (:BOTTOM-LEFT NIL))
+    Actions on corners in the main mode with the right mouse button
   *CORNER-MAIN-MODE-MIDDLE-BUTTON* = ((:TOP-LEFT HELP-ON-CLFSWM) (:TOP-RIGHT ASK-CLOSE/KILL-CURRENT-WINDOW) (:BOTTOM-RIGHT NIL) (:BOTTOM-LEFT NIL))
     Actions on corners in the main mode with the middle mouse button
   *CORNER-MAIN-MODE-LEFT-BUTTON* = ((:TOP-LEFT OPEN-MENU) (:TOP-RIGHT PRESENT-VIRTUAL-KEYBOARD) (:BOTTOM-RIGHT EXPOSE-WINDOWS-MODE) (:BOTTOM-LEFT NIL))
@@ -119,11 +119,11 @@ The command to display the virtual keybaord
     Query hook. Hook called on each key press event in query loop
   *DEFAULT-NW-HOOK* = DEFAULT-FRAME-NW-HOOK
     Default action to do on newly created windows
-  *CLOSE-HOOK* = (CLOSE-NOTIFY-WINDOW CLOSE-CLFSWM-TERMINAL CLOSE-VIRTUAL-KEYBOARD CLOSE-ALL-TOOLBARS)
+  *CLOSE-HOOK* = (CLOSE-NOTIFY-WINDOW CLOSE-CLFSWM-TERMINAL CLOSE-VIRTUAL-KEYBOARD)
     Close hook. This hook is run just before closing the display
-  *INIT-HOOK* = (DEFAULT-INIT-HOOK DISPLAY-HELLO-WINDOW OPEN-ALL-TOOLBARS MY-INIT-HOOK MY-WALLPAPER)
+  *INIT-HOOK* = (DEFAULT-INIT-HOOK DISPLAY-HELLO-WINDOW)
     Init hook. This hook is run just after the first root frame is created
-  *ROOT-SIZE-CHANGE* = (MY-WALLPAPER)
+  *ROOT-SIZE-CHANGE-HOOK* = NIL
     Hook executed when the root size has changed for example when adding/removing a monitor
   *MAIN-ENTRANCE-HOOK* = NIL
     
@@ -134,8 +134,7 @@ loading configuration file and before opening the display.
   *BINDING-HOOK* = 
 (INIT-*QUERY-KEYS* SET-DEFAULT-QUERY-KEYS SET-DEFAULT-CIRCULATE-KEYS INIT-*INFO-KEYS* INIT-*INFO-MOUSE*
  SET-DEFAULT-INFO-KEYS SET-DEFAULT-INFO-MOUSE INIT-*MAIN-KEYS* INIT-*MAIN-MOUSE* SET-DEFAULT-MAIN-KEYS
- SET-DEFAULT-MAIN-MOUSE INIT-*SECOND-KEYS* INIT-*SECOND-MOUSE* SET-DEFAULT-SECOND-KEYS SET-DEFAULT-SECOND-MOUSE
- MPD-BINDING FR-BINDING REBOOT-HALT-BINDING INIT-*VOLUME-KEYS* SET-DEFAULT-VOLUME-KEYS AMIXER-VOLUME-BIND LOCAL-BINDING)
+ SET-DEFAULT-MAIN-MOUSE INIT-*SECOND-KEYS* INIT-*SECOND-MOUSE* SET-DEFAULT-SECOND-KEYS SET-DEFAULT-SECOND-MOUSE)
     Hook executed when keys/buttons are bounds
 
 
@@ -244,7 +243,7 @@ Example: :mod-2 for num_lock, :lock for Caps_lock...
     Default mouse focus policy. One of :click, :sloppy, :sloppy-strict or :sloppy-select.
   *DEFAULT-MANAGED-TYPE* = (:NORMAL)
     Default managed window types
-  *DEFAULT-FRAME-DATA* = ((:TILE-SIZE 0.8) (:TILE-SPACE-SIZE 0.1) (:MAIN-LAYOUT-WINDOWS NIL) (:FAST-LAYOUT (TILE-SPACE-LAYOUT NO-LAYOUT)))
+  *DEFAULT-FRAME-DATA* = ((:TILE-SIZE 0.8) (:TILE-SPACE-SIZE 0.1) (:FAST-LAYOUT (TILE-LEFT-LAYOUT TILE-LAYOUT)) (:MAIN-LAYOUT-WINDOWS NIL))
     Default slots set in frame date
   *DEFAULT-FONT-STRING* = "fixed"
     The default font used in clfswm
@@ -283,10 +282,6 @@ It is particulary useful with CLISP/MIT-CLX.
 
 <= Placement Group =>
 
-  *VOLUME-MODE-PLACEMENT* = BOTTOM-MIDDLE-ROOT-PLACEMENT
-    Volume mode window placement
-  *TOOLBAR-WINDOW-PLACEMENT* = TOP-LEFT-PLACEMENT
-    Toolbar window placement
   *UNMANAGED-WINDOW-PLACEMENT* = MIDDLE-MIDDLE-ROOT-PLACEMENT
     Unmanager window placement
   *ASK-CLOSE/KILL-PLACEMENT* = TOP-RIGHT-ROOT-PLACEMENT
@@ -305,20 +300,8 @@ It is particulary useful with CLISP/MIT-CLX.
     Info mode window placement
   *SECOND-MODE-PLACEMENT* = TOP-MIDDLE-ROOT-PLACEMENT
     Second mode window placement
-  *BANISH-POINTER-PLACEMENT* = MIDDLE-RIGHT-ROOT-PLACEMENT
+  *BANISH-POINTER-PLACEMENT* = BOTTOM-RIGHT-ROOT-PLACEMENT
     Pointer banishment placement
-
-
-<= Power Management Group =>
-
-  *POWER-HALT-CMD* = "sudo /sbin/halt"
-    Halt command
-  *POWER-REBOOT-CMD* = "sudo /sbin/reboot"
-    Reboot command
-  *POWER-SUSPEND-TO-DISK-CMD* = "sudo pm-hibernate"
-    Suspend to disk command
-  *POWER-SUSPEND-TO-RAM-CMD* = "sudo pm-suspend"
-    Suspend to ram command
 
 
 <= Query String Group =>
@@ -380,96 +363,6 @@ on the root window in the main mode with the mouse
     Second mode window background color
   *SM-BORDER-COLOR* = "Green"
     Second mode window border color
-
-
-<= Toolbar Group =>
-
-  *TOOLBAR-VOLUME-MODE-BUTTON-COLOR* = "green"
-    Volume mode color
-  *TOOLBAR-MPD-BUTTONS-COLOR* = "green"
-    MPD - Music Player Daemon buttons color
-  *TOOLBAR-MPD-INFO-COLOR* = "green"
-    MPD - Music Player Daemon information color
-  *MPD-TOOLBAR-CLIENT* = "gmpc"
-    MPD client
-  *MPD-TOOLBAR* = ((MPD-BUTTONS 1) (MPD-INFO 60))
-    MPD toolbar modules
-  *TOOLBAR-EXPOSE-MODE-BUTTON-COLOR* = "green"
-    Expose-mode button
-  *TOOLBAR-SYSTEM-INFO-URGENT-COLOR* = "Red"
-    System information colors (CPU+Mem+Battery)
-  *TOOLBAR-SYSTEM-INFO-ALERT-COLOR* = "Magenta"
-    System information colors (CPU+Mem+Battery)
-  *TOOLBAR-SYSTEM-INFO-LOW-COLOR* = "Yellow"
-    System information colors (CPU+Mem+Battery)
-  *TOOLBAR-SYSTEM-INFO-COLOR* = "green"
-    System information colors (CPU+Mem+Battery)
-  *TOOLBAR-MEM-COLOR* = "green"
-    Memory color
-  *TOOLBAR-CPU-COLOR* = "green"
-    CPU color
-  *TOOLBAR-CLFSWM-MENU-COLOR* = "green"
-    CLFSWM menu color
-  *TOOLBAR-CLOCK-ACTION* = "xclock -analog"
-    Toolbar clickable clock module action on click
-  *TOOLBAR-CLICKABLE-CLOCK-COLOR* = "green"
-    Clickable clock color
-  *TOOLBAR-CLICKABLE-LABEL-COLOR* = "green"
-    Clickable label color
-  *TOOLBAR-LABEL-COLOR* = "green"
-    Label color
-  *TOOLBAR-CLOCK-COLOR* = "green"
-    Clock color
-  *TOOLBAR-SENSIBILITY* = 3
-    Toolbar sensibility in pixels
-  *TOOLBAR-DEFAULT-AUTOHIDE* = NIL
-    Toolbar default autohide value
-  *TOOLBAR-DEFAULT-REFRESH-DELAY* = 30
-    Toolbar default refresh delay
-  *TOOLBAR-DEFAULT-THICKNESS* = 20
-    Toolbar default thickness
-  *TOOLBAR-WINDOW-TRANSPARENCY* = 0.8
-    Toolbar window background transparency
-  *TOOLBAR-DEFAULT-BORDER-SIZE* = 0
-    Toolbar Window border size
-  *TOOLBAR-WINDOW-BORDER* = "red"
-    Toolbar Window border color
-  *TOOLBAR-WINDOW-FOREGROUND* = "green"
-    Toolbar Window foreground color
-  *TOOLBAR-WINDOW-BACKGROUND* = "black"
-    Toolbar Window background color
-  *TOOLBAR-WINDOW-FONT-STRING* = "fixed"
-    Toolbar window font string
-  *DEFAULT-TOOLBAR* = ((CLFSWM-MENU 1) (EXPOSE-MODE-BUTTON 10) (SYSTEM-USAGE 90) (CLICKABLE-CLOCK 99))
-    Default toolbar modules
-
-
-<= Volume Mode Group =>
-
-  *VOLUME-EXTERNAL-MIXER-CMD* = "/usr/bin/gnome-alsamixer"
-    Command to start an external mixer program
-  *VOLUME-TEXT-LIMIT* = 30
-    Maximum text limit in the volume window
-  *VOLUME-HEIGHT* = 15
-    Volume mode window height
-  *VOLUME-WIDTH* = 400
-    Volume mode window width
-  *VOLUME-BORDER-SIZE* = 1
-    Volume window border size
-  *VOLUME-BORDER* = "red"
-    Volume window border color
-  *VOLUME-FOREGROUND* = "green"
-    Volume window foreground color
-  *VOLUME-BACKGROUND* = "black"
-    Volume window background color
-  *VOLUME-FONT-STRING* = "fixed"
-    Volume window font string
-
-
-<= Wallpaper Group =>
-
-  *WALLPAPER-COMMAND* = "Esetroot -scale"
-    Command to install the wallpaper
 
  Those variables can be changed in clfswm.
 Maybe you'll need to restart clfswm to take care of new values

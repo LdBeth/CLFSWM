@@ -85,11 +85,6 @@
         </a>
       </li>
       <li>
-        <a href='#power-management'>
-          Power Management Group
-        </a>
-      </li>
-      <li>
         <a href='#query-string'>
           Query String Group
         </a>
@@ -102,21 +97,6 @@
       <li>
         <a href='#second-mode'>
           Second Mode Group
-        </a>
-      </li>
-      <li>
-        <a href='#toolbar'>
-          Toolbar Group
-        </a>
-      </li>
-      <li>
-        <a href='#volume-mode'>
-          Volume Mode Group
-        </a>
-      </li>
-      <li>
-        <a href='#wallpaper'>
-          Wallpaper Group
         </a>
       </li>
     </ul>
@@ -332,10 +312,10 @@
 &nbsp; &nbsp; &nbsp; &nbsp; ((:TOP-LEFT PRESENT-CLFSWM-TERMINAL) (:TOP-RIGHT ASK-CLOSE/KILL-CURRENT-WINDOW) (:BOTTOM-RIGHT EXPOSE-ALL-WINDOWS-MODE) <br>
 
     
-&nbsp; &nbsp; &nbsp; &nbsp;  (:BOTTOM-LEFT START-FILE-MANAGER)) <br>
+&nbsp; &nbsp; &nbsp; &nbsp;  (:BOTTOM-LEFT NIL)) <br>
 
     
-&nbsp; &nbsp; &nbsp; &nbsp;     Config(Corner group): Actions on corners in the main mode with the right mouse button <br>
+&nbsp; &nbsp; &nbsp; &nbsp;     Actions on corners in the main mode with the right mouse button <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *corner-main-mode-middle-button*
@@ -568,7 +548,7 @@
       &nbsp;&nbsp;  *close-hook*
     </font>
     <font color='#0000ff'>
-       = (CLOSE-NOTIFY-WINDOW CLOSE-CLFSWM-TERMINAL CLOSE-VIRTUAL-KEYBOARD CLOSE-ALL-TOOLBARS) <br>
+       = (CLOSE-NOTIFY-WINDOW CLOSE-CLFSWM-TERMINAL CLOSE-VIRTUAL-KEYBOARD) <br>
     </font>
     
 &nbsp; &nbsp; &nbsp; &nbsp;     Close hook. This hook is run just before closing the display <br>
@@ -577,16 +557,16 @@
       &nbsp;&nbsp;  *init-hook*
     </font>
     <font color='#0000ff'>
-       = (DEFAULT-INIT-HOOK DISPLAY-HELLO-WINDOW OPEN-ALL-TOOLBARS MY-INIT-HOOK MY-WALLPAPER) <br>
+       = (DEFAULT-INIT-HOOK DISPLAY-HELLO-WINDOW) <br>
     </font>
     
 &nbsp; &nbsp; &nbsp; &nbsp;     Init hook. This hook is run just after the first root frame is created <br>
 
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *root-size-change*
+      &nbsp;&nbsp;  *root-size-change-hook*
     </font>
     <font color='#0000ff'>
-       = (MY-WALLPAPER) <br>
+       = NIL <br>
     </font>
     
 &nbsp; &nbsp; &nbsp; &nbsp;     Hook executed when the root size has changed for example when adding/removing a monitor <br>
@@ -628,10 +608,7 @@
 &nbsp; &nbsp; &nbsp; &nbsp;  SET-DEFAULT-INFO-KEYS SET-DEFAULT-INFO-MOUSE INIT-*MAIN-KEYS* INIT-*MAIN-MOUSE* SET-DEFAULT-MAIN-KEYS <br>
 
     
-&nbsp; &nbsp; &nbsp; &nbsp;  SET-DEFAULT-MAIN-MOUSE INIT-*SECOND-KEYS* INIT-*SECOND-MOUSE* SET-DEFAULT-SECOND-KEYS SET-DEFAULT-SECOND-MOUSE <br>
-
-    
-&nbsp; &nbsp; &nbsp; &nbsp;  MPD-BINDING FR-BINDING REBOOT-HALT-BINDING INIT-*VOLUME-KEYS* SET-DEFAULT-VOLUME-KEYS AMIXER-VOLUME-BIND LOCAL-BINDING) <br>
+&nbsp; &nbsp; &nbsp; &nbsp;  SET-DEFAULT-MAIN-MOUSE INIT-*SECOND-KEYS* INIT-*SECOND-MOUSE* SET-DEFAULT-SECOND-KEYS SET-DEFAULT-SECOND-MOUSE) <br>
 
     
 &nbsp; &nbsp; &nbsp; &nbsp;     Hook executed when keys/buttons are bounds <br>
@@ -1042,7 +1019,7 @@
       &nbsp;&nbsp;  *default-frame-data*
     </font>
     <font color='#0000ff'>
-       = ((:TILE-SIZE 0.8) (:TILE-SPACE-SIZE 0.1) (:MAIN-LAYOUT-WINDOWS NIL) (:FAST-LAYOUT (TILE-SPACE-LAYOUT NO-LAYOUT))) <br>
+       = ((:TILE-SIZE 0.8) (:TILE-SPACE-SIZE 0.1) (:FAST-LAYOUT (TILE-LEFT-LAYOUT TILE-LAYOUT)) (:MAIN-LAYOUT-WINDOWS NIL)) <br>
     </font>
     
 &nbsp; &nbsp; &nbsp; &nbsp;     Default slots set in frame date <br>
@@ -1184,24 +1161,6 @@
       </a>
     </p>
     <font color='#ff0000'>
-      &nbsp;&nbsp;  *volume-mode-placement*
-    </font>
-    <font color='#0000ff'>
-       = BOTTOM-MIDDLE-ROOT-PLACEMENT <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Volume mode window placement <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-window-placement*
-    </font>
-    <font color='#0000ff'>
-       = TOP-LEFT-PLACEMENT <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar window placement <br>
-
-    <font color='#ff0000'>
       &nbsp;&nbsp;  *unmanaged-window-placement*
     </font>
     <font color='#0000ff'>
@@ -1286,51 +1245,10 @@
       &nbsp;&nbsp;  *banish-pointer-placement*
     </font>
     <font color='#0000ff'>
-       = MIDDLE-RIGHT-ROOT-PLACEMENT <br>
+       = BOTTOM-RIGHT-ROOT-PLACEMENT <br>
     </font>
     
 &nbsp; &nbsp; &nbsp; &nbsp;     Pointer banishment placement <br>
-
-    <p>
-      <a name='power-management' href='#top'>
-        &lt;= Power Management Group =&gt; 
-      </a>
-    </p>
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *power-halt-cmd*
-    </font>
-    <font color='#0000ff'>
-       = "sudo /sbin/halt" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Halt command <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *power-reboot-cmd*
-    </font>
-    <font color='#0000ff'>
-       = "sudo /sbin/reboot" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Reboot command <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *power-suspend-to-disk-cmd*
-    </font>
-    <font color='#0000ff'>
-       = "sudo pm-hibernate" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Suspend to disk command <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *power-suspend-to-ram-cmd*
-    </font>
-    <font color='#0000ff'>
-       = "sudo pm-suspend" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Suspend to ram command <br>
 
     <p>
       <a name='query-string' href='#top'>
@@ -1562,372 +1480,6 @@
     </font>
     
 &nbsp; &nbsp; &nbsp; &nbsp;     Second mode window border color <br>
-
-    <p>
-      <a name='toolbar' href='#top'>
-        &lt;= Toolbar Group =&gt; 
-      </a>
-    </p>
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-volume-mode-button-color*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Volume mode color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-mpd-buttons-color*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     MPD - Music Player Daemon buttons color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-mpd-info-color*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     MPD - Music Player Daemon information color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *mpd-toolbar-client*
-    </font>
-    <font color='#0000ff'>
-       = "gmpc" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     MPD client <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *mpd-toolbar*
-    </font>
-    <font color='#0000ff'>
-       = ((MPD-BUTTONS 1) (MPD-INFO 60)) <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     MPD toolbar modules <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-expose-mode-button-color*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Expose-mode button <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-system-info-urgent-color*
-    </font>
-    <font color='#0000ff'>
-       = "Red" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     System information colors (CPU+Mem+Battery) <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-system-info-alert-color*
-    </font>
-    <font color='#0000ff'>
-       = "Magenta" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     System information colors (CPU+Mem+Battery) <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-system-info-low-color*
-    </font>
-    <font color='#0000ff'>
-       = "Yellow" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     System information colors (CPU+Mem+Battery) <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-system-info-color*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     System information colors (CPU+Mem+Battery) <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-mem-color*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Memory color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-cpu-color*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     CPU color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-clfswm-menu-color*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     CLFSWM menu color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-clock-action*
-    </font>
-    <font color='#0000ff'>
-       = "xclock -analog" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar clickable clock module action on click <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-clickable-clock-color*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Clickable clock color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-clickable-label-color*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Clickable label color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-label-color*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Label color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-clock-color*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Clock color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-sensibility*
-    </font>
-    <font color='#0000ff'>
-       = 3 <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar sensibility in pixels <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-default-autohide*
-    </font>
-    <font color='#0000ff'>
-       = NIL <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar default autohide value <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-default-refresh-delay*
-    </font>
-    <font color='#0000ff'>
-       = 30 <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar default refresh delay <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-default-thickness*
-    </font>
-    <font color='#0000ff'>
-       = 20 <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar default thickness <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-window-transparency*
-    </font>
-    <font color='#0000ff'>
-       = 0.8 <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar window background transparency <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-default-border-size*
-    </font>
-    <font color='#0000ff'>
-       = 0 <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar Window border size <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-window-border*
-    </font>
-    <font color='#0000ff'>
-       = "red" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar Window border color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-window-foreground*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar Window foreground color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-window-background*
-    </font>
-    <font color='#0000ff'>
-       = "black" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar Window background color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *toolbar-window-font-string*
-    </font>
-    <font color='#0000ff'>
-       = "fixed" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Toolbar window font string <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *default-toolbar*
-    </font>
-    <font color='#0000ff'>
-       = ((CLFSWM-MENU 1) (EXPOSE-MODE-BUTTON 10) (SYSTEM-USAGE 90) (CLICKABLE-CLOCK 99)) <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Default toolbar modules <br>
-
-    <p>
-      <a name='volume-mode' href='#top'>
-        &lt;= Volume Mode Group =&gt; 
-      </a>
-    </p>
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *volume-external-mixer-cmd*
-    </font>
-    <font color='#0000ff'>
-       = "/usr/bin/gnome-alsamixer" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Command to start an external mixer program <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *volume-text-limit*
-    </font>
-    <font color='#0000ff'>
-       = 30 <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Maximum text limit in the volume window <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *volume-height*
-    </font>
-    <font color='#0000ff'>
-       = 15 <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Volume mode window height <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *volume-width*
-    </font>
-    <font color='#0000ff'>
-       = 400 <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Volume mode window width <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *volume-border-size*
-    </font>
-    <font color='#0000ff'>
-       = 1 <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Volume window border size <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *volume-border*
-    </font>
-    <font color='#0000ff'>
-       = "red" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Volume window border color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *volume-foreground*
-    </font>
-    <font color='#0000ff'>
-       = "green" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Volume window foreground color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *volume-background*
-    </font>
-    <font color='#0000ff'>
-       = "black" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Volume window background color <br>
-
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *volume-font-string*
-    </font>
-    <font color='#0000ff'>
-       = "fixed" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Volume window font string <br>
-
-    <p>
-      <a name='wallpaper' href='#top'>
-        &lt;= Wallpaper Group =&gt; 
-      </a>
-    </p>
-    <font color='#ff0000'>
-      &nbsp;&nbsp;  *wallpaper-command*
-    </font>
-    <font color='#0000ff'>
-       = "Esetroot -scale" <br>
-    </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp;     Command to install the wallpaper <br>
 
     <p>
       <small>

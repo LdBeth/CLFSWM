@@ -28,41 +28,6 @@ d: Show the current time and date
 p: Show current processes sorted by CPU usage
 m: Show current processes sorted by memory usage
 v: Show the current CLFSWM version
-F2: < Music Player Daemon (MPD) menu >
-x: < XMMS menu >
-i: < CDPLAYER menu >
-
-Mpd-Menu
-i: Show MPD informations
-p: Play the previous song in the current playlist
-n: Play the next song in the current playlist
-t: Toggles Play/Pause, plays if stopped
-y: Start playing
-k: Stop the currently playing playlists
-x: Seeks to +5%
-w: Seeks to -5%
-l: Show the current MPD playlist
-s: Start sonata
-g: Start gmpc
-
-Xmms-Menu
-r: Lanch XMMS
-s: Show the current xmms status
-l: Show the current xmms playlist
-n: Play the next XMMS track
-p: Play the previous XMMS track
-e: open xmms "Load file(s)" dialog window.
-
-Cdplayer-Menu
-y: Start playing CD
-k: Stop playing CD
-t: Toggle pause
-s: Show the current CD status
-l: Show the current CD playlist
-n: Play the next CD track
-p: Play the previous CD track
-e: Eject CD
-c: Close CD
 
 Standard-Menu
 a: < TEXTEDITOR >
@@ -102,7 +67,8 @@ e: Open Folder with Thunar - Open the specified folders in Thunar
 f: Worker - File manager for X.
 g: Xfe - A lightweight file manager for X Window
 h: Thunar File Manager - Browse the filesystem with the file manager
-i: Gentoo - Fully GUI-configurable, two-pane X file manager
+i: Midnight Commander - File manager
+j: Gentoo - Fully GUI-configurable, two-pane X file manager
 
 Webbrowser
 a: Konqueror
@@ -115,6 +81,7 @@ g: Midori Private Browsing - Open a new private browsing window
 h: Web - Browse the web
 i: Conkeror Web Browser - Browse the World Wide Web
 j: Links 2
+k: Luakit - Fast, small, webkit based micro-browser extensible by Lua
 
 Audiovideo
 a: Dragon Player
@@ -129,30 +96,32 @@ i: Rhythmbox - Play and organize your music collection
 j: Musique - Play your music collection
 k: HasciiCam - (h)ascii for the masses!
 l: MediathekView - View streams from public German TV stations
-m: Sonata - An elegant GTK+ MPD client
-n: Stopmotion - Program to create stop-motion animations
-o: Gnome Music Player Client - A gnome frontend for the mpd daemon
-p: PulseAudio Volume Control - Adjust the volume level
-q: GNOME ALSA Mixer - ALSA sound mixer for GNOME
-r: Mixer - Audio mixer for the Xfce Desktop Environment
-s: Alsa Modular Synth - Modular Software Synth
-t: VLC media player - Read, capture, broadcast your multimedia streams
-u: Petri-Foo - Sound Sampler
-v: Sound Juicer - Copy music from your CDs
-w: PulseAudio Volume Meter (Playback) - Monitor the output volume
-x: Rhythmbox - Play and organize your music collection
-y: Brasero - Create and copy CDs and DVDs
-z: Audacity - Record and edit audio files
-0: Cheese - Take photos and videos with your webcam, with fun graphical effects
-1: Sound Recorder - Record sound clips
-2: OpenShot Video Editor - Create and edit videos and movies
-3: terminatorX - Scratch and mix audio
-4: Decibel Audio Player - A simple audio player
-5: Movie Player - Play movies and songs
-6: QVideoob - Search for videos on many websites, and get info about them
-7: PulseAudio Volume Meter (Capture) - Monitor the input volume
-8: Specimen - Sound Sampler
-9: Music Player - Play your music files easily
+m: XBMC Media Center - Manage and view your media 
+n: Sonata - An elegant GTK+ MPD client
+o: Stopmotion - Program to create stop-motion animations
+p: Gnome Music Player Client - A gnome frontend for the mpd daemon
+q: PulseAudio Volume Control - Adjust the volume level
+r: Minitube - Watch YouTube videos
+s: GNOME ALSA Mixer - ALSA sound mixer for GNOME
+t: Mixer - Audio mixer for the Xfce Desktop Environment
+u: Alsa Modular Synth - Modular Software Synth
+v: VLC media player - Read, capture, broadcast your multimedia streams
+w: Petri-Foo - Sound Sampler
+x: Sound Juicer - Copy music from your CDs
+y: PulseAudio Volume Meter (Playback) - Monitor the output volume
+z: Rhythmbox - Play and organize your music collection
+0: Brasero - Create and copy CDs and DVDs
+1: Audacity - Record and edit audio files
+2: Cheese - Take photos and videos with your webcam, with fun graphical effects
+3: Sound Recorder - Record sound clips
+4: OpenShot Video Editor - Create and edit videos and movies
+5: terminatorX - Scratch and mix audio
+6: Decibel Audio Player - A simple audio player
+7: Movie Player - Play movies and songs
+8: QVideoob - Search for videos on many websites, and get info about them
+9: PulseAudio Volume Meter (Capture) - Monitor the input volume
+A: Specimen - Sound Sampler
+B: Music Player - Play your music files easily
 
 Audio
 a: KMix
@@ -175,10 +144,12 @@ q: Music Player - Play your music files easily
 
 Video
 a: Camorama Webcam Viewer - View, alter and save images from a webcam
-b: Stopmotion - Program to create stop-motion animations
-c: OptGeo - Interactive tool to study and simulate optic assemblies
-d: OpenShot Video Editor - Create and edit videos and movies
-e: Movie Player - Play movies and songs
+b: XBMC Media Center - Manage and view your media 
+c: Stopmotion - Program to create stop-motion animations
+d: Minitube - Watch YouTube videos
+e: OptGeo - Interactive tool to study and simulate optic assemblies
+f: OpenShot Video Editor - Create and edit videos and movies
+g: Movie Player - Play movies and songs
 
 Development
 a: KLinkStatus
@@ -195,15 +166,16 @@ k: Scilab CLI - Scientific software package for numerical computations
 l: Scilab - Scientific software package for numerical computations
 m: Scilab advanced CLI - Scientific software package for numerical computations
 n: IDLE (using Python-2.7) - Integrated Development Environment for Python (using Python-2.7)
-o: IDLE - Integrated Development Environment for Python
-p: Python (v2.6) - Python Interpreter (v2.6)
-q: Python (v3.2) - Python Interpreter (v3.2)
-r: IDLE (using Python-3.2) - Integrated Development Environment for Python (using Python-3.2)
-s: IDLE 3 - Integrated DeveLopment Environment for Python3
-t: Python (v2.7) - Python Interpreter (v2.7)
-u: IDLE (using Python-2.6) - Integrated Development Environment for Python (using Python-2.6)
-v: GNU Emacs 23 - View and edit files
-w: Squeak -  Programming system and content development tool
+o: GvRng - Guido van Robot NG
+p: IDLE - Integrated Development Environment for Python
+q: Python (v2.6) - Python Interpreter (v2.6)
+r: Python (v3.2) - Python Interpreter (v3.2)
+s: IDLE (using Python-3.2) - Integrated Development Environment for Python (using Python-3.2)
+t: IDLE 3 - Integrated DeveLopment Environment for Python3
+u: Python (v2.7) - Python Interpreter (v2.7)
+v: IDLE (using Python-2.6) - Integrated Development Environment for Python (using Python-2.6)
+w: GNU Emacs 23 - View and edit files
+x: Squeak -  Programming system and content development tool
 
 Education
 a: Kig - Explore Geometric Constructions
@@ -241,15 +213,19 @@ z: GeoGebra - Create interactive mathematical constructions and applets.
 6: Scilab advanced CLI - Scientific software package for numerical computations
 7: Geomview - Interactive geometry viewing program
 8: OptGeo - Interactive tool to study and simulate optic assemblies
-9: Klavaro - Yet another touch typing tutor
-A: wxMaxima - Perform symbolic and numeric calculations using Maxima
-B: Regina - Software for 3-manifold topology and normal surface theory
-C: CaRMetal - CaRMetal interactive geometry
-D: python-whiteboard
-E: AWeather - Advanced weather reporting program
-F: Xcas Computer Algebra System - The swiss knife for mathematics
-G: Squeak -  Programming system and content development tool
-H: Educational suite GCompris - Educational game for ages 2 to 10
+9: GvRng - Guido van Robot NG
+A: Klavaro - Yet another touch typing tutor
+B: TurtleArt - A Logo programming environment
+C: wxMaxima - Perform symbolic and numeric calculations using Maxima
+D: Little Wizard - Development environment for children
+E: Regina - Software for 3-manifold topology and normal surface theory
+F: CaRMetal - CaRMetal interactive geometry
+G: python-whiteboard
+H: AWeather - Advanced weather reporting program
+I: Xcas Computer Algebra System - The swiss knife for mathematics
+J: Squeak -  Programming system and content development tool
+K: Educational suite GCompris - Educational game for ages 2 to 10
+L: eToys -  A media-rich model, simulation construction kit and authoring tool
 
 Game
 a: Kolf
@@ -307,13 +283,14 @@ P: I Have No Tomatoes - How many tomatoes can you smash in ten short minutes?
 Q: FreeCraft - The War begins
 R: FreeGish - A physics based arcade game
 S: Neverball - A 3D arcade game with a ball
-T: SDL-Ball
-U: FreeDinkedit - Portable Dink Smallwood game editor
-V: PyChess - PyChess is a fully featured, nice looking, easy to use chess client for the Gnome desktop
-W: PlayOnLinux - PlayOnLinux
-X: REminiscence - A port of FlashBack game engine
-Y: Gravitation - game about mania, melancholia, and the creative process
-Z: OpenArena - A fast-paced 3D first-person shooter, similar to id Software Inc.'s Quake III Arena
+T: Teeworlds - An online multi-player platform 2D shooter
+U: SDL-Ball
+V: FreeDinkedit - Portable Dink Smallwood game editor
+W: PyChess - PyChess is a fully featured, nice looking, easy to use chess client for the Gnome desktop
+X: PlayOnLinux - PlayOnLinux
+Y: REminiscence - A port of FlashBack game engine
+Z: Gravitation - game about mania, melancholia, and the creative process
+|: OpenArena - A fast-paced 3D first-person shooter, similar to id Software Inc.'s Quake III Arena
 |: The Ur-Quan Masters - An interstellar adventure game
 |: Golly - A Conway's Game of Life simulator
 |: Chromium B.S.U. - Scrolling space shooter
@@ -398,6 +375,7 @@ Z: OpenArena - A fast-paced 3D first-person shooter, similar to id Software Inc.
 |: Heroes - Collect powerups and avoid your opponents' trails
 |: Secret Maryo Chronicles - A 2D platform game with style similar to classic sidescroller games
 |: Gunroar - Kenta Cho's Gunroar
+|: Singularity - Become the singularity
 |: Quadrapassel - Fit falling blocks together
 |: Minetest - InfiniMiner/Minecraft-inspired open game world
 |: Angband (GTK) - A roguelike dungeon exploration game based on the books of J.R.R.Tolkien
@@ -420,6 +398,7 @@ Z: OpenArena - A fast-paced 3D first-person shooter, similar to id Software Inc.
 |: Zatacka - Arcade multiplayer game for 2-6 players
 |: Tumiki Fighters - Kenta Cho's Tumiki Fighters
 |: Funny Boat - a side scrolling arcade shooter game on a steamboat
+|: T.E.G. client - Tenes Empanadas Graciela client
 |: Tennix! - Play tennis against the computer or a friend
 |: LordsAWar Tile Editor - Create or Edit LordsAWar tilesets
 |: Battle for Wesnoth (1.10) - A fantasy turn-based strategy game
@@ -541,6 +520,7 @@ G: Links 2
 H: Wicd Network Manager
 I: Dillo - Lightweight browser
 J: Gnubiff - Gnubiff is a mail notification program.
+K: Luakit - Fast, small, webkit based micro-browser extensible by Lua
 
 Office
 a: Lokalize
@@ -633,7 +613,6 @@ W: Guake Preferences - Comment
 X: System Settings
 Y: IcedTea Web Control Panel - Configure IcedTea Web (javaws and plugin)
 Z: Settings Manager - Graphical Settings Manager for Xfce 4
-|: Panel tint2 - Customize the panel settings
 |: Tux Paint Config. - Configure Tux Paint
 |: Passwords and Keys - Manage your passwords and encryption keys
 |: Software Settings - Change software update preferences and enable or disable software sources
@@ -701,18 +680,20 @@ K: System Monitor - View current processes and monitor system state
 L: Open Folder with Thunar - Open the specified folders in Thunar
 M: Catalog Installer - Install a catalog of software on the system
 N: Log Out
-O: XTerm - standard terminal emulator for the X window system
-P: Reportbug - Report bugs to the Debian BTS
-Q: GDebi Package Installer - Install and view software packages
-R: Terminal emulator - Terminal Emulator
-S: Xfe - A lightweight file manager for X Window
-T: Thunar File Manager - Browse the filesystem with the file manager
-U: Synaptic Package Manager - Install, remove and upgrade software packages
-V: Software Update - Update software installed on the system
-W: dconf Editor - Directly edit your entire configuration database
-X: Htop - Show System Processes
-Y: UNetbootin - Tool for creating Live USB drives
-Z: Add/Remove Software - Add or remove software installed on the system
+O: Keyboard Layout - Preview keyboard layouts
+P: XTerm - standard terminal emulator for the X window system
+Q: Reportbug - Report bugs to the Debian BTS
+R: GDebi Package Installer - Install and view software packages
+S: Terminal emulator - Terminal Emulator
+T: Xfe - A lightweight file manager for X Window
+U: Thunar File Manager - Browse the filesystem with the file manager
+V: Synaptic Package Manager - Install, remove and upgrade software packages
+W: Software Update - Update software installed on the system
+X: Midnight Commander - File manager
+Y: dconf Editor - Directly edit your entire configuration database
+Z: Htop - Show System Processes
+|: UNetbootin - Tool for creating Live USB drives
+|: Add/Remove Software - Add or remove software installed on the system
 |: Service Pack Creator - Create service packs for sharing with other computers
 
 Utility
@@ -800,6 +781,7 @@ Z: Bluetooth Device Setup - Setup Bluetooth devices
 |: Terminal emulator - Terminal Emulator
 |: GNU Emacs 23 - View and edit files
 |: Thunar File Manager - Browse the filesystem with the file manager
+|: Midnight Commander - File manager
 |: Xfwrite - A simple text editor for Xfe
 |: Gentoo - Fully GUI-configurable, two-pane X file manager
 |: Disk Utility - Manage Drives and Media
@@ -1123,7 +1105,6 @@ f: Open the next window in the current frame and leave the focus on the current 
 g: Open the next window in a named frame
 h: Open the next window in a numbered frame
 i: Open the window in this frame if it match nw-absorb-test
-s: Open the window in the Surf frame if it match surf absorb-nw-test
 
 Frame-Movement-Menu
 p: < Frame pack menu >
@@ -1243,28 +1224,36 @@ l: Run LXDE
 p: Prompt for an other window manager
 
 Configuration-Menu
-a: < Corner Group >
-b: < Hook Group >
-c: < Root Group >
-d: < Main Mode Group >
-e: < Frame Colors Group >
-f: < Miscellaneous Group >
-g: < Second Mode Group >
-h: < Identify Key Group >
-i: < Query String Group >
-j: < Circulate Mode Group >
-k: < Expose Mode Group >
-l: < Info Mode Group >
-m: < Menu Group >
-n: < Notify Window Group >
-o: < Gimp Layout Group >
-p: < Power Management Group >
-q: < Placement Group >
-r: < Volume Mode Group >
-s: < Toolbar Group >
-t: < Wallpaper Group >
+a: < Placement Group >
+b: < Corner Group >
+c: < Hook Group >
+d: < Root Group >
+e: < Main Mode Group >
+f: < Frame Colors Group >
+g: < Miscellaneous Group >
+h: < Second Mode Group >
+i: < Identify Key Group >
+j: < Query String Group >
+k: < Circulate Mode Group >
+l: < Expose Mode Group >
+m: < Info Mode Group >
+n: < Menu Group >
+o: < Notify Window Group >
+p: < Gimp Layout Group >
 F2: Save all configuration variables in clfswmrc
 F3: Reset all configuration variables to their default values
+
+Conf-Placement
+a: Configure BANISH-POINTER-PLACEMENT
+b: Configure SECOND-MODE-PLACEMENT
+c: Configure INFO-MODE-PLACEMENT
+d: Configure QUERY-MODE-PLACEMENT
+e: Configure CIRCULATE-MODE-PLACEMENT
+f: Configure EXPOSE-MODE-PLACEMENT
+g: Configure EXPOSE-QUERY-PLACEMENT
+h: Configure NOTIFY-WINDOW-PLACEMENT
+i: Configure ASK-CLOSE/KILL-PLACEMENT
+j: Configure UNMANAGED-WINDOW-PLACEMENT
 
 Conf-Corner
 a: Configure CORNER-SIZE
@@ -1286,7 +1275,7 @@ Conf-Hook
 a: Configure BINDING-HOOK
 b: Configure LOOP-HOOK
 c: Configure MAIN-ENTRANCE-HOOK
-d: Configure ROOT-SIZE-CHANGE
+d: Configure ROOT-SIZE-CHANGE-HOOK
 e: Configure INIT-HOOK
 f: Configure CLOSE-HOOK
 g: Configure DEFAULT-NW-HOOK
@@ -1419,83 +1408,10 @@ f: Configure NOTIFY-WINDOW-TRANSPARENCY
 Conf-Gimp-Layout
 a: Configure GIMP-LAYOUT-NOTIFY-WINDOW-DELAY
 
-Conf-Power-Management
-a: Configure POWER-SUSPEND-TO-RAM-CMD
-b: Configure POWER-SUSPEND-TO-DISK-CMD
-c: Configure POWER-REBOOT-CMD
-d: Configure POWER-HALT-CMD
-
-Conf-Placement
-a: Configure BANISH-POINTER-PLACEMENT
-b: Configure SECOND-MODE-PLACEMENT
-c: Configure INFO-MODE-PLACEMENT
-d: Configure QUERY-MODE-PLACEMENT
-e: Configure CIRCULATE-MODE-PLACEMENT
-f: Configure EXPOSE-MODE-PLACEMENT
-g: Configure EXPOSE-QUERY-PLACEMENT
-h: Configure NOTIFY-WINDOW-PLACEMENT
-i: Configure ASK-CLOSE/KILL-PLACEMENT
-j: Configure UNMANAGED-WINDOW-PLACEMENT
-k: Configure TOOLBAR-WINDOW-PLACEMENT
-l: Configure VOLUME-MODE-PLACEMENT
-
-Conf-Volume-Mode
-a: Configure VOLUME-FONT-STRING
-b: Configure VOLUME-BACKGROUND
-c: Configure VOLUME-FOREGROUND
-d: Configure VOLUME-BORDER
-e: Configure VOLUME-BORDER-SIZE
-f: Configure VOLUME-WIDTH
-g: Configure VOLUME-HEIGHT
-h: Configure VOLUME-TEXT-LIMIT
-i: Configure VOLUME-EXTERNAL-MIXER-CMD
-
-Conf-Toolbar
-a: Configure DEFAULT-TOOLBAR
-b: Configure TOOLBAR-WINDOW-FONT-STRING
-c: Configure TOOLBAR-WINDOW-BACKGROUND
-d: Configure TOOLBAR-WINDOW-FOREGROUND
-e: Configure TOOLBAR-WINDOW-BORDER
-f: Configure TOOLBAR-DEFAULT-BORDER-SIZE
-g: Configure TOOLBAR-WINDOW-TRANSPARENCY
-h: Configure TOOLBAR-DEFAULT-THICKNESS
-i: Configure TOOLBAR-DEFAULT-REFRESH-DELAY
-j: Configure TOOLBAR-DEFAULT-AUTOHIDE
-k: Configure TOOLBAR-SENSIBILITY
-l: Configure TOOLBAR-CLOCK-COLOR
-m: Configure TOOLBAR-LABEL-COLOR
-n: Configure TOOLBAR-CLICKABLE-LABEL-COLOR
-o: Configure TOOLBAR-CLICKABLE-CLOCK-COLOR
-p: Configure TOOLBAR-CLOCK-ACTION
-q: Configure TOOLBAR-CLFSWM-MENU-COLOR
-r: Configure TOOLBAR-CPU-COLOR
-s: Configure TOOLBAR-MEM-COLOR
-t: Configure TOOLBAR-SYSTEM-INFO-COLOR
-u: Configure TOOLBAR-SYSTEM-INFO-LOW-COLOR
-v: Configure TOOLBAR-SYSTEM-INFO-ALERT-COLOR
-w: Configure TOOLBAR-SYSTEM-INFO-URGENT-COLOR
-x: Configure TOOLBAR-EXPOSE-MODE-BUTTON-COLOR
-y: Configure MPD-TOOLBAR
-z: Configure MPD-TOOLBAR-CLIENT
-0: Configure TOOLBAR-MPD-INFO-COLOR
-1: Configure TOOLBAR-MPD-BUTTONS-COLOR
-2: Configure TOOLBAR-VOLUME-MODE-BUTTON-COLOR
-
-Conf-Wallpaper
-a: Configure WALLPAPER-COMMAND
-
 Clfswm-Menu
 r: Reset clfswm
 l: Reload clfswm
 x: Exit clfswm
-Pause: < Suspend/Reboot/Halt menu >
-
-Reboot-Halt-Menu
--: Do nothing
-s: Suspend the computer to RAM
-d: Suspend the computer to DISK
-r: Reboot the computer
-h: Halt the computer
 
 
 This documentation was produced with the CLFSWM auto-doc functions. To reproduce it, use the produce-menu-doc-in-file or
