@@ -105,8 +105,9 @@
 
 
 
-(defun create-new-blank-window ()
+(defun create-new-blank-window (&rest args)
   "Create a new blank window"
+  (declare (ignore args))
   (with-x-pointer
     (push (xlib:create-window :parent *root*
                               :x (- x 50) :y y
@@ -188,12 +189,41 @@
   (with-current-blank-window (window)
     (setf (xlib:drawable-border-width window) (if *blank-window-show-current* 1 0))))
 
-(defun place-current-blank-window (window root-x root-y)
-  "Place the current blank window with the mouse"
+(defun find-blank-window-under-mouse ()
+  "Return the blank window under the mouse pointer if any"
+  (with-x-pointer
+    (dolist (win *blank-window-list*)
+      (when (in-window win x y)
+        (with-current-blank-window (window)
+          (setf (xlib:drawable-border-width window) 0))
+        (setf *blank-window-list* (remove win *blank-window-list* :test #'xlib:window-equal))
+        (push win *blank-window-list*)
+        (when *blank-window-show-current*
+          (with-current-blank-window (window)
+            (setf (xlib:drawable-border-width window) 1)))
+        (return-from find-blank-window-under-mouse win)))))
+
+(defun move-blank-window (window root-x root-y)
+  "Move blank window with the mouse"
   (declare (ignore window))
+  (let ((window (find-blank-window-under-mouse)))
+    (when window
+      (move-window window root-x root-y))))
+
+(defun resize-blank-window (window root-x root-y)
+  "Resize blank window with the mouse"
+  (declare (ignore window))
+  (let ((window (find-blank-window-under-mouse)))
+    (when window
+      (resize-window window root-x root-y))))
+
+(defun hide-unhide-current-blank-window ()
+  "Hide or unhide the current blank window"
   (with-current-blank-window (window)
-    (setf (xlib:drawable-x window) root-x
-          (xlib:drawable-y window) root-y)))
+    (if (window-hidden-p window)
+        (unhide-window window)
+        (hide-window window))))
+
 
 (defun blank-black-window ()
   "Open a black window. ie light of the screen"
@@ -241,11 +271,14 @@
   (define-blank-window-key ("m") 'blank-window-inc-width -1)
   (define-blank-window-key ("l") 'blank-window-inc-height -1)
   (define-blank-window-key ("Delete") 'remove-current-blank-window)
+  (define-blank-window-key ("t") 'hide-unhide-current-blank-window)
   (define-blank-window-key ("Control_R") 'banish-pointer)
   (define-blank-window-key ("b") 'banish-pointer)
   (define-blank-window-key ("x") 'blank-black-window)
 
-  (define-blank-window-mouse (1) 'place-current-blank-window))
+  (define-blank-window-mouse (1) 'move-blank-window)
+  (define-blank-window-mouse (2) 'create-new-blank-window)
+  (define-blank-window-mouse (3) 'resize-blank-window))
 
 
 
