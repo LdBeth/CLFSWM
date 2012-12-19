@@ -709,7 +709,7 @@
         (return-from find-child-in-all-root root))))
 
   (defun find-current-root ()
-    (root-child (find-root (current-child))))
+    (root-child (find-root current-child)))
 
   (defun exchange-root-geometry (root-1 root-2)
     (when (and root-1 root-2)
@@ -746,9 +746,10 @@
     current-child)
 
   (defun current-child-setter (value)
-    (awhen (find-root value)
-      (setf (root-current-child it) value))
-    (setf current-child value))
+    (when value
+      (awhen (find-root value)
+        (setf (root-current-child it) value))
+      (setf current-child value)))
 
   (defmacro with-current-child ((new-child) &body body)
     "Temporarly change the current child"
