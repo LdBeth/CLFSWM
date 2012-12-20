@@ -80,6 +80,7 @@
                  (when (or (child-equal-p window (current-child))
                            (is-in-current-child-p window))
                    (setf change (or change :moved))
+                   (show-all-children)
                    (raise-window window)
                    (focus-window window)
                    (focus-all-children window (find-parent-frame window (find-current-root)))))))))
