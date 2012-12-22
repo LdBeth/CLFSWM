@@ -490,15 +490,6 @@
 
 
 
-(defun null-size-window-in-frame (frame)
-  (let ((null-size-window-p nil))
-    (with-all-windows (frame window)
-      (when (null-size-window-p window)
-        (setf null-size-window-p t)))
-    null-size-window-p))
-
-
-
 (defun create-frame-window ()
   (let ((win (xlib:create-window :parent *root*
                                  :x 0
@@ -1079,8 +1070,7 @@ XINERAMA version 1.1 opcode: 150
   (lower-window window (frame-window child)))
 
 (defmethod set-child-stack-order (window child)
-  (declare (ignore child))
-  (raise-window window))
+  (declare (ignore window child)))
 
 
 
@@ -1195,10 +1185,10 @@ XINERAMA version 1.1 opcode: 150
 			(/= (x-drawable-width window) (child-rect-w rect))
 			(/= (x-drawable-height window) (child-rect-h rect)))))
         (when change
-          (setf (x-drawable-x window) (child-rect-x rect)
-                (x-drawable-y window) (child-rect-y rect)
-                (x-drawable-width window) (child-rect-w rect)
-                (x-drawable-height window) (child-rect-h rect)))
+          (setf (x-drawable-width window) (child-rect-w rect)
+                (x-drawable-height window) (child-rect-h rect)
+                (x-drawable-x window) (child-rect-x rect)
+                (x-drawable-y window) (child-rect-y rect)))
 	change))))
 
 

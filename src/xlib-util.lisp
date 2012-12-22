@@ -349,17 +349,6 @@ they should be windows. So use this function to make a window out of them."
   (eql (window-state window) +iconic-state+))
 
 
-(defun null-size-window-p (window)
-  (let ((hints (xlib:wm-normal-hints window)))
-    (and hints
-	 (not (or (xlib:wm-size-hints-width hints)
-		  (xlib:wm-size-hints-height hints)
-		  (xlib:wm-size-hints-win-gravity hints)))
-	 (xlib:wm-size-hints-user-specified-position-p hints))))
-
-
-
-
 
 
 (defun unhide-window (window)
@@ -533,8 +522,14 @@ they should be windows. So use this function to make a window out of them."
       (unhide-window window))
     (setf (xlib:window-priority window) :above)))
 
+
+(defun no-focus ()
+  "don't focus any window but still read keyboard events."
+  (xlib:set-input-focus *display* *no-focus-window* :pointer-root))
+
 (defun focus-window (window)
   "Give the window focus."
+  (no-focus)
   (when (xlib:window-p window)
     (xlib:set-input-focus *display* window :parent)))
 
@@ -542,10 +537,6 @@ they should be windows. So use this function to make a window out of them."
   "Raise and focus."
   (raise-window window)
   (focus-window window))
-
-(defun no-focus ()
-  "don't focus any window but still read keyboard events."
-  (xlib:set-input-focus *display* *no-focus-window* :pointer-root))
 
 
 (defun lower-window (window sibling)

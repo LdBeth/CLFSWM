@@ -76,14 +76,12 @@
           (when (has-stackmode value-mask)
             (case stack-mode
               (:above
-               (unless (null-size-window-p window)
-                 (when (or (child-equal-p window (current-child))
-                           (is-in-current-child-p window))
-                   (setf change (or change :moved))
-                   (show-all-children)
-                   (raise-window window)
-                   (focus-window window)
-                   (focus-all-children window (find-parent-frame window (find-current-root)))))))))
+               (when (or (child-equal-p window (current-child))
+                         (is-in-current-child-p window))
+                 (setf change (or change :moved))
+                 (show-all-children)
+                 (focus-window window)
+                 (focus-all-children window (find-parent-frame window (find-current-root))))))))
         (unless (eq change :resized)
           ;; To be ICCCM compliant, send a fake configuration notify event only when
           ;; the window has moved and not when it has been resized or the border width has changed.
@@ -98,11 +96,10 @@
       (unhide-window window)
       (process-new-window window)
       (map-window window)
-      (unless (null-size-window-p window)
-        (multiple-value-bind (never-managed raise)
-            (never-managed-window-p window)
-          (unless (and never-managed raise)
-            (show-all-children)))))))
+      (multiple-value-bind (never-managed raise)
+          (never-managed-window-p window)
+        (unless (and never-managed raise)
+          (show-all-children))))))
 
 
 
@@ -113,11 +110,7 @@
       (setf (window-state window) +withdrawn-state+)
       (xlib:unmap-window window)
       (remove-child-in-all-frames window)
-      (unless (null-size-window-in-frame *root-frame*)
-        (show-all-children)))))
-
-
-
+      (show-all-children))))
 
 
 (define-handler main-mode :destroy-notify (send-event-p event-window window)
@@ -125,9 +118,9 @@
 	      (xlib:window-equal window event-window))
     (when (find-child window *root-frame*)
       (delete-child-in-all-frames window)
-      (unless (null-size-window-in-frame *root-frame*)
-        (show-all-children))
+      (show-all-children)
       (xlib:destroy-window window))))
+
 
 (define-handler main-mode :enter-notify  (window root-x root-y)
   (unless (and (> root-x (- (xlib:screen-width *screen*) 3))
@@ -156,11 +149,10 @@
 
 (define-handler main-mode :configure-notify (window)
   (when (child-equal-p window *root*)
-    (unless (null-size-window-in-frame *root-frame*)
-      (unless (eql (place-frames-from-xinerama-infos) :update)
-        (finish-configuring-root))
-      (show-all-children)
-      (call-hook *root-size-change-hook*))))
+    (unless (eql (place-frames-from-xinerama-infos) :update)
+      (finish-configuring-root))
+    (show-all-children)
+    (call-hook *root-size-change-hook*)))
 
 
 (defun error-handler (display error-key &rest key-vals &key asynchronous &allow-other-keys)
