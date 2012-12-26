@@ -354,22 +354,6 @@ Write (defparameter *contrib-dir* \"/usr/local/lib/clfswm/\") in ~A.~%"
 
 
 
-(defun find-window-under-mouse (x y)
-  "Return the child window under the mouse"
-  (let ((win *root*))
-    (with-all-root-child (root)
-      (with-all-windows-frames-and-parent (root child parent)
-        (when (and (or (managed-window-p child parent) (child-equal-p parent (current-child)))
-                   (not (window-hidden-p child))
-                   (in-window child x y))
-          (setf win child))
-        (when (in-frame child x y)
-          (setf win (frame-window child)))))
-    win))
-
-
-
-
 (defun find-child-under-mouse-in-never-managed-windows (x y)
   "Return the child under mouse from never managed windows"
   (let ((ret nil))
@@ -381,30 +365,20 @@ Write (defparameter *contrib-dir* \"/usr/local/lib/clfswm/\") in ~A.~%"
 	    (setf ret win)))))
     ret))
 
-
-(defun find-child-under-mouse-in-child-tree (x y &optional first-foundp)
-  "Return the child under the mouse"
-  (let ((ret nil))
-    (with-all-root-child (root)
-      (with-all-windows-frames (root child)
-        (when (and (not (window-hidden-p child))
-                   (in-window child x y))
-          (if first-foundp
-              (return-from find-child-under-mouse-in-child-tree child)
-              (setf ret child)))
-        (when (in-frame child x y)
-          (if first-foundp
-              (return-from find-child-under-mouse-in-child-tree child)
-              (setf ret child)))))
-    ret))
+(defun find-child-under-mouse-in-child-tree (x y)
+  (dolist (child-rect (get-displayed-child))
+    (when (in-rect x y (child-rect-x child-rect) (child-rect-y child-rect)
+                   (child-rect-w child-rect) (child-rect-h child-rect))
+      (return-from find-child-under-mouse-in-child-tree (child-rect-child child-rect)))))
 
 
 
-(defun find-child-under-mouse (x y &optional first-foundp also-never-managed)
+(defun find-child-under-mouse (x y &optional also-never-managed)
   "Return the child under the mouse"
   (or (and also-never-managed
 	   (find-child-under-mouse-in-never-managed-windows x y))
-      (find-child-under-mouse-in-child-tree x y first-foundp)))
+      (find-child-under-mouse-in-child-tree x y)))
+
 
 
 
@@ -593,32 +567,32 @@ Write (defparameter *contrib-dir* \"/usr/local/lib/clfswm/\") in ~A.~%"
     "Eval a lisp form from the query input"
     (let ((form (query-string (format nil "Eval Lisp <~A> " (package-name *package*))
                               "" all-symbols))
-            (result nil))
-        (when (and form (not (equal form "")))
-          (let ((printed-result
-                 (with-output-to-string (*standard-output*)
-                   (setf result (handler-case
-                                    (loop for i in (multiple-value-list
-                                                    (eval (read-from-string form)))
-                                       collect (format nil "~S" i))
-                                  (error (condition)
-                                    (format nil "~A" condition)))))))
-            (let ((ret (info-mode (expand-newline (append (ensure-list (format nil "> ~A" form))
-                                                          (ensure-list printed-result)
-                                                          (ensure-list result)))
-                                  :width (- (xlib:screen-width *screen*) 2))))
-              (when (or (search "defparameter" form :test #'string-equal)
-                        (search "defvar" form :test #'string-equal))
-                (let ((elem (split-string form)))
-                  (pushnew (string-downcase (if (string= (first elem) "(") (third elem) (second elem)))
-                           all-symbols :test #'string=)))
-              (when (search "in-package" form :test #'string-equal)
-                (let ((*notify-window-placement* 'middle-middle-root-placement))
-                  (open-notify-window '("Collecting all symbols for Lisp REPL completion."))
-                  (setf all-symbols (collect-all-symbols))
-                  (close-notify-window)))
-              (when ret
-                (eval-from-query-string))))))))
+          (result nil))
+      (when (and form (not (equal form "")))
+        (let ((printed-result
+               (with-output-to-string (*standard-output*)
+                 (setf result (handler-case
+                                  (loop for i in (multiple-value-list
+                                                  (eval (read-from-string form)))
+                                     collect (format nil "~S" i))
+                                (error (condition)
+                                  (format nil "~A" condition)))))))
+          (let ((ret (info-mode (expand-newline (append (ensure-list (format nil "> ~A" form))
+                                                        (ensure-list printed-result)
+                                                        (ensure-list result)))
+                                :width (- (xlib:screen-width *screen*) 2))))
+            (when (or (search "defparameter" form :test #'string-equal)
+                      (search "defvar" form :test #'string-equal))
+              (let ((elem (split-string form)))
+                (pushnew (string-downcase (if (string= (first elem) "(") (third elem) (second elem)))
+                         all-symbols :test #'string=)))
+            (when (search "in-package" form :test #'string-equal)
+              (let ((*notify-window-placement* 'middle-middle-root-placement))
+                (open-notify-window '("Collecting all symbols for Lisp REPL completion."))
+                (setf all-symbols (collect-all-symbols))
+                (close-notify-window)))
+            (when ret
+              (eval-from-query-string))))))))
 
 
 
@@ -891,7 +865,7 @@ For window: set current child to window or its parent according to window-parent
 	     (funcall (cond ((eql mouse-fn #'move-frame) #'move-window)
 			    ((eql mouse-fn #'resize-frame) #'resize-window))
 		      child root-x root-y)))
-    (let ((child (find-child-under-mouse root-x root-y nil t)))
+    (let ((child (find-child-under-mouse root-x root-y t)))
       (multiple-value-bind (never-managed raise-fun)
 	  (never-managed-window-p child)
 	(if (and (xlib:window-p child) never-managed raise-fun)
@@ -1214,11 +1188,11 @@ For window: set current child to window or its parent according to window-parent
   (with-current-window
     (let ((parent (find-parent-frame window)))
       (setf (x-drawable-x window) (truncate (+ (frame-rx parent)
-						  (/ (- (frame-rw parent)
-							(x-drawable-width window)) 2)))
+                                               (/ (- (frame-rw parent)
+                                                     (x-drawable-width window)) 2)))
 	    (x-drawable-y window) (truncate (+ (frame-ry parent)
-						  (/ (- (frame-rh parent)
-							(x-drawable-height window)) 2))))
+                                               (/ (- (frame-rh parent)
+                                                     (x-drawable-height window)) 2))))
       (xlib:display-finish-output *display*)))
   (leave-second-mode))
 
@@ -1238,7 +1212,7 @@ For window: set current child to window or its parent according to window-parent
 (defun set-current-window-transparency ()
   "Set the current window transparency"
   (with-current-window
-      (ask-child-transparency "window" window))
+    (ask-child-transparency "window" window))
   (leave-second-mode))
 
 
@@ -1421,7 +1395,7 @@ For window: set current child to window or its parent according to window-parent
 
 (defun current-frame-set-sloppy-select-policy ()
   "Set a sloppy select policy for the current frame."
-    (set-focus-policy-generic :sloppy-select))
+  (set-focus-policy-generic :sloppy-select))
 
 
 
@@ -1445,7 +1419,7 @@ For window: set current child to window or its parent according to window-parent
 
 (defun all-frames-set-sloppy-select-policy ()
   "Set a sloppy select policy for all frames."
-    (set-focus-policy-generic-for-all :sloppy-select))
+  (set-focus-policy-generic-for-all :sloppy-select))
 
 
 
@@ -1518,23 +1492,23 @@ For window: set current child to window or its parent according to window-parent
 	(loop for line = (ignore-errors (read-line stream nil nil))
 	   while line
 	   do
-	   (cond ((first-position "Name=" line) (setf name (um-extract-value line)))
-		 ((first-position "Exec=" line) (setf exec (um-extract-value line)))
-		 ((first-position "Categories=" line) (setf categories (um-extract-value line)))
-		 ((first-position "Comment=" line) (setf comment (um-extract-value line))))
-	   (when (and name exec categories)
-	     (let* ((sub-menu (um-find-submenu menu (split-string categories #\;)))
-		    (fun-name (intern name :clfswm)))
-	       (setf (symbol-function fun-name) (let ((do-exec exec))
-						  (lambda ()
-						    (do-shell do-exec)
-						    (leave-second-mode)))
-		     (documentation fun-name 'function) (format nil "~A~A" name (if comment
-										    (format nil " - ~A" comment)
-										    "")))
-	       (dolist (m sub-menu)
-		 (add-menu-key (menu-name m) :next fun-name m)))
-	     (setf name nil exec nil categories nil comment nil)))))))
+             (cond ((first-position "Name=" line) (setf name (um-extract-value line)))
+                   ((first-position "Exec=" line) (setf exec (um-extract-value line)))
+                   ((first-position "Categories=" line) (setf categories (um-extract-value line)))
+                   ((first-position "Comment=" line) (setf comment (um-extract-value line))))
+             (when (and name exec categories)
+               (let* ((sub-menu (um-find-submenu menu (split-string categories #\;)))
+                      (fun-name (intern name :clfswm)))
+                 (setf (symbol-function fun-name) (let ((do-exec exec))
+                                                    (lambda ()
+                                                      (do-shell do-exec)
+                                                      (leave-second-mode)))
+                       (documentation fun-name 'function) (format nil "~A~A" name (if comment
+                                                                                      (format nil " - ~A" comment)
+                                                                                      "")))
+                 (dolist (m sub-menu)
+                   (add-menu-key (menu-name m) :next fun-name m)))
+               (setf name nil exec nil categories nil comment nil)))))))
 
 
 (defun update-menus (&optional (menu (make-menu :name 'main :doc "Main menu")))
@@ -1862,12 +1836,12 @@ For window: set current child to window or its parent according to window-parent
 (defun key-inc-transparency ()
   "Increment the current window transparency"
   (with-current-window
-      (incf (child-transparency window) 0.1)))
+    (incf (child-transparency window) 0.1)))
 
 (defun key-dec-transparency ()
   "Decrement the current window transparency"
   (with-current-window
-      (decf (child-transparency window) 0.1)))
+    (decf (child-transparency window) 0.1)))
 
 
 

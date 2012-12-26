@@ -126,6 +126,7 @@
                 (x-drawable-x window) (x-drawable-y window)
                 (x-drawable-width window) (x-drawable-height window))))
 
+
 (defgeneric in-child (child x y))
 
 (defmethod in-child ((child frame) x y)
@@ -1193,78 +1194,82 @@ XINERAMA version 1.1 opcode: 150
 
 
 
+(let ((displayed-child nil))
+  (defun get-displayed-child ()
+    displayed-child)
 
-(defun show-all-children (&optional (from-root-frame nil))
-  "Show all children and hide those not in a root frame"
-  (declare (ignore from-root-frame))
-  (let ((geometry-change nil)
-        (displayed-child nil)
-        (hidden-child nil))
-    (labels ((in-displayed-list (child)
-               (member child displayed-child :test (lambda (c rect)
-                                                     (child-equal-p c (child-rect-child rect)))))
+  (defun show-all-children (&optional (from-root-frame nil))
+    "Show all children and hide those not in a root frame"
+    (declare (ignore from-root-frame))
+    (let ((geometry-change nil)
+          (hidden-child nil))
+      (labels ((in-displayed-list (child)
+                 (member child displayed-child :test (lambda (c rect)
+                                                       (child-equal-p c (child-rect-child rect)))))
 
-             (add-in-hidden-list (child)
-               (pushnew child hidden-child :test #'child-equal-p))
+               (add-in-hidden-list (child)
+                 (pushnew child hidden-child :test #'child-equal-p))
 
-             (set-geometry (child parent in-current-root child-current-root-p)
-               (if (or in-current-root child-current-root-p)
+               (set-geometry (child parent in-current-root child-current-root-p)
+                 (if (or in-current-root child-current-root-p)
+                     (when (frame-p child)
+                       (adapt-frame-to-parent child (if child-current-root-p nil parent)))
+                     (add-in-hidden-list child)))
+
+               (recurse-on-frame-child (child in-current-root child-current-root-p selected-p)
+                 (let ((selected-child (frame-selected-child child)))
+                   (dolist (sub-child (frame-child child))
+                     (rec sub-child child
+                          (and selected-p (child-equal-p sub-child selected-child))
+                          (or in-current-root child-current-root-p)))))
+
+               (hidden-child-p (rect)
+                 (dolist (r displayed-child)
+                   (when (and (rect-hidden-p r rect)
+                              (or (not (xlib:window-p (child-rect-child r)))
+                                  (eq (window-type (child-rect-child r)) :normal)))
+                     (return t))))
+
+               (select-and-display (child parent selected-p)
+                 (multiple-value-bind (nx ny nw nh)
+                     (get-parent-layout child parent)
+                   (let ((rect (make-child-rect :child child :parent parent
+                                                :selected-p selected-p
+                                                :x nx :y ny :w nw :h nh)))
+                     (if (and *show-hide-policy* (hidden-child-p rect))
+                         (add-in-hidden-list child)
+                         (push rect displayed-child)))))
+
+               (display-displayed-child ()
+                 (let ((previous nil))
+                   (setf displayed-child (nreverse displayed-child))
+                   (dolist (rect displayed-child)
+                     (when (adapt-child-to-rect rect)
+                       (setf geometry-change t))
+                     (select-child (child-rect-child rect) (child-rect-selected-p rect))
+                     (show-child (child-rect-child rect)
+                                 (child-rect-parent rect)
+                                 previous)
+                     (setf previous (child-rect-child rect)))))
+
+               (rec (child parent selected-p in-current-root)
+                 (let ((child-current-root-p (child-root-p child)))
+                   (unless (in-displayed-list child)
+                     (set-geometry child parent in-current-root child-current-root-p))
                    (when (frame-p child)
-                     (adapt-frame-to-parent child (if child-current-root-p nil parent)))
-                   (add-in-hidden-list child)))
+                     (recurse-on-frame-child child in-current-root child-current-root-p selected-p))
+                   (when (and (or in-current-root child-current-root-p)
+                              (not (in-displayed-list child)))
+                     (select-and-display child parent selected-p)))))
 
-             (recurse-on-frame-child (child in-current-root child-current-root-p selected-p)
-               (let ((selected-child (frame-selected-child child)))
-                 (dolist (sub-child (frame-child child))
-                   (rec sub-child child
-                        (and selected-p (child-equal-p sub-child selected-child))
-                        (or in-current-root child-current-root-p)))))
-
-             (hidden-child-p (rect)
-               (dolist (r displayed-child)
-                 (when (and (rect-hidden-p r rect)
-                            (or (not (xlib:window-p (child-rect-child r)))
-                                (eq (window-type (child-rect-child r)) :normal)))
-                   (return t))))
-
-             (select-and-display (child parent selected-p)
-               (multiple-value-bind (nx ny nw nh)
-                   (get-parent-layout child parent)
-                 (let ((rect (make-child-rect :child child :parent parent
-                                              :selected-p selected-p
-                                              :x nx :y ny :w nw :h nh)))
-                   (if (and *show-hide-policy* (hidden-child-p rect))
-                       (add-in-hidden-list child)
-                       (push rect displayed-child)))))
-
-             (display-displayed-child ()
-               (let ((previous nil))
-                 (dolist (rect (nreverse displayed-child))
-                   (when (adapt-child-to-rect rect)
-                     (setf geometry-change t))
-                   (select-child (child-rect-child rect) (child-rect-selected-p rect))
-                   (show-child (child-rect-child rect)
-                               (child-rect-parent rect)
-                               previous)
-                   (setf previous (child-rect-child rect)))))
-
-             (rec (child parent selected-p in-current-root)
-               (let ((child-current-root-p (child-root-p child)))
-                 (unless (in-displayed-list child)
-                   (set-geometry child parent in-current-root child-current-root-p))
-                 (when (frame-p child)
-                   (recurse-on-frame-child child in-current-root child-current-root-p selected-p))
-                 (when (and (or in-current-root child-current-root-p)
-                            (not (in-displayed-list child)))
-                   (select-and-display child parent selected-p)))))
-
-      (rec *root-frame* nil t (child-root-p *root-frame*))
-      (display-displayed-child)
-      (dolist (child hidden-child)
-        (hide-child child))
-      (set-focus-to-current-child)
-      (xlib:display-finish-output *display*)
-      geometry-change)))
+        (setf displayed-child nil)
+        (rec *root-frame* nil t (child-root-p *root-frame*))
+        (display-displayed-child)
+        (dolist (child hidden-child)
+          (hide-child child))
+        (set-focus-to-current-child)
+        (xlib:display-finish-output *display*)
+        geometry-change))))
 
 
 
