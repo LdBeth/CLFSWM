@@ -1062,7 +1062,7 @@ XINERAMA version 1.1 opcode: 150
 
 
 (defgeneric set-child-stack-order (window child)
-  (:documentation "Raise window if child is NIL else put window just below child"))
+  (:documentation "Put window just below child"))
 
 (defmethod set-child-stack-order (window (child xlib:window))
   (lower-window window child))

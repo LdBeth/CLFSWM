@@ -1201,12 +1201,13 @@ For window: set current child to window or its parent according to window-parent
 (defun display-current-window-info ()
   "Display information on the current window"
   (with-current-window
-    (info-mode (list (format nil "Window:       ~A" window)
-		     (format nil "Window name:  ~A" (xlib:wm-name window))
-		     (format nil "Window class: ~A" (xlib:get-wm-class window))
-		     (format nil "Window type:  ~:(~A~)" (window-type window))
-		     (format nil "Window id:    0x~X" (xlib:window-id window))
-                     (format nil "Window transparency: ~A" (* 100 (window-transparency window))))))
+    (info-mode (append (list (format nil "Window:       ~A" window)
+                             (format nil "Window name:  ~A" (xlib:wm-name window))
+                             (format nil "Window class: ~A" (xlib:get-wm-class window))
+                             (format nil "Window type:  ~:(~A~)" (window-type window))
+                             (format nil "Window id:    0x~X" (xlib:window-id window))
+                             (format nil "Window transparency: ~A" (* 100 (window-transparency window))))
+                       (split-string (format nil "~A" (xlib:wm-normal-hints window)) #\Newline))))
   (leave-second-mode))
 
 (defun set-current-window-transparency ()

@@ -471,8 +471,10 @@ they should be windows. So use this function to make a window out of them."
   "Return one of :desktop, :dock, :toolbar, :utility, :splash,
 :dialog, :transient, :maxsize and :normal."
   (or (and (let ((hints (xlib:wm-normal-hints window)))
-             (and hints (or (xlib:wm-size-hints-max-width hints)
-                            (xlib:wm-size-hints-max-height hints)
+             (and hints (or (and (xlib:wm-size-hints-max-width hints)
+                                 (< (xlib:wm-size-hints-max-width hints) (x-drawable-width *root*)))
+                            (and (xlib:wm-size-hints-max-height hints)
+                                 (< (xlib:wm-size-hints-max-height hints) (x-drawable-height *root*)))
                             (xlib:wm-size-hints-min-aspect hints)
                             (xlib:wm-size-hints-max-aspect hints))))
            :maxsize)
