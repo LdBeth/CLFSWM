@@ -109,7 +109,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 ;;; CONFIG - Default managed window type for a frame
 ;;; type can be  :all, :normal, :transient, :maxsize, :desktop, :dock, :toolbar, :menu, :utility, :splash, :dialog
-(defconfig *default-managed-type* '(:normal) nil
+(defconfig *default-managed-type* '(:normal :maxsize) nil
   "Default managed window types")
 ;;(defparameter *default-managed-type* '(:normal :maxsize :transient))
 ;;(defparameter *default-managed-type* '(:normal :transient :maxsize :desktop :dock :toolbar :menu :utility :splash :dialog))
