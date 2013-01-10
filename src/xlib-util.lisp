@@ -328,6 +328,31 @@ they should be windows. So use this function to make a window out of them."
 
 
 
+(defun maxmin-size-equal-p (window)
+  (when (xlib:window-p window)
+    (let ((hints (xlib:wm-normal-hints window)))
+      (when hints
+        (let ((hint-x (xlib:wm-size-hints-x hints))
+              (hint-y (xlib:wm-size-hints-y hints))
+              (user-specified-position-p (xlib:wm-size-hints-user-specified-position-p hints))
+              (min-width (xlib:wm-size-hints-min-width hints))
+              (min-height (xlib:wm-size-hints-min-height hints))
+              (max-width (xlib:wm-size-hints-max-width hints))
+              (max-height (xlib:wm-size-hints-max-height hints)))
+          (and hint-x hint-y min-width max-width min-height max-height
+               user-specified-position-p
+               (= hint-x 0) (= hint-y 0)
+               (= min-width max-width)
+               (= min-height max-height)))))))
+
+(defun maxmin-size-equal-window-in-tree ()
+  (dolist (win (xlib:query-tree *root*))
+    (when (maxmin-size-equal-p win)
+      (return win))))
+
+
+
+
 (defun window-state (win)
   "Get the state (iconic, normal, withdrawn) of a window."
   (first (xlib:get-property win :WM_STATE)))

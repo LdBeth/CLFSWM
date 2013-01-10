@@ -1071,7 +1071,9 @@ XINERAMA version 1.1 opcode: 150
   (lower-window window (frame-window child)))
 
 (defmethod set-child-stack-order (window child)
-  (declare (ignore window child)))
+  (declare (ignore child))
+  (unless (maxmin-size-equal-window-in-tree)
+    (raise-window window)))
 
 
 
