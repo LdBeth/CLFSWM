@@ -1226,7 +1226,8 @@ XINERAMA version 1.1 opcode: 150
                           (or in-current-root child-current-root-p)))))
 
                (hidden-child-p (rect)
-                 (when (member (window-type (child-rect-child rect)) *show-hide-policy-type*)
+                 (when (or (frame-p (child-rect-child rect))
+                           (member (window-type (child-rect-child rect)) *show-hide-policy-type*))
                    (dolist (r displayed-child)
                      (when (and (rect-hidden-p r rect)
                                 (or (not (xlib:window-p (child-rect-child r)))
