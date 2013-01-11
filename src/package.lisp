@@ -127,6 +127,9 @@ It is particulary useful with CLISP/MIT-CLX.")
 '<': Hide only children less than children above.
 '<=': Hide children less or equal to children above (better for performance on slow machine).")
 
+(defconfig *show-hide-policy-type* '(:normal)
+  nil "Windows types which are optimized by the show hide policy")
+
 (defstruct child-rect child parent selected-p x y w h)
 
 (defstruct root child original current-child x y w h)
