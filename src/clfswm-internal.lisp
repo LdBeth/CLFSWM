@@ -1204,8 +1204,22 @@ XINERAMA version 1.1 opcode: 150
     "Show all children and hide those not in a root frame"
     (declare (ignore from-root-frame))
     (let ((geometry-change nil)
-          (hidden-child nil))
-      (labels ((in-displayed-list (child)
+          (hidden-child nil)
+          (has-no-leader-list nil))
+      (labels ((set-has-no-leader-list ()
+                 (let ((window-list nil)
+                       (leader-list nil))
+                   (with-all-windows (*root-frame* win)
+                     (let ((leader (window-leader win)))
+                       (when leader
+                         (when (member leader window-list :test (lambda (x y) (eql x (first y))))
+                           (pushnew leader leader-list))
+                         (push (list leader win) window-list))))
+                   (dolist (leader-win window-list)
+                     (unless (member leader-win leader-list :test (lambda (x y) (eql (first x) y)))
+                       (push (second leader-win) has-no-leader-list)))))
+
+               (in-displayed-list (child)
                  (member child displayed-child :test (lambda (c rect)
                                                        (child-equal-p c (child-rect-child rect)))))
 
@@ -1240,7 +1254,8 @@ XINERAMA version 1.1 opcode: 150
                    (let ((rect (make-child-rect :child child :parent parent
                                                 :selected-p selected-p
                                                 :x nx :y ny :w nw :h nh)))
-                     (if (and *show-hide-policy* (hidden-child-p rect))
+                     (if (and *show-hide-policy* (hidden-child-p rect)
+                              (member child has-no-leader-list :test #'child-equal-p))
                          (add-in-hidden-list child)
                          (push rect displayed-child)))))
 
@@ -1267,6 +1282,7 @@ XINERAMA version 1.1 opcode: 150
                      (select-and-display child parent selected-p)))))
 
         (setf displayed-child nil)
+        (set-has-no-leader-list)
         (rec *root-frame* nil t (child-root-p *root-frame*))
         (display-displayed-child)
         (dolist (child hidden-child)

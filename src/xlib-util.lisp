@@ -374,6 +374,16 @@ they should be windows. So use this function to make a window out of them."
   (eql (window-state window) +iconic-state+))
 
 
+(defun window-transient-for (window)
+  (first (xlib:get-property window :WM_TRANSIENT_FOR)))
+
+(defun window-leader (window)
+  (when window
+    (or (first (xlib:get-property window :WM_CLIENT_LEADER))
+        (let ((id (window-transient-for window)))
+          (when id
+            (window-leader id))))))
+
 
 
 (defun unhide-window (window)
