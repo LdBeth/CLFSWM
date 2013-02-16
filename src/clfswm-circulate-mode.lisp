@@ -177,10 +177,10 @@
     (xlib:destroy-window *circulate-window*))
   (when *circulate-font*
     (xlib:close-font *circulate-font*))
-  (xlib:display-finish-output *display*)
   (setf *circulate-window* nil
 	*circulate-gc* nil
-	*circulate-font* nil))
+	*circulate-font* nil)
+  (xlib:display-finish-output *display*))
 
 (defun circulate-loop-function ()
   (unless (is-a-key-pressed-p)

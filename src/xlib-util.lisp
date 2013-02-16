@@ -378,7 +378,7 @@ they should be windows. So use this function to make a window out of them."
   (first (xlib:get-property window :WM_TRANSIENT_FOR)))
 
 (defun window-leader (window)
-  (when window
+  (when (xlib:window-p window)
     (or (first (xlib:get-property window :WM_CLIENT_LEADER))
         (let ((id (window-transient-for window)))
           (when id
@@ -505,22 +505,23 @@ they should be windows. So use this function to make a window out of them."
 (defun window-type (window)
   "Return one of :desktop, :dock, :toolbar, :utility, :splash,
 :dialog, :transient, :maxsize and :normal."
-  (or (and (let ((hints (xlib:wm-normal-hints window)))
-             (and hints (or (and (xlib:wm-size-hints-max-width hints)
-                                 (< (xlib:wm-size-hints-max-width hints) (x-drawable-width *root*)))
-                            (and (xlib:wm-size-hints-max-height hints)
-                                 (< (xlib:wm-size-hints-max-height hints) (x-drawable-height *root*)))
-                            (xlib:wm-size-hints-min-aspect hints)
-                            (xlib:wm-size-hints-max-aspect hints))))
-           :maxsize)
-      (let ((net-wm-window-type (xlib:get-property window :_NET_WM_WINDOW_TYPE)))
-        (when net-wm-window-type
-          (dolist (type-atom net-wm-window-type)
-            (when (assoc (xlib:atom-name *display* type-atom) +netwm-window-types+)
-              (return (cdr (assoc (xlib:atom-name *display* type-atom) +netwm-window-types+)))))))
-      (and (xlib:get-property window :WM_TRANSIENT_FOR)
-           :transient)
-      :normal))
+  (when (xlib:window-p window)
+    (or (and (let ((hints (xlib:wm-normal-hints window)))
+               (and hints (or (and (xlib:wm-size-hints-max-width hints)
+                                   (< (xlib:wm-size-hints-max-width hints) (x-drawable-width *root*)))
+                              (and (xlib:wm-size-hints-max-height hints)
+                                   (< (xlib:wm-size-hints-max-height hints) (x-drawable-height *root*)))
+                              (xlib:wm-size-hints-min-aspect hints)
+                              (xlib:wm-size-hints-max-aspect hints))))
+             :maxsize)
+        (let ((net-wm-window-type (xlib:get-property window :_NET_WM_WINDOW_TYPE)))
+          (when net-wm-window-type
+            (dolist (type-atom net-wm-window-type)
+              (when (assoc (xlib:atom-name *display* type-atom) +netwm-window-types+)
+                (return (cdr (assoc (xlib:atom-name *display* type-atom) +netwm-window-types+)))))))
+        (and (xlib:get-property window :WM_TRANSIENT_FOR)
+             :transient)
+        :normal)))
 
 
 
