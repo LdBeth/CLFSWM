@@ -170,4 +170,4 @@ from $XDG_CONFIG_HOME/clfswm/clfswmrc")
 #+:clfswm-build-image
 (progn
   (cl-user::load-info "Building CLFSWM executable image")
-   (build-lisp-image "clfswm"))
+  (build-lisp-image "clfswm"))

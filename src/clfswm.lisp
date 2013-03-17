@@ -105,17 +105,16 @@
 
 (define-handler main-mode :unmap-notify (send-event-p event-window window)
   (unless (and (not send-event-p)
-	       (not (xlib:window-equal window event-window)))
+               (not (xlib:window-equal window event-window)))
     (when (find-child window *root-frame*)
       (setf (window-state window) +withdrawn-state+)
-      (xlib:unmap-window window)
       (remove-child-in-all-frames window)
       (show-all-children))))
 
 
 (define-handler main-mode :destroy-notify (send-event-p event-window window)
   (unless (or send-event-p
-	      (xlib:window-equal window event-window))
+              (xlib:window-equal window event-window))
     (when (find-child window *root-frame*)
       (delete-child-in-all-frames window)
       (show-all-children)
