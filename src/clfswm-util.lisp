@@ -367,19 +367,18 @@ Write (defparameter *contrib-dir* \"/usr/local/lib/clfswm/\") in ~A.~%"
 
 (defun find-child-under-mouse-in-child-tree (x y)
   (dolist (child-rect (get-displayed-child))
-    (when (in-rect x y (child-rect-x child-rect) (child-rect-y child-rect)
-                   (child-rect-w child-rect) (child-rect-h child-rect))
-      (return-from find-child-under-mouse-in-child-tree (child-rect-child child-rect)))))
+    (let ((child (child-rect-child child-rect)))
+      (when (in-rect x y (x-drawable-x child) (x-drawable-y child)
+                   (x-drawable-width child) (x-drawable-height child))
+        (return-from find-child-under-mouse-in-child-tree (child-rect-child child-rect))))))
 
 
 
 (defun find-child-under-mouse (x y &optional also-never-managed)
   "Return the child under the mouse"
   (or (and also-never-managed
-	   (find-child-under-mouse-in-never-managed-windows x y))
+           (find-child-under-mouse-in-never-managed-windows x y))
       (find-child-under-mouse-in-child-tree x y)))
-
-
 
 
 
@@ -1206,7 +1205,10 @@ For window: set current child to window or its parent according to window-parent
                              (format nil "Window class: ~A" (xlib:get-wm-class window))
                              (format nil "Window type:  ~:(~A~)" (window-type window))
                              (format nil "Window id:    0x~X" (xlib:window-id window))
-                             (format nil "Window transparency: ~A" (* 100 (window-transparency window))))
+                             (format nil "Window transparency: ~A" (* 100 (window-transparency window)))
+                             (format nil " X=~A  Y=~A  W=~A  H=~A"
+                                     (x-drawable-x window) (x-drawable-y window)
+                                     (x-drawable-width window) (x-drawable-height window)))
                        (split-string (format nil "~A" (xlib:wm-normal-hints window)) #\Newline))))
   (leave-second-mode))
 
