@@ -133,12 +133,29 @@
       (:sloppy-select (let* ((child (find-child-under-mouse root-x root-y))
 			     (parent (find-parent-frame child)))
 			(unless (or (child-root-p child)
-				    (equal (typecase child
-				    	     (xlib:window parent)
-					     (t child))
-					   (current-child)))
+				    (child-equal-p (typecase child
+                                                     (xlib:window parent)
+                                                     (t child))
+                                                   (current-child)))
 			    (focus-all-children child parent)
-			    (show-all-children)))))))
+			    (show-all-children))))
+      (:sloppy-select-window (let* ((child (find-child-under-mouse root-x root-y))
+                                    (parent (find-parent-frame child))
+                                    (need-warp-pointer (not (or (frame-p child)
+                                                                (child-equal-p child (frame-selected-child parent))))))
+                               (unless (child-root-p child)
+                                 (when (focus-all-children child parent)
+                                   (show-all-children)
+                                   (when need-warp-pointer
+                                     (typecase child
+                                       (xlib:window (xlib:warp-pointer *root*
+                                                                       (truncate (+ (x-drawable-x child)
+                                                                                    (/ (x-drawable-width child) 2)))
+                                                                       (truncate (+ (x-drawable-y child)
+                                                                                    (/ (x-drawable-height child) 2)))))
+                                       (frame (xlib:warp-pointer *root*
+                                                                 (+ (frame-rx child) 10)
+                                                                 (+ (frame-ry child) 10))))))))))))
 
 (define-handler main-mode :exposure (window)
   (awhen (find-frame-window window)
