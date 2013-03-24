@@ -367,10 +367,8 @@ Write (defparameter *contrib-dir* \"/usr/local/lib/clfswm/\") in ~A.~%"
 
 (defun find-child-under-mouse-in-child-tree (x y)
   (dolist (child-rect (get-displayed-child))
-    (let ((child (child-rect-child child-rect)))
-      (when (in-rect x y (x-drawable-x child) (x-drawable-y child)
-                   (x-drawable-width child) (x-drawable-height child))
-        (return-from find-child-under-mouse-in-child-tree (child-rect-child child-rect))))))
+    (when (in-child (child-rect-child child-rect) x y)
+      (return-from find-child-under-mouse-in-child-tree (child-rect-child child-rect)))))
 
 
 
