@@ -123,39 +123,8 @@
 (define-handler main-mode :enter-notify  (window root-x root-y)
   (unless (and (> root-x (- (xlib:screen-width *screen*) 3))
 	       (> root-y (- (xlib:screen-height *screen*) 3)))
-    (case (if (frame-p (current-child))
-	      (frame-focus-policy (current-child))
-	      *default-focus-policy*)
-      (:sloppy (focus-window window))
-      (:sloppy-strict (when (and (frame-p (current-child))
-				 (child-member window (frame-child (current-child))))
-			(focus-window window)))
-      (:sloppy-select (let* ((child (find-child-under-mouse root-x root-y))
-			     (parent (find-parent-frame child)))
-			(unless (or (child-root-p child)
-				    (child-equal-p (typecase child
-                                                     (xlib:window parent)
-                                                     (t child))
-                                                   (current-child)))
-			    (focus-all-children child parent)
-			    (show-all-children))))
-      (:sloppy-select-window (let* ((child (find-child-under-mouse root-x root-y))
-                                    (parent (find-parent-frame child))
-                                    (need-warp-pointer (not (or (frame-p child)
-                                                                (child-equal-p child (frame-selected-child parent))))))
-                               (unless (child-root-p child)
-                                 (when (focus-all-children child parent)
-                                   (show-all-children)
-                                   (when need-warp-pointer
-                                     (typecase child
-                                       (xlib:window (xlib:warp-pointer *root*
-                                                                       (truncate (+ (x-drawable-x child)
-                                                                                    (/ (x-drawable-width child) 2)))
-                                                                       (truncate (+ (x-drawable-y child)
-                                                                                    (/ (x-drawable-height child) 2)))))
-                                       (frame (xlib:warp-pointer *root*
-                                                                 (+ (frame-rx child) 10)
-                                                                 (+ (frame-ry child) 10))))))))))))
+    (manage-focus  window root-x root-y)))
+
 
 (define-handler main-mode :exposure (window)
   (awhen (find-frame-window window)

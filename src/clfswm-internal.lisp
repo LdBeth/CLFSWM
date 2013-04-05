@@ -1668,3 +1668,39 @@ managed."
 	  (frame-selected-pos parent) 0)))
 
 
+(defun manage-focus (window root-x root-y)
+  (case (if (frame-p (current-child))
+            (frame-focus-policy (current-child))
+            *default-focus-policy*)
+    (:sloppy (focus-window window))
+    (:sloppy-strict (when (and (frame-p (current-child))
+                               (child-member window (frame-child (current-child))))
+                      (focus-window window)))
+    (:sloppy-select (let* ((child (find-child-under-mouse root-x root-y))
+                           (parent (find-parent-frame child)))
+                      (unless (or (child-root-p child)
+                                  (child-equal-p (typecase child
+                                                   (xlib:window parent)
+                                                   (t child))
+                                                 (current-child)))
+                        (focus-all-children child parent)
+                        (show-all-children))))
+    (:sloppy-select-window (let* ((child (find-child-under-mouse root-x root-y))
+                                  (parent (find-parent-frame child))
+                                  (need-warp-pointer (not (or (frame-p child)
+                                                              (child-equal-p child (frame-selected-child parent))))))
+                             (unless (child-root-p child)
+                               (when (focus-all-children child parent)
+                                 (show-all-children)
+                                 (when (and need-warp-pointer
+                                            (not (eql (frame-data-slot (current-child) :tile-layout-keep-position)
+                                                      :yes)))
+                                   (typecase child
+                                     (xlib:window (xlib:warp-pointer *root*
+                                                                     (truncate (+ (x-drawable-x child)
+                                                                                  (/ (x-drawable-width child) 2)))
+                                                                     (truncate (+ (x-drawable-y child)
+                                                                                  (/ (x-drawable-height child) 2)))))
+                                     (frame (xlib:warp-pointer *root*
+                                                               (+ (frame-rx child) 10)
+                                                               (+ (frame-ry child) 10)))))))))))
