@@ -428,13 +428,49 @@
 
 
 
+
+
+(defun three-columns-layout (child parent)
+  "Three Colums: main child in the middle, others on the two sides."
+  (with-slots (rx ry rw rh) parent
+    (let* ((managed-children (update-layout-managed-children child parent))
+           (pos (child-position child managed-children))
+           (len (max (1- (length managed-children)) 1))
+           (dy (round (/ rh (max (truncate (/ (+ (if (oddp pos) 1 0) len) 2)) 1))))
+           (size (or (frame-data-slot parent :tile-size) 0.75))
+           (other-size (if (> len 1) (/ (- 1 size) 2) (- 1 size))))
+      (if (> (length managed-children) 1)
+          (if (= pos 0)
+              (values (adj-border-xy (if (> len 1)
+                                         (round (+ rx (* rw other-size)))
+                                         rx) parent)
+                      (adj-border-xy ry parent)
+                      (adj-border-wh (round (* rw size)) child)
+                      (adj-border-wh rh child))
+              (values (adj-border-xy (if (oddp pos)
+                                         (round (+ rx (* rw (if (> len 1) (+ size other-size) size))))
+                                         rx) parent)
+                      (adj-border-xy (round (+ ry (* dy (truncate (/ (1- pos) 2))))) parent)
+                      (adj-border-wh (round (* rw other-size)) parent)
+                      (adj-border-wh dy parent)))
+          (no-layout child parent)))))
+
+(defun set-three-columns-layout ()
+  "Three Columns: main child in the middle, others on the two sides."
+  (layout-ask-size "Tile size in percent (%)" :tile-size)
+  (set-layout-managed-children)
+  (set-layout #'three-columns-layout))
+
+
+
 (register-layout-sub-menu 'frame-tile-layout-menu "Frame tile layout menu"
 			  '(("v" set-tile-layout)
 			    ("h" set-tile-horizontal-layout)
                             ("m" set-tile-layout-mix)
 			    ("c" set-one-column-layout)
 			    ("l" set-one-line-layout)
-			    ("s" set-tile-space-layout)))
+			    ("s" set-tile-space-layout)
+                            ("t" set-three-columns-layout)))
 
 
 
