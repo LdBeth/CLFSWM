@@ -1400,6 +1400,10 @@ For window: set current child to window or its parent according to window-parent
   "Set a sloppy select policy for the current frame."
   (set-focus-policy-generic :sloppy-select))
 
+(defun current-frame-set-sloppy-select-window-policy ()
+  "Set a sloppy select window policy for the current frame."
+  (set-focus-policy-generic :sloppy-select-window))
+
 
 
 (defun set-focus-policy-generic-for-all (focus-policy)
@@ -1423,6 +1427,10 @@ For window: set current child to window or its parent according to window-parent
 (defun all-frames-set-sloppy-select-policy ()
   "Set a sloppy select policy for all frames."
   (set-focus-policy-generic-for-all :sloppy-select))
+
+(defun all-frames-set-sloppy-select-window-policy ()
+  "Set a sloppy select window policy for all frames."
+  (set-focus-policy-generic-for-all :sloppy-select-window))
 
 
 

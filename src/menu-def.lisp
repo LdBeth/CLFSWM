@@ -155,11 +155,13 @@
 (add-menu-key 'frame-focus-policy "b" 'current-frame-set-sloppy-focus-policy)
 (add-menu-key 'frame-focus-policy "c" 'current-frame-set-sloppy-strict-focus-policy)
 (add-menu-key 'frame-focus-policy "d" 'current-frame-set-sloppy-select-policy)
+(add-menu-key 'frame-focus-policy "e" 'current-frame-set-sloppy-select-window-policy)
 (add-menu-comment 'frame-focus-policy "-=- For all frames -=-")
-(add-menu-key 'frame-focus-policy "e" 'all-frames-set-click-focus-policy)
-(add-menu-key 'frame-focus-policy "f" 'all-frames-set-sloppy-focus-policy)
-(add-menu-key 'frame-focus-policy "g" 'all-frames-set-sloppy-strict-focus-policy)
-(add-menu-key 'frame-focus-policy "h" 'all-frames-set-sloppy-select-policy)
+(add-menu-key 'frame-focus-policy "f" 'all-frames-set-click-focus-policy)
+(add-menu-key 'frame-focus-policy "g" 'all-frames-set-sloppy-focus-policy)
+(add-menu-key 'frame-focus-policy "h" 'all-frames-set-sloppy-strict-focus-policy)
+(add-menu-key 'frame-focus-policy "i" 'all-frames-set-sloppy-select-policy)
+(add-menu-key 'frame-focus-policy "j" 'all-frames-set-sloppy-select-window-policy)
 
 
 
