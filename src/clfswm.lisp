@@ -117,6 +117,7 @@
               (xlib:window-equal window event-window))
     (when (find-child window *root-frame*)
       (delete-child-in-all-frames window)
+      (xlib:destroy-window window)
       (show-all-children))))
 
 
