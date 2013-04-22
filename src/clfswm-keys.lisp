@@ -151,13 +151,14 @@
 					  (character (multiple-value-list (char->keycode key)))
 					  (number key)
 					  (string (let* ((keysym (keysym-name->keysym key))
-							 (ret-keycode (multiple-value-list (xlib:keysym->keycodes *display* keysym))))
+							 (ret-keycode (multiple-value-list
+                                                                       (xlib:keysym->keycodes *display* keysym))))
 						    (let ((found nil))
 						      (dolist (kc ret-keycode)
 							(when (= keysym (xlib:keycode->keysym *display* kc 0))
 							  (setf found t)))
-						      (unless found
-							(setf modifiers (add-in-state modifiers :shift))))
+                                                      (unless found
+                                                        (setf modifiers (add-in-state modifiers :shift))))
 						    ret-keycode)))))
 			  (if keycode
 			      (if (consp keycode)

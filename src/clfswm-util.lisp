@@ -687,13 +687,6 @@ Write (defparameter *contrib-dir* \"/usr/local/lib/clfswm/\") in ~A.~%"
 
 
 ;;; Move by function
-(defun move-child-to (child frame-dest)
-  (when (and child (frame-p frame-dest))
-    (remove-child-in-frame child (find-parent-frame child))
-    (pushnew child (frame-child frame-dest))
-    (focus-all-children child frame-dest)
-    (show-all-children t)))
-
 (defun move-current-child-by-name ()
   "Move current child in a named frame"
   (move-child-to (current-child)

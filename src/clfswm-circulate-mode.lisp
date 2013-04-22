@@ -264,6 +264,29 @@
     (setf *circulate-orig* (frame-child *circulate-parent*)))
   (circulate-mode :brother-direction -1))
 
+
+(defmacro with-move-current-focused-window (() &body body)
+  (let ((window (gensym)))
+    `(with-focus-window (,window)
+       ,@body
+       (move-child-to ,window (if (frame-p (current-child))
+                                  (current-child)
+                                  (find-parent-frame (current-child) (find-current-root)))))))
+
+
+
+(defun select-next-brother-take-current ()
+  "Select the next brother and move the current focused child in it"
+  (with-move-current-focused-window ()
+    (select-next-brother)))
+
+(defun select-previous-brother-take-current ()
+  "Select the previous brother and move the current focused child in it"
+  (with-move-current-focused-window ()
+    (select-previous-brother)))
+
+
+
 (defun select-next-subchild ()
   "Select the next subchild"
   (when (and (frame-p (current-child))
@@ -374,5 +397,28 @@
                                            (when (< (child-y child) (child-y current))
                                              (distance (middle-child-x current) (child-y current)
                                                        (middle-child-x child) (child-y2 child))))))
+
+
+(defun select-brother-spatial-move-right-take-current ()
+  "Select spatially the nearest brother of the current child in the right direction - move current focused child"
+  (with-move-current-focused-window ()
+    (select-brother-spatial-move-right)))
+
+
+(defun select-brother-spatial-move-left-take-current ()
+  "Select spatially the nearest brother of the current child in the left direction - move current focused child"
+  (with-move-current-focused-window ()
+    (select-brother-spatial-move-left)))
+
+(defun select-brother-spatial-move-down-take-current ()
+  "Select spatially the nearest brother of the current child in the down direction - move current focused child"
+  (with-move-current-focused-window ()
+    (select-brother-spatial-move-down)))
+
+(defun select-brother-spatial-move-up-take-current ()
+  "Select spatially the nearest brother of the current child in the up direction - move current focused child"
+  (with-move-current-focused-window ()
+    (select-brother-spatial-move-up)))
+
 
 

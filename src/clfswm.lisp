@@ -80,8 +80,8 @@
                          (is-in-current-child-p window))
                  (setf change (or change :moved))
                  (focus-window window)
-                 (focus-all-children window (find-parent-frame window (find-current-root)))
-                 (show-all-children))))))
+                 (when (focus-all-children window (find-parent-frame window (find-current-root)))
+                   (show-all-children)))))))
         (unless (eq change :resized)
           ;; To be ICCCM compliant, send a fake configuration notify event only when
           ;; the window has moved and not when it has been resized or the border width has changed.
@@ -109,6 +109,7 @@
     (when (find-child window *root-frame*)
       (setf (window-state window) +withdrawn-state+)
       (remove-child-in-all-frames window)
+      (xlib:unmap-window window)
       (show-all-children))))
 
 

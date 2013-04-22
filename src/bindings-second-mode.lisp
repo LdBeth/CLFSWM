@@ -112,12 +112,23 @@
   (define-second-key ("Home" :mod-1 :control :shift) 'exit-clfswm)
   (define-second-key ("Right" :mod-1) 'select-next-brother)
   (define-second-key ("Left" :mod-1) 'select-previous-brother)
+
+  (define-second-key ("Right" :mod-1 :shift) 'select-next-brother-take-current)
+  (define-second-key ("Left" :mod-1 :shift) 'select-previous-brother-take-current)
+
   (define-second-key ("Down" :mod-1) 'select-previous-level)
   (define-second-key ("Up" :mod-1) 'select-next-level)
+
   (define-second-key ("Left" :control :mod-1) 'select-brother-spatial-move-left)
   (define-second-key ("Right" :control :mod-1) 'select-brother-spatial-move-right)
   (define-second-key ("Up" :control :mod-1) 'select-brother-spatial-move-up)
   (define-second-key ("Down" :control :mod-1) 'select-brother-spatial-move-down)
+
+  (define-second-key ("Left" :control :mod-1 :shift) 'select-brother-spatial-move-left-take-current)
+  (define-second-key ("Right" :control :mod-1 :shift) 'select-brother-spatial-move-right-take-current)
+  (define-second-key ("Up" :control :mod-1 :shift) 'select-brother-spatial-move-up-take-current)
+  (define-second-key ("Down" :control :mod-1 :shift) 'select-brother-spatial-move-down-take-current)
+
   (define-second-key ("j") 'swap-frame-geometry)
   (define-second-key ("h") 'rotate-frame-geometry)
   (define-second-key ("h" :shift) 'anti-rotate-frame-geometry)

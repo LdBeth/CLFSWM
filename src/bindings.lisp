@@ -47,10 +47,20 @@
   (define-main-key ("Left" :mod-1) 'select-previous-brother)
   (define-main-key ("Down" :mod-1) 'select-previous-level)
   (define-main-key ("Up" :mod-1) 'select-next-level)
+
+  (define-main-key ("Right" :mod-1 :shift) 'select-next-brother-take-current)
+  (define-main-key ("Left" :mod-1 :shift) 'select-previous-brother-take-current)
+
   (define-main-key ("Left" :control :mod-1) 'select-brother-spatial-move-left)
   (define-main-key ("Right" :control :mod-1) 'select-brother-spatial-move-right)
   (define-main-key ("Up" :control :mod-1) 'select-brother-spatial-move-up)
   (define-main-key ("Down" :control :mod-1) 'select-brother-spatial-move-down)
+
+  (define-main-key ("Left" :control :mod-1 :shift) 'select-brother-spatial-move-left-take-current)
+  (define-main-key ("Right" :control :mod-1 :shift) 'select-brother-spatial-move-right-take-current)
+  (define-main-key ("Up" :control :mod-1 :shift) 'select-brother-spatial-move-up-take-current)
+  (define-main-key ("Down" :control :mod-1 :shift) 'select-brother-spatial-move-down-take-current)
+
   (define-main-key ("Tab" :mod-1) 'select-next-child)
   (define-main-key ("Tab" :mod-1 :shift) 'select-previous-child)
   (define-main-key ("Tab" :mod-1 :control) 'select-next-subchild)

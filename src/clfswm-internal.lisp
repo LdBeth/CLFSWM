@@ -1476,6 +1476,14 @@ For window: set current child to window or its parent according to window-parent
 
 
 
+(defun move-child-to (child frame-dest)
+  (when (and child (frame-p frame-dest))
+    (remove-child-in-frame child (find-parent-frame child))
+    (pushnew child (frame-child frame-dest) :test #'child-equal-p)
+    (focus-all-children child frame-dest)
+    (show-all-children t)))
+
+
 (defun prevent-current-*-equal-child (child)
   " Prevent current-root and current-child equal to child"
   (if (child-original-root-p child)
