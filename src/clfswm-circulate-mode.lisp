@@ -266,12 +266,11 @@
 
 
 (defmacro with-move-current-focused-window (() &body body)
-  (let ((window (gensym)))
-    `(with-focus-window (,window)
-       ,@body
-       (move-child-to ,window (if (frame-p (current-child))
-                                  (current-child)
-                                  (find-parent-frame (current-child) (find-current-root)))))))
+  `(with-current-window
+     ,@body
+     (move-child-to window (if (frame-p (current-child))
+                               (current-child)
+                               (find-parent-frame (current-child) (find-current-root))))))
 
 
 

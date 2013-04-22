@@ -42,7 +42,8 @@
 		      (truncate (/ (- *sm-width* (* (xlib:max-char-width *sm-font*) len)) 2))
 		      (truncate (/ (+ *sm-height* (- (xlib:font-ascent *sm-font*) (xlib:font-descent *sm-font*))) 2))
 		      text))
-  (copy-pixmap-buffer *sm-window* *sm-gc*))
+  (copy-pixmap-buffer *sm-window* *sm-gc*)
+  (no-focus))
 
 
 
