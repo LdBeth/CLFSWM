@@ -59,6 +59,8 @@ Example: :mod-2 for num_lock, :lock for Caps_lock...")
 A list of (list match-function handle-function)")
 
 
+(defconfig *steal-focus* t nil
+           "Allow to streal the focus on configure request")
 
 (defconfig *hide-unmanaged-window* t nil
            "Hide or not unmanaged windows when a child is deselected.")
