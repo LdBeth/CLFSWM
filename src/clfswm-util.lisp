@@ -1807,7 +1807,8 @@ For window: set current child to window or its parent according to window-parent
 	  (put-child-on-top window parent)
           (when maximized
             (change-root (find-root parent) parent))
-	  (focus-all-children window parent)
+          (when *steal-focus*
+            (focus-all-children window parent))
           (show-all-children t))
         (funcall run-fn))))
 
