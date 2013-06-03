@@ -32,8 +32,8 @@
 
 
 ;;; CONFIG - Default modifiers
-(defconfig *default-modifiers* '() nil
-           "Default modifiers list to append to explicit modifiers
+(defconfig *default-modifiers* '()
+  nil "Default modifiers list to append to explicit modifiers
 Example: :mod-2 for num_lock, :lock for Caps_lock...")
 
 
@@ -59,24 +59,24 @@ Example: :mod-2 for num_lock, :lock for Caps_lock...")
 A list of (list match-function handle-function)")
 
 
-(defconfig *steal-focus* t nil
-           "Allow to streal the focus on configure request")
+(defconfig *steal-focus* t
+  nil "Allow to steal the focus on configure request")
 
-(defconfig *hide-unmanaged-window* t nil
-           "Hide or not unmanaged windows when a child is deselected.")
+(defconfig *hide-unmanaged-window* t
+  nil "Hide or not unmanaged windows when a child is deselected.")
 
-(defconfig *snap-size* 5 nil
-           "Snap size (in % of parent size) when move or resize frame is constrained")
+(defconfig *snap-size* 5
+  nil "Snap size (in % of parent size) when move or resize frame is constrained")
 
-(defconfig *spatial-move-delay-before* 0.2 nil
-           "Delay to display the current child before doing a spatial move")
+(defconfig *spatial-move-delay-before* 0.2
+  nil "Delay to display the current child before doing a spatial move")
 
-(defconfig *spatial-move-delay-after* 0.5 nil
-           "Delay to display the new child after doing a spatial move")
+(defconfig *spatial-move-delay-after* 0.5
+  nil "Delay to display the new child after doing a spatial move")
 
 
-(defconfig  *corner-size* 3 'Corner
-            "The size of the corner square")
+(defconfig  *corner-size* 3
+  'Corner "The size of the corner square")
 
 ;;; CONFIG: Corner actions - See in clfswm-corner.lisp for
 ;;;   allowed functions

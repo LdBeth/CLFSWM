@@ -1676,7 +1676,7 @@ managed."
 	  (frame-selected-pos parent) 0)))
 
 
-(let ((lx -1) (ly -1))
+(let ((last-child nil))
   (defun manage-focus (window root-x root-y)
     (case (if (frame-p (current-child))
               (frame-focus-policy (current-child))
@@ -1699,8 +1699,8 @@ managed."
                                     (need-warp-pointer (not (or (frame-p child)
                                                                 (child-equal-p child (frame-selected-child parent))))))
                                (unless (or (child-root-p child)
-                                           (= lx root-x) (= ly root-y))
-                                 (setf lx root-x ly root-y)
+                                           (child-equal-p child last-child))
+                                 (setf last-child child)
                                  (when (focus-all-children child parent)
                                    (show-all-children)
                                    (when (and need-warp-pointer

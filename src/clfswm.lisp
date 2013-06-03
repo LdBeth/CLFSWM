@@ -126,7 +126,7 @@
 (define-handler main-mode :enter-notify  (window root-x root-y)
   (unless (and (> root-x (- (xlib:screen-width *screen*) 3))
 	       (> root-y (- (xlib:screen-height *screen*) 3)))
-    (manage-focus  window root-x root-y)))
+    (manage-focus window root-x root-y)))
 
 
 (define-handler main-mode :exposure (window)
