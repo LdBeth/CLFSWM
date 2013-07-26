@@ -26,8 +26,10 @@
 (in-package :clfswm)
 
 (defparameter *expose-font* nil)
-(defparameter *expose-windows-list* nil)
+(defparameter *expose-child-list* nil)
 (defparameter *expose-selected-child* nil)
+
+(defstruct expose-child child key window gc string)
 
 (defun leave-expose-mode ()
   "Leave the expose mode"
@@ -48,55 +50,83 @@
   (throw 'exit-expose-loop t))
 
 
-(defun expose-draw-letter ()
-  (dolist (lwin *expose-windows-list*)
-    (destructuring-bind (window gc string child letter) lwin
-      (declare (ignore child))
-      (clear-pixmap-buffer window gc)
-      (xlib:with-gcontext (gc :foreground (get-color (if (substring-equal *query-string* letter)
-                                                         *expose-foreground-letter*
-                                                         *expose-foreground-letter-nok*))
-                              :background (get-color (if (string-equal *query-string* letter)
-                                                         *expose-background-letter-match*
-                                                         *expose-background*)))
-        (xlib:draw-image-glyphs *pixmap-buffer* gc
-                                (xlib:max-char-width *expose-font*)
-                                (+ (xlib:font-ascent *expose-font*) (xlib:font-descent *expose-font*))
-                                letter))
-      (xlib:draw-glyphs *pixmap-buffer* gc
-                        (xlib:max-char-width *expose-font*)
-                        (+ (* 2 (xlib:font-ascent *expose-font*)) (xlib:font-descent *expose-font*) 1)
-                        string)
-      (copy-pixmap-buffer window gc))))
 
-(defun expose-create-window (child n)
-  (with-current-child (child)
-    (let* ((string (format nil "~A"
-                           (if *expose-show-window-title*
-                               (ensure-printable (child-fullname child))
-                               "")))
-           (width (if *expose-show-window-title*
-                      (min (* (xlib:max-char-width *expose-font*) (+ (length string) 2))
-                           (- (child-width child) 4))
-                      (* (xlib:max-char-width *expose-font*) 3)))
-           (height (* (xlib:font-ascent *expose-font*) 3)))
-      (with-placement (*expose-mode-placement* x y width height)
-        (let* ((window (xlib:create-window :parent *root*
-                                           :x x   :y y
-                                           :width width   :height height
+
+(defun fastswitch-sort (predicate type)
+  (lambda (x y)
+    (funcall predicate (funcall type x) (funcall type y))))
+
+(defun fastswitch-associate-keys ()
+  (let* ((acc nil)
+         (n 0)
+         (win-list (sort (get-all-windows) (fastswitch-sort #'< #'xlib:window-id)))
+         (frame-list (sort (get-all-frames) (fastswitch-sort #'< #'frame-number))))
+    (loop for c in win-list
+       do (push (make-expose-child :child c :key (number->letter n)) acc)
+         (incf n))
+    (loop for c in frame-list
+       do (unless (child-equal-p c *root-frame*)
+            (push (make-expose-child :child c :key (number->letter n)) acc)
+            (incf n)))
+    (nreverse acc)))
+
+
+
+
+
+(defun expose-draw-letter ()
+  (dolist (ex-child *expose-child-list*)
+    (let ((window (expose-child-window ex-child))
+          (gc (expose-child-gc ex-child)))
+      (when (and window gc)
+        (clear-pixmap-buffer window gc)
+        (xlib:with-gcontext (gc :foreground (get-color (if (substring-equal *query-string* (expose-child-key ex-child))
+                                                           *expose-foreground-letter*
+                                                           *expose-foreground-letter-nok*))
+                                :background (get-color (if (string-equal *query-string* (expose-child-key ex-child))
+                                                           *expose-background-letter-match*
+                                                           *expose-background*)))
+          (xlib:draw-image-glyphs *pixmap-buffer* gc
+                                  (xlib:max-char-width *expose-font*)
+                                  (+ (xlib:font-ascent *expose-font*) (xlib:font-descent *expose-font*))
+                                  (expose-child-key ex-child)))
+        (xlib:draw-glyphs *pixmap-buffer* gc
+                          (xlib:max-char-width *expose-font*)
+                          (+ (* 2 (xlib:font-ascent *expose-font*)) (xlib:font-descent *expose-font*) 1)
+                          (expose-child-string ex-child))
+        (copy-pixmap-buffer window gc)))))
+
+(defun expose-create-window (ex-child)
+  (let ((child (expose-child-child ex-child)))
+    (with-current-child (child)
+      (let* ((string (format nil "~A"
+                             (if *expose-show-window-title*
+                                 (ensure-printable (child-fullname child))
+                                 "")))
+             (width (if *expose-show-window-title*
+                        (min (* (xlib:max-char-width *expose-font*) (+ (length string) 2))
+                             (- (child-width child) 4))
+                        (* (xlib:max-char-width *expose-font*) 3)))
+             (height (* (xlib:font-ascent *expose-font*) 3)))
+        (with-placement (*expose-mode-placement* x y width height)
+          (let* ((window (xlib:create-window :parent *root*
+                                             :x x   :y y
+                                             :width width   :height height
+                                             :background (get-color *expose-background*)
+                                             :border-width *border-size*
+                                             :border (get-color *expose-border*)
+                                             :colormap (xlib:screen-default-colormap *screen*)
+                                             :event-mask '(:exposure :key-press)))
+                 (gc (xlib:create-gcontext :drawable window
+                                           :foreground (get-color *expose-foreground*)
                                            :background (get-color *expose-background*)
-                                           :border-width *border-size*
-                                           :border (get-color *expose-border*)
-                                           :colormap (xlib:screen-default-colormap *screen*)
-                                           :event-mask '(:exposure :key-press)))
-               (gc (xlib:create-gcontext :drawable window
-                                         :foreground (get-color *expose-foreground*)
-                                         :background (get-color *expose-background*)
-                                         :font *expose-font*
-                                         :line-style :solid)))
-          (setf (window-transparency window) *expose-transparency*)
-          (map-window window)
-          (push (list window gc string child (number->letter n)) *expose-windows-list*))))))
+                                           :font *expose-font*
+                                           :line-style :solid)))
+            (setf (window-transparency window) *expose-transparency*)
+            (map-window window)
+            (setf (expose-child-window ex-child) window
+                  (expose-child-gc ex-child) gc
+                  (expose-child-string ex-child) string)))))))
 
 
 
@@ -104,7 +134,7 @@
 (defun expose-query-key-press-hook (code state)
   (declare (ignore code state))
   (expose-draw-letter)
-  (when (and *expose-direct-select* (<= (length *expose-windows-list*) 26))
+  (when (and *expose-direct-select* (<= (length *expose-child-list*) 26))
     (leave-query-mode :return)))
 
 (defun expose-query-button-press-hook (code state x y)
@@ -116,7 +146,7 @@
 
 (defun expose-init ()
   (setf *expose-font* (xlib:open-font *display* *expose-font-string*)
-	*expose-windows-list* nil
+	*expose-child-list* (fastswitch-associate-keys)
 	*expose-selected-child* nil
         *query-string* "")
   (xlib:warp-pointer *root* (truncate (/ (xlib:screen-width *screen*) 2))
@@ -125,51 +155,59 @@
   (add-hook *query-button-press-hook* 'expose-query-button-press-hook))
 
 (defun expose-present-windows ()
-  (with-all-root-child (root)
-    (with-all-frames (root frame)
-      (setf (frame-data-slot frame :old-layout) (frame-layout frame)
-            (frame-layout frame) #'tile-space-layout)))
+  (dolist (ex-child *expose-child-list*)
+    (let ((child (expose-child-child ex-child)))
+      (when (frame-p child)
+        (setf (frame-data-slot child :old-layout) (frame-layout child)
+              (frame-layout child) #'tile-space-layout))))
   (show-all-children t))
 
+(defun expose-unpresent-windows ()
+  (dolist (ex-child *expose-child-list*)
+    (let ((child (expose-child-child ex-child)))
+      (when (frame-p child)
+        (setf (frame-layout child) (frame-data-slot child :old-layout)
+              (frame-data-slot child :old-layout) nil)))))
+
 (defun expose-mode-display-accel-windows ()
-  (let ((n -1))
-    (with-all-root-child (root)
-      (with-all-children-reversed (root child)
-        (if (or (frame-p child)
-                (managed-window-p child (find-parent-frame child *root-frame*)))
-            (expose-create-window child (incf n))
-            (hide-child child))))
-    (setf *expose-windows-list* (nreverse *expose-windows-list*))
-    (expose-draw-letter)))
+  (with-all-root-child (root)
+    (with-all-children-reversed (root child)
+      (let ((ex-child (find child *expose-child-list* :test #'child-equal-p :key #'expose-child-child)))
+        (when ex-child
+          (if (or (frame-p (expose-child-child ex-child))
+                  (managed-window-p (expose-child-child ex-child)
+                                    (find-parent-frame (expose-child-child ex-child) *root-frame*)))
+              (expose-create-window ex-child)
+              (hide-child (expose-child-child ex-child)))))))
+  (expose-draw-letter))
+
 
 (defun expose-find-child-from-letters (letters)
-  (fourth (find letters *expose-windows-list* :test #'string-equal :key #'fifth)))
+  (find letters *expose-child-list* :test #'string-equal :key #'expose-child-key))
 
 (defun expose-select-child ()
   (let ((*query-mode-placement* *expose-query-placement*))
     (multiple-value-bind (letters return)
         (query-string "Which child ?")
-      (let ((child (case return
+      (let ((ex-child (case return
                      (:return (expose-find-child-from-letters letters))
                      (:click *expose-selected-child*))))
-        (when (find-child-in-all-root child)
-          child)))))
+        (when ex-child
+          (expose-child-child ex-child))))))
+
 
 (defun expose-restore-windows ()
   (remove-hook *query-key-press-hook* 'expose-query-key-press-hook)
   (remove-hook *query-button-press-hook* 'expose-query-button-press-hook)
-  (dolist (lwin *expose-windows-list*)
-    (awhen (first lwin)
-      (xlib:destroy-window it))
-    (awhen (second lwin)
-      (xlib:free-gcontext it)))
+  (dolist (ex-child *expose-child-list*)
+    (awhen (expose-child-gc ex-child)
+      (xlib:free-gcontext it))
+    (awhen (expose-child-window ex-child)
+      (xlib:destroy-window it)))
   (when *expose-font*
     (xlib:close-font *expose-font*))
-  (setf *expose-windows-list* nil)
-  (with-all-root-child (root)
-    (with-all-frames (root frame)
-      (setf (frame-layout frame) (frame-data-slot frame :old-layout)
-            (frame-data-slot frame :old-layout) nil))))
+  (expose-unpresent-windows)
+  (setf *expose-child-list* nil))
 
 (defun expose-focus-child (child)
   (let ((parent (typecase child
@@ -211,3 +249,11 @@
 
 
 
+;;;
+;;; Fast switch mode
+;;;
+;;; Expose shortcut
+;;;
+
+(defun fastswitch-mode ()
+  (dbg 'todo))

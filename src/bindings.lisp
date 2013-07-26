@@ -74,6 +74,8 @@
   (define-main-key ("Page_Down" :mod-1 :control) 'frame-raise-child)
   (define-main-key ("Home" :mod-1) 'switch-to-root-frame)
   (define-main-key ("Home" :mod-1 :shift) 'switch-and-select-root-frame)
+  (define-main-key ("Menu") 'fastswitch-mode)
+  (define-main-key (135) 'fastswitch-mode)  ;; Menu hardcoded -> not good!!!
   (define-main-key ("F10" :mod-1) 'fast-layout-switch)
   (define-main-key ("F10" :shift :control) 'toggle-show-root-frame)
   (define-main-key ("F10") 'expose-windows-mode)

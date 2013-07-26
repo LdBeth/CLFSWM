@@ -919,6 +919,20 @@ XINERAMA version 1.1 opcode: 150
       (push (frame-window frame) acc))
     acc))
 
+(defun get-all-frames (&optional (root *root-frame*))
+  "Return all frame in root and in its children"
+  (let ((acc nil))
+    (with-all-frames (root frame)
+      (push frame acc))
+    acc))
+
+(defun get-all-children (&optional (root *root-frame*))
+  "Return a list of all children in root"
+  (let ((acc nil))
+    (with-all-children (root child)
+      (push child acc))
+    acc))
+
 
 (defun get-hidden-windows ()
   "Return all hiddens windows"
