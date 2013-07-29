@@ -1,5 +1,5 @@
-;; Copyright (C) 2012 Xavier Maillard <xma@gnu.org>
-;; Copyright (C) 2012 Martin Bishop
+;; Copyright (C) 2005-2013 Xavier Maillard <xma@gnu.org>
+;; Copyright (C) 2005-2013 Martin Bishop
 ;;
 ;;  Borrowed from Stumpwm
 ;;  This file is part of clfswm.
