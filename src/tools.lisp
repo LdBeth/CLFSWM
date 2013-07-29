@@ -567,13 +567,15 @@ Return the result of the last hook"
 (defun substring-equal (substring string)
   (string-equal substring (subseq string 0 (min (length substring) (length string)))))
 
-(defun string-match (match list)
+(defun string-match (match list &optional key)
   "Return the string in list witch match the match string"
   (let ((len (length match)))
     (remove-duplicates (remove-if-not (lambda (x)
                                         (string-equal match (subseq x 0 (min len (length x)))))
-                                      list)
-                       :test #'string-equal)))
+                                      list
+                                      :key key)
+                       :test #'string-equal
+                       :key key)))
 
 
 (defun extented-alphanumericp (char)

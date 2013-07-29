@@ -52,15 +52,15 @@
 
 
 
-(defun fastswitch-sort (predicate type)
+(defun expose-sort (predicate type)
   (lambda (x y)
     (funcall predicate (funcall type x) (funcall type y))))
 
-(defun fastswitch-associate-keys ()
+(defun expose-associate-keys ()
   (let* ((acc nil)
          (n 0)
-         (win-list (sort (get-all-windows) (fastswitch-sort #'< #'xlib:window-id)))
-         (frame-list (sort (get-all-frames) (fastswitch-sort #'< #'frame-number))))
+         (win-list (sort (get-all-windows) (expose-sort #'< #'xlib:window-id)))
+         (frame-list (sort (get-all-frames) (expose-sort #'< #'frame-number))))
     (loop for c in win-list
        do (push (make-expose-child :child c :key (number->letter n)) acc)
          (incf n))
@@ -146,7 +146,7 @@
 
 (defun expose-init ()
   (setf *expose-font* (xlib:open-font *display* *expose-font-string*)
-	*expose-child-list* (fastswitch-associate-keys)
+	*expose-child-list* (expose-associate-keys)
 	*expose-selected-child* nil
         *query-string* "")
   (xlib:warp-pointer *root* (truncate (/ (xlib:screen-width *screen*) 2))
@@ -246,14 +246,3 @@
       (expose-focus-child child)))
   (show-all-children)
   t)
-
-
-
-;;;
-;;; Fast switch mode
-;;;
-;;; Expose shortcut
-;;;
-
-(defun fastswitch-mode ()
-  (dbg 'todo))

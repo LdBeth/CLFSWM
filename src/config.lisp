@@ -338,6 +338,27 @@ on the root window in the main mode with the mouse")
   'Expose-mode "Immediately select child if they can be directly accessed")
 
 
+;;; CONFIG - Fastswitch string colors
+(defconfig *fastswitch-font-string* *default-font-string*
+  'Fastswitch-mode "Fastswitch string window font string")
+(defconfig *fastswitch-background* "grey10"
+  'Fastswitch-mode "Fastswitch string window background color")
+(defconfig *fastswitch-foreground* "grey50"
+  'Fastswitch-mode "Fastswitch string window foreground color")
+(defconfig *fastswitch-foreground-letter* "red"
+  'Fastswitch-mode "Fastswitch string window foreground color for letters")
+(defconfig *fastswitch-foreground-letter-second* "magenta"
+  'Fastswitch-mode "Fastswitch string window foreground color for letters")
+(defconfig *fastswitch-foreground-childname* "grey70"
+  'Fastswitch-mode "Fastswitch string window foreground color for childname")
+(defconfig *fastswitch-border* "grey20"
+  'Fastswitch-mode "Fastswitch string window border color")
+(defconfig *fastswitch-transparency* 0.9
+  'Fastswitch-mode "Fastswitch string window background transparency")
+
+
+
+
 ;;; CONFIG - Show key binding colors
 (defconfig *info-color-title* "Magenta"
   'Info-mode "Colored info title color")

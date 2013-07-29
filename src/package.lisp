@@ -251,6 +251,8 @@ loading configuration file and before opening the display.")
   'Placement "Expose mode window placement (Selection keys position)")
 (defconfig *expose-query-placement* 'bottom-left-root-placement
   'Placement "Expose mode query window placement")
+(defconfig *fastswitch-mode-placement* 'top-left-root-placement
+  'Placement "Fastswitch mode window placement")
 (defconfig *notify-window-placement* 'bottom-right-root-placement
   'Placement "Notify window placement")
 (defconfig *ask-close/kill-placement* 'top-right-root-placement
