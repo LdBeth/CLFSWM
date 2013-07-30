@@ -349,6 +349,8 @@ on the root window in the main mode with the mouse")
   'Fastswitch-mode "Fastswitch string window foreground color for letters")
 (defconfig *fastswitch-foreground-letter-second* "magenta"
   'Fastswitch-mode "Fastswitch string window foreground color for letters")
+(defconfig *fastswitch-foreground-letter-second-frame* "yellow"
+  'Fastswitch-mode "Fastswitch string window foreground color for letters for frames")
 (defconfig *fastswitch-foreground-childname* "grey70"
   'Fastswitch-mode "Fastswitch string window foreground color for childname")
 (defconfig *fastswitch-border* "grey20"

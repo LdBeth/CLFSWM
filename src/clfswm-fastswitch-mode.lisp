@@ -45,7 +45,10 @@
   (labels ((display-match-child ()
              (let ((pos 1))
                (dolist (ex-child *fastswitch-match-child*)
-                 (xlib:with-gcontext (*fastswitch-gc* :foreground (get-color *fastswitch-foreground-letter-second*))
+                 (xlib:with-gcontext (*fastswitch-gc*
+                                      :foreground (get-color (if (frame-p (expose-child-child ex-child))
+                                                                 *fastswitch-foreground-letter-second-frame*
+                                                                 *fastswitch-foreground-letter-second*)))
                    (xlib:draw-glyphs *pixmap-buffer* *fastswitch-gc*
                                      (* (xlib:max-char-width *fastswitch-font*) pos)
                                      (+ (* 2 (xlib:font-ascent *fastswitch-font*)) (xlib:font-descent *fastswitch-font*) 1)
@@ -61,7 +64,9 @@
                                      (* (xlib:max-char-width *fastswitch-font*) pos)
                                      (+ (* 2 (xlib:font-ascent *fastswitch-font*)) (xlib:font-descent *fastswitch-font*) 1)
                                      (child-fullname (expose-child-child ex-child)))
-                   (incf pos (1+ (length (child-fullname (expose-child-child ex-child))))))))))
+                   (incf pos (1+ (length (child-fullname (expose-child-child ex-child))))))
+                 (when (> (* pos (xlib:max-char-width *fastswitch-font*)) (xlib:drawable-width *fastswitch-window*))
+                   (return))))))
     (clear-pixmap-buffer *fastswitch-window* *fastswitch-gc*)
     (xlib:with-gcontext (*fastswitch-gc* :foreground (get-color *fastswitch-foreground-letter*)
                                          :background (get-color *fastswitch-background*))
