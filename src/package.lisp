@@ -81,6 +81,9 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defparameter *background-image* nil)
 (defparameter *background-gc* nil)
 
+(defparameter *expose-current-number* 0)
+(defparameter *expose-child-list* nil)
+
 (defconfig *loop-timeout* 1 nil
            "Maximum time (in seconds) to wait before calling *loop-hook*")
 

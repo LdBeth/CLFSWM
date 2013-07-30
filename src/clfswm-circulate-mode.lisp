@@ -44,7 +44,8 @@
 	 (len (length text)))
     (xlib:draw-glyphs *pixmap-buffer* *circulate-gc*
 		      (truncate (/ (- *circulate-width* (* (xlib:max-char-width *circulate-font*) len)) 2))
-		      (truncate (/ (+ *circulate-height* (- (xlib:font-ascent *circulate-font*) (xlib:font-descent *circulate-font*))) 2))
+		      (truncate (/ (+ *circulate-height* (- (xlib:font-ascent *circulate-font*)
+                                                            (xlib:font-descent *circulate-font*))) 2))
 		      text))
   (copy-pixmap-buffer *circulate-window* *circulate-gc*))
 

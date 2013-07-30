@@ -26,7 +26,6 @@
 (in-package :clfswm)
 
 (defparameter *expose-font* nil)
-(defparameter *expose-child-list* nil)
 (defparameter *expose-selected-child* nil)
 
 (defstruct expose-child child key window gc string)
@@ -50,25 +49,18 @@
   (throw 'exit-expose-loop t))
 
 
-
-
-(defun expose-sort (predicate type)
-  (lambda (x y)
-    (funcall predicate (funcall type x) (funcall type y))))
-
 (defun expose-associate-keys ()
-  (let* ((acc nil)
-         (n 0)
-         (win-list (sort (get-all-windows) (expose-sort #'< #'xlib:window-id)))
-         (frame-list (sort (get-all-frames) (expose-sort #'< #'frame-number))))
-    (loop for c in win-list
-       do (push (make-expose-child :child c :key (number->letter n)) acc)
-         (incf n))
-    (loop for c in frame-list
-       do (unless (child-equal-p c *root-frame*)
-            (push (make-expose-child :child c :key (number->letter n)) acc)
-            (incf n)))
-    (nreverse acc)))
+  (let* ((all nil)
+         (new nil))
+    (with-all-children-reversed (*root-frame* child)
+      (unless (child-equal-p child *root-frame*)
+        (push child all)
+        (unless (member child *expose-child-list* :test #'child-equal-p :key #'expose-child-child)
+          (push (make-expose-child :child child :key (number->letter *expose-current-number*)) new)
+          (incf *expose-current-number*))))
+    (append (remove-if-not (lambda (x) (member x all :test #'child-equal-p)) *expose-child-list*
+                           :key #'expose-child-child)
+            (nreverse new))))
 
 
 
@@ -206,8 +198,7 @@
       (xlib:destroy-window it)))
   (when *expose-font*
     (xlib:close-font *expose-font*))
-  (expose-unpresent-windows)
-  (setf *expose-child-list* nil))
+  (expose-unpresent-windows))
 
 (defun expose-focus-child (child)
   (let ((parent (typecase child

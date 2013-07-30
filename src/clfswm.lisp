@@ -203,7 +203,9 @@
 					    :depth (xlib:screen-root-depth *screen*)
 					    :drawable *root*)
 	*in-second-mode* nil
-        *x-error-count* 0)
+        *x-error-count* 0
+        *expose-current-number* 0
+        *expose-child-list* nil)
   (store-root-background)
   (init-modifier-list)
   (xgrab-init-pointer)
