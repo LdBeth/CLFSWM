@@ -850,7 +850,7 @@ XINERAMA version 1.1 opcode: 150
 
   (defun place-frames-from-xinerama-infos ()
     "Place frames according to xdpyinfo/xinerama informations"
-    (let ((sizes (get-connected-heads-size t)) ;;; PHIL: remove here
+    (let ((sizes (get-connected-heads-size))
           (width (screen-width))
           (height (screen-height)))
       (labels ((update-root-geometry ()
