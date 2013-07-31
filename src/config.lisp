@@ -357,7 +357,10 @@ on the root window in the main mode with the mouse")
   'Fastswitch-mode "Fastswitch string window border color")
 (defconfig *fastswitch-transparency* 0.9
   'Fastswitch-mode "Fastswitch string window background transparency")
-
+(defconfig *fastswitch-show-frame-p* t
+  'Fastswitch-mode "Fastswitch show frame in mini window")
+(defconfig *fastswitch-adjust-window-p* t
+  'Fastswitch-mode "Fastswitch adjust window to show all children names")
 
 
 
