@@ -27,8 +27,8 @@
 
 
 
-(symbol-macrolet ((sw (xlib:screen-width *screen*))
-		  (sh (xlib:screen-height *screen*))
+(symbol-macrolet ((sw (screen-width))
+		  (sh (screen-height))
 		  (cs *corner-size*))
   (defun in-corner (corner x y)
     "Return t if (x, y) is in corner.
@@ -44,8 +44,8 @@ Corner is one of :bottom-right :bottom-left :top-right :top-left"
 	   (<= ymin y ymax)))))
 
 
-(symbol-macrolet ((sw (xlib:screen-width *screen*))
-		  (sh (xlib:screen-height *screen*))
+(symbol-macrolet ((sw (screen-width))
+		  (sh (screen-height))
 		  (cs *corner-size*))
   (defun find-corner (x y)
     (cond ((and (< cs x (- sw cs)) (< cs y (- sh cs))) nil)

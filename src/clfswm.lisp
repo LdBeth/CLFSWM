@@ -124,8 +124,8 @@
 
 
 (define-handler main-mode :enter-notify  (window root-x root-y)
-  (unless (and (> root-x (- (xlib:screen-width *screen*) 3))
-	       (> root-y (- (xlib:screen-height *screen*) 3)))
+  (unless (and (> root-x (- (screen-width) 3))
+	       (> root-y (- (screen-height) 3)))
     (manage-focus window root-x root-y)))
 
 
@@ -198,8 +198,8 @@
 	*root* (xlib:screen-root *screen*)
 	*no-focus-window* (xlib:create-window :parent *root* :x 0 :y 0 :width 1 :height 1)
 	*default-font* (xlib:open-font *display* *default-font-string*)
-	*pixmap-buffer* (xlib:create-pixmap :width (xlib:screen-width *screen*)
-					    :height (xlib:screen-height *screen*)
+	*pixmap-buffer* (xlib:create-pixmap :width (screen-width)
+					    :height (screen-height)
 					    :depth (xlib:screen-root-depth *screen*)
 					    :drawable *root*)
 	*in-second-mode* nil

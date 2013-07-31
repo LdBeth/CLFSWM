@@ -71,13 +71,13 @@
                                        (child-fullname (expose-child-child ex-child)))
                      (incf posx (1+ (length (child-fullname (expose-child-child ex-child))))))
                    (when (> (* posx (xlib:max-char-width *fastswitch-font*))
-                            (xlib:drawable-width *fastswitch-window*))
+                            (x-drawable-width *fastswitch-window*))
                      (if *fastswitch-adjust-window-p*
                          (setf posx 1
                                posy (1+ posy))
                          (return)))))))
            (adjust-window ()
-             (setf (xlib:drawable-height *fastswitch-window*) (* (xlib:font-ascent *fastswitch-font*) 3))
+             (setf (x-drawable-height *fastswitch-window*) (* (xlib:font-ascent *fastswitch-font*) 3))
              (let ((posx 1))
                (dolist (ex-child *fastswitch-match-child*)
                  (when (or *fastswitch-show-frame-p* (not (frame-p (expose-child-child ex-child))))
@@ -85,9 +85,9 @@
                    (incf posx)
                    (incf posx (1+ (length (child-fullname (expose-child-child ex-child)))))
                    (when (> (* posx (xlib:max-char-width *fastswitch-font*))
-                            (xlib:drawable-width *fastswitch-window*))
+                            (x-drawable-width *fastswitch-window*))
                      (setf posx 1)
-                     (incf (xlib:drawable-height *fastswitch-window*) (xlib:font-ascent *fastswitch-font*))))))))
+                     (incf (x-drawable-height *fastswitch-window*) (xlib:font-ascent *fastswitch-font*))))))))
     (when *fastswitch-adjust-window-p*
       (adjust-window))
     (clear-pixmap-buffer *fastswitch-window* *fastswitch-gc*)
@@ -106,7 +106,7 @@
   (setf *fastswitch-font* (xlib:open-font *display* *fastswitch-font-string*)
         *fastswitch-string* ""
         *fastswitch-match-child* (string-match *fastswitch-string* *expose-child-list* #'expose-child-key))
-  (let* ((width (- (xlib:screen-width *screen*) 2))
+  (let* ((width (- (screen-width) 2))
          (height (* (xlib:font-ascent *fastswitch-font*) 3)))
     (with-placement (*fastswitch-mode-placement* x y width height)
       (setf *fastswitch-window* (xlib:create-window :parent *root*

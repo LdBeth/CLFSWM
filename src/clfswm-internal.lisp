@@ -1,4 +1,4 @@
-;; --------------------------------------------------------------------------
+;;; --------------------------------------------------------------------------
 ;;; CLFSWM - FullScreen Window Manager
 ;;;
 ;;; --------------------------------------------------------------------------
@@ -762,7 +762,7 @@
   (unless (get-root-list)
     (let ((frame (create-frame)))
       (add-frame frame *root-frame*)
-      (define-as-root frame 0 0 (xlib:screen-width *screen*) (xlib:screen-height *screen*))
+      (define-as-root frame 0 0 (screen-width) (screen-height))
       (add-frame (create-frame) frame))))
 
 
@@ -850,9 +850,9 @@ XINERAMA version 1.1 opcode: 150
 
   (defun place-frames-from-xinerama-infos ()
     "Place frames according to xdpyinfo/xinerama informations"
-    (let ((sizes (get-connected-heads-size))
-          (width (xlib:screen-width *screen*))
-          (height (xlib:screen-height *screen*)))
+    (let ((sizes (get-connected-heads-size t)) ;;; PHIL: remove here
+          (width (screen-width))
+          (height (screen-height)))
       (labels ((update-root-geometry ()
                  (loop for size in sizes
                     for root in (get-root-list)
@@ -1020,8 +1020,8 @@ XINERAMA version 1.1 opcode: 150
                     (funcall it child parent)
                     (no-layout child parent))
                (values (- (child-border-size child)) (- (child-border-size child))
-                       (xlib:screen-width *screen*)
-                       (xlib:screen-height *screen*)))
+                       (screen-width)
+                       (screen-height)))
            (values (x-drawable-x child) (x-drawable-y child)
                    (x-drawable-width child) (x-drawable-height child)))))
 
@@ -1625,8 +1625,8 @@ managed."
 
 (defun store-root-background ()
   (with-all-mapped-windows *screen* #'hide-window)
-  (setf *background-image* (xlib:create-pixmap :width (xlib:screen-width *screen*)
-                                               :height (xlib:screen-height *screen*)
+  (setf *background-image* (xlib:create-pixmap :width (screen-width)
+                                               :height (screen-height)
                                                :depth (xlib:screen-root-depth *screen*)
                                                :drawable *root*)
         *background-gc* (xlib:create-gcontext :drawable *background-image*
@@ -1635,7 +1635,7 @@ managed."
                                               :font *default-font*
                                               :line-style :solid))
   (xlib:copy-area *root* *background-gc*
-                  0 0 (xlib:screen-width *screen*) (xlib:screen-height *screen*)
+                  0 0 (screen-width) (screen-height)
                   *background-image* 0 0)
   (with-all-mapped-windows *screen* #'unhide-window))
 

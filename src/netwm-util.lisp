@@ -49,8 +49,8 @@
   ;;  (xlib:change-property *root* :_NET_NUMBER_OF_DESKTOPS
   ;;		   (list (length *workspace-list*)) :cardinal 32)
   ;;  (xlib:change-property *root* :_NET_DESKTOP_GEOMETRY
-  ;;		   (list (xlib:screen-width *screen*)
-  ;;			 (xlib:screen-height *screen*))
+  ;;		   (list (screen-width)
+  ;;			 (screen-height))
   ;;		   :cardinal 32)
   ;;  (xlib:change-property *root* :_NET_DESKTOP_VIEWPORT
   ;;		   (list 0 0) :cardinal 32)

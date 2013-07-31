@@ -61,8 +61,8 @@
 ;;; Absolute placement
 ;;;
 (defun root-screen-coord (border-size)
-  (values (- (xlib:screen-width *screen*) (* 2 border-size))
-          (- (xlib:screen-height *screen*) (* 2 border-size))))
+  (values (- (screen-width) (* 2 border-size))
+          (- (screen-height) (* 2 border-size))))
 
 (defmacro with-root-screen-coord ((border-size w h) &body body)
   `(multiple-value-bind (,w ,h)

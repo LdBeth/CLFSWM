@@ -141,8 +141,8 @@
 	*expose-child-list* (expose-associate-keys)
 	*expose-selected-child* nil
         *query-string* "")
-  (xlib:warp-pointer *root* (truncate (/ (xlib:screen-width *screen*) 2))
-		     (truncate (/ (xlib:screen-height *screen*) 2)))
+  (xlib:warp-pointer *root* (truncate (/ (screen-width) 2))
+		     (truncate (/ (screen-height) 2)))
   (add-hook *query-key-press-hook* 'expose-query-key-press-hook)
   (add-hook *query-button-press-hook* 'expose-query-button-press-hook))
 

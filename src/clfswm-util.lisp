@@ -493,7 +493,7 @@ Write (defparameter *contrib-dir* \"/usr/local/lib/clfswm/\") in ~A.~%"
 	 (font (xlib:open-font *display* *identify-font-string*))
 	 (window (xlib:create-window :parent *root*
 				     :x 0 :y 0
-				     :width (- (xlib:screen-width *screen*) (* *border-size* 2))
+				     :width (- (screen-width) (* *border-size* 2))
 				     :height (* 5 (+ (xlib:max-char-ascent font) (xlib:max-char-descent font)))
 				     :background (get-color *identify-background*)
 				     :border-width *border-size*
@@ -577,7 +577,7 @@ Write (defparameter *contrib-dir* \"/usr/local/lib/clfswm/\") in ~A.~%"
           (let ((ret (info-mode (expand-newline (append (ensure-list (format nil "> ~A" form))
                                                         (ensure-list printed-result)
                                                         (ensure-list result)))
-                                :width (- (xlib:screen-width *screen*) 2))))
+                                :width (- (screen-width) 2))))
             (when (or (search "defparameter" form :test #'string-equal)
                       (search "defvar" form :test #'string-equal))
               (let ((elem (split-string form)))
@@ -1662,7 +1662,7 @@ For window: set current child to window or its parent according to window-parent
 	(reset-if-moved x y)
 	(setf minx x)
 	(add-in-history x y)
-	(setf lx (middle minx (or maxx (xlib:screen-width *screen*))))
+	(setf lx (middle minx (or maxx (screen-width))))
 	(xlib:warp-pointer *root* lx y)))
     (defun speed-mouse-up ()
       "Speed move mouse to up"
@@ -1678,7 +1678,7 @@ For window: set current child to window or its parent according to window-parent
 	(reset-if-moved x y)
 	(setf miny y)
 	(add-in-history x y)
-	(setf ly (middle miny (or maxy (xlib:screen-height *screen*))))
+	(setf ly (middle miny (or maxy (screen-height))))
 	(xlib:warp-pointer *root* x ly)))
     (defun speed-mouse-undo ()
       "Undo last speed mouse move"

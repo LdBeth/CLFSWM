@@ -317,10 +317,10 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
 	       (ilh (+ (xlib:max-char-ascent font) (xlib:max-char-descent font) 1))
 	       (width (or width
 			  (min (* (+ (loop for l in info-list maximize (compute-size l)) 2) ilw)
-			       (xlib:screen-width *screen*))))
+			       (screen-width))))
 	       (height (or height
 			   (min (round (+ (* (length info-list) ilh) (/ ilh 2)))
-				(xlib:screen-height *screen*)))))
+				(screen-height)))))
 	  (with-placement (*info-mode-placement* x y width height)
 	    (let* ((window (xlib:create-window :parent *root*
 					       :x x :y y
