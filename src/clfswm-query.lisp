@@ -137,7 +137,7 @@
     (xlib:draw-glyphs *pixmap-buffer* *query-gc*
 		      (+ 10 dec)
 		      (+ (* 2 (+ (xlib:max-char-ascent *query-font*) (xlib:max-char-descent *query-font*))) 5)
-		      *query-string*)
+		      (ensure-printable *query-string*))
     (setf (xlib:gcontext-foreground *query-gc*) (get-color *query-cursor-color*))
     (xlib:draw-line *pixmap-buffer* *query-gc*
 		    (+ 10 (* *query-pos* (xlib:max-char-width *query-font*)) dec)

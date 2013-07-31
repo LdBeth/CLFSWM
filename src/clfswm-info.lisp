@@ -96,7 +96,7 @@
                         *pixmap-buffer* (info-gc info)
                         (- (+ (info-ilw info) (* posx (info-ilw info))) (info-x info))
                         (info-y-display-coords info posy)
-                        (format nil "~A" line)))
+                        (ensure-printable (format nil "~A" line))))
 	     (+ posx (length line))))
     (clear-pixmap-buffer (info-window info) (info-gc info))
     (loop for line in (info-list info)
