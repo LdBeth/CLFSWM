@@ -33,7 +33,7 @@
 (defparameter *fastswitch-font* nil)
 (defparameter *fastswitch-string* "")
 (defparameter *fastswitch-match-child* nil)
-
+(defparameter *fastswitch-msg* nil)
 
 (defun leave-fastswitch-mode ()
   "Leave the fastswitch mode"
@@ -91,10 +91,18 @@
     (when *fastswitch-adjust-window-p*
       (adjust-window))
     (clear-pixmap-buffer *fastswitch-window* *fastswitch-gc*)
+    (when *fastswitch-msg*
+      (xlib:draw-image-glyphs *pixmap-buffer* *fastswitch-gc*
+                              (xlib:max-char-width *fastswitch-font*)
+                              (+ (xlib:font-ascent *fastswitch-font*) (xlib:font-descent *fastswitch-font*))
+                              *fastswitch-msg*))
     (xlib:with-gcontext (*fastswitch-gc* :foreground (get-color *fastswitch-foreground-letter*)
                                          :background (get-color *fastswitch-background*))
       (xlib:draw-image-glyphs *pixmap-buffer* *fastswitch-gc*
-                              (xlib:max-char-width *fastswitch-font*)
+                              (* (xlib:max-char-width *fastswitch-font*)
+                                 (if *fastswitch-msg*
+                                     (1+ (length *fastswitch-msg*))
+                                     1))
                               (+ (xlib:font-ascent *fastswitch-font*) (xlib:font-descent *fastswitch-font*))
                               *fastswitch-string*))
     (display-match-child)
@@ -160,7 +168,7 @@
       (fastswitch-draw-window))))
 
 
-(defun fastswitch-do-main ()
+(defun fastswitch-select-child ()
   (with-grab-keyboard-and-pointer (92 93 66 67 t)
     (generic-mode 'fastswitch-mode 'exit-fastswitch-loop
                   :enter-function #'fastswitch-enter-function
@@ -175,7 +183,8 @@
 (defun fastswitch-mode ()
   "Switch between children with expose shortcut"
   (setf *expose-child-list* (expose-associate-keys))
-  (let ((ex-child (fastswitch-do-main)))
+  (setf *fastswitch-msg* "Select child:  ")
+  (let ((ex-child (fastswitch-select-child)))
     (when (and ex-child (expose-child-child ex-child))
       (expose-focus-child (expose-child-child ex-child))))
   (show-all-children)
@@ -183,3 +192,28 @@
 
 
 
+;;; Fastswitch move mode
+(defun fastswitch-move-mode ()
+  "Move children with expose shortcut"
+  (let ((window nil))
+    (with-focus-window (win)
+      (setf window win))
+    (no-focus)
+    (setf *expose-child-list* (expose-associate-keys))
+    (setf *fastswitch-msg* (if window
+                               (format nil "Move focused child [~A] with:  "
+                                       (child-fullname window))
+                               "No child to move...  "))
+    (let ((ex-child (fastswitch-select-child)))
+      (when (and window ex-child (expose-child-child ex-child))
+        (let ((from (find-parent-frame window))
+              (to (typecase (expose-child-child ex-child)
+                    (xlib:window (find-parent-frame (expose-child-child ex-child)))
+                    (frame (expose-child-child ex-child)))))
+          (when (and (frame-p from) (frame-p to))
+            (remove-child-in-frame window from)
+            (pushnew window (frame-child to) :test #'child-equal-p)
+            (when (child-equal-p window (current-child))
+              (focus-all-children window to))))))
+    (show-all-children))
+  t)
