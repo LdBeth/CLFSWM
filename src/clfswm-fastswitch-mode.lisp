@@ -213,7 +213,6 @@
           (when (and (frame-p from) (frame-p to))
             (remove-child-in-frame window from)
             (pushnew window (frame-child to) :test #'child-equal-p)
-            (when (child-equal-p window (current-child))
-              (focus-all-children window to))))))
+            (focus-all-children from from)))))
     (show-all-children))
   t)
