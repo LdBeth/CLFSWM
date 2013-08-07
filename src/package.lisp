@@ -141,12 +141,12 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defclass frame ()
   ((name :initarg :name :accessor frame-name :initform nil)
    (number :initarg :number :accessor frame-number :initform 0)
-   ;;; Float size between 0 and 1 - Manipulate only this variable and not real size
+   ;;; Float size between 0 and 1 - Manipulate only those variables and not real size
    (x :initarg :x :accessor frame-x :initform 0.1)
    (y :initarg :y :accessor frame-y :initform 0.1)
    (w :initarg :w :accessor frame-w :initform 0.8)
    (h :initarg :h :accessor frame-h :initform 0.8)
-   ;;; Real size (integer) in screen size - Don't set directly this variables
+   ;;; Real size (integer) in screen size - Don't set directly those variables
    ;;; they may be recalculated by the layout manager.
    (rx :initarg :rx :accessor frame-rx :initform 0)
    (ry :initarg :ry :accessor frame-ry :initform 0)
@@ -174,7 +174,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 		    :documentation "A list of hidden children")
    (selected-pos :initarg :selected-pos :accessor frame-selected-pos :initform 0
 		 :documentation "The position in the child list of the selected child")
-   (focus-policy :initarg :focus-ploicy :accessor frame-focus-policy
+   (focus-policy :initarg :focus-policy :accessor frame-focus-policy
 		 :initform *default-focus-policy*)
    (window :initarg :window :accessor frame-window :initform nil)
    (gc :initarg :gc :accessor frame-gc :initform nil)

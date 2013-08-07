@@ -9,6 +9,14 @@ Should handle these soon.
 
 - Make CLFSWM running with ECL
 
+- Implement a save/restore root-frame system. And use it on error reset or for undo/redo.
+
+- Undo/redo
+
+- Dump frame -> tree saved in register / save/restore (frame-tree-register n)
+
+- Save/restore frame-tree-register to file (~/.clfswmrc)
+
 
 FOR THE NEXT RELEASE
 ====================
@@ -19,8 +27,6 @@ FOR THE NEXT RELEASE
 
 MAYBE
 =====
-
-- Implement a save/restore root-frame system. And use it on error reset or for undo/redo.
 
 - Add a tabbar layout : save some space on top/left... of the frame and display clickable
     children name.
@@ -49,6 +55,5 @@ MAYBE
       http://en.wikipedia.org/wiki/Compositing_window_manager
       http://ktown.kde.org/~fredrik/composite_howto.html
 
-- Undo/redo
 
 

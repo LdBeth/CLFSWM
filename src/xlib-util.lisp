@@ -103,6 +103,7 @@ Features: ~A"
 ;;  `(progn
 ;;     ,@body))
 
+(declaim (inline screen-width screen-height))
 (defun screen-width ()
   ;;(xlib:screen-width *screen*))
   (x-drawable-width *root*))
@@ -110,7 +111,6 @@ Features: ~A"
 (defun screen-height ()
   ;;(xlib:screen-height *screen*))
   (x-drawable-height *root*))
-
 
 
 (defmacro with-x-pointer (&body body)

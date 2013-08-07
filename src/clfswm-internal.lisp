@@ -1730,3 +1730,72 @@ managed."
                                                                  (+ (frame-rx child) 10)
                                                                  (+ (frame-ry child) 10))))))))))))
 
+
+
+;;; Dumping/restoring frame tree functions
+(defun print-frame-tree (root &optional (disp-fun #'child-fullname))
+  (labels ((rec (child space)
+             (print-space space)
+             (format t "~A~%" (funcall disp-fun child))
+             (when (frame-p child)
+               (dolist (c (reverse (frame-child child)))
+                 (rec c (+ space 2))))))
+    (rec root 0)))
+
+
+(defun window-list->xid-list (list)
+  (loop for win in list
+     collect (xlib:window-id win)))
+
+
+(defun copy-frame (frame)
+  (with-slots (name number x y w h layout nw-hook managed-type
+                    forced-managed-window forced-unmanaged-window
+                    show-window-p hidden-children selected-pos
+                    focus-policy data)
+      frame
+    (make-instance 'frame :name name :number number
+                   :x x :y y :w w :h h
+                   :layout layout :nw-hook nw-hook
+                   :managed-type (if (consp managed-type)
+                                     (copy-list managed-type)
+                                     managed-type)
+                   :forced-managed-window (window-list->xid-list forced-managed-window)
+                   :forced-unmanaged-window (window-list->xid-list forced-unmanaged-window)
+                   :show-window-p show-window-p
+                   :hidden-children (window-list->xid-list hidden-children)
+                   :selected-pos selected-pos
+                   :focus-policy focus-policy
+                   :data (copy-tree data))))
+
+(defun dump-frame-tree ()
+  "Return a tree list of frame dimensions and name"
+  (let ((root (make-instance 'frame :name "root")))
+    (labels ((store (from root)
+               (when (frame-p from)
+                 (dolist (c (frame-child from))
+                   (push (if (frame-p c)
+                             (let ((new-root (copy-frame c)))
+                               (store c new-root)
+                               new-root)
+                             (format nil "~A (#x~X)" (child-fullname c) (xlib:window-id c)))
+                         (frame-child root))))))
+      (store *root-frame* root)
+      (print-frame-tree root #'(lambda (x)
+                                 (if (frame-p x)
+                                     (format nil "~A - ~F ~F ~F ~F ~A ~A ~A ~X ~X ~A ~A ~A ~A ~A"
+                                             (child-fullname x)
+                                             (frame-x x) (frame-y x) (frame-w x) (frame-h x)
+                                             (frame-layout x) (frame-nw-hook x)
+                                             (frame-managed-type x)
+                                             (frame-forced-managed-window x)
+                                             (frame-forced-unmanaged-window x)
+                                             (frame-show-window-p x)
+                                             (frame-hidden-children x)
+                                             (frame-selected-pos x)
+                                             (frame-focus-policy x)
+                                             (frame-data x))
+                                     x))))))
+
+
+
