@@ -767,7 +767,7 @@ Write (defparameter *contrib-dir* \"/usr/local/lib/clfswm/\") in ~A.~%"
 
 
 
-(defun mouse-click-to-focus-generic (root-x root-y mouse-fn)
+(defun mouse-click-to-focus-generic (window root-x root-y mouse-fn)
   "Focus the current frame or focus the current window parent
 mouse-fun is #'move-frame or #'resize-frame"
   (let* ((to-replay t)
@@ -785,9 +785,11 @@ mouse-fun is #'move-frame or #'resize-frame"
                  (pushnew child (frame-child parent)))))
       (when (and root-p  *create-frame-on-root*)
         (add-new-frame))
-      (when (and (frame-p child) (not (child-root-p child)))
+      (when (and (frame-p child) (not (child-root-p child))
+                 (not (equal-clfswm-terminal window)))
         (funcall mouse-fn child parent root-x root-y))
       (when (and child parent
+                 (not (equal-clfswm-terminal window))
                  (focus-all-children child parent (not (child-root-p child))))
         (when (show-all-children)
           (setf to-replay nil)))
@@ -799,16 +801,15 @@ mouse-fun is #'move-frame or #'resize-frame"
 (defun mouse-click-to-focus-and-move (window root-x root-y)
   "Move and focus the current frame or focus the current window parent.
 Or do actions on corners"
-  (declare (ignore window))
   (or (do-corner-action root-x root-y *corner-main-mode-left-button*)
-      (mouse-click-to-focus-generic root-x root-y #'move-frame)))
+      (mouse-click-to-focus-generic window root-x root-y #'move-frame)))
 
 (defun mouse-click-to-focus-and-resize (window root-x root-y)
   "Resize and focus the current frame or focus the current window parent.
 Or do actions on corners"
-  (declare (ignore window))
+  ;;(declare (ignore window))
   (or (do-corner-action root-x root-y *corner-main-mode-right-button*)
-      (mouse-click-to-focus-generic root-x root-y #'resize-frame)))
+      (mouse-click-to-focus-generic window root-x root-y #'resize-frame)))
 
 (defun mouse-middle-click (window root-x root-y)
   "Do actions on corners"

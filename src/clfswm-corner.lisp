@@ -130,7 +130,7 @@ stop the button event"
 
 (let (win)
   (defun equal-clfswm-terminal (window)
-    (when win
+    (when (and win (xlib:window-p window))
       (xlib:window-equal window win)))
   (defun close-clfswm-terminal ()
     (when win

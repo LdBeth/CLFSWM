@@ -40,7 +40,7 @@
 
 (defun start-mocp ()
   "Start mocp"
-  (do-shell "exec xterm -e 'mocp 2> /dev/null'"))
+  (do-shell "xterm -e 'mocp 2> /dev/null'"))
 
 
 (defun show-moc-info ()
