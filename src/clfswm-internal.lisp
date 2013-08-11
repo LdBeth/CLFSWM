@@ -230,6 +230,11 @@
 	(return (values t (second type)))))))
 
 
+(defun never-managed-window-and-handled-p (window)
+  (multiple-value-bind (never-managed handle)
+      (never-managed-window-p window)
+    (and never-managed handle)))
+
 
 (defgeneric child-name (child))
 

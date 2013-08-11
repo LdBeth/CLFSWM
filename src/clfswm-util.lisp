@@ -786,10 +786,10 @@ mouse-fun is #'move-frame or #'resize-frame"
       (when (and root-p  *create-frame-on-root*)
         (add-new-frame))
       (when (and (frame-p child) (not (child-root-p child))
-                 (not (equal-clfswm-terminal window)))
+                 (not (never-managed-window-and-handled-p window)))
         (funcall mouse-fn child parent root-x root-y))
       (when (and child parent
-                 (not (equal-clfswm-terminal window))
+                 (not (never-managed-window-and-handled-p window))
                  (focus-all-children child parent (not (child-root-p child))))
         (when (show-all-children)
           (setf to-replay nil)))
