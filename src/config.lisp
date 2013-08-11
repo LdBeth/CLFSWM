@@ -361,6 +361,8 @@ on the root window in the main mode with the mouse")
   'Fastswitch-mode "Fastswitch show frame in mini window")
 (defconfig *fastswitch-adjust-window-p* t
   'Fastswitch-mode "Fastswitch adjust window to show all children names")
+(defconfig *fastswitch-display-mode* 'Tree
+  'Fastswitch-mode "Fastswitch display mode (one of LINE or TREE)")
 
 
 

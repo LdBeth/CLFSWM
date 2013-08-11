@@ -847,7 +847,7 @@ Or do actions on corners - Skip windows in main window list"
     (if (and (frame-p (current-child))
 	     (child-member window (frame-data-slot (current-child) :main-window-list)))
 	(replay-button-event)
-	(mouse-click-to-focus-generic root-x root-y #'move-frame))))
+	(mouse-click-to-focus-generic window root-x root-y #'move-frame))))
 
 
 
