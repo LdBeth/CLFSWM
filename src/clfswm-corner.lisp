@@ -91,7 +91,6 @@ stop the button event"
 
 (defun generic-present-body (cmd wait-test win &optional focus-p)
   (stop-button-event)
-  (no-focus)
   (unless (find-window-in-query-tree win)
     (do-shell cmd)
     (setf win (wait-window-in-query-tree wait-test))

@@ -1747,60 +1747,81 @@ managed."
                  (rec c (+ space 2))))))
     (rec root 0)))
 
+(defmethod print-object ((frame frame) stream)
+  (format stream "~A - ~F ~F ~F ~F ~A ~A ~A ~X ~X ~A ~A ~A ~A"
+          (child-fullname frame)
+          (frame-x frame) (frame-y frame) (frame-w frame) (frame-h frame)
+          (frame-layout frame) (frame-nw-hook frame)
+          (frame-managed-type frame)
+          (frame-forced-managed-window frame)
+          (frame-forced-unmanaged-window frame)
+          (frame-show-window-p frame)
+          (frame-hidden-children frame)
+          (frame-selected-pos frame)
+          (frame-focus-policy frame)
+          ;;(frame-data frame))
+          ))
 
-(defun window-list->xid-list (list)
-  (loop for win in list
-     collect (xlib:window-id win)))
+
+(defun window->xid (window)
+  (when (xlib:window-p window)
+    (xlib:window-id window)))
+
+(defun xid->window (xid)
+  (dolist (win (xlib:query-tree *root*))
+    (when (equal xid (xlib:window-id win))
+      (return-from xid->window win))))
 
 
-(defun copy-frame (frame)
-  (with-slots (name number x y w h layout nw-hook managed-type
-                    forced-managed-window forced-unmanaged-window
-                    show-window-p hidden-children selected-pos
-                    focus-policy data)
-      frame
-    (make-instance 'frame :name name :number number
-                   :x x :y y :w w :h h
-                   :layout layout :nw-hook nw-hook
-                   :managed-type (if (consp managed-type)
-                                     (copy-list managed-type)
-                                     managed-type)
-                   :forced-managed-window (window-list->xid-list forced-managed-window)
-                   :forced-unmanaged-window (window-list->xid-list forced-unmanaged-window)
-                   :show-window-p show-window-p
-                   :hidden-children (window-list->xid-list hidden-children)
-                   :selected-pos selected-pos
-                   :focus-policy focus-policy
-                   :data (copy-tree data))))
 
-(defun dump-frame-tree ()
-  "Return a tree list of frame dimensions and name"
-  (let ((root (make-instance 'frame :name "root")))
+(defun copy-frame (frame &optional (window-fun #'window->xid))
+  (labels ((handle-window-list (list)
+             (loop for win in list
+                collect (funcall window-fun win))))
+    (with-slots (name number x y w h layout nw-hook managed-type
+                      forced-managed-window forced-unmanaged-window
+                      show-window-p hidden-children selected-pos
+                      focus-policy data)
+        frame
+      (make-instance 'frame :name name :number number
+                     :x x :y y :w w :h h
+                     :layout layout :nw-hook nw-hook
+                     :managed-type (if (consp managed-type)
+                                       (copy-list managed-type)
+                                       managed-type)
+                     :forced-managed-window (handle-window-list forced-managed-window)
+                     :forced-unmanaged-window (handle-window-list forced-unmanaged-window)
+                     :show-window-p show-window-p
+                     :hidden-children (handle-window-list hidden-children)
+                     :selected-pos selected-pos
+                     :focus-policy focus-policy
+                     :data (copy-tree data)))))
+
+(defun dump-frame-tree (root &optional (window-fun #'window->xid))
+  "Return a tree of frames."
+  (let ((new-root (copy-frame root window-fun)))
     (labels ((store (from root)
                (when (frame-p from)
-                 (dolist (c (frame-child from))
+                 (dolist (c (reverse (frame-child from)))
                    (push (if (frame-p c)
-                             (let ((new-root (copy-frame c)))
+                             (let ((new-root (copy-frame c window-fun)))
                                (store c new-root)
                                new-root)
-                             (format nil "~A (#x~X)" (child-fullname c) (xlib:window-id c)))
+                             (funcall window-fun c))
                          (frame-child root))))))
-      (store *root-frame* root)
-      (print-frame-tree root #'(lambda (x)
-                                 (if (frame-p x)
-                                     (format nil "~A - ~F ~F ~F ~F ~A ~A ~A ~X ~X ~A ~A ~A ~A ~A"
-                                             (child-fullname x)
-                                             (frame-x x) (frame-y x) (frame-w x) (frame-h x)
-                                             (frame-layout x) (frame-nw-hook x)
-                                             (frame-managed-type x)
-                                             (frame-forced-managed-window x)
-                                             (frame-forced-unmanaged-window x)
-                                             (frame-show-window-p x)
-                                             (frame-hidden-children x)
-                                             (frame-selected-pos x)
-                                             (frame-focus-policy x)
-                                             (frame-data x))
-                                     x))))))
+      (store root new-root)
+      new-root)))
+
+(defun test-dump-frame-tree ()
+  (let ((store (dump-frame-tree *root-frame*)))
+    (print-frame-tree store
+                      #'(lambda (x)
+                          (format nil "~A" x)))
+    (format t "~&--------------------------------------------------~2%")
+    (print-frame-tree (dump-frame-tree store #'xid->window)
+                      #'(lambda (x)
+                          (format nil "~A" (if (frame-p x) x (child-fullname x)))))))
+
 
 
 
