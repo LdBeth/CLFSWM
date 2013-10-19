@@ -25,6 +25,7 @@
 
 (in-package :clfswm)
 
+(defparameter *clfswm-initializing* nil)
 
 (define-handler main-mode :key-press (code state)
   (funcall-key-from-code *main-keys* code state))
@@ -150,8 +151,12 @@
           (find error-key '(xlib:window-error xlib:drawable-error xlib:match-error)))
      #+:xlib-debug (format t "~&Ignoring XLib asynchronous error: ~s~%" error-key))
     ((eq error-key 'xlib:access-error)
-     (write-line "~&Another window manager is running.")
-     (throw 'exit-clfswm nil))
+     (if *clfswm-initializing*
+         (progn
+           (format t "~3&Another window manager is running. Exiting...~%")
+           (throw 'exit-clfswm nil))
+         #+:xlib-debug
+         (format t "~&Ignoring XLib asynchronous access error: ~s~%" error-key)))
     ;; all other asynchronous errors are printed.
     (asynchronous
      #+:xlib-debug (format t "~&Caught Asynchronous X Error: ~s ~s" error-key key-vals))
@@ -159,6 +164,8 @@
     ;; (format t "~&Ignoring Xlib error: ~S ~S~%" error-key key-vals))
     (t
      (apply 'error error-key :display display :error-key error-key key-vals))))
+
+
 
 
 (defun main-loop ()
@@ -272,6 +279,7 @@
 (defun main-unprotected (&key (display (or (getenv "DISPLAY") ":0")) protocol
 			 (read-conf-file-p t) (alternate-conf nil)
 			 error-msg)
+  (setf *clfswm-initializing* t)
   (conf-file-name alternate-conf)
   (when read-conf-file-p
     (read-conf-file))
@@ -294,6 +302,7 @@
       (exit-clfswm)))
   (when error-msg
     (info-mode error-msg))
+  (setf *clfswm-initializing* nil)
   (catch 'exit-main-loop
       (unwind-protect
 	   (main-loop)

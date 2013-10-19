@@ -103,6 +103,7 @@ Features: ~A"
 ;;  `(progn
 ;;     ,@body))
 
+
 (declaim (inline screen-width screen-height))
 (defun screen-width ()
   ;;(xlib:screen-width *screen*))
@@ -1017,9 +1018,8 @@ they should be windows. So use this function to make a window out of them."
 ;;; Windows wm class and name tests
 (defmacro defun-equal-wm-class (symbol class)
   `(defun ,symbol (window)
-     (ignore-errors   ;; Ignore incompliant wm-class strings
-       (when (xlib:window-p window)
-         (string-equal (xlib:get-wm-class window) ,class)))))
+     (when (xlib:window-p window)
+       (string-equal (xlib:get-wm-class window) ,class))))
 
 
 (defmacro defun-equal-wm-name (symbol name)

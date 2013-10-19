@@ -164,11 +164,11 @@ It is particulary useful with CLISP/MIT-CLX.")
    (forced-managed-window :initarg :forced-managed-window
 			  :accessor frame-forced-managed-window
 			  :initform nil
-			  :documentation "A list of forced managed windows (wm-name or window)")
+			  :documentation "A list of forced managed windows (xlib:wm-name or window)")
    (forced-unmanaged-window :initarg :forced-unmanaged-window
 			  :accessor frame-forced-unmanaged-window
 			  :initform nil
-			  :documentation "A list of forced unmanaged windows (wm-name or window)")
+			  :documentation "A list of forced unmanaged windows (xlib:wm-name or window)")
    (show-window-p :initarg :show-window-p :accessor frame-show-window-p :initform t)
    (hidden-children :initarg :hidden-children :accessor frame-hidden-children :initform nil
 		    :documentation "A list of hidden children")
