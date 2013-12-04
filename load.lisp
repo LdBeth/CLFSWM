@@ -136,6 +136,7 @@ from $XDG_CONFIG_HOME/clfswm/clfswmrc")
 #+:clfswm-compile
 (progn
   (load-info "Compiling CLFSWM")
+  (load "clfswm.asd")
   (asdf:oos 'asdf:load-op :clfswm))
 
 
