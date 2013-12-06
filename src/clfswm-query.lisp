@@ -41,12 +41,13 @@
 
 
 (defun add-char-in-query-string (char)
-  (setf *query-string* (concatenate 'string
-                                    (when (<= *query-pos* (length *query-string*))
-                                      (subseq *query-string* 0 *query-pos*))
-                                    (string char)
-                                    (when (< *query-pos* (length *query-string*))
-                                      (subseq *query-string* *query-pos*))))
+  (setf *query-string* (ensure-printable
+                        (concatenate 'string
+                                     (when (<= *query-pos* (length *query-string*))
+                                       (subseq *query-string* 0 *query-pos*))
+                                     (string char)
+                                     (when (< *query-pos* (length *query-string*))
+                                       (subseq *query-string* *query-pos*)))))
   (incf *query-pos*))
 
 
