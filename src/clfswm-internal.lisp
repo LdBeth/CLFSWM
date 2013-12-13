@@ -1567,7 +1567,10 @@ Warning:frame window and gc are freeed."
     (when (frame-p child)
       (delete-child-and-children-in-frames child *root-frame* close-methode))
     (when (xlib:window-p child)
-      (funcall close-methode child))))
+      (funcall close-methode child))
+    (when (frame-p child)
+      (awhen (frame-gc child) (xlib:free-gcontext it) (setf it nil))
+      (awhen (frame-window child) (xlib:destroy-window it) (setf it nil)))))
 
 
 (defun clean-windows-in-all-frames ()

@@ -671,7 +671,7 @@ Write (defparameter *contrib-dir* \"/usr/local/lib/clfswm/\") in ~A.~%"
               (child-root-p frame))
     (when (child-equal-p frame (current-child))
       (setf (current-child) (find-current-root)))
-    (remove-child-in-frame frame (find-parent-frame frame)))
+    (delete-child-and-children-in-all-frames frame))
   (show-all-children t))
 
 
