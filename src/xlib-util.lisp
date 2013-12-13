@@ -570,15 +570,23 @@ they should be windows. So use this function to make a window out of them."
     (setf (xlib:window-priority window) :above)))
 
 
-(defun no-focus ()
-  "don't focus any window but still read keyboard events."
-  (xlib:set-input-focus *display* *no-focus-window* :pointer-root))
+(let ((focused-window nil))
+  (defun no-focus ()
+    "don't focus any window but still read keyboard events."
+    (xlib:set-input-focus *display* *no-focus-window* :pointer-root)
+    (setf focused-window nil))
 
-(defun focus-window (window)
-  "Give the window focus."
-  (no-focus)
-  (when (xlib:window-p window)
-    (xlib:set-input-focus *display* window :parent)))
+  (defun focus-window (window)
+    "Give the window focus."
+    (no-focus)
+    (when (xlib:window-p window)
+      (xlib:set-input-focus *display* window :parent)
+      (setf focused-window window)))
+
+  (defun focused-window ()
+    focused-window))
+
+
 
 (defun raise-and-focus-window (window)
   "Raise and focus."

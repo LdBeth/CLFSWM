@@ -130,6 +130,14 @@
     (manage-focus window root-x root-y)))
 
 
+(define-handler main-mode :focus-in (window)
+  (unless (child-equal-p window (focused-window))
+    (set-focus-to-current-child)))
+
+
+
+
+
 (define-handler main-mode :exposure (window)
   (awhen (find-frame-window window)
     (display-frame-info it)))
