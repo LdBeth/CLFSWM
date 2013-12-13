@@ -252,10 +252,10 @@
 (defgeneric set-child-name (child name))
 
 (defmethod set-child-name ((child xlib:window) name)
-  (setf (xlib:wm-name child) name))
+  (setf (xlib:wm-name child) (ensure-printable name)))
 
 (defmethod set-child-name ((child frame) name)
-  (setf (frame-name child) name))
+  (setf (frame-name child) (ensure-printable name)))
 
 (defmethod set-child-name (child name)
   (declare (ignore child name)))
@@ -268,14 +268,12 @@
 (defgeneric child-fullname (child))
 
 (defmethod child-fullname ((child xlib:window))
-  (ensure-printable
-   (format nil "~A (~A)" (or (xlib:wm-name child) "?") (or (xlib:get-wm-class child) "?"))))
+  (format nil "~A (~A)" (or (xlib:wm-name child) "?") (or (xlib:get-wm-class child) "?")))
 
 (defmethod child-fullname ((child frame))
-  (ensure-printable
-   (aif (frame-name child)
-        (format nil "~A (Frame ~A)" it (frame-number child))
-        (format nil "Frame ~A" (frame-number child)))))
+  (aif (frame-name child)
+       (format nil "~A (Frame ~A)" it (frame-number child))
+       (format nil "Frame ~A" (frame-number child))))
 
 (defmethod child-fullname (child)
   (declare (ignore child))

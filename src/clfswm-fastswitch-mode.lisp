@@ -61,7 +61,7 @@
       (xlib:draw-glyphs *pixmap-buffer* *fastswitch-gc*
                         (* (xlib:max-char-width *fastswitch-font*) posx)
                         placey
-                        (child-fullname (expose-child-child ex-child)))
+                        (ensure-printable (child-fullname (expose-child-child ex-child))))
       (incf posx (1+ (length (child-fullname (expose-child-child ex-child))))))
     posx))
 

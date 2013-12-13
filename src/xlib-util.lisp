@@ -1003,6 +1003,7 @@ they should be windows. So use this function to make a window out of them."
                              t))))
 
 
+
 (defun copy-pixmap-buffer (window gc)
   (xlib:copy-area *pixmap-buffer* gc
   		  0 0 (x-drawable-width window) (x-drawable-height window)

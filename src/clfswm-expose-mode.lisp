@@ -88,6 +88,7 @@
                           (expose-child-string ex-child))
         (copy-pixmap-buffer window gc)))))
 
+
 (defun expose-create-window (ex-child)
   (let ((child (expose-child-child ex-child)))
     (with-current-child (child)
@@ -182,8 +183,8 @@
     (multiple-value-bind (letters return)
         (query-string "Which child ?")
       (let ((ex-child (case return
-                     (:return (expose-find-child-from-letters letters))
-                     (:click *expose-selected-child*))))
+                        (:return (expose-find-child-from-letters letters))
+                        (:click *expose-selected-child*))))
         (when ex-child
           (expose-child-child ex-child))))))
 
@@ -195,7 +196,9 @@
     (awhen (expose-child-gc ex-child)
       (xlib:free-gcontext it))
     (awhen (expose-child-window ex-child)
-      (xlib:destroy-window it)))
+      (xlib:destroy-window it))
+    (setf (expose-child-gc ex-child) nil
+          (expose-child-window ex-child) nil))
   (when *expose-font*
     (xlib:close-font *expose-font*))
   (expose-unpresent-windows))
