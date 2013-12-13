@@ -133,7 +133,8 @@
 (defun expose-query-button-press-hook (code state x y)
   (declare (ignore state))
   (when (= code 1)
-    (setf *expose-selected-child* (find-child-under-mouse x y)))
+    (setf *expose-selected-child*
+          (find (find-child-under-mouse x y) *expose-child-list* :test #'child-equal-p :key #'expose-child-child)))
   (leave-query-mode :click))
 
 
