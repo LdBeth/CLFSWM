@@ -312,7 +312,10 @@
 
 
 (defun reorder-brother-simple (reorder-fun)
-  (unless (child-root-p (current-child))
+  (let ((is-root-p (child-root-p (current-child))))
+    (when is-root-p
+      (leave-frame)
+      (sleep *spatial-move-delay-before*))
     (no-focus)
     (select-current-frame nil)
     (let ((parent-frame (find-parent-frame (current-child))))
@@ -320,7 +323,10 @@
         (with-slots (child) parent-frame
           (setf child (funcall reorder-fun child)
                 (current-child) (frame-selected-child parent-frame))))
-      (show-all-children t))))
+      (show-all-children t)
+      (when is-root-p
+        (sleep *spatial-move-delay-after*)
+        (enter-frame)))))
 
 
 (defun select-next-brother-simple ()
