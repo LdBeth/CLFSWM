@@ -135,9 +135,6 @@
     (set-focus-to-current-child)))
 
 
-
-
-
 (define-handler main-mode :exposure (window)
   (awhen (find-frame-window window)
     (display-frame-info it)))

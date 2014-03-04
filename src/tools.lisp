@@ -317,7 +317,7 @@ Return the result of the last hook"
   "Start the function fun at delay seconds."
   (funcall #'add-timer delay fun id))
 
-(defmacro with-timer ((delay &optional (id (gensym))) &body body)
+(defmacro with-timer ((delay &optional (id '(gensym))) &body body)
   "Same thing as add-timer but with syntaxic sugar"
   `(add-timer ,delay
 	      (lambda ()
