@@ -459,7 +459,9 @@ Write (defparameter *contrib-dir* \"/usr/local/lib/clfswm/\") in ~A.~%"
 
 (defun retrieve-existing-window ()
   "Retrieve existing windows not already managed by CLFSWM."
-  (process-existing-windows *screen*))
+  (process-existing-windows *screen*)
+  (show-all-children t)
+  (leave-second-mode))
 
 
 
