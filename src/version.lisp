@@ -1,4 +1,4 @@
-;; Copyright (C) 2005-2013 Xavier Maillard <xma@gnu.org>
+;; Copyright (C) 2005-2014 Xavier Maillard <xma@gnu.org>
 ;; Copyright (C) 2005-2013 Martin Bishop
 ;;
 ;;  Borrowed from Stumpwm

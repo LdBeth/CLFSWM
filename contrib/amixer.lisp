@@ -5,7 +5,7 @@
 ;;; Documentation: Volume mode
 ;;; --------------------------------------------------------------------------
 ;;;
-;;; (C) 2012 Desmond O. Chang <dochang@gmail.com>
+;;; (C) 2014 Desmond O. Chang <dochang@gmail.com>
 ;;;
 ;;; This program is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
