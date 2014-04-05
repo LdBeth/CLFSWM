@@ -25,9 +25,6 @@
 
 (in-package :clfswm)
 
-(defparameter *sm-window* nil)
-(defparameter *sm-font* nil)
-(defparameter *sm-gc* nil)
 
 (defparameter *second-mode-leave-function* nil
   "Execute the function if not nil")

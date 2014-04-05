@@ -78,6 +78,11 @@ It is particulary useful with CLISP/MIT-CLX.")
 (defparameter *root* nil)
 (defparameter *no-focus-window* nil)
 
+(defparameter *sm-window* nil)
+(defparameter *sm-font* nil)
+(defparameter *sm-gc* nil)
+
+
 (defparameter *background-image* nil)
 (defparameter *background-gc* nil)
 
