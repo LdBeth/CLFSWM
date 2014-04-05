@@ -406,16 +406,32 @@ Write (defparameter *contrib-dir* \"/usr/local/lib/clfswm/\") in ~A.~%"
         (show-all-children t))
       (current-child))))
 
+
+
+(defun count-child-in-root (child root)
+  (let ((count 0))
+    (with-all-children (root c)
+      (when (child-equal-p c child)
+        (incf count)))
+    count))
+
+
+(defun find-a-last-child (child)
+  (with-all-children (child c)
+    (when (= (count-child-in-root c *root-frame*) 1)
+      (return-from find-a-last-child t))))
+
 (defun remove-current-child ()
   "Remove the current child from its parent frame"
   (unless (child-root-p (current-child))
-    (let ((parent (find-parent-frame (current-child))))
-      (hide-all (current-child))
-      (remove-child-in-frame (current-child) (find-parent-frame (current-child) (find-current-root)))
-      (when parent
-        (setf (current-child) parent))
-      (show-all-children t)
-      (leave-second-mode))))
+    (unless (find-a-last-child (current-child))
+      (let ((parent (find-parent-frame (current-child))))
+        (hide-all (current-child))
+        (remove-child-in-frame (current-child) (find-parent-frame (current-child) (find-current-root)))
+        (when parent
+          (setf (current-child) parent))))
+    (show-all-children t)
+    (leave-second-mode)))
 
 (defun delete-current-child ()
   "Delete the current child and its children in all frames"
