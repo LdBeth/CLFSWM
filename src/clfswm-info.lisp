@@ -346,8 +346,6 @@ Or ((1_word color) (2_word color) 3_word (4_word color)...)"
               (wait-no-key-or-button-press)
               (with-grab-keyboard-and-pointer (68 69 66 67)
                 (generic-mode 'info-mode 'exit-info-loop
-                              :loop-function (lambda ()
-                                               (raise-window (info-window info)))
                               :original-mode '(main-mode)))
 	      (xlib:free-gcontext gc)
 	      (xlib:destroy-window window)
@@ -592,9 +590,3 @@ Pass the :no-producing-doc symbol to remove the producing doc"
 (defun show-version ()
   "Show the current CLFSWM version"
   (info-mode (list *version*)))
-
-
-
-
-
-

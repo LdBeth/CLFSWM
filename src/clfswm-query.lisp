@@ -180,9 +180,6 @@
   (xlib:close-font *query-font*)
   (wait-no-key-or-button-press))
 
-(defun query-loop-function ()
-  (raise-window *query-window*))
-
 
 
 (labels ((generic-backspace (del-pos)
@@ -396,7 +393,6 @@ that calls query-mode-complete-suggest."
   (with-grab-keyboard-and-pointer (92 93 66 67 t)
     (generic-mode 'query-mode 'exit-query-loop
 		  :enter-function #'query-enter-function
-		  :loop-function #'query-loop-function
 		  :leave-function #'query-leave-function
 		  :original-mode '(main-mode)))
   (when (equal *query-return* :Return)
