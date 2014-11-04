@@ -127,8 +127,11 @@
 (defun expose-query-key-press-hook (code state)
   (declare (ignore code state))
   (expose-draw-letter)
-  (when (and *expose-direct-select* (<= (length *expose-child-list*) 26))
-    (leave-query-mode :return)))
+  (let ((two-letters-key (dolist (child *expose-child-list*)
+			   (when (> (length (expose-child-key child)) 1)
+			     (return t)))))
+    (when (and *expose-direct-select* (not two-letters-key))
+      (leave-query-mode :return))))
 
 (defun expose-query-button-press-hook (code state x y)
   (declare (ignore state))
