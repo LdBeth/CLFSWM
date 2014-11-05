@@ -216,7 +216,6 @@
 					    :drawable *root*)
 	*in-second-mode* nil
         *x-error-count* 0
-        *expose-current-number* 0
         *expose-child-list* nil)
   (store-root-background)
   (init-modifier-list)
@@ -342,6 +341,3 @@
 	       (format t "~&~A~%Reinitializing...~%" msg)
 	       (setf error-msg (list (list msg *info-color-title*)
 				     "Reinitializing...")))))))))
-
-
-

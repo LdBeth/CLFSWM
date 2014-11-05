@@ -28,7 +28,7 @@
 (defparameter *expose-font* nil)
 (defparameter *expose-selected-child* nil)
 
-(defstruct expose-child child key window gc string)
+(defstruct expose-child number child key window gc string)
 
 (defun leave-expose-mode ()
   "Leave the expose mode"
@@ -51,13 +51,16 @@
 
 (defun expose-associate-keys ()
   (let* ((all nil)
-         (new nil))
+         (new nil)
+	 (all-numbers (loop for ec in *expose-child-list*
+			 collect (expose-child-number ec))))
     (with-all-children-reversed (*root-frame* child)
       (unless (child-equal-p child *root-frame*)
         (push child all)
         (unless (member child *expose-child-list* :test #'child-equal-p :key #'expose-child-child)
-          (push (make-expose-child :child child :key (number->letter *expose-current-number*)) new)
-          (incf *expose-current-number*))))
+	  (let ((number (find-free-number all-numbers)))
+	    (push (make-expose-child :child child :number number :key (number->letter number)) new)
+	    (push number all-numbers)))))
     (append (remove-if-not (lambda (x) (member x all :test #'child-equal-p)) *expose-child-list*
                            :key #'expose-child-child)
             (nreverse new))))
