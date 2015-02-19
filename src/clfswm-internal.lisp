@@ -1826,7 +1826,3 @@ managed."
     (print-frame-tree (dump-frame-tree store #'xid->window)
                       #'(lambda (x)
                           (format nil "~A" (if (frame-p x) x (child-fullname x)))))))
-
-
-
-

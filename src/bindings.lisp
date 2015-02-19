@@ -76,6 +76,7 @@
   (define-main-key ("Home" :mod-1 :shift) 'switch-and-select-root-frame)
   (define-main-key ("Menu") 'fastswitch-mode)
   (define-main-key ("Menu" :control) 'fastswitch-move-mode)
+  (define-main-key ("Menu" :mod-5) 'expose-current-child-mode)
   (define-main-key ("F10" :mod-1) 'fast-layout-switch)
   (define-main-key ("F10" :shift :control) 'toggle-show-root-frame)
   (define-main-key ("F10") 'expose-windows-mode)
@@ -156,5 +157,3 @@
   (define-main-mouse (5 :mod-1 :control :shift) 'inc-transparency-slow))
 
 (add-hook *binding-hook* 'set-default-main-mouse)
-
-
