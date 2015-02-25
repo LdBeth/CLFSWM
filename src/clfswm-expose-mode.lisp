@@ -218,7 +218,7 @@
                   (xlib:window (find-parent-frame child))
                   (frame child))))
     (when (and child parent)
-      (change-root (find-root parent) parent)
+	  (change-root (find-root parent) parent)
       (setf (current-child) child)
       (focus-all-children child parent t))))
 
@@ -230,7 +230,8 @@
   (expose-mode-display-accel-windows)
   (let ((child (expose-select-child)))
 	(expose-restore-windows present-window)
-    child))
+	child))
+
 
 (defun expose-windows-mode ()
   "Present all windows in currents roots (An expose like)"
@@ -254,7 +255,8 @@
 
 (defun expose-current-child-mode ()
   "Present all windows in currents roots (An expose like)"
-  (awhen (expose-do-main nil)
-    (expose-focus-child it))
+  (with-saved-root-list ()
+	(awhen (expose-do-main nil)
+	  (expose-focus-child it)))
   (show-all-children)
   t)
