@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# (C) 2014 Xavier Maillard <xma@gnu.org>
+# (C) 2015 Xavier Maillard <xma@gnu.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -239,4 +239,3 @@ then
 else
     echo "As requested, we have just dumped the image."
 fi
-

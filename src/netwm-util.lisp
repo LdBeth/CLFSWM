@@ -6,7 +6,7 @@
 ;;;   http://freedesktop.org/wiki/Specifications_2fwm_2dspec
 ;;; --------------------------------------------------------------------------
 ;;;
-;;; (C) 2005-2014 Philippe Brochard <pbrochard@common-lisp.net>
+;;; (C) 2005-2015 Philippe Brochard <pbrochard@common-lisp.net>
 ;;;
 ;;; This program is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -86,8 +86,3 @@ FOCUS-WINDOW is an extra window used for _NET_SUPPORTING_WM_CHECK."
 			"clfswm"
 			:string 8 :transform #'xlib:char->card8)
   (netwm-update-desktop-property))
-
-
-
-
-

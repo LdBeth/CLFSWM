@@ -5,7 +5,7 @@
 ;;; Documentation: Layout functions
 ;;; --------------------------------------------------------------------------
 ;;;
-;;; (C) 2005-2014 Philippe Brochard <pbrochard@common-lisp.net>
+;;; (C) 2005-2015 Philippe Brochard <pbrochard@common-lisp.net>
 ;;;
 ;;; This program is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -920,5 +920,3 @@ Or do actions on corners - Skip windows in main window list"
 			    ("a" add-in-main-window-list)
 			    ("v" remove-in-main-window-list)
 			    ("c" clear-main-window-list)))
-
-

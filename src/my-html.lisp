@@ -5,7 +5,7 @@
 ;;; Documentation: Html generator helper
 ;;; --------------------------------------------------------------------------
 ;;;
-;;; (C) 2005-2014 Philippe Brochard <pbrochard@common-lisp.net>
+;;; (C) 2005-2015 Philippe Brochard <pbrochard@common-lisp.net>
 ;;;
 ;;; This program is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -127,8 +127,3 @@
 			   (li "toto")
 			   (li "klm"))))
 		       10))
-
-
-
-
-

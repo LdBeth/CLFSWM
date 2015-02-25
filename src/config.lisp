@@ -10,7 +10,7 @@
 ;;; (you can do a 'grep CONFIG *.lisp' to see what you can configure)
 ;;; --------------------------------------------------------------------------
 ;;;
-;;; (C) 2005-2014 Philippe Brochard <pbrochard@common-lisp.net>
+;;; (C) 2005-2015 Philippe Brochard <pbrochard@common-lisp.net>
 ;;;
 ;;; This program is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -404,4 +404,3 @@ on the root window in the main mode with the mouse")
   'Notify-Window "Notify Window display delay")
 (defconfig *notify-window-transparency* *default-transparency*
   'Notify-window "Notify window background transparency")
-

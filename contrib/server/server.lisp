@@ -7,7 +7,7 @@
 ;;; same clfswm binary.
 ;;; --------------------------------------------------------------------------
 ;;;
-;;; (C) 2014 Philippe Brochard <pbrochard@common-lisp.net>
+;;; (C) 2015 Philippe Brochard <pbrochard@common-lisp.net>
 ;;;
 ;;; This program is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -274,4 +274,3 @@ You can start the client with the '--client' command line option.~%"
   (member "--client" (get-command-line-words) :test #'string-equal))
 
 (add-hook *main-entrance-hook* 'server-parse-cmdline)
-

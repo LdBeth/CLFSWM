@@ -5,7 +5,7 @@
 ;;; Documentation: Utility functions
 ;;; --------------------------------------------------------------------------
 ;;;
-;;; (C) 2005-2014 Philippe Brochard <pbrochard@common-lisp.net>
+;;; (C) 2005-2015 Philippe Brochard <pbrochard@common-lisp.net>
 ;;;
 ;;; This program is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -1035,4 +1035,3 @@ they should be windows. So use this function to make a window out of them."
   `(defun ,symbol (window)
      (when (xlib:window-p window)
        (string-equal (xlib:wm-name window) ,name))))
-

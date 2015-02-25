@@ -5,7 +5,7 @@
 ;;; Documentation: Main functions
 ;;; --------------------------------------------------------------------------
 ;;;
-;;; (C) 2005-2014 Philippe Brochard <pbrochard@common-lisp.net>
+;;; (C) 2005-2015 Philippe Brochard <pbrochard@common-lisp.net>
 ;;;
 ;;; This program is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -51,5 +51,3 @@
         (nfuncall leave-function))
       (unassoc-keyword-handle-event)
       (assoc-keyword-handle-event last-mode))))
-
-

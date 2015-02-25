@@ -5,7 +5,7 @@
 ;;; Documentation: Auto documentation tools
 ;;; --------------------------------------------------------------------------
 ;;;
-;;; (C) 2005-2014 Philippe Brochard <pbrochard@common-lisp.net>
+;;; (C) 2005-2015 Philippe Brochard <pbrochard@common-lisp.net>
 ;;;
 ;;; This program is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -416,8 +416,3 @@ or<br> CLFSWM> (produce-all-docs)"))))
   (produce-corner-doc-html-in-file "doc/corner.html")
   (produce-conf-var-doc-in-file "doc/variables.txt")
   (produce-conf-var-doc-html-in-file "doc/variables.html"))
-
-
-
-
-
