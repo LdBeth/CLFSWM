@@ -29,101 +29,101 @@
 (defpackage tools
   (:use common-lisp)
   (:export :it
-	   :awhen
-	   :aif
+		   :awhen
+		   :aif
            :defconfig :*config-var-table* :configvar-value :configvar-group :config-default-value
            :config-all-groups
            :config-group->string
-	   :find-in-hash
+		   :find-in-hash
            :search-in-hash
            :view-hash-table
            :copy-hash-table
-	   :nfuncall
-	   :pfuncall
+		   :nfuncall
+		   :pfuncall
            :symbol-search
-	   :create-symbol :create-symbol-in-package
-	   :call-hook
+		   :create-symbol :create-symbol-in-package
+		   :call-hook
            :add-new-hook
-	   :add-hook
-	   :remove-hook
-	   :clear-timers
-	   :add-timer
-	   :at
-	   :with-timer
-	   :process-timers
-	   :erase-timer
-	   :timer-loop
-	   :dbg
-	   :dbgnl
-	   :dbgc
+		   :add-hook
+		   :remove-hook
+		   :clear-timers
+		   :add-timer
+		   :at
+		   :with-timer
+		   :process-timers
+		   :erase-timer
+		   :timer-loop
+		   :dbg
+		   :dbgnl
+		   :dbgc
            :make-rectangle
            :rectangle-x :rectangle-y :rectangle-width :rectangle-height
            :in-rectangle
            :distance
            :collect-all-symbols
-	   :with-all-internal-symbols
-	   :export-all-functions :export-all-variables
-	   :export-all-functions-and-variables
-	   :ensure-function
-	   :empty-string-p
-	   :find-common-string
+		   :with-all-internal-symbols
+		   :export-all-functions :export-all-variables
+		   :export-all-functions-and-variables
+		   :ensure-function
+		   :empty-string-p
+		   :find-common-string
            :command-in-path
-	   :setf/=
-	   :number->char
+		   :setf/=
+		   :number->char
            :number->string
            :number->letter
-	   :simple-type-of
-	   :repeat-chars
-	   :nth-insert
-	   :split-string
+		   :simple-type-of
+		   :repeat-chars
+		   :nth-insert
+		   :split-string
            :substring-equal
            :string-match
-           :extented-alphanumericp
-	   :append-newline-space
-	   :expand-newline
-	   :ensure-list
-	   :ensure-printable
-	   :limit-length
-	   :ensure-n-elems
-	   :begin-with-2-spaces
-	   :string-equal-p
-	   :find-assoc-word
-	   :print-space
-	   :escape-string
-	   :first-position
-	   :find-free-number
-	   :date-string
+           :extended-alphanumericp
+		   :append-newline-space
+		   :expand-newline
+		   :ensure-list
+		   :ensure-printable
+		   :limit-length
+		   :ensure-n-elems
+		   :begin-with-2-spaces
+		   :string-equal-p
+		   :find-assoc-word
+		   :print-space
+		   :escape-string
+		   :first-position
+		   :find-free-number
+		   :date-string
            :write-backtrace
-	   :do-execute
-	   :do-shell :fdo-shell :do-shell-output
-	   :getenv
-	   :uquit
-	   :urun-prog
-	   :ushell
-	   :ush
-	   :ushell-loop
-	   :cldebug
-	   :get-command-line-words
-	   :string-to-list
-	   :near-position
-	   :string-to-list-multichar
-	   :list-to-string
-	   :list-to-string-list
-	   :clean-string
-	   :one-in-list
-	   :exchange-one-in-list
-	   :rotate-list
-	   :anti-rotate-list
+		   :do-execute
+		   :do-shell :fdo-shell :do-shell-output
+		   :getenv
+		   :uquit
+		   :urun-prog
+		   :ushell
+		   :ush
+		   :ushell-loop
+		   :cldebug
+		   :get-command-line-words
+		   :string-to-list
+		   :near-position
+		   :string-to-list-multichar
+		   :list-to-string
+		   :list-to-string-list
+		   :clean-string
+		   :one-in-list
+		   :exchange-one-in-list
+		   :rotate-list
+		   :anti-rotate-list
            :n-rotate-list
-	   :append-formated-list
-	   :shuffle-list
-	   :parse-integer-in-list
-	   :convert-to-number
-	   :next-in-list :prev-in-list
-	   :find-string
-	   :find-all-strings
-	   :subst-strings
-	   :test-find-string
+		   :append-formated-list
+		   :shuffle-list
+		   :parse-integer-in-list
+		   :convert-to-number
+		   :next-in-list :prev-in-list
+		   :find-string
+		   :find-all-strings
+		   :subst-strings
+		   :test-find-string
            :memory-usage
            :cpu-usage
            :battery-usage
@@ -578,16 +578,12 @@ Return the result of the last hook"
                        :key key)))
 
 
-(defun extented-alphanumericp (char)
-  (or (alphanumericp char)
-      (eq char #\-)
-      (eq char #\_)
-      (eq char #\.)
-      (eq char #\+)
-      (eq char #\=)
-      (eq char #\*)
-      (eq char #\:)
-      (eq char #\%)))
+(defun extended-alphanumericp (char)
+  "Is the character an alphanumeric or one of the following characters: -, _,
+., +, =, *, :, %."
+  (some (lambda (c)
+		  (char= c char))
+		'(#\- #\_ #\. #\+ #\= #\* #\: #\%)))
 
 
 (defun append-newline-space (string)
