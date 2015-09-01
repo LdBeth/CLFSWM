@@ -53,9 +53,7 @@ The command to display the virtual keybaord
     Actions on corners in the second mode with the middle mouse button
   *CORNER-SECOND-MODE-LEFT-BUTTON* = ((:TOP-LEFT NIL) (:TOP-RIGHT NIL) (:BOTTOM-RIGHT EXPOSE-WINDOWS-MODE) (:BOTTOM-LEFT NIL))
     Actions on corners in the second mode with the left mouse button
-  *CORNER-MAIN-MODE-RIGHT-BUTTON* = 
-((:TOP-LEFT PRESENT-CLFSWM-TERMINAL) (:TOP-RIGHT ASK-CLOSE/KILL-CURRENT-WINDOW) (:BOTTOM-RIGHT EXPOSE-ALL-WINDOWS-MODE)
- (:BOTTOM-LEFT NIL))
+  *CORNER-MAIN-MODE-RIGHT-BUTTON* = ((:TOP-LEFT PRESENT-CLFSWM-TERMINAL) (:TOP-RIGHT ASK-CLOSE/KILL-CURRENT-WINDOW) (:BOTTOM-RIGHT EXPOSE-ALL-WINDOWS-MODE) (:BOTTOM-LEFT NIL))
     Actions on corners in the main mode with the right mouse button
   *CORNER-MAIN-MODE-MIDDLE-BUTTON* = ((:TOP-LEFT HELP-ON-CLFSWM) (:TOP-RIGHT ASK-CLOSE/KILL-CURRENT-WINDOW) (:BOTTOM-RIGHT NIL) (:BOTTOM-LEFT NIL))
     Actions on corners in the main mode with the middle mouse button
@@ -89,6 +87,34 @@ The command to display the virtual keybaord
     Expose string window background color
   *EXPOSE-FONT-STRING* = "fixed"
     Expose string window font string
+
+
+<= Fastswitch Mode Group =>
+
+  *FASTSWITCH-DISPLAY-MODE* = TREE
+    Fastswitch display mode (one of LINE or TREE)
+  *FASTSWITCH-ADJUST-WINDOW-P* = T
+    Fastswitch adjust window to show all children names
+  *FASTSWITCH-SHOW-FRAME-P* = T
+    Fastswitch show frame in mini window
+  *FASTSWITCH-TRANSPARENCY* = 0.9
+    Fastswitch string window background transparency
+  *FASTSWITCH-BORDER* = "grey20"
+    Fastswitch string window border color
+  *FASTSWITCH-FOREGROUND-CHILDNAME* = "grey70"
+    Fastswitch string window foreground color for childname
+  *FASTSWITCH-FOREGROUND-LETTER-SECOND-FRAME* = "yellow"
+    Fastswitch string window foreground color for letters for frames
+  *FASTSWITCH-FOREGROUND-LETTER-SECOND* = "magenta"
+    Fastswitch string window foreground color for letters
+  *FASTSWITCH-FOREGROUND-LETTER* = "red"
+    Fastswitch string window foreground color for letters
+  *FASTSWITCH-FOREGROUND* = "grey50"
+    Fastswitch string window foreground color
+  *FASTSWITCH-BACKGROUND* = "grey10"
+    Fastswitch string window background color
+  *FASTSWITCH-FONT-STRING* = "fixed"
+    Fastswitch string window font string
 
 
 <= Frame Colors Group =>
@@ -132,9 +158,8 @@ loading configuration file and before opening the display.
   *LOOP-HOOK* = NIL
     Hook executed on each event loop
   *BINDING-HOOK* = 
-(INIT-*QUERY-KEYS* SET-DEFAULT-QUERY-KEYS SET-DEFAULT-CIRCULATE-KEYS INIT-*INFO-KEYS* INIT-*INFO-MOUSE*
- SET-DEFAULT-INFO-KEYS SET-DEFAULT-INFO-MOUSE INIT-*MAIN-KEYS* INIT-*MAIN-MOUSE* SET-DEFAULT-MAIN-KEYS
- SET-DEFAULT-MAIN-MOUSE INIT-*SECOND-KEYS* INIT-*SECOND-MOUSE* SET-DEFAULT-SECOND-KEYS SET-DEFAULT-SECOND-MOUSE)
+(INIT-*QUERY-KEYS* SET-DEFAULT-QUERY-KEYS SET-DEFAULT-CIRCULATE-KEYS INIT-*INFO-KEYS* INIT-*INFO-MOUSE* SET-DEFAULT-INFO-KEYS SET-DEFAULT-INFO-MOUSE INIT-*MAIN-KEYS* INIT-*MAIN-MOUSE*
+ SET-DEFAULT-MAIN-KEYS SET-DEFAULT-MAIN-MOUSE INIT-*SECOND-KEYS* INIT-*SECOND-MOUSE* SET-DEFAULT-SECOND-KEYS SET-DEFAULT-SECOND-MOUSE)
     Hook executed when keys/buttons are bounds
 
 
@@ -204,9 +229,7 @@ loading configuration file and before opening the display.
     Comment color in menu
   *MENU-COLOR-SUBMENU* = "Cyan"
     Submenu color in menu
-  *XDG-SECTION-LIST* = 
-(TEXTEDITOR FILEMANAGER WEBBROWSER AUDIOVIDEO AUDIO VIDEO DEVELOPMENT EDUCATION GAME GRAPHICS NETWORK OFFICE SETTINGS
- SYSTEM UTILITY TERMINALEMULATOR SCREENSAVER)
+  *XDG-SECTION-LIST* = (TEXTEDITOR FILEMANAGER WEBBROWSER AUDIOVIDEO AUDIO VIDEO DEVELOPMENT EDUCATION GAME GRAPHICS NETWORK OFFICE SETTINGS SYSTEM UTILITY TERMINALEMULATOR SCREENSAVER)
     Standard menu sections
 
 
@@ -224,9 +247,9 @@ loading configuration file and before opening the display.
     Snap size (in % of parent size) when move or resize frame is constrained
   *HIDE-UNMANAGED-WINDOW* = T
     Hide or not unmanaged windows when a child is deselected.
-  *NEVER-MANAGED-WINDOW-LIST* = 
-((IS-NOTIFY-WINDOW-P RAISE-WINDOW) (EQUAL-WM-CLASS-ROX-PINBOARD NIL) (EQUAL-WM-CLASS-XVKBD RAISE-WINDOW)
- (EQUAL-CLFSWM-TERMINAL RAISE-AND-FOCUS-WINDOW))
+  *STEAL-FOCUS* = T
+    Allow to steal the focus on configure request
+  *NEVER-MANAGED-WINDOW-LIST* = ((EQUAL-WM-CLASS-ROX-PINBOARD NIL) (EQUAL-WM-CLASS-XVKBD RAISE-WINDOW) (EQUAL-CLFSWM-TERMINAL RAISE-AND-FOCUS-WINDOW))
     
 CLFSWM will never manage windows of this type.
 A list of (list match-function handle-function)
@@ -234,13 +257,17 @@ A list of (list match-function handle-function)
     
 Default modifiers list to append to explicit modifiers
 Example: :mod-2 for num_lock, :lock for Caps_lock...
+  *SHOW-HIDE-POLICY-TYPE* = (:NORMAL)
+    Windows types which are optimized by the show hide policy
   *SHOW-HIDE-POLICY* = #<SYSTEM-FUNCTION <=>
     
 'NIL': always display all children (better with transparency support).
 '<': Hide only children less than children above.
 '<=': Hide children less or equal to children above (better for performance on slow machine).
   *DEFAULT-FOCUS-POLICY* = :CLICK
-    Default mouse focus policy. One of :click, :sloppy, :sloppy-strict or :sloppy-select.
+    
+Default mouse focus policy. One of :click, :sloppy, :sloppy-strict, :sloppy-select or
+:sloppy-select-window.
   *DEFAULT-MANAGED-TYPE* = (:NORMAL)
     Default managed window types
   *DEFAULT-FRAME-DATA* = ((:TILE-SIZE 0.8) (:TILE-SPACE-SIZE 0.1) (:FAST-LAYOUT (TILE-LEFT-LAYOUT TILE-LAYOUT)) (:MAIN-LAYOUT-WINDOWS NIL))
@@ -288,6 +315,8 @@ It is particulary useful with CLISP/MIT-CLX.
     Ask close/kill window placement
   *NOTIFY-WINDOW-PLACEMENT* = BOTTOM-RIGHT-ROOT-PLACEMENT
     Notify window placement
+  *FASTSWITCH-MODE-PLACEMENT* = TOP-LEFT-ROOT-PLACEMENT
+    Fastswitch mode window placement
   *EXPOSE-QUERY-PLACEMENT* = BOTTOM-LEFT-ROOT-PLACEMENT
     Expose mode query window placement
   *EXPOSE-MODE-PLACEMENT* = TOP-LEFT-CHILD-PLACEMENT

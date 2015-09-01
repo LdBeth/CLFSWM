@@ -35,6 +35,11 @@
         </a>
       </li>
       <li>
+        <a href='#fastswitch-mode'>
+          Fastswitch Mode Group
+        </a>
+      </li>
+      <li>
         <a href='#frame-colors'>
           Frame Colors Group
         </a>
@@ -306,14 +311,8 @@
       &nbsp;&nbsp;  *corner-main-mode-right-button*
     </font>
     <font color='#0000ff'>
-       =  <br>
+       = ((:TOP-LEFT PRESENT-CLFSWM-TERMINAL) (:TOP-RIGHT ASK-CLOSE/KILL-CURRENT-WINDOW) (:BOTTOM-RIGHT EXPOSE-ALL-WINDOWS-MODE) (:BOTTOM-LEFT NIL)) <br>
     </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp; ((:TOP-LEFT PRESENT-CLFSWM-TERMINAL) (:TOP-RIGHT ASK-CLOSE/KILL-CURRENT-WINDOW) (:BOTTOM-RIGHT EXPOSE-ALL-WINDOWS-MODE) <br>
-
-    
-&nbsp; &nbsp; &nbsp; &nbsp;  (:BOTTOM-LEFT NIL)) <br>
-
     
 &nbsp; &nbsp; &nbsp; &nbsp;     Actions on corners in the main mode with the right mouse button <br>
 
@@ -447,6 +446,119 @@
     </font>
     
 &nbsp; &nbsp; &nbsp; &nbsp;     Expose string window font string <br>
+
+    <p>
+      <a name='fastswitch-mode' href='#top'>
+        &lt;= Fastswitch Mode Group =&gt; 
+      </a>
+    </p>
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *fastswitch-display-mode*
+    </font>
+    <font color='#0000ff'>
+       = TREE <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Fastswitch display mode (one of LINE or TREE) <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *fastswitch-adjust-window-p*
+    </font>
+    <font color='#0000ff'>
+       = T <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Fastswitch adjust window to show all children names <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *fastswitch-show-frame-p*
+    </font>
+    <font color='#0000ff'>
+       = T <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Fastswitch show frame in mini window <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *fastswitch-transparency*
+    </font>
+    <font color='#0000ff'>
+       = 0.9 <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Fastswitch string window background transparency <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *fastswitch-border*
+    </font>
+    <font color='#0000ff'>
+       = "grey20" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Fastswitch string window border color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *fastswitch-foreground-childname*
+    </font>
+    <font color='#0000ff'>
+       = "grey70" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Fastswitch string window foreground color for childname <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *fastswitch-foreground-letter-second-frame*
+    </font>
+    <font color='#0000ff'>
+       = "yellow" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Fastswitch string window foreground color for letters for frames <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *fastswitch-foreground-letter-second*
+    </font>
+    <font color='#0000ff'>
+       = "magenta" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Fastswitch string window foreground color for letters <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *fastswitch-foreground-letter*
+    </font>
+    <font color='#0000ff'>
+       = "red" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Fastswitch string window foreground color for letters <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *fastswitch-foreground*
+    </font>
+    <font color='#0000ff'>
+       = "grey50" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Fastswitch string window foreground color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *fastswitch-background*
+    </font>
+    <font color='#0000ff'>
+       = "grey10" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Fastswitch string window background color <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *fastswitch-font-string*
+    </font>
+    <font color='#0000ff'>
+       = "fixed" <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Fastswitch string window font string <br>
 
     <p>
       <a name='frame-colors' href='#top'>
@@ -602,13 +714,10 @@
        =  <br>
     </font>
     
-&nbsp; &nbsp; &nbsp; &nbsp; (INIT-*QUERY-KEYS* SET-DEFAULT-QUERY-KEYS SET-DEFAULT-CIRCULATE-KEYS INIT-*INFO-KEYS* INIT-*INFO-MOUSE* <br>
+&nbsp; &nbsp; &nbsp; &nbsp; (INIT-*QUERY-KEYS* SET-DEFAULT-QUERY-KEYS SET-DEFAULT-CIRCULATE-KEYS INIT-*INFO-KEYS* INIT-*INFO-MOUSE* SET-DEFAULT-INFO-KEYS SET-DEFAULT-INFO-MOUSE INIT-*MAIN-KEYS* INIT-*MAIN-MOUSE* <br>
 
     
-&nbsp; &nbsp; &nbsp; &nbsp;  SET-DEFAULT-INFO-KEYS SET-DEFAULT-INFO-MOUSE INIT-*MAIN-KEYS* INIT-*MAIN-MOUSE* SET-DEFAULT-MAIN-KEYS <br>
-
-    
-&nbsp; &nbsp; &nbsp; &nbsp;  SET-DEFAULT-MAIN-MOUSE INIT-*SECOND-KEYS* INIT-*SECOND-MOUSE* SET-DEFAULT-SECOND-KEYS SET-DEFAULT-SECOND-MOUSE) <br>
+&nbsp; &nbsp; &nbsp; &nbsp;  SET-DEFAULT-MAIN-KEYS SET-DEFAULT-MAIN-MOUSE INIT-*SECOND-KEYS* INIT-*SECOND-MOUSE* SET-DEFAULT-SECOND-KEYS SET-DEFAULT-SECOND-MOUSE) <br>
 
     
 &nbsp; &nbsp; &nbsp; &nbsp;     Hook executed when keys/buttons are bounds <br>
@@ -871,14 +980,8 @@
       &nbsp;&nbsp;  *xdg-section-list*
     </font>
     <font color='#0000ff'>
-       =  <br>
+       = (TEXTEDITOR FILEMANAGER WEBBROWSER AUDIOVIDEO AUDIO VIDEO DEVELOPMENT EDUCATION GAME GRAPHICS NETWORK OFFICE SETTINGS SYSTEM UTILITY TERMINALEMULATOR SCREENSAVER) <br>
     </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp; (TEXTEDITOR FILEMANAGER WEBBROWSER AUDIOVIDEO AUDIO VIDEO DEVELOPMENT EDUCATION GAME GRAPHICS NETWORK OFFICE SETTINGS <br>
-
-    
-&nbsp; &nbsp; &nbsp; &nbsp;  SYSTEM UTILITY TERMINALEMULATOR SCREENSAVER) <br>
-
     
 &nbsp; &nbsp; &nbsp; &nbsp;     Standard menu sections <br>
 
@@ -942,17 +1045,20 @@
 &nbsp; &nbsp; &nbsp; &nbsp;     Hide or not unmanaged windows when a child is deselected. <br>
 
     <font color='#ff0000'>
+      &nbsp;&nbsp;  *steal-focus*
+    </font>
+    <font color='#0000ff'>
+       = T <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Allow to steal the focus on configure request <br>
+
+    <font color='#ff0000'>
       &nbsp;&nbsp;  *never-managed-window-list*
     </font>
     <font color='#0000ff'>
-       =  <br>
+       = ((EQUAL-WM-CLASS-ROX-PINBOARD NIL) (EQUAL-WM-CLASS-XVKBD RAISE-WINDOW) (EQUAL-CLFSWM-TERMINAL RAISE-AND-FOCUS-WINDOW)) <br>
     </font>
-    
-&nbsp; &nbsp; &nbsp; &nbsp; ((IS-NOTIFY-WINDOW-P RAISE-WINDOW) (EQUAL-WM-CLASS-ROX-PINBOARD NIL) (EQUAL-WM-CLASS-XVKBD RAISE-WINDOW) <br>
-
-    
-&nbsp; &nbsp; &nbsp; &nbsp;  (EQUAL-CLFSWM-TERMINAL RAISE-AND-FOCUS-WINDOW)) <br>
-
     
 &nbsp; &nbsp; &nbsp; &nbsp;      <br>
 
@@ -976,6 +1082,15 @@
 
     
 &nbsp; &nbsp; &nbsp; &nbsp; Example: :mod-2 for num_lock, :lock for Caps_lock... <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *show-hide-policy-type*
+    </font>
+    <font color='#0000ff'>
+       = (:NORMAL) <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Windows types which are optimized by the show hide policy <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *show-hide-policy*
@@ -1004,7 +1119,13 @@
        = :CLICK <br>
     </font>
     
-&nbsp; &nbsp; &nbsp; &nbsp;     Default mouse focus policy. One of :click, :sloppy, :sloppy-strict or :sloppy-select. <br>
+&nbsp; &nbsp; &nbsp; &nbsp;      <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; Default mouse focus policy. One of :click, :sloppy, :sloppy-strict, :sloppy-select or <br>
+
+    
+&nbsp; &nbsp; &nbsp; &nbsp; :sloppy-select-window. <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *default-managed-type*
@@ -1186,6 +1307,15 @@
     </font>
     
 &nbsp; &nbsp; &nbsp; &nbsp;     Notify window placement <br>
+
+    <font color='#ff0000'>
+      &nbsp;&nbsp;  *fastswitch-mode-placement*
+    </font>
+    <font color='#0000ff'>
+       = TOP-LEFT-ROOT-PLACEMENT <br>
+    </font>
+    
+&nbsp; &nbsp; &nbsp; &nbsp;     Fastswitch mode window placement <br>
 
     <font color='#ff0000'>
       &nbsp;&nbsp;  *expose-query-placement*
