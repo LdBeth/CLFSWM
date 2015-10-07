@@ -170,10 +170,6 @@ Write (defparameter *contrib-dir* \"/usr/local/lib/clfswm/\") in ~A.~%"
   "Rotate root geometry to previous root"
   (rotate-root-geometry-generic #'anti-rotate-root-geometry t))
 
-(defun rotate-root-geometry-select-next-root ()
-  "Rotate root geometry and select the next root"
-  (rotate-root-geometry-next)
-  (select-next-root))
 
 
 (defun exchange-root-geometry-with-mouse ()

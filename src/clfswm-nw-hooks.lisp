@@ -174,6 +174,7 @@
       (change-root (find-root parent) parent)
       (setf (current-child) parent)
       (set-layout-once #'tile-space-layout)
+      (setf (current-child) new-frame)
       (default-window-placement new-frame window)
       (show-all-children t)
       t)))

@@ -1424,17 +1424,6 @@ For window: set current child to window or its parent according to window-parent
       (show-all-children))))
 
 
-(defun select-next-level-and-enter-frame ()
-  "Select the next level and enter in the selected frame"
-  (select-next-level)
-  (enter-frame))
-
-(defun leave-frame-and-select-previous-level ()
-  "Leave the selected frame and select the previous level"
-  (leave-frame)
-  (select-previous-level))
-
-
 ;;; Other actions (select-next-child, select-next-brother...) are in
 ;;; clfswm-circulate-mode.lisp
 
