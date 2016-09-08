@@ -111,6 +111,7 @@
 (add-sub-menu 'frame-menu "w" 'frame-managed-window-menu "Managed window type menu")
 (add-sub-menu 'frame-menu "u" 'frame-unmanaged-window-menu "Unmanaged window behaviour")
 (add-sub-menu 'frame-menu "s" 'frame-miscellaneous-menu "Frame miscallenous menu")
+(add-menu-key 'frame-menu "b" 'bury-frame)
 (add-menu-key 'frame-menu "x" 'frame-toggle-maximize)
 
 

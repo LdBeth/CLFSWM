@@ -481,6 +481,23 @@ Write (defparameter *contrib-dir* \"/usr/local/lib/clfswm/\") in ~A.~%"
 
 
 
+;;; Bury function
+(defun bury-frame ()
+  "Bury the current frame: put the current frame at the end of the parent frame children list"
+  (let ((current-child (current-child)))
+	(when (frame-p current-child)
+	  (let ((parent (find-parent-frame current-child))
+			(is-root-p (child-root-p current-child)))
+		(when is-root-p
+		  (leave-frame))
+		(setf (frame-child parent) (append (child-remove current-child (frame-child parent)) (list current-child))
+			  (current-child) (first (frame-child parent)))
+		(if is-root-p
+			(enter-frame)
+			(show-all-children t))
+		(leave-second-mode)))))
+
+
 
 ;;; Maximize function
 (defun frame-toggle-maximize ()
