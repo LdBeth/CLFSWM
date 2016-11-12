@@ -482,20 +482,28 @@ Write (defparameter *contrib-dir* \"/usr/local/lib/clfswm/\") in ~A.~%"
 
 
 ;;; Bury function
-(defun bury-frame ()
-  "Bury the current frame: put the current frame at the end of the parent frame children list"
+(defun bury-first-child ()
+  "Bury the first child: put the first child at the end of the current frame children list"
   (let ((current-child (current-child)))
 	(when (frame-p current-child)
-	  (let ((parent (find-parent-frame current-child))
-			(is-root-p (child-root-p current-child)))
-		(when is-root-p
-		  (leave-frame))
-		(setf (frame-child parent) (append (child-remove current-child (frame-child parent)) (list current-child))
-			  (current-child) (first (frame-child parent)))
-		(if is-root-p
-			(enter-frame)
-			(show-all-children t))
-		(leave-second-mode)))))
+	  (let ((first-child (first (frame-child current-child))))
+		(setf (frame-child current-child) (append (child-remove first-child (frame-child current-child)) (list first-child))))
+	  (show-all-children t)
+	  (leave-second-mode))))
+
+(defun bury-current-child ()
+  "Bury the current child: put the current child at the end of the parent frame children list"
+  (let* ((current-child (current-child))
+		 (parent (find-parent-frame current-child))
+		 (is-root-p (child-root-p current-child)))
+	(when is-root-p
+	  (leave-frame))
+	(setf (frame-child parent) (append (child-remove current-child (frame-child parent)) (list current-child))
+		  (current-child) (first (frame-child parent)))
+	(if is-root-p
+		(enter-frame)
+		(show-all-children t))
+	(leave-second-mode)))
 
 
 

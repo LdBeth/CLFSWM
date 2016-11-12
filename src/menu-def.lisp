@@ -81,8 +81,10 @@
 
 
 (add-menu-key 'child-menu "r" 'rename-current-child)
+(add-menu-key 'child-menu "b" 'bury-current-child)
+(add-menu-key 'child-menu "f" 'bury-first-child)
 (add-menu-key 'child-menu "t" 'set-current-child-transparency)
-(add-menu-key 'child-menu "b" 'set-current-child-border-size)
+(add-menu-key 'child-menu "o" 'set-current-child-border-size)
 (add-menu-key 'child-menu "e" 'ensure-unique-name)
 (add-menu-key 'child-menu "n" 'ensure-unique-number)
 (add-menu-key 'child-menu "Delete" 'delete-current-child)
@@ -90,7 +92,7 @@
 (add-menu-key 'child-menu "R" 'retrieve-existing-window)
 (add-menu-key 'child-menu "h" 'hide-current-child)
 (add-menu-key 'child-menu "u" 'unhide-a-child)
-(add-menu-key 'child-menu "f" 'unhide-a-child-from-all-frames)
+(add-menu-key 'child-menu "F" 'unhide-a-child-from-all-frames)
 (add-menu-key 'child-menu "a" 'unhide-all-children)
 (add-menu-key 'child-menu "Page_Up" 'frame-lower-child)
 (add-menu-key 'child-menu "Page_Down" 'frame-raise-child)
@@ -111,7 +113,6 @@
 (add-sub-menu 'frame-menu "w" 'frame-managed-window-menu "Managed window type menu")
 (add-sub-menu 'frame-menu "u" 'frame-unmanaged-window-menu "Unmanaged window behaviour")
 (add-sub-menu 'frame-menu "s" 'frame-miscellaneous-menu "Frame miscallenous menu")
-(add-menu-key 'frame-menu "b" 'bury-frame)
 (add-menu-key 'frame-menu "x" 'frame-toggle-maximize)
 
 
