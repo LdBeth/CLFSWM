@@ -4,11 +4,17 @@
 # exclude patterns (uncomment them if you want to use them):
 *.fas
 *.fasl
+*.lx64fsl
 *.lib
 *.orig
 *.patch
 *.diff
 *~
+
+# Ignore CLX
+clx/
+
+asdf.lisp
 
 # Personal scripts:
 1disp-load.lisp
