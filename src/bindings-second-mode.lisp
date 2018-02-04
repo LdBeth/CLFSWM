@@ -88,7 +88,7 @@
 
 
 (defun set-default-second-keys ()
-  (define-second-key ("F1" :prefix) 'help-on-clfswm)
+  (define-second-key ("F1" :alt) 'help-on-clfswm)
   (define-second-key ("m") 'open-menu)
   (define-second-key ("less") 'open-menu)
   (define-second-key ("less" :control) 'open-menu)
@@ -183,7 +183,7 @@
   (define-shell ("e" :control) b-start-emacsremote
     "start an emacs for another user"
     "exec xterm -e emacsremote")
-  (define-second-key ("F10" :prefix) 'fast-layout-switch)
+  (define-second-key ("F10" :alt) 'fast-layout-switch)
   (define-second-key ("F10" :shift :control) 'toggle-show-root-frame)
   (define-second-key ("F10") 'expose-windows-mode)
   (define-second-key ("F10" :control) 'expose-all-windows-mode)

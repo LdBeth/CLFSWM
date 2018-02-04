@@ -416,14 +416,14 @@ Function can be a function or a list (function color) for colored output"
 ;;;,-----
 ;;;| CONFIG - Info mode functions
 ;;;`-----
-(defun key-binding-colorize-line (list)
+(defun key-binding-colorize-line (list); FIXME: Use a parameter instead of hard code
   (loop :for line :in list
      :collect (cond ((search "* CLFSWM Keys *" line) (list line *info-color-title*))
 		    ((search "---" line) (list line *info-color-underline*))
 		    ((begin-with-2-spaces line)
 		     (list (list (subseq line 0 22) *info-color-second*)
-			   (list (subseq line 22 35) *info-color-first*)
-			   (subseq line 35)))
+			   (list (subseq line 22 44) *info-color-first*)
+			   (subseq line 44)))
 		    (t line))))
 
 
