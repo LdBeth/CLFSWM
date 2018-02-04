@@ -161,12 +161,12 @@
   (define-circulate-key ("g" :control) 'leave-circulate-mode)
   (define-circulate-key ("Escape" :alt) 'leave-circulate-mode)
   (define-circulate-key ("g" :control :alt) 'leave-circulate-mode)
-  (define-circulate-key ("Tab" :mod-4) 'circulate-select-next-child)
-  (define-circulate-key ("Tab" :mod-4 :control) 'circulate-select-next-subchild)
-  (define-circulate-key ("Tab" :mod-4 :shift) 'circulate-select-previous-child)
-  (define-circulate-key ("Iso_Left_Tab" :mod-4 :shift) 'circulate-select-previous-child)
-  (define-circulate-key ("Right" :mod-4) 'circulate-select-next-brother)
-  (define-circulate-key ("Left" :mod-4) 'circulate-select-previous-brother)
+  (define-circulate-key ("Tab" :prefix) 'circulate-select-next-child)
+  (define-circulate-key ("Tab" :prefix :control) 'circulate-select-next-subchild)
+  (define-circulate-key ("Tab" :prefix :shift) 'circulate-select-previous-child)
+  (define-circulate-key ("Iso_Left_Tab" :prefix :shift) 'circulate-select-previous-child)
+  (define-circulate-key ("Right" :prefix) 'circulate-select-next-brother)
+  (define-circulate-key ("Left" :prefix) 'circulate-select-previous-brother)
   (define-circulate-release-key ("Alt_L" :alt) 'leave-circulate-mode)
   (define-circulate-release-key ("Alt_L") 'leave-circulate-mode))
 
@@ -295,6 +295,14 @@
 	  *circulate-parent* nil)
     (circulate-mode :subchild-direction +1)))
 
+(defun select-previous-subchild ()
+  "Select the previous subchild"
+  (when (and (frame-p (current-child))
+	     (frame-p (frame-selected-child (current-child))))
+    (setf *circulate-orig* (frame-child (current-child))
+	  *circulate-parent* nil)
+    (circulate-mode :subchild-direction -1)))
+
 
 (defun select-next-child-simple ()
   "Select the next child (do not enter in circulate mode)"
@@ -312,21 +320,24 @@
 
 
 (defun reorder-brother-simple (reorder-fun)
-  (let ((is-root-p (child-root-p (current-child))))
-    (when is-root-p
-      (leave-frame)
-      (sleep *spatial-move-delay-before*))
+  (let ((is-root (child-root-p (current-child))))
     (no-focus)
     (select-current-frame nil)
+    (when is-root
+      (let ((root (find-root (current-child))))
+	(unless (or (child-equal-p (root-child root) *root-frame*)
+		    (child-original-root-p (root-child root)))
+	  (awhen (and root (find-parent-frame (root-child root)))
+	    (when (frame-p it)
+	      (change-root root it))))))
     (let ((parent-frame (find-parent-frame (current-child))))
       (when (frame-p parent-frame)
-        (with-slots (child) parent-frame
-          (setf child (funcall reorder-fun child)
-                (current-child) (frame-selected-child parent-frame))))
-      (show-all-children t)
-      (when is-root-p
-        (sleep *spatial-move-delay-after*)
-        (enter-frame)))))
+	(with-slots (child) parent-frame
+	  (setf child (funcall reorder-fun child)
+		(current-child) (frame-selected-child parent-frame)))))
+    (when is-root
+      (change-root (find-root (current-child)) (current-child)))
+    (show-all-children (not is-root))))
 
 
 (defun select-next-brother-simple ()

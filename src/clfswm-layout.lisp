@@ -873,11 +873,11 @@ Or do actions on corners - Skip windows in main window list"
     (when (frame-p (current-child))
       ;; Note: There is no need to ungrab/grab keys because this
       ;; is done when leaving the second mode.
-      (define-main-key ("F8" :mod-4) 'add-in-main-window-list)
-      (define-main-key ("F9" :mod-4) 'remove-in-main-window-list)
-      (define-main-key ("F10" :mod-4) 'clear-main-window-list)
-      (define-main-key ("Tab" :mod-4) 'select-next-child-no-main-window)
-      (define-main-key ("Tab" :mod-4 :shift) 'select-previous-child-no-main-window)
+      (define-main-key ("F8" :alt) 'add-in-main-window-list)
+      (define-main-key ("F9" :alt) 'remove-in-main-window-list)
+      (define-main-key ("F10" :alt) 'clear-main-window-list)
+      (define-main-key ("Tab" :prefix) 'select-next-child-no-main-window)
+      (define-main-key ("Tab" :prefix :shift) 'select-previous-child-no-main-window)
       (define-main-mouse (1) 'mouse-click-to-focus-and-move-no-main-window)
       (setf (frame-data-slot (current-child) :focus-policy-save)
             (frame-focus-policy (current-child)))
@@ -892,11 +892,11 @@ Or do actions on corners - Skip windows in main window list"
 
 (defun set-previous-layout ()
   "Restore the previous layout"
-  (undefine-main-key ("F8" :mod-4))
-  (undefine-main-key ("F9" :mod-4))
-  (undefine-main-key ("F10" :mod-4))
-  (define-main-key ("Tab" :mod-4) 'select-next-child)
-  (define-main-key ("Tab" :mod-4 :shift) 'select-previous-child)
+  (undefine-main-key ("F8" :alt))
+  (undefine-main-key ("F9" :alt))
+  (undefine-main-key ("F10" :alt))
+  (define-main-key ("Tab" :prefix) 'select-next-child)
+  (define-main-key ("Tab" :prefix :shift) 'select-previous-child)
   (define-main-mouse (1) 'mouse-click-to-focus-and-move)
   (setf (frame-focus-policy (current-child))
 	(frame-data-slot (current-child) :focus-policy-save))

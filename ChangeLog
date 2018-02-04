@@ -1,3 +1,7 @@
+2018-2-2  Jair Wang <andpuke@foxmail.com>
+	* src/: Use keyword `:prefix' to replace most hardcoded :mod-1
+	keybindings.
+
 2012-11-16  Philippe Brochard  <pbrochard@common-lisp.net>
 
 	* ChangeLog are now reported in git history.

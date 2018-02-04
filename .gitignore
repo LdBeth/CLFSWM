@@ -15,6 +15,7 @@
 clx/
 
 asdf.lisp
+clfswm
 
 # Personal scripts:
 1disp-load.lisp
