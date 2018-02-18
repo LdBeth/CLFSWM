@@ -55,5 +55,8 @@ MAYBE
       http://en.wikipedia.org/wiki/Compositing_window_manager
       http://ktown.kde.org/~fredrik/composite_howto.html
 
+- A screen lock with the ability to display custom texts and images.
+
+- A dmenu like auto-completion menu for query window.
 
 
