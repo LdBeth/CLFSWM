@@ -75,6 +75,7 @@
   (define-main-key ("Home" :prefix) 'switch-to-root-frame)
   (define-main-key ("Home" :prefix :shift) 'switch-and-select-root-frame)
   (define-main-key ("Menu") 'fastswitch-mode)
+  (define-main-key ("F4") 'fastswitch-mode)
   (define-main-key ("Menu" :control) 'fastswitch-move-mode)
   (define-main-key ("Menu" :mod-5) 'expose-current-child-mode)
   (define-main-key ("F10" :alt) 'fast-layout-switch)

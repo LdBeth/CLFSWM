@@ -237,7 +237,7 @@ on the root window in the main mode with the mouse")
 
 
 ;;; CONFIG - Identify key colors
-(defconfig *identify-font-string* "genera-tr10"
+(defconfig *identify-font-string* "genera-hl10"
   'Identify-key "Identify window font string")
 (defconfig *identify-background* "black"
   'Identify-key "Identify window background color")
@@ -339,7 +339,7 @@ on the root window in the main mode with the mouse")
 
 
 ;;; CONFIG - Fastswitch string colors
-(defconfig *fastswitch-font-string* *default-font-string*
+(defconfig *fastswitch-font-string* "genera-13fgb"
   'Fastswitch-mode "Fastswitch string window font string")
 (defconfig *fastswitch-background* "grey10"
   'Fastswitch-mode "Fastswitch string window background color")
@@ -392,7 +392,7 @@ on the root window in the main mode with the mouse")
 
 
 ;;; CONFIG - Notify window string colors
-(defconfig *notify-window-font-string* *default-font-string*
+(defconfig *notify-window-font-string* "genera-sail12"
   'Notify-Window "Notify window font string")
 (defconfig *notify-window-background* "black"
   'Notify-Window "Notify Window background color")

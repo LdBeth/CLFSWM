@@ -159,6 +159,7 @@
   (define-second-key ("Home" :prefix) 'switch-to-root-frame)
   (define-second-key ("Home" :prefix :shift) 'switch-and-select-root-frame)
   (define-second-key ("Menu") 'toggle-show-root-frame)
+  (define-second-key ("F4") 'toggle-show-root-frame)
   (define-second-key ("b" :prefix) 'banish-pointer)
   (define-second-key ("o") 'set-open-in-new-frame-in-parent-frame-nw-hook)
   (define-second-key ("o" :control) 'set-open-in-new-frame-in-root-frame-nw-hook)
