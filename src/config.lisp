@@ -224,7 +224,7 @@ on the root window in the main mode with the mouse")
   'Second-mode "Second mode window background color")
 (defconfig *sm-foreground-color* "Red"
   'Second-mode "Second mode window foreground color")
-(defconfig *sm-font-string* *default-font-string*
+(defconfig *sm-font-string* "genera-cptfontbi"
   'Second-mode "Second mode window font string")
 (defconfig *sm-width* 300
   'Second-mode "Second mode window width")
@@ -237,7 +237,7 @@ on the root window in the main mode with the mouse")
 
 
 ;;; CONFIG - Identify key colors
-(defconfig *identify-font-string* *default-font-string*
+(defconfig *identify-font-string* "genera-tr10"
   'Identify-key "Identify window font string")
 (defconfig *identify-background* "black"
   'Identify-key "Identify window background color")
@@ -284,7 +284,7 @@ on the root window in the main mode with the mouse")
   'Info-mode "Info window line cursor color color")
 (defconfig *info-selected-background* "blue"
   'Info-mode "Info selected item background color")
-(defconfig *info-font-string* *default-font-string*
+(defconfig *info-font-string* "genera-cptfontcc"
   'Info-mode "Info window font string")
 (defconfig *info-transparency* *default-transparency*
   'Info-mode "Info window background transparency")
@@ -293,7 +293,7 @@ on the root window in the main mode with the mouse")
   'Info-mode "If true, click on info window select item. Otherwise, click to drag the menu")
 
 ;;; CONFIG - Circulate string colors
-(defconfig *circulate-font-string* *default-font-string*
+(defconfig *circulate-font-string* "genera-cptfonti"
   'Circulate-mode "Circulate string window font string")
 (defconfig *circulate-background* "black"
   'Circulate-mode "Circulate string window background color")

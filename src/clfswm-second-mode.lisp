@@ -33,7 +33,7 @@
 (defun draw-second-mode-window ()
   (raise-window *sm-window*)
   (clear-pixmap-buffer *sm-window* *sm-gc*)
-  (let* ((text (format nil "Second mode"))
+  (let* ((text (format nil "SECOND MODE"))
 	 (len (length text)))
     (xlib:draw-glyphs *pixmap-buffer* *sm-gc*
 		      (truncate (/ (- *sm-width* (* (xlib:max-char-width *sm-font*) len)) 2))
