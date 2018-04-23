@@ -1,0 +1,3 @@
+[submodule "genera-fonts"]
+	path = genera-fonts
+	url = https://github.com/jethrovt/genera-fonts.git

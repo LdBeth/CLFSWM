@@ -71,6 +71,20 @@ or> (require :asdf)                     ; asdf for sbcl
   > (clfswm:main)                       ; start the main loop
 
 
+* Fonts
+
+CLFSWM by default uses fonts in genera-fonts/, guides on how to
+install these fonts for X Window are described in FONTS.
+
+If you are having problem installing fonts, feel free to contact
+the maintainer.
+
+To override the default font, add following line to your config:
+(setf *default-font-string* "fixed")
+
+A list of valid values for font strings can be get by running:
+$ xlsfonts
+
 * Tweaking
 
 To change the default keybinding, have a look at the bindings*.lisp
@@ -105,7 +119,7 @@ may find a speed up with the compress notify event. See the variable
 
 Philippe Brochard <pbrochard [at] common-lisp [dot] net>.
 
-Références
+RÃ©fÃ©rences
 
       http://common-lisp.net/project/clfswm/
       http://trac.common-lisp.net/clfswm/

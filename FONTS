@@ -1,0 +1,16 @@
+====================
+    Genera Fonts
+====================
+CLFSWM uses `bfd` format Symbolics Genera fonts in the git submodule
+`genera-fonts`. The default font is `genera-cptfontc`.
+
+Installation
+============
+To install fonts, first create a directory `/usr/share/fonts/genera`,
+and copying all files under `genera-fonts/bfd` to it, then make
+X Window recognize these fonts by adding these two lines to `.xintrc`.
+
+    xset fp+ ~/x11/fonts/genera/
+    xset fp rehash
+
+

@@ -98,7 +98,7 @@ It is particulary useful with CLISP/MIT-CLX.")
 
 (defparameter *default-font* nil)
 ;;(defparameter *default-font-string* "9x15")
-(defconfig *default-font-string* "fixed" nil
+(defconfig *default-font-string* "genera-cptfontc" nil
            "The default font used in clfswm")
 
 (defconfig *color-move-window* "DeepPink" 'Main-mode
