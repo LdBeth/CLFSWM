@@ -272,21 +272,23 @@ loading configuration file and before opening the display.")
 (defparameter *in-process-existing-windows* nil)
 
 ;; For debug - redefine defun
-;;(shadow :defun)
+#+(or)
+(progn
+  (shadow :defun)
 
-;;(defmacro defun (name args &body body)
-;;  `(progn
-;;    (format t "defun: ~A ~A~%" ',name ',args)
-;;    (force-output)
-;;    (cl:defun ,name ,args
-;;      (handler-case
-;;	  (progn
-;;	    ,@body)
-;;	(error (c)
-;;	  (format t "New defun: Error in ~A : ~A~%" ',name c)
-;;	  (format t "Root tree=~A~%All windows=~A~%"
-;;		  (xlib:query-tree *root*) (get-all-windows))
-;;	  (force-output))))))
+  (defmacro defun (name args &body body)
+    `(progn
+       (format t "defun: ~A ~A~%" ',name ',args)
+       (force-output)
+       (cl:defun ,name ,args
+	 (handler-case
+	     (progn
+	       ,@body)
+	   (error (c)
+	     (format t "New defun: Error in ~A : ~A~%" ',name c)
+	     (format t "Root tree=~A~%All windows=~A~%"
+		     (xlib:query-tree *root*) (get-all-windows))
+	     (force-output)))))))
 
 
 
