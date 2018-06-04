@@ -60,6 +60,7 @@
            :rectangle-x :rectangle-y :rectangle-width :rectangle-height
            :in-rectangle
            :distance
+           :concat
            :collect-all-symbols
 		   :with-all-internal-symbols
 		   :export-all-functions :export-all-variables
