@@ -415,13 +415,17 @@ Return the result of the last hook"
 
 
 ;;; Symbols tools
+(defun concat (&rest strings)
+  "Concatenate strings"
+  (apply #'concatenate 'string strings))
+
 (defun collect-all-symbols (&optional package)
   (format t "Collecting all symbols for Lisp REPL completion...")
   (let (all-symbols)
     (do-symbols (symbol (or package *package*))
       (pushnew (string-downcase (symbol-name symbol)) all-symbols :test #'string=))
     (do-symbols (symbol :keyword)
-      (pushnew (concatenate 'string ":" (string-downcase (symbol-name symbol)))
+      (pushnew (concat ":" (string-downcase (symbol-name symbol)))
                all-symbols :test #'string=))
     (format t " Done.~%")
     all-symbols))

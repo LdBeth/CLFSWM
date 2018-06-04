@@ -86,6 +86,9 @@
 						(do-shell cmd))))
 	 (leave-second-mode))))
 
+(defvar *xterm-cmd* "xterm")
+(defvar *emacs-cmd* "emacs")
+
 
 (defun set-default-second-keys ()
   (define-second-key ("F1" :alt) 'help-on-clfswm)
@@ -179,11 +182,13 @@
   (define-second-key ("v" :control :shift) 'paste-selection-no-clear)
   (define-second-key ("Delete" :control) 'remove-current-child)
   (define-second-key ("Delete") 'delete-current-child)
-  (define-shell ("t") b-start-xterm "start an xterm" "cd $HOME && exec alacritty")
-  (define-shell ("e") b-start-emacs "start emacs" "cd $HOME && exec emacs")
-  (define-shell ("e" :control) b-start-emacsremote
-    "start an emacs for another user"
-    "exec xterm -e emacsremote")
+  (define-shell ("t") b-start-xterm 
+    "start an xterm" (concat "cd $HOME && exec " *xterm-cmd*))
+  (define-shell ("e") b-start-emacs
+    "start emacs" (concat "cd $HOME && exec " *emacs-cmd*))
+  ;;(define-shell ("e" :control) b-start-emacsremote
+  ;;  "start an emacs for another user"
+  ;;  "exec xterm -e emacsremote")
   (define-second-key ("F10" :alt) 'fast-layout-switch)
   (define-second-key ("F10" :shift :control) 'toggle-show-root-frame)
   (define-second-key ("F10") 'expose-windows-mode)
