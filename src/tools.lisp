@@ -695,7 +695,7 @@ of the program to return.
   #-CLISP (declare (ignore io))
   (let ((fullstring program))
     (dolist (a args)
-      (setf fullstring (concatenate 'string fullstring " " a)))
+      (setf fullstring (concat fullstring " " a)))
     #+:cmu (let ((proc (ext:run-program program args :input :stream :output :stream :wait wt)))
              (unless proc
                (error "Cannot create process."))
@@ -1001,10 +1001,10 @@ Useful for re-using the &REST arg after removing some options."
     (dolist (i lst)
       (cond ((funcall test-not-fun i) nil)
 	    (t (setq str
-		     (concatenate 'string str
-				  (if first "" ", ")
-				  (format nil "~A"
-					  (funcall print-fun i))))
+		     (concat str
+			     (if first "" ", ")
+		 	     (format nil "~A"
+				     (funcall print-fun i))))
 	       (setq first nil))))
     (if (string= base-str str)
 	(concatenate 'string str default-str) str)))
