@@ -27,7 +27,7 @@
 (in-package :common-lisp-user)
 
 (defpackage tools
-  (:use common-lisp)
+  (:use #:common-lisp)
   (:export :it
 		   :awhen
 		   :aif
