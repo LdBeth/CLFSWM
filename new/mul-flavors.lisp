@@ -547,6 +547,7 @@
     (setq new-body (adjust-body instance-vars body))
     `(let ((*instance-var-alist*
             (flavor-instance-vars ,flavor-instance)));not a gensym because of compiler bug in gclisp
+       (declare (ignorable *instance-var-alist*))
        (progn ,@new-body))))
 ;;; --> END WITH-INSTANCE-VARIABLES
 
@@ -601,11 +602,6 @@
           (t body))))
 ;;; --> END ADJUST-BODY
 
-(defun parse-body (body &aux decl)
-  (when (and (listp (car body)) (eq 'declare (caar body)))
-    (setq decl (pop body)))
-  (values body decl))
-
 ;;; --> DEFMETHOD
 ;;; This macro creates a method associated with a particular flavor. The syntax
 ;;; is a subset of the ZetaLisp syntax. Notice the different calls to variants
@@ -646,7 +642,7 @@
                                  `(lambda
                                       ;; (eval `(defun ,func-name ; to avoid compilation, instead
                                       ,(cons 'cl::self parameters) ;self is first...
-                                    ,@(when decl (cons decl nil))
+                                    ,@(or decl) ; form declation
                                     ,(macroexpand `(with-instance-variables
                                                      ,a-flavor-name
                                                      cl::self
@@ -1359,7 +1355,7 @@
                           (string method-name))))
            (the-func `(defun ,func-name
                           ,(cons 'cl::self parameters)
-                        ,@(when decl (cons decl nil))
+                        ,@(or decl)
                         ,(macroexpand `(with-instance-variables
                                          ,(car object-key-method)
                                          cl::self
