@@ -7,6 +7,8 @@ URGENT PROBLEMS
 ===============
 Should handle these soon.
 
+- Rewrite with proper OOP system
+
 - Make CLFSWM running with ECL
 
 - Implement a save/restore root-frame system. And use it on error reset or for undo/redo.
