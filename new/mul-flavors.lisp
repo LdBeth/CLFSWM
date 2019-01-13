@@ -21,31 +21,8 @@
 ;;; should not be a problem in most garden variety uses, and should make
 ;;; code portability to CLOS easier.
 ;;; ===
-#+cltl1
-(provide 'mul-flavors)
-(defpackage mul-flavors
-  (:use #:cl #+ccl #:ccl)
-  (:shadow #:defmethod #:make-instance)
-  (:export #:defflavor #:defmethod #:flavor #:flavor-instance #:send
-  #:make-instance #:instantiate-flavor #:cf-mulf #:*out-file*
-  #:*all-flavor-names* #:lexpr-send #:handles-p #:get-handler-for #:instancep
-  #:instance-typep #:describe-flavor #:set-in-instance #:symeval-in-instance
-  #:defwhopper #:continue-whopper #:lexpr-continue-whopper
-           ;;; --- Extra Functions #:keyword-instance-environment
-           #:instance-environment #:instance-keywords #:flavor-variables
-           #:my-flavor-variables #:flavor-default-environment))
 
-(in-package #:mul-flavors)
-
-#+cltl1
-(export '(defflavor defmethod flavor flavor-instance send
-           make-instance instantiate-flavor cf-mulf 
-           *out-file* *all-flavor-names* lexpr-send handles-p get-handler-for 
-           instancep instance-typep describe-flavor set-in-instance 
-           symeval-in-instance defwhopper continue-whopper lexpr-continue-whopper
-           ;;; --- Extra Functions
-           keyword-instance-environment instance-environment instance-keywords
-           flavor-variables my-flavor-variables flavor-default-environment))
+(in-package #:flavors)
 
 ;;; The next two globals are used by CF-MULF, the file compiler function
 ;;; for MUL-Flavors
@@ -1198,7 +1175,7 @@
   ; (flavor-default-environment 'ship)
   ; ((:A . 3) (:B . 2))
   (flavor-vars (get a-flavor 'flavor-pattern)))
-#| 
+
   
 ;;; =======================  COMPILED FILES SUPPORT  ========================
 ;;; This section contains the code required to produce FASL files of
@@ -1450,9 +1427,6 @@
       (adjust-dependent-methods a-flavor-name method-name new-method))
     (flavor-methods pattern)))
 ;;; --> END ATTACH-METHODS
-|#
-;;; I guess someone forgot to add vanilla...
-(defflavor vanilla () () :no-vanilla-flavor)
 
 (format t "mul-flavors done~%")
 
