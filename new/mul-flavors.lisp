@@ -943,6 +943,7 @@
 	(return (apply (cddr a-meth) target args))))))
 ;;; --- SETF METHOD FOR SEND
 (define-setf-expander send (target method-name &rest arguments)
+  (declare (ignore arguments))
   (let* ((temp-target (gensym))
          (old-method (gensym))
          (temp-method (gensym))
