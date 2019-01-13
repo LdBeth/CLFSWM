@@ -942,7 +942,7 @@
 	(declare (special *remaining-whoppers*))
 	(return (apply (cddr a-meth) target args))))))
 ;;; --- SETF METHOD FOR SEND
-(define-setf-method send (target method-name &rest arguments)
+(define-setf-expander send (target method-name &rest arguments)
   (let* ((temp-target (gensym))
          (old-method (gensym))
          (temp-method (gensym))
