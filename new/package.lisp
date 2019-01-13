@@ -12,5 +12,5 @@
            ;; --- Extra Functions #:keyword-instance-environment
            #:instance-environment #:instance-keywords #:flavor-variables
            #:my-flavor-variables #:flavor-default-environment
-           #:vanilla
+           #:vanilla #:self
            ))

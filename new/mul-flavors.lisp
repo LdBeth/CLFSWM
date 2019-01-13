@@ -276,7 +276,7 @@
 ;;; SIDE-EFFECTS: it creates the :init method for the given flavor
 (defun create-init-method (a-flavor-name)
   (eval `(defmethod (,a-flavor-name :init) (init-plist)
-           (let ((fl-patt (get (flavor-instance-class-name cl::self)
+           (let ((fl-patt (get (flavor-instance-class-name self)
                                 'flavor-pattern)))
              (do ((def-init-plist (flavor-default-init-plist fl-patt)
                     (cddr def-init-plist)))
@@ -284,8 +284,8 @@
                (if (not (assoc (car def-init-plist) init-plist)) ;not there yet
                  (push (cons (car def-init-plist) (eval (cadr def-init-plist)))
                        init-plist)))
-             (setf (flavor-instance-vars cl::self)
-                   (nconc init-plist (flavor-instance-vars cl::self)))))))
+             (setf (flavor-instance-vars self)
+                   (nconc init-plist (flavor-instance-vars self)))))))
 ;;; --> END CREATE-INIT-METHOD
 
 ;;; --> CREATE-ACCESSOR-METHOD
@@ -641,11 +641,11 @@
                         (compile func-name
                                  `(lambda
                                       ;; (eval `(defun ,func-name ; to avoid compilation, instead
-                                      ,(cons 'cl::self parameters) ;self is first...
+                                      ,(cons 'self parameters) ;self is first...
                                     ,@(or decl) ; form declation
                                     ,(macroexpand `(with-instance-variables
                                                      ,a-flavor-name
-                                                     cl::self
+                                                     self
                                                      ,@body))))))))
       (if curr-method        ;there already - REPLACE
         (setf (gethash method-name (flavor-methods pattern))
@@ -1354,11 +1354,11 @@
                           (string key) "-"
                           (string method-name))))
            (the-func `(defun ,func-name
-                          ,(cons 'cl::self parameters)
+                          ,(cons 'self parameters)
                         ,@(or decl)
                         ,(macroexpand `(with-instance-variables
                                          ,(car object-key-method)
-                                         cl::self
+                                         self
                                          ,@body))))
            (the-meth-list
             (intern
