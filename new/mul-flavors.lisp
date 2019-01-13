@@ -912,19 +912,19 @@
 ;;; ---
 (defun send (target method-name &rest arguments)
   (assert (typep target 'flavor-instance) ()
-	  "The object ~s is not a flavor instance" target)	      
+          "The object ~s is not a flavor instance" target)
   (let* ((*method-name-methods* ;get method of given name on the methods of class
-         (gethash method-name 
-                     (flavor-methods (get (flavor-instance-class-name target) 
-                                          'flavor-pattern))))
-	 (*remaining-whoppers* *method-name-methods*))
+           (gethash method-name 
+                    (flavor-methods (get (flavor-instance-class-name target) 
+                                         'flavor-pattern))))
+         (*remaining-whoppers* *method-name-methods*))
     (declare (special *remaining-whoppers* *method-name-methods*))
     (cond ((null *method-name-methods*)
            (error 
-              "The object ~s  received a ~s message which went unclaimed.~%The rest of the message was ~s~%"
-              target method-name arguments))
+            "The object ~s  received a ~s message which went unclaimed.~%The rest of the message was ~s~%"
+            target method-name arguments))
           (t
-	   (send-internal target arguments)))))
+           (send-internal target arguments)))))
 ;;; --- SEND-INTERNAL
 ;;; Send-internal is called from within send, and by continue-whopper and
 ;;; lexpr-continue-whopper.  It does most of the work of the original send
@@ -998,9 +998,11 @@
 ;;; make continue-whopper and lexpr-continue-whopper give errors when used
 ;;; outside of defwhopper
 (defmacro continue-whopper (&rest ignore)
+  (declare (ignore ignore))
   (error "Continue-whopper can only be used inside a whopper"))
 
 (defmacro lexpr-continue-whopper (&rest ignore)
+  (declare (ignore ignore))
   (error "Lexpr-continue-whopper can only be used inside a whopper"))
 ;;; --- END CONTINUE-WHOPPER & LEXPR-CONTINUE-WHOPPER ERROR CHECKING
 
@@ -1196,7 +1198,7 @@
   ; (flavor-default-environment 'ship)
   ; ((:A . 3) (:B . 2))
   (flavor-vars (get a-flavor 'flavor-pattern)))
- 
+#| 
   
 ;;; =======================  COMPILED FILES SUPPORT  ========================
 ;;; This section contains the code required to produce FASL files of
@@ -1448,7 +1450,7 @@
       (adjust-dependent-methods a-flavor-name method-name new-method))
     (flavor-methods pattern)))
 ;;; --> END ATTACH-METHODS
-
+|#
 ;;; I guess someone forgot to add vanilla...
 (defflavor vanilla () () :no-vanilla-flavor)
 
