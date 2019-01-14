@@ -58,9 +58,7 @@
   "function interface to :print-self method"
   (if (handles-p object :print-self)
     (send object :print-self stream depth)
-    (format stream "#<~a ~d>"
-            (flavor-instance-class-name object)
-            (flavor-instance-unique-number object))))
+    (print-flavor-instance object stream)))
 ;;; --> END FLAVOR-PRINTER
 
 ;;; --> INSTANCE DEFINITION
@@ -73,7 +71,6 @@
 ;;; ---
 (defstruct (flavor-instance :named (:print-function flavor-printer))
   class-name			           ; class name
-  (unique-number (get-internal-real-time)) ; for identification when printing
   vars				; ((var . value) ... ) instance variables
   )
 ;;; --> END INSTANCE DEFINITION

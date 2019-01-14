@@ -14,7 +14,5 @@
 
 (defmethod (vanilla :print-self) (&optional (stream t) (depth 1))
   (declare (ignore depth))
-  (format stream "#<~a ~d>"
-          (flavor-instance-class-name self)
-          (flavor-instance-unique-number self)))
+  (print-flavor-instance self stream))
 
