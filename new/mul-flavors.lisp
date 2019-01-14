@@ -545,7 +545,7 @@
     `(let ((*instance-var-alist*
             (flavor-instance-vars ,flavor-instance)));not a gensym because of compiler bug in gclisp
        (declare (ignorable *instance-var-alist*))
-       (progn ,@new-body))))
+       ,new-body)))
 ;;; --> END WITH-INSTANCE-VARIABLES
 
 ;;; --> ADJUST-BODY
@@ -577,6 +577,7 @@
 
 ;;; mjp 12/89 handles lambda's that have no arguments
 
+#|
 (defun adjust-body (instance-vars body)
   (let ((key nil))
     (cond ((and (atom body) (member body instance-vars))
@@ -597,6 +598,18 @@
                  (t (cons (adjust-body instance-vars (car body))
                           (adjust-body instance-vars (cdr body))))))
           (t body))))
+|#
+
+;; LdBeth: Use SYMBOL-MACROLET to do this.
+
+(defun adjust-body (instance-vars body)
+  `(symbol-macrolet
+        ,(mapcar (lambda (var)
+                   `(,var (cdr (assoc ,(intern (string var) 'keyword)
+                                 *instance-var-alist*))))
+                 instance-vars)
+      ,@body))
+
 ;;; --> END ADJUST-BODY
 
 ;;; --> DEFMETHOD
