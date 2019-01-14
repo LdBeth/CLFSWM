@@ -537,80 +537,20 @@
 ;;;                   function names that are the same as instance variables
 ;;; mjp 11-88
 ;;; ---
-(defmacro with-instance-variables (a-flavor-name flavor-instance &body body)
-  (let ((new-body nil)
-        (instance-vars (flavor-known-lexical-ivs (get a-flavor-name
-                                                      'flavor-pattern))))
-    (setq new-body (adjust-body instance-vars body))
-    `(let ((*instance-var-alist*
-            (flavor-instance-vars ,flavor-instance)));not a gensym because of compiler bug in gclisp
-       (declare (ignorable *instance-var-alist*))
-       ,new-body)))
+(let ((instance-var-alist (gensym "*INSTANCE-VAR-ALIST*")))
+  (defmacro with-instance-variables (a-flavor-name flavor-instance &body body)
+    (let ((instance-vars (flavor-known-lexical-ivs (get a-flavor-name
+                                                        'flavor-pattern))))
+      `(let ((,instance-var-alist
+               (flavor-instance-vars ,flavor-instance)))
+         (declare (ignorable ,instance-var-alist))
+         (symbol-macrolet
+             ,(mapcar (lambda (var)
+                        `(,var (cdr (assoc ,(intern (string var) 'keyword)
+                                           ,instance-var-alist))))
+               instance-vars)
+           ,@body)))))
 ;;; --> END WITH-INSTANCE-VARIABLES
-
-;;; --> ADJUST-BODY
-;;; This function "adjusts" the body of a method so that assigments to Instance
-;;; Variables are handled in a usable manner: if it is a var replace it by its
-;;; value expression; if it is involved in a SETQ, replace by the appropriate
-;;; SETF; otherwise leave alone. This does not allow the appearance of local
-;;; variables and function names that clash with the Instance Variables. Will
-;;; have to be fixed in the future
-;;; ---
-;;; INPUT: a list of instance variables and a body-form
-;;; OUTPUT: return the modified body.
-;;; SIDE-EFFECTS: none
-;;; USER-DEFINED-CALLED: adjust-body
-;;; ---
-#|(defun adjust-body (instance-vars body)
-  (let ((key nil))
-    (cond ((and (atom body) (member body instance-vars))
-           (setq key (intern (string body) 'keyword))
-           `(cdr (assoc ,key *instance-var-alist*)))
-          ((consp body)
-           (cond ((eq (car body) 'setq)
-                  (cons 'setf (adjust-body instance-vars (cdr body))))
-                 ((eq (car body) 'quote)
-                  body)
-                 (t (cons (adjust-body instance-vars (car body))
-                          (adjust-body instance-vars (cdr body))))))
-          (t body))))|#
-
-;;; mjp 12/89 handles lambda's that have no arguments
-
-#|
-(defun adjust-body (instance-vars body)
-  (let ((key nil))
-    (cond ((and (atom body) (member body instance-vars))
-           (setq key (intern (string body) 'keyword))
-           `(cdr (assoc ,key *instance-var-alist*)))
-          ((consp body)
-           (cond ((eq (car body) 'setq)
-                  (cons 'setf (adjust-body instance-vars (cdr body))))
-                 ((and (eq (car body) 'quote)
-                       (consp (cadr body))
-                       (eq (caadr body) 'lambda)
-                       (null (second (cadr body))))
-                       (list 'quote (list 'lambda nil
-                        (adjust-body instance-vars (third (cadr body)))))
-                       )
-                 ((eq (car body) 'quote)
-                  body)
-                 (t (cons (adjust-body instance-vars (car body))
-                          (adjust-body instance-vars (cdr body))))))
-          (t body))))
-|#
-
-;; LdBeth: Use SYMBOL-MACROLET to do this.
-
-(defun adjust-body (instance-vars body)
-  `(symbol-macrolet
-        ,(mapcar (lambda (var)
-                   `(,var (cdr (assoc ,(intern (string var) 'keyword)
-                                 *instance-var-alist*))))
-                 instance-vars)
-      ,@body))
-
-;;; --> END ADJUST-BODY
 
 ;;; --> DEFMETHOD
 ;;; This macro creates a method associated with a particular flavor. The syntax
