@@ -5,5 +5,6 @@
   :serial t
   :components ((:file "package")
                (:file "helpers")
+               (:file "object-definition")
                (:file "mul-flavors")
                (:file "vanilla")))

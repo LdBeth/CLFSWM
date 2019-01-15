@@ -30,50 +30,6 @@
 (defvar *all-meth-lists* nil)
 (defvar *all-flavor-names* nil)
 
-;;; --> PATTERN DEFINITION.
-;;; This is the definition of the class pattern. It attempts to provide most
-;;; of the fields normally associated with a flavor. Not everything is
-;;; supported. The methods are held in a hash table, and no COMBINED-METHODS
-;;; function is provided: the body of SEND will collect and execute.
-;;; ---
-(defstruct flavor
-  name
-  vars
-  known-lexical-ivs
-  initable-instance-variables
-  init-keywords
-  default-init-plist
-  required-init-keywords
-  depends-on
-  depended-on-by
-  precedence
-  methods)
-;;; --> END PATTERN DEFINITION
-
-;;; --> FLAVOR-PRINTER
-;;; This function providies the default printing capability associated
-;;; with the flavor structure
-;;; ---
-(defun flavor-printer (object &optional (stream t) (depth 1))
-  "function interface to :print-self method"
-  (if (handles-p object :print-self)
-    (send object :print-self stream depth)
-    (print-flavor-instance object stream)))
-;;; --> END FLAVOR-PRINTER
-
-;;; --> INSTANCE DEFINITION
-;;; This is the definition of the defstruct that holds a flavor object instance.
-;;; It contains fields for the class name, methods and instance variables.
-;;; Note that it knows how to print itself without having a method to do it.
-;;; The Vanilla Flavor HAS a :print-self method to which every flavor will
-;;; then respond. The print function for the defstruct will simply print to
-;;; the screen as output from a function or as part of an error message.
-;;; ---
-(defstruct (flavor-instance :named (:print-function flavor-printer))
-  class-name			           ; class name
-  vars				; ((var . value) ... ) instance variables
-  )
-;;; --> END INSTANCE DEFINITION
 
 ;;; --> DEFFLAVOR
 ;;; This is the flavor definition macro. The syntax is a subset of the Zetalisp
