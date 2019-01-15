@@ -40,11 +40,12 @@
 ;;; then respond. The print function for the defstruct will simply print to
 ;;; the screen as output from a function or as part of an error message.
 ;;; ---
-#|
 (defstruct (flavor-instance :named (:print-function flavor-printer))
   class-name			           ; class name
   vars				; ((var . value) ... ) instance variables
-)|#
+)
+#|
+(progn
 (cl:defclass flavor-instance ()
   ((class-name :initarg :class-name :initform nil
                :accessor flavor-instance-class-name)
@@ -66,5 +67,5 @@
   (typep object 'flavor-instance))
 
 (defun make-flavor-instance (&rest args)
-  (apply #'cl:make-instance 'flavor-instance args))
+  (apply #'cl:make-instance 'flavor-instance args)))|#
 ;;; --> END INSTANCE DEFINITION

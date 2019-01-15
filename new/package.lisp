@@ -2,7 +2,7 @@
 
 (defpackage mul-flavors
   (:nicknames #:flavors)
-  (:use #:common-lisp #+ccl #:ccl)
+  (:use #:common-lisp)
   (:shadow #:defmethod #:make-instance)
   (:export #:defflavor #:defmethod #:flavor #:flavor-instance #:send
            #:make-instance #:instantiate-flavor #:cf-mulf #:*out-file*
