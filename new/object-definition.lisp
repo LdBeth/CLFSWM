@@ -7,7 +7,7 @@
 ;;; supported. The methods are held in a hash table, and no COMBINED-METHODS
 ;;; function is provided: the body of SEND will collect and execute.
 ;;; ---
-(defstruct flavor
+(defstruct (flavor (:print-function print-flavor))
   name
   vars
   known-lexical-ivs

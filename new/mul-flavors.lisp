@@ -125,26 +125,26 @@
         (i-s-vs nil))
     (if (and (null depends-on)        ;top of a hierarchy
              (not (member :no-vanilla-flavor keyword-props)))
-      (setq depends-on (list 'vanilla)))
+        (setq depends-on (list 'vanilla)))
     (update-parents a-flavor-name depends-on)
     (setq key-class-vars           ;make everything uniform with "right" names
           (mapcar #'(lambda (x)
                       (if (consp x)
-                        (cons (intern (symbol-name (car x)) 'keyword)
-                              (cadr x))
-                        (cons (intern (symbol-name x) 'keyword) nil)))
-		  (append (option-find :required-instance-variables
-				       keyword-props)
-			 class-vars))) ;done with vars at bottom level
+                          (cons (intern (symbol-name (car x)) 'keyword)
+                                (cadr x))
+                          (cons (intern (symbol-name x) 'keyword) nil)))
+                  (append (option-find :required-instance-variables
+                                       keyword-props)
+                          class-vars))) ;done with vars at bottom level
     (setq all-key-class-vars
           (merge-class-super-vars key-class-vars (get-class-vars depends-on)))
-    ;add vars from upper levels - lower names prevail
+;add vars from upper levels - lower names prevail
     (setq i-s-vs
           (if (or (member :initable-instance-variables keyword-props)
                   (member :settable-instance-variables keyword-props))
-            (mapcar #'car key-class-vars) ;(:A :B :C) ;no only mine???
-            (option-find :initable-instance-variables keyword-props)));(A B) bug?
-    (setf (get a-flavor-name 'flavor-pattern)
+              (mapcar #'car key-class-vars) ;(:A :B :C) ;no only mine???
+              (option-find :initable-instance-variables keyword-props)));(A B) bug?
+    (setf (find-flavor a-flavor-name)
           (make-flavor
            :name a-flavor-name
            :vars all-key-class-vars
@@ -162,15 +162,15 @@
                             (apply #'append
                                    (mapcar #'flavor-init-keywords
                                            (mapcar #'(lambda (x)
-                                                       (get x 'flavor-pattern))
+                                                       (find-flavor x))
                                                    depends-on)))))
            :default-init-plist (option-find :default-init-plist keyword-props)
            :required-init-keywords
            (option-find :required-init-keywords keyword-props)
            :methods nil))
     (if (not (member a-flavor-name *all-flavor-names*))
-      (push a-flavor-name *all-flavor-names*))
-    (get a-flavor-name 'flavor-pattern)))
+        (push a-flavor-name *all-flavor-names*))
+    (find-flavor a-flavor-name)))
 ;;; --> END MAKE-FLAVOR-PATTERN
 
 ;;; --> MAKE-ACCESS-METHODS
@@ -229,14 +229,13 @@
 ;;; SIDE-EFFECTS: it creates the :init method for the given flavor
 (defun create-init-method (a-flavor-name)
   (eval `(defmethod (,a-flavor-name :init) (init-plist)
-           (let ((fl-patt (get (flavor-instance-class-name self)
-                                'flavor-pattern)))
+           (let ((fl-patt (find-flavor (flavor-instance-class-name self))))
              (do ((def-init-plist (flavor-default-init-plist fl-patt)
-                    (cddr def-init-plist)))
+                      (cddr def-init-plist)))
                  ((null def-init-plist))
                (if (not (assoc (car def-init-plist) init-plist)) ;not there yet
-                 (push (cons (car def-init-plist) (eval (cadr def-init-plist)))
-                       init-plist)))
+                   (push (cons (car def-init-plist) (eval (cadr def-init-plist)))
+                         init-plist)))
              (setf (flavor-instance-vars self)
                    (nconc init-plist (flavor-instance-vars self)))))))
 ;;; --> END CREATE-INIT-METHOD
@@ -285,12 +284,12 @@
 ;;; USER-DEFINED-CALLED: flavor-depends-on, fetch-flavors.
 ;;; ---
 (defun fetch-flavors (a-flavor-name)
-  (let ((flavors (flavor-depends-on (get a-flavor-name 'flavor-pattern))))
+  (let ((flavors (flavor-depends-on (find-flavor a-flavor-name))))
     (if (null flavors)
-      (list a-flavor-name) ;end of the line
-      (cons a-flavor-name
-            (remove-duplicates
-             (apply #'append (mapcar #'fetch-flavors flavors)))))))
+        (list a-flavor-name) ;end of the line
+        (cons a-flavor-name
+              (remove-duplicates
+               (apply #'append (mapcar #'fetch-flavors flavors)))))))
 ;;; --> END FETCH-FLAVORS
 
 ;;; --> CREATE-PREDICATE
@@ -325,7 +324,7 @@
 ;;; ---
 (defun update-parents (a-flavor-name the-parents)
   (dolist (item the-parents)
-    (push a-flavor-name (flavor-depended-on-by (get item 'flavor-pattern)))))
+    (push a-flavor-name (flavor-depended-on-by (find-flavor item)))))
 ;;; --> END UPDATE-PARENTS
 
 ;;; --> SET-PRECEDENCE
@@ -346,13 +345,13 @@
 ;;; ---
 (defun set-precedence (a-flavor-name depends-on)
   (if (null depends-on)
-    (list a-flavor-name)
-    (let ((new-precedence nil))
-      (dolist (item (reverse depends-on))
-        (setq new-precedence
-              (append (flavor-precedence (get item 'flavor-pattern))
-                      new-precedence)))
-      (remove-duplicates (cons a-flavor-name new-precedence)))))
+      (list a-flavor-name)
+      (let ((new-precedence nil))
+        (dolist (item (reverse depends-on))
+          (setq new-precedence
+                (append (flavor-precedence (find-flavor item))
+                        new-precedence)))
+        (remove-duplicates (cons a-flavor-name new-precedence)))))
 ;;; --> END SET-PRECEDENCE
 
 ;;; --> OPTION-FIND
@@ -393,8 +392,8 @@
   (cond ((null depends-on) nil)
         ((flavor-p depends-on)
          (copy-alist (flavor-vars depends-on)))           ;make copy!!!
-        (t (nconc (get-class-vars (get (car depends-on)   ;surgery.
-                                       'flavor-pattern))
+        (t (nconc (get-class-vars (find-flavor            ;surgery.
+                                   (car depends-on)))
                   (get-class-vars (cdr depends-on))))))
 ;;; --> END GET-CLASS-VARS
 
@@ -430,9 +429,9 @@
 ;;; ---
 (defun get-class-methods (depends-on)
   (if depends-on
-    (mapcar #'flavor-methods
-            (mapcar #'(lambda (x) (get x 'flavor-pattern))
-                    depends-on))))
+      (mapcar #'flavor-methods
+              (mapcar #'(lambda (x) (find-flavor x))
+                      depends-on))))
 ;;; --> END GET-CLASS-METHODS
 
 ;;; --> MERGE-CLASS-SUPER-METHODS
@@ -495,8 +494,8 @@
 ;;; ---
 (let ((instance-var-alist (gensym "*INSTANCE-VAR-ALIST*")))
   (defmacro with-instance-variables (a-flavor-name flavor-instance &body body)
-    (let ((instance-vars (flavor-known-lexical-ivs (get a-flavor-name
-                                                        'flavor-pattern))))
+    (let ((instance-vars (flavor-known-lexical-ivs
+                          (find-flavor a-flavor-name))))
       `(let ((,instance-var-alist
                (flavor-instance-vars ,flavor-instance)))
          (declare (ignorable ,instance-var-alist))
@@ -528,7 +527,7 @@
 ;;; ---
 (defun defmethod2 (object-key-method parameters body decl)     ;;body is now a list
   (let* ((a-flavor-name (car object-key-method))
-         (pattern (get a-flavor-name 'flavor-pattern))
+         (pattern (find-flavor a-flavor-name))
          key method-name)
     (cond ((= (length object-key-method) 3)
            (setq key (cadr object-key-method))
@@ -536,33 +535,33 @@
           (t (setq key :primary)
              (setq method-name (cadr object-key-method))))
     (let* ((func-name           ;the method is made into a NAMED function
-            (intern
-             (concatenate 'string (string (car object-key-method)) "-"
-                          (string key) "-"
-                          (string method-name))))
+             (intern
+              (concatenate 'string (string (car object-key-method)) "-"
+                           (string key) "-"
+                           (string method-name))))
            (curr-method (gethash method-name (flavor-methods pattern)))
            (new-method
-            (cons key
-                  (cons (car object-key-method)
-                        (compile func-name
-                                 `(lambda
-                                      ;; (eval `(defun ,func-name ; to avoid compilation, instead
-                                      ,(cons 'self parameters) ;self is first...
-                                    ,@(or decl) ; form declation
-                                    ,(macroexpand `(with-instance-variables
-                                                     ,a-flavor-name
-                                                     self
-                                                     ,@body))))))))
+             (cons key
+                   (cons (car object-key-method)
+                         (compile func-name
+                                  `(lambda
+                                       ;; (eval `(defun ,func-name ; to avoid compilation, instead
+                                       ,(cons 'self parameters) ;self is first...
+                                     ,@(or decl) ; form declation
+                                     ,(macroexpand `(with-instance-variables
+                                                        ,a-flavor-name
+                                                        self
+                                                      ,@body))))))))
       (if curr-method        ;there already - REPLACE
-        (setf (gethash method-name (flavor-methods pattern))
-              (adjust-methods new-method curr-method
-                              (flavor-precedence pattern)))
-        (cond ((flavor-methods pattern)
-               (setf (gethash method-name (flavor-methods pattern))
-                     (list  new-method)))
-              (t (setf (flavor-methods pattern) (make-hash-table :size 30))
+          (setf (gethash method-name (flavor-methods pattern))
+                (adjust-methods new-method curr-method
+                                (flavor-precedence pattern)))
+          (cond ((flavor-methods pattern)
                  (setf (gethash method-name (flavor-methods pattern))
-                     (list  new-method)))))
+                       (list  new-method)))
+                (t (setf (flavor-methods pattern) (make-hash-table :size 30))
+                   (setf (gethash method-name (flavor-methods pattern))
+                         (list  new-method)))))
       (adjust-dependent-methods a-flavor-name method-name new-method))
     method-name))
 ;;; --> END DEFMETHOD
@@ -605,15 +604,15 @@
 ;;; SIDE-EFFECTS: dependents of the given class MAY have their methods lists
 ;;;         altered
 ;;; USER-DEFINED-CALLED: flavor-depended-on, flavor-methods, adjust-methods,
-;;;         flavor-precedence, adjust-dependent-methods
+;;;         flavor-precedence, adjust-dependent-methods, find-flavor
 ;;; ---
 (defun adjust-dependent-methods (a-flavor-name method-name new-method)
-  (let ((dependents (flavor-depended-on-by (get a-flavor-name 'flavor-pattern)))
+  (let ((dependents (flavor-depended-on-by (find-flavor a-flavor-name)))
         (dependent-pattern nil)
         (dependent-methods nil)
         (curr-method nil))
     (dolist (a-flavor-name-item dependents)
-      (setq dependent-pattern (get a-flavor-name-item 'flavor-pattern))
+      (setq dependent-pattern (find-flavor a-flavor-name-item))
       (cond ((setq dependent-methods ;do we have them yet???
                    (flavor-methods dependent-pattern))
              (if (setq curr-method (gethash method-name dependent-methods))
@@ -697,7 +696,7 @@
 ;;;  (setq ship1 (make-instance 'ship :a 3 :b 5))
 ;;; ---
 (defun make-instance (a-flavor-name &rest init-plist)
-  (let ((flavor (get a-flavor-name 'flavor-pattern)))
+  (let ((flavor (find-flavor a-flavor-name)))
     (cond ((oddp (length init-plist))
            (error "keyword value mismatch in make-instance ~s ~s~%"
                   a-flavor-name init-plist))
@@ -719,7 +718,7 @@
 ;;; probably not a complete implementation
 ;;; allows the init-plist to be passed as a list
 (defun instantiate-flavor (a-flavor-name init-plist)
-  (let ((flavor (get a-flavor-name 'flavor-pattern)))
+  (let ((flavor (find-flavor a-flavor-name)))
     (cond ((oddp (length init-plist))
            (error "keyword value mismatch in make-instance ~s ~s~%"
                   a-flavor-name init-plist))
@@ -802,8 +801,8 @@
           "The object ~s is not a flavor instance" target)
   (let* ((*method-name-methods* ;get method of given name on the methods of class
            (gethash method-name
-                    (flavor-methods (get (flavor-instance-class-name target)
-                                         'flavor-pattern))))
+                    (flavor-methods (find-flavor
+                                     (flavor-instance-class-name target)))))
          (*remaining-whoppers* *method-name-methods*))
     (declare (special *remaining-whoppers* *method-name-methods*))
     (cond ((null *method-name-methods*)
@@ -914,14 +913,13 @@
 ;;; ---
 (defun handles-p (object method-name)
   "returns non-nil if the object handles the method"
-  ;? (handles-p sship :speed)
-  ;#<An Anonymous Compiled Function>
+  ;;? (handles-p sship :speed)
+  ;;#<An Anonymous Compiled Function>
   (and (typep object 'flavor-instance)  ;must be a flavor instance
        (assoc :primary
               (gethash method-name
                        (flavor-methods
-                        (get (flavor-instance-class-name object)
-                             'flavor-pattern))))))
+                        (find-flavor (flavor-instance-class-name object)))))))
 ;;; --> END HANDLES-P
 
 ;;; --> GET-HANDLER-FOR
@@ -936,15 +934,15 @@
 ;;; ---
 (defun get-handler-for (object method-name)
   (if (typep object 'flavor-instance)
-    (cddr (assoc :primary
-                 (gethash method-name
-                          (flavor-methods
-                           (get (flavor-instance-class-name object)
-                                'flavor-pattern)))))
-    (cddr (assoc :primary
-                 (gethash method-name
-                          (flavor-methods
-                           (get object 'flavor-pattern)))))))
+      (cddr (assoc :primary
+                   (gethash method-name
+                            (flavor-methods
+                             (find-flavor
+                              (flavor-instance-class-name object))))))
+      (cddr (assoc :primary
+                   (gethash method-name
+                            (flavor-methods
+                             (find-flavor object)))))))
 ;;; --> END GET-HANDLER-FOR
 
 ;;; --> INSTANCEP
@@ -990,15 +988,15 @@
 ;;; ---
 (defun describe-flavor (a-flavor-name)
   (if (typep a-flavor-name 'flavor-instance)
-    (send a-flavor-name :describe)
-    (let ((fl (get a-flavor-name 'flavor-pattern)))
-      (format t "<CLASS ~s> has variables and default values:~%" a-flavor-name)
-      (dolist (item (flavor-vars fl))
-        (format t " ~s   ~s~%" (car item) (cdr item)))
-      (format t "It directly or indirectly depends on:~%")
-      (format t "~s~%" (flavor-precedence fl))
-      (format t "with dependents:~%")
-      (format t "~s~%" (flavor-depended-on-by fl)))))
+      (send a-flavor-name :describe)
+      (let ((fl (find-flavor a-flavor-name)))
+        (format t "<CLASS ~s> has variables and default values:~%" a-flavor-name)
+        (dolist (item (flavor-vars fl))
+          (format t " ~s   ~s~%" (car item) (cdr item)))
+        (format t "It directly or indirectly depends on:~%")
+        (format t "~s~%" (flavor-precedence fl))
+        (format t "with dependents:~%")
+        (format t "~s~%" (flavor-depended-on-by fl)))))
 ;;; --> END DESCRIBE-FLAVOR
 
 ;;; --> SET-IN-INSTANCE
@@ -1070,7 +1068,7 @@
 ;;; (A B)
 ;;; ---
 (defun flavor-variables (a-flavor)
-  (flavor-known-lexical-ivs (get a-flavor 'flavor-pattern)))
+  (flavor-known-lexical-ivs (find-flavor a-flavor)))
 ;;; --> END FLAVOR-VARIABLES
 
 
@@ -1078,14 +1076,14 @@
 ;;; Returns the lexical Instance Variables of the class of the given INSTANCE
 ;;; ---
 (defun my-flavor-variables (an-instance)
-  (flavor-known-lexical-ivs (get (instance-typep an-instance) 'flavor-pattern)))
+  (flavor-known-lexical-ivs (find-flavor (instance-typep an-instance))))
 ;;; --> END MY-FLAVOR-VARIABLES
 
 
 (defun flavor-default-environment (a-flavor)
-  ; (flavor-default-environment 'ship)
-  ; ((:A . 3) (:B . 2))
-  (flavor-vars (get a-flavor 'flavor-pattern)))
+  ;; (flavor-default-environment 'ship)
+  ;; ((:A . 3) (:B . 2))
+  (flavor-vars (find-flavor a-flavor)))
 
 
 ;;; =======================  COMPILED FILES SUPPORT  ========================
@@ -1304,7 +1302,7 @@
 ;;;        flavor-precedence
 ;;; ---
 (defun attach-methods (a-flavor-name &rest meth-list)
-  (let ((pattern (get a-flavor-name 'flavor-pattern))
+  (let ((pattern (find-flavor a-flavor-name))
         (key nil)
         (method-name nil)
         (item-str nil)
