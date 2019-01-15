@@ -16,3 +16,10 @@
   (declare (ignore depth))
   (print-flavor-instance self stream))
 
+(defmethod (vanilla :operation-handled-p) (operation)
+  (when (handles-p self operation)
+    t))
+
+(defmethod (vanilla :send-if-handles) (message &rest args)
+  (when (send self :operation-handled-p message)
+    (lexpr-send self message args)))
