@@ -23,3 +23,6 @@
 (defmethod (vanilla :send-if-handles) (message &rest args)
   (when (send self :operation-handled-p message)
     (lexpr-send self message args)))
+
+(defmethod (vanilla :get-handler-for) (operation)
+  (get-handler-for self operation))
