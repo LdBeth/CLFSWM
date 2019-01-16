@@ -4,7 +4,7 @@
   :licence "Public Domain"
   :serial t
   :components ((:file "package")
-               (:file "helpers")
                (:file "object-definition")
+	       (:file "helpers")
                (:file "mul-flavors")
                (:file "vanilla")))
