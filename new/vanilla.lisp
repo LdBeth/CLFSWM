@@ -5,12 +5,7 @@
 (defflavor vanilla () () :no-vanilla-flavor)
 
 (defmethod (vanilla :describe) ()
-  (format t "~a, an object of flavor ~a,
- has instance variable values:~%"
-          self
-          (flavor-instance-class-name self))
-  (dolist (item (flavor-instance-vars self))
-    (format t " ~s   ~s~%" (car item) (cdr item))))
+  (describe self))
 
 (defmethod (vanilla :print-self) (&optional (stream t) (depth 1))
   (declare (ignore depth))

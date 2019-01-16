@@ -5,6 +5,7 @@
   (:use #:common-lisp)
   (:shadow #:defmethod #:make-instance)
   (:export #:defflavor #:defmethod #:flavor #:flavor-instance #:send
+           #:find-flavor
            #:make-instance #:instantiate-flavor #:cf-mulf #:*out-file*
            #:*all-flavor-names* #:lexpr-send #:handles-p #:get-handler-for #:instancep
            #:instance-typep #:describe-flavor #:set-in-instance #:symeval-in-instance

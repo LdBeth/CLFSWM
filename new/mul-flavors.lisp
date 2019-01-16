@@ -989,14 +989,7 @@
 (defun describe-flavor (a-flavor-name)
   (if (typep a-flavor-name 'flavor-instance)
       (send a-flavor-name :describe)
-      (let ((fl (find-flavor a-flavor-name)))
-        (format t "<CLASS ~s> has variables and default values:~%" a-flavor-name)
-        (dolist (item (flavor-vars fl))
-          (format t " ~s   ~s~%" (car item) (cdr item)))
-        (format t "It directly or indirectly depends on:~%")
-        (format t "~s~%" (flavor-precedence fl))
-        (format t "with dependents:~%")
-        (format t "~s~%" (flavor-depended-on-by fl)))))
+      (describe (find-flavor a-flavor-name))))
 ;;; --> END DESCRIBE-FLAVOR
 
 ;;; --> SET-IN-INSTANCE

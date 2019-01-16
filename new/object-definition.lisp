@@ -21,6 +21,16 @@
   methods)
 ;;; --> END PATTERN DEFINITION
 
+(cl:defmethod describe-object ((obj flavor) stream)
+  (format stream "<CLASS ~s> has variables and default values:~%"
+          (flavor-name obj))
+  (dolist (item (flavor-vars obj))
+    (format stream " ~s   ~s~%" (car item) (cdr item)))
+  (format stream "It directly or indirectly depends on:~%")
+  (format stream "~s~%" (flavor-precedence obj))
+  (format stream "with dependents:~%")
+  (format stream "~s~%" (flavor-depended-on-by obj)))
+
 ;;; --> FLAVOR-PRINTER
 ;;; This function providies the default printing capability associated
 ;;; with the flavor structure
@@ -69,3 +79,12 @@
 (defun make-flavor-instance (&rest args)
   (apply #'cl:make-instance 'flavor-instance args)))|#
 ;;; --> END INSTANCE DEFINITION
+
+
+(cl:defmethod describe-object ((obj flavor-instance) stream)
+  (format stream "~a, an object of flavor ~a,
+ has instance variable values:~%"
+          obj
+          (flavor-instance-class-name obj))
+  (dolist (item (flavor-instance-vars obj))
+    (format t " ~s   ~s~%" (car item) (cdr item))))
