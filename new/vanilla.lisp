@@ -21,3 +21,12 @@
 
 (defmethod (vanilla :get-handler-for) (operation)
   (get-handler-for self operation))
+
+(defmethod (vanilla :which-operations) ()
+  (let (tmp)
+    (maphash (lambda (key val)
+               (declare (ignore val))
+               (push key tmp))
+             (flavor-methods
+              (find-flavor (flavor-instance-class-name self))))
+    tmp))
