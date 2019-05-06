@@ -30,6 +30,10 @@
 
 (in-package :clfswm)
 
+;;; CONFIG - WM Name
+(defconfig *wm-name* "clfswm"
+  nil "Set to \"LG3D\" for making Java GUI programs work.")
+
 
 ;;; CONFIG - Default modifiers
 (defconfig *default-modifiers* '()

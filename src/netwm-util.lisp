@@ -83,6 +83,6 @@ FOCUS-WINDOW is an extra window used for _NET_SUPPORTING_WM_CHECK."
 			(list *no-focus-window*) :window 32
 			:transform #'xlib:drawable-id)
   (xlib:change-property *no-focus-window* :_NET_WM_NAME
-			"clfswm"
+			*wm-name*
 			:string 8 :transform #'xlib:char->card8)
   (netwm-update-desktop-property))
