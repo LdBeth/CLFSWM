@@ -1,247 +1,260 @@
     * CLFSWM Keys *
       -----------
 
-Note: Mod-1 is the Meta or Alt key
+Note:
+Mod-1 is the Meta or Alt key, Mod-4 is the Super or Cmd key
 
 Main mode keys:
 --------------
 
-  Mod-1                0               Bind or jump to a slot (a frame or a window)
-  Mod-1                9               Bind or jump to a slot (a frame or a window)
-  Mod-1                8               Bind or jump to a slot (a frame or a window)
-  Mod-1                7               Bind or jump to a slot (a frame or a window)
-  Mod-1                6               Bind or jump to a slot (a frame or a window)
-  Mod-1                5               Bind or jump to a slot (a frame or a window)
-  Mod-1                4               Bind or jump to a slot (a frame or a window)
-  Mod-1                3               Bind or jump to a slot (a frame or a window)
-  Mod-1                2               Bind or jump to a slot (a frame or a window)
-  Mod-1                1               Bind or jump to a slot (a frame or a window)
-  Control              Less            Switch to editing mode (second mode)
-  Mod-1                T               Switch to editing mode (second mode)
-  Control              Escape          Close or kill the current window (ask before doing anything)
-  Mod-1                B               Move the pointer to the lower right corner of the screen
-  Mod-1 Shift          L2              Show all frames info windows
-  Shift                L2              Show all frames info windows until a key is release
-  Control              L2              Hide/Unhide a terminal
-  Control              F10             Present all windows in all frames (An expose like)
-                       F10             Present all windows in currents roots (An expose like)
-  Control Shift        F10             Show/Hide the root frame
-  Mod-1                F10             Switch between two layouts
-  Mod-1 Shift          Home            Switch and select the root frame
-  Mod-1                Home            Switch to the root frame
-  Mod-1 Control        Page_down       Raise the child in the current frame
-  Mod-1 Control        Page_up         Lower the child in the current frame
-  Mod-1                Page_down       Select the next child in the current frame
-  Mod-1                Page_up         Select the previous child in the current frame
-  Mod-5                Return          Maximize/Unmaximize the current frame in its parent frame
-  Mod-1 Control        Return          Maximize/Unmaximize the current frame in its parent frame
-  Mod-1 Shift          Return          Leave the selected frame - ie make its parent the root frame
-  Mod-1                Return          Enter in the selected frame - ie make it the root frame
-  Mod-1 Control        Tab             Select the next subchild
-  Mod-1 Shift          Tab             Select the previous child
-  Mod-1                Tab             Select the next child
-  Mod-1 Control        Down            Select spatially the nearest brother of the current child in the down direction
-  Mod-1 Control        Up              Select spatially the nearest brother of the current child in the up direction
-  Mod-1 Control        Right           Select spatially the nearest brother of the current child in the right direction
-  Mod-1 Control        Left            Select spatially the nearest brother of the current child in the left direction
-  Mod-1                Up              Select the next level in frame
-  Mod-1                Down            Select the previous level in frame
-  Mod-1                Left            Select the previous brother
-  Mod-1                Right           Select the next brother
-  Mod-1 Control Shift  Home            Exit clfswm
-  Mod-1                F1              Open the help and info window
+  Mod-4                Return                 Enter in the selected frame - ie make it the root frame
+  Mod-4                7                      Bind or jump to a slot (a frame or a window)
+  Mod-4                Right                  Select the next brother
+  Mod-4                2                      Bind or jump to a slot (a frame or a window)
+  Mod-4 Control        Return                 Maximize/Unmaximize the current frame in its parent frame
+  Mod-4                5                      Bind or jump to a slot (a frame or a window)
+  Mod-4                3                      Bind or jump to a slot (a frame or a window)
+                       Menu                   Switch between children with expose shortcut
+  Mod-4                Page_down              Select the next child in the current frame
+  Mod-4                B                      Move the pointer to the lower right corner of the screen
+  Mod-4                0                      Bind or jump to a slot (a frame or a window)
+  Mod-4 Shift          Return                 Leave the selected frame - ie make its parent the root frame
+  Mod-4                Home                   Switch to the root frame
+  Mod-4                9                      Bind or jump to a slot (a frame or a window)
+  Control              Escape                 Close or kill the current window (ask before doing anything)
+                       F10                    Present all windows in currents roots (An expose like)
+  Control              F12                    Hide/Unhide a terminal
+  Mod-4 Control        Right                  Select spatially the nearest brother of the current child in the right direction
+  Mod-4 Control        Page_down              Raise the child in the current frame
+  Mod-4                T                      Switch to editing mode (second mode)
+  Mod-4                6                      Bind or jump to a slot (a frame or a window)
+  Mod-4 Control Shift  Left                   Select spatially the nearest brother of the current child in the left direction - move current focused child
+  Mod-4 Shift          Left                   Select the previous brother and move the current focused child in it
+  Mod-4                4                      Bind or jump to a slot (a frame or a window)
+                       F4                     Switch between children with expose shortcut
+  Mod-4                Page_up                Select the previous child in the current frame
+  Mod-4 Control Shift  Home                   Exit clfswm
+  Control Shift        F10                    Show/Hide the root frame
+  Control              F10                    Present all windows in all frames (An expose like)
+  Mod-4 Control        Left                   Select spatially the nearest brother of the current child in the left direction
+  Mod-4 Shift          Home                   Switch and select the root frame
+  Mod-4                8                      Bind or jump to a slot (a frame or a window)
+  Mod-4                1                      Bind or jump to a slot (a frame or a window)
+  Mod-4 Shift          Right                  Select the next brother and move the current focused child in it
+  Mod-4 Control        Page_up                Lower the child in the current frame
+  Mod-5                Menu                   Present all windows in currents roots (An expose like)
+  Mod-4                Down                   Select the previous level in frame
+  Mod-4 Control        Down                   Select spatially the nearest brother of the current child in the down direction
+  Control              Less                   Switch to editing mode (second mode)
+  Mod-4 Control        Up                     Select spatially the nearest brother of the current child in the up direction
+  Control              Menu                   Move children with expose shortcut
+  Mod-4                Tab                    Select the next child
+  Mod-4 Shift          Tab                    Select the previous child
+  Mod-5                Return                 Maximize/Unmaximize the current frame in its parent frame
+  Mod-4 Control Shift  Right                  Select spatially the nearest brother of the current child in the right direction - move current focused child
+  Mod-4 Control Shift  Up                     Select spatially the nearest brother of the current child in the up direction - move current focused child
+  Mod-1                F10                    Switch between two layouts
+  Mod-4 Control        Tab                    Select the next subchild
+  Mod-4                Left                   Select the previous brother
+  Mod-4                Up                     Select the next level in frame
+  Mod-4 Control Shift  Down                   Select spatially the nearest brother of the current child in the down direction - move current focused child
+  Mod-4 Shift          F12                    Show all frames info windows
+  Shift                F12                    Show all frames info windows until a key is release
+  Mod-1                F1                     Open the help and info window
 
 
 Mouse buttons actions in main mode:
 ----------------------------------
 
-  Mod-1 Control Shift  5               Increment slowly the child under mouse transparency
-  Mod-1 Control Shift  4               Decrement slowly the child under mouse transparency
-  Mod-1 Control        5               Increment the child under mouse transparency
-  Mod-1 Control        4               Decrement the child under mouse transparency
-  Mod-1                5               Leave the selected frame - ie make its parent the root frame
-  Mod-1                4               Enter in the selected frame - ie make it the root frame
-                       5               Select the previous level in frame
-                       4               Select the next level in frame
-  Mod-1 Control        1               Move the child under the mouse cursor to another frame
-  Mod-1 Shift          3               Resize (constrained by other frames) and focus the current child - Create a new frame on the root window
-  Mod-1 Shift          1               Move (constrained by other frames) and focus the current child - Create a new frame on the root window
-  Mod-1                3               Resize and focus the current child - Create a new frame on the root window
-  Mod-1                1               Move and focus the current child - Create a new frame on the root window
-                       3               
-Resize and focus the current frame or focus the current window parent.
+  Mod-4                3                      Resize and focus the current child - Create a new frame on the root window
+  Mod-4 Control        5                      Increment the child under mouse transparency
+                       3                      Resize and focus the current frame or focus the current window parent.
 Or do actions on corners
-                       2               Do actions on corners
-                       1               
-Move and focus the current frame or focus the current window parent.
+  Mod-4 Shift          3                      Resize (constrained by other frames) and focus the current child - Create a new frame on the root window
+  Mod-4 Control Shift  5                      Increment slowly the child under mouse transparency
+                       1                      Move and focus the current frame or focus the current window parent.
 Or do actions on corners
+  Mod-4 Control Shift  4                      Decrement slowly the child under mouse transparency
+  Mod-4                1                      Move and focus the current child - Create a new frame on the root window
+  Mod-4                5                      Leave the selected frame - ie make its parent the root frame
+  Mod-4 Control        1                      Move the child under the mouse cursor to another frame
+                       4                      Select the next level in frame
+                       5                      Select the previous level in frame
+  Mod-4 Shift          1                      Move (constrained by other frames) and focus the current child - Create a new frame on the root window
+  Mod-4 Control        4                      Decrement the child under mouse transparency
+                       2                      Do actions on corners
+  Mod-4                4                      Enter in the selected frame - ie make it the root frame
 
 
 Second mode keys:
 ----------------
 
-  Control              T               Decrement the current window transparency
-  Control Shift        T               Increment the current window transparency
-  Mod-1                0               Bind or jump to a slot (a frame or a window)
-  Mod-1                9               Bind or jump to a slot (a frame or a window)
-  Mod-1                8               Bind or jump to a slot (a frame or a window)
-  Mod-1                7               Bind or jump to a slot (a frame or a window)
-  Mod-1                6               Bind or jump to a slot (a frame or a window)
-  Mod-1                5               Bind or jump to a slot (a frame or a window)
-  Mod-1                4               Bind or jump to a slot (a frame or a window)
-  Mod-1                3               Bind or jump to a slot (a frame or a window)
-  Mod-1                2               Bind or jump to a slot (a frame or a window)
-  Mod-1                1               Bind or jump to a slot (a frame or a window)
-  Mod-1 Shift          L2              Show all frames info windows
-  Shift                L2              Show all frames info windows until a key is release
-  Control              F10             Present all windows in all frames (An expose like)
-                       F10             Present all windows in currents roots (An expose like)
-  Control Shift        F10             Show/Hide the root frame
-  Mod-1                F10             Switch between two layouts
-  Control              E               start an emacs for another user
-                       E               start emacs
-                       T               start an xterm
-                       Delete          Delete the current child and its children in all frames
-  Control              Delete          Remove the current child from its parent frame
-  Control Shift        V               Paste the selection in the current frame - Do not clear the selection after paste
-  Control              V               Paste the selection in the current frame
-  Control              C               Copy the current child to the selection
-  Mod-1 Control        X               Clear the current selection
-  Control              X               Cut the current child to the selection
-  Control              Escape          Close or kill the current window (ask before doing anything)
-  Control              Minus           Decrease slowly the tile layout size
-  Control              Plus            Increase slowly the tile layout size
-                       Minus           Decrease the tile layout size
-                       Plus            Increase the tile layout size
-  Control              A               Add a frame in the parent frame (and reorganize parent frame)
-                       A               Add a default frame in the current frame
-  Control              O               Open the next window in a new frame in the root frame
-                       O               Open the next window in a new frame in the parent frame
-  Mod-1                B               Move the pointer to the lower right corner of the screen
-                       Menu            Show/Hide the root frame
-  Mod-1 Shift          Home            Switch and select the root frame
-  Mod-1                Home            Switch to the root frame
-  Mod-1                Page_down       Raise the child in the current frame
-  Mod-1                Page_up         Lower the child in the current frame
-  Mod-5                Return          Maximize/Unmaximize the current frame in its parent frame
-  Mod-1 Control        Return          Maximize/Unmaximize the current frame in its parent frame
-  Mod-1 Shift          Return          Leave the selected frame - ie make its parent the root frame
-  Mod-1                Return          Enter in the selected frame - ie make it the root frame
-                       Tab             Store the current child and switch to the previous one
-  Mod-1 Control        Tab             Select the next subchild
-  Mod-1 Shift          Tab             Select the previous child
-  Mod-1                Tab             Select the next child
-  Control              Down            Reset speed mouse coordinates
-  Control              Up              Revert to the first speed move mouse
-  Control              Left            Undo last speed mouse move
-                       Up              Speed move mouse to up
-                       Down            Speed move mouse to down
-                       Left            Speed move mouse to left
-                       Right           Speed move mouse to right
-  Control              Page_down       Rotate root geometry to previous root
-  Control              Page_up         Rotate root geometry to next root
-                       Page_down       Select the previous root
-                       Page_up         Select the next root
-  Shift                H               Anti rotate brother frame geometry
-                       H               Rotate brother frame geometry
-                       J               Swap current brother frame geometry
-  Mod-1 Control        Down            Select spatially the nearest brother of the current child in the down direction
-  Mod-1 Control        Up              Select spatially the nearest brother of the current child in the up direction
-  Mod-1 Control        Right           Select spatially the nearest brother of the current child in the right direction
-  Mod-1 Control        Left            Select spatially the nearest brother of the current child in the left direction
-  Mod-1                Up              Select the next level in frame
-  Mod-1                Down            Select the previous level in frame
-  Mod-1                Left            Select the previous brother
-  Mod-1                Right           Select the next brother
-  Mod-1 Control Shift  Home            Exit clfswm
-  Shift                T               Tile the current frame
-                       Escape          Leave second mode
-                       Return          Leave second mode
-                       Exclam          Run a program from the query input
-                       Colon           Eval a lisp form from the query input
-                       I               Identify a key
-                       K               Close or kill the current window (ask before doing anything)
-                       Q               Close focus window: Delete the focus window in all frames and workspaces
-  Control              G               Stop all pending actions
-                       X               Update layout managed children position
-                       C               Open the child menu
-                       R               Open the root menu
-                       P               Open the frame movement menu (pack/fill/resize)
-                       U               Open the action by number menu
-                       N               Open the action by name menu
-                       W               Open the window menu
-                       F               Open the frame menu
-  Control              Less            Open the main menu
-                       Less            Open the main menu
-                       M               Open the main menu
-  Mod-1                F1              Open the help and info window
+  Mod-4 Control        Right                  Select spatially the nearest brother of the current child in the right direction
+                       Minus                  Decrease the tile layout size
+                       K                      Close or kill the current window (ask before doing anything)
+                       Colon                  Eval a lisp form from the query input
+  Control              Down                   Reset speed mouse coordinates
+                       Page_down              Select the previous root
+  Control              Plus                   Increase slowly the tile layout size
+  Mod-4                Return                 Enter in the selected frame - ie make it the root frame
+  Mod-4 Control        Up                     Select spatially the nearest brother of the current child in the up direction
+  Mod-4                Page_up                Lower the child in the current frame
+                       P                      Open the frame movement menu (pack/fill/resize)
+  Mod-4                9                      Bind or jump to a slot (a frame or a window)
+  Mod-4 Shift          F12                    Show all frames info windows
+  Mod-4                Up                     Select the next level in frame
+  Mod-4                Left                   Select the previous brother
+                       T                      start an xterm
+  Mod-4 Control Shift  Home                   Exit clfswm
+                       A                      Add a default frame in the current frame
+  Mod-4 Shift          Tab                    Select the previous child
+  Mod-4                Page_down              Raise the child in the current frame
+  Control Shift        F10                    Show/Hide the root frame
+                       W                      Open the window menu
+  Mod-4 Control Shift  Down                   Select spatially the nearest brother of the current child in the down direction - move current focused child
+  Mod-4                6                      Bind or jump to a slot (a frame or a window)
+                       Return                 Leave second mode
+  Mod-4 Control Shift  Left                   Select spatially the nearest brother of the current child in the left direction - move current focused child
+  Control              C                      Copy the current child to the selection
+  Control              Less                   Open the main menu
+                       Less                   Open the main menu
+                       X                      Update layout managed children position
+  Mod-4 Control        X                      Clear the current selection
+  Mod-4                5                      Bind or jump to a slot (a frame or a window)
+  Mod-4 Shift          Home                   Switch and select the root frame
+  Mod-4 Shift          Right                  Select the next brother and move the current focused child in it
+                       J                      Swap current brother frame geometry
+                       Delete                 Delete the current child and its children in all frames
+  Mod-4 Control        Left                   Select spatially the nearest brother of the current child in the left direction
+  Shift                T                      Tile the current frame
+                       Menu                   Show/Hide the root frame
+  Control              T                      Decrement the current window transparency
+  Control              Page_down              Rotate root geometry to previous root
+                       Exclam                 Run a program from the query input
+  Control              Page_up                Rotate root geometry to next root
+  Mod-4 Shift          Return                 Leave the selected frame - ie make its parent the root frame
+                       Plus                   Increase the tile layout size
+  Mod-4 Control        Return                 Maximize/Unmaximize the current frame in its parent frame
+                       R                      Open the root menu
+                       N                      Open the action by name menu
+                       Tab                    Store the current child and switch to the previous one
+                       Page_up                Select the next root
+  Control              V                      Paste the selection in the current frame
+                       F4                     Show/Hide the root frame
+  Control              Escape                 Close or kill the current window (ask before doing anything)
+  Shift                H                      Anti rotate brother frame geometry
+  Mod-4                2                      Bind or jump to a slot (a frame or a window)
+  Control Shift        V                      Paste the selection in the current frame - Do not clear the selection after paste
+  Mod-4                Right                  Select the next brother
+  Shift                F12                    Show all frames info windows until a key is release
+  Mod-4                Down                   Select the previous level in frame
+  Mod-4                7                      Bind or jump to a slot (a frame or a window)
+                       Right                  Speed move mouse to right
+                       I                      Identify a key
+  Control              Up                     Revert to the first speed move mouse
+  Mod-4 Control Shift  Right                  Select spatially the nearest brother of the current child in the right direction - move current focused child
+                       Q                      Close focus window: Delete the focus window in all frames and workspaces
+                       Escape                 Leave second mode
+  Mod-4                Home                   Switch to the root frame
+  Control              G                      Stop all pending actions
+  Control              O                      Open the next window in a new frame in the root frame
+  Control              F10                    Present all windows in all frames (An expose like)
+  Mod-4                1                      Bind or jump to a slot (a frame or a window)
+  Mod-4                3                      Bind or jump to a slot (a frame or a window)
+                       H                      Rotate brother frame geometry
+  Mod-4                0                      Bind or jump to a slot (a frame or a window)
+  Control              A                      Add a frame in the parent frame (and reorganize parent frame)
+                       Left                   Speed move mouse to left
+                       F                      Open the frame menu
+                       C                      Open the child menu
+                       F10                    Present all windows in currents roots (An expose like)
+                       M                      Open the main menu
+  Mod-4                Tab                    Select the next child
+  Mod-1                F1                     Open the help and info window
+  Mod-1                F10                    Switch between two layouts
+  Mod-4                4                      Bind or jump to a slot (a frame or a window)
+  Mod-4 Control Shift  Up                     Select spatially the nearest brother of the current child in the up direction - move current focused child
+                       O                      Open the next window in a new frame in the parent frame
+  Mod-4                8                      Bind or jump to a slot (a frame or a window)
+  Control              Minus                  Decrease slowly the tile layout size
+  Control              Delete                 Remove the current child from its parent frame
+  Mod-5                Return                 Maximize/Unmaximize the current frame in its parent frame
+  Mod-4                B                      Move the pointer to the lower right corner of the screen
+  Mod-4 Control        Tab                    Select the next subchild
+  Control Shift        T                      Increment the current window transparency
+  Control              X                      Cut the current child to the selection
+                       Down                   Speed move mouse to down
+                       Up                     Speed move mouse to up
+                       U                      Open the action by number menu
+                       E                      start emacs
+  Mod-4 Shift          Left                   Select the previous brother and move the current focused child in it
+  Control              Left                   Undo last speed mouse move
+  Mod-4 Control        Down                   Select spatially the nearest brother of the current child in the down direction
 
 
 Mouse buttons actions in second mode:
 ------------------------------------
 
-  Mod-1                5               Leave the selected frame - ie make its parent the root frame
-  Mod-1                4               Enter in the selected frame - ie make it the root frame
-                       5               Select the previous level in frame
-                       4               Select the next level in frame
-  Mod-1 Control        1               Move the child under the mouse cursor to another frame
-  Mod-1 Shift          3               Resize (constrained by other frames) and focus the current child - Create a new frame on the root window
-  Mod-1 Shift          1               Move (constrained by other frames) and focus the current child - Create a new frame on the root window
-  Mod-1                3               Resize and focus the current child - Create a new frame on the root window
-  Mod-1                1               Move and focus the current child - Create a new frame on the root window
-                       3               
-Resize and focus the current child - Create a new frame on the root window.
+  Mod-4                3                      Resize and focus the current child - Create a new frame on the root window
+                       3                      Resize and focus the current child - Create a new frame on the root window.
 Or do corners actions
-                       2               Do actions on corners
-                       1               
-Move and focus the current child - Create a new frame on the root window.
+  Mod-4 Shift          3                      Resize (constrained by other frames) and focus the current child - Create a new frame on the root window
+                       1                      Move and focus the current child - Create a new frame on the root window.
 Or do corners actions
+  Mod-4                1                      Move and focus the current child - Create a new frame on the root window
+  Mod-4                5                      Leave the selected frame - ie make its parent the root frame
+  Mod-4 Control        1                      Move the child under the mouse cursor to another frame
+                       4                      Select the next level in frame
+                       5                      Select the previous level in frame
+  Mod-4 Shift          1                      Move (constrained by other frames) and focus the current child - Create a new frame on the root window
+                       2                      Do actions on corners
+  Mod-4                4                      Enter in the selected frame - ie make it the root frame
 
 
 Info mode keys:
 --------------
 
-                       Page_up         Move ten lines up
-                       Page_down       Move ten lines down
-                       End             Move to last line
-                       Home            Move to first line
-                       Right           Move one char right
-                       Left            Move one char left
-                       Up              Move one line up
-                       Down            Move one line down
-                       Twosuperior     Move the pointer to the lower right corner of the screen
-  Control              G               Leave the info mode
-                       Escape          Leave the info mode
-                       Space           Leave the info mode and valid the selected item
-  Mod-2                Kp_enter        Leave the info mode and valid the selected item
-                       Return          Leave the info mode and valid the selected item
-                       Q               Leave the info mode
+  Control              G                      Leave the info mode
+                       Twosuperior            Move the pointer to the lower right corner of the screen
+                       Left                   Move one char left
+                       Escape                 Leave the info mode
+                       End                    Move to last line
+                       Up                     Move one line up
+                       Q                      Leave the info mode
+  Mod-2                Kp_enter               Leave the info mode and valid the selected item
+                       Right                  Move one char right
+                       Page_down              Move ten lines down
+                       Page_up                Move ten lines up
+                       Return                 Leave the info mode and valid the selected item
+                       Down                   Move one line down
+                       Space                  Leave the info mode and valid the selected item
+                       Home                   Move to first line
 
 
 Mouse buttons actions in info mode:
 ----------------------------------
 
-                       Motion          NIL
-                       5               Move one line down
-                       4               Move one line up
-                       3               Leave the info mode
-                       2               Leave the info mode
-                       1               NIL
+                       3                      Leave the info mode
+                       1                      NIL
+                       4                      Move one line up
+                       5                      Move one line down
+                       Motion                 NIL
+                       2                      Leave the info mode
 
 
 Circulate mode keys:
 -------------------
 
-  Mod-1                Left            Select the previous borther
-  Mod-1                Right           Select the next brother
-  Mod-1 Shift          Iso_left_tab    Select the previous child
-  Mod-1 Shift          Tab             Select the previous child
-  Mod-1 Control        Tab             Select the next subchild
-  Mod-1                Tab             Select the next child
-  Mod-1 Control        G               Leave the circulate mode
-  Mod-1                Escape          Leave the circulate mode
-  Control              G               Leave the circulate mode
-                       Escape          Leave the circulate mode
+  Control              G                      Leave the circulate mode
+  Mod-4                Right                  Select the next brother
+  Mod-4 Shift          Iso_left_tab           Select the previous child
+                       Escape                 Leave the circulate mode
+  Mod-1 Control        G                      Leave the circulate mode
+  Mod-4                Tab                    Select the next child
+  Mod-4 Shift          Tab                    Select the previous child
+  Mod-4 Control        Tab                    Select the next subchild
+  Mod-4                Left                   Select the previous borther
+  Mod-1                Escape                 Leave the circulate mode
 
 
 Expose windows mode keys:

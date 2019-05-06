@@ -49,969 +49,78 @@ p: < TERMINALEMULATOR >
 q: < SCREENSAVER >
 
 Texteditor
-a: Snippets datafile editor
-b: Kate
-c: KWrite
-d: Xournal - Take handwritten notes
-e: Leafpad - Simple text editor
-f: gedit - Edit text files
-g: GNU Emacs 23 - View and edit files
-h: Xfwrite - A simple text editor for Xfe
+a: GNU Emacs - Emacs is the extensible, customizable, self-documenting real-time display editor
+b: Jasspa MicroEmacs - Advanced Text Editor
+c: XEmacs Text Editor - Edit text
 
 Filemanager
-a: Krusader
-b: Dolphin
-c: GNOME Commander - A two paned file manager
-d: File Manager - Configure the Thunar file manager
-e: Open Folder with Thunar - Open the specified folders in Thunar
-f: Worker - File manager for X.
-g: Xfe - A lightweight file manager for X Window
-h: Thunar File Manager - Browse the filesystem with the file manager
-i: Midnight Commander - File manager
-j: Gentoo - Fully GUI-configurable, two-pane X file manager
 
 Webbrowser
-a: Konqueror
-b: Bookmark Editor - Bookmark Organizer and Editor
-c: Web Browser
-d: Web - Browse the web
-e: Midori - Lightweight web browser
-f: Iceweasel - Browse the World Wide Web
-g: Midori Private Browsing - Open a new private browsing window
-h: Web - Browse the web
-i: Conkeror Web Browser - Browse the World Wide Web
-j: Links 2
-k: Luakit - Fast, small, webkit based micro-browser extensible by Lua
+a: qutebrowser - A keyboard-driven, vim-like browser based on PyQt5
 
 Audiovideo
-a: Dragon Player
-b: KMix
-c: KsCD
-d: JuK
-e: Qsampler - Qsampler is a LinuxSampler Qt GUI Interface
-f: Composite - Live performance sequencer
-g: Swami Instrument Editor - Create, play and organize MIDI instruments and sounds
-h: QjackCtl - QjackCtl is a JACK Audio Connection Kit Qt GUI Interface
-i: Rhythmbox - Play and organize your music collection
-j: Musique - Play your music collection
-k: HasciiCam - (h)ascii for the masses!
-l: MediathekView - View streams from public German TV stations
-m: XBMC Media Center - Manage and view your media 
-n: Sonata - An elegant GTK+ MPD client
-o: Stopmotion - Program to create stop-motion animations
-p: Gnome Music Player Client - A gnome frontend for the mpd daemon
-q: PulseAudio Volume Control - Adjust the volume level
-r: Minitube - Watch YouTube videos
-s: GNOME ALSA Mixer - ALSA sound mixer for GNOME
-t: Mixer - Audio mixer for the Xfce Desktop Environment
-u: Alsa Modular Synth - Modular Software Synth
-v: VLC media player - Read, capture, broadcast your multimedia streams
-w: Petri-Foo - Sound Sampler
-x: Sound Juicer - Copy music from your CDs
-y: PulseAudio Volume Meter (Playback) - Monitor the output volume
-z: Rhythmbox - Play and organize your music collection
-0: Brasero - Create and copy CDs and DVDs
-1: Audacity - Record and edit audio files
-2: Cheese - Take photos and videos with your webcam, with fun graphical effects
-3: Sound Recorder - Record sound clips
-4: OpenShot Video Editor - Create and edit videos and movies
-5: terminatorX - Scratch and mix audio
-6: Decibel Audio Player - A simple audio player
-7: Movie Player - Play movies and songs
-8: QVideoob - Search for videos on many websites, and get info about them
-9: PulseAudio Volume Meter (Capture) - Monitor the input volume
-A: Specimen - Sound Sampler
-B: Music Player - Play your music files easily
+a: mpv Media Player - Play movies and songs
 
 Audio
-a: KMix
-b: Qsampler - Qsampler is a LinuxSampler Qt GUI Interface
-c: Composite - Live performance sequencer
-d: Swami Instrument Editor - Create, play and organize MIDI instruments and sounds
-e: QjackCtl - QjackCtl is a JACK Audio Connection Kit Qt GUI Interface
-f: Musique - Play your music collection
-g: PulseAudio Volume Control - Adjust the volume level
-h: Mixer - Audio mixer for the Xfce Desktop Environment
-i: Alsa Modular Synth - Modular Software Synth
-j: Petri-Foo - Sound Sampler
-k: Sound Juicer - Copy music from your CDs
-l: PulseAudio Volume Meter (Playback) - Monitor the output volume
-m: Audacity - Record and edit audio files
-n: Sound Recorder - Record sound clips
-o: Decibel Audio Player - A simple audio player
-p: PulseAudio Volume Meter (Capture) - Monitor the input volume
-q: Music Player - Play your music files easily
+a: mpv Media Player - Play movies and songs
 
 Video
-a: Camorama Webcam Viewer - View, alter and save images from a webcam
-b: XBMC Media Center - Manage and view your media 
-c: Stopmotion - Program to create stop-motion animations
-d: Minitube - Watch YouTube videos
-e: OptGeo - Interactive tool to study and simulate optic assemblies
-f: OpenShot Video Editor - Create and edit videos and movies
-g: Movie Player - Play movies and songs
+a: mpv Media Player - Play movies and songs
 
 Development
-a: KLinkStatus
-b: Cervisia
-c: Lokalize
-d: Umbrello
-e: KUIViewer
-f: KImageMapEditor
-g: Kompare
-h: KAppTemplate
-i: KCachegrind - Visualization of Performance Profiling Data
-j: Akonadi Console - Akonadi Management and Debugging Console
-k: Scilab CLI - Scientific software package for numerical computations
-l: Scilab - Scientific software package for numerical computations
-m: Scilab advanced CLI - Scientific software package for numerical computations
-n: IDLE (using Python-2.7) - Integrated Development Environment for Python (using Python-2.7)
-o: GvRng - Guido van Robot NG
-p: IDLE - Integrated Development Environment for Python
-q: Python (v2.6) - Python Interpreter (v2.6)
-r: Python (v3.2) - Python Interpreter (v3.2)
-s: IDLE (using Python-3.2) - Integrated Development Environment for Python (using Python-3.2)
-t: IDLE 3 - Integrated DeveLopment Environment for Python3
-u: Python (v2.7) - Python Interpreter (v2.7)
-v: IDLE (using Python-2.6) - Integrated Development Environment for Python (using Python-2.6)
-w: GNU Emacs 23 - View and edit files
-x: Squeak -  Programming system and content development tool
+a: CMake - Cross-platform buildsystem
+b: GNU Emacs - Emacs is the extensible, customizable, self-documenting real-time display editor
+c: Jasspa MicroEmacs - Advanced Text Editor
+d: sandbox - launch a sandboxed shell ... useful for debugging ebuilds
 
 Education
-a: Kig - Explore Geometric Constructions
-b: Rocs - Graph Theory Tool for Professors and Students.
-c: KWordQuiz - A flashcard and vocabulary learning program
-d: Marble
-e: KHangMan - KDE Hangman Game
-f: Step - Simulate physics experiments
-g: Parley
-h: KTurtle
-i: KStars - Desktop Planetarium
-j: KmPlot - Function Plotter
-k: Kiten - Japanese Reference and Study Tool
-l: KGeography - A Geography Learning Program
-m: KLettres - a KDE program to learn the alphabet
-n: Blinken - A memory enhancement game
-o: KBruch - Practice exercises with fractions
-p: KTouch
-q: Cantor
-r: Kanagram - KDE Letter Order Game
-s: Kalzium - KDE Periodic Table of Elements
-t: KAlgebra - Math Expression Solver and Plotter
-u: Dr.Geo - Dr.Geo Math Tool
-v: Tux Math  - Tux Math - Learn math with Tux!
-w: Euler
-x: Scilab CLI - Scientific software package for numerical computations
-y: MathWar - A simple math game for kids
-z: GeoGebra - Create interactive mathematical constructions and applets.
-0: Maxima Algebra System - An interface to the Maxima Computer Algebra System
-1: Tux Paint
-2: Scilab - Scientific software package for numerical computations
-3: K3DSurf - tool for mathematical surfaces
-4: Tux Typing - Educational typing tutor game starring Tux
-5: Childsplay - Suite of educational games for young children
-6: Scilab advanced CLI - Scientific software package for numerical computations
-7: Geomview - Interactive geometry viewing program
-8: OptGeo - Interactive tool to study and simulate optic assemblies
-9: GvRng - Guido van Robot NG
-A: Klavaro - Yet another touch typing tutor
-B: TurtleArt - A Logo programming environment
-C: wxMaxima - Perform symbolic and numeric calculations using Maxima
-D: Little Wizard - Development environment for children
-E: Regina - Software for 3-manifold topology and normal surface theory
-F: CaRMetal - CaRMetal interactive geometry
-G: python-whiteboard
-H: AWeather - Advanced weather reporting program
-I: Xcas Computer Algebra System - The swiss knife for mathematics
-J: Squeak -  Programming system and content development tool
-K: Educational suite GCompris - Educational game for ages 2 to 10
-L: eToys -  A media-rich model, simulation construction kit and authoring tool
+a: xmaxima - A graphical interface for Maxima, a Computer Algebra System
 
 Game
-a: Kolf
-b: KJumpingCube
-c: Klickety
-d: Bovo
-e: Palapeli
-f: KSnake
-g: KSpaceDuel
-h: KPatience
-i: KMines
-j: Kiriki
-k: KBlackBox
-l: Naval Battle
-m: Bomber
-n: Kubrick
-o: Konquest
-p: Kolor Lines
-q: KSquares
-r: KHangMan - KDE Hangman Game
-s: KMahjongg
-t: KsirK
-u: KDiamond
-v: KNetWalk
-w: KAtomic
-x: Killbots
-y: KBlocks
-z: KReversi
-0: KBounce
-1: Blinken - A memory enhancement game
-2: Kigo
-3: Potato Guy
-4: KBreakOut
-5: LSkat
-6: KGoldrunner - A game of action and puzzle-solving
-7: Kapman - Eat pills escaping ghosts
-8: Granatier
-9: AMOR
-A: Kanagram - KDE Letter Order Game
-B: Kollision - A simple ball dodging game
-C: Shisen-Sho
-D: KSudoku - KSudoku, Sudoku game & more for KDE
-E: KSnakeDuel
-F: KFourInLine
-G: Kajongg - The ancient Chinese board game for 4 players
-H: SameGame
-I: KsirK Skin Editor
-J: Xboard - Resume XBoard chess tourney
-K: Frogatto - Young frog's adventure
-L: Four-in-a-Row - Make lines of the same color to win
-M: pyRacerz
-N: Out Of Order - Adventure Game
-O: Plee the Bear - Catch your son, he ate all the honey then ran away
-P: I Have No Tomatoes - How many tomatoes can you smash in ten short minutes?
-Q: FreeCraft - The War begins
-R: FreeGish - A physics based arcade game
-S: Neverball - A 3D arcade game with a ball
-T: Teeworlds - An online multi-player platform 2D shooter
-U: SDL-Ball
-V: FreeDinkedit - Portable Dink Smallwood game editor
-W: PyChess - PyChess is a fully featured, nice looking, easy to use chess client for the Gnome desktop
-X: PlayOnLinux - PlayOnLinux
-Y: REminiscence - A port of FlashBack game engine
-Z: Gravitation - game about mania, melancholia, and the creative process
-|: OpenArena - A fast-paced 3D first-person shooter, similar to id Software Inc.'s Quake III Arena
-|: The Ur-Quan Masters - An interstellar adventure game
-|: Golly - A Conway's Game of Life simulator
-|: Chromium B.S.U. - Scrolling space shooter
-|: Virus Killer
-|: Swell Foop - Clear the screen by removing groups of colored and shaped tiles
-|: Xmoto
-|: LordsAWar Editor - Create or Edit LordsAWar maps
-|: Primrose - Captivating tile-clearing puzzle game
-|: Biniax-2 - Colorful Logic game with arcade and tactics modes
-|: Galaga:Hyperspace - Play enhanced Galaga Game
-|: MegaGlest - A real time strategy game.
-|: koules - Push your enemies away, but stay away from obstacles
-|: XBoard - Use an X Windows Chess Board
-|: Xboard - Resume XBoard chess tourney
-|: Bouncy the Hungry Rabbit - Eat the yummy veggies in the garden (game for small kids)
-|: Battle for Wesnoth Map Editor (1.10) - A map editor for Battle for Wesnoth maps
-|: DFArc - Dink frontend - Run, edit, install, remove and package D-Mods (Dink Modules)
-|: ii-esu - HIZ's ES
-|: Amphetamine - Fight evil monsters with your magic weapons.
-|: Galaga - Play Galaga Game
-|: Xboard - Resume XBoard chess tourney
-|: Adanaxis - Fly your ship in a 4d environment
-|: Flight of the Amazon Queen - Embark on a quest to rescue a kidnapped princess and in the process, discover the true sinister intentions of a suspiciously located Lederhosen company
-|: Sudoku - Test your logic skills in this number grid puzzle
-|: Monster Masher - Mash monsters and save the gnomes
-|: SuperTuxKart
-|: LordsAWar Army Editor - Create or Edit LordsAWar armies
-|: DOSBox Emulator - Run old DOS applications
-|: Childsplay - Suite of educational games for young children
-|: Egoboo - 3D dungeon crawling game
-|: X Slash'EM - Super Lotsa Added Stuff Hack - Extended Magic (X11)
-|: Tuxfootball - 2D Football Game
-|: Biloba - Up to four player network capable turn based strategy board game
-|: GTK Slash'EM - Super Lotsa Added Stuff Hack - Extended Magic (GTK)
-|: The Mana world - The Mana World 2D MMORPG client
-|: Lights Off - Turn off all the lights
-|: PIX Frogger - Help the frog cross the street
-|: Robots - Avoid the robots and make them crash into each other
-|: Tali - Beat the odds in a poker-style dice game
-|: Trackballs
-|: Raincat - 2D puzzle game featuring a fuzzy little cat
-|: Tetravex - Complete the puzzle by matching numbered tiles
-|: Freedroid - Clear a spaceship from all droids
-|: Magicor - Puzzle game in the spirit of solomon's key
-|: Kiki the nano bot
-|: FreeDink - Humorous zelda-like isometric adventure/RPG
-|: Tower Toppler - A clone of the 'Nebulus' game on old 8 and 16 bit machines.
-|: Klotski - Slide blocks to solve the puzzle
-|: eboard - A graphical chessboard program
-|: Word War vi - side-scrolling shoot'em up arcade game
-|: Lugaru - Third-person action game about an anthropomorphic rabbit with curiously well developed combat skills
-|: B.A.L.L.Z. - Platform game with some puzzle elements
-|: Mana - A 2D MMORPG client
-|: PokerTH - Texas hold'em game
-|: AisleRiot Solitaire - Play many different solitaire games
-|: Dodgin Diamond 2
-|: OpenTTD
-|: Alex the Allegator 4 - Retro platform game
-|: Meritous - action-adventure dungeon crawl game
-|: Amoebax - Defeat your opponent by filling up their grid up with garbage.
-|: Angband (SDL) - A roguelike dungeon exploration game based on the books of J.R.R.Tolkien
-|: Triplane Classic - side-scrolling dogfighting game
-|: Pathological - Solve puzzles involving paths and marbles
-|: Block Attack - Rise of the Blocks - Switch blocks so they match
-|: Luola
-|: Between - game about consciousness and isolation
-|: Airstrike - Dogfight an enemy plane
-|: X NetHack
-|: Balazar - Play a 3D adventure and roleplaying game
-|: Passage - game about the passage through life
-|: Numpty Physics
-|: FreeCell Solitaire - Play the popular FreeCell card game
-|: Balder2D - 2D overhead shooter in Zero G
-|: SDL Slash'EM - Super Lotsa Added Stuff Hack - Extended Magic (SDL)
-|: FloboPuyo
-|: Which Way is Up - 2D platform game with a slight rotational twist
-|: Crack Attack - Puzzle game similar to Tetris Attack
-|: LordsAWar - Play a clone of Warlords II
-|: Hedgewars
-|: Five or More - Remove colored balls from the board by forming lines
-|: Bomberclone - Play a Bomberman like game
-|: Heroes - Collect powerups and avoid your opponents' trails
-|: Secret Maryo Chronicles - A 2D platform game with style similar to classic sidescroller games
-|: Gunroar - Kenta Cho's Gunroar
-|: Singularity - Become the singularity
-|: Quadrapassel - Fit falling blocks together
-|: Minetest - InfiniMiner/Minecraft-inspired open game world
-|: Angband (GTK) - A roguelike dungeon exploration game based on the books of J.R.R.Tolkien
-|: Neverputt - A 3D mini golf game
-|: ScummVM - Interpreter for several adventure games
-|: Liquid War - A unique multiplayer wargame
-|: Angband (X11) - A roguelike dungeon exploration game based on the books of J.R.R.Tolkien
-|: Mahjongg - Disassemble a pile of tiles by removing matching pairs
-|: Foobillard - 3D billiards game using OpenGL
-|: rRootage - Destroy autocreated battleships
-|: VoR
-|: Search and rescue
-|: Chess - Play the classic two-player boardgame of chess
-|: Freedroid RPG - Isometric role playing game
-|: Billard-GL - Play Billard Game
-|: Widelands - A a real-time build-up strategy game
-|: Nibbles - Guide a worm around a maze
-|: Ardentryst - Fantasy sidescroller game
-|: Trophy - 2D car racing game with power-ups
-|: Zatacka - Arcade multiplayer game for 2-6 players
-|: Tumiki Fighters - Kenta Cho's Tumiki Fighters
-|: Funny Boat - a side scrolling arcade shooter game on a steamboat
-|: T.E.G. client - Tenes Empanadas Graciela client
-|: Tennix! - Play tennis against the computer or a friend
-|: LordsAWar Tile Editor - Create or Edit LordsAWar tilesets
-|: Battle for Wesnoth (1.10) - A fantasy turn-based strategy game
-|: Feeding Frenzy! - multiplayer platform game with dwarfs fighting with/for food
-|: Trigger - 3D rally racing car game
-|: PCSX - Sony PlayStation emulator
-|: Kobo Deluxe - Destroy enemy bases in space
-|: Ceferino - Save the cows!
-|: Fish Fillets - Puzzle game about witty fish saving the world sokoban-style
-|: XScavenger - X11 clone of Lode Runner
-|: Educational suite GCompris - Educational game for ages 2 to 10
-|: Tatan - HIZ's Tatan
-|: Mines - Clear hidden mines from a minefield
-|: Xmille
-|: Ri-li - a toy simulator game
-|: SLUDGE Engine - Play SLUDGE games
-|: Beneath A Steel Sky - A science-fiction adventure game set in a bleak post-apocalyptic vision of the future
-|: SuperTux - A Super Mario inspired penguin platform game
-|: Cytadela - old-school first person shooter
-|: Iagno - Dominate the board in a classic version of Reversi
+a: Katawa Shoujo - Bishoujo-style visual novel by Four Leaf Studios
+b: oshu! - Fast osu! port
 
 Graphics
-a: digiKam
-b: Okular
-c: Okular
-d: Photo Layouts Editor
-e: Kamoso - Take any picture with your web cam
-f: ExpoBlending - A tool to blend bracketed images
-g: KColorChooser
-h: AcquireImages - A tool to acquire images using a flat scanner
-i: Okular
-j: Okular
-k: Okular
-l: Gwenview - A simple image viewer
-m: Okular
-n: Okular
-o: Okular
-p: Okular
-q: KolourPaint
-r: Okular
-s: Okular
-t: DNGConverter - A tool to batch convert RAW camera images to DNG
-u: Okular
-v: KSnapshot
-w: Panorama - A tool to assemble images as a panorama
-x: KRuler
-y: KIPI Plugins - KDE Image Plugins Interface
-z: K-3D - Free-as-in-freedom 3D modeling and animation software
-0: Hugin Calibrate Lens - Stitch photographs together
-1: Inkscape - Create and edit Scalable Vector Graphics images
-2: MyPaint - Painting program for digital artists
-3: XSane Image scanning program - A program to work with scanner. Can be used as a scanning, copier, OCR, fax tools.
-4: Document Viewer - View multi-page documents
-5: Camorama Webcam Viewer - View, alter and save images from a webcam
-6: Hugin Panorama Creator - Stitch photographs together
-7: Mandelbulber - Visit 3D Fractal World
-8: LibreOffice Draw
-9: Shotwell - Organize your photos
-A: Stopmotion - Program to create stop-motion animations
-B: ImageMagick (display) - Display and edit image files
-C: PDF Editor - PDF Editor
-D: Scribus - Page Layout and Publication
-E: Xaos - Fractal Zoomer - Fractal Generator
-F: Image Viewer
-G: GNU Image Manipulation Program - Create images and edit photographs
-H: apvlv - Alf's PDF Viewer Like Vim
-I: Hugin Batch Processor - Hugin project stitching queue manager
-J: Shotwell Viewer
-K: Image Viewer
-L: MuPDF - PDF file viewer
-M: gv - View PS and/or PDF files
-N: xpdf - View PDF files
-O: Simple Scan - Scan Documents
+a: PhotoQt - View and manage images
 
 Network
-a: Konqueror
-b: KNode
-c: Akregator - A Feed Reader for KDE
-d: KPPPLogview
-e: KNetAttach
-f: Kopete - Instant Messenger
-g: Blogilo
-h: KMail
-i: KRDC
-j: KPPP
-k: Krfb
-l: KGet
-m: Bookmark Editor - Bookmark Organizer and Editor
-n: QWebContentEdit - Edit website contents
-o: Web Browser
-p: Web - Browse the web
-q: SSL/SSH VNC Viewer - SSVNC - access remote VNC desktops
-r: Midori - Lightweight web browser
-s: Remote Desktop Viewer - Access remote desktops
-t: Mail Reader
-u: QBoobmsg - Send and receive messages from various websites
-v: Iceweasel - Browse the World Wide Web
-w: Mumble - A low-latency, high quality voice chat program for gaming
-x: Email Settings - Configure email accounts
-y: IcedTea Java Web Start - IcedTea Java Web Start
-z: Desktop Sharing - Choose how other users can remotely view your desktop
-0: Midori Private Browsing - Open a new private browsing window
-1: Icedove Mail/News - Read/Write Mail/News with Icedove
-2: Web - Browse the web
-3: Liferea - Download and view feeds
-4: Conkeror Web Browser - Browse the World Wide Web
-5: Wireshark - Network traffic analyzer
-6: Ekiga Softphone - Talk to people over the Internet
-7: Google Gadgets (Qt) - Run Google Gadgets in KDE/Qt environment
-8: MLDonkey - Graphical frontend for MLDonkey
-9: Remmina - Connect to remote desktops
-A: QFlatBoob - Search housings
-B: Transmission - Download and share files over BitTorrent
-C: Web Browser
-D: QHaveDate - Optimize your probabilities to have sex on dating websites
-E: X11VNC Server - Share this desktop by VNC
-F: mutt - Simple text-based Mail User Agent
-G: Links 2
-H: Wicd Network Manager
-I: Dillo - Lightweight browser
-J: Gnubiff - Gnubiff is a mail notification program.
-K: Luakit - Fast, small, webkit based micro-browser extensible by Lua
+a: qutebrowser - A keyboard-driven, vim-like browser based on PyQt5
+b: Qtransmission Bittorrent Client - Download and share files over BitTorrent
+c: WPA Supplicant Administration GUI - IEEE 802.1X/WPA supplicant for secure wireless transfers
 
 Office
-a: Lokalize
-b: KOrganizer - Calendar and Scheduling Program
-c: Kontact
-d: Kontact Administration
-e: KAddressBook
-f: Okular
-g: KTimeTracker
-h: LibreOffice Calc
-i: LibreOffice 
-j: Evolution - Manage your email, contacts and schedule
-k: Document Viewer - View multi-page documents
-l: Dictionary - Check word definitions and spellings in an online dictionary
-m: Orage Calendar - Desktop calendar
-n: LibreOffice Draw
-o: Orage Globaltime - Show clocks from different countries
-p: LibreOffice Writer
-q: LibreOffice Base
-r: LyX Document Processor - High level LaTeX frontend
-s: FreeMind
-t: LibreOffice Impress
-u: ePDFViewer - Lightweight PDF document viewer
-v: AbiWord
-w: LibreOffice Math
-x: mutt - Simple text-based Mail User Agent
-y: Gnumeric - Calculation, Analysis, and Visualization of Information
-z: Zathura - A minimalistic document viewer
+a: qpdfview - A tabbed document viewer using Qt and the Poppler library.
 
 Settings
-a: KDE System Settings
-b: Change Password
-c: System Settings
-d: Menu Editor
-e: Date and Time - Date and Time preferences panel
-f: Background - Change the background
-g: Printing - Configure printers
-h: Mouse - Configure pointer device behavior and appearance
-i: Power - Power management settings
-j: Workspaces - Set number and names of workspaces
-k: Network Tools - View information about your network
-l: Users and Groups - Add or remove users and groups
-m: Window Manager - Configure window behavior and shortcuts
-n: Notifications - Customize how notifications appear on your screen
-o: Software Center - Lets you choose from thousands of applications available for your system 
-p: Network - Configure network devices and connections
-q: Network - Configure network devices and connections
-r: Details - System Information
-s: User Accounts - Add or remove users
-t: Brightness and Lock - Screen brightness and lock settings
-u: Keyboard - Edit keyboard settings and application shortcuts
-v: Shared Folders - Configure which folders are available for your network neighborhood
-w: Preferred Applications
-x: Region and Language - Change your region and language settings
-y: Bluetooth - Configure Bluetooth settings
-z: Color - Color management settings
-0: Startup Applications - Choose what applications to start when you log in
-1: Screensaver - Change screensaver properties
-2: Update Manager - Show and install available updates
-3: Email Settings - Configure email accounts
-4: Desktop Sharing - Choose how other users can remotely view your desktop
-5: Services - Configure which services will be run when the system starts
-6: Universal Access - Universal Access Preferences
-7: GParted - Create, reorganize, and delete partitions
-8: Wacom Graphics Tablet - Set your Wacom tablet preferences
-9: Displays - Change resolution and position of monitors and projectors
-A: Personal File Sharing - Preferences for sharing of files
-B: Appearance - Customize the look of your desktop
-C: Online Accounts - Manage online accounts
-D: Time and Date - Change system time, date, and timezone
-E: Desktop  - Set desktop background and menu and icon behaviour
-F: Keyboard and Mouse - Configure keyboard, mouse, and other input devices
-G: Multimedia Systems Selector - Configure defaults for GStreamer applications
-H: File Manager - Configure the Thunar file manager
-I: Session and Startup - Customize desktop startup and splash screen
-J: Openbox Configuration Manager - Configure and personalize the Openbox window manager
-K: Keyboard - Edit keyboard settings and application shortcuts
-L: ARandR
-M: Settings Editor - Graphical settings editor for Xfconf
-N: Software Sources - Configure the sources for installable software and updates
-O: GCompris Administration - Administration for gcompris
-P: Monitor Settings - Change screen resolution and configure external monitors
-Q: Synaptic Package Manager - Install, remove and upgrade software packages
-R: Orage preferences - Settings for the Xfce 4 Calendar Application (Orage)
-S: Window Manager Tweaks - Fine-tune window behaviour and effects
-T: Network Connections - Manage and change your network connection settings
-U: Preferred Applications
-V: Sound - Change sound volume and sound events
-W: Guake Preferences - Comment
-X: System Settings
-Y: IcedTea Web Control Panel - Configure IcedTea Web (javaws and plugin)
-Z: Settings Manager - Graphical Settings Manager for Xfce 4
-|: Tux Paint Config. - Configure Tux Paint
-|: Passwords and Keys - Manage your passwords and encryption keys
-|: Software Settings - Change software update preferences and enable or disable software sources
-|: Main Menu - Add or remove applications from the main menu
-|: Printers - Change printer settings
-|: Desktop Session Settings - Manage applications loaded in desktop session
-|: OpenJDK Java 6 Policy Tool - OpenJDK Java 6 Policy Tool
-|: Accessibility - Improve keyboard and mouse accessibility
-|: Mouse and Touchpad - Set your mouse and touchpad preferences
-|: Customize Look and Feel - Customizes look and feel of your desktop and applications
-|: Pointing devices - Set your mouse and touchpad preferences
-|: Panel
-|: Power Manager - Settings for the Xfce Power Manager
-|: Removable Drives and Media - Configure management of removable drives and media
-|: Display - Configure screen settings and layout
 
 System
-a: KDiskFree
-b: Konqueror
-c: Nepomuk File Indexing Controller - System tray icon to control the behaviour of the Nepomuk file indexer
-d: Nepomuk Backup
-e: Konqueror
-f: Konqueror
-g: Konsole
-h: System Monitor - View current processes and monitor system state
-i: Dolphin
-j: KwikDisk
-k: Konqueror
-l: KSystemLog
-m: File Manager - Super User Mode
-n: KWalletManager
-o: Krusader - root-mode
-p: Krfb
-q: KUser
-r: KInfoCenter
-s: KRandRTray - A panel applet for resizing and reorientating X screens.
-t: Software Install - Install selected software on the system
-u: Synaptic Package Manager - Install, remove and upgrade software packages
-v: Printing - Configure printers
-w: UXTerm - standard terminal emulator for the X window system
-x: Network Tools - View information about your network
-y: Xosview - X based system monitor
-z: Log File Viewer - View or monitor system log files
-0: Users and Groups - Add or remove users and groups
-1: Configuration Editor - Directly edit your entire configuration database
-2: Software Log Viewer - View past package management tasks
-3: Software Center - Lets you choose from thousands of applications available for your system 
-4: Wine Uninstaller - Uninstall Windows programs
-5: Network - Configure network devices and connections
-6: Bulk Rename - Rename Multiple Files
-7: User Accounts - Add or remove users
-8: CD/DVD Creator - Create CDs and DVDs
-9: Shared Folders - Configure which folders are available for your network neighborhood
-A: Power Statistics - Observe power management
-B: Wine configuration - Setup the compatibility layer for Windows programs
-C: Update Manager - Show and install available updates
-D: Software Install - Install selected software on the system
-E: Services - Configure which services will be run when the system starts
-F: Disk Usage Analyzer - Check folder sizes and available disk space
-G: GParted - Create, reorganize, and delete partitions
-H: Panel
-I: Time and Date - Change system time, date, and timezone
-J: Task Manager - Manage running processes
-K: System Monitor - View current processes and monitor system state
-L: Open Folder with Thunar - Open the specified folders in Thunar
-M: Catalog Installer - Install a catalog of software on the system
-N: Log Out
-O: Keyboard Layout - Preview keyboard layouts
-P: XTerm - standard terminal emulator for the X window system
-Q: Reportbug - Report bugs to the Debian BTS
-R: GDebi Package Installer - Install and view software packages
-S: Terminal emulator - Terminal Emulator
-T: Xfe - A lightweight file manager for X Window
-U: Thunar File Manager - Browse the filesystem with the file manager
-V: Synaptic Package Manager - Install, remove and upgrade software packages
-W: Software Update - Update software installed on the system
-X: Midnight Commander - File manager
-Y: dconf Editor - Directly edit your entire configuration database
-Z: Htop - Show System Processes
-|: UNetbootin - Tool for creating Live USB drives
-|: Add/Remove Software - Add or remove software installed on the system
-|: Service Pack Creator - Create service packs for sharing with other computers
+a: Alacritty
+b: simpleterm - simple terminal implementation for X
 
 Utility
-a: KJots
-b: KTimer
-c: Okteta
-d: Krusader
-e: Ark
-f: Snippets datafile editor
-g: KNotes
-h: Akonaditray
-i: KonsoleKalendar
-j: Home
-k: KDE Groupware Wizard
-l: Help
-m: Kate
-n: Klipper
-o: Kleopatra
-p: KMouth
-q: Kleopatra
-r: SuperKaramba - An engine for cool desktop eyecandy.
-s: KGpg - A GnuPG frontend
-t: KAlarm
-u: KFileReplace
-v: KWrite
-w: KTeaTime
-x: KFontView
-y: KCalc
-z: Jovie - KDE Text To Speech Service
-0: Sweeper
-1: KMag
-2: KTimeTracker
-3: KMouseTool - Clicks the mouse for you, reducing the effects of RSI
-4: Find Files/Folders
-5: Filelight - View disk usage information
-6: KCharSelect
-7: Shutter - Capture, edit and share screenshots
-8: Time Tracker - Project Hamster - track your time
-9: Run Program...
-A: Guake Terminal - Use the command line in a Quake-like terminal
-B: Help
-C: Xfimage - A simple image viewer for Xfe
-D: Add New Program - Adds Zero Install programs to your Applications menu
-E: Xournal - Take handwritten notes
-F: Leafpad - Simple text editor
-G: Terminal - Use the command line
-H: File Manager - Configure the Thunar file manager
-I: Calculator - Perform arithmetic, scientific or financial calculations
-J: Kupfer - Convenient command and access tool for applications and documents
-K: Xfview - A simple text viewer for Xfe
-L: Galculator - Perform simple and scientific calculations
-M: Character Map - Insert special characters into documents
-N: Time Tracker - Project Hamster - track your time
-O: Bulk Rename - Rename Multiple Files
-P: Search for Files... - Locate documents and folders on this computer by name or content
-Q: Live Magic - Create Debian Live systems (LiveCDs, etc.)
-R: Xfpack - A simple package manager for Xfe
-S: Manage Programs - Update or Remove Zero Install programs on your Applications menu
-T: Tux Commander - A two panel file manager
-U: About Xfce
-V: gedit - Edit text files
-W: Curtain - Show and move a curtain on the desktop
-X: Orage Globaltime - Show clocks from different countries
-Y: Screenshot - Save images of your desktop or individual windows
-Z: Bluetooth Device Setup - Setup Bluetooth devices
-|: VirtualBox - Run several virtual systems on a single host computer
-|: Help
-|: GNOME Commander - A two paned file manager
-|: Time Tracking Overview - The overview window of hamster time tracker
-|: GNOME Shell Extension Preferences - Configure GNOME Shell Extensions
-|: Spotlighter - Show and move a spotlight on the desktop
-|: File Manager - Configure the Thunar file manager
-|: Xarchiver - A GTK+2 only archive manager
-|: Take Vector Screenshot - Save vector images of application windows
-|: Battery Charge Graph - Battery Charge Graph
-|: Application Finder - Find and launch applications installed on your system
-|: Open Folder with Thunar - Open the specified folders in Thunar
-|: Worker - File manager for X.
-|: Archive Manager - Create and modify an archive
-|: Weboob backends configuration - Configure Weboob backends
-|: GNOME Shell - Window management and application launching
-|: Files - Access and organize files
-|: LXTerminal - Use the command line
-|: On-Screen Keyboard - Navigate applications and type using alternative input devices
-|: Terminal emulator - Terminal Emulator
-|: GNU Emacs 23 - View and edit files
-|: Thunar File Manager - Browse the filesystem with the file manager
-|: Midnight Commander - File manager
-|: Xfwrite - A simple text editor for Xfe
-|: Gentoo - Fully GUI-configurable, two-pane X file manager
-|: Disk Utility - Manage Drives and Media
-|: Terminal Emulator
-|: Root Terminal - Opens a terminal as the root user, using gksu to ask for the password
-|: Bluetooth Transfer - Send files via Bluetooth
-|: Main Menu - Add or remove applications from the main menu
-|: Image Viewer
-|: Contacts
+a: compton - A X compositor
+b: XEmacs Text Editor - Edit text
 
 Terminalemulator
-a: Konsole
-b: Guake Terminal - Use the command line in a Quake-like terminal
-c: UXTerm - standard terminal emulator for the X window system
-d: Terminal - Use the command line
-e: XTerm - standard terminal emulator for the X window system
-f: LXTerminal - Use the command line
-g: Terminal emulator - Terminal Emulator
-h: Root Terminal - Opens a terminal as the root user, using gksu to ask for the password
+a: Alacritty
+b: simpleterm - simple terminal implementation for X
 
 Screensaver
-a: LCDscrub - This screen saver is not meant to look pretty, but rather, to repair burn-in on LCD monitors. Believe it or not, screen burn is not a thing of the past. It can happen to LCD screens pretty easily, even in this modern age. However, leaving the screen on and displaying high contrast images can often repair the damage. That's what this screen saver does. See also: http://docs.info.apple.com/article.html?artnum
-b: Kumppa - Spiraling, spinning, and very, very fast splashes of color rush toward the screen. Written by Teemu Suutari.
-c: CloudLife - Generates cloud-like formations based on a variant of Conway's Life. The difference is that cells have a maximum age, after which they count as 3 for populating the next generation. This makes long-lived formations explode instead of just sitting there. http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life Written by Don Marti.
-d: m6502 - This emulates a 6502 microprocessor. The family of 6502 chips were used throughout the 70's and 80's in machines such as the Atari 2600, Commodore PET, VIC20 and C64, Apple ][, and the NES. Some example programs are included, and it can also read in an assembly file as input. Original JavaScript Version by Stian Soreng: http://www.6502asm.com/. Ported to XScreenSaver by Jeremy English. Written by Stian Soreng and Jeremy English.
-e: Galaxy - This draws spinning galaxies, which then collide and scatter their stars to the, uh, four winds or something. Written by Uli Siegmund, Harald Backert, and Hubert Feyrer.
-f: IFS - This one draws spinning, colliding iterated-function-system images. Note that the "Detail" parameter is exponential. Number of points drawn is functions^detail. http://en.wikipedia.org/wiki/Iterated_function_system Written by Chris Le Sueur and Robby Griffin.
-g: Swirl - Flowing, swirly patterns. Written by M. Dobie and R. Taylor.
-h: StonerView - Chains of colorful squares dance around each other in complex spiral patterns. Inspired by David Tristram's `electropaint' screen saver, originally written for SGI computers in the late 1980s or early 1990s. Written by Andrew Plotkin.
-i: Slip - This throws some random bits on the screen, then sucks them through a jet engine and spews them out the other side. To avoid turning the image completely to mush, every now and then it will it interject some splashes of color into the scene, or go into a spin cycle, or stretch the image like taffy. Written by Scott Draves and Jamie Zawinski.
-j: GFlux - Draws a rippling waves on a rotating wireframe grid. Written by Josiah Pease.
-k: Munch - DATAI 2 ADDB 1,2 ROTC 2,-22 XOR 1,2 JRST .-4 As reported by HAKMEM, in 1962, Jackson Wright wrote the above PDP-1 code. That code still lives on here, some 46 years later. The number of lines of enclosing code has increased substantially, however. http://en.wikipedia.org/wiki/HAKMEM http://en.wikipedia.org/wiki/Munching_square Written by Jackson Wright and Tim Showalter.
-l: Apple2 - Simulates an original Apple ][ Plus computer in all its 1979 glory. It also reproduces the appearance of display on a color television set of the period. In "Basic Programming Mode", a simulated user types in a BASIC program and runs it. In "Text Mode", it displays the output of a program, or the contents of a file or URL. In "Slideshow Mode", it chooses random images and displays them within the limitations of the Apple ][ display hardware. (Six available colors in hi-res mode!) On X11 systems, This program is also a fully-functional VT100 emulator. http://en.wikipedia.org/wiki/Apple_II_series Written by Trevor Blackwell.
-m: Hypertorus - This shows a rotating Clifford Torus: a torus lying on the "surface" of a 4D hypersphere. Inspired by Thomas Banchoff's book "Beyond the Third Dimension: Geometry, Computer Graphics, and Higher Dimensions", Scientific American Library, 1990. http://en.wikipedia.org/wiki/N-sphere http://en.wikipedia.org/wiki/Clifford_torus http://en.wikipedia.org/wiki/Regular_polytope Written by Carsten Steger.
-n: Jigsaw - This grabs a screen image, carves it up into a jigsaw puzzle, shuffles it, and then solves the puzzle. This works especially well when you feed it an external video signal instead of letting it grab the screen image (actually, I guess this is generally true...) When it is grabbing a video image, it is sometimes pretty hard to guess what the image is going to look like once the puzzle is solved. Written by Jamie Zawinski.
-o: Rorschach - This generates random inkblot patterns via a reflected random walk. Any deep-seated neurotic tendencies which this program reveals are your own problem. http://en.wikipedia.org/wiki/Rorschach_inkblot_test http://en.wikipedia.org/wiki/Random_walk Written by Jamie Zawinski.
-p: GLHanoi - Solves the Towers of Hanoi puzzle. Move N disks from one pole to another, one disk at a time, with no disk ever resting on a disk smaller than itself. http://en.wikipedia.org/wiki/Tower_of_Hanoi Written by Dave Atkinson; 2005. 	
-q: Circuit - Animates a number of 3D electronic components. Written by Ben Buxton.
-r: Starfish - This generates a sequence of undulating, throbbing, star-like patterns which pulsate, rotate, and turn inside out. Another display mode uses these shapes to lay down a field of colors, which are then cycled. The motion is very organic. Written by Jamie Zawinski.
-s: Julia - Animates the Julia set (a close relative of the Mandelbrot set). The small moving dot indicates the control point from which the rest of the image was generated. See also the "Discrete" screen saver. http://en.wikipedia.org/wiki/Julia_set Written by Sean McCullough.
-t: Maze - This generates random mazes (with various different algorithms), and then solves them. Backtracking and look-ahead paths are displayed in different colors. Written by Jim Randell and many others.
-u: VidWhacker - This is a shell script that grabs a frame of video from the system's video input, and then uses some PBM filters (chosen at random) to manipulate and recombine the video frame in various ways (edge detection, subtracting the image from a rotated version of itself, etc.) Then it displays that image for a few seconds, and does it again. This works really well if you just feed broadcast television into it. Written by Jamie Zawinski.
-v: Pipes - A growing plumbing system, with bolts and valves. Written by Marcelo Vianna.
-w: SBalls - Draws an animation of textured balls spinning like crazy. Written by Eric Lassauge.
-x: MirrorBlob - Draws a wobbly blob that distorts the image behind it. Written by Jon Dowdall.
-y: Polyominoes - Repeatedly attempts to completely fill a rectangle with irregularly-shaped puzzle pieces. http://en.wikipedia.org/wiki/Polyomino Written by Stephen Montgomery-Smith.
-z: Flame - Iterative fractals. Written by Scott Draves.
-0: AntSpotlight - Draws an ant (with a headlight) who walks on top of an image of your desktop or other image. Written by Blair Tennessy.
-1: XLyap - This generates pretty fractal pictures via the Lyapunov exponent. http://en.wikipedia.org/wiki/Lyapunov_exponent Written by Ron Record.
-2: FontGlide - Puts text on the screen using large characters that glide in from the edges, assemble, then disperse. Alternately, it can simply scroll whole sentences from right to left. Written by Jamie Zawinski.
-3: Spotlight - Draws a spotlight scanning across a black screen, illuminating the underlying desktop (or a picture) when it passes. Written by Rick Schultz and Jamie Zawinski.
-4: SkyTentacles - There is a tentacled abomination in the sky. From above you it devours. Written by Jamie Zawinski.
-5: Surfaces - This draws a visualization of several interesting parametric surfaces. http://mathworld.wolfram.com/DinisSurface.html http://en.wikipedia.org/wiki/Enneper_surface http://mathworld.wolfram.com/EnnepersMinimalSurface.html http://mathworld.wolfram.com/KuenSurface.html http://en.wikipedia.org/wiki/Moebius_strip http://mathworld.wolfram.com/Seashell.html http://mathworld.wolfram.com/SwallowtailCatastrophe.html http://mathworld.wolfram.com/BohemianDome.html http://en.wikipedia.org/wiki/Whitney_umbrella http://mathworld.wolfram.com/PlueckersConoid.html http://mathworld.wolfram.com/HennebergsMinimalSurface.html http://mathworld.wolfram.com/CatalansSurface.html http://mathworld.wolfram.com/CorkscrewSurface.html Written by Andrey Mirtchovski and Carsten Steger.
-6: GLPlanet - Draws a planet bouncing around in space. The built-in image is a map of the earth (extracted from `xearth'), but you can wrap any texture around the sphere, e.g., the planetary textures that come with `ssystem'. Written by David Konerding.
-7: Intermomentary - A surface is filled with a hundred medium to small sized circles. Each circle has a different size and direction, but moves at the same slow rate. Displays the instantaneous intersections of the circles as well as the aggregate intersections of the circles. The circles begin with a radius of 1 pixel and slowly increase to some arbitrary size. Circles are drawn with small moving points along the perimeter. The intersections are rendered as glowing orbs. Glowing orbs are rendered only when a perimeter point moves past the intersection point. Written by Casey Reas, William Ngan, Robert Hodgin, and Jamie Zawinski.
-8: Cynosure - Random dropshadowed rectangles pop onto the screen in lockstep. Written by Ozymandias G. Desiderata, Jamie Zawinski, and Stephen Linhart.
-9: WhirlWindWarp - Floating stars are acted upon by a mixture of simple 2D forcefields. The strength of each forcefield changes continuously, and it is also switched on and off at random. Written by Paul 'Joey' Clark.
-A: SpeedMine - Simulates speeding down a rocky mineshaft, or a funky dancing worm. Written by Conrad Parker.
-B: Flow - Strange attractors formed of flows in a 3D differential equation phase space. Features the popular attractors described by Lorentz, Roessler, Birkhoff and Duffing, and can discover entirely new attractors by itself. http://en.wikipedia.org/wiki/Attractor#Strange_attractor Written by Tim Auckland.
-C: Bouboule - This draws what looks like a spinning, deforming balloon with varying-sized spots painted on its invisible surface. Written by Jeremie Petit.
-D: Barcode - Draws a random sequence of colorful barcodes scrolling across your screen. CONSUME! The barcodes follow the UPC-A, UPC-E, EAN-8 or EAN-13 standards. http://en.wikipedia.org/wiki/Universal_Product_Code http://en.wikipedia.org/wiki/European_Article_Number Written by Dan Bornstein.
-E: Moire2 - Generates fields of concentric circles or ovals, and combines the planes with various operations. The planes are moving independently of one another, causing the interference lines to spray. http://en.wikipedia.org/wiki/Moire_pattern Written by Jamie Zawinski.
-F: BouncingCow - A Cow. A Trampoline. Together, they fight crime. Written by Jamie Zawinski.
-G: Grav - This draws a simple orbital simulation. With trails enabled, it looks kind of like a cloud-chamber photograph. Written by Greg Bowering.
-H: Greynetic - Draws random colored, stippled and transparent rectangles. Written by Jamie Zawinski.
-I: Atunnel - Draws an animation of a textured tunnel in GL. Written by Eric Lassauge and Roman Podobedov.
-J: Sproingies - Slinky-like creatures walk down an infinite staircase and occasionally explode! http://en.wikipedia.org/wiki/Slinky http://en.wikipedia.org/wiki/Q%2Abert http://en.wikipedia.org/wiki/Marble_Madness Written by Ed Mackey.
-K: Hilbert - This draws the recursive Hilbert space-filling curve, in both 2D and 3D variants. It incrementally animates the growth and recursion to the maximum depth, then unwinds it back. The Hilbert path is a single contiguous line that can fill a volume without crossing itself. As a data structure, Hilbert paths are useful because ordering along the curve preserves locality: points that close together along the curve are also close together in space. The converse is often, but not always, true. The coloration reflects this. http://en.wikipedia.org/wiki/Hilbert_curve Written by Jamie Zawinski.
-L: Mountain - Generates random 3D plots that look vaguely mountainous. Written by Pascal Pensa.
-M: Polytopes - This shows one of the six regular 4D polytopes rotating in 4D. Inspired by H.S.M Coxeter's book "Regular Polytopes", 3rd Edition, Dover Publications, Inc., 1973, and Thomas Banchoff's book "Beyond the Third Dimension: Geometry, Computer Graphics, and Higher Dimensions", Scientific American Library, 1990. http://en.wikipedia.org/wiki/Hypercube http://en.wikipedia.org/wiki/Regular_polytope Written by Carsten Steger.
-N: Morph3D - Platonic solids that turn inside out and get spikey. http://en.wikipedia.org/wiki/Platonic_solid Written by Marcelo Vianna.
-O: GLMatrix - Draws 3D dropping characters similar to what is seen in the title sequence of "The Matrix". See also "xmatrix" for a 2D rendering of the similar effect that appeared on the computer monitors actually *in* the movie. Written by Jamie Zawinski.
-P: FluidBalls - Models the physics of bouncing balls, or of particles in a gas or fluid, depending on the settings. If "Shake Box" is selected, then every now and then, the box will be rotated, changing which direction is down (in order to keep the settled balls in motion.) Written by Peter Birtles and Jamie Zawinski.
-Q: Qix - Bounces a series of line segments around the screen, and uses variations on this basic motion pattern to produce all sorts of different presentations: line segments, filled polygons, and overlapping translucent areas. http://en.wikipedia.org/wiki/Qix Written by Jamie Zawinski.
-R: CubicGrid - Draws the view of an observer located inside a rotating 3D lattice of colored points. Written by Vasek Potocek.
-S: Boing - This bouncing ball is a clone of the first graphics demo for the Amiga 1000, which was written by Dale Luck and RJ Mical during a break at the 1984 Consumer Electronics Show (or so the legend goes.) This looks like the original Amiga demo if you turn off "smoothing" and "lighting" and turn on "scanlines", and is somewhat more modern otherwise. http://en.wikipedia.org/wiki/Amiga#Boing_Ball Written by Jamie Zawinski.
-T: GLKnots - Generates some twisting 3d knot patterns. Spins 'em around. http://en.wikipedia.org/wiki/Knot_theory Written by Jamie Zawinski.
-U: RubikBlocks - Animates the Rubik's Mirror Blocks puzzle. See also the "Rubik", "Cube21", and "GLSnake" screen savers. http://en.wikipedia.org/wiki/Combination_puzzles#Irregular_Cuboids Written by Vasek Potocek.
-V: BSOD - BSOD stands for "Blue Screen of Death". The finest in personal computer emulation, BSOD simulates popular screen savers from a number of less robust operating systems. Written by Jamie Zawinski.
-W: Celtic - Repeatedly draws random Celtic cross-stitch patterns. http://en.wikipedia.org/wiki/Celtic_knot Written by Max Froumentin.
-X: TimeTunnel - Draws an animation similar to the opening and closing effects on the Dr. Who TV show. Written by Sean P. Brennan.
-Y: Rocks - This draws an animation of flight through an asteroid field, with changes in rotation and direction. Written by Jamie Zawinski.
-Z: Kaleidescope - A simple kaleidoscope. See also "GLeidescope". http://en.wikipedia.org/wiki/Kaleidoscope Written by Ron Tapia.
-|: Deluxe - Draws a pulsing sequence of transparent stars, circles, and lines. Written by Jamie Zawinski.
-|: Pinion - Draws an interconnected set of gears moving across the screen. See also the "Gears" and "MoebiusGears" screen savers. http://en.wikipedia.org/wiki/Involute_gear Written by Jamie Zawinski.
-|: Hopalong - This draws lacy fractal patterns based on iteration in the imaginary plane, from a 1986 Scientific American article. See also the "Discrete" screen saver. Written by Patrick Naughton.
-|: Atlantis - A 3D animation of a number of sharks, dolphins, and whales. Written by Mark Kilgard.
-|: Goop - This draws set of animating, transparent, amoeba-like blobs. The blobs change shape as they wander around the screen, and they are translucent, so you can see the lower blobs through the higher ones, and when one passes over another, their colors merge. I got the idea for this from a mouse pad I had once, which achieved the same kind of effect in real life by having several layers of plastic with colored oil between them. Written by Jamie Zawinski.
-|: Noof - Draws some rotatey patterns, using OpenGL. Written by Bill Torzewski.
-|: Pong - This simulates the 1971 Pong home video game, as well as various artifacts from displaying it on a color TV set. In clock mode, the score keeps track of the current time. http://en.wikipedia.org/wiki/Pong Written by Jeremy English and Trevor Blackwell.
-|: Interaggregate - A surface is filled with a hundred medium to small sized circles. Each circle has a different size and direction, but moves at the same slow rate. Displays the instantaneous intersections of the circles as well as the aggregate intersections of the circles. Though actually it doesn't look like circles at all! Written by Casey Reas, William Ngan, Robert Hodgin, and Jamie Zawinski.
-|: Petri - This simulates colonies of mold growing in a petri dish. Growing colored circles overlap and leave spiral interference in their wake. Written by Dan Bornstein.
-|: Fiberlamp - Draws a groovy rotating fiber optic lamp. Written by Tim Auckland.
-|: Pyro - Exploding fireworks. See also the "Fireworkx", "Eruption", and "XFlame" screen savers. Written by Jamie Zawinski.
-|: Wormhole - Flying through a colored wormhole in space. Written by Jon Rafkind.
-|: Spheremonics - These closed objects are commonly called spherical harmonics, although they are only remotely related to the mathematical definition found in the solution to certain wave functions, most notably the eigenfunctions of angular momentum operators. http://en.wikipedia.org/wiki/Spherical_harmonics#Visualization_of_the_spherical_harmonics Written by Paul Bourke and Jamie Zawinski.
-|: Substrate - Crystalline lines grow on a computational substrate. A simple perpendicular growth rule creates intricate city-like structures. Written by J. Tarbell and Mike Kershaw.
-|: AntMaze - Draws a few views of a few ants walking around in a simple maze. Written by Blair Tennessy.
-|: Crackberg - Flies through height maps, optionally animating the creation and destruction of generated tiles; tiles `grow' into place. Written by Matus Telgarsky.
-|: DecayScreen - This takes an image and makes it melt. You've no doubt seen this effect before, but no screensaver would really be complete without it. It works best if there's something colorful visible. Warning, if the effect continues after the screen saver is off, seek medical attention. Written by David Wald, Vivek Khera, Jamie Zawinski, and Vince Levey.
-|: Tangram - Solves tangram puzzles. http://en.wikipedia.org/wiki/Tangram Written by Jeremy English.
-|: Lavalite - Draws a 3D Simulation a Lava Lite(r). Odd-shaped blobs of a mysterious substance are heated, slowly rise to the top of the bottle, and then drop back down as they cool. This simulation requires a fairly fast machine (both CPU and 3D performance.) "LAVA LITE(r) and the configuration of the LAVA(r) brand motion lamp are registered trademarks of Haggerty Enterprises, Inc. The configuration of the globe and base of the motion lamp are registered trademarks of Haggerty Enterprises, Inc. in the U.S.A. and in other countries around the world." http://en.wikipedia.org/wiki/Lava_lamp http://en.wikipedia.org/wiki/Metaballs Written by Jamie Zawinski.
-|: Pulsar - Draws some intersecting planes, making use of alpha blending, fog, textures, and mipmaps. Written by David Konerding.
-|: RotZoomer - Creates a collage of rotated and scaled portions of the screen. Written by Claudio Matsuoka.
-|: Engine - Draws a simple model of an engine that floats around the screen. http://en.wikipedia.org/wiki/Internal_combustion_engine#Operation Written by Ben Buxton and Ed Beroset.
-|: Phosphor - Draws a simulation of an old terminal, with large pixels and long-sustain phosphor. On X11 systems, This program is also a fully-functional VT100 emulator! Written by Jamie Zawinski.
-|: Rubik - Draws a Rubik's Cube that rotates in three dimensions and repeatedly shuffles and solves itself. See also the "GLSnake" and "Cube21" screen savers. http://en.wikipedia.org/wiki/Rubik%27s_Cube Written by Marcelo Vianna.
-|: Zoom - Zooms in on a part of the screen and then moves around. With the "Lenses" option, the result is like looking through many overlapping lenses rather than just a simple zoom. Written by James Macnicol.
-|: Polyhedra - Displays different 3D solids and some information about each. A new solid is chosen every few seconds. There are 75 uniform polyhedra, plus 5 infinite sets of prisms and antiprisms; including their duals brings the total to 160. http://en.wikipedia.org/wiki/Uniform_polyhedra Written by Dr. Zvi Har'El and Jamie Zawinski.
-|: Lockward - A translucent spinning, blinking thing. Sort of a cross between the wards in an old combination lock and those old backlit information displays that animated and changed color via polarized light. Written by Leo L. Schwab.
-|: Stairs - Escher's infinite staircase. http://en.wikipedia.org/wiki/Maurits_Cornelis_Escher Written by Marcelo Vianna.
-|: Loop - Generates loop-shaped colonies that spawn, age, and eventually die. http://en.wikipedia.org/wiki/Langton%27s_loops Written by David Bagley.
-|: Bubble3D - Draws a stream of rising, undulating 3D bubbles, rising toward the top of the screen, with transparency and specular reflections. Written by Richard Jones.
-|: CompanionCube - The symptoms most commonly produced by Enrichment Center testing are superstition, perceiving inanimate objects as alive, and hallucinations. The Enrichment Center reminds you that the weighted companion cube will never threaten to stab you and, in fact, cannot speak. In the event that the Weighted Companion Cube does speak, the Enrichment Center urges you to disregard its advice. http://en.wikipedia.org/wiki/Portal_%28video_game%29 Written by Jamie Zawinski.
-|: Juggler3D - 3D simulation of a juggler performing with balls, clubs and rings. http://en.wikipedia.org/wiki/Siteswap Written by Brian Apps.
-|: Anemone - Wiggling tentacles. Written by Gabriel Finch.
-|: MoebiusGears - Draws a closed, interlinked chain of rotating gears. The layout of the gears follows the path of a moebius strip. See also the "Pinion" and "Gears" screen savers. http://en.wikipedia.org/wiki/Involute_gear http://en.wikipedia.org/wiki/Moebius_strip Written by Jamie Zawinski.
-|: Hypnowheel - Draws a series of overlapping, translucent spiral patterns. The tightness of their spirals fluctuates in and out. http://en.wikipedia.org/wiki/Moire_pattern Written by Jamie Zawinski.
-|: Sierpinski - This draws the two-dimensional variant of the recursive Sierpinski triangle fractal. See also the "Sierpinski3D" screen saver. http://en.wikipedia.org/wiki/Sierpinski_triangle Written by Desmond Daignault.
-|: Sierpinski3D - This draws the Sierpinski tetrahedron fractal, the three-dimensional variant of the recursive Sierpinski triangle. http://en.wikipedia.org/wiki/Sierpinski_triangle#Analogs_in_higher_dimension Written by Tim Robinson and Jamie Zawinski.
-|: GLText - Displays a few lines of text spinning around in a solid 3D font. The text can use strftime() escape codes to display the current date and time. Written by Jamie Zawinski.
-|: Euler2D - Simulates two dimensional incompressible inviscid fluid flow. http://en.wikipedia.org/wiki/Euler_equations_%28fluid_dynamics%29 http://en.wikipedia.org/wiki/Inviscid_flow Written by Stephen Montgomery-Smith.
-|: Boxed - Draws a box full of 3D bouncing balls that explode. Written by Sander van Grieken.
-|: Superquadrics - Morphing 3D shapes. Written by Ed Mackey.
-|: Fireworkx - Exploding fireworks. See also the "Eruption", "XFlame" and "Pyro" screen savers. Written by Rony B Chandran.
-|: FlipFlop - Draws a grid of 3D colored tiles that change positions with each other. Written by Kevin Ogden and Sergio Gutierrez.
-|: XMatrix - Draws dropping characters similar to what is seen on the computer monitors in "The Matrix". See also "GLMatrix" for a 3D rendering of the similar effect that appeared in the movie's title sequence. Written by Jamie Zawinski.
-|: Distort - Grabs an image of the screen, and then lets a transparent lens wander around the screen, magnifying whatever is underneath. Written by Jonas Munsin.
-|: XJack - This behaves schizophrenically and makes a lot of typos. Written by Jamie Zawinski.
-|: Extrusion - Draws various rotating extruded shapes that twist around, lengthen, and turn inside out. Written by Linas Vepstas, David Konerding, and Jamie Zawinski.
-|: MemScroller - This draws a dump of its own process memory scrolling across the screen in three windows at three different rates. Written by Jamie Zawinski.
-|: FlyingToasters - A fleet of 3d space-age jet-powered flying toasters (and toast!) Inspired by the ancient Berkeley Systems After Dark flying toasters. http://en.wikipedia.org/wiki/After_Dark_%28software%29#Flying_Toasters Written by Jamie Zawinski and Devon Dossett.
-|: Bumps - A spotlight roams across an embossed version of your desktop or other picture. Written by Shane Smit.
-|: XAnalogTV - XAnalogTV shows a detailed simulation of an old TV set showing various test patterns, with various picture artifacts like snow, bloom, distortion, ghosting, and hash noise. It also simulates the TV warming up. It will cycle through 12 channels, some with images you give it, and some with color bars or nothing but static. Written by Trevor Blackwell.
-|: Penetrate - Simulates (something like) the classic arcade game Missile Command. http://en.wikipedia.org/wiki/Missile_Command Written by Adam Miller.
-|: Apollonian - Draws an Apollonian gasket: a fractal packing of circles with smaller circles, demonstrating Descartes's theorem. http://en.wikipedia.org/wiki/Apollonian_gasket http://en.wikipedia.org/wiki/Descartes%27_theorem Written by Allan R. Wilks and David Bagley.
-|: Endgame - Black slips out of three mating nets, but the fourth one holds him tight! A brilliant composition! See also the "Queens" screen saver. http://en.wikipedia.org/wiki/Chess_endgame Written by Blair Tennessy.
-|: Ripples - This draws rippling interference patterns like splashing water. With the -water option, it manipulates your desktop image to look like something is dripping into it. Written by Tom Hammersley.
-|: Menger - This draws the three-dimensional variant of the recursive Menger Gasket, a cube-based fractal object analagous to the Sierpinski Tetrahedron. http://en.wikipedia.org/wiki/Menger_sponge http://en.wikipedia.org/wiki/Sierpinski_carpet Written by Jamie Zawinski.
-|: Cage - This draws Escher's "Impossible Cage", a 3d analog of a moebius strip, and rotates it in three dimensions. http://en.wikipedia.org/wiki/Maurits_Cornelis_Escher Written by Marcelo Vianna.
-|: Triangle - Generates random mountain ranges using iterative subdivision of triangles. Written by Tobias Gloth.
-|: Gears - This draws sets of turning, interlocking gears, rotating in three dimensions. See also the "Pinion" and "MoebiusGears" screen savers. http://en.wikipedia.org/wiki/Involute_gear http://en.wikipedia.org/wiki/Epicyclic_gearing Written by Jamie Zawinski.
-|: JigglyPuff - This does bad things with quasi-spherical objects. You have a tetrahedron with tesselated faces. The vertices on these faces have forces on them: one proportional to the distance from the surface of a sphere; and one proportional to the distance from the neighbors. They also have inertia. The resulting effect can range from a shape that does nothing, to a frenetic polygon storm. Somewhere in between there it usually manifests as a blob that jiggles in a kind of disturbing manner. Written by Keith Macleod.
-|: Wander - Draws a colorful random-walk, in various forms. http://en.wikipedia.org/wiki/Random_walk Written by Rick Campbell.
-|: Cube21 - Animates a Rubik-like puzzle known as Cube 21 or Square-1. The rotations are chosen randomly. See also the "Rubik" and "GLSnake" screen savers. http://en.wikipedia.org/wiki/Square_One_%28puzzle%29 Written by Vasek Potocek.
-|: FlipText - Draws successive pages of text. The lines flip in and out in a soothing 3D pattern. Written by Jamie Zawinski.
-|: Providence - "A pyramid unfinished. In the zenith an eye in a triangle, surrounded by a glory, proper." http://en.wikipedia.org/wiki/Eye_of_Providence Written by Blair Tennessy.
-|: Penrose - Draws quasiperiodic tilings; think of the implications on modern formica technology. In April 1997, Sir Roger Penrose, a British math professor who has worked with Stephen Hawking on such topics as relativity, black holes, and whether time has a beginning, filed a copyright-infringement lawsuit against the Kimberly-Clark Corporation, which Penrose said copied a pattern he created (a pattern demonstrating that "a nonrepeating pattern could exist in nature") for its Kleenex quilted toilet paper. Penrose said he doesn't like litigation but, "When it comes to the population of Great Britain being invited by a multinational to wipe their bottoms on what appears to be the work of a Knight of the Realm, then a last stand must be taken." As reported by News of the Weird #491, 4-Jul-1997. http://en.wikipedia.org/wiki/Penrose_tiling Written by Timo Korvola.
-|: FadePlot - Draws what looks like a waving ribbon following a sinusoidal path. Written by Bas van Gaalen and Charles Vidal.
-|: XFlame - Draws a simulation of pulsing fire. It can also take an arbitrary image and set it on fire too. Written by Carsten Haitzler and many others.
-|: Photopile - Loads several random images, and displays them as if lying in a random pile. The pile is periodically reshuffled, with new images coming in and old ones being thrown out. Written by Jens Kilian.
-|: GLBlur - This draws a box and a few line segments, and generates a radial blur outward from it. This creates flowing field effects. This is done by rendering the scene into a small texture, then repeatedly rendering increasingly-enlarged and increasingly-transparent versions of that texture onto the frame buffer. As such, it's quite GPU-intensive: if you don't have a very good graphics card, it will hurt your machine bad. Written by Jamie Zawinski.
-|: Crystal - Moving polygons, similar to a kaleidoscope. See also the "Kaleidescope" and "GLeidescope" screen savers. http://en.wikipedia.org/wiki/Kaleidoscope Written by Jouk Jansen.
-|: Interference - Color field based on computing decaying sinusoidal waves. Written by Hannu Mallat.
-|: Carousel - Loads several random images, and displays them flying in a circular formation. The formation changes speed and direction randomly, and images periodically drop out to be replaced by new ones. Written by Jamie Zawinski.
-|: Epicycle - This draws the path traced out by a point on the edge of a circle. That circle rotates around a point on the rim of another circle, and so on, several times. These were the basis for the pre-heliocentric model of planetary motion. http://en.wikipedia.org/wiki/Deferent_and_epicycle Written by James Youngman.
-|: StarWars - Draws a stream of text slowly scrolling into the distance at an angle, over a star field, like at the beginning of the movie of the same name. http://en.wikipedia.org/wiki/Star_Wars_opening_crawl Written by Jamie Zawinski and Claudio Matauoka.
-|: Vermiculate - Draws squiggly worm-like paths. Written by Tyler Pierce.
-|: Blaster - Draws a simulation of flying space-combat robots (cleverly disguised as colored circles) doing battle in front of a moving star field. Written by Jonathan Lin.
-|: Discrete - More "discrete map" systems, including new variants of Hopalong and Julia, and a few others. Written by Tim Auckland.
-|: NerveRot - Draws different shapes composed of nervously vibrating squiggles, as if seen through a camera operated by a monkey on crack. Written by Dan Bornstein.
-|: Abstractile - Generates mosaic patterns of interlocking tiles. Written by Steve Sundstrom.
-|: Demon - A cellular automaton that starts with a random field, and organizes it into stripes and spirals. http://en.wikipedia.org/wiki/Maxwell%27s_demon Written by David Bagley.
-|: TronBit - Draws an animation of the character "Bit" from the film, "Tron". The "yes" state is a tetrahedron; the "no" state is the second stellation of an icosahedron; and the idle state oscillates between a small triambic icosahedron and the compound of an icosahedron and a dodecahedron. http://en.wikipedia.org/wiki/List_of_Tron_characters#Bit http://en.wikipedia.org/wiki/Uniform_polyhedra http://en.wikipedia.org/wiki/Stellation Written by Jamie Zawinski.
-|: AntInspect - Draws a trio of ants moving their spheres around a circle. Written by Blair Tennessy.
-|: Truchet - This draws line- and arc-based truchet patterns that tile the screen. http://en.wikipedia.org/wiki/Tessellation Written by Adrian Likins.
-|: Pedal - This is sort of a combination spirograph/string-art. It generates a large, complex polygon, and renders it by filling using an even/odd winding rule. Written by Dale Moore.
-|: BlockTube - Draws a swirling, falling tunnel of reflective slabs. They fade from hue to hue. Written by Lars R. Damerow.
-|: Moire - When the lines on the screen Make more lines in between, That's a moire'! http://en.wikipedia.org/wiki/Moire_pattern Written by Jamie Zawinski and Michael Bayne.
-|: Drift - Drifting recursive fractal cosmic flames. Written by Scott Draves.
-|: NoseGuy - A little man with a big nose wanders around your screen saying things. Written by Dan Heller and Jamie Zawinski.
-|: FlipScreen3D - Grabs an image of the desktop, turns it into a GL texture map, and spins it around and deforms it in various ways. Written by Ben Buxton and Jamie Zawinski.
-|: Strange - This draws iterations to strange attractors: it's a colorful, unpredictably-animating swarm of dots that swoops and twists around. http://en.wikipedia.org/wiki/Attractor#Strange_attractor Written by Massimino Pascal.
-|: CWaves - This generates a languidly-scrolling vertical field of sinusoidal colors. Written by Jamie Zawinski.
-|: IMSMap - This generates random cloud-like patterns. The idea is to take four points on the edge of the image, and assign each a random "elevation". Then find the point between them, and give it a value which is the average of the other four, plus some small random offset. Coloration is done based on elevation. Written by Juergen Nickelsen and Jamie Zawinski.
-|: GLSlideshow - Loads a random sequence of images and smoothly scans and zooms around in each, fading from pan to pan. Written by Jamie Zawinski and Mike Oliphant.
-|: ShadeBobs - This draws smoothly-shaded oscillating oval patterns that look something like vapor trails or neon tubes. Written by Shane Smit.
-|: Eruption - Exploding fireworks. See also the "Fireworkx", "XFlame" and "Pyro" screen savers. Written by W.P. van Paassen.
-|: Thornbird - Displays a view of the "Bird in a Thornbush" fractal. Written by Tim Auckland.
-|: Halo - Draws trippy psychedelic circular patterns that hurt to look at. http://en.wikipedia.org/wiki/Moire_pattern Written by Jamie Zawinski.
-|: XRaySwarm - Draws a few swarms of critters flying around the screen, with faded color trails behind them. Written by Chris Leger.
-|: Anemotaxis - Anemotaxis demonstrates a search algorithm designed for locating a source of odor in turbulent atmosphere. The searcher is able to sense the odor and determine local instantaneous wind direction. The goal is to find the source in the shortest mean time. http://en.wikipedia.org/wiki/Anemotaxis Written by Eugene Balkovsky.
-|: Queens - Solves the N-Queens problem (where N is between 5 and 10 queens). The problem is: how may one place N queens on an NxN chessboard such that no queen can attack a sister? See also the "Endgame" screen saver. http://en.wikipedia.org/wiki/Eight_queens_puzzle Written by Blair Tennessy.
-|: Halftone - Draws the gravity force in each point on the screen seen through a halftone dot pattern. The gravity force is calculated from a set of moving mass points. View it from a distance for best effect. http://en.wikipedia.org/wiki/Halftone Written by Peter Jaric.
-|: Moebius - This animates a 3D rendition M.C. Escher's "Moebius Strip II", an image of ants walking along the surface of a moebius strip. http://en.wikipedia.org/wiki/Moebius_strip http://en.wikipedia.org/wiki/Maurits_Cornelis_Escher Written by Marcelo F. Vianna.
-|: Helix - Spirally string-art-ish patterns. Written by Jamie Zawinski.
-|: Flurry - This X11 port of the OSX screensaver of the same name draws a colourful star(fish)like flurry of particles. Original Mac version: http://homepage.mac.com/calumr Written by Calum Robinson and Tobias Sargeant.
-|: CCurve - Generates self-similar linear fractals, including the classic "C Curve". http://en.wikipedia.org/wiki/Levy_C_curve Written by Rick Campbell.
-|: Cubenetic - Draws a pulsating set of overlapping boxes with ever-chaning blobby patterns undulating across their surfaces. It's sort of a cubist Lavalite. Written by Jamie Zawinski.
-|: GLSchool - Uses Craig Reynolds' Boids algorithm to simulate a school of fish. http://en.wikipedia.org/wiki/Boids Written by David C. Lambert.
-|: Pacman - Simulates a game of Pac-Man on a randomly-created level. http://en.wikipedia.org/wiki/Pac-Man Written by Edwin de Jong.
-|: Voronoi - Draws a randomly-colored Voronoi tessellation, and periodically zooms in and adds new points. The existing points also wander around. There are a set of control points on the plane, each at the center of a colored cell. Every pixel within that cell is closer to that cell's control point than to any other control point. That is what determines the cell's shapes. http://en.wikipedia.org/wiki/Voronoi_diagram Written by Jamie Zawinski.
-|: BoxFit - Packs the screen with growing squares or circles, colored according to a horizontal or vertical gradient, or according to the colors of the desktop or a loaded image file. The objects grow until they touch, then stop. When the screen is full, they shrink away and the process restarts. Written by Jamie Zawinski.
-|: Coral - Simulates coral growth, albeit somewhat slowly. Written by Frederick Roeber.
-|: TopBlock - Creates a 3D world with dropping blocks that build up and up. Written by rednuht.
-|: Lament - Animates a simulation of Lemarchand's Box, the Lament Configuration, repeatedly solving itself. Warning: occasionally opens doors. http://en.wikipedia.org/wiki/Lemarchand%27s_box Written by Jamie Zawinski.
-|: Attraction - Uses a simple simple motion model to generate many different display modes. The control points attract each other up to a certain distance, and then begin to repel each other. The attraction/repulsion is proportional to the distance between any two particles, similar to the strong and weak nuclear forces. Written by Jamie Zawinski and John Pezaris.
-|: Gleidescope - A kaleidoscope that operates on your desktop image, or on image files loaded from disk. http://en.wikipedia.org/wiki/Kaleidoscope Written by Andrew Dean.
-|: CubeStorm - Draws a series of rotating 3D boxes that intersect each other and eventually fill space. Written by Jamie Zawinski.
-|: Compass - This draws a compass, with all elements spinning about randomly, for that "lost and nauseous" feeling. Written by Jamie Zawinski.
-|: Twang - Divides the screen into a grid, and plucks them. Written by Dan Bornstein.
-|: BlitSpin - Repeatedly rotates a bitmap by 90 degrees by using logical operations: the bitmap is divided into quadrants, and the quadrants are shifted clockwise. Then the same thing is done again with progressively smaller quadrants, except that all sub-quadrants of a given size are rotated in parallel. As you watch it, the image appears to dissolve into static and then reconstitute itself, but rotated. Written by Jamie Zawinski.
-|: XSpirograph - Simulates that pen-in-nested-plastic-gears toy from your childhood. http://en.wikipedia.org/wiki/Spirograph Written by Rohit Singh.
-|: SlideScreen - This takes an image, divides it into a grid, and then randomly shuffles the squares around as if it was one of those "fifteen-puzzle" games where there is a grid of squares, one of which is missing. http://en.wikipedia.org/wiki/Fifteen_puzzle Written by Jamie Zawinski.
-|: Piecewise - This draws a bunch of moving circles which switch from visibility to invisibility at intersection points. Written by Geoffrey Irving.
-|: Deco - Subdivides and colors rectangles randomly. It looks kind of like Brady-Bunch-era rec-room wall paneling. http://en.wikipedia.org/wiki/Piet_Mondrian#Paris_1919.E2.80.931938 Written by Jamie Zawinski and Michael Bayne.
-|: GLSnake - Draws a simulation of the Rubik's Snake puzzle. See also the "Rubik" and "Cube21" screen savers. http://en.wikipedia.org/wiki/Rubik%27s_Snake Written by Jamie Wilkinson, Andrew Bennetts, and Peter Aylett.
-|: RDbomb - Draws a grid of growing square-like shapes that, once they overtake each other, react in unpredictable ways. "RD" stands for reaction-diffusion. Written by Scott Draves.
-|: FuzzyFlakes - Falling colored snowflake/flower shapes. Written by Barry Dmytro.
-|: Braid - Draws random color-cycling inter-braided concentric circles. Written by John Neil.
-|: MetaBalls - Draws two dimensional metaballs: overlapping and merging balls with fuzzy edges. http://en.wikipedia.org/wiki/Metaballs Written by W.P. van Paassen.
-|: DangerBall - Draws a ball that periodically extrudes many random spikes. Ouch! Written by Jamie Zawinski.
-|: Molecule - Draws several different representations of molecules. Some common molecules are built in, and it can also read PDB (Protein Data Bank) files as input. http://en.wikipedia.org/wiki/Protein_Data_Bank_%28file_format%29 Written by Jamie Zawinski.
-|: BlinkBox - Shows a ball contained inside of a bounding box. Colored blocks blink in when the ball hits the sides. Written by Jeremy English.
-|: Sonar - This draws a sonar screen that pings (get it?) the hosts on your local network, and plots their distance (response time) from you. The three rings represent ping times of approximately 2.5, 70 and 2,000 milliseconds respectively. Alternately, it can run a simulation that doesn't involve hosts. (If pinging doesn't work, you may need to make the executable be setuid.) http://en.wikipedia.org/wiki/Ping#History Written by Stephen Martin and Jamie Zawinski.
-|: GLCells - Cells growing, dividing and dying on your screen. Written by Matthias Toussaint.
-|: Squiral - Draws a set of interacting, square-spiral-producing automata. The spirals grow outward until they hit something, then they go around it. Written by Jeff Epler.
-|: Klein - This draws a visualization of a Klein bottle or some other interesting parametric surfaces. http://en.wikipedia.org/wiki/Klein_bottle Written by Andrey Mirtchovski.
 
 Child-Menu
 r: Rename the current child
+b: Bury the current child: put the current child at the end of the parent frame children list
+f: Bury the first child: put the first child at the end of the current frame children list
 t: Set the current child transparency
-b: Set the current child border size
+o: Set the current child border size
 e: Ensure that all children names are unique
 n: Ensure that all children numbers are unique
 Delete: Delete the current child and its children in all frames
 X: Remove the current child from its parent frame
+R: Retrieve existing windows not already managed by CLFSWM.
 h: Hide the current child
 u: Unhide a child in the current frame
-f: Unhide a child from all frames in the current frame
+F: Unhide a child from all frames in the current frame
 a: Unhide all current frame hidden children
 Page_Up: Lower the child in the current frame
 Page_Down: Raise the child in the current frame
@@ -1061,6 +170,7 @@ m: Tile child in its frame (mix: automatic choose between vertical/horizontal)
 c: One column layout
 l: One line layout
 s: Tile Space: tile child in its frame leaving spaces between them
+t: Three Columns: main child in the middle, others on the two sides.
 
 Frame-Tile-Dir-Layout-Menu
 l: Tile Left: main child on left and others on right
@@ -1146,11 +256,13 @@ a: Set a click focus policy for the current frame.
 b: Set a sloppy focus policy for the current frame.
 c: Set a (strict) sloppy focus policy only for windows in the current frame.
 d: Set a sloppy select policy for the current frame.
+e: Set a sloppy select window policy for the current frame.
 -=- For all frames -=-
-e: Set a click focus policy for all frames.
-f: Set a sloppy focus policy for all frames.
-g: Set a (strict) sloppy focus policy for all frames.
-h: Set a sloppy select policy for all frames.
+f: Set a click focus policy for all frames.
+g: Set a sloppy focus policy for all frames.
+h: Set a (strict) sloppy focus policy for all frames.
+i: Set a sloppy select policy for all frames.
+j: Set a sloppy select window policy for all frames.
 
 Frame-Managed-Window-Menu
 m: Change window types to be managed by a frame
@@ -1224,189 +336,208 @@ l: Run LXDE
 p: Prompt for an other window manager
 
 Configuration-Menu
-a: < Placement Group >
-b: < Corner Group >
-c: < Hook Group >
-d: < Root Group >
-e: < Main Mode Group >
-f: < Frame Colors Group >
-g: < Miscellaneous Group >
-h: < Second Mode Group >
-i: < Identify Key Group >
-j: < Query String Group >
-k: < Circulate Mode Group >
-l: < Expose Mode Group >
-m: < Info Mode Group >
-n: < Menu Group >
-o: < Notify Window Group >
-p: < Gimp Layout Group >
+a: < Gimp Layout Group >
+b: < Fastswitch Mode Group >
+c: < Expose Mode Group >
+d: < Query String Group >
+e: < Frame Colors Group >
+f: < Root Group >
+g: < Hook Group >
+h: < Main Mode Group >
+i: < Menu Group >
+j: < Miscellaneous Group >
+k: < Info Mode Group >
+l: < Second Mode Group >
+m: < Notify Window Group >
+n: < Identify Key Group >
+o: < Placement Group >
+p: < Corner Group >
+q: < Circulate Mode Group >
 F2: Save all configuration variables in clfswmrc
 F3: Reset all configuration variables to their default values
 
-Conf-Placement
-a: Configure BANISH-POINTER-PLACEMENT
-b: Configure SECOND-MODE-PLACEMENT
-c: Configure INFO-MODE-PLACEMENT
-d: Configure QUERY-MODE-PLACEMENT
-e: Configure CIRCULATE-MODE-PLACEMENT
-f: Configure EXPOSE-MODE-PLACEMENT
-g: Configure EXPOSE-QUERY-PLACEMENT
-h: Configure NOTIFY-WINDOW-PLACEMENT
-i: Configure ASK-CLOSE/KILL-PLACEMENT
-j: Configure UNMANAGED-WINDOW-PLACEMENT
+Conf-Gimp-Layout
+a: Configure GIMP-LAYOUT-NOTIFY-WINDOW-DELAY
 
-Conf-Corner
-a: Configure CORNER-SIZE
-b: Configure CORNER-MAIN-MODE-LEFT-BUTTON
-c: Configure CORNER-MAIN-MODE-MIDDLE-BUTTON
-d: Configure CORNER-MAIN-MODE-RIGHT-BUTTON
-e: Configure CORNER-SECOND-MODE-LEFT-BUTTON
-f: Configure CORNER-SECOND-MODE-MIDDLE-BUTTON
-g: Configure CORNER-SECOND-MODE-RIGHT-BUTTON
-h: Configure VIRTUAL-KEYBOARD-CMD
-i: Configure CLFSWM-TERMINAL-NAME
-j: Configure CLFSWM-TERMINAL-CMD
-k: Configure CORNER-ERROR-MESSAGE-COLOR
-l: Configure CORNER-ERROR-MESSAGE-DELAY
-m: Configure CORNER-COMMAND-TRY-DELAY
-n: Configure CORNER-COMMAND-TRY-NUMBER
-
-Conf-Hook
-a: Configure BINDING-HOOK
-b: Configure LOOP-HOOK
-c: Configure MAIN-ENTRANCE-HOOK
-d: Configure ROOT-SIZE-CHANGE-HOOK
-e: Configure INIT-HOOK
-f: Configure CLOSE-HOOK
-g: Configure DEFAULT-NW-HOOK
-h: Configure QUERY-KEY-PRESS-HOOK
-i: Configure QUERY-BUTTON-PRESS-HOOK
-
-Conf-Root
-a: Configure CREATE-FRAME-ON-ROOT
-b: Configure HAVE-TO-SHOW-CURRENT-ROOT
-c: Configure SHOW-CURRENT-ROOT-DELAY
-d: Configure SHOW-CURRENT-ROOT-PLACEMENT
-e: Configure SHOW-CURRENT-ROOT-MESSAGE
-
-Conf-Main-Mode
-a: Configure COLOR-MOVE-WINDOW
-b: Configure COLOR-SELECTED
-c: Configure COLOR-UNSELECTED
-d: Configure COLOR-MAYBE-SELECTED
-
-Conf-Frame-Colors
-a: Configure FRAME-BACKGROUND
-b: Configure FRAME-FOREGROUND
-c: Configure FRAME-FOREGROUND-ROOT
-d: Configure FRAME-FOREGROUND-HIDDEN
-e: Configure FRAME-TRANSPARENCY
-
-Conf-Miscellaneous
-a: Configure HAVE-TO-COMPRESS-NOTIFY
-b: Configure TRANSPARENT-BACKGROUND
-c: Configure DEFAULT-TRANSPARENCY
-d: Configure SHOW-ROOT-FRAME-P
-e: Configure BORDER-SIZE
-f: Configure LOOP-TIMEOUT
-g: Configure DEFAULT-FONT-STRING
-h: Configure DEFAULT-FRAME-DATA
-i: Configure DEFAULT-MANAGED-TYPE
-j: Configure DEFAULT-FOCUS-POLICY
-k: Configure SHOW-HIDE-POLICY
-l: Configure DEFAULT-MODIFIERS
-m: Configure NEVER-MANAGED-WINDOW-LIST
-n: Configure HIDE-UNMANAGED-WINDOW
-o: Configure SNAP-SIZE
-p: Configure SPATIAL-MOVE-DELAY-BEFORE
-q: Configure SPATIAL-MOVE-DELAY-AFTER
-r: Configure DEFAULT-WINDOW-WIDTH
-s: Configure DEFAULT-WINDOW-HEIGHT
-
-Conf-Second-Mode
-a: Configure SM-BORDER-COLOR
-b: Configure SM-BACKGROUND-COLOR
-c: Configure SM-FOREGROUND-COLOR
-d: Configure SM-FONT-STRING
-e: Configure SM-WIDTH
-f: Configure SM-HEIGHT
-g: Configure SM-TRANSPARENCY
-
-Conf-Identify-Key
-a: Configure IDENTIFY-FONT-STRING
-b: Configure IDENTIFY-BACKGROUND
-c: Configure IDENTIFY-FOREGROUND
-d: Configure IDENTIFY-BORDER
-e: Configure IDENTIFY-TRANSPARENCY
-
-Conf-Query-String
-a: Configure QUERY-FONT-STRING
-b: Configure QUERY-BACKGROUND
-c: Configure QUERY-MESSAGE-COLOR
-d: Configure QUERY-FOREGROUND
-e: Configure QUERY-CURSOR-COLOR
-f: Configure QUERY-PARENT-COLOR
-g: Configure QUERY-PARENT-ERROR-COLOR
-h: Configure QUERY-BORDER
-i: Configure QUERY-TRANSPARENCY
-j: Configure QUERY-MAX-COMPLET-LENGTH
-k: Configure QUERY-MIN-COMPLET-CHAR
-
-Conf-Circulate-Mode
-a: Configure CIRCULATE-FONT-STRING
-b: Configure CIRCULATE-BACKGROUND
-c: Configure CIRCULATE-FOREGROUND
-d: Configure CIRCULATE-BORDER
-e: Configure CIRCULATE-WIDTH
-f: Configure CIRCULATE-HEIGHT
-g: Configure CIRCULATE-TRANSPARENCY
-h: Configure CIRCULATE-TEXT-LIMITE
+Conf-Fastswitch-Mode
+a: Configure FASTSWITCH-FOREGROUND
+b: Configure FASTSWITCH-FONT-STRING
+c: Configure FASTSWITCH-FOREGROUND-LETTER-SECOND-FRAME
+d: Configure FASTSWITCH-ADJUST-WINDOW-P
+e: Configure FASTSWITCH-FOREGROUND-LETTER
+f: Configure FASTSWITCH-FOREGROUND-LETTER-SECOND
+g: Configure FASTSWITCH-BACKGROUND
+h: Configure FASTSWITCH-BORDER
+i: Configure FASTSWITCH-TRANSPARENCY
+j: Configure FASTSWITCH-DISPLAY-MODE
+k: Configure FASTSWITCH-SHOW-FRAME-P
+l: Configure FASTSWITCH-FOREGROUND-CHILDNAME
 
 Conf-Expose-Mode
-a: Configure EXPOSE-FONT-STRING
-b: Configure EXPOSE-BACKGROUND
-c: Configure EXPOSE-FOREGROUND
-d: Configure EXPOSE-FOREGROUND-LETTER
-e: Configure EXPOSE-FOREGROUND-LETTER-NOK
-f: Configure EXPOSE-BACKGROUND-LETTER-MATCH
+a: Configure EXPOSE-BACKGROUND
+b: Configure EXPOSE-DIRECT-SELECT
+c: Configure EXPOSE-FOREGROUND-LETTER
+d: Configure EXPOSE-FOREGROUND-LETTER-NOK
+e: Configure EXPOSE-FOREGROUND
+f: Configure EXPOSE-VALID-ON-KEY
 g: Configure EXPOSE-BORDER
-h: Configure EXPOSE-VALID-ON-KEY
+h: Configure EXPOSE-FONT-STRING
 i: Configure EXPOSE-SHOW-WINDOW-TITLE
-j: Configure EXPOSE-TRANSPARENCY
-k: Configure EXPOSE-DIRECT-SELECT
+j: Configure EXPOSE-BACKGROUND-LETTER-MATCH
+k: Configure EXPOSE-TRANSPARENCY
+
+Conf-Query-String
+a: Configure QUERY-MAX-COMPLET-LENGTH
+b: Configure QUERY-MESSAGE-COLOR
+c: Configure QUERY-FOREGROUND
+d: Configure QUERY-FONT-STRING
+e: Configure QUERY-PARENT-ERROR-COLOR
+f: Configure QUERY-MIN-COMPLET-CHAR
+g: Configure QUERY-BORDER
+h: Configure QUERY-BACKGROUND
+i: Configure QUERY-PARENT-COLOR
+j: Configure QUERY-CURSOR-COLOR
+k: Configure QUERY-TRANSPARENCY
+
+Conf-Frame-Colors
+a: Configure FRAME-FOREGROUND-HIDDEN
+b: Configure FRAME-TRANSPARENCY
+c: Configure FRAME-BACKGROUND
+d: Configure FRAME-FOREGROUND
+e: Configure FRAME-FOREGROUND-ROOT
+
+Conf-Root
+a: Configure HAVE-TO-SHOW-CURRENT-ROOT
+b: Configure CREATE-FRAME-ON-ROOT
+c: Configure SHOW-CURRENT-ROOT-MESSAGE
+d: Configure SHOW-CURRENT-ROOT-PLACEMENT
+e: Configure SHOW-CURRENT-ROOT-DELAY
+
+Conf-Hook
+a: Configure QUERY-BUTTON-PRESS-HOOK
+b: Configure LOOP-HOOK
+c: Configure ROOT-SIZE-CHANGE-HOOK
+d: Configure INIT-HOOK
+e: Configure DEFAULT-NW-HOOK
+f: Configure BINDING-HOOK
+g: Configure QUERY-KEY-PRESS-HOOK
+h: Configure MAIN-ENTRANCE-HOOK
+i: Configure CLOSE-HOOK
+
+Conf-Main-Mode
+a: Configure COLOR-SELECTED
+b: Configure COLOR-UNSELECTED
+c: Configure COLOR-MAYBE-SELECTED
+d: Configure COLOR-MOVE-WINDOW
+
+Conf-Menu
+a: Configure MENU-COLOR-SUBMENU
+b: Configure MENU-COLOR-KEY
+c: Configure MENU-COLOR-MENU-KEY
+d: Configure XDG-SECTION-LIST
+e: Configure MENU-KEY-BOUND-COLOR
+f: Configure MENU-COLOR-COMMENT
+
+Conf-Miscellaneous
+a: Configure DEFAULT-FOCUS-POLICY
+b: Configure NEVER-MANAGED-WINDOW-LIST
+c: Configure SHOW-HIDE-POLICY
+d: Configure WM-NAME
+e: Configure HIDE-UNMANAGED-WINDOW
+f: Configure DEFAULT-MANAGED-TYPE
+g: Configure LOOP-TIMEOUT
+h: Configure SHOW-ROOT-FRAME-P
+i: Configure DEFAULT-FONT-STRING
+j: Configure DEFAULT-FRAME-DATA
+k: Configure DEFAULT-TRANSPARENCY
+l: Configure HAVE-TO-COMPRESS-NOTIFY
+m: Configure DEFAULT-WINDOW-WIDTH
+n: Configure SPATIAL-MOVE-DELAY-AFTER
+o: Configure TRANSPARENT-BACKGROUND
+p: Configure DEFAULT-MODIFIERS
+q: Configure DEFAULT-WINDOW-HEIGHT
+r: Configure SHOW-HIDE-POLICY-TYPE
+s: Configure SNAP-SIZE
+t: Configure SPATIAL-MOVE-DELAY-BEFORE
+u: Configure BORDER-SIZE
+v: Configure STEAL-FOCUS
 
 Conf-Info-Mode
 a: Configure INFO-BACKGROUND
-b: Configure INFO-FOREGROUND
-c: Configure INFO-BORDER
-d: Configure INFO-LINE-CURSOR
-e: Configure INFO-SELECTED-BACKGROUND
-f: Configure INFO-FONT-STRING
-g: Configure INFO-TRANSPARENCY
-h: Configure INFO-CLICK-TO-SELECT
-i: Configure INFO-COLOR-TITLE
-j: Configure INFO-COLOR-UNDERLINE
-k: Configure INFO-COLOR-FIRST
-l: Configure INFO-COLOR-SECOND
+b: Configure INFO-LINE-CURSOR
+c: Configure INFO-SELECTED-BACKGROUND
+d: Configure INFO-CLICK-TO-SELECT
+e: Configure INFO-COLOR-SECOND
+f: Configure INFO-BORDER
+g: Configure INFO-COLOR-TITLE
+h: Configure INFO-COLOR-FIRST
+i: Configure INFO-FONT-STRING
+j: Configure INFO-FOREGROUND
+k: Configure INFO-TRANSPARENCY
+l: Configure INFO-COLOR-UNDERLINE
 
-Conf-Menu
-a: Configure XDG-SECTION-LIST
-b: Configure MENU-COLOR-SUBMENU
-c: Configure MENU-COLOR-COMMENT
-d: Configure MENU-COLOR-KEY
-e: Configure MENU-COLOR-MENU-KEY
-f: Configure MENU-KEY-BOUND-COLOR
+Conf-Second-Mode
+a: Configure SM-WIDTH
+b: Configure SM-BORDER-COLOR
+c: Configure SM-TRANSPARENCY
+d: Configure SM-FONT-STRING
+e: Configure SM-FOREGROUND-COLOR
+f: Configure SM-BACKGROUND-COLOR
+g: Configure SM-HEIGHT
 
 Conf-Notify-Window
-a: Configure NOTIFY-WINDOW-FONT-STRING
-b: Configure NOTIFY-WINDOW-BACKGROUND
-c: Configure NOTIFY-WINDOW-FOREGROUND
+a: Configure NOTIFY-WINDOW-FOREGROUND
+b: Configure NOTIFY-WINDOW-FONT-STRING
+c: Configure NOTIFY-WINDOW-DELAY
 d: Configure NOTIFY-WINDOW-BORDER
-e: Configure NOTIFY-WINDOW-DELAY
-f: Configure NOTIFY-WINDOW-TRANSPARENCY
+e: Configure NOTIFY-WINDOW-TRANSPARENCY
+f: Configure NOTIFY-WINDOW-BACKGROUND
 
-Conf-Gimp-Layout
-a: Configure GIMP-LAYOUT-NOTIFY-WINDOW-DELAY
+Conf-Identify-Key
+a: Configure IDENTIFY-BACKGROUND
+b: Configure IDENTIFY-FONT-STRING
+c: Configure IDENTIFY-TRANSPARENCY
+d: Configure IDENTIFY-BORDER
+e: Configure IDENTIFY-FOREGROUND
+
+Conf-Placement
+a: Configure FASTSWITCH-MODE-PLACEMENT
+b: Configure CIRCULATE-MODE-PLACEMENT
+c: Configure BANISH-POINTER-PLACEMENT
+d: Configure EXPOSE-MODE-PLACEMENT
+e: Configure QUERY-MODE-PLACEMENT
+f: Configure INFO-MODE-PLACEMENT
+g: Configure SECOND-MODE-PLACEMENT
+h: Configure UNMANAGED-WINDOW-PLACEMENT
+i: Configure EXPOSE-QUERY-PLACEMENT
+j: Configure NOTIFY-WINDOW-PLACEMENT
+k: Configure ASK-CLOSE/KILL-PLACEMENT
+
+Conf-Corner
+a: Configure CORNER-SIZE
+b: Configure CORNER-ERROR-MESSAGE-COLOR
+c: Configure CLFSWM-TERMINAL-NAME
+d: Configure CORNER-SECOND-MODE-RIGHT-BUTTON
+e: Configure CORNER-MAIN-MODE-RIGHT-BUTTON
+f: Configure CORNER-COMMAND-TRY-DELAY
+g: Configure CORNER-COMMAND-TRY-NUMBER
+h: Configure CORNER-MAIN-MODE-MIDDLE-BUTTON
+i: Configure CORNER-MAIN-MODE-LEFT-BUTTON
+j: Configure CORNER-SECOND-MODE-LEFT-BUTTON
+k: Configure CLFSWM-TERMINAL-CMD
+l: Configure CORNER-ERROR-MESSAGE-DELAY
+m: Configure CORNER-SECOND-MODE-MIDDLE-BUTTON
+n: Configure VIRTUAL-KEYBOARD-CMD
+
+Conf-Circulate-Mode
+a: Configure CIRCULATE-FOREGROUND
+b: Configure CIRCULATE-TRANSPARENCY
+c: Configure CIRCULATE-FONT-STRING
+d: Configure CIRCULATE-TEXT-LIMITE
+e: Configure CIRCULATE-WIDTH
+f: Configure CIRCULATE-HEIGHT
+g: Configure CIRCULATE-BORDER
+h: Configure CIRCULATE-BACKGROUND
 
 Clfswm-Menu
 r: Reset clfswm

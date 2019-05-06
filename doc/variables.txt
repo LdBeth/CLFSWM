@@ -3,43 +3,28 @@
 
 <= Circulate Mode Group =>
 
-  *CIRCULATE-TEXT-LIMITE* = 30
-    Maximum text limite in the circulate window
-  *CIRCULATE-TRANSPARENCY* = 0.8
-    Circulate window background transparency
+  *CIRCULATE-BACKGROUND* = "black"
+    Circulate string window background color
+  *CIRCULATE-BORDER* = "red"
+    Circulate string window border color
   *CIRCULATE-HEIGHT* = 15
     Circulate mode window height
   *CIRCULATE-WIDTH* = 400
     Circulate mode window width
-  *CIRCULATE-BORDER* = "red"
-    Circulate string window border color
+  *CIRCULATE-TEXT-LIMITE* = 30
+    Maximum text limite in the circulate window
+  *CIRCULATE-FONT-STRING* = "genera-cptfonti"
+    Circulate string window font string
+  *CIRCULATE-TRANSPARENCY* = 0.8
+    Circulate window background transparency
   *CIRCULATE-FOREGROUND* = "green"
     Circulate string window foreground color
-  *CIRCULATE-BACKGROUND* = "black"
-    Circulate string window background color
-  *CIRCULATE-FONT-STRING* = "fixed"
-    Circulate string window font string
 
 
 <= Corner Group =>
 
-  *CORNER-COMMAND-TRY-NUMBER* = 10
-    Number of try to wait the window in query tree
-  *CORNER-COMMAND-TRY-DELAY* = 0.2
-    Time to wait before checking window in query tree
-  *CORNER-ERROR-MESSAGE-DELAY* = 5
-    Time to display the error message on commad error
-  *CORNER-ERROR-MESSAGE-COLOR* = "red"
-    Error message color
-  *CLFSWM-TERMINAL-CMD* = "xterm -T clfswm-terminal"
-    
-The clfswm terminal command.
-This command must set the window title to *clfswm-terminal-name*
-  *CLFSWM-TERMINAL-NAME* = "clfswm-terminal"
-    The clfswm terminal name
   *VIRTUAL-KEYBOARD-CMD* = "xvkbd"
-    
-The command to display the virtual keybaord
+    The command to display the virtual keybaord
   Here is an ~/.Xresources example for xvkbd:
     xvkbd.windowGeometry: 300x100-0-0
     xvkbd*Font: 6x12
@@ -47,62 +32,101 @@ The command to display the virtual keybaord
     xvkbd.customization: -french
     xvkbd.keypad: false
   And make it always on top
-  *CORNER-SECOND-MODE-RIGHT-BUTTON* = ((:TOP-LEFT NIL) (:TOP-RIGHT NIL) (:BOTTOM-RIGHT EXPOSE-ALL-WINDOWS-MODE) (:BOTTOM-LEFT NIL))
-    Actions on corners in the second mode with the right mouse button
   *CORNER-SECOND-MODE-MIDDLE-BUTTON* = ((:TOP-LEFT HELP-ON-CLFSWM) (:TOP-RIGHT NIL) (:BOTTOM-RIGHT NIL) (:BOTTOM-LEFT NIL))
     Actions on corners in the second mode with the middle mouse button
+  *CORNER-ERROR-MESSAGE-DELAY* = 5
+    Time to display the error message on commad error
+  *CLFSWM-TERMINAL-CMD* = "xterm -T clfswm-terminal"
+    The clfswm terminal command.
+This command must set the window title to *clfswm-terminal-name*
   *CORNER-SECOND-MODE-LEFT-BUTTON* = ((:TOP-LEFT NIL) (:TOP-RIGHT NIL) (:BOTTOM-RIGHT EXPOSE-WINDOWS-MODE) (:BOTTOM-LEFT NIL))
     Actions on corners in the second mode with the left mouse button
-  *CORNER-MAIN-MODE-RIGHT-BUTTON* = 
-((:TOP-LEFT PRESENT-CLFSWM-TERMINAL) (:TOP-RIGHT ASK-CLOSE/KILL-CURRENT-WINDOW) (:BOTTOM-RIGHT EXPOSE-ALL-WINDOWS-MODE)
- (:BOTTOM-LEFT NIL))
-    Actions on corners in the main mode with the right mouse button
-  *CORNER-MAIN-MODE-MIDDLE-BUTTON* = ((:TOP-LEFT HELP-ON-CLFSWM) (:TOP-RIGHT ASK-CLOSE/KILL-CURRENT-WINDOW) (:BOTTOM-RIGHT NIL) (:BOTTOM-LEFT NIL))
-    Actions on corners in the main mode with the middle mouse button
   *CORNER-MAIN-MODE-LEFT-BUTTON* = ((:TOP-LEFT OPEN-MENU) (:TOP-RIGHT PRESENT-VIRTUAL-KEYBOARD) (:BOTTOM-RIGHT EXPOSE-WINDOWS-MODE) (:BOTTOM-LEFT NIL))
     Actions on corners in the main mode with the left mouse button
+  *CORNER-MAIN-MODE-MIDDLE-BUTTON* = ((:TOP-LEFT HELP-ON-CLFSWM) (:TOP-RIGHT ASK-CLOSE/KILL-CURRENT-WINDOW) (:BOTTOM-RIGHT NIL) (:BOTTOM-LEFT NIL))
+    Actions on corners in the main mode with the middle mouse button
+  *CORNER-COMMAND-TRY-NUMBER* = 10
+    Number of try to wait the window in query tree
+  *CORNER-COMMAND-TRY-DELAY* = 0.2
+    Time to wait before checking window in query tree
+  *CORNER-MAIN-MODE-RIGHT-BUTTON* = ((:TOP-LEFT PRESENT-CLFSWM-TERMINAL) (:TOP-RIGHT ASK-CLOSE/KILL-CURRENT-WINDOW) (:BOTTOM-RIGHT EXPOSE-ALL-WINDOWS-MODE) (:BOTTOM-LEFT NIL))
+    Actions on corners in the main mode with the right mouse button
+  *CORNER-SECOND-MODE-RIGHT-BUTTON* = ((:TOP-LEFT NIL) (:TOP-RIGHT NIL) (:BOTTOM-RIGHT EXPOSE-ALL-WINDOWS-MODE) (:BOTTOM-LEFT NIL))
+    Actions on corners in the second mode with the right mouse button
+  *CLFSWM-TERMINAL-NAME* = "clfswm-terminal"
+    The clfswm terminal name
+  *CORNER-ERROR-MESSAGE-COLOR* = "red"
+    Error message color
   *CORNER-SIZE* = 3
     The size of the corner square
 
 
 <= Expose Mode Group =>
 
-  *EXPOSE-DIRECT-SELECT* = T
-    Immediately select child if they can be directly accessed
   *EXPOSE-TRANSPARENCY* = 0.9
     Expose string window background transparency
-  *EXPOSE-SHOW-WINDOW-TITLE* = T
-    Show the window title on accel window
-  *EXPOSE-VALID-ON-KEY* = T
-    Valid expose mode when an accel key is pressed
-  *EXPOSE-BORDER* = "grey20"
-    Expose string window border color
   *EXPOSE-BACKGROUND-LETTER-MATCH* = "green"
     Expose string window background color for matching letters
+  *EXPOSE-SHOW-WINDOW-TITLE* = T
+    Show the window title on accel window
+  *EXPOSE-FONT-STRING* = "genera-cptfontc"
+    Expose string window font string
+  *EXPOSE-BORDER* = "grey20"
+    Expose string window border color
+  *EXPOSE-VALID-ON-KEY* = T
+    Valid expose mode when an accel key is pressed
+  *EXPOSE-FOREGROUND* = "grey50"
+    Expose string window foreground color
   *EXPOSE-FOREGROUND-LETTER-NOK* = "grey30"
     Expose string window foreground color for letter not selected
   *EXPOSE-FOREGROUND-LETTER* = "red"
     Expose string window foreground color for letters
-  *EXPOSE-FOREGROUND* = "grey50"
-    Expose string window foreground color
+  *EXPOSE-DIRECT-SELECT* = T
+    Immediately select child if they can be directly accessed
   *EXPOSE-BACKGROUND* = "grey10"
     Expose string window background color
-  *EXPOSE-FONT-STRING* = "fixed"
-    Expose string window font string
+
+
+<= Fastswitch Mode Group =>
+
+  *FASTSWITCH-FOREGROUND-CHILDNAME* = "grey70"
+    Fastswitch string window foreground color for childname
+  *FASTSWITCH-SHOW-FRAME-P* = T
+    Fastswitch show frame in mini window
+  *FASTSWITCH-DISPLAY-MODE* = TREE
+    Fastswitch display mode (one of LINE or TREE)
+  *FASTSWITCH-TRANSPARENCY* = 0.9
+    Fastswitch string window background transparency
+  *FASTSWITCH-BORDER* = "grey20"
+    Fastswitch string window border color
+  *FASTSWITCH-BACKGROUND* = "grey10"
+    Fastswitch string window background color
+  *FASTSWITCH-FOREGROUND-LETTER-SECOND* = "magenta"
+    Fastswitch string window foreground color for letters
+  *FASTSWITCH-FOREGROUND-LETTER* = "red"
+    Fastswitch string window foreground color for letters
+  *FASTSWITCH-ADJUST-WINDOW-P* = T
+    Fastswitch adjust window to show all children names
+  *FASTSWITCH-FOREGROUND-LETTER-SECOND-FRAME* = "yellow"
+    Fastswitch string window foreground color for letters for frames
+  *FASTSWITCH-FONT-STRING* = "genera-13fgb"
+    Fastswitch string window font string
+  *FASTSWITCH-FOREGROUND* = "grey50"
+    Fastswitch string window foreground color
 
 
 <= Frame Colors Group =>
 
-  *FRAME-TRANSPARENCY* = 0.6
-    Frame background transparency
-  *FRAME-FOREGROUND-HIDDEN* = "Darkgreen"
-    Frame foreground for hidden windows
   *FRAME-FOREGROUND-ROOT* = "Red"
     Frame foreground when the frame is the root frame
   *FRAME-FOREGROUND* = "Green"
     Frame foreground
   *FRAME-BACKGROUND* = "Black"
     Frame background
+  *FRAME-TRANSPARENCY* = 0.6
+    Frame background transparency
+  *FRAME-FOREGROUND-HIDDEN* = "Darkgreen"
+    Frame foreground for hidden windows
 
 
 <= Gimp Layout Group =>
@@ -113,256 +137,252 @@ The command to display the virtual keybaord
 
 <= Hook Group =>
 
-  *QUERY-BUTTON-PRESS-HOOK* = NIL
-    Query hook. Hook called on each button press event in query loop
-  *QUERY-KEY-PRESS-HOOK* = (QUERY-MODE-COMPLETE-SUGGEST-RESET)
-    Query hook. Hook called on each key press event in query loop
-  *DEFAULT-NW-HOOK* = DEFAULT-FRAME-NW-HOOK
-    Default action to do on newly created windows
   *CLOSE-HOOK* = (CLOSE-NOTIFY-WINDOW CLOSE-CLFSWM-TERMINAL CLOSE-VIRTUAL-KEYBOARD)
     Close hook. This hook is run just before closing the display
+  *MAIN-ENTRANCE-HOOK* = NIL
+    Hook executed on the main function entrance after
+loading configuration file and before opening the display.
+  *QUERY-KEY-PRESS-HOOK* = (QUERY-MODE-COMPLETE-SUGGEST-RESET)
+    Query hook. Hook called on each key press event in query loop
+  *BINDING-HOOK* = (INIT-*QUERY-KEYS* SET-DEFAULT-QUERY-KEYS SET-DEFAULT-CIRCULATE-KEYS INIT-*INFO-KEYS* INIT-*INFO-MOUSE* SET-DEFAULT-INFO-KEYS SET-DEFAULT-INFO-MOUSE INIT-*MAIN-KEYS* INIT-*MAIN-MOUSE* SET-DEFAULT-MAIN-KEYS SET-DEFAULT-MAIN-MOUSE INIT-*SECOND-KEYS* INIT-*SECOND-MOUSE* SET-DEFAULT-SECOND-KEYS SET-DEFAULT-SECOND-MOUSE)
+    Hook executed when keys/buttons are bounds
+  *DEFAULT-NW-HOOK* = DEFAULT-FRAME-NW-HOOK
+    Default action to do on newly created windows
   *INIT-HOOK* = (DEFAULT-INIT-HOOK DISPLAY-HELLO-WINDOW)
     Init hook. This hook is run just after the first root frame is created
   *ROOT-SIZE-CHANGE-HOOK* = NIL
     Hook executed when the root size has changed for example when adding/removing a monitor
-  *MAIN-ENTRANCE-HOOK* = NIL
-    
-Hook executed on the main function entrance after
-loading configuration file and before opening the display.
   *LOOP-HOOK* = NIL
     Hook executed on each event loop
-  *BINDING-HOOK* = 
-(INIT-*QUERY-KEYS* SET-DEFAULT-QUERY-KEYS SET-DEFAULT-CIRCULATE-KEYS INIT-*INFO-KEYS* INIT-*INFO-MOUSE*
- SET-DEFAULT-INFO-KEYS SET-DEFAULT-INFO-MOUSE INIT-*MAIN-KEYS* INIT-*MAIN-MOUSE* SET-DEFAULT-MAIN-KEYS
- SET-DEFAULT-MAIN-MOUSE INIT-*SECOND-KEYS* INIT-*SECOND-MOUSE* SET-DEFAULT-SECOND-KEYS SET-DEFAULT-SECOND-MOUSE)
-    Hook executed when keys/buttons are bounds
+  *QUERY-BUTTON-PRESS-HOOK* = NIL
+    Query hook. Hook called on each button press event in query loop
 
 
 <= Identify Key Group =>
 
-  *IDENTIFY-TRANSPARENCY* = 0.8
-    Identify window background transparency
-  *IDENTIFY-BORDER* = "red"
-    Identify window border color
   *IDENTIFY-FOREGROUND* = "green"
     Identify window foreground color
+  *IDENTIFY-BORDER* = "red"
+    Identify window border color
+  *IDENTIFY-TRANSPARENCY* = 0.8
+    Identify window background transparency
+  *IDENTIFY-FONT-STRING* = "genera-hl10"
+    Identify window font string
   *IDENTIFY-BACKGROUND* = "black"
     Identify window background color
-  *IDENTIFY-FONT-STRING* = "fixed"
-    Identify window font string
 
 
 <= Info Mode Group =>
 
-  *INFO-COLOR-SECOND* = "lightblue"
-    Colored info second color
-  *INFO-COLOR-FIRST* = "Cyan"
-    Colored info first color
   *INFO-COLOR-UNDERLINE* = "Yellow"
     Colored info underline color
-  *INFO-COLOR-TITLE* = "Magenta"
-    Colored info title color
-  *INFO-CLICK-TO-SELECT* = T
-    If true, click on info window select item. Otherwise, click to drag the menu
   *INFO-TRANSPARENCY* = 0.8
     Info window background transparency
-  *INFO-FONT-STRING* = "fixed"
+  *INFO-FOREGROUND* = "green"
+    Info window foreground color
+  *INFO-FONT-STRING* = "genera-cptfontcc"
     Info window font string
+  *INFO-COLOR-FIRST* = "Cyan"
+    Colored info first color
+  *INFO-COLOR-TITLE* = "Magenta"
+    Colored info title color
+  *INFO-BORDER* = "red"
+    Info window border color
+  *INFO-COLOR-SECOND* = "lightblue"
+    Colored info second color
+  *INFO-CLICK-TO-SELECT* = T
+    If true, click on info window select item. Otherwise, click to drag the menu
   *INFO-SELECTED-BACKGROUND* = "blue"
     Info selected item background color
   *INFO-LINE-CURSOR* = "white"
     Info window line cursor color color
-  *INFO-BORDER* = "red"
-    Info window border color
-  *INFO-FOREGROUND* = "green"
-    Info window foreground color
   *INFO-BACKGROUND* = "black"
     Info window background color
 
 
 <= Main Mode Group =>
 
+  *COLOR-MOVE-WINDOW* = "DeepPink"
+    Color when moving or resizing a windows
   *COLOR-MAYBE-SELECTED* = "Yellow"
     Color of maybe selected windows
   *COLOR-UNSELECTED* = "Blue"
     Color of unselected color
   *COLOR-SELECTED* = "Red"
     Color of selected window
-  *COLOR-MOVE-WINDOW* = "DeepPink"
-    Color when moving or resizing a windows
 
 
 <= Menu Group =>
 
+  *MENU-COLOR-COMMENT* = "Yellow"
+    Comment color in menu
   *MENU-KEY-BOUND-COLOR* = "gray50"
     Key bound min menu color
-  *MENU-COLOR-MENU-KEY* = #<XLIB:COLOR 0.99609375 0.6015625 0.99609375>
+  *XDG-SECTION-LIST* = (TEXTEDITOR FILEMANAGER WEBBROWSER AUDIOVIDEO AUDIO VIDEO DEVELOPMENT EDUCATION GAME GRAPHICS NETWORK OFFICE SETTINGS SYSTEM UTILITY TERMINALEMULATOR SCREENSAVER)
+    Standard menu sections
+  *MENU-COLOR-MENU-KEY* = #<COLOR 0.99609375 0.6015625 0.99609375>
     Menu key color in menu
   *MENU-COLOR-KEY* = "Magenta"
     Key color in menu
-  *MENU-COLOR-COMMENT* = "Yellow"
-    Comment color in menu
   *MENU-COLOR-SUBMENU* = "Cyan"
     Submenu color in menu
-  *XDG-SECTION-LIST* = 
-(TEXTEDITOR FILEMANAGER WEBBROWSER AUDIOVIDEO AUDIO VIDEO DEVELOPMENT EDUCATION GAME GRAPHICS NETWORK OFFICE SETTINGS
- SYSTEM UTILITY TERMINALEMULATOR SCREENSAVER)
-    Standard menu sections
 
 
 <= Miscellaneous Group =>
 
-  *DEFAULT-WINDOW-HEIGHT* = 300
-    Default window height
-  *DEFAULT-WINDOW-WIDTH* = 400
-    Default window width
-  *SPATIAL-MOVE-DELAY-AFTER* = 0.5
-    Delay to display the new child after doing a spatial move
+  *STEAL-FOCUS* = T
+    Allow to steal the focus on configure request
+  *BORDER-SIZE* = 1
+    Windows and frames border size
   *SPATIAL-MOVE-DELAY-BEFORE* = 0.2
     Delay to display the current child before doing a spatial move
   *SNAP-SIZE* = 5
     Snap size (in % of parent size) when move or resize frame is constrained
-  *HIDE-UNMANAGED-WINDOW* = T
-    Hide or not unmanaged windows when a child is deselected.
-  *NEVER-MANAGED-WINDOW-LIST* = 
-((IS-NOTIFY-WINDOW-P RAISE-WINDOW) (EQUAL-WM-CLASS-ROX-PINBOARD NIL) (EQUAL-WM-CLASS-XVKBD RAISE-WINDOW)
- (EQUAL-CLFSWM-TERMINAL RAISE-AND-FOCUS-WINDOW))
-    
-CLFSWM will never manage windows of this type.
-A list of (list match-function handle-function)
+  *SHOW-HIDE-POLICY-TYPE* = (:NORMAL)
+    Windows types which are optimized by the show hide policy
+  *DEFAULT-WINDOW-HEIGHT* = 300
+    Default window height
   *DEFAULT-MODIFIERS* = NIL
-    
-Default modifiers list to append to explicit modifiers
+    Default modifiers list to append to explicit modifiers
 Example: :mod-2 for num_lock, :lock for Caps_lock...
-  *SHOW-HIDE-POLICY* = #<SYSTEM-FUNCTION <=>
-    
-'NIL': always display all children (better with transparency support).
-'<': Hide only children less than children above.
-'<=': Hide children less or equal to children above (better for performance on slow machine).
-  *DEFAULT-FOCUS-POLICY* = :CLICK
-    Default mouse focus policy. One of :click, :sloppy, :sloppy-strict or :sloppy-select.
-  *DEFAULT-MANAGED-TYPE* = (:NORMAL)
-    Default managed window types
-  *DEFAULT-FRAME-DATA* = ((:TILE-SIZE 0.8) (:TILE-SPACE-SIZE 0.1) (:FAST-LAYOUT (TILE-LEFT-LAYOUT TILE-LAYOUT)) (:MAIN-LAYOUT-WINDOWS NIL))
-    Default slots set in frame date
-  *DEFAULT-FONT-STRING* = "fixed"
-    The default font used in clfswm
-  *LOOP-TIMEOUT* = 1
-    Maximum time (in seconds) to wait before calling *loop-hook*
-  *BORDER-SIZE* = 1
-    Windows and frames border size
-  *SHOW-ROOT-FRAME-P* = NIL
-    Show the root frame information or not
-  *DEFAULT-TRANSPARENCY* = 0.8
-    Default transparency for all windows when in xcompmgr transparency mode
   *TRANSPARENT-BACKGROUND* = T
     Enable transparent background: one of nil, :pseudo, t (xcompmgr must be started)
+  *SPATIAL-MOVE-DELAY-AFTER* = 0.5
+    Delay to display the new child after doing a spatial move
+  *DEFAULT-WINDOW-WIDTH* = 400
+    Default window width
   *HAVE-TO-COMPRESS-NOTIFY* = T
-    
-Compress event notify?
+    Compress event notify?
 This variable may be useful to speed up some slow version of CLX.
 It is particulary useful with CLISP/MIT-CLX.
+  *DEFAULT-TRANSPARENCY* = 0.8
+    Default transparency for all windows when in xcompmgr transparency mode
+  *DEFAULT-FRAME-DATA* = ((:TILE-SIZE 0.8) (:TILE-SPACE-SIZE 0.1) (:FAST-LAYOUT (TILE-LEFT-LAYOUT TILE-LAYOUT)) (:MAIN-LAYOUT-WINDOWS NIL))
+    Default slots set in frame date
+  *DEFAULT-FONT-STRING* = "genera-cptfontc"
+    The default font used in clfswm
+  *SHOW-ROOT-FRAME-P* = NIL
+    Show the root frame information or not
+  *LOOP-TIMEOUT* = 1
+    Maximum time (in seconds) to wait before calling *loop-hook*
+  *DEFAULT-MANAGED-TYPE* = (:NORMAL)
+    Default managed window types
+  *HIDE-UNMANAGED-WINDOW* = T
+    Hide or not unmanaged windows when a child is deselected.
+  *WM-NAME* = "clfswm"
+    Set to "LG3D" for making Java GUI programs work.
+  *SHOW-HIDE-POLICY* = #<Compiled-function <= #x300000165B7F>
+    'NIL': always display all children (better with transparency support).
+'<': Hide only children less than children above.
+'<=': Hide children less or equal to children above (better for performance on slow machine).
+  *NEVER-MANAGED-WINDOW-LIST* = ((EQUAL-WM-CLASS-ROX-PINBOARD NIL) (EQUAL-WM-CLASS-XVKBD RAISE-WINDOW) (EQUAL-CLFSWM-TERMINAL RAISE-AND-FOCUS-WINDOW))
+    CLFSWM will never manage windows of this type.
+A list of (list match-function handle-function)
+  *DEFAULT-FOCUS-POLICY* = :CLICK
+    Default mouse focus policy. One of :click, :sloppy, :sloppy-strict, :sloppy-select or
+:sloppy-select-window.
 
 
 <= Notify Window Group =>
 
-  *NOTIFY-WINDOW-TRANSPARENCY* = 0.8
-    Notify window background transparency
-  *NOTIFY-WINDOW-DELAY* = 10
-    Notify Window display delay
-  *NOTIFY-WINDOW-BORDER* = "red"
-    Notify Window border color
-  *NOTIFY-WINDOW-FOREGROUND* = "green"
-    Notify Window foreground color
   *NOTIFY-WINDOW-BACKGROUND* = "black"
     Notify Window background color
-  *NOTIFY-WINDOW-FONT-STRING* = "fixed"
+  *NOTIFY-WINDOW-TRANSPARENCY* = 0.8
+    Notify window background transparency
+  *NOTIFY-WINDOW-BORDER* = "red"
+    Notify Window border color
+  *NOTIFY-WINDOW-DELAY* = 10
+    Notify Window display delay
+  *NOTIFY-WINDOW-FONT-STRING* = "genera-sail12"
     Notify window font string
+  *NOTIFY-WINDOW-FOREGROUND* = "green"
+    Notify Window foreground color
 
 
 <= Placement Group =>
 
-  *UNMANAGED-WINDOW-PLACEMENT* = MIDDLE-MIDDLE-ROOT-PLACEMENT
-    Unmanager window placement
   *ASK-CLOSE/KILL-PLACEMENT* = TOP-RIGHT-ROOT-PLACEMENT
     Ask close/kill window placement
   *NOTIFY-WINDOW-PLACEMENT* = BOTTOM-RIGHT-ROOT-PLACEMENT
     Notify window placement
   *EXPOSE-QUERY-PLACEMENT* = BOTTOM-LEFT-ROOT-PLACEMENT
     Expose mode query window placement
-  *EXPOSE-MODE-PLACEMENT* = TOP-LEFT-CHILD-PLACEMENT
-    Expose mode window placement (Selection keys position)
-  *CIRCULATE-MODE-PLACEMENT* = BOTTOM-MIDDLE-ROOT-PLACEMENT
-    Circulate mode window placement
-  *QUERY-MODE-PLACEMENT* = TOP-LEFT-ROOT-PLACEMENT
-    Query mode window placement
-  *INFO-MODE-PLACEMENT* = TOP-LEFT-ROOT-PLACEMENT
-    Info mode window placement
+  *UNMANAGED-WINDOW-PLACEMENT* = MIDDLE-MIDDLE-ROOT-PLACEMENT
+    Unmanager window placement
   *SECOND-MODE-PLACEMENT* = TOP-MIDDLE-ROOT-PLACEMENT
     Second mode window placement
+  *INFO-MODE-PLACEMENT* = TOP-LEFT-ROOT-PLACEMENT
+    Info mode window placement
+  *QUERY-MODE-PLACEMENT* = TOP-LEFT-ROOT-PLACEMENT
+    Query mode window placement
+  *EXPOSE-MODE-PLACEMENT* = TOP-LEFT-CHILD-PLACEMENT
+    Expose mode window placement (Selection keys position)
   *BANISH-POINTER-PLACEMENT* = BOTTOM-RIGHT-ROOT-PLACEMENT
     Pointer banishment placement
+  *CIRCULATE-MODE-PLACEMENT* = BOTTOM-MIDDLE-ROOT-PLACEMENT
+    Circulate mode window placement
+  *FASTSWITCH-MODE-PLACEMENT* = TOP-LEFT-ROOT-PLACEMENT
+    Fastswitch mode window placement
 
 
 <= Query String Group =>
 
-  *QUERY-MIN-COMPLET-CHAR* = 2
-    Query minimum input length for completion
-  *QUERY-MAX-COMPLET-LENGTH* = 100
-    Query maximum length of completion list
   *QUERY-TRANSPARENCY* = 0.8
     Query string window background transparency
-  *QUERY-BORDER* = "red"
-    Query string window border color
-  *QUERY-PARENT-ERROR-COLOR* = "red"
-    Query string window parenthesis color when no match
-  *QUERY-PARENT-COLOR* = "blue"
-    Query string window parenthesis color
   *QUERY-CURSOR-COLOR* = "white"
     Query string window foreground cursor color
+  *QUERY-PARENT-COLOR* = "blue"
+    Query string window parenthesis color
+  *QUERY-BACKGROUND* = "black"
+    Query string window background color
+  *QUERY-BORDER* = "red"
+    Query string window border color
+  *QUERY-MIN-COMPLET-CHAR* = 2
+    Query minimum input length for completion
+  *QUERY-PARENT-ERROR-COLOR* = "red"
+    Query string window parenthesis color when no match
+  *QUERY-FONT-STRING* = "genera-cptfontc"
+    Query string window font string
   *QUERY-FOREGROUND* = "green"
     Query string window foreground color
   *QUERY-MESSAGE-COLOR* = "yellow"
     Query string window message color
-  *QUERY-BACKGROUND* = "black"
-    Query string window background color
-  *QUERY-FONT-STRING* = "fixed"
-    Query string window font string
+  *QUERY-MAX-COMPLET-LENGTH* = 100
+    Query maximum length of completion list
 
 
 <= Root Group =>
 
-  *SHOW-CURRENT-ROOT-MESSAGE* = "Current root"
-    Current root notify window message
-  *SHOW-CURRENT-ROOT-PLACEMENT* = MIDDLE-MIDDLE-ROOT-PLACEMENT
-    Current root notify window placement
   *SHOW-CURRENT-ROOT-DELAY* = 1
     Delay to show the current root
-  *HAVE-TO-SHOW-CURRENT-ROOT* = T
-    Show the current root if true
+  *SHOW-CURRENT-ROOT-PLACEMENT* = MIDDLE-MIDDLE-ROOT-PLACEMENT
+    Current root notify window placement
+  *SHOW-CURRENT-ROOT-MESSAGE* = "Current root"
+    Current root notify window message
   *CREATE-FRAME-ON-ROOT* = NIL
-    
-Create frame on root.
+    Create frame on root.
 Set this variable to true if you want to allow to create a new frame
 on the root window in the main mode with the mouse
+  *HAVE-TO-SHOW-CURRENT-ROOT* = T
+    Show the current root if true
 
 
 <= Second Mode Group =>
 
-  *SM-TRANSPARENCY* = 0.8
-    Second mode background transparency
   *SM-HEIGHT* = 25
     Second mode window height
-  *SM-WIDTH* = 300
-    Second mode window width
-  *SM-FONT-STRING* = "fixed"
-    Second mode window font string
-  *SM-FOREGROUND-COLOR* = "Red"
-    Second mode window foreground color
   *SM-BACKGROUND-COLOR* = "Black"
     Second mode window background color
+  *SM-FOREGROUND-COLOR* = "Red"
+    Second mode window foreground color
+  *SM-FONT-STRING* = "genera-cptfontbi"
+    Second mode window font string
+  *SM-TRANSPARENCY* = 0.8
+    Second mode background transparency
   *SM-BORDER-COLOR* = "Green"
     Second mode window border color
+  *SM-WIDTH* = 300
+    Second mode window width
 
  Those variables can be changed in clfswm.
 Maybe you'll need to restart clfswm to take care of new values
