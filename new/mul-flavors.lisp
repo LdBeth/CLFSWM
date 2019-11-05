@@ -1191,11 +1191,10 @@
 ;;;        make-access-methods
 ;;; ---
 (defun defflavor2-compile (a-flavor-name class-vars depends-on keyword-props)
-  (let ((pattern nil)
-        (the-meth-list (intern
-                        (concatenate 'string (string a-flavor-name) "-METHODS")))
-        (spec nil))
-    (setq spec (list 'special the-meth-list)) ;say it is special
+  (let* ((pattern nil)
+         (the-meth-list (intern
+                         (concatenate 'string (string a-flavor-name) "-METHODS")))
+         (spec (list 'special the-meth-list)));say it is special
     (proclaim spec)                           ;and make it known
     (set the-meth-list (list a-flavor-name))
     (push the-meth-list *all-meth-lists*)
