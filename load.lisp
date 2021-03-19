@@ -68,7 +68,7 @@ from $XDG_CONFIG_HOME/clfswm/clfswmrc")
 #+:SBCL
 (require :sb-posix)
 
-(load (compile-file "src/tools.lisp"))
+;; (load (compile-file "src/tools.lisp"))
 
 (defun load-info (formatter &rest args)
   (format t "~&  ==> ~A~%" (apply #'format nil formatter args))

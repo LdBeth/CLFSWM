@@ -1044,23 +1044,22 @@ Useful for re-using the &REST arg after removing some options."
 (defun prev-in-list (item lst)
   (next-in-list item (reverse lst)))
 
-
-(let ((jours '("Lundi" "Mardi" "Mercredi" "Jeudi" "Vendredi" "Samedi" "Dimanche"))
-      (mois '("Janvier" "Fevrier" "Mars" "Avril" "Mai" "Juin" "Juillet"
-	      "Aout" "Septembre" "Octobre" "Novembre" "Decembre"))
-      (days '("Monday" "Tuesday" "Wednesday" "Thursday" "Friday" "Saturday" "Sunday"))
-      (months '("January" "February" "March" "April" "May" "June" "July"
-		 "August" "September" "October" "November" "December")))
-  (defun date-string ()
+(defun date-string ()
+  (let ((jours '#("Lundi" "Mardi" "Mercredi" "Jeudi" "Vendredi" "Samedi" "Dimanche"))
+	(mois '#("Janvier" "Fevrier" "Mars" "Avril" "Mai" "Juin" "Juillet"
+		 "Aout" "Septembre" "Octobre" "Novembre" "Decembre"))
+	(days '#("Monday" "Tuesday" "Wednesday" "Thursday" "Friday" "Saturday" "Sunday"))
+	(months '#("January" "February" "March" "April" "May" "June" "July"
+		   "August" "September" "October" "November" "December")))
     (multiple-value-bind (second minute hour date month year day)
 	(get-decoded-time)
       (if (search "fr" (getenv "LANG") :test #'string-equal)
 	  (format nil "   ~2,'0D:~2,'0D:~2,'0D    ~A ~2,'0D ~A ~A "
 		  hour minute second
-		  (nth day jours) date (nth (1- month) mois) year)
-	  (format nil "   ~2,'0D:~2,'0D:~2,'0D    ~A ~A ~2,'0D ~A "
-		  hour minute second
-		  (nth day days) (nth (1- month) months) date year)))))
+		  (aref jours day) date (aref mois (1- month)) year)
+	(format nil "   ~2,'0D:~2,'0D:~2,'0D    ~A ~A ~2,'0D ~A "
+		hour minute second
+		(aref days day) (aref months (1- month)) date year)))))
 
 ;;;
 ;;; Backtrace function
@@ -1078,7 +1077,7 @@ Useful for re-using the &REST arg after removing some options."
               (lisp-implementation-version))
       #+clisp (system::print-backtrace)
       #+(or cmucl scl) (debug:backtrace)
-      #+sbcl (sb-debug:backtrace)
+      #+sbcl (sb-debug:print-backtrace)
       #+(or mcl ccl) (ccl:print-call-history :detailed-p nil)
       #-(or clisp cmucl scl sbcl mcl ccl) (format t "Backtrace not defined~%")
       (when other-info
